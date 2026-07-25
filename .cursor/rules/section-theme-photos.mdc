@@ -11,8 +11,16 @@ When creating or renaming a pursuit section card (`.sec-card`), always assign a 
 
 - Use `window.__secImgFor(sectionName)` / the `IMG` + `KEYWORDS` maps in `dashboard.html` — do not reuse a generic lifestyle/vibes image when a better thematic match exists.
 - Travel-related sections (`travel`, `travel-ready`, `traveler`, trip, flight, luggage, airport, packing) must use `manus-storage/pursuit-travel.jpg`.
-- Returns / refund / exchange sections must use `manus-storage/pursuit-returns.jpg` (cash / money back — not the shopped lifestyle flat-lay, not packages, not a cute piggy bank).
+- Returns / refund / exchange sections must use `manus-storage/pursuit-returns-v2.jpg` (cash / money back — not the shopped lifestyle flat-lay, not packages, not a cute piggy bank).
+- Pickups sections must use `manus-storage/pursuit-pickups.jpg` (store / curbside pickup bag — not money, not returns cash).
+- Momentum sections must use `manus-storage/pursuit-momentum-v7.jpg` (runner mid-sprint / forward motion — not highway trails, not vibes).
 - On travel sections, put past-tense status verbs (e.g. packed, picked up) at the **end of the task status/progress bar**, not grayed inside the task title.
 - If no suitable local image exists for a new theme, add one under `manus-storage/` (self-hosted; no CDN dependency) and register it in both the exact-name `IMG` map and the `KEYWORDS` list.
 - After adding/renaming a section, run or rely on `__normalizeSecCards` so the photo + theme class stay in sync.
+- When a **new** pursuit card is introduced on a day, also add an **empty** copy of that card to **every following day** (including flow-only days — seed a full `.sec-grid` if missing), **unless the user explicitly scopes it to one day** (e.g. pickups on Jul 25 only). Empty cards stay compact (square header + bottom-right `+` only) until tasks are added. Recent forward-fill names: `momentum`, `UX Design`, `workflow`, `Power`, `Frequency`, `postal`, `traveler`, `returns`.
+- Pursuit cards stay **square**. Empty = 148px full-bleed photo + `+`. With tasks ≈ 210px.
+- With-tasks composition = **full-bleed photo vision board**: the whole card is the image; each task is a small **beige ripped-paper scrap** with Reenie Beanie handwriting. Card stays **square** and **grows with item count** (`--vb-size`); scraps sit in a soft grid so they don’t overlap. Title stays on the photo. Users can drag the bottom-right resize handle (`.card-sized`); never wipe that size in sync unless it’s non-square / too small for the scraps.
+- Items inside each pursuit card are **numbered** (1, 2, 3…) per card.
+- Jul 25/26 Flow: keep a dedicated `.gsep-retreat-card` **after** the flow timeline card. Never delete it in flow-chart-card dedupe (pursuits panel also uses `.flow-chart-card`).
+- Flow timeline reorder is **global for every day**: keep Sortable attached to every `.flow-timeline-list`; never destroy/rebuild lists just to sync pins (append-only); respect `__flowReorderCooldown` after drag so sync doesn’t wipe order.
 - Keep assets local under `manus-storage/` — do not point card banners at Manus or other remote CDNs.
