@@ -20154,10 +20154,11 @@ setTimeout(() => { updateFlowSectionAutoToggle(); attachFlowSectionListeners(); 
     setTimeout(function(){btn.textContent='SYNC';btn.disabled=false;},2000);
   });
 })(this)" type="button">SYNC</button>
+<button id="save-github-btn" type="button">SAVE TO GITHUB</button>
 <style>
   #sync-state-btn {
     position: fixed;
-    bottom: 14px;
+    bottom: 44px;
     right: 14px;
     z-index: 99999;
     padding: 6px 10px;
@@ -20176,7 +20177,64 @@ setTimeout(() => { updateFlowSectionAutoToggle(); attachFlowSectionListeners(); 
     transition: opacity 0.2s;
   }
   #sync-state-btn:hover { opacity: 1; }
+  #save-github-btn {
+    position: fixed;
+    bottom: 14px;
+    right: 14px;
+    z-index: 99999;
+    padding: 6px 10px;
+    background: rgba(90,110,80,0.9);
+    color: #fdfaf3;
+    border: none;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    user-select: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  #save-github-btn:hover { opacity: 1; }
+  #save-github-btn:disabled { opacity: 0.5; cursor: default; }
 </style>
+<script>
+(function(){
+  var btn=document.getElementById('save-github-btn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    btn.textContent='saving...';
+    btn.disabled=true;
+    var data={};
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i);
+        if(k!=null) data[k]=localStorage.getItem(k);
+      }
+    }catch(e){
+      btn.textContent='error';
+      setTimeout(function(){btn.textContent='SAVE TO GITHUB';btn.disabled=false;},2500);
+      return;
+    }
+    fetch('/bake',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({data:data})
+    }).then(function(r){
+      return r.json().then(function(j){ return {ok:r.ok, j:j}; });
+    }).then(function(res){
+      if(!res.ok) throw new Error((res.j&&res.j.error)||'bake failed');
+      btn.textContent=res.j.committed===false ? 'up to date' : 'saved \u2713';
+      setTimeout(function(){btn.textContent='SAVE TO GITHUB';btn.disabled=false;},2500);
+    }).catch(function(){
+      btn.textContent='error';
+      setTimeout(function(){btn.textContent='SAVE TO GITHUB';btn.disabled=false;},2500);
+    });
+  });
+})();
+</script>
 <script>
 // One-time migration: force-uncheck Sephora in May 10 orders/pickups (was unchecked in HTML)
 (function() {
