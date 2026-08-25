@@ -9,6 +9,8 @@
     { href: 'goals.html', label: 'goals', group: 'main' },
     { href: 'projects.html', label: 'projects', group: 'main' },
     { href: 'agenda.html', label: 'agenda', group: 'main' },
+    { href: 'deen.html', label: 'deen', group: 'main' },
+    { href: 'dimensions.html', label: 'dimensions', group: 'main' },
     { href: 'everything.html', label: 'everything', group: 'main' },
     { href: 'dashboard.html', label: 'dashboard', group: 'main' },
     { href: 'brain-dump.html', label: 'brain dump', group: 'main' },
