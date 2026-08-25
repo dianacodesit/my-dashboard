@@ -2,7 +2,7 @@
 """Dashboard static server with durable GitHub bake.
 
 POST /bake  JSON {"data": {localStorageKey: value, ...}}
-  - Rewrites the /*baked-data*/ seed script in dashboard.html
+  - Rewrites the /*baked-data*/ seed script in everything.html
   - Writes localStorage_dump.json
   - Commits and pushes to origin
 
@@ -23,13 +23,26 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent
-DASHBOARD = ROOT / "dashboard.html"
+DASHBOARD = ROOT / "everything.html"
+BRAIN = ROOT / "brain-dump.html"
 DUMP = ROOT / "localStorage_dump.json"
 PORT = int(os.environ.get("PORT", "8080"))
 GIT_LOCK = threading.Lock()
 
 BAKE_START = "<script>/*baked-data*/(function(){try{var D="
 BAKE_END = ';for(var k in D){if(localStorage.getItem(k)===null){localStorage.setItem(k,D[k]);}}}catch(e){}})();</script>'
+BRAIN_START = '<script id="brain-dump-data" type="application/json">'
+BRAIN_END = "</script><!--/brain-dump-data-->"
+
+ALLOWED_SECTIONS = {
+    "body",
+    "life",
+    "finances",
+    "leverage",
+    "ambition",
+    "presence",
+    "inbox",
+}
 
 
 def _git(*args: str) -> subprocess.CompletedProcess:
@@ -52,7 +65,7 @@ def bake_to_github(data: dict) -> dict:
     html = DASHBOARD.read_text(encoding="utf-8")
     start = html.find(BAKE_START)
     if start < 0:
-        raise RuntimeError("baked-data script not found in dashboard.html")
+        raise RuntimeError("baked-data script not found in everything.html")
     obj_start = start + len(BAKE_START)
     end = html.find(BAKE_END, obj_start)
     if end < 0:
@@ -70,7 +83,7 @@ def bake_to_github(data: dict) -> dict:
         if not status.stdout.strip():
             return {"ok": True, "committed": False, "message": "already up to date"}
 
-        add = _git("add", "dashboard.html", "localStorage_dump.json")
+        add = _git("add", "everything.html", "localStorage_dump.json")
         if add.returncode != 0:
             raise RuntimeError(add.stderr.strip() or "git add failed")
 
@@ -81,7 +94,7 @@ def bake_to_github(data: dict) -> dict:
             "-m",
             msg,
             "-m",
-            "Persist phone/browser localStorage into dashboard.html and localStorage_dump.json for durable GitHub sync.",
+            "Persist phone/browser localStorage into everything.html and localStorage_dump.json for durable GitHub sync.",
         )
         if commit.returncode != 0:
             raise RuntimeError(commit.stderr.strip() or commit.stdout.strip() or "git commit failed")
@@ -100,6 +113,47 @@ def bake_to_github(data: dict) -> dict:
             "sha": (sha.stdout or "").strip(),
             "keys": len(clean),
         }
+
+
+def save_brain_dump(entries) -> dict:
+    """Write brain-dump entries into brain-dump.html. Does not git commit."""
+    if not isinstance(entries, list):
+        raise ValueError("expected entries array")
+
+    clean = []
+    for item in entries:
+        if not isinstance(item, dict):
+            continue
+        text = str(item.get("text") or "").strip()
+        if not text:
+            continue
+        section = str(item.get("section") or "inbox").strip().lower()
+        if section not in ALLOWED_SECTIONS:
+            section = "inbox"
+        clean.append(
+            {
+                "id": str(item.get("id") or "")[:80],
+                "text": text[:4000],
+                "section": section,
+                "at": str(item.get("at") or "")[:80],
+            }
+        )
+
+    html = BRAIN.read_text(encoding="utf-8")
+    start = html.find(BRAIN_START)
+    if start < 0:
+        raise RuntimeError("brain-dump-data marker missing")
+    obj_start = start + len(BRAIN_START)
+    end = html.find(BRAIN_END, obj_start)
+    if end < 0:
+        raise RuntimeError("brain-dump-data end marker missing")
+
+    payload = json.dumps(clean, ensure_ascii=False, separators=(",", ":"))
+    payload = payload.replace("<", "\\u003c")
+    tmp = BRAIN.with_name("brain-dump.html.tmp")
+    tmp.write_text(html[:obj_start] + payload + html[end:], encoding="utf-8")
+    tmp.replace(BRAIN)
+    return {"ok": True, "count": len(clean)}
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -128,6 +182,11 @@ class Handler(SimpleHTTPRequestHandler):
                 data = body.get("data") if isinstance(body, dict) else None
                 result = bake_to_github(data)
                 return self._json(200, result)
+            if path in ("/brain-dump", "/brain-dump-save"):
+                body = self._read_json()
+                entries = body.get("entries") if isinstance(body, dict) else None
+                result = save_brain_dump(entries)
+                return self._json(200, result)
             if path in ("/save", "/move-cards"):
                 # Acknowledge UI autosave hooks; durable path is /bake.
                 length = int(self.headers.get("Content-Length") or "0")
@@ -151,8 +210,9 @@ def main():
     # Avoid serving parent paths; stay in ROOT.
     os.chdir(ROOT)
     httpd = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
-    print(f"dashboard server on http://127.0.0.1:{PORT}/dashboard.html", flush=True)
+    print(f"dashboard server on http://127.0.0.1:{PORT}/", flush=True)
     print("POST /bake to persist localStorage into GitHub", flush=True)
+    print("POST /brain-dump to write thoughts into brain-dump.html", flush=True)
     httpd.serve_forever()
 
 

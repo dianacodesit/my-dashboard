@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>thoughts · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&family=DM+Mono:wght@300;400&family=Italiana&family=Reenie+Beanie&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body.thoughts-page {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f3e6d0;
+    background: #120e0b;
+    overflow-x: hidden;
+  }
+  body.thoughts-page #hamburger-menu span {
+    background: #f3e6d0;
+    box-shadow: 0 1px 4px rgba(8,4,2,0.55);
+  }
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(180deg, rgba(12,8,6,0.28) 0%, rgba(12,8,6,0.08) 40%, rgba(8,4,2,0.45) 100%),
+      url("manus-storage/thoughts-bg.jpg") center/cover no-repeat;
+  }
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 72px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 28px;
+    max-width: 560px;
+  }
+  .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(243,230,208,0.72);
+    margin-bottom: 8px;
+    text-shadow: 0 1px 10px rgba(8,4,2,0.5);
+  }
+  h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: #f7efe4;
+    text-shadow: 0 2px 22px rgba(8,4,2,0.6);
+  }
+  .sub {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(243,230,208,0.62);
+  }
+  .journal {
+    width: min(640px, 100%);
+    background: rgba(250,246,238,0.92);
+    color: #1c140e;
+    border-radius: 4px 18px 18px 4px;
+    padding: 36px 34px 28px;
+    box-shadow:
+      0 0 0 1px rgba(255,248,238,0.18),
+      0 24px 60px rgba(8,4,2,0.45);
+    min-height: 52vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .journal-rule {
+    flex: 1;
+    width: 100%;
+    min-height: 420px;
+    border: 0;
+    outline: none;
+    resize: none;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 31px,
+        rgba(196,168,130,0.28) 31px,
+        rgba(196,168,130,0.28) 32px
+      );
+    background-attachment: local;
+    font-family: "Reenie Beanie", "Newsreader", cursive;
+    font-size: 28px;
+    line-height: 32px;
+    color: #2a221c;
+    padding: 0 4px 12px;
+  }
+  .journal-rule::placeholder {
+    color: rgba(90,70,50,0.38);
+    font-style: italic;
+  }
+  .journal-status {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8a7a6a;
+    text-align: right;
+  }
+</style>
+</head>
+<body class="thoughts-page">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">lamp · night desk</p>
+    <h1>thoughts</h1>
+    <p class="sub">the dark room · not the agenda</p>
+  </header>
+  <section class="journal">
+    <textarea id="thoughts-input" class="journal-rule" spellcheck="false" placeholder="write whatever is actually on your mind…"></textarea>
+    <p class="journal-status" id="thoughts-status">saved here</p>
+  </section>
+</main>
+<script src="nav-shared.js"></script>
+<script>
+(function(){
+  var KEY = 'thoughts_page_v1';
+  var el = document.getElementById('thoughts-input');
+  var status = document.getElementById('thoughts-status');
+  var t;
+  try { el.value = localStorage.getItem(KEY) || ''; } catch (e) {}
+  function save(){
+    try { localStorage.setItem(KEY, el.value); } catch (e) {}
+    status.textContent = 'saved here';
+  }
+  el.addEventListener('input', function(){
+    status.textContent = 'saving…';
+    clearTimeout(t);
+    t = setTimeout(save, 280);
+  });
+})();
+</script>
+</body>
+</html>

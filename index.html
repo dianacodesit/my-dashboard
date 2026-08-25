@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>home · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&family=DM+Mono:wght@300;400&family=Italiana&family=Cinzel:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css"/>
+<style>
+  :root {
+    --ink: #f7efe4;
+    --muted: rgba(247,239,228,0.68);
+    --line: rgba(255,248,238,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: var(--ink);
+    background: #120e0b;
+    overflow-x: hidden;
+  }
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(165deg, rgba(12,8,6,0.52) 0%, rgba(18,12,8,0.22) 40%, rgba(8,6,4,0.7) 100%),
+      url("manus-storage/dashboard-hq-bg.jpg") center/cover no-repeat;
+    filter: saturate(0.88) brightness(0.78);
+  }
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 88px 28px 56px;
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(44px, 8vw, 78px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 0.92;
+    text-shadow: 0 2px 24px rgba(8,4,2,0.5);
+  }
+  .home-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 14px 22px;
+    margin: 18px 0 36px;
+  }
+  .clock {
+    font-family: "Cinzel", serif;
+    font-size: clamp(22px, 4vw, 32px);
+    letter-spacing: 0.08em;
+  }
+  .clock-date {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .focus-line {
+    max-width: 42ch;
+    font-size: 18px;
+    line-height: 1.4;
+    color: rgba(247,239,228,0.88);
+    font-style: italic;
+  }
+  .rooms {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .room {
+    position: relative;
+    overflow: hidden;
+    min-height: 168px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px 16px 14px;
+    background: rgba(18,12,8,0.35);
+    box-shadow: 0 14px 36px rgba(8,4,2,0.28);
+  }
+  .room::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--photo);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+    transform: scale(1.04);
+  }
+  .room::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,7,5,0.05) 12%, rgba(10,7,5,0.72) 100%);
+  }
+  .room > * { position: relative; z-index: 1; }
+  .room-kicker {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.72);
+    margin-bottom: 4px;
+  }
+  .room-title {
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .room:hover { transform: translateY(-2px); }
+  .room:hover::before { opacity: 0.64; }
+  .today { --photo: url("manus-storage/zone-ambition-v4.jpg"); grid-column: span 2; min-height: 210px; }
+  .today .room-title { font-size: 22px; }
+  .agenda { --photo: url("manus-storage/agenda-bg-wall.jpg?v=wall"); }
+  .thoughts { --photo: url("manus-storage/thoughts-bg.jpg"); }
+  .everything { --photo: url("manus-storage/_339ab459.jpg"); }
+  .dims { --photo: url("manus-storage/pursuit-ux-design-v12_f2f2c818.jpg"); }
+  .deen { --photo: url("manus-storage/deen-moodboard-bg_807e7166.jpg"); }
+  .dump { --photo: url("manus-storage/brain-dump-bg-linen.jpg?v=linen"); }
+  .dash { --photo: url("manus-storage/dashboard-hq-bg.jpg"); }
+  .grids { --photo: url("manus-storage/pursuit-curated-lifestyle.jpg?v=2"); }
+  @media (max-width: 860px) {
+    .rooms { grid-template-columns: 1fr 1fr; }
+    .today { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) {
+    .rooms { grid-template-columns: 1fr; }
+    .today { min-height: 180px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <p class="eyebrow" id="greet">home</p>
+  <h1>diana's board</h1>
+  <div class="home-meta">
+    <div class="clock" id="clock">00:00</div>
+    <p class="clock-date" id="clock-date"></p>
+    <p class="focus-line" id="focus-line" hidden></p>
+  </div>
+  <nav class="rooms" aria-label="rooms">
+    <a class="room today" href="today.html">
+      <p class="room-kicker">this day</p>
+      <h2 class="room-title">Today</h2>
+    </a>
+    <a class="room agenda" href="agenda.html">
+      <p class="room-kicker">schedule</p>
+      <h2 class="room-title">Agenda</h2>
+    </a>
+    <a class="room thoughts" href="thoughts.html">
+      <p class="room-kicker">late night</p>
+      <h2 class="room-title">Thoughts</h2>
+    </a>
+    <a class="room everything" href="everything.html">
+      <p class="room-kicker">the board</p>
+      <h2 class="room-title">Everything</h2>
+    </a>
+    <a class="room dims" href="dimensions.html">
+      <p class="room-kicker">pursuits</p>
+      <h2 class="room-title">Dimensions</h2>
+    </a>
+    <a class="room grids" href="grids.html">
+      <p class="room-kicker">lists</p>
+      <h2 class="room-title">Grids</h2>
+    </a>
+    <a class="room deen" href="deen.html">
+      <p class="room-kicker">prayer</p>
+      <h2 class="room-title">Deen</h2>
+    </a>
+    <a class="room dump" href="brain-dump.html">
+      <p class="room-kicker">notes</p>
+      <h2 class="room-title">Brain Dump</h2>
+    </a>
+    <a class="room dash" href="dashboard.html">
+      <p class="room-kicker">command</p>
+      <h2 class="room-title">Dashboard</h2>
+    </a>
+  </nav>
+</main>
+<script src="nav-shared.js"></script>
+<script>
+(function(){
+  function pad(n){ return String(n).padStart(2, "0"); }
+  function tick(){
+    var d = new Date();
+    document.getElementById("clock").textContent = pad(d.getHours()) + ":" + pad(d.getMinutes());
+    document.getElementById("clock-date").textContent = d.toLocaleDateString(undefined, {
+      weekday: "long", month: "long", day: "numeric"
+    });
+    var h = d.getHours();
+    document.getElementById("greet").textContent = h < 12 ? "good morning" : h < 17 ? "good afternoon" : "good evening";
+  }
+  tick();
+  setInterval(tick, 15000);
+  try {
+    var focus = (localStorage.getItem("dash_focus_v1") || "").trim();
+    if (focus) {
+      var line = document.getElementById("focus-line");
+      line.hidden = false;
+      line.textContent = focus;
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
