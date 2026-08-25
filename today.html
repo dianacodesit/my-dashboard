@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>today · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --win-bg:rgba(22,22,26,0.72);
+  --win-border:rgba(255,255,255,0.06);
+  --card-bg:rgba(32,32,38,0.75);
+  --card-border:rgba(255,255,255,0.08);
+  --text-primary:#FFFFFF;
+  --text-secondary:rgba(255,255,255,0.6);
+  --text-dim:rgba(255,255,255,0.35);
+  --blue:#4A9EFF;
+  --green:#34D399;
+  --orange:#FB923C;
+  --red:#F87171;
+  --radius:24px;
+  --radius-card:16px;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);color:var(--text-primary);background:#000}
+
+/* ENVIRONMENT - blurred room background */
+.env{
+  position:fixed;inset:0;z-index:0;
+  background:url('manus-storage/deen-moodboard-bg_807e7166.jpg') center/cover no-repeat;
+  filter:blur(8px) brightness(0.85);
+  transform:scale(1.05);
+}
+
+/* MAIN FLOATING WINDOW */
+.window{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(82vw,1080px);height:min(86vh,700px);
+  background:var(--win-bg);
+  backdrop-filter:blur(80px) saturate(1.3);
+  -webkit-backdrop-filter:blur(80px) saturate(1.3);
+  border:1px solid var(--win-border);
+  border-radius:var(--radius);
+  box-shadow:
+    0 50px 100px rgba(0,0,0,0.5),
+    0 20px 40px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  display:flex;flex-direction:column;
+  overflow:hidden;z-index:10;
+  animation:winIn 0.5s var(--ease) forwards;
+}
+@keyframes winIn{from{opacity:0;transform:translate(-50%,-50%) scale(0.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
+/* SIDE WIDGET - detached, floating right */
+.side-widget{
+  position:fixed;top:18%;right:4%;z-index:11;
+  width:170px;border-radius:18px;overflow:hidden;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  animation:swIn 0.6s var(--ease) 0.3s both;
+}
+@keyframes swIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.sw-top{
+  background:linear-gradient(135deg,#2563EB,#3B82F6,#60A5FA);
+  padding:16px;color:#fff;
+}
+.sw-top-label{font-size:9px;font-weight:500;opacity:0.8;text-transform:uppercase;letter-spacing:0.5px}
+.sw-top-name{font-size:12px;font-weight:600;margin-top:4px}
+.sw-top-time{font-size:26px;font-weight:700;margin-top:6px;letter-spacing:-1px}
+.sw-top-date{font-size:10px;opacity:0.7;margin-top:2px}
+.sw-top-row{display:flex;align-items:center;gap:6px;margin-top:10px}
+.sw-top-avatar{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
+.sw-top-status{font-size:9px;opacity:0.8}
+.sw-bottom{
+  background:rgba(22,22,26,0.85);
+  backdrop-filter:blur(40px);
+  padding:14px;display:flex;align-items:center;justify-content:center;
+}
+.sw-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.2s}
+.sw-btn:hover{background:rgba(255,255,255,0.15)}
+.sw-btn svg{width:14px;height:14px;stroke:#fff;stroke-width:2;fill:none}
+
+/* HEADER */
+.hdr{
+  display:flex;align-items:center;padding:14px 20px;
+  border-bottom:1px solid var(--win-border);flex-shrink:0;
+}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.hdr-close{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s}
+.hdr-close:hover{background:rgba(255,59,48,0.2)}
+.hdr-close svg{width:10px;height:10px;stroke:var(--text-secondary);stroke-width:2.5}
+.hdr-close:hover svg{stroke:#ff3b30}
+.hdr-icon{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center}
+.hdr-icon svg{width:14px;height:14px;stroke:var(--text-secondary);stroke-width:1.5;fill:none}
+.hdr-title{margin-left:4px}
+.hdr-title h1{font-size:13px;font-weight:600;color:var(--text-primary)}
+.hdr-title p{font-size:10px;color:var(--text-secondary);margin-top:1px}
+
+.hdr-center{flex:1;display:flex;justify-content:center}
+.hdr-profile{display:flex;align-items:center;gap:8px;padding:6px 16px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--win-border);border-radius:20px}
+.hdr-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4a90d9,#67b26f);
+  display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff}
+.hdr-profile-text{display:flex;flex-direction:column}
+.hdr-profile-name{font-size:11px;font-weight:500;color:var(--text-primary)}
+.hdr-profile-role{font-size:9px;color:var(--text-secondary)}
+
+.hdr-right{display:flex;align-items:center;gap:10px}
+.hdr-time{font-size:18px;font-weight:600;color:var(--text-primary);letter-spacing:-0.5px}
+.hdr-actions{display:flex;gap:6px}
+.hdr-btn{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s}
+.hdr-btn:hover{background:rgba(255,255,255,0.12)}
+.hdr-btn svg{width:13px;height:13px;stroke:var(--text-secondary);stroke-width:1.5;fill:none}
+
+/* SUB HEADER - tabs + search */
+.sub{display:flex;align-items:center;padding:10px 20px;border-bottom:1px solid var(--win-border);flex-shrink:0}
+.sub-left{display:flex;align-items:center;gap:4px}
+.sub-tab{font-size:11px;font-weight:500;padding:6px 14px;border-radius:8px;
+  color:var(--text-secondary);cursor:pointer;transition:all 0.2s}
+.sub-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.05)}
+.sub-tab.active{color:#fff;background:var(--blue)}
+.sub-right{margin-left:auto}
+.sub-search{display:flex;align-items:center;gap:6px;padding:6px 12px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--win-border);border-radius:8px;
+  font-size:10px;color:var(--text-dim);cursor:pointer;transition:all 0.2s}
+.sub-search:hover{border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.06)}
+.sub-search svg{width:11px;height:11px;stroke:var(--text-dim);stroke-width:2;fill:none}
+
+/* CONTENT AREA */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* CARDS GRID */
+.cards-section{flex:1;overflow-y:auto;padding:16px 20px;position:relative}
+.cards-section::-webkit-scrollbar{width:3px}
+.cards-section::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+.p-card{
+  background:var(--card-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-card);
+  padding:16px;
+  cursor:pointer;
+  transition:all 0.25s var(--ease);
+  animation:cardIn 0.4s var(--ease) both;
+}
+.p-card:nth-child(1){animation-delay:0.05s}
+.p-card:nth-child(2){animation-delay:0.1s}
+.p-card:nth-child(3){animation-delay:0.15s}
+.p-card:nth-child(4){animation-delay:0.2s}
+.p-card:nth-child(5){animation-delay:0.25s}
+.p-card:nth-child(6){animation-delay:0.3s}
+.p-card:nth-child(7){animation-delay:0.35s}
+.p-card:nth-child(8){animation-delay:0.4s}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.p-card:hover{background:rgba(42,42,48,0.85);transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);border-color:rgba(255,255,255,0.12)}
+
+.pc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.pc-name{font-size:12px;font-weight:600;color:var(--text-primary)}
+.pc-sub{font-size:9px;color:var(--text-secondary);margin-top:2px}
+.pc-badge{font-size:8px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px}
+.pc-badge.active{background:rgba(34,197,94,0.15);color:#34D399}
+.pc-badge.pending{background:rgba(251,146,60,0.15);color:#FB923C}
+.pc-badge.urgent{background:rgba(248,113,113,0.15);color:#F87171}
+.pc-badge.due{background:rgba(248,113,113,0.15);color:#F87171}
+
+.pc-divider{height:1px;background:rgba(255,255,255,0.06);margin:10px 0}
+
+.pc-details{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pc-detail-item{}
+.pc-detail-label{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.3px}
+.pc-detail-value{font-size:11px;font-weight:500;color:var(--text-primary);margin-top:2px}
+
+.pc-divider2{height:1px;background:rgba(255,255,255,0.06);margin:10px 0}
+.pc-action{text-align:center;font-size:10px;font-weight:500;color:var(--text-secondary);
+  cursor:pointer;padding:6px;border-radius:6px;transition:all 0.2s}
+.pc-action:hover{color:var(--text-primary);background:rgba(255,255,255,0.06)}
+
+/* PAGINATION INDICATOR */
+.pagination{display:flex;justify-content:center;padding:10px 0;gap:4px}
+.pag-dot{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,0.15)}
+.pag-dot.active{width:36px;background:rgba(255,255,255,0.5)}
+
+/* DIVIDER */
+.section-divider{height:1px;background:var(--win-border);margin:0 20px;flex-shrink:0}
+
+/* CALENDAR SECTION */
+.cal-section{height:200px;flex-shrink:0;display:flex;flex-direction:column}
+.cal-header{display:flex;align-items:center;padding:10px 20px;gap:12px;flex-shrink:0}
+.cal-label{font-size:11px;color:var(--text-secondary)}
+.cal-dropdown{font-size:11px;font-weight:500;color:var(--text-primary);
+  padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;
+  display:flex;align-items:center;gap:4px}
+.cal-dropdown svg{width:10px;height:10px;stroke:var(--text-secondary);stroke-width:2;fill:none}
+.cal-date{font-size:11px;color:var(--text-secondary);margin-left:auto}
+.cal-toggle{display:flex;gap:0;border-radius:6px;overflow:hidden;border:1px solid var(--win-border)}
+.cal-tog-btn{font-size:9px;font-weight:500;padding:4px 10px;color:var(--text-dim);
+  background:transparent;cursor:pointer;transition:all 0.2s}
+.cal-tog-btn:hover{color:var(--text-secondary)}
+.cal-tog-btn.active{color:#fff;background:rgba(255,255,255,0.1)}
+
+.cal-grid-wrap{flex:1;overflow:auto;padding:0 20px 12px}
+.cal-grid-wrap::-webkit-scrollbar{display:none}
+.cal-grid{display:grid;grid-template-columns:48px repeat(7,1fr);min-width:650px}
+.cal-corner{position:sticky;top:0;left:0;z-index:3;background:rgba(22,22,26,0.95);backdrop-filter:blur(10px)}
+.cal-hdr{position:sticky;top:0;z-index:2;background:rgba(22,22,26,0.95);
+  backdrop-filter:blur(10px);padding:6px 4px;text-align:center;
+  border-bottom:1px solid rgba(255,255,255,0.04)}
+.cal-hdr-day{font-size:9px;font-weight:500;color:var(--text-dim);text-transform:uppercase}
+.cal-hdr-num{font-size:13px;font-weight:600;color:var(--text-primary);margin-top:1px}
+.cal-hdr.today .cal-hdr-num{color:var(--blue)}
+.cal-time{position:sticky;left:0;z-index:1;
+  padding:0 6px;font-size:9px;font-weight:500;color:var(--text-dim);
+  text-align:right;background:rgba(22,22,26,0.9);
+  border-right:1px solid rgba(255,255,255,0.04);
+  display:flex;align-items:flex-start;justify-content:flex-end;padding-top:3px}
+.cal-cell{border-bottom:1px solid rgba(255,255,255,0.03);border-right:1px solid rgba(255,255,255,0.03);
+  min-height:44px;padding:2px;position:relative}
+.cal-event{position:absolute;left:2px;right:2px;border-radius:5px;padding:4px 6px;
+  font-size:8px;font-weight:500;color:#fff;overflow:hidden;cursor:pointer;transition:all 0.2s}
+.cal-event:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.cal-event.green{background:rgba(34,197,94,0.35);border-left:2px solid #34D399}
+.cal-event.blue{background:rgba(59,130,246,0.35);border-left:2px solid #3B82F6}
+.cal-event.purple{background:rgba(168,85,247,0.35);border-left:2px solid #A855F7}
+.cal-event.orange{background:rgba(251,146,60,0.35);border-left:2px solid #FB923C}
+
+/* FLOW VIEW */
+.flow-panel{display:none;flex:1;overflow-y:auto;padding:20px}
+.flow-panel.active{display:block}
+.flow-item{display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;
+  margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+.flow-item:hover{background:rgba(42,42,48,0.85);border-color:rgba(255,255,255,0.12)}
+.flow-check{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.flow-check.done{background:var(--green);border-color:var(--green)}
+.flow-check.done::after{content:'✓';font-size:10px;color:#fff}
+.flow-item-text{font-size:12px;color:var(--text-primary);flex:1}
+.flow-item-time{font-size:10px;color:var(--text-dim);font-weight:500}
+
+/* AGENDA VIEW */
+.agenda-panel{display:none;flex:1;overflow-y:auto;padding:20px}
+.agenda-panel.active{display:block}
+.agenda-block{margin-bottom:16px}
+.agenda-time{font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;
+  letter-spacing:0.5px;margin-bottom:6px}
+.agenda-event{padding:12px 16px;background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:12px;border-left:3px solid var(--blue);margin-bottom:6px}
+.agenda-event-title{font-size:12px;font-weight:500;color:var(--text-primary)}
+.agenda-event-detail{font-size:10px;color:var(--text-secondary);margin-top:3px}
+
+/* PANELS VISIBILITY */
+.cards-panel{display:flex;flex-direction:column;flex:1;overflow:hidden}
+.cards-panel.active{display:flex}
+.cards-panel.hidden,.flow-panel.hidden,.agenda-panel.hidden{display:none}
+</style>
+<link rel="stylesheet" href="nav-shared.css"/>
+</head>
+<body>
+
+<!-- BLURRED ROOM BACKGROUND -->
+<div class="env"></div>
+
+<!-- SIDE WIDGET - detached floating -->
+<div class="side-widget">
+  <div class="sw-top">
+    <div class="sw-top-label">Diana Jundi</div>
+    <div class="sw-top-name">Task Dashboard</div>
+    <div class="sw-top-time" id="swTime">4:02 AM</div>
+    <div class="sw-top-date" id="swDate">Jul 13, 2026</div>
+    <div class="sw-top-row">
+      <div class="sw-top-avatar">DC</div>
+      <div class="sw-top-status">At Home · Online</div>
+    </div>
+  </div>
+  <div class="sw-bottom">
+    <div class="sw-btn"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+</div>
+
+<!-- MAIN FLOATING WINDOW -->
+<div class="window">
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-close"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></div>
+      <div class="hdr-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div class="hdr-title">
+        <h1>Diana's Board</h1>
+        <p>Task Dashboard</p>
+      </div>
+    </div>
+    <div class="hdr-center">
+      <div class="hdr-profile">
+        <div class="hdr-avatar">DC</div>
+        <div class="hdr-profile-text">
+          <span class="hdr-profile-name">Diana</span>
+          <span class="hdr-profile-role">Pursuits · Flow · Agenda</span>
+        </div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-time" id="hdrTime">4:02 AM</div>
+      <div class="hdr-actions">
+        <div class="hdr-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="hdr-btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <div class="hdr-btn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUB HEADER - tabs -->
+  <div class="sub">
+    <div class="sub-left">
+      <div class="sub-tab active" data-view="pursuits">Pursuits</div>
+      <div class="sub-tab" data-view="flow">Flow</div>
+      <div class="sub-tab" data-view="agenda">Agenda</div>
+    </div>
+    <div class="sub-right">
+      <div class="sub-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Search tasks</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <!-- PURSUITS VIEW -->
+    <div class="cards-panel active" id="pursuitsPanel">
+      <div class="cards-section">
+        <div class="cards-grid">
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">persons</div><div class="pc-sub">relationships · networking</div></div><div class="pc-badge active">Active</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Connections</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">3 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">curated lifestyle</div><div class="pc-sub">aesthetics · environment</div></div><div class="pc-badge active">Active</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Aesthetics</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">2 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">adderall</div><div class="pc-sub">health · rx management</div></div><div class="pc-badge pending">Pending</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Health</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">1 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">money back</div><div class="pc-sub">finance · disputes</div></div><div class="pc-badge urgent">Urgent</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Finance</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">4 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">social media</div><div class="pc-sub">content · presence</div></div><div class="pc-badge active">Active</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Content</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">2 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">skincare</div><div class="pc-sub">routine · products</div></div><div class="pc-badge active">Active</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Routine</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">1 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">vibes</div><div class="pc-sub">energy · alignment</div></div><div class="pc-badge active">Active</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Energy</div></div><div class="pc-detail-item"><div class="pc-detail-label">Tasks</div><div class="pc-detail-value">0 pending</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+          <div class="p-card">
+            <div class="pc-header"><div><div class="pc-name">apply to</div><div class="pc-sub">scholarships · opportunities</div></div><div class="pc-badge due">Due</div></div>
+            <div class="pc-divider"></div>
+            <div class="pc-details"><div class="pc-detail-item"><div class="pc-detail-label">Focus area</div><div class="pc-detail-value">Scholarships</div></div><div class="pc-detail-item"><div class="pc-detail-label">Due</div><div class="pc-detail-value">Jul 6</div></div></div>
+            <div class="pc-divider2"></div>
+            <div class="pc-action">View Details</div>
+          </div>
+        </div>
+      </div>
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <div class="pag-dot active"></div>
+        <div class="pag-dot"></div>
+        <div class="pag-dot"></div>
+      </div>
+      <!-- SECTION DIVIDER -->
+      <div class="section-divider"></div>
+      <!-- CALENDAR -->
+      <div class="cal-section">
+        <div class="cal-header">
+          <span class="cal-label">Schedule:</span>
+          <div class="cal-dropdown">This Week <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <span class="cal-date">July 7 – 13, 2026</span>
+          <div class="cal-toggle">
+            <div class="cal-tog-btn">Day</div>
+            <div class="cal-tog-btn active">Week</div>
+            <div class="cal-tog-btn">Month</div>
+          </div>
+        </div>
+        <div class="cal-grid-wrap">
+          <div class="cal-grid">
+            <!-- Header row -->
+            <div class="cal-corner"></div>
+            <div class="cal-hdr"><div class="cal-hdr-day">Mon</div><div class="cal-hdr-num">7</div></div>
+            <div class="cal-hdr"><div class="cal-hdr-day">Tue</div><div class="cal-hdr-num">8</div></div>
+            <div class="cal-hdr"><div class="cal-hdr-day">Wed</div><div class="cal-hdr-num">9</div></div>
+            <div class="cal-hdr"><div class="cal-hdr-day">Thu</div><div class="cal-hdr-num">10</div></div>
+            <div class="cal-hdr"><div class="cal-hdr-day">Fri</div><div class="cal-hdr-num">11</div></div>
+            <div class="cal-hdr today"><div class="cal-hdr-day">Sat</div><div class="cal-hdr-num">12</div></div>
+            <div class="cal-hdr"><div class="cal-hdr-day">Sun</div><div class="cal-hdr-num">13</div></div>
+            <!-- 7:00 row -->
+            <div class="cal-time">7:00</div>
+            <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+            <!-- 8:00 row -->
+            <div class="cal-time">8:00</div>
+            <div class="cal-cell"><div class="cal-event green" style="top:4px;height:36px">SCLA Mtg</div></div>
+            <div class="cal-cell"></div>
+            <div class="cal-cell"><div class="cal-event blue" style="top:4px;height:36px">AERA Session</div></div>
+            <div class="cal-cell"></div>
+            <div class="cal-cell"><div class="cal-event purple" style="top:4px;height:44px">ELEVATE<br>Brainstorm</div></div>
+            <div class="cal-cell"></div>
+            <div class="cal-cell"></div>
+            <!-- 9:00 row -->
+            <div class="cal-time">9:00</div>
+            <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+            <!-- 10:00 row -->
+            <div class="cal-time">10:00</div>
+            <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+            <!-- 15:00 row -->
+            <div class="cal-time">15:00</div>
+            <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+            <div class="cal-cell"><div class="cal-event blue" style="top:4px;height:36px">Psi Chi Mtg</div></div>
+            <div class="cal-cell"><div class="cal-event orange" style="top:4px;height:36px">General Mtg</div></div>
+            <div class="cal-cell"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW VIEW -->
+    <div class="flow-panel" id="flowPanel">
+      <div class="flow-item"><div class="flow-check done"></div><div class="flow-item-text">Review SCLA presentation slides</div><div class="flow-item-time">8:00 AM</div></div>
+      <div class="flow-item"><div class="flow-check done"></div><div class="flow-item-text">Submit AERA workshop proposal draft</div><div class="flow-item-time">9:30 AM</div></div>
+      <div class="flow-item"><div class="flow-check"></div><div class="flow-item-text">ELEVATE brainstorm session prep</div><div class="flow-item-time">11:00 AM</div></div>
+      <div class="flow-item"><div class="flow-check"></div><div class="flow-item-text">Follow up on Psi Chi scholarship</div><div class="flow-item-time">1:00 PM</div></div>
+      <div class="flow-item"><div class="flow-check"></div><div class="flow-item-text">Update social media content calendar</div><div class="flow-item-time">2:30 PM</div></div>
+      <div class="flow-item"><div class="flow-check"></div><div class="flow-item-text">Skincare routine research - retinol options</div><div class="flow-item-time">4:00 PM</div></div>
+      <div class="flow-item"><div class="flow-check"></div><div class="flow-item-text">Call pharmacy re: Adderall refill</div><div class="flow-item-time">5:00 PM</div></div>
+    </div>
+
+    <!-- AGENDA VIEW -->
+    <div class="agenda-panel" id="agendaPanel">
+      <div class="agenda-block">
+        <div class="agenda-time">Morning</div>
+        <div class="agenda-event" style="border-left-color:#34D399"><div class="agenda-event-title">SCLA Community Champions Kick-off</div><div class="agenda-event-detail">8:00 AM · Virtual · 1 hour</div></div>
+        <div class="agenda-event" style="border-left-color:#3B82F6"><div class="agenda-event-title">AERA 2027 Proposal Development Workshop</div><div class="agenda-event-detail">9:30 AM · Virtual · 1.5 hours</div></div>
+      </div>
+      <div class="agenda-block">
+        <div class="agenda-time">Afternoon</div>
+        <div class="agenda-event" style="border-left-color:#A855F7"><div class="agenda-event-title">ELEVATE Brainstorm Session</div><div class="agenda-event-detail">11:00 AM · Virtual · 1 hour</div></div>
+        <div class="agenda-event" style="border-left-color:#3B82F6"><div class="agenda-event-title">Psi Chi Graduate Scholarships Review</div><div class="agenda-event-detail">3:00 PM · In-person · 45 min</div></div>
+        <div class="agenda-event" style="border-left-color:#FB923C"><div class="agenda-event-title">General Meeting #1</div><div class="agenda-event-detail">3:00 PM · Virtual · 1 hour</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Live clock
+function updateTime(){
+  const now=new Date();
+  let h=now.getHours(),m=now.getMinutes();
+  const ampm=h>=12?'PM':'AM';
+  h=h%12||12;
+  const timeStr=h+':'+String(m).padStart(2,'0')+' '+ampm;
+  document.getElementById('hdrTime').textContent=timeStr;
+  document.getElementById('swTime').textContent=timeStr;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('swDate').textContent=months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
+}
+updateTime();setInterval(updateTime,10000);
+
+// Tab switching
+const tabs=document.querySelectorAll('.sub-tab');
+const pursuitsPanel=document.getElementById('pursuitsPanel');
+const flowPanel=document.getElementById('flowPanel');
+const agendaPanel=document.getElementById('agendaPanel');
+
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const view=tab.dataset.view;
+    pursuitsPanel.style.display=view==='pursuits'?'flex':'none';
+    flowPanel.style.display=view==='flow'?'block':'none';
+    agendaPanel.style.display=view==='agenda'?'block':'none';
+  });
+});
+
+// Flow check toggle
+document.querySelectorAll('.flow-check').forEach(check=>{
+  check.addEventListener('click',()=>{
+    check.classList.toggle('done');
+  });
+});
+
+// Card click
+document.querySelectorAll('.p-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('.p-card').forEach(c=>c.style.borderColor='');
+    card.style.borderColor='rgba(74,158,255,0.5)';
+  });
+});
+
+// Calendar toggle
+document.querySelectorAll('.cal-tog-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.cal-tog-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+<script src="nav-shared.js"></script>
+</body>
+</html>
