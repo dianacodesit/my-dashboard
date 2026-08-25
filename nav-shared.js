@@ -3,12 +3,14 @@
   window.__navSharedWired = 1;
 
   var LINKS = [
+    { href: 'index.html', label: 'home', group: 'top' },
     { href: 'today.html', label: 'today', group: 'top' },
     { href: 'tasks-obsidian-v1127.html', label: 'taskboard', group: 'main' },
     { href: 'identity.html', label: 'identity', group: 'main' },
     { href: 'goals.html', label: 'goals', group: 'main' },
     { href: 'projects.html', label: 'projects', group: 'main' },
     { href: 'agenda.html', label: 'agenda', group: 'main' },
+    { href: 'thoughts.html', label: 'thoughts', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
     { href: 'dimensions.html', label: 'dimensions', group: 'main' },
     { href: 'grids.html', label: 'grids', group: 'main' },
@@ -30,7 +32,7 @@
   }
   function currentFile(){
     var path = (window.location.pathname || '').split('/').pop();
-    return path || 'dashboard.html';
+    return path || 'index.html';
   }
   function aTag(item, cur){
     var cls = fileOf(item.href) === cur ? ' class="current"' : '';
@@ -82,8 +84,16 @@
     }
     if (!btn.dataset.wired) {
       btn.dataset.wired = '1';
-      btn.addEventListener('click', open);
-      if (closeBtn) closeBtn.addEventListener('click', close);
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        open();
+      }, true);
+      if (closeBtn) closeBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+      }, true);
       overlay.addEventListener('click', close);
       document.addEventListener('keydown', function(e){
         if (e.key === 'Escape' && sidebar.classList.contains('open')) close();

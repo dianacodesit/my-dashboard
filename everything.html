@@ -8586,11 +8586,17 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </script>
 <style>
   /* ===== Hamburger nav menu + sidebar ===== */
+  #nav-root {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    pointer-events: none;
+  }
   #hamburger-menu {
     position: fixed;
     top: 18px;
     left: 18px;
-    z-index: 10000;
+    z-index: 200010;
     background: transparent;
     border: none;
     border-radius: 4px;
@@ -8601,6 +8607,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     gap: 3px;
     box-shadow: none;
     transition: opacity 0.2s;
+    pointer-events: auto;
   }
   #hamburger-menu:hover {
     background: transparent;
@@ -8619,8 +8626,9 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.3);
-    z-index: 10000;
+    z-index: 200000;
     transition: opacity 0.3s;
+    pointer-events: auto;
   }
   #nav-overlay.open { display: block; }
   #nav-sidebar {
@@ -8631,12 +8639,13 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     height: 100vh;
     background: #F5F0E8;
     border-right: 1px solid rgba(196,168,130,0.4);
-    z-index: 10001;
+    z-index: 200005;
     padding: 60px 0 20px;
     box-shadow: 4px 0 24px rgba(0,0,0,0.12);
     transition: left 0.3s ease;
     overflow-y: auto;
     box-sizing: border-box;
+    pointer-events: auto;
   }
   #nav-sidebar.open { left: 0; }
   #nav-close {
@@ -9947,6 +9956,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </style>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="icon-grid.css?v=nosidebar"/>
 </head>
 <body>
 <!-- Global SVG defs for pin markers -->
@@ -10013,6 +10023,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     tick();
   })();
 </script>
+<div id="nav-root">
 <button aria-label="open menu" id="hamburger-menu" type="button"><span></span><span></span><span></span></button>
 <div id="nav-overlay"></div>
 <aside aria-hidden="true" id="nav-sidebar">
@@ -10025,6 +10036,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 #nav-sidebar details.nav-group[open] > summary.nav-section::after { transform:rotate(90deg); }
 </style>
 <nav>
+<a href="index.html">home</a>
 <a href="today.html">today</a>
 </nav>
 <div class="nav-section">main</div>
@@ -10034,8 +10046,10 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 <a href="goals.html">goals</a>
 <a href="projects.html">projects</a>
 <a href="agenda.html">agenda</a>
+<a href="thoughts.html">thoughts</a>
 <a href="deen.html">deen</a>
 <a href="dimensions.html">dimensions</a>
+<a href="grids.html">grids</a>
 <a class="current" href="everything.html">everything</a>
 <a href="dashboard.html">dashboard</a>
 <a href="brain-dump.html">brain dump</a>
@@ -10054,6 +10068,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </nav>
 </details>
 </aside>
+</div>
 <script>
 (function(){
   function setup(){
@@ -10072,15 +10087,26 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
       overlay.classList.remove('open');
       sidebar.setAttribute('aria-hidden', 'true');
     }
-    btn.addEventListener('click', open);
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    overlay.addEventListener('click', close);
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      open();
+    }, true);
+    if (closeBtn) closeBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      close();
+    }, true);
+    overlay.addEventListener('click', function(e){
+      e.preventDefault();
+      close();
+    });
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape' && sidebar.classList.contains('open')) close();
     });
     // Mark the current page based on URL
     try {
-      var path = window.location.pathname;
+      var path = (window.location.pathname || '').split('/').pop() || 'everything.html';
       document.querySelectorAll('#nav-sidebar nav a').forEach(function(a){
         a.classList.toggle('current', a.getAttribute('href') === path);
       });
@@ -12838,8 +12864,8 @@ window.__j22fnApply=run;
     'money':'manus-storage/pursuit-money_57ff14e0.jpg',
     'skincare':'manus-storage/pursuit-skincare_e30839d6.jpg',
     'skin care':'manus-storage/pursuit-skincare_e30839d6.jpg',
-    'glow up':'manus-storage/mock-glow-up-skin.jpg?v=1',
-    'glow-up':'manus-storage/mock-glow-up-skin.jpg?v=1',
+    'glow up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
+    'glow-up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'body':'manus-storage/zone-body.jpg?v=abs',
     'beauty':'manus-storage/pursuit-skincare_e30839d6.jpg',
     'curated lifestyle':'manus-storage/pursuit-curated-lifestyle.jpg?v=2',
@@ -12952,7 +12978,7 @@ window.__j22fnApply=run;
 (function(){
   window.__pursuitZones = 2;
   var ZONES = [
-    {id:'body', title:'GLOW UP', subs:'body', img:'manus-storage/mock-glow-up-skin.jpg?v=1', keys:/\bbody\b|adderall|glow|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera/},
+    {id:'body', title:'GLOW UP', subs:'body', img:'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek', keys:/\bbody\b|adderall|glow|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera/},
     {id:'life', title:'LIFESTYLE', subs:'curated lifestyle, returns, postal, traveler, persons, social, vibes', img:'manus-storage/pursuit-lifestyle_577937e8.jpg', keys:/lifestyle|shopped|\bshop\b|sephora|amazon|nordstrom|target|return|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran/},
     {id:'finances', title:'FINANCES', subs:'capital blueprint', img:'manus-storage/zone-finances-v2.jpg?v=2', keys:/capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger/},
     {id:'leverage', title:'POWER', subs:'litigation wins, leverage, workflow', img:'manus-storage/mock-power.jpg', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
@@ -12969,6 +12995,7 @@ window.__j22fnApply=run;
     var n=(name||'').toLowerCase();
     if(n==='power'||n==='added'||n==='leverage') return 'leverage';
     if(n==='quantum') return 'presence';
+    if(/text\s*mom/.test(n) || n==='persons') return 'life';
     if(n==='body'||n==='glow up'||n==='glow-up'||n==='skin care'||n==='skincare'||n==='adderall') return 'body';
     if(/translat|arabic/.test(n)) return 'ambition';
     var today=document.querySelector('.day-block.today-block, .day-block.zone-board-day');
@@ -12992,46 +13019,62 @@ window.__j22fnApply=run;
     return 'life';
   }
   window.__zoneForPursuit = zoneFor;
-  var POSKEY='btm_zonepos_v13_stack';
+  var POSKEY='btm_zonepos_v14_sectionpanes';
   var ZONE_GAP=64;
   var DEFAULT_POS = {
-    body:{x:28,y:24,w:260,h:248},
-    life:{x:368,y:48,w:260,h:248},
-    finances:{x:708,y:20,w:270,h:248},
-    leverage:{x:40,y:360,w:270,h:248},
-    ambition:{x:352,y:360,w:280,h:260},
-    presence:{x:708,y:360,w:270,h:248}
+    body:{x:28,y:28,w:248,h:288},
+    life:{x:432,y:50,w:340,h:320},
+    finances:{x:836,y:22,w:340,h:320},
+    leverage:{x:40,y:420,w:340,h:320},
+    ambition:{x:432,y:420,w:340,h:340},
+    presence:{x:836,y:420,w:340,h:320}
   };
   function loadPos(){ try{ return JSON.parse(localStorage.getItem(POSKEY)||'{}'); }catch(e){ return {}; } }
   function savePos(map){ try{ localStorage.setItem(POSKEY, JSON.stringify(map)); }catch(e){} scheduleCloudSave(); }
   function writeRect(r){
+    var board=!!(r.el && r.el.closest('.pursuit-board-day, [data-date="2026-08-20"]'));
+    var collapsed=!!(r.el && r.el.classList.contains('zone-collapsed'));
     var x=Math.max(0, Math.round(r.x));
     var y=Math.max(0, Math.round(r.y));
-    var w=Math.max(220, Math.round(r.w));
-    var h=Math.max(180, Math.round(r.h));
+    var prevW=parseFloat(r.el.style.getPropertyValue('--zone-w'));
+    var prevH=parseFloat(r.el.style.getPropertyValue('--zone-h'));
+    var w, h;
+    if(collapsed && board){
+      w=Math.max(200, Math.round(prevW || r.w || 248));
+      h=Math.max(168, Math.round(prevH || r.h || 288));
+    } else {
+      w=Math.max(board ? 200 : 320, Math.round(r.w));
+      h=Math.max(board ? 168 : 300, Math.round(r.h));
+    }
     r.el.style.setProperty('--ff-x', x+'px');
     r.el.style.setProperty('--ff-y', y+'px');
     r.el.style.setProperty('--zone-w', w+'px');
     r.el.style.setProperty('--zone-h', h+'px');
     r.el.style.setProperty('left', x+'px', 'important');
     r.el.style.setProperty('top', y+'px', 'important');
-    r.el.style.setProperty('width', w+'px', 'important');
-    if(r.el.classList.contains('zone-collapsed')){
+    if(collapsed && board){
+      r.el.style.setProperty('width', '172px', 'important');
+      r.el.style.setProperty('height', '52px', 'important');
+    } else if(collapsed){
+      r.el.style.setProperty('width', w+'px', 'important');
       r.el.style.setProperty('height', '48px', 'important');
     } else {
+      r.el.style.setProperty('width', w+'px', 'important');
       r.el.style.setProperty('height', h+'px', 'important');
     }
+    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
   }
   function zoneRect(row){
     var collapsed=row.classList.contains('zone-collapsed');
+    var board=!!row.closest('.pursuit-board-day, [data-date="2026-08-20"]');
     return {
       el:row,
       id:row.getAttribute('data-zone'),
       x:parseFloat(row.style.getPropertyValue('--ff-x'))||parseFloat(row.style.left)||0,
       y:parseFloat(row.style.getPropertyValue('--ff-y'))||parseFloat(row.style.top)||0,
-      w:parseFloat(row.style.getPropertyValue('--zone-w'))||parseFloat(row.style.width)||320,
+      w:collapsed && board ? 172 : (parseFloat(row.style.getPropertyValue('--zone-w'))||parseFloat(row.style.width)||320),
       h:collapsed
-        ? (parseFloat(row.style.getPropertyValue('--zone-h'))||280)
+        ? (board ? 52 : 48)
         : (parseFloat(row.style.getPropertyValue('--zone-h'))||parseFloat(row.style.height)||280)
     };
   }
@@ -13081,9 +13124,13 @@ window.__j22fnApply=run;
     });
     if(right<80) right=fitW;
     if(bottom<80) bottom=280;
-    var scale=Math.min(1, (fitW-2)/Math.max(right,1));
-    if(scale<0.35) scale=0.35;
-    scale=Math.round(scale*1000)/1000;
+    var isBoard=!!(grid.closest('.pursuit-board-day, .day-block[data-date="2026-08-20"]'));
+    var scale=1;
+    if(!isBoard){
+      scale=Math.min(1, (fitW-2)/Math.max(right,1));
+      if(scale<0.35) scale=0.35;
+      scale=Math.round(scale*1000)/1000;
+    }
     grid.style.removeProperty('--zone-photo');
     grid.style.background='none';
     grid.style.backgroundImage='none';
@@ -13100,7 +13147,7 @@ window.__j22fnApply=run;
       host.style.width='100%';
       host.style.maxWidth='100%';
       host.style.minWidth='0';
-      host.style.overflow='hidden';
+      host.style.overflow=isBoard ? 'auto' : 'hidden';
       host.style.setProperty('--board-scale', String(scale));
       host.style.height=Math.round(bottom*scale)+'px';
     }
@@ -13140,18 +13187,18 @@ window.__j22fnApply=run;
     var gap=64;
     var avail=Math.max(320, W-pad*2);
     var zw=Math.floor((avail-gap*2)/3);
-    if(zw>280) zw=280;
-    if(zw<210) zw=210;
+    if(zw>400) zw=400;
+    if(zw<340) zw=340;
     var extra=Math.max(0, avail-(zw*3+gap*2));
     var hgap=gap+Math.floor(extra/2);
-    var zh=248;
+    var zh=320;
     var vgap=72;
     var pos={
       body:{x:pad, y:pad, w:zw, h:zh},
       life:{x:pad+zw+hgap, y:pad+22, w:zw, h:zh},
       finances:{x:pad+(zw+hgap)*2, y:pad+6, w:zw, h:zh},
       leverage:{x:pad+12, y:pad+zh+vgap, w:zw, h:zh},
-      ambition:{x:pad+zw+hgap-10, y:pad+zh+vgap, w:zw, h:zh},
+      ambition:{x:pad+zw+hgap-10, y:pad+zh+vgap, w:zw, h:zh+20},
       presence:{x:pad+(zw+hgap)*2, y:pad+zh+vgap, w:zw, h:zh}
     };
     [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
@@ -13165,6 +13212,7 @@ window.__j22fnApply=run;
   function applyPos(row, id){
     var saved=loadPos()[id];
     var d=DEFAULT_POS[id]||{x:20,y:20,w:320,h:280};
+    var board=!!row.closest('.pursuit-board-day, [data-date="2026-08-20"]');
     if(saved && typeof saved.x==='number' && typeof saved.y==='number'){
       d={
         x:saved.x,
@@ -13172,33 +13220,83 @@ window.__j22fnApply=run;
         w:typeof saved.w==='number'?saved.w:d.w,
         h:typeof saved.h==='number'?saved.h:d.h
       };
-      /* collapse bug stored the 48px bar / 180px floor as the real size */
-      if(d.h<=180) d.h=(DEFAULT_POS[id]||d).h;
-      if(d.w<=220) d.w=(DEFAULT_POS[id]||d).w;
+      if(board){
+        if(d.h<168) d.h=(DEFAULT_POS[id]||d).h;
+        if(d.w<200) d.w=(DEFAULT_POS[id]||d).w;
+      } else {
+        if(d.h<300) d.h=(DEFAULT_POS[id]||d).h;
+        if(d.w<320) d.w=(DEFAULT_POS[id]||d).w;
+      }
+    }
+    if(board && id==='body' && row.querySelectorAll('.pursuit-zone-grid .sec-card').length<=1){
+      d.w=248; d.h=288;
     }
     writeRect({el:row, x:d.x, y:d.y, w:d.w, h:d.h});
     readPos(row, id);
   }
-  function sameZoneColumn(a, b){
-    var overlap=Math.min(a.x+a.w, b.x+b.w)-Math.max(a.x, b.x);
-    return overlap > Math.min(a.w, b.w)*0.4;
+  function clusterAug20Web(grid){
+    if(!grid || !grid.closest('[data-date="2026-08-20"]')) return;
+    try{ if(localStorage.getItem('btm_aug20_web_cluster_v1')) return; }catch(e){}
+    var pos={
+      body:{x:36,y:32,w:248,h:288},
+      life:{x:300,y:44,w:220,h:176},
+      finances:{x:500,y:22,w:220,h:176},
+      leverage:{x:48,y:348,w:248,h:280},
+      ambition:{x:310,y:360,w:340,h:340},
+      presence:{x:530,y:348,w:220,h:176}
+    };
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var id=z.getAttribute('data-zone');
+      var d=pos[id];
+      if(!d) return;
+      writeRect({el:z, id:id, x:d.x, y:d.y, w:d.w, h:d.h});
+    });
+    resolveOverlaps(grid);
+    try{ localStorage.setItem('btm_aug20_web_cluster_v1','1'); }catch(e){}
+    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
   }
-  function pinPresenceUnderFinances(grid){
-    if(!grid) return;
-    var fin=grid.querySelector(':scope > .pursuit-zone[data-zone="finances"]:not(.zone-collapsed)');
-    var q=grid.querySelector(':scope > .pursuit-zone[data-zone="presence"]:not(.zone-collapsed)');
-    if(!fin || !q) return;
-    var a=zoneRect(fin), b=zoneRect(q);
-    if(!sameZoneColumn(a, b)) return;
-    var floor=a.y+a.h+ZONE_GAP;
-    if(b.y<floor){
-      b.y=floor;
-      writeRect(b);
+  window.__clusterAug20Web=clusterAug20Web;
+  function zoneHit(a, b, gap){
+    gap=gap==null?ZONE_GAP:gap;
+    return a.x < b.x+b.w+gap && a.x+a.w+gap > b.x &&
+           a.y < b.y+b.h+gap && a.y+a.h+gap > b.y;
+  }
+  function zoneClearOf(mover, rects, gap){
+    var k;
+    for(k=0;k<rects.length;k++){
+      if(rects[k].id===mover.id) continue;
+      if(zoneHit(mover, rects[k], gap)) return false;
     }
+    return true;
+  }
+  function separateZone(mover, other, rects, gap){
+    var ox=(mover.w/2+other.w/2+gap)-Math.abs((mover.x+mover.w/2)-(other.x+other.w/2));
+    var oy=(mover.h/2+other.h/2+gap)-Math.abs((mover.y+mover.h/2)-(other.y+other.h/2));
+    var cands=[
+      {x:mover.x+ox+1, y:mover.y},
+      {x:Math.max(0, mover.x-ox-1), y:mover.y},
+      {x:mover.x, y:mover.y+oy+1},
+      {x:mover.x, y:Math.max(0, mover.y-oy-1)},
+      {x:other.x+other.w+gap, y:mover.y},
+      {x:Math.max(0, other.x-mover.w-gap), y:mover.y},
+      {x:mover.x, y:other.y+other.h+gap},
+      {x:mover.x, y:Math.max(0, other.y-mover.h-gap)}
+    ];
+    var best=null, bestD=1e9, i, pass;
+    for(pass=0; pass<2 && !best; pass++){
+      for(i=0;i<cands.length;i++){
+        var c={el:mover.el, id:mover.id, x:cands[i].x, y:cands[i].y, w:mover.w, h:mover.h};
+        if(pass===0 && !zoneClearOf(c, rects, gap)) continue;
+        if(pass===1 && zoneHit(c, other, gap)) continue;
+        var d=Math.abs(c.x-mover.x)+Math.abs(c.y-mover.y);
+        if(d<bestD){ bestD=d; best=c; }
+      }
+    }
+    return best;
   }
   function resolveOverlaps(grid, keepId, opts){
     if(!grid) return;
-    var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone:not(.zone-collapsed)'));
+    var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
     if(!zones.length) return;
     var gap=ZONE_GAP;
     var iter, moved;
@@ -13209,48 +13307,48 @@ window.__j22fnApply=run;
       for(i=0;i<rects.length;i++){
         for(j=i+1;j<rects.length;j++){
           var a=rects[i], b=rects[j];
-          var acx=a.x+a.w/2, acy=a.y+a.h/2;
-          var bcx=b.x+b.w/2, bcy=b.y+b.h/2;
-          var overlapX=(a.w/2+b.w/2+gap)-Math.abs(acx-bcx);
-          var overlapY=(a.h/2+b.h/2+gap)-Math.abs(acy-bcy);
-          if(overlapX<=0 || overlapY<=0) continue;
+          if(!zoneHit(a, b, gap)) continue;
           var mover, other;
           if(keepId && a.id===keepId){ mover=b; other=a; }
           else if(keepId && b.id===keepId){ mover=a; other=b; }
           else { mover=b; other=a; }
-          var stack=sameZoneColumn(mover, other);
-          if(stack || overlapY<=overlapX){
-            mover.y=Math.max(mover.y, other.y+other.h+gap);
-          } else {
-            mover.x=Math.max(mover.x, other.x+other.w+gap);
-          }
-          writeRect(mover);
+          var next=separateZone(mover, other, rects, gap);
+          if(!next) continue;
+          if(next.x===mover.x && next.y===mover.y) continue;
+          writeRect(next);
           moved=true;
         }
       }
       if(!moved) break;
     }
-    pinPresenceUnderFinances(grid);
-    var finalRects=zones.map(zoneRect).concat(
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone.zone-collapsed')).map(zoneRect)
-    );
     expandCanvas(grid, [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).map(zoneRect));
     if(opts && opts.skipSave) return;
     var map=loadPos();
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).map(zoneRect).forEach(function(r){
-      map[r.id]={x:r.x,y:r.y,w:r.w,h:r.h};
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var id=z.getAttribute('data-zone');
+      map[id]={
+        x:parseFloat(z.style.getPropertyValue('--ff-x'))||0,
+        y:parseFloat(z.style.getPropertyValue('--ff-y'))||0,
+        w:parseFloat(z.style.getPropertyValue('--zone-w'))||320,
+        h:parseFloat(z.style.getPropertyValue('--zone-h'))||280
+      };
     });
     savePos(map);
+    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
   }
-  function fitZoneToCards(zone){
+  function fitZoneToCards(zone, keepEl){
     if(!zone) return;
-    layoutZonePieces(zone, zone.classList.contains('is-zoomed') ? 'zoom' : 'fit');
+    layoutZonePieces(zone, zone.classList.contains('is-zoomed') ? 'zoom' : 'fit', keepEl);
   }
   window.__fitZoneToCards=fitZoneToCards;
   function readPos(row, id){
-    var r=zoneRect(row);
     var map=loadPos();
-    map[id]={x:r.x,y:r.y,w:r.w,h:r.h};
+    map[id]={
+      x:parseFloat(row.style.getPropertyValue('--ff-x'))||0,
+      y:parseFloat(row.style.getPropertyValue('--ff-y'))||0,
+      w:parseFloat(row.style.getPropertyValue('--zone-w'))||320,
+      h:parseFloat(row.style.getPropertyValue('--zone-h'))||280
+    };
     savePos(map);
   }
   function themedImg(name, zid){
@@ -13329,8 +13427,8 @@ window.__j22fnApply=run;
     if(!pieces.length) return {w:220,h:180};
     var gap=16, x=12, y=28, right=12, bottom=y;
     pieces.forEach(function(el){
-      var w=parseFloat(el.style.getPropertyValue('--card-w'))||(el.classList.contains('zone-oneoff')?176:148);
-      var h=parseFloat(el.style.getPropertyValue('--card-h'))||(el.classList.contains('zone-oneoff')?88:148);
+      var w=parseFloat(el.style.getPropertyValue('--card-w'))||(el.classList.contains('zone-oneoff')?252:148);
+      var h=parseFloat(el.style.getPropertyValue('--card-h'))||(el.classList.contains('zone-oneoff')?76:148);
       right=Math.max(right, x+w);
       bottom=Math.max(bottom, y+h);
       x += w + gap;
@@ -13344,13 +13442,160 @@ window.__j22fnApply=run;
     var offs=[].slice.call(zone.querySelectorAll(':scope > .zone-oneoffs .zone-oneoff'));
     return cards.concat(offs);
   }
-  function layoutZonePieces(zone, mode){
+  function zonePieceBox(el){
+    var off=el.classList.contains('zone-oneoff');
+    var cs=getComputedStyle(el);
+    var declaredW=parseFloat(el.style.getPropertyValue('--card-w'))||parseFloat(cs.getPropertyValue('--card-w'))||0;
+    var declaredH=parseFloat(el.style.getPropertyValue('--card-h'))||parseFloat(cs.getPropertyValue('--card-h'))||0;
+    var renderedW=el.offsetWidth||0;
+    var renderedH=el.offsetHeight||0;
+    var w=(renderedW>=40)?renderedW:(declaredW||(off?252:148));
+    var h=(renderedH>=40)?renderedH:(declaredH||(off?76:148));
+    var x=parseFloat(el.style.getPropertyValue('--ff-x'));
+    var y=parseFloat(el.style.getPropertyValue('--ff-y'));
+    if(!isFinite(x)) x=parseFloat(cs.getPropertyValue('--ff-x'))||0;
+    if(!isFinite(y)) y=parseFloat(cs.getPropertyValue('--ff-y'))||0;
+    if(!off){
+      x+=ZONE_CARD_PAD_LEFT;
+      y+=ZONE_CARD_PAD_TOP;
+    }
+    return {el:el, off:off, x:x, y:y, w:w, h:h};
+  }
+  function applyZonePieceBox(b){
+    if(!b || !b.el) return;
+    if(b.off){
+      b.el.style.setProperty('--ff-x', Math.round(b.x)+'px');
+      b.el.style.setProperty('--ff-y', Math.round(b.y)+'px');
+      b.el.style.setProperty('--card-w', Math.round(b.w)+'px');
+      b.el.style.setProperty('--card-h', Math.round(b.h)+'px');
+      if(typeof saveOneoffRect==='function') saveOneoffRect(b.el);
+    } else {
+      b.el.style.setProperty('--ff-x', Math.round(b.x-ZONE_CARD_PAD_LEFT)+'px');
+      b.el.style.setProperty('--ff-y', Math.round(b.y-ZONE_CARD_PAD_TOP)+'px');
+      b.el.style.removeProperty('top');
+      b.el.style.removeProperty('left');
+      if(typeof saveMini==='function') saveMini(b.el);
+    }
+  }
+  function packZonePieces(zone, opts){
+    if(!zone || zone.classList.contains('zone-collapsed')) return;
+    var dayBlk=zone.closest('.day-block');
+    if(dayBlk && dayBlk.classList.contains('collapsed')) return;
+    opts=opts||{};
+    var keep=opts.keep||null;
+    var grow=opts.grow!==false;
+    var gap=20;
+    var boxes=zoneInnerPieces(zone).map(zonePieceBox);
+    if(!boxes.length) return;
+    var minX=8;
+    var minY=ZONE_CARD_PAD_TOP;
+    boxes.forEach(function(b){
+      if(b.x<minX) b.x=minX;
+      var floor=b.off?8:minY;
+      if(b.y<floor) b.y=floor;
+    });
+    boxes.sort(function(a,b){
+      if(a.el===keep) return 1;
+      if(b.el===keep) return -1;
+      if(a.off!==b.off) return a.off?1:-1;
+      return (a.y-b.y)||(a.x-b.x);
+    });
+    var zr=zoneRect(zone);
+    var zoneW=zr.w||parseFloat(zone.style.getPropertyValue('--zone-w'))||340;
+    var guard=0, moved=true;
+    while(moved && guard++<60){
+      moved=false;
+      var i,j;
+      for(i=0;i<boxes.length;i++){
+        for(j=i+1;j<boxes.length;j++){
+          var a=boxes[i], b=boxes[j];
+          if(!miniCardsOverlap(a,b,gap)) continue;
+          var rightSlot=a.x+a.w+gap;
+          if(rightSlot+b.w+12<=zoneW){
+            b.x=rightSlot;
+          } else {
+            b.x=minX;
+            b.y=Math.max(b.y, a.y+a.h+gap);
+          }
+          moved=true;
+        }
+      }
+    }
+    var changed=false;
+    boxes.forEach(function(b, idx){
+      var before=zonePieceBox(b.el);
+      if(Math.abs(before.x-b.x)>0.5 || Math.abs(before.y-b.y)>0.5) changed=true;
+      applyZonePieceBox(b);
+    });
+    var maxR=120, maxB=120;
+    boxes.forEach(function(b){
+      maxR=Math.max(maxR, b.x+b.w+16);
+      maxB=Math.max(maxB, b.y+b.h+ZONE_CARD_PAD_BOTTOM);
+    });
+    if(grow && (maxR>zr.w+1 || maxB>zr.h+1)){
+      writeRect({el:zone, id:zone.getAttribute('data-zone'), x:zr.x, y:zr.y, w:Math.max(zr.w, maxR), h:Math.max(zr.h, maxB)});
+      var grid=zone.closest('.sec-grid');
+      if(grid){
+        resolveOverlaps(grid, zone.getAttribute('data-zone'));
+        expandCanvas(grid);
+      }
+    }
+    var hostGrid=zone.closest('.sec-grid');
+    if(hostGrid) resolveCanvasPieceOverlaps(hostGrid);
+    return changed;
+  }
+  window.__packZonePieces=packZonePieces;
+  function resolveCanvasPieceOverlaps(grid){
+    if(!grid) return;
+    var blk=grid.closest('.day-block');
+    if(blk && blk.classList.contains('collapsed')) return;
+    var gap=20;
+    var obstacles=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone:not(.zone-collapsed)')).map(function(z){
+      var r=zoneRect(z);
+      return {x:r.x, y:r.y, w:r.w, h:r.h};
+    });
+    var pieces=[].slice.call(grid.querySelectorAll(':scope > .canvas-oneoff, :scope > .loose-card'));
+    pieces.forEach(function(el){
+      var w=el.offsetWidth||parseFloat(el.style.getPropertyValue('--card-w'))||252;
+      var h=el.offsetHeight||parseFloat(el.style.getPropertyValue('--card-h'))||76;
+      var x=parseFloat(el.style.getPropertyValue('--ff-x'))||0;
+      var y=parseFloat(el.style.getPropertyValue('--ff-y'))||0;
+      var box={x:x, y:y, w:w, h:h};
+      var moved=true, guard=0, i;
+      while(moved && guard++<24){
+        moved=false;
+        for(i=0;i<obstacles.length;i++){
+          var z=obstacles[i];
+          if(!miniCardsOverlap(box, z, gap)) continue;
+          var down=z.y+z.h+gap;
+          var right=z.x+z.w+gap;
+          if((right-box.x)>0 && (right-box.x)<(down-box.y)) box.x=right;
+          else box.y=Math.max(box.y, down);
+          moved=true;
+        }
+      }
+      el.style.setProperty('--ff-x', Math.round(box.x)+'px');
+      el.style.setProperty('--ff-y', Math.round(box.y)+'px');
+      var name=((el.querySelector('.zone-oneoff-t')||{}).textContent||'').trim();
+      if(!name && typeof cardName==='function') name=cardName(el);
+      if(typeof snapshotLoose==='function' && name) snapshotLoose(el, el.classList.contains('loose-card')?'card':'oneoff', name);
+    });
+  }
+  window.__resolveCanvasPieceOverlaps=resolveCanvasPieceOverlaps;
+  function layoutZonePieces(zone, mode, keepEl){
     if(!zone || zone.classList.contains('zone-collapsed')) return;
     var host=zone.querySelector('.pursuit-zone-grid');
     if(!host) return;
     var pieces=zoneInnerPieces(zone);
     if(!pieces.length) return;
     var zoom=mode==='zoom' || zone.classList.contains('is-zoomed');
+    if(!zoom && pieces.length===1 && pieces[0].classList.contains('glow-hero')){
+      pieces[0].style.setProperty('--card-w','196px');
+      pieces[0].style.setProperty('--card-h','228px');
+      pieces[0].style.setProperty('--ff-x','16px');
+      pieces[0].style.setProperty('--ff-y','8px');
+      return;
+    }
     var blk=zone.closest('.day-block');
     var hidden=!!(blk && blk.classList.contains('collapsed'));
     var zr=zone.getBoundingClientRect();
@@ -13372,7 +13617,7 @@ window.__j22fnApply=run;
     var cellH=Math.floor((innerH-gap*(rows-1))/rows);
     if(cellW<72) cellW=72;
     if(cellH<64) cellH=64;
-    if(!zoom && n===1){
+    if(!zoom && n===1 && !pieces[0].classList.contains('glow-hero')){
       cellW=Math.min(cellW, 148);
       cellH=Math.min(cellH, 148);
     }
@@ -13384,28 +13629,34 @@ window.__j22fnApply=run;
     if(zoom) window.__zoneZoomLayout=true;
     var persist=!zoom && !hidden;
     try{
+      var hasOff=pieces.some(function(el){ return el.classList.contains('zone-oneoff'); });
+      if(!zoom && hasOff){
+        packZonePieces(zone, {keep: keepEl});
+        return;
+      } else {
       pieces.forEach(function(el,i){
         var col=i%cols;
         var row=Math.floor(i/cols);
         var off=el.classList.contains('zone-oneoff');
         var w=cellW;
-        var h=off && !zoom ? Math.max(72, Math.min(cellH, Math.round(cellW*0.62))) : cellH;
+        var h=off ? Math.max(72, Math.min(cellH, Math.round(cellW*0.58))) : cellH;
         var x=pad+col*(cellW+gap);
-        var y=pad+row*(cellH+gap)+Math.max(0, Math.round((cellH-h)/2));
+        var y2=pad+row*(cellH+gap)+Math.max(0, Math.round((cellH-h)/2));
         el.style.setProperty('--card-w', w+'px');
         el.style.setProperty('--card-h', h+'px');
         if(off){
           el.style.setProperty('--ff-x', Math.round(x+dx)+'px');
-          el.style.setProperty('--ff-y', Math.round(y+dy)+'px');
+          el.style.setProperty('--ff-y', Math.round(y2+dy)+'px');
           if(persist && typeof saveOneoffRect==='function') saveOneoffRect(el);
         } else {
           el.style.setProperty('--ff-x', x+'px');
-          el.style.setProperty('--ff-y', y+'px');
+          el.style.setProperty('--ff-y', y2+'px');
           el.style.removeProperty('top');
           el.style.removeProperty('left');
           if(persist && typeof saveMini==='function') saveMini(el);
         }
       });
+      }
     } finally {
       window.__zoneZoomLayout=prev;
     }
@@ -13530,10 +13781,34 @@ window.__j22fnApply=run;
     if(!zone) return;
     var on=!!loadCol()[colKey(zone)];
     zone.classList.toggle('zone-collapsed', on);
-    var open=zone.style.getPropertyValue('--zone-h')||'280px';
-    zone.style.setProperty('height', on ? '48px' : open, 'important');
-    zone.style.setProperty('min-height', on ? '48px' : '0px', 'important');
-    zone.style.setProperty('overflow', 'hidden', 'important');
+    var board=!!zone.closest('.pursuit-board-day, [data-date="2026-08-20"]');
+    var openH=zone.style.getPropertyValue('--zone-h')||'280px';
+    var openW=zone.style.getPropertyValue('--zone-w')||'320px';
+    if(on && board){
+      zone.style.setProperty('width', '172px', 'important');
+      zone.style.setProperty('height', '52px', 'important');
+      zone.style.setProperty('min-height', '52px', 'important');
+    } else if(on){
+      zone.style.setProperty('height', '48px', 'important');
+      zone.style.setProperty('min-height', '48px', 'important');
+    } else {
+      if(board){
+        var nCards=zone.querySelectorAll('.pursuit-zone-grid .sec-card').length;
+        var nOffs=zone.querySelectorAll('.zone-oneoff').length;
+        if(zone.getAttribute('data-zone')==='body' && nCards<=1){
+          openW='248px'; openH='288px';
+        } else if(nCards===0 && nOffs===0){
+          openW='220px'; openH='176px';
+        }
+        zone.style.setProperty('--zone-w', openW);
+        zone.style.setProperty('--zone-h', openH);
+      }
+      zone.style.setProperty('width', openW, 'important');
+      zone.style.setProperty('height', openH, 'important');
+      zone.style.setProperty('min-height', '0px', 'important');
+    }
+    zone.style.setProperty('overflow', on ? 'hidden' : (board && zone.classList.contains('pursuit-zone-body') ? 'visible' : 'hidden'), 'important');
+    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
   }
   window.__squashMini=squashMini;
   function squashMini(card, on){
@@ -13604,6 +13879,7 @@ window.__j22fnApply=run;
     if(grid){
       resolveOverlaps(grid);
       expandCanvas(grid);
+      if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
     }
   }
   function clearZoomedZoneLayout(zone){
@@ -13871,6 +14147,15 @@ window.__j22fnApply=run;
     if(short.length<6) return false;
     return long.indexOf(short+' ')===0 || long.indexOf(' '+short+' ')>=0;
   }
+  function isTextMomName(name){
+    return /text\s*mom/.test(String(name||'').toLowerCase());
+  }
+  function nameMatches(a, b){
+    var x=String(a||'').toLowerCase();
+    var y=String(b||'').toLowerCase();
+    if(!x || !y) return false;
+    return x===y || thoughtsOverlap(x, y);
+  }
   function nameIsOnCanvas(grid, name){
     var low=String(name||'').toLowerCase();
     if(!low) return false;
@@ -13891,7 +14176,24 @@ window.__j22fnApply=run;
       });
     }
     if(set[low]) return true;
-    return loadMiniTasks(name).some(function(t){ return set[String(t).toLowerCase()]; });
+    if(Object.keys(set).some(function(n){ return nameMatches(n, low); })) return true;
+    return loadMiniTasks(name).some(function(t){
+      var tn=String(t).toLowerCase();
+      return set[tn] || Object.keys(set).some(function(n){ return nameMatches(n, tn); });
+    });
+  }
+  function nameAlreadyOnBoard(grid, name){
+    var low=String(name||'').toLowerCase();
+    if(!low) return false;
+    if(nameIsOnCanvas(grid, name)) return true;
+    if(!grid) return false;
+    if([].slice.call(grid.querySelectorAll('.zone-oneoff-t')).some(function(t){
+      return nameMatches(t.textContent, low);
+    })) return true;
+    return [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card, :scope > .sec-card, :scope > .loose-card')).some(function(c){
+      if(nameMatches(cardName(c), low)) return true;
+      return cardTaskNames(c).some(function(t){ return nameMatches(t, low); });
+    });
   }
   function sweepMovedDuplicates(grid){
     if(!grid) return;
@@ -14009,6 +14311,11 @@ window.__j22fnApply=run;
   }
   function putOneoffInZone(zone, name, x, y, w, h){
     if(!zone || !name) return;
+    if(isTextMomName(name) && zone.getAttribute('data-zone')==='body'){
+      var life=zone.parentNode && zone.parentNode.querySelector('.pursuit-zone[data-zone="life"]');
+      if(!life) return;
+      zone=life;
+    }
     var zid=zone.getAttribute('data-zone');
     var arr=taskList(zid).filter(function(t){ return taskName(t).toLowerCase()!==name.toLowerCase(); });
     arr.push(normTask({name:name, x:x, y:y, w:w, h:h}, arr.length));
@@ -14030,6 +14337,9 @@ window.__j22fnApply=run;
     var tasks=cardTaskNames(el);
     if(!tasks.length){
       var stored=loadMiniTasks(name);
+      if(/^(body|glow up|glow-up)$/.test(String(name||'').toLowerCase())){
+        stored=(stored||[]).filter(function(t){ return !isTextMomName(t); });
+      }
       if(stored.length) fillCardTasks(el, stored);
       else if(/elevate/.test(String(name||'').toLowerCase())) fillCardTasks(el, ['text Dr Betty']);
     } else saveMiniTasks(name, tasks);
@@ -14060,6 +14370,9 @@ window.__j22fnApply=run;
     var zone=zoneAtPoint(grid, p.x, p.y);
     if(!zone && grid.classList.contains('zone-zoomed')){
       zone=grid.querySelector('.pursuit-zone.is-zoomed');
+    }
+    if(zone && zone.getAttribute('data-zone')==='body' && isTextMomName(name)){
+      zone=grid.querySelector('.pursuit-zone[data-zone="life"]')||null;
     }
     if(zone){
       var zr=zoneRect(zone);
@@ -14104,8 +14417,12 @@ window.__j22fnApply=run;
         el.classList.remove('canvas-oneoff');
         removeLooseNamed(name, 'oneoff');
         if(el.parentNode) el.parentNode.removeChild(el);
+        var topLeft=canvasPoint(grid, r.left, r.top);
+        lx=Math.max(6, topLeft.x-zr.x);
+        ly=Math.max(8, topLeft.y-zr.y);
         putOneoffInZone(zone, name, lx, ly, sz.w, sz.h);
-        fitZoneToCards(zone);
+        var dropped=zone.querySelector(':scope > .zone-oneoffs .zone-oneoff:last-child');
+        packZonePieces(zone, {keep: dropped});
         expandCanvas(grid);
       }
       return;
@@ -14134,7 +14451,7 @@ window.__j22fnApply=run;
   }
   function spawnCanvasOneoff(grid, name, x, y, w, h){
     if(!grid || !name) return null;
-    w=w||176; h=h||118;
+    w=w||252; h=h||76;
     var hasChip=[].slice.call(grid.querySelectorAll(':scope > .canvas-oneoff')).some(function(n){
       return ((n.querySelector('.zone-oneoff-t')||{}).textContent||'').trim().toLowerCase()===String(name||'').toLowerCase();
     });
@@ -14146,7 +14463,7 @@ window.__j22fnApply=run;
     chip.style.setProperty('--ff-y', Math.max(0, y||0)+'px');
     chip.style.setProperty('--card-w', w+'px');
     chip.style.setProperty('--card-h', h+'px');
-    chip.innerHTML='<img class="zone-oneoff-img" alt=""><div class="zone-oneoff-bar"><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
+    chip.innerHTML='<img class="zone-oneoff-img" alt=""><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
     chip.querySelector('.zone-oneoff-img').src=themedImg(name, '');
     chip.querySelector('.zone-oneoff-t').textContent=name;
     chip.querySelector('.zone-oneoff-del').addEventListener('click', function(ev){
@@ -14287,7 +14604,7 @@ window.__j22fnApply=run;
         chip.style.setProperty('--ff-y', (it.y||0)+'px');
         chip.style.setProperty('--card-w', Math.max(132, it.w||176)+'px');
         chip.style.setProperty('--card-h', Math.max(88, it.h||118)+'px');
-        chip.innerHTML='<img class="zone-oneoff-img" alt=""><div class="zone-oneoff-bar"><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
+        chip.innerHTML='<img class="zone-oneoff-img" alt=""><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
         chip.querySelector('.zone-oneoff-img').src=themedImg(it.name, '');
         chip.querySelector('.zone-oneoff-t').textContent=it.name;
         chip.querySelector('.zone-oneoff-del').addEventListener('click', function(ev){
@@ -14317,6 +14634,7 @@ window.__j22fnApply=run;
     grid.addEventListener('click', function(e){
       if(window.__zoneTapHandled && (Date.now()-window.__zoneTapHandled)<500) return;
       if(window.__ffMoved || window.__cardDragging) return;
+      if((e.metaKey||e.ctrlKey) && e.target.closest('.day-block.flow-picking')) return;
       var zone=e.target.closest('.pursuit-zone');
       if(!zone || !grid.contains(zone)) return;
       tapZone(zone, e.target);
@@ -14333,7 +14651,7 @@ window.__j22fnApply=run;
       }
       var card=e.target.closest('.sec-card');
       if(card && grid.contains(card) && (card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card'))){
-        if(e.target.closest('.add-task-sec,input,button,a,.add-pursuit-slot,.card-del,.del-x-sec,.card-collapse-tick,.card-resize')) return;
+        if(e.target.closest('.add-task-sec,input,button,a,.add-pursuit-slot,.card-del,.del-x-sec,.card-collapse-tick,.card-resize,.zone-del,.del-x')) return;
         window.__cardDragging=true;
         var fromZone=card.closest('.pursuit-zone');
         var ch=e.target.closest('.card-resize');
@@ -14413,38 +14731,52 @@ window.__j22fnApply=run;
       var chip=e.target.closest('.zone-oneoff');
       if(chip && grid.contains(chip)){
         if(e.target.closest('.zone-oneoff-del, .zone-oneoff-check, input, label')) return;
+        window.__oneoffDragging=true;
         var fromZone=chip.closest('.pursuit-zone');
         var startX=e.clientX, startY=e.clientY;
-        var ox=parseFloat(getComputedStyle(chip).getPropertyValue('--ff-x'))||12;
-        var oy=parseFloat(getComputedStyle(chip).getPropertyValue('--ff-y'))||52;
-        var ow=parseFloat(getComputedStyle(chip).getPropertyValue('--card-w'))||176;
-        var oh=parseFloat(getComputedStyle(chip).getPropertyValue('--card-h'))||118;
+        var ox=parseFloat(chip.style.getPropertyValue('--ff-x'));
+        var oy=parseFloat(chip.style.getPropertyValue('--ff-y'));
+        if(!isFinite(ox)) ox=parseFloat(getComputedStyle(chip).getPropertyValue('--ff-x'))||12;
+        if(!isFinite(oy)) oy=parseFloat(getComputedStyle(chip).getPropertyValue('--ff-y'))||52;
+        var ow=parseFloat(chip.style.getPropertyValue('--card-w'))||parseFloat(getComputedStyle(chip).getPropertyValue('--card-w'))||176;
+        var oh=parseFloat(chip.style.getPropertyValue('--card-h'))||parseFloat(getComputedStyle(chip).getPropertyValue('--card-h'))||76;
         var resizing=!!e.target.closest('.oneoff-resize');
         var lifted=!!chip.classList.contains('canvas-oneoff');
         e.preventDefault();
         e.stopPropagation();
+        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
         window.__ffMoved=false;
+        window.__ffPt=null;
         try{ chip.setPointerCapture(e.pointerId); }catch(err){}
         function tmove(ev){
           var sc=boardScale(grid);
           var dx=(ev.clientX-startX)/sc, dy=(ev.clientY-startY)/sc;
           if(Math.abs(dx)+Math.abs(dy)>3) window.__ffMoved=true;
+          window.__ffPt=canvasPoint(grid, ev.clientX, ev.clientY);
           if(resizing){
             chip.style.setProperty('--card-w', Math.max(132, ow+dx)+'px');
-            chip.style.setProperty('--card-h', Math.max(88, oh+dy)+'px');
+            chip.style.setProperty('--card-h', Math.max(64, oh+dy)+'px');
           } else {
-            if(!lifted && window.__ffMoved){
-              var pt=canvasPoint(grid, ev.clientX, ev.clientY);
-              grid.appendChild(chip);
-              chip.classList.add('canvas-oneoff');
-              chip.style.setProperty('--ff-x', Math.max(0, pt.x-ow/2)+'px');
-              chip.style.setProperty('--ff-y', Math.max(0, pt.y-oh/2)+'px');
-              ox=parseFloat(chip.style.getPropertyValue('--ff-x'))||0;
-              oy=parseFloat(chip.style.getPropertyValue('--ff-y'))||0;
-              startX=ev.clientX; startY=ev.clientY;
-              lifted=true;
-              grid.classList.add('item-dragging');
-              try{ chip.setPointerCapture(e.pointerId); }catch(err){}
+            if(!lifted && fromZone && window.__ffMoved){
+              var zr=fromZone.getBoundingClientRect();
+              var pad=12;
+              var outside=ev.clientX<zr.left-pad || ev.clientX>zr.right+pad || ev.clientY<zr.top-pad || ev.clientY>zr.bottom+pad;
+              if(outside){
+                var pt=canvasPoint(grid, ev.clientX, ev.clientY);
+                grid.appendChild(chip);
+                chip.classList.add('canvas-oneoff');
+                chip.style.setProperty('--ff-x', Math.max(0, pt.x-ow/2)+'px');
+                chip.style.setProperty('--ff-y', Math.max(0, pt.y-oh/2)+'px');
+                ox=parseFloat(chip.style.getPropertyValue('--ff-x'))||0;
+                oy=parseFloat(chip.style.getPropertyValue('--ff-y'))||0;
+                startX=ev.clientX; startY=ev.clientY;
+                lifted=true;
+                grid.classList.add('item-dragging');
+                try{ chip.setPointerCapture(e.pointerId); }catch(err){}
+                return;
+              }
+              chip.style.setProperty('--ff-x', Math.max(6, ox+dx)+'px');
+              chip.style.setProperty('--ff-y', Math.max(8, oy+dy)+'px');
               return;
             }
             chip.style.setProperty('--ff-x', Math.max(0, ox+dx)+'px');
@@ -14455,17 +14787,27 @@ window.__j22fnApply=run;
           try{ chip.releasePointerCapture(e.pointerId); }catch(err){}
           document.removeEventListener('pointermove', tmove, true);
           document.removeEventListener('pointerup', tup, true);
+          document.removeEventListener('pointercancel', tup, true);
           grid.classList.remove('item-dragging');
+          window.__oneoffDragging=false;
           if(resizing){
-            if(fromZone) saveOneoffRect(chip);
+            if(fromZone && !lifted) saveOneoffRect(chip);
             else snapshotLoose(chip, 'oneoff', (chip.querySelector('.zone-oneoff-t')||{}).textContent||'');
+            window.__ffPt=null;
             return;
           }
-          if(window.__ffMoved) dropPiece(chip, grid, 'oneoff', fromZone);
-          else if(fromZone) saveOneoffRect(chip);
+          if(window.__ffMoved){
+            if(lifted) dropPiece(chip, grid, 'oneoff', fromZone);
+            else if(fromZone){
+              saveOneoffRect(chip);
+              packZonePieces(fromZone, {keep: chip});
+            }
+          } else if(fromZone && !lifted) saveOneoffRect(chip);
+          window.__ffPt=null;
         }
         document.addEventListener('pointermove', tmove, true);
         document.addEventListener('pointerup', tup, true);
+        document.addEventListener('pointercancel', tup, true);
         return;
       }
       if(grid.classList.contains('zone-zoomed')){
@@ -14502,6 +14844,7 @@ window.__j22fnApply=run;
         } else {
           writeRect({el:zone, id:id, x:ox+dx, y:oy+dy, w:ow, h:oh});
         }
+        if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
       }
       function up(){
         try{ if(captured) zone.releasePointerCapture(e.pointerId); }catch(err){}
@@ -14570,13 +14913,18 @@ window.__j22fnApply=run;
   }
   function addNamedMini(host, name){
     if(!host || !name) return;
+    if(isTextMomName(name) && host.getAttribute('data-zone')==='body'){
+      var life=host.closest('.sec-grid') && host.closest('.sec-grid').querySelector('.pursuit-zone-grid[data-zone="life"]');
+      if(!life) return;
+      host=life;
+    }
     if(isOneoffTaskName(name)){
       var zone=host.closest('.pursuit-zone');
       if(zone){ addZoneTask(zone, name.trim()); return; }
     }
     var want=name.trim().toLowerCase();
     var grid=host.closest('.sec-grid');
-    if(grid && nameIsOnCanvas(grid, want)) return;
+    if(grid && nameAlreadyOnBoard(grid, want)) return;
     var exists=[].slice.call(host.querySelectorAll('.sec-card')).some(function(c){ return cardName(c)===want; });
     if(exists) return;
     var el=makeMini(name.trim(), host.getAttribute('data-zone'));
@@ -14699,8 +15047,80 @@ window.__j22fnApply=run;
     delete pos[(zid||'')+'|'+name.toLowerCase()];
     saveC(pos);
   }
+  function isTextMomName(name){
+    return /text\s*mom/.test(String(name||'').toLowerCase());
+  }
+  function unpinTextMomFromGlowUp(grid){
+    if(!grid) return;
+    pinBoardDay(grid);
+    var m=loadLive();
+    var day=LIVE_DAY;
+    if(m[day] && m[day].body){
+      m[day].body=(m[day].body||[]).filter(function(n){ return !isTextMomName(n); });
+      saveLive(m);
+    }
+    try{
+      var good=JSON.parse(localStorage.getItem(GOODKEY)||'null');
+      if(good && good.live && good.live[day] && good.live[day].body){
+        good.live[day].body=(good.live[day].body||[]).filter(function(n){ return !isTextMomName(n); });
+        localStorage.setItem(GOODKEY, JSON.stringify(good));
+      }
+    }catch(e){}
+    var gone=loadGone();
+    gone[goneKey('body','Text Mom')]=1;
+    gone[goneKey('body','text mom')]=1;
+    gone[goneKey('body','Text Mom back')]=1;
+    saveGone(gone);
+    var bodyHost=grid.querySelector('.pursuit-zone-grid[data-zone="body"]');
+    var lifeHost=grid.querySelector('.pursuit-zone-grid[data-zone="life"]');
+    if(bodyHost){
+      [].slice.call(bodyHost.querySelectorAll('.sec-card')).forEach(function(c){
+        if(!isTextMomName(cardName(c))) return;
+        var already=lifeHost && [].slice.call(lifeHost.querySelectorAll('.sec-card')).some(function(x){ return isTextMomName(cardName(x)); });
+        if(lifeHost && !already) lifeHost.appendChild(c);
+        else c.remove();
+      });
+      [].slice.call(bodyHost.querySelectorAll('.j22-t')).forEach(function(t){
+        if(!isTextMomName(t.textContent)) return;
+        var item=t.closest('.j22-item');
+        if(item) item.remove();
+      });
+    }
+    [].slice.call(grid.querySelectorAll('.pursuit-zone[data-zone="body"] .zone-oneoff-t, .pursuit-zone[data-zone="body"] .zone-oneoffs .zone-oneoff-t')).forEach(function(t){
+      if(!isTextMomName(t.textContent)) return;
+      var chip=t.closest('.zone-oneoff');
+      if(chip) chip.remove();
+    });
+    try{
+      var tasks=JSON.parse(localStorage.getItem(TKEY)||'{}');
+      var list=tasks[day] && tasks[day].body;
+      if(Array.isArray(list)){
+        tasks[day].body=list.filter(function(t){ return !isTextMomName(taskName(t)); });
+        localStorage.setItem(TKEY, JSON.stringify(tasks));
+      }
+    }catch(e){}
+  }
+  function persistFreeformCardGone(card){
+    var blk=card.closest('.day-block');
+    var day=blk?blk.getAttribute('data-date'):'';
+    var name=cardName(card);
+    if(!day||!name) return;
+    try{
+      var a=JSON.parse(localStorage.getItem('btm_deleted_v1')||'[]');
+      var k='S|'+day+'|'+name;
+      if(a.indexOf(k)<0){ a.push(k); localStorage.setItem('btm_deleted_v1', JSON.stringify(a)); }
+    }catch(e){}
+    try{
+      var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
+      if(o[day]){
+        o[day]=(o[day]||[]).filter(function(r){ return String((r&&r.name)||'').toLowerCase()!==String(name).toLowerCase(); });
+        localStorage.setItem('btm_grids_v1', JSON.stringify(o));
+      }
+    }catch(e){}
+  }
   function deleteMiniCard(card){
     if(!card) return;
+    persistFreeformCardGone(card);
     pinBoardDay(card);
     var zone=card.closest('.pursuit-zone');
     var zid=(zone&&zone.getAttribute('data-zone'))||'';
@@ -14708,6 +15128,192 @@ window.__j22fnApply=run;
     card.remove();
   }
   window.__deleteMiniCard=deleteMiniCard;
+  var ZONE_GONE_KEY='btm_aug20_zones_gone_v1';
+  var ZONE_CUSTOM_KEY='btm_aug20_custom_zones_v1';
+  function loadZoneGone(){ try{ return JSON.parse(localStorage.getItem(ZONE_GONE_KEY)||'{}'); }catch(e){ return {}; } }
+  function saveZoneGone(m){ try{ localStorage.setItem(ZONE_GONE_KEY, JSON.stringify(m||{})); }catch(e){} }
+  function loadCustomZones(){ try{ var a=JSON.parse(localStorage.getItem(ZONE_CUSTOM_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function saveCustomZones(a){ try{ localStorage.setItem(ZONE_CUSTOM_KEY, JSON.stringify(a||[])); }catch(e){} }
+  function isAug20Board(el){
+    var blk=el && el.closest ? el.closest('.day-block') : el;
+    return !!(blk && (blk.classList.contains('pursuit-board-day') || blk.getAttribute('data-date')==='2026-08-20'));
+  }
+  function zoneSlug(title){
+    var s=String(title||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    if(!s) s='zone';
+    return s.slice(0,28);
+  }
+  function makeZoneRow(z){
+    var row=document.createElement('div');
+    row.className='pursuit-zone pursuit-zone-'+(z.id||'custom');
+    row.setAttribute('data-zone', z.id);
+    if(z.custom) row.setAttribute('data-custom-zone','1');
+    if(z.img) row.style.setProperty('--zone-photo', 'url("'+z.img+'")');
+    row.style.backgroundImage='none';
+    row.innerHTML='<div class="pursuit-zone-head"><p class="pursuit-zone-title"></p></div><div class="pursuit-zone-grid" data-zone=""></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div><button type="button" class="zone-del" aria-label="delete section">×</button>';
+    var titleEl=row.querySelector('.pursuit-zone-title');
+    if(titleEl) titleEl.textContent=z.title||z.id;
+    var host=row.querySelector('.pursuit-zone-grid');
+    if(host) host.setAttribute('data-zone', z.id);
+    var plus=row.querySelector('.add-pursuit-slot');
+    if(plus) plus.setAttribute('data-zone', z.id);
+    return row;
+  }
+  function ensureAug20TogglePlus(blk){
+    if(!isAug20Board(blk)) return;
+    var card=blk.querySelector('.day-card');
+    var tog=card && card.querySelector('.today-view-toggle');
+    if(!card || !tog) return;
+    var row=tog.closest('.tv-toggle-row');
+    if(!row){
+      row=document.createElement('div');
+      row.className='tv-toggle-row';
+      tog.parentNode.insertBefore(row, tog);
+      row.appendChild(tog);
+    }
+    if(!row.querySelector('.day-add-zone')){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='day-add-zone';
+      b.setAttribute('aria-label','add section');
+      b.textContent='+';
+      row.appendChild(b);
+    }
+  }
+  function ensureAug20EditChrome(grid){
+    if(!grid || !isAug20Board(grid)) return;
+    var blk=grid.closest('.day-block');
+    ensureAug20TogglePlus(blk);
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      if(!z.querySelector(':scope > .zone-del')){
+        var d=document.createElement('button');
+        d.type='button';
+        d.className='zone-del';
+        d.setAttribute('aria-label','delete section');
+        d.textContent='×';
+        z.appendChild(d);
+      }
+    });
+    [].slice.call(grid.querySelectorAll('.sec-card')).forEach(prepareMini);
+    [].slice.call(grid.querySelectorAll('.j22-item')).forEach(function(it){
+      if(!it.querySelector(':scope > .del-x')){
+        var x=document.createElement('span');
+        x.className='del-x';
+        x.textContent='×';
+        x.setAttribute('aria-label','delete');
+        it.appendChild(x);
+      }
+    });
+  }
+  function applyAug20ZoneEdits(grid){
+    if(!grid || !isAug20Board(grid)) return;
+    var gone=loadZoneGone();
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var id=z.getAttribute('data-zone')||'';
+      if(id && gone[id]) z.remove();
+    });
+    loadCustomZones().forEach(function(z){
+      if(!z || !z.id || gone[z.id]) return;
+      if(grid.querySelector(':scope > .pursuit-zone[data-zone="'+z.id+'"]')) return;
+      var row=makeZoneRow({id:z.id, title:z.title||z.id, img:z.img||'', custom:true});
+      grid.appendChild(row);
+      applyPos(row, z.id);
+    });
+    ensureAug20EditChrome(grid);
+  }
+  function deleteAug20Zone(zone){
+    if(!zone || !isAug20Board(zone)) return;
+    var id=zone.getAttribute('data-zone')||'';
+    var grid=zone.closest('.sec-grid');
+    if(id){
+      var gone=loadZoneGone();
+      gone[id]=1;
+      saveZoneGone(gone);
+      saveCustomZones(loadCustomZones().filter(function(z){ return z && z.id!==id; }));
+    }
+    zone.remove();
+    if(grid){
+      resolveOverlaps(grid);
+      expandCanvas(grid);
+      if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
+    }
+  }
+  function nextCustomZoneId(grid, title){
+    var base=zoneSlug(title);
+    var id=base, n=2;
+    while(grid.querySelector(':scope > .pursuit-zone[data-zone="'+id+'"]') || DEFAULT_POS[id]){
+      id=base+'-'+n;
+      n++;
+    }
+    return id;
+  }
+  function addAug20Zone(grid, title){
+    if(!grid || !isAug20Board(grid)) return;
+    title=String(title||'').trim();
+    if(!title) return;
+    var gone=loadZoneGone();
+    var match=ZONES.filter(function(z){ return String(z.title).toLowerCase()===title.toLowerCase() || z.id===title.toLowerCase(); })[0];
+    if(match && gone[match.id]){
+      delete gone[match.id];
+      saveZoneGone(gone);
+      if(!grid.querySelector(':scope > .pursuit-zone[data-zone="'+match.id+'"]')){
+        var restored=makeZoneRow(match);
+        grid.appendChild(restored);
+        applyPos(restored, match.id);
+      }
+    } else {
+      var id=nextCustomZoneId(grid, title);
+      var img='manus-storage/pursuit-vibes_e645a2da.jpg';
+      var row=makeZoneRow({id:id, title:title, img:img, custom:true});
+      var maxY=36;
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+        var r=zoneRect(z);
+        maxY=Math.max(maxY, (r.y||0)+(r.h||0)+40);
+      });
+      writeRect({el:row, id:id, x:36, y:maxY, w:320, h:280});
+      grid.appendChild(row);
+      var custom=loadCustomZones();
+      custom.push({id:id, title:title, img:img});
+      saveCustomZones(custom);
+      applyPos(row, id);
+    }
+    resolveOverlaps(grid);
+    wireZoneDrag(grid);
+    ensureAug20EditChrome(grid);
+    expandCanvas(grid);
+    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
+  }
+  function openAddAug20Zone(btn){
+    var blk=btn && btn.closest('.day-block');
+    if(!blk || !isAug20Board(blk)) return;
+    var row=btn.closest('.tv-toggle-row')||blk.querySelector('.tv-toggle-row');
+    var existing=blk.querySelector('.zone-add-picker');
+    if(existing){ existing.remove(); return; }
+    document.querySelectorAll('.zone-add-picker').forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
+    var box=document.createElement('div');
+    box.className='zone-add-picker';
+    box.innerHTML='<input class="plus-name-input" type="text" placeholder="new section name" autocomplete="off"><button type="button" class="plus-picker-go">add</button>';
+    (row||blk.querySelector('.day-card')).appendChild(box);
+    var inp=box.querySelector('input');
+    var go=box.querySelector('button');
+    function commit(){
+      var name=(inp.value||'').trim();
+      if(!name) return;
+      var grid=blk.querySelector('.sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid');
+      addAug20Zone(grid, name);
+      box.remove();
+    }
+    go.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); commit(); });
+    inp.addEventListener('keydown', function(ev){
+      if(ev.key==='Enter'){ ev.preventDefault(); commit(); }
+      if(ev.key==='Escape'){ ev.preventDefault(); box.remove(); }
+    });
+    inp.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+    setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 0);
+  }
+  window.__deleteAug20Zone=deleteAug20Zone;
+  window.__openAddAug20Zone=openAddAug20Zone;
+  window.__addAug20Zone=addAug20Zone;
   function rememberLive(zid, name){
     if(!zid || !name) return;
     var m=loadLive();
@@ -14776,6 +15382,7 @@ window.__j22fnApply=run;
   function restoreLiveMinis(g){
     if(window.__cardDragging) return;
     pinBoardDay(g);
+    unpinTextMomFromGlowUp(g);
     var baked=harvestLiveFromGrid(g);
     var all=loadLive();
     var pack=all[LIVE_DAY]||{};
@@ -14802,7 +15409,10 @@ window.__j22fnApply=run;
       var inDom={};
       [].slice.call(host.querySelectorAll('.sec-card')).forEach(function(c){ inDom[cardName(c)]=1; });
       (pack[zid]||[]).forEach(function(name){
-        if(isGone(zid, name) || nameIsOnCanvas(g, name)) return;
+        if(isGone(zid, name) || nameAlreadyOnBoard(g, name)){
+          if(nameAlreadyOnBoard(g, name)) detachLive(zid, name);
+          return;
+        }
         var low=String(name).toLowerCase();
         if(inDom[low]) return;
         var isPreset=(PRESETS[zid]||[]).some(function(p){ return String(p).toLowerCase()===low; });
@@ -14891,10 +15501,12 @@ window.__j22fnApply=run;
     var arr=taskList(zid);
     if(!arr[idx]) return;
     var cs=getComputedStyle(chip);
-    arr[idx].x=parseFloat(cs.getPropertyValue('--ff-x'))||0;
-    arr[idx].y=parseFloat(cs.getPropertyValue('--ff-y'))||0;
-    arr[idx].w=parseFloat(cs.getPropertyValue('--card-w'))||176;
-    arr[idx].h=parseFloat(cs.getPropertyValue('--card-h'))||118;
+    arr[idx].x=parseFloat(chip.style.getPropertyValue('--ff-x'));
+    if(!isFinite(arr[idx].x)) arr[idx].x=parseFloat(cs.getPropertyValue('--ff-x'))||0;
+    arr[idx].y=parseFloat(chip.style.getPropertyValue('--ff-y'));
+    if(!isFinite(arr[idx].y)) arr[idx].y=parseFloat(cs.getPropertyValue('--ff-y'))||0;
+    arr[idx].w=parseFloat(chip.style.getPropertyValue('--card-w'))||parseFloat(cs.getPropertyValue('--card-w'))||176;
+    arr[idx].h=parseFloat(chip.style.getPropertyValue('--card-h'))||parseFloat(cs.getPropertyValue('--card-h'))||76;
     saveTaskList(zid, arr);
   }
   function ensureOneoffHost(zone){
@@ -14911,6 +15523,7 @@ window.__j22fnApply=run;
     return themedImg(name, zid);
   }
   function renderOneoffs(zone){
+    if(window.__oneoffDragging) return;
     pinBoardDay(zone);
     if(zone && zone.closest('.zone-board-day')){
       var skip=zone.querySelector(':scope > .zone-oneoffs');
@@ -14927,8 +15540,7 @@ window.__j22fnApply=run;
     (taskList(zid)||[]).forEach(function(item, i){
       item=normTask(item, i);
       var w=item.w, h=item.h;
-      if(h<64) h=88;
-      if(w<80) w=148;
+      if(h<70 || w<220){ w=252; h=76; }
       var chip=document.createElement('div');
       chip.className='zone-oneoff';
       if(item.done) chip.classList.add('is-done');
@@ -14975,8 +15587,8 @@ window.__j22fnApply=run;
       var x=parseFloat(card.style.getPropertyValue('--ff-x'))||parseFloat(cs.getPropertyValue('--ff-x'))||170;
       var y=parseFloat(card.style.getPropertyValue('--ff-y'))||parseFloat(cs.getPropertyValue('--ff-y'))||52;
       var done=!!card.querySelector('.agenda-check:checked');
-      forgetLive(zid, n);
-      putOneoffInZone(zone, n, x, y, 220, 88);
+      detachLive(zid, n);
+      putOneoffInZone(zone, n, x, y, 252, 76);
       if(done){
         var arr=taskList(zid);
         arr.forEach(function(it){ if(taskName(it).toLowerCase()===n) it.done=true; });
@@ -14991,9 +15603,35 @@ window.__j22fnApply=run;
     var zone=grid && grid.querySelector('.pursuit-zone[data-zone="ambition"]');
     if(!zone) return;
     var name='document translation into arabic';
-    if(isGone('ambition', name) || isGone('ambition', 'oneoff:'+name)) return;
-    if(taskList('ambition').some(function(t){ return taskName(t).toLowerCase()===name; })) return;
-    putOneoffInZone(zone, name, 170, 28, 220, 88);
+    pinBoardDay(zone);
+    var g=loadGone();
+    var cardKey=goneKey('ambition', name);
+    if(g[cardKey]){
+      delete g[cardKey];
+      saveGone(g);
+    }
+    if(isGone('ambition', 'oneoff:'+name)) return;
+    var arr=taskList('ambition');
+    var found=false;
+    var migrated=false;
+    arr.forEach(function(t){
+      if(taskName(t).toLowerCase()!==name) return;
+      found=true;
+      var tx=typeof t.x==='number'?t.x:156;
+      var ty=typeof t.y==='number'?t.y:52;
+      var tw=t.w||252;
+      var th=t.h||76;
+      var elevate={x:20,y:72,w:148,h:148};
+      var chip={x:tx,y:ty,w:tw,h:th};
+      if(miniCardsOverlap(elevate, chip, 14)){
+        t.x=12; t.y=236; t.w=252; t.h=76;
+        migrated=true;
+      }
+    });
+    if(migrated) saveTaskList('ambition', arr);
+    if(found) return;
+    if(typeof nameAlreadyOnBoard==='function' && nameAlreadyOnBoard(grid, name)) return;
+    putOneoffInZone(zone, name, 12, 236, 252, 76);
   }
   function addZoneTask(zone, name){
     name=(name||'').trim();
@@ -15129,21 +15767,44 @@ window.__j22fnApply=run;
         if(plus.closest('.sec-grid')) openPlusName(plus);
         return;
       }
+      if(e.target.closest('.zone-del, .day-add-zone, .zone-add-picker, .card-del, .del-x')){
+        e.stopPropagation();
+        return;
+      }
       if(!e.target.closest('.plus-name-input, .plus-picker, .plus-picker-opt, .plus-picker-go, .zone-oneoff-del')) return;
       e.stopPropagation();
     }, true);
     document.addEventListener('click', function(e){
-      var del=e.target.closest('.day-block.today-block .card-del, .day-block.today-block .pursuit-zone-grid .del-x-sec, .day-block.zone-board-day .card-del, .day-block.zone-board-day .pursuit-zone-grid .del-x-sec');
+      var del=e.target.closest('.day-block.today-block .card-del, .day-block.today-block .pursuit-zone-grid .del-x-sec, .day-block.zone-board-day .card-del, .day-block.zone-board-day .pursuit-zone-grid .del-x-sec, .day-block.pursuit-board-day .card-del, .day-block[data-date="2026-08-20"] .card-del, .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-del');
       if(del){
         e.preventDefault();
         e.stopPropagation();
         deleteMiniCard(del.closest('.sec-card'));
         return;
       }
+      var zdel=e.target.closest('.day-block.pursuit-board-day .zone-del, .day-block[data-date="2026-08-20"] .zone-del');
+      if(zdel){
+        e.preventDefault();
+        e.stopPropagation();
+        if(typeof window.__deleteAug20Zone==='function') window.__deleteAug20Zone(zdel.closest('.pursuit-zone'));
+        return;
+      }
+      var addZ=e.target.closest('.day-add-zone');
+      if(addZ){
+        e.preventDefault();
+        e.stopPropagation();
+        if(typeof window.__openAddAug20Zone==='function') window.__openAddAug20Zone(addZ);
+        return;
+      }
       var plus=e.target.closest('.add-pursuit-slot');
       if(!plus){
         if(!e.target.closest('.plus-picker')){
           document.querySelectorAll('.plus-picker').forEach(function(p){
+            if(p.parentNode) p.parentNode.removeChild(p);
+          });
+        }
+        if(!e.target.closest('.zone-add-picker, .day-add-zone')){
+          document.querySelectorAll('.zone-add-picker').forEach(function(p){
             if(p.parentNode) p.parentNode.removeChild(p);
           });
         }
@@ -15186,13 +15847,14 @@ window.__j22fnApply=run;
   window.__boardSpreadTooTight=boardSpreadTooTight;
   function ensureGrid(grid){
     if(!grid) return;
-    if(window.__cardDragging) return;
+    if(window.__cardDragging || window.__oneoffDragging) return;
     if(!grid.classList.contains('pursuit-canvas') || !grid.querySelector(':scope > .pursuit-zone')) return;
     reviveGoodBoard();
     try{
     var blk=grid.closest('.day-block');
     if(blk && blk.getAttribute('data-date')==='2026-08-20') blk.classList.add('pursuit-board-day');
     pinBoardDay(grid);
+    applyAug20ZoneEdits(grid);
     function adoptLooseCards(g){
       [].slice.call(g.querySelectorAll(':scope > .sec-card, :scope > .j22-section.card')).forEach(function(c){
         if(c.classList.contains('loose-card')) return;
@@ -15254,10 +15916,12 @@ window.__j22fnApply=run;
           }
         }
       })();
-      if(fresh || stacked || boardSpreadTooTight(grid)){
+      if(!grid.closest('[data-date="2026-08-20"]') && (fresh || stacked || boardSpreadTooTight(grid))){
         savePos({});
         airSpreadZones(grid);
       }
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
+      clusterAug20Web(grid);
       resolveOverlaps(grid);
       sweepLooseCards(grid);
       adoptStoredGridCards(grid);
@@ -15266,7 +15930,9 @@ window.__j22fnApply=run;
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
       wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
+      seedKnownOneoffs(grid);
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
       restoreLoose(grid);
       expandCanvas(grid);
       return;
@@ -15279,7 +15945,9 @@ window.__j22fnApply=run;
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
       wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
+      seedKnownOneoffs(grid);
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
       restoreLoose(grid);
       expandCanvas(grid);
       return;
@@ -15292,10 +15960,18 @@ window.__j22fnApply=run;
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
       wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
+      seedKnownOneoffs(grid);
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
       restoreLoose(grid);
       expandCanvas(grid);
       snapshotGoodBoard();
+      return;
+    }
+    if(isAug20Board(grid)){
+      ensureAug20EditChrome(grid);
+      expandCanvas(grid);
+      if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
       return;
     }
     grid.innerHTML='';
@@ -15318,11 +15994,14 @@ window.__j22fnApply=run;
     dedupeZoneCards(grid);
     [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
     wireZoneDrag(grid);
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
+    seedKnownOneoffs(grid);
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
     restoreLoose(grid);
     expandCanvas(grid);
     snapshotGoodBoard();
     }catch(err){ try{ console.error(err); }catch(e){} }
+    try{ resolveCanvasPieceOverlaps(grid); }catch(e){}
     window.__boardHydrated=1;
   }
   function ensureTaskInbox(blk){
@@ -15473,7 +16152,7 @@ window.__j22fnApply=run;
     document.addEventListener('pointerdown', function(e){
       if(e.button && e.button!==0) return;
       var handleEarly=e.target.closest('.zone-resize');
-      if(!handleEarly && e.target.closest('.add-pursuit-slot,.plus-picker,.card-del,.del-x-sec,.card-resize,.oneoff-resize,.zone-oneoff-del,input,textarea,a,.add-task-sec,.card-add-task')) return;
+      if(!handleEarly && e.target.closest('.add-pursuit-slot,.plus-picker,.card-del,.del-x-sec,.card-resize,.oneoff-resize,.zone-oneoff-del,.zone-oneoff,.zone-del,.day-add-zone,.zone-add-picker,.del-x,input,textarea,a,.add-task-sec,.card-add-task')) return;
       if(!handleEarly && e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
         /* header click collapses — do not start a section drag that swallows the tap */
         return;
@@ -16066,7 +16745,7 @@ var a=load(); if(!a.length) return;
 }
 function ensureX(){
 [].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-item')).forEach(function(it){ var x=it.querySelector(':scope > .del-x'); if(!x){ x=document.createElement('span'); x.className='del-x'; x.textContent='×'; x.setAttribute('aria-label','delete'); it.appendChild(x); } x.style.top=''; });
-[].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-section')).forEach(function(sec){ if(sec.closest('.today-block .pursuit-zone-grid')) return; if(sec.querySelector(':scope > .del-x-sec')) return; var x=document.createElement('span'); x.className='del-x-sec'; x.textContent='×'; x.setAttribute('aria-label','delete section'); sec.appendChild(x); });
+[].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-section')).forEach(function(sec){ if(sec.closest('.today-block .pursuit-zone-grid') || sec.closest('.pursuit-zone-grid') || sec.classList.contains('sec-card')) return; if(sec.querySelector(':scope > .del-x-sec')) return; var x=document.createElement('span'); x.className='del-x-sec'; x.textContent='×'; x.setAttribute('aria-label','delete section'); sec.appendChild(x); });
 }
 document.addEventListener('click', function(e){
 if(!e.target.closest) return;
@@ -16751,19 +17430,22 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 20 · thu</span></div>
+<div class="tv-toggle-row">
 <div class="today-view-toggle">
 <button class="tv-pill active" data-view="pursuits">pursuits</button>
 <button class="tv-pill" data-view="flow">flow</button>
 </div>
+<button type="button" class="day-add-zone" aria-label="add section">+</button>
+</div>
 <div class="day-tasks">
 <div class="tv-panel tv-pursuits active">
 <div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1">
-<div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:260px;height:248px;--ff-x:28px;--ff-y:28px;--zone-w:260px;--zone-h:248px;--zone-photo:url('manus-storage/mock-glow-up-skin.jpg?v=1')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">GLOW UP</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="blush" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/zone-body.jpg?v=abs"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:368px;top:50px;width:260px;height:248px;--ff-x:368px;--ff-y:50px;--zone-w:260px;--zone-h:248px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="blush" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-blush"><img alt="Text Mom" src="manus-storage/pursuit-persons_be56f167.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Text Mom">Text Mom</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">Text Mom back</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:168px;--ff-y:44px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="curated lifestyle" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2"><p class="j22-group" spellcheck="false" data-newhdr="curated lifestyle">curated lifestyle</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-finances" data-zone="finances" style="left:708px;top:20px;width:270px;height:248px;--ff-x:708px;--ff-y:20px;--zone-w:270px;--zone-h:248px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-leverage" data-zone="leverage" style="left:40px;top:360px;width:270px;height:248px;--ff-x:40px;--ff-y:360px;--zone-w:270px;--zone-h:248px;--zone-photo:url('manus-storage/mock-power.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:352px;top:360px;width:280px;height:260px;--ff-x:352px;--ff-y:360px;--zone-w:280px;--zone-h:260px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-presence" data-zone="presence" style="left:708px;top:360px;width:270px;height:248px;--ff-x:708px;--ff-y:360px;--zone-w:270px;--zone-h:248px;--zone-photo:url('manus-storage/zone-quantum-v14.jpg?v=symbol')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:248px;height:288px;--ff-x:28px;--ff-y:28px;--zone-w:248px;--zone-h:288px;--zone-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">GLOW UP</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty glow-hero" data-user-added="1" data-theme="blush" style="--ff-x:16px;--ff-y:8px;--card-w:196px;--card-h:228px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="blush" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-blush"><img alt="Text Mom" src="manus-storage/pursuit-persons_be56f167.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Text Mom">Text Mom</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">Text Mom back</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:168px;--ff-y:44px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="curated lifestyle" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2"><p class="j22-group" spellcheck="false" data-newhdr="curated lifestyle">curated lifestyle</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-finances" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-leverage" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-presence" data-zone="presence" style="left:836px;top:420px;width:340px;height:320px;--ff-x:836px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v14.jpg?v=symbol')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 </div>
 </div>
 <div class="tv-panel tv-flow" style="display:none">
@@ -16813,6 +17495,42 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 24 · mon</span></div>
+<div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits">pursuits</button>
+<button class="tv-pill" data-view="flow">flow</button>
+</div>
+<div class="day-tasks">
+<div class="tv-panel tv-pursuits active">
+<div class="flow-chart-card"><div class="sec-grid freeform"></div></div>
+</div>
+<div class="tv-panel tv-flow" style="display:none">
+<div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+</div>
+</div>
+</div>
+<div class="day-block fmt22" data-date="2026-08-25">
+<div class="day-dot"></div>
+<div class="day-card">
+<div class="day-card-header"><span class="day-date">aug 25 · tue</span></div>
+<div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits">pursuits</button>
+<button class="tv-pill" data-view="flow">flow</button>
+</div>
+<div class="day-tasks">
+<div class="tv-panel tv-pursuits active">
+<div class="flow-chart-card"><div class="sec-grid freeform"><div class="j22-section card sec-card is-empty shot-card" data-user-added="1" data-theme="warm"><div class="card-visual theme-warm"><img alt="Pepperdine GSA · Top Applicant" src="manus-storage/handshake-pepperdine-gsa.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Pepperdine GSA · Top Applicant">Pepperdine GSA · Top Applicant</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button></div></div></div>
+</div>
+<div class="tv-panel tv-flow" style="display:none">
+<div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+</div>
+</div>
+</div>
+<div class="day-block fmt22" data-date="2026-08-26">
+<div class="day-dot"></div>
+<div class="day-card">
+<div class="day-card-header"><span class="day-date">aug 26 · wed</span></div>
 <div class="today-view-toggle">
 <button class="tv-pill active" data-view="pursuits">pursuits</button>
 <button class="tv-pill" data-view="flow">flow</button>
@@ -16906,7 +17624,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 <div class="sched-footer"><p>26 tasks · april 13 → 29 · LA/OC</p></div>
 <!-- /agenda-body -->
-<div class="grid">
+<div id="icon-grid-host">
+<div class="grid icon-task-grid" id="iconTaskGrid">
 <!-- 1. BOA -->
 <div class="section-label">banking · legal</div>
 <div class="card" id="c1"><div class="card-visual theme-warm"><button class="done-check" onclick="toggle('c1',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><circle cx="45" cy="45" r="32" stroke="#C4A882" stroke-dasharray="4 3" stroke-width="1"></circle><text fill="#2A2A25" font-family="Georgia" font-size="11" font-style="italic" text-anchor="middle" x="45" y="38">resolve</text><text fill="#C4A882" font-family="monospace" font-size="18" text-anchor="middle" x="45" y="52">$$$</text><line stroke="#C4A882" stroke-width="0.5" x1="28" x2="62" y1="60" y2="60"></line><text fill="#B5A99A" font-family="monospace" font-size="8" text-anchor="middle" x="45" y="70">dispute</text></svg></div>
@@ -17072,11 +17791,14 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="card" id="c44"><div class="card-visual theme-sage"><button class="done-check" onclick="toggle('c44',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="#e8ede2" height="28" rx="3" stroke="#8A9E85" stroke-width="1" width="46" x="22" y="32"></rect><path d="M22 36 L45 50 L68 36" fill="none" stroke="#8A9E85" stroke-width="1"></path><circle cx="62" cy="32" fill="#C4A882" r="6"></circle><text fill="white" font-family="serif" font-size="9" font-weight="bold" text-anchor="middle" x="62" y="35.5">3</text></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">inbox · monitor</p><p class="task-title" contenteditable="false">Watch for emails</p><p class="task-desc"><label class="subtask">Ounass<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Instacart<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Psi Chi<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">don't miss replies</span><span class="task-target" contenteditable="false">3 incoming</span></div></div>
 </div>
-</div>
+<div class="section-label">visuals</div>
 <div class="card" id="c49"><div class="card-visual theme-warm"><button class="done-check" onclick="toggle('c49',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="none" height="34" rx="2" stroke="#C4A882" stroke-width="1" width="46" x="22" y="28"></rect><circle cx="45" cy="45" fill="none" r="9" stroke="#C4A882" stroke-width="1"></circle><circle cx="45" cy="45" fill="#C4A882" r="3"></circle><rect fill="none" height="6" rx="1" stroke="#C4A882" stroke-width="1" width="14" x="38" y="24"></rect><text fill="#B5A99A" font-family="monospace" font-size="8" text-anchor="middle" x="45" y="74">photos</text></svg></div>
-<div class="card-body"><p class="task-num" contenteditable="false">visuals</p><p class="task-title" contenteditable="false">Photos</p><p class="task-desc"><label class="subtask">organization of screenshots<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Photoshop<input onchange="updateSubtask(this)" type="checkbox"/></label></p></div></div><div class="card" id="c50"><div class="card-visual theme-warm"><button class="done-check" onclick="toggle('c50',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><path d="M30 32 L30 28 Q30 22 36 22 L54 22 Q60 22 60 28 L60 32" fill="none" stroke="#C4A882" stroke-width="1"></path><path d="M26 32 L64 32 L62 68 L28 68 Z" fill="none" stroke="#C4A882" stroke-width="1"></path><text fill="#B5A99A" font-family="monospace" font-size="7" text-anchor="middle" x="45" y="76">curated</text></svg></div>
-<div class="card-body"><p class="task-num" contenteditable="false">acquisitions</p><p class="task-title" contenteditable="false">Curated finds</p><p class="task-desc"><label class="subtask">Conair Reflections LED vanity mirror <span class="suffix-small">exchange</span><input onchange="updateSubtask(this)" type="checkbox"/></label></p></div></div></div>
+<div class="card-body"><p class="task-num" contenteditable="false">visuals</p><p class="task-title" contenteditable="false">Photos</p><p class="task-desc"><label class="subtask">organization of screenshots<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Photoshop<input onchange="updateSubtask(this)" type="checkbox"/></label></p></div></div>
+<div class="section-label">acquisitions</div>
+<div class="card" id="c50"><div class="card-visual theme-warm"><button class="done-check" onclick="toggle('c50',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><path d="M30 32 L30 28 Q30 22 36 22 L54 22 Q60 22 60 28 L60 32" fill="none" stroke="#C4A882" stroke-width="1"></path><path d="M26 32 L64 32 L62 68 L28 68 Z" fill="none" stroke="#C4A882" stroke-width="1"></path><text fill="#B5A99A" font-family="monospace" font-size="7" text-anchor="middle" x="45" y="76">curated</text></svg></div>
+<div class="card-body"><p class="task-num" contenteditable="false">acquisitions</p><p class="task-title" contenteditable="false">Curated finds</p><p class="task-desc"><label class="subtask">Conair Reflections LED vanity mirror <span class="suffix-small">exchange</span><input onchange="updateSubtask(this)" type="checkbox"/></label></p></div></div>
 <!-- 38. Apple Gift Cards -->
+<div class="section-label">redeem</div>
 <div class="card" id="c38"><div class="card-visual theme-sage"><button class="done-check" onclick="toggle('c38',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="#eef3eb" height="30" rx="4" stroke="#8A9E85" stroke-width="1" width="46" x="22" y="32"></rect><rect fill="#8A9E85" height="6" rx="4 4 0 0" width="46" x="22" y="32"></rect><circle cx="32" cy="50" fill="none" r="3" stroke="#8A9E85" stroke-width="0.75"></circle><path d="M30 50 Q32 47 34 50 Q34 52 32 53 Q30 52 30 50 Z" fill="#8A9E85"></path><line stroke="#B5A99A" stroke-width="0.75" x1="40" x2="60" y1="48" y2="48"></line><line stroke="#B5A99A" stroke-width="0.75" x1="40" x2="56" y1="52" y2="52"></line><rect fill="#faf8f1" height="14" opacity="0.7" rx="3" stroke="#8A9E85" stroke-width="0.75" width="38" x="26" y="60"></rect><circle cx="34" cy="67" fill="none" r="2" stroke="#8A9E85" stroke-width="0.6"></circle><path d="M32 67 Q34 64 36 67 Q36 69 34 70 Q32 69 32 67 Z" fill="#8A9E85"></path></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">redeem</p><p class="task-title" contenteditable="false">Apple gift cards</p><p class="task-desc"><label class="subtask">Card 1 · $8xx<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Card 2 · $5xx<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">redeem before departure</span><span class="task-target" contenteditable="false">~$1.3k balance</span></div></div>
 </div>
@@ -17103,6 +17825,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <!-- 39. Join professional organizations -->
 <div class="card" id="c39"><div class="card-visual theme-sage"><button class="done-check" onclick="toggle('c39',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><circle cx="45" cy="32" fill="none" r="6" stroke="#8A9E85" stroke-width="1"></circle><circle cx="28" cy="42" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><circle cx="62" cy="42" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><circle cx="35" cy="58" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><circle cx="55" cy="58" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><line stroke="#C4A882" stroke-width="0.75" x1="45" x2="33" y1="38" y2="42"></line><line stroke="#C4A882" stroke-width="0.75" x1="45" x2="57" y1="38" y2="42"></line><line stroke="#C4A882" stroke-width="0.75" x1="32" x2="35" y1="47" y2="53"></line><line stroke="#C4A882" stroke-width="0.75" x1="58" x2="55" y1="47" y2="53"></line><line stroke="#C4A882" stroke-width="0.75" x1="40" x2="50" y1="58" y2="58"></line><line stroke="#C4A882" stroke-width="0.75" x1="33" x2="57" y1="42" y2="42"></line></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">community · network</p><p class="task-title" contenteditable="false">Professional organizations</p><p class="task-desc"><label class="subtask">CAMFT · CA Assoc. of MFTs<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">AAMFT · American Assoc. of MFTs<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">APA · American Psychological Assoc.<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Psi Chi · Intl Honor Society in Psych<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">ACA · American Counseling Assoc.<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">APsaA · American Psychoanalytic Assoc.<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">SCAMFT · S. CA chapter (regional)<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">IAMFC · Intl Assoc. of MFC<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">NBCC · Natl Board for Certified Counselors<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">build clinical community + credentials</span><span class="task-target" contenteditable="false">post-arrival</span></div></div>
+</div>
+</div>
 </div>
 </div>
 <footer><p>41 tasks · pre-departure · LA</p></footer>
@@ -20464,8 +21188,8 @@ function refreshPursuitBoardLayout(block){
     }
     [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
       if(window.__layoutZonePieces) window.__layoutZonePieces(z, 'fit');
-      else if(window.__resolveZoneCardOverlaps) window.__resolveZoneCardOverlaps(z.querySelector('.pursuit-zone-grid'));
     });
+    if(window.__resolveCanvasPieceOverlaps) window.__resolveCanvasPieceOverlaps(grid);
     if(window.__expandPursuitCanvas) window.__expandPursuitCanvas(grid);
   }
   requestAnimationFrame(function(){ requestAnimationFrame(fit); });
@@ -20765,10 +21489,33 @@ document.addEventListener('DOMContentLoaded',()=>{
   (function(){
     const pad = n => String(n).padStart(2, '0');
     const todayStr = () => { const t = new Date(); return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`; };
-    let lastDay = todayStr();
-    const ensureTodayCard = () => {
+    const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    const wd = ['sun','mon','tue','wed','thu','fri','sat'];
+    const parseIso = iso => { const p = String(iso||'').split('-').map(Number); return new Date(p[0], (p[1]||1)-1, p[2]||1); };
+    const nextIso = iso => { const t = parseIso(iso); t.setDate(t.getDate()+1); return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`; };
+    const labelFor = iso => { const t = parseIso(iso); return months[t.getMonth()] + ' ' + t.getDate() + ' · ' + wd[t.getDay()]; };
+    const SHELL_KEY = 'btm_day_shells_v1';
+    const loadShells = () => { try { return JSON.parse(localStorage.getItem(SHELL_KEY)||'{}'); } catch(e){ return {}; } };
+    const saveShell = (iso, el) => {
+      if (!iso || !el) return;
+      try {
+        const o = loadShells();
+        o[iso] = el.outerHTML;
+        localStorage.setItem(SHELL_KEY, JSON.stringify(o));
+      } catch(e){}
+    };
+    const persistOpenDays = () => {
       const iso = todayStr();
-      if (document.querySelector(`.day-block[data-date="${iso}"]`)) return;
+      const todayEl = document.querySelector(`.day-block[data-date="${iso}"]`);
+      if (todayEl) saveShell(iso, todayEl);
+      const y = parseIso(iso); y.setDate(y.getDate()-1);
+      const yIso = `${y.getFullYear()}-${pad(y.getMonth()+1)}-${pad(y.getDate())}`;
+      const yEl = document.querySelector(`.day-block[data-date="${yIso}"]`);
+      if (yEl) saveShell(yIso, yEl);
+    };
+    let lastDay = todayStr();
+    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="flow">flow</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="flow-chart-card"><div class="sec-grid freeform"></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div></div></div>';
+    const pickSrc = iso => {
       const days = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'));
       let src = null;
       days.forEach(b => {
@@ -20778,22 +21525,42 @@ document.addEventListener('DOMContentLoaded',()=>{
         if (b.querySelector('.sec-grid.pursuit-canvas .pursuit-zone')) return;
         src = b;
       });
-      const t = new Date();
-      const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-      const wd = ['sun','mon','tue','wed','thu','fri','sat'];
-      const label = months[t.getMonth()] + ' ' + t.getDate() + ' · ' + wd[t.getDay()];
-      let clone;
-      if (!src) {
-        clone = document.createElement('div');
-        clone.className = 'day-block fmt22';
-        clone.innerHTML = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="flow">flow</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="flow-chart-card"><div class="sec-grid freeform"></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div></div></div>';
-      } else {
-        clone = src.cloneNode(true);
-        clone.querySelectorAll('.j22-section-items').forEach(el => { el.innerHTML = ''; });
-        clone.querySelectorAll('.sec-card, .j22-section.card').forEach(el => el.remove());
+      return src;
+    };
+    const insertDay = (clone, iso) => {
+      const rail = document.querySelector('#agendaBody > .timeline') || document.querySelector('.agenda-body > .timeline');
+      const railDays = Array.from((rail || document).querySelectorAll(':scope > .day-block.fmt22[data-date]'));
+      const last = railDays.filter(b => {
+        const d = b.getAttribute('data-date') || '';
+        return /^\d{4}-\d{2}-\d{2}$/.test(d) && d < iso;
+      }).pop() || railDays[railDays.length - 1];
+      const offRail = rail && rail.parentNode && rail.parentNode.querySelector(':scope > .day-block[data-date="doha"], :scope > .day-block.archive-block');
+      if (last && last.parentNode) last.parentNode.insertBefore(clone, last.nextSibling);
+      else if (rail) rail.insertBefore(clone, offRail || null);
+    };
+    const ensureDayCard = iso => {
+      if (!iso || document.querySelector(`.day-block[data-date="${iso}"]`)) return;
+      let clone = null;
+      const saved = loadShells()[iso];
+      if (saved) {
+        const wrap = document.createElement('div');
+        wrap.innerHTML = saved.trim();
+        clone = wrap.firstElementChild;
+      }
+      if (!clone) {
+        const src = pickSrc(iso);
+        if (!src) {
+          clone = document.createElement('div');
+          clone.className = 'day-block fmt22';
+          clone.innerHTML = emptyShellHtml;
+        } else {
+          clone = src.cloneNode(true);
+          clone.querySelectorAll('.j22-section-items').forEach(el => { el.innerHTML = ''; });
+          clone.querySelectorAll('.sec-card, .j22-section.card, .zone-oneoff, .canvas-oneoff').forEach(el => el.remove());
+        }
       }
       clone.setAttribute('data-date', iso);
-      clone.classList.remove('past', 'featured-block', 'collapsed', 'zone-board-day', 'pursuit-board-day');
+      clone.classList.remove('past', 'featured-block', 'collapsed', 'zone-board-day', 'pursuit-board-day', 'today-block');
       clone.querySelectorAll('.sec-grid.pursuit-canvas').forEach(function(g){
         g.classList.remove('pursuit-canvas', 'pursuit-categories');
         g.removeAttribute('data-zoned');
@@ -20804,23 +21571,30 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(grid && h.parentNode) h.parentNode.insertBefore(grid, h);
         h.remove();
       });
-      if (iso === '2026-08-20') {
-        clone.classList.add('pursuit-board-day');
-        clone.classList.remove('today-block');
-      } else {
-        clone.classList.add('today-block');
-      }
+      if (iso === '2026-08-20') clone.classList.add('pursuit-board-day');
+      else if (iso === todayStr()) clone.classList.add('today-block');
       const dateEl = clone.querySelector('.day-date');
-      if (dateEl) dateEl.textContent = label;
-      const rail = document.querySelector('#agendaBody > .timeline') || document.querySelector('.agenda-body > .timeline');
-      const railDays = Array.from((rail || document).querySelectorAll(':scope > .day-block.fmt22[data-date]'));
-      const last = railDays.filter(b => {
-        const d = b.getAttribute('data-date') || '';
-        return /^\d{4}-\d{2}-\d{2}$/.test(d) && d < iso;
-      }).pop() || railDays[railDays.length - 1];
-      const offRail = rail && rail.parentNode && rail.parentNode.querySelector(':scope > .day-block[data-date="doha"], :scope > .day-block.archive-block');
-      if (last && last.parentNode) last.parentNode.insertBefore(clone, last.nextSibling);
-      else if (rail) rail.insertBefore(clone, offRail || null);
+      if (dateEl) dateEl.textContent = labelFor(iso);
+      insertDay(clone, iso);
+      saveShell(iso, clone);
+    };
+    const ensureTodayCard = () => {
+      const iso = todayStr();
+      const dated = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'))
+        .map(b => b.getAttribute('data-date') || '')
+        .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= iso)
+        .sort();
+      let cursor = dated.length ? dated[dated.length - 1] : iso;
+      if (cursor < iso) {
+        cursor = nextIso(cursor);
+        while (cursor <= iso) {
+          ensureDayCard(cursor);
+          cursor = nextIso(cursor);
+        }
+      } else {
+        ensureDayCard(iso);
+      }
+      persistOpenDays();
     };
     const scrollToToday = () => {
       ensureTodayCard();
@@ -20832,8 +21606,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     };
     if (typeof applyDateRoles === 'function') { try { applyDateRoles(); } catch(e){} }
     scrollToToday();
-    // Stay aware of the real date: if it rolls over while open, re-tag today + re-scroll
+    persistOpenDays();
+    document.addEventListener('visibilitychange', () => { if (document.hidden) persistOpenDays(); });
+    window.addEventListener('pagehide', persistOpenDays);
+    // Stay aware of the real date: if it rolls over while open, keep yesterday + make today
     setInterval(() => {
+      persistOpenDays();
       const now = todayStr();
       if (now !== lastDay) {
         lastDay = now;
@@ -25788,7 +26566,8 @@ function handleMay18No(btn) {
   function hdrOf(sec){var g=sec.querySelector('.j22-group');return g?(g.getAttribute('data-newhdr')||g.textContent.trim()):'';}
   function setup(){
     document.querySelectorAll('.day-block.fmt22 .sec-grid').forEach(function(grid){
-      if(grid.__cardSortable) return;
+      if(grid.classList.contains('pursuit-canvas') || grid.querySelector(':scope > .pursuit-zone')) return;
+      if(grid.__cardSortable || grid.__sortableInited) return;
       var cards=[].slice.call(grid.querySelectorAll(':scope > .sec-card'));
       if(!cards.length) return;
       var day=grid.closest('.day-block').getAttribute('data-date');
@@ -25801,7 +26580,9 @@ function handleMay18No(btn) {
       }
       if(window.Sortable){
         grid.__cardSortable=window.Sortable.create(grid,{
-          animation:150, draggable:'.sec-card', handle:'.card-visual', filter:'.done-check', preventOnFilter:false, onStart:function(){ window.__taskDragging=true; if(!window.__taskHoverBound){ window.__taskHoverBound=true; document.addEventListener('pointermove', window.__taskHoverExpand, true); document.addEventListener('touchmove', window.__taskHoverExpand, true); } },
+          animation:150, draggable:'.sec-card', handle:'.card-visual',
+          filter:'.done-check,.add-task-sec,.card-add-task,.card-del,.card-resize,.j22-item,.j22-t,.j22-group',
+          preventOnFilter:false, onStart:function(){ window.__taskDragging=true; if(!window.__taskHoverBound){ window.__taskHoverBound=true; document.addEventListener('pointermove', window.__taskHoverExpand, true); document.addEventListener('touchmove', window.__taskHoverExpand, true); } },
           onEnd:function(){ var o=load(); o[day]=[].slice.call(grid.querySelectorAll(':scope > .sec-card')).map(hdrOf); save(o); }
         });
       }
@@ -25874,18 +26655,22 @@ function handleMay18No(btn) {
   }
   function layout(){
     document.querySelectorAll('.day-block.fmt22 .sec-grid').forEach(function(grid){
+      if(grid.classList.contains('pursuit-canvas') || grid.querySelector(':scope > .pursuit-zone')) return;
       grid.classList.add('freeform');
       var day=grid.closest('.day-block').getAttribute('data-date');
       applyOrder(grid, day);
-      if(grid.__sortableInited) return;
+      if(grid.__sortableInited || grid.__cardSortable) return;
+      if(!grid.querySelector(':scope > .sec-card')) return;
       grid.__sortableInited=true;
       if(window.Sortable){
         Sortable.create(grid, {
           animation:200,
+          draggable:'.sec-card',
           handle:'.card-visual',
           ghostClass:'sortable-ghost',
           dragClass:'sortable-drag',
-          filter:'.done-check,.add-task-sec,.j22-group',
+          filter:'.done-check,.add-task-sec,.card-add-task,.card-del,.card-resize,.j22-group,.j22-item,.j22-t',
+          preventOnFilter:false,
           onEnd:function(){
             var order=[]; [].slice.call(grid.querySelectorAll(':scope > .sec-card')).forEach(function(c){ order.push(hdrOf(c)); });
             var o=loadOrder(); o[day]=order; saveOrder(o);
@@ -26068,13 +26853,13 @@ function handleMay18No(btn) {
 }
 .day-block.collapsed .add-board-row,
 .day-block.fmt22.collapsed .add-board-row,
-.day-block.fmt22.past .add-board-row,
 .day-block.fmt22:not(.today-block)[data-date^="2026-07"] .add-board-row,
 .day-block.fmt22:not(.today-block)[data-date="2026-08-20"] .add-board-row,
 .day-block.fmt22:not(.today-block)[data-date="2026-08-21"] .add-board-row,
 .day-block.fmt22:not(.today-block)[data-date="2026-08-22"] .add-board-row,
 .day-block.fmt22:not(.today-block)[data-date="2026-08-23"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-24"] .add-board-row{
+.day-block.fmt22:not(.today-block)[data-date="2026-08-24"] .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date="2026-08-25"] .add-board-row{
   display:none !important;
 }
 .day-block.fmt22 .add-board-row .add-grid,
@@ -26190,7 +26975,7 @@ function handleMay18No(btn) {
     sec.className='j22-section card sec-card is-empty';
     sec.setAttribute('data-theme', theme);
     var imgHtml=src?('<img alt="'+escAttr(name)+'" src="'+escAttr(src)+'">'):icon(name, (THEMES[(idx||0)%THEMES.length]||['warm','#c4a882'])[1]);
-    sec.innerHTML='<div class="card-visual theme-'+theme+'">'+CHECK+imgHtml+'<p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="'+escAttr(name)+'">'+escAttr(name)+'</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-add-task" aria-label="add task to this pursuit">+</button>';
+    sec.innerHTML='<div class="card-visual theme-'+theme+'">'+CHECK+imgHtml+'<p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="'+escAttr(name)+'">'+escAttr(name)+'</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div><button type="button" class="card-add-task" aria-label="add task to this pursuit">+</button>';
     if(window.__normalizeSecCards) window.__normalizeSecCards(sec);
     return sec;
   }
@@ -26201,8 +26986,8 @@ function handleMay18No(btn) {
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'GLOW UP', life:'LIFESTYLE', finances:'FINANCES', leverage:'POWER', ambition:'AMBITION', presence:'QUANTUM'};
   var SEEDED_CARDS={
-    'GLOW UP':['body','Text Mom','adderall'],
-    'LIFESTYLE':['curated lifestyle','persons','social media','vibes','postal','traveler','returns','pickups'],
+    'GLOW UP':['body','adderall'],
+    'LIFESTYLE':['curated lifestyle','persons','Text Mom','social media','vibes','postal','traveler','returns','pickups'],
     'FINANCES':['capital blueprint'],
     'POWER':['litigation wins','leverage','workflow'],
     'AMBITION':['momentum','UX Design','Frequency','Elevate'],
@@ -26386,10 +27171,26 @@ function handleMay18No(btn) {
     (typed||box.querySelector('.plus-name-input')).focus();
   }
   function openSecPicker(host, grid){ openNamedPicker(host, grid, 'section'); }
-  function restore(){ document.querySelectorAll('.day-block.fmt22 .sec-grid').forEach(function(g){
+  function deletedSecNames(){
+    var out={};
+    try{
+      (JSON.parse(localStorage.getItem('btm_deleted_v1')||'[]')||[]).forEach(function(k){
+        var p=String(k||'').split('|');
+        if(p[0]!=='S' || p.length<3) return;
+        out[p[1]+'|'+String(p.slice(2).join('|')).trim().toLowerCase()]=1;
+      });
+    }catch(e){}
+    return out;
+  }
+  function restore(){ var gone=deletedSecNames(); document.querySelectorAll('.day-block.fmt22 .sec-grid').forEach(function(g){
     var blk=g.closest('.day-block');
     if(isZoneSkip(blk) || g.classList.contains('pursuit-canvas')) return;
-    var arr=load()[dayOf(g)]||[]; var ex=existing(g); arr.forEach(function(r){ if(ex.indexOf((r.name||'').toLowerCase())<0){ g.appendChild(makeCard(r.name,r.idx||ex.length)); ex.push((r.name||'').toLowerCase()); } });
+    var day=dayOf(g);
+    var arr=load()[day]||[]; var ex=existing(g); arr.forEach(function(r){
+      var nm=(r.name||'').trim();
+      if(!nm || gone[day+'|'+nm.toLowerCase()]) return;
+      if(ex.indexOf(nm.toLowerCase())<0){ g.appendChild(makeCard(nm,r.idx||ex.length)); ex.push(nm.toLowerCase()); }
+    });
   }); }
   function wireAddRow(row, grid){
     if(!row || row.__addWired) return;
@@ -26946,14 +27747,13 @@ html body .day-block[data-date="2026-08-20"] .task-count-badge {
 .day-block.fmt22 .sec-card .card-resize{
   position:absolute; right:0; bottom:0; width:22px; height:22px;
   cursor:nwse-resize; z-index:12; touch-action:none;
+  background:transparent;
 }
-.day-block.fmt22 .sec-card .card-resize::after{
-  content:""; position:absolute; right:4px; bottom:4px; width:8px; height:8px;
-  border-right:1.6px solid rgba(241,239,232,0.85); border-bottom:1.6px solid rgba(241,239,232,0.85);
-  opacity:0; transition:opacity .15s;
-}
+.day-block.fmt22 .sec-card .card-resize::after,
 .day-block.fmt22 .sec-card:hover .card-resize::after,
-.day-block.fmt22 .sec-card.resizing .card-resize::after{ opacity:0.95; }
+.day-block.fmt22 .sec-card.resizing .card-resize::after{
+  display:none !important; content:none !important; opacity:0 !important; border:0 !important;
+}
 .day-block.fmt22 .sec-card.resizing{ overflow:hidden; user-select:none; }
 </style>
 <script>
@@ -27824,7 +28624,7 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
   window.__tvToggleWired = 1;
   function switchView(block, view){
     if(!block || !view || view === 'agenda') return;
-    block.querySelectorAll('.tv-pill').forEach(function(p){
+    block.querySelectorAll('.tv-pill[data-view]').forEach(function(p){
       p.classList.toggle('active', p.getAttribute('data-view') === view);
     });
     block.querySelectorAll('.tv-panel').forEach(function(panel){
@@ -27835,13 +28635,16 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
     if(view === 'flow' && window.__syncFlowFromPins) window.__syncFlowFromPins();
     if(view === 'pursuits' && window.__ensurePursuitZones) window.__ensurePursuitZones(block);
   }
+  window.__switchDayView = switchView;
   document.addEventListener('click', function(e){
     var pill = e.target.closest('.tv-pill');
-    if(!pill) return;
+    if(!pill || pill.classList.contains('make-flow-btn')) return;
+    var view = pill.getAttribute('data-view');
+    if(!view) return;
     var block = pill.closest('.day-block');
     if(!block) return;
     e.preventDefault();
-    switchView(block, pill.getAttribute('data-view'));
+    switchView(block, view);
   });
   function initBlocks(){
     document.querySelectorAll('.day-block .today-view-toggle').forEach(function(toggle){
@@ -27921,7 +28724,7 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
   // Use event delegation so tab switching works even after DOM replacement by loadFullStructure
   document.addEventListener('click', function(e){
     var pill = e.target.closest('.tv-pill');
-    if(!pill) return;
+    if(!pill || pill.classList.contains('make-flow-btn')) return;
     var toggle = pill.closest('.today-view-toggle');
     if(!toggle) return;
     var card = toggle.closest('.day-card');
@@ -30264,6 +31067,7 @@ window.__refreshPinnedAgenda = function(){};
   // Task modal: ⌘/Ctrl + click the task name only (plain click does nothing)
   document.addEventListener('click', function(e){
     if(!(e.metaKey || e.ctrlKey)) return;
+    if(e.target.closest('.day-block.flow-picking')) return;
     // Don't open modal in edit mode
     if(document.body.classList.contains('editing')) return;
     var nameEl = e.target.closest('.j22-t');
@@ -33126,11 +33930,9 @@ window.__refreshPinnedAgenda = function(){};
 
   /* —— Swipe right → hide card; Hidden button restores —— */
   function isZoneCanvasDay(block){
-    return !!(block && (
-      block.classList.contains('pursuit-board-day') ||
-      block.classList.contains('today-block') ||
-      block.classList.contains('zone-board-day')
-    ));
+    if(!block) return false;
+    if(block.classList.contains('pursuit-board-day') || block.classList.contains('zone-board-day')) return true;
+    return !!(block.classList.contains('today-block') && block.querySelector('.pursuit-zone, .sec-grid.pursuit-canvas'));
   }
   function stripHiddenUI(panel){
     if(!panel) return;
@@ -33715,8 +34517,8 @@ html body .day-block.today-block.fmt22 .sec-grid.pursuit-canvas > .sec-card.loos
   position: absolute !important;
   left: var(--ff-x, 12px);
   top: var(--ff-y, 12px);
-  width: var(--zone-w, 320px);
-  height: var(--zone-h, 280px);
+  width: var(--zone-w, 340px);
+  height: var(--zone-h, 320px);
   max-width: none !important;
   min-width: 0 !important;
   display: block !important;
@@ -33736,11 +34538,23 @@ html body .day-block.today-block.fmt22 .sec-grid.pursuit-canvas > .sec-card.loos
   cursor: default !important;
   transition: left 0.16s ease, top 0.16s ease;
 }
+.day-block.today-block .pursuit-zone:not(.zone-collapsed),
+.day-block.zone-board-day .pursuit-zone:not(.zone-collapsed) {
+  min-width: 320px !important;
+  min-height: 300px !important;
+}
+.day-block.pursuit-board-day .pursuit-zone:not(.zone-collapsed),
+.day-block[data-date="2026-08-20"] .pursuit-zone:not(.zone-collapsed) {
+  min-width: 200px !important;
+  min-height: 168px !important;
+}
 .day-block.today-block .pursuit-zone-grid .sec-card.card:hover,
 .day-block.today-block .pursuit-zone-grid .sec-card:hover {
   transform: none !important;
 }
-.day-block.today-block .pursuit-zone.zone-dragging {
+.day-block.today-block .pursuit-zone.zone-dragging,
+.day-block.pursuit-board-day .pursuit-zone.zone-dragging,
+.day-block[data-date="2026-08-20"] .pursuit-zone.zone-dragging {
   transition: none !important;
 }
 .day-block.today-block .pursuit-zone::before,
@@ -33790,15 +34604,32 @@ html body .day-block.today-block.fmt22 .sec-grid.pursuit-canvas > .sec-card.loos
   cursor: pointer !important;
 }
 .day-block.today-block .pursuit-zone.zone-collapsed,
-.day-block.zone-board-day .pursuit-zone.zone-collapsed,
-.day-block.pursuit-board-day .pursuit-zone.zone-collapsed,
-.day-block[data-date="2026-08-20"] .pursuit-zone.zone-collapsed {
+.day-block.zone-board-day .pursuit-zone.zone-collapsed {
   height: 48px !important;
   min-height: 48px !important;
   width: var(--zone-w, 220px);
   overflow: hidden !important;
   opacity: 0.72;
   cursor: pointer !important;
+}
+.day-block.pursuit-board-day .pursuit-zone.zone-collapsed,
+.day-block[data-date="2026-08-20"] .pursuit-zone.zone-collapsed {
+  width: 172px !important;
+  max-width: 172px !important;
+  min-width: 172px !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  opacity: 0.94;
+  cursor: pointer !important;
+}
+.day-block.pursuit-board-day .pursuit-zone.zone-collapsed .pursuit-zone-title,
+.day-block[data-date="2026-08-20"] .pursuit-zone.zone-collapsed .pursuit-zone-title {
+  font-size: 11px !important;
+  letter-spacing: 0.14em !important;
+  text-align: center !important;
+  padding: 16px 8px !important;
 }
 .day-block.today-block .pursuit-zone.zone-collapsed .pursuit-zone-head,
 .day-block.zone-board-day .pursuit-zone.zone-collapsed .pursuit-zone-head,
@@ -34129,8 +34960,9 @@ html body .day-block.pursuit-board-day .zone-oneoffs,
 html body .day-block[data-date="2026-08-20"] .zone-oneoffs {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 8;
   pointer-events: none;
+  overflow: visible;
 }
 html body .day-block.pursuit-board-day .zone-oneoff:not(.canvas-oneoff),
 html body .day-block[data-date="2026-08-20"] .zone-oneoff:not(.canvas-oneoff) {
@@ -34759,17 +35591,11 @@ html body .day-block.today-block .zone-resize::before {
 }
 html body .day-block.zone-board-day .zone-resize::after,
 html body .day-block.today-block .zone-resize::after {
-  display: block !important;
-  content: "" !important;
-  position: absolute !important;
-  right: 5px !important;
-  bottom: 5px !important;
-  width: 11px !important;
-  height: 11px !important;
-  border-right: 2px solid rgba(255,255,255,0.92) !important;
-  border-bottom: 2px solid rgba(255,255,255,0.92) !important;
-  box-shadow: 1px 1px 0 rgba(0,0,0,0.35) !important;
-  pointer-events: none !important;
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 /* Full-photo zoom: whole --zone-photo, no title/sidebar leftover */
@@ -34914,6 +35740,52 @@ html body .day-block[data-date="2026-08-20"].collapsed .day-card-header {
   justify-content: flex-start !important;
   text-align: left !important;
 }
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 8 !important;
+  margin: 8px 0 14px !important;
+  padding: 0 44px 0 12px !important;
+}
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row .make-flow-btn {
+  grid-column: 1 !important;
+  justify-self: start !important;
+  align-self: center !important;
+  margin: 0 !important;
+  padding: 4px 8px !important;
+  width: auto !important;
+  height: auto !important;
+  white-space: nowrap !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  font: italic 13px/1.1 "Newsreader", Georgia, serif !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  color: rgba(255, 248, 238, 0.88) !important;
+  cursor: pointer !important;
+}
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row .make-flow-btn.active-pick,
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row .make-flow-btn:hover {
+  color: #fff8ee !important;
+  text-decoration: underline !important;
+}
+html body .day-block[data-date="2026-08-20"].collapsed .tv-toggle-row {
+  display: none !important;
+}
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row .today-view-toggle {
+  grid-column: 2 !important;
+  justify-self: center !important;
+  margin: 0 !important;
+  width: min(340px, 72%) !important;
+  max-width: min(340px, 72%) !important;
+  align-self: center !important;
+}
 html body .day-block[data-date="2026-08-20"] .today-view-toggle {
   display: flex !important;
   justify-content: center !important;
@@ -34929,6 +35801,106 @@ html body .day-block[data-date="2026-08-20"] .today-view-toggle {
   padding: 3px !important;
   backdrop-filter: blur(10px) !important;
   -webkit-backdrop-filter: blur(10px) !important;
+}
+html body .day-block[data-date="2026-08-20"] .day-add-zone {
+  grid-column: 3 !important;
+  justify-self: end !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 2px 0 0 !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  border-radius: 50% !important;
+  background: rgba(245,240,233,0.22) !important;
+  color: rgba(255,255,255,0.92) !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  z-index: 9 !important;
+}
+html body .day-block[data-date="2026-08-20"] .day-add-zone:hover {
+  background: rgba(255,255,255,0.28) !important;
+  color: #fff !important;
+}
+html body .day-block[data-date="2026-08-20"] .zone-add-picker {
+  position: absolute !important;
+  right: 12px !important;
+  top: calc(100% - 4px) !important;
+  z-index: 80 !important;
+  display: flex !important;
+  gap: 6px !important;
+  padding: 8px !important;
+  background: rgba(250,246,238,0.96) !important;
+  border: 1px solid rgba(110,100,86,0.28) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 22px rgba(20,12,8,0.16) !important;
+}
+html body .day-block[data-date="2026-08-20"] .zone-add-picker .plus-name-input {
+  width: 160px !important;
+  padding: 6px 10px !important;
+  border: 1px solid rgba(110,100,86,0.4) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  font-size: 12px !important;
+  color: #41373a !important;
+  outline: none !important;
+}
+html body .day-block[data-date="2026-08-20"] .zone-del,
+html body .day-block.pursuit-board-day .zone-del,
+html body .day-block[data-date="2026-08-20"] .sec-card > .card-del,
+html body .day-block.pursuit-board-day .sec-card > .card-del,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-del,
+html body .day-block.pursuit-board-day .zone-oneoff-del,
+html body .day-block[data-date="2026-08-20"] .j22-item > .del-x,
+html body .day-block.pursuit-board-day .j22-item > .del-x {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: rgba(255,255,255,0.92) !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 28px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  z-index: 90 !important;
+  opacity: 0 !important;
+  pointer-events: auto !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.55) !important;
+}
+html body .day-block[data-date="2026-08-20"] .zone-del:hover,
+html body .day-block.pursuit-board-day .zone-del:hover,
+html body .day-block[data-date="2026-08-20"] .sec-card > .card-del:hover,
+html body .day-block.pursuit-board-day .sec-card > .card-del:hover,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-del:hover,
+html body .day-block.pursuit-board-day .zone-oneoff-del:hover,
+html body .day-block[data-date="2026-08-20"] .j22-item > .del-x:hover,
+html body .day-block.pursuit-board-day .j22-item > .del-x:hover,
+html body .day-block[data-date="2026-08-20"] .zone-del:focus,
+html body .day-block[data-date="2026-08-20"] .sec-card > .card-del:focus,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-del:focus,
+html body .day-block[data-date="2026-08-20"] .j22-item > .del-x:focus {
+  opacity: 1 !important;
+  background: rgba(40,32,24,0.45) !important;
+}
+html body .day-block[data-date="2026-08-20"] .j22-item:hover > .del-x,
+html body .day-block.pursuit-board-day .j22-item:hover > .del-x,
+html body .day-block[data-date="2026-08-20"] .sec-card:hover > .card-del,
+html body .day-block.pursuit-board-day .sec-card:hover > .card-del {
+  opacity: 0 !important;
+}
+html body .day-block[data-date="2026-08-20"] .j22-item > .del-x:hover,
+html body .day-block.pursuit-board-day .j22-item > .del-x:hover,
+html body .day-block[data-date="2026-08-20"] .sec-card > .card-del:hover,
+html body .day-block.pursuit-board-day .sec-card > .card-del:hover {
+  opacity: 1 !important;
 }
 html body .day-block[data-date="2026-08-20"] .tv-pill {
   flex: 1 !important;
@@ -35091,7 +36063,7 @@ html body .day-block[data-date="2026-08-20"] .zone-resize {
 html body .day-block.pursuit-board-day .pursuit-zoom-host,
 html body .day-block[data-date="2026-08-20"] .pursuit-zoom-host {
   width: 100% !important;
-  overflow: hidden !important;
+  overflow: auto !important;
   position: relative !important;
 }
 html body .day-block.pursuit-board-day .pursuit-zoom-host:has(.zone-zoomed),
@@ -35466,6 +36438,92 @@ html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-car
   flex: none !important;
   box-shadow: 0 6px 16px rgba(20,12,8,0.28) !important;
 }
+html body .day-block.pursuit-board-day.fmt22 .pursuit-zone-grid > .sec-card.glow-hero,
+html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-card.glow-hero {
+  width: 196px !important;
+  height: 228px !important;
+  padding: 9px 9px 38px 9px !important;
+  background: #f3eee4 !important;
+  border-radius: 2px !important;
+  overflow: visible !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.7) inset,
+    0 14px 28px rgba(40,28,18,0.32) !important;
+  transform: rotate(-2.2deg) !important;
+  z-index: 4 !important;
+}
+html body .day-block.pursuit-board-day.fmt22 .pursuit-zone-grid > .sec-card.glow-hero::before,
+html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-card.glow-hero::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 54px;
+  height: 16px;
+  margin-left: -27px;
+  background: rgba(236, 214, 168, 0.58);
+  box-shadow: 0 1px 3px rgba(40,28,18,0.18);
+  transform: rotate(-8deg);
+  z-index: 9;
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day.fmt22 .pursuit-zone-grid > .sec-card.glow-hero .card-visual,
+html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-card.glow-hero .card-visual {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: calc(100% - 0px) !important;
+  overflow: hidden !important;
+  background: #d8cfc4 !important;
+}
+html body .day-block.pursuit-board-day.fmt22 .pursuit-zone-grid > .sec-card.glow-hero .card-visual img,
+html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-card.glow-hero .card-visual img {
+  object-position: center 22% !important;
+  filter: saturate(1.08) contrast(1.04) !important;
+}
+html body .day-block.pursuit-board-day.fmt22 .pursuit-zone-grid > .sec-card.glow-hero .card-visual .j22-group,
+html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-card.glow-hero .card-visual .j22-group {
+  left: 0 !important;
+  right: 0 !important;
+  top: auto !important;
+  bottom: -32px !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 8px !important;
+  text-align: center !important;
+  font-family: "Reenie Beanie", "Newsreader", cursive !important;
+  font-style: italic !important;
+  font-size: 30px !important;
+  font-weight: 400 !important;
+  color: #3a332c !important;
+  text-shadow: none !important;
+  overflow: visible !important;
+}
+html body .day-block.pursuit-board-day .pursuit-zone-body:not(.zone-collapsed)::before,
+html body .day-block[data-date="2026-08-20"] .pursuit-zone-body:not(.zone-collapsed)::before {
+  opacity: 0.16;
+}
+html body .day-block.pursuit-board-day .pursuit-zone-body:not(.zone-collapsed) .pursuit-zone-grid,
+html body .day-block[data-date="2026-08-20"] .pursuit-zone-body:not(.zone-collapsed) .pursuit-zone-grid {
+  inset: 42px 10px 10px 10px !important;
+  overflow: visible !important;
+}
+.day-block.pursuit-board-day .sec-grid.pursuit-canvas > svg.aug20-zone-web,
+.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas > svg.aug20-zone-web {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+.day-block.pursuit-board-day .sec-grid.pursuit-canvas > .pursuit-zone,
+.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas > .pursuit-zone {
+  z-index: 2;
+  transition: left 0.22s ease, top 0.22s ease, width 0.2s ease, height 0.2s ease;
+}
 </style>
 <style id="pursuit-board-loose-pieces">
 /* Free-flowing cards + one-off tasks on the canvas (Aug 20 / pursuit-board-day) */
@@ -35799,6 +36857,21 @@ html body.enh-dark #hamburger-menu span {
   background: #1c140e !important;
   box-shadow: 0 1px 3px rgba(20,12,6,0.45);
 }
+html body #nav-root {
+  z-index: 200000 !important;
+  pointer-events: none !important;
+}
+html body #hamburger-menu {
+  z-index: 200010 !important;
+  pointer-events: auto !important;
+}
+html body #nav-overlay {
+  z-index: 200000 !important;
+}
+html body #nav-sidebar {
+  z-index: 200005 !important;
+  pointer-events: auto !important;
+}
 html body .day-block.collapsed .day-date,
 html body.enh-dark .day-date,
 html body.enh-dark .day-block.collapsed .day-date,
@@ -35990,5 +37063,990 @@ html body .day-block[data-date="2026-08-20"] .sec-grid.zone-zoomed > .pursuit-zo
   setTimeout(run, 1200);
 })();
 </script>
+<style id="task-slips">
+/* Cards stay polaroids. One-off tasks are paper tickets, not cropped photo tiles. */
+html body .day-block.pursuit-board-day .zone-oneoff,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff,
+html body .day-block.today-block .zone-oneoff,
+html body .day-block.pursuit-board-day .zone-oneoff.canvas-oneoff,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.canvas-oneoff {
+  width: var(--card-w, 252px) !important;
+  height: var(--card-h, 76px) !important;
+  min-width: 220px !important;
+  min-height: 70px !important;
+  background:
+    linear-gradient(90deg, transparent 58px, rgba(90,70,48,0.38) 58px, rgba(90,70,48,0.38) 59px, transparent 59px),
+    repeating-linear-gradient(180deg, transparent 0 6px, rgba(90,70,48,0.22) 6px 8px) 58px 10px / 2px calc(100% - 20px) no-repeat,
+    linear-gradient(180deg, rgba(255,252,246,0.55), rgba(232,214,186,0.2) 42%, transparent 70%),
+    #f1e2c8 !important;
+  border-radius: 2px 11px 11px 2px !important;
+  overflow: visible !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.55) inset,
+    1px 3px 10px rgba(40,28,18,0.28) !important;
+  border: 1px solid rgba(92,72,50,0.22) !important;
+  transform: rotate(var(--slip-rot, -1.2deg));
+  isolation: isolate;
+}
+html body .day-block.pursuit-board-day .zone-oneoff:nth-child(even),
+html body .day-block[data-date="2026-08-20"] .zone-oneoff:nth-child(even) {
+  --slip-rot: 1.15deg;
+}
+html body .day-block.pursuit-board-day .zone-oneoff::before,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff::before,
+html body .day-block.today-block .zone-oneoff::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 42%;
+  width: 54px;
+  height: 15px;
+  z-index: 5;
+  pointer-events: none;
+  background: rgba(186, 132, 84, 0.48);
+  box-shadow: 0 1px 2px rgba(40,28,18,0.18);
+  transform: rotate(-9deg);
+}
+html body .day-block.pursuit-board-day .zone-oneoff-img,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-img,
+html body .day-block.today-block .zone-oneoff-img,
+html body .day-block.pursuit-board-day .zone-oneoff.canvas-oneoff .zone-oneoff-img,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.canvas-oneoff .zone-oneoff-img {
+  position: absolute !important;
+  inset: auto !important;
+  left: 8px !important;
+  top: 9px !important;
+  width: 44px !important;
+  height: 56px !important;
+  object-fit: cover !important;
+  border: 3px solid #fffaf0 !important;
+  border-radius: 1px !important;
+  box-shadow: 0 1px 4px rgba(40,28,18,0.28);
+  transform: rotate(-3deg);
+  z-index: 2;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-bar,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-bar,
+html body .day-block.today-block .zone-oneoff-bar,
+html body .day-block.pursuit-board-day .zone-oneoff.canvas-oneoff .zone-oneoff-bar,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.canvas-oneoff .zone-oneoff-bar {
+  left: 62px !important;
+  right: 8px !important;
+  top: 16px !important;
+  bottom: 8px !important;
+  transform: none !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  padding: 0 22px 0 6px !important;
+  background: none !important;
+  text-align: left !important;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-t,
+html body .day-block.today-block .zone-oneoff-t,
+html body .day-block.pursuit-board-day .zone-oneoff.canvas-oneoff .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.canvas-oneoff .zone-oneoff-t,
+html body .day-block.pursuit-board-day .zone-oneoff.need-halo .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.need-halo .zone-oneoff-t {
+  color: #3a2c24 !important;
+  -webkit-text-fill-color: #3a2c24 !important;
+  text-shadow: none !important;
+  text-align: left !important;
+  font-size: 24px !important;
+  line-height: 0.95 !important;
+  white-space: normal !important;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-kicker,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-kicker,
+html body .day-block.today-block .zone-oneoff-kicker {
+  left: auto !important;
+  right: 26px !important;
+  top: 5px !important;
+  color: #8a3a32 !important;
+  text-shadow: none !important;
+  letter-spacing: 0.2em !important;
+  font-size: 7px !important;
+  border: 1px solid rgba(138,58,50,0.5);
+  padding: 1px 5px;
+  transform: rotate(12deg);
+  background: rgba(255,248,236,0.35);
+}
+html body .day-block.pursuit-board-day .zone-oneoff-check .agenda-check,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-check .agenda-check,
+html body .day-block.today-block .zone-oneoff-check .agenda-check {
+  border-color: rgba(90,70,48,0.55) !important;
+  background: rgba(255,250,240,0.7) !important;
+  border-radius: 2px !important;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-check .agenda-check:checked,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-check .agenda-check:checked,
+html body .day-block.today-block .zone-oneoff-check .agenda-check:checked {
+  background: #8a3a32 !important;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-del,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-del,
+html body .day-block.today-block .zone-oneoff-del {
+  background: transparent !important;
+  color: #6a5648 !important;
+}
+</style>
+<style id="add-board-polaroid-chrome">
+/* Today is an add-board day now, not the six-zone canvas.
+   Restore wrap + visible delete/resize on freeform polaroids. */
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .day-tasks,
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits,
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits.active,
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid:not(.pursuit-canvas),
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform:not(.pursuit-canvas) {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid:not(.pursuit-canvas),
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform:not(.pursuit-canvas) {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: none !important;
+  position: relative !important;
+}
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid:not(.pursuit-canvas) > .sec-card,
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform:not(.pursuit-canvas) > .sec-card {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  cursor: grab !important;
+}
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid:not(.pursuit-canvas) > .sec-card.has-tasks:not(.card-collapsed):not(.card-sized) {
+  width: var(--vb-size, 210px) !important;
+  height: var(--vb-size, 210px) !important;
+  max-width: var(--vb-size, 210px) !important;
+  max-height: var(--vb-size, 210px) !important;
+  min-width: var(--vb-size, 210px) !important;
+  min-height: var(--vb-size, 210px) !important;
+  flex: 0 0 var(--vb-size, 210px) !important;
+}
+html body .day-block.today-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid:not(.pursuit-canvas) > .sec-card.card-sized:not(.card-collapsed) {
+  max-width: none !important;
+  max-height: none !important;
+}
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-del {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  width: 22px !important;
+  height: 22px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(44,40,31,0.55) !important;
+  color: #f5f0e9 !important;
+  font-size: 16px !important;
+  line-height: 22px !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  z-index: 90 !important;
+  opacity: 0.7;
+  pointer-events: auto !important;
+}
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card:hover > .card-del,
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-del:focus {
+  opacity: 1;
+}
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-add-task {
+  right: auto !important;
+  left: 3px !important;
+  bottom: 3px !important;
+  z-index: 6 !important;
+}
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-resize {
+  position: absolute !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+  cursor: nwse-resize !important;
+  z-index: 90 !important;
+  pointer-events: auto !important;
+  background: none !important;
+}
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-resize::after,
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card:hover > .card-resize::after,
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card.resizing > .card-resize::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-sec {
+  display: none !important;
+}
+</style>
+<script>
+(function(){
+  if(window.__addBoardPolaroidChrome) return; window.__addBoardPolaroidChrome=1;
+  function isFreeformGrid(grid){
+    return !!(grid && grid.classList.contains('sec-grid') && !grid.classList.contains('pursuit-canvas') && !grid.querySelector(':scope > .pursuit-zone'));
+  }
+  function prepCard(card){
+    if(!card || !card.classList.contains('sec-card')) return;
+    var grid=card.closest('.sec-grid');
+    if(!isFreeformGrid(grid) || card.closest('.pursuit-zone-grid')) return;
+    if(!card.querySelector(':scope > .card-del')){
+      var d=document.createElement('button');
+      d.type='button'; d.className='card-del'; d.setAttribute('aria-label','delete card'); d.textContent='×';
+      card.appendChild(d);
+    }
+    if(!card.querySelector(':scope > .card-resize')){
+      var h=document.createElement('div'); h.className='card-resize'; h.title='drag to resize';
+      card.appendChild(h);
+    }
+    card.querySelectorAll(':scope > .del-x-sec').forEach(function(x){ x.remove(); });
+  }
+  function prepAll(){
+    document.querySelectorAll('.day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card').forEach(prepCard);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', prepAll);
+  else prepAll();
+  [400,1200,2800].forEach(function(ms){ setTimeout(prepAll, ms); });
+  if(window.MutationObserver){
+    var t=null;
+    new MutationObserver(function(){ clearTimeout(t); t=setTimeout(prepAll, 350); }).observe(document.body,{childList:true,subtree:true});
+  }
+})();
+</script>
+<style id="make-flow-from-select-css">
+.make-flow-btn {
+  display: inline-block;
+  margin: 0 0 8px 4px;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  font: italic 13px/1.1 "Newsreader", Georgia, serif;
+  color: #8a6a20;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.make-flow-btn:hover,
+.make-flow-btn.active-pick {
+  color: #5c4810;
+  text-decoration: underline;
+}
+.today-view-toggle .make-flow-btn {
+  display: none !important;
+}
+.sec-card.flow-pick-on {
+  outline: 3px solid #c4a035 !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(196,160,53,.18) !important;
+}
+.pursuit-zone.flow-pick-on {
+  outline: 3px solid #c4a035 !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(196,160,53,.18) !important;
+}
+.j22-item.flow-pick-on,
+.zone-oneoff.flow-pick-on,
+.canvas-oneoff.flow-pick-on {
+  background: rgba(196,160,53,.28) !important;
+  outline: 2px solid #c4a035;
+  position: relative;
+}
+.flow-pick-num {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 10px;
+  background: #c4a035;
+  color: #2a220c;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  line-height: 20px;
+  text-align: center;
+  z-index: 96;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.j22-item .flow-pick-num { top: -2px; left: -10px; }
+.flow-pick-bar {
+  display: none;
+  position: relative;
+  z-index: 40;
+  margin: 0 8px 12px;
+  padding: 10px 14px;
+  background: #f6efe4;
+  border: 1px solid rgba(180,140,50,.45);
+  box-shadow: 2px 3px 0 rgba(90,70,40,.12);
+  font-family: 'Newsreader', Georgia, serif;
+  color: #3d3229;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.tv-pursuits > .flow-pick-bar { margin-top: 4px; }
+.day-block.flow-picking .flow-pick-bar { display: flex; }
+.day-block.flow-picking .tv-panel.tv-pursuits {
+  outline: 2px dashed rgba(196,160,53,.55);
+  outline-offset: -4px;
+}
+.flow-pick-count { font-size: 15px; font-style: italic; flex: 1; min-width: 140px; }
+.flow-pick-go, .flow-pick-cancel {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(90,70,40,.35);
+  background: #fffdf8;
+  color: #3d3229;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.flow-pick-go { background: #c4a035; color: #2a220c; border-color: #8a6a20; }
+.flow-pick-go:disabled { opacity: .45; cursor: default; }
+.made-select-flow { margin: 8px 4px 16px; }
+.sec-grid.pursuit-canvas > .made-select-flow.canvas-flow-chart,
+.tv-pursuits .sec-grid.freeform > .made-select-flow.canvas-flow-chart {
+  position: absolute !important;
+  left: var(--ff-x, 28px) !important;
+  top: var(--ff-y, 24px) !important;
+  width: min(280px, 86%) !important;
+  max-width: 320px !important;
+  z-index: 6;
+  margin: 0 !important;
+  padding: 12px 14px 10px !important;
+  background: rgba(246, 239, 228, 0.92) !important;
+  border: 1px solid rgba(180,140,50,.4) !important;
+  box-shadow: 2px 3px 0 rgba(90,70,40,.12) !important;
+}
+</style>
+<script id="make-flow-from-select-js">
+(function(){
+  if (window.__makeFlowFromSelect) return;
+  var KEY = 'btm_made_flow_v1';
+
+  function loadAll(){ try { return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; } catch(e){ return {}; } }
+  function saveAll(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} }
+
+  function pickList(block){
+    if (!block._flowPick) block._flowPick = [];
+    return block._flowPick;
+  }
+  function cardName(card){
+    var g = card && card.querySelector('.j22-group');
+    if (g) {
+      var h = (g.getAttribute('data-newhdr')||'').trim();
+      if (h) return h;
+      var t = (g.textContent||'').replace(/\s+/g,' ').trim();
+      if (t) return t.slice(0, 80);
+    }
+    return 'untitled';
+  }
+  function taskName(item){
+    var t = item.querySelector('.j22-t, .zone-oneoff-t, .day-task-text');
+    var n = ((t && t.textContent) || item.textContent || '').replace(/\s+/g,' ').trim();
+    n = n.replace(/^[☐☑✓✔]\s*/,'').replace(/\s*[×x✕]\s*$/,'');
+    return n || 'untitled';
+  }
+  function isTaskEl(el){
+    return !!(el && (el.classList.contains('j22-item') || el.classList.contains('zone-oneoff') || el.classList.contains('canvas-oneoff') || el.classList.contains('day-task-item')));
+  }
+  function isZoneEl(el){
+    return !!(el && el.classList.contains('pursuit-zone'));
+  }
+  function zoneName(zone){
+    var t = zone && zone.querySelector(':scope > .pursuit-zone-head .pursuit-zone-title, :scope > .pursuit-zone-title');
+    var n = ((t && t.textContent) || zone.getAttribute('data-zone') || 'section').replace(/\s+/g,' ').trim();
+    return n || 'section';
+  }
+  function isModClick(e){
+    return !!(e && (e.metaKey || e.ctrlKey));
+  }
+
+  function ensureFlowPanel(block){
+    var flow = block.querySelector('.tv-panel.tv-flow');
+    if (flow) return flow;
+    var wrap = block.querySelector('.day-tasks');
+    if (!wrap) return null;
+    flow = document.createElement('div');
+    flow.className = 'tv-panel tv-flow';
+    flow.style.display = 'none';
+    wrap.appendChild(flow);
+    return flow;
+  }
+
+  function ensureToggle(block){
+    var card = block.querySelector('.day-card') || block;
+    var tog = block.querySelector('.today-view-toggle');
+    if (!tog) {
+      tog = document.createElement('div');
+      tog.className = 'today-view-toggle';
+      tog.innerHTML = '<button class="tv-pill active" data-view="pursuits" type="button">pursuits</button><button class="tv-pill" data-view="flow" type="button">flow</button>';
+      var header = block.querySelector('.day-card-header');
+      if (header && header.parentNode) header.parentNode.insertBefore(tog, header.nextSibling);
+      else card.insertBefore(tog, card.firstChild);
+    }
+    var stuck = tog.querySelector('.make-flow-btn');
+    if (stuck) stuck.parentNode.removeChild(stuck);
+    var btn = block.querySelector(':scope > .make-flow-btn, .day-card > .make-flow-btn, .tv-toggle-row > .make-flow-btn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'make-flow-btn';
+      btn.textContent = 'make flow';
+      btn.title = 'Then ⌘-click cards, sections, or tasks on this board to build a flowchart';
+    }
+    var row = tog.closest('.tv-toggle-row');
+    if (row) {
+      if (btn.parentNode !== row || btn !== row.firstElementChild) row.insertBefore(btn, row.firstChild);
+    } else if (tog.parentNode) {
+      if (btn.parentNode !== tog.parentNode || btn.previousElementSibling !== tog) tog.parentNode.insertBefore(btn, tog.nextSibling);
+    } else if (!btn.parentNode) {
+      card.appendChild(btn);
+    }
+    return tog;
+  }
+
+  function ensureBar(block){
+    var bar = block.querySelector('.flow-pick-bar');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.className = 'flow-pick-bar';
+      bar.innerHTML = '<span class="flow-pick-count">⌘-click cards, sections, or tasks, in order</span>' +
+        '<button type="button" class="flow-pick-go" disabled>create flowchart</button>' +
+        '<button type="button" class="flow-pick-cancel">cancel</button>';
+    }
+    var purs = block.querySelector('.tv-panel.tv-pursuits') || block.querySelector('.day-card') || block;
+    if (bar.parentNode !== purs) purs.insertBefore(bar, purs.firstChild);
+    return bar;
+  }
+
+  function renumber(block){
+    var list = pickList(block).filter(function(el){ return el.isConnected && el.classList.contains('flow-pick-on'); });
+    block._flowPick = list;
+    list.forEach(function(el, i){
+      var b = el.querySelector(':scope > .flow-pick-num');
+      if (!b) {
+        b = document.createElement('span');
+        b.className = 'flow-pick-num';
+        el.appendChild(b);
+      }
+      b.textContent = String(i + 1);
+    });
+    var n = list.length;
+    var el = block.querySelector('.flow-pick-count');
+    if (el) el.textContent = n ? (n + ' selected') : '⌘-click cards, sections, or tasks, in order';
+    var go = block.querySelector('.flow-pick-go');
+    if (go) go.disabled = n === 0;
+  }
+
+  function startPick(block){
+    var prev = document.querySelector('.day-block.flow-picking');
+    if (prev && prev !== block) endPick(prev);
+    if (window.__switchDayView) window.__switchDayView(block, 'pursuits');
+    block.classList.add('flow-picking');
+    window.__flowPicking = true;
+    var btn = block.querySelector('.make-flow-btn');
+    if (btn) btn.classList.add('active-pick');
+    ensureBar(block);
+    renumber(block);
+  }
+  function endPick(block){
+    if (!block) { window.__flowPicking = false; return; }
+    block.classList.remove('flow-picking');
+    (block._flowPick || []).forEach(function(el){
+      el.classList.remove('flow-pick-on');
+      var num = el.querySelector(':scope > .flow-pick-num');
+      if (num) num.remove();
+    });
+    block.querySelectorAll('.flow-pick-on').forEach(function(el){
+      el.classList.remove('flow-pick-on');
+      var num = el.querySelector(':scope > .flow-pick-num');
+      if (num) num.remove();
+    });
+    block._flowPick = [];
+    var btn = block.querySelector('.make-flow-btn');
+    if (btn) btn.classList.remove('active-pick');
+    window.__flowPicking = !!document.querySelector('.day-block.flow-picking');
+  }
+
+  function togglePick(block, el){
+    var list = pickList(block);
+    var i = list.indexOf(el);
+    if (i >= 0) {
+      list.splice(i, 1);
+      el.classList.remove('flow-pick-on');
+      var num = el.querySelector(':scope > .flow-pick-num');
+      if (num) num.remove();
+    } else {
+      list.push(el);
+      el.classList.add('flow-pick-on');
+    }
+    renumber(block);
+  }
+
+  function collectSteps(block){
+    var list = pickList(block).filter(function(el){ return el.isConnected && el.classList.contains('flow-pick-on'); });
+    var steps = [];
+    var seen = {};
+    function push(name){
+      name = String(name || '').replace(/\s+/g, ' ').trim();
+      if (!name) return;
+      var k = name.toLowerCase();
+      if (seen[k]) return;
+      seen[k] = 1;
+      steps.push(name);
+    }
+    list.forEach(function(el){
+      if (isTaskEl(el)) { push(taskName(el)); return; }
+      if (isZoneEl(el)) { push(zoneName(el)); return; }
+      if (el.classList.contains('sec-card')) push(cardName(el));
+    });
+    return steps;
+  }
+
+  function makeStep(name){
+    var step = document.createElement('div');
+    step.className = 'flow-step';
+    step.setAttribute('data-name', name);
+    var input = document.createElement('input');
+    input.className = 'flow-check';
+    input.type = 'checkbox';
+    input.setAttribute('onchange', "this.closest('.flow-step').classList.toggle('done', this.checked)");
+    var span = document.createElement('span');
+    span.className = 'flow-step-text';
+    span.setAttribute('contenteditable', 'true');
+    span.setAttribute('spellcheck', 'false');
+    span.textContent = name;
+    var delBtn = document.createElement('button');
+    delBtn.className = 'flow-delete';
+    delBtn.type = 'button';
+    delBtn.setAttribute('aria-label', 'delete task');
+    delBtn.textContent = '×';
+    step.appendChild(input);
+    step.appendChild(span);
+    step.appendChild(delBtn);
+    return step;
+  }
+
+  function placeOnCanvas(grid, card){
+    var maxB = 24;
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone, :scope > .made-select-flow')).forEach(function(el){
+      if (el === card) return;
+      var y = parseFloat(el.style.getPropertyValue('--ff-y')) || 0;
+      var h = parseFloat(el.style.getPropertyValue('--zone-h')) || el.offsetHeight || 200;
+      maxB = Math.max(maxB, y + h + 28);
+    });
+    card.style.setProperty('--ff-x', '28px');
+    card.style.setProperty('--ff-y', Math.round(maxB) + 'px');
+  }
+
+  function renderChart(host, date, steps){
+    if (!host || !steps.length) return;
+    var existing = host.querySelector('.made-select-flow');
+    if (existing) existing.remove();
+    var canvas = (host.classList.contains('sec-grid') && host.classList.contains('pursuit-canvas'))
+      ? host
+      : (host.querySelector && host.querySelector('.sec-grid.pursuit-canvas'));
+    var mount = canvas || host;
+    var card = document.createElement('div');
+    card.className = 'flow-chart-card made-select-flow';
+    card.setAttribute('data-date', date);
+    var title = document.createElement('p');
+    title.className = 'flow-title';
+    title.textContent = 'flowchart';
+    card.appendChild(title);
+    steps.forEach(function(name){ card.appendChild(makeStep(name)); });
+    if (canvas) {
+      card.classList.add('canvas-flow-chart');
+      canvas.appendChild(card);
+      placeOnCanvas(canvas, card);
+      if (typeof window.__expandPursuitCanvas === 'function') window.__expandPursuitCanvas(canvas);
+    } else {
+      mount.insertBefore(card, mount.firstChild);
+    }
+    if (typeof window.rebuildArrows === 'function') window.rebuildArrows(card);
+  }
+
+  function persist(date, steps){
+    if (!date) return;
+    var all = loadAll();
+    all[date] = steps;
+    saveAll(all);
+  }
+
+  function createFlow(block){
+    var date = block.getAttribute('data-date');
+    var steps = collectSteps(block);
+    if (!steps.length) return;
+    var purs = block.querySelector('.tv-panel.tv-pursuits');
+    if (!purs) return;
+    var canvas = purs.querySelector('.sec-grid.pursuit-canvas');
+    renderChart(canvas || purs, date, steps);
+    persist(date, steps);
+    endPick(block);
+    if (window.__switchDayView) window.__switchDayView(block, 'pursuits');
+    if (window.initSortable) try { window.initSortable(); } catch(e) {}
+  }
+
+  function restore(){
+    var all = loadAll();
+    document.querySelectorAll('.day-block.fmt22[data-date]').forEach(function(block){
+      ensureToggle(block);
+      var date = block.getAttribute('data-date');
+      var steps = all[date];
+      if (steps && steps.length) {
+        var purs = block.querySelector('.tv-panel.tv-pursuits');
+        if (purs && !purs.querySelector('.made-select-flow')) {
+          var canvas = purs.querySelector('.sec-grid.pursuit-canvas');
+          renderChart(canvas || purs, date, steps);
+        }
+      }
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    var block = e.target.closest('.day-block.fmt22');
+    if (!block) return;
+    if (e.target.closest('.make-flow-btn')) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      if (block.classList.contains('flow-picking')) endPick(block);
+      else startPick(block);
+      return;
+    }
+    if (e.target.closest('.flow-pick-cancel')) {
+      e.preventDefault(); e.stopPropagation();
+      endPick(block);
+      return;
+    }
+    if (e.target.closest('.flow-pick-go')) {
+      e.preventDefault(); e.stopPropagation();
+      createFlow(block);
+      return;
+    }
+    if (!block.classList.contains('flow-picking')) return;
+    if (!isModClick(e)) return;
+    if (e.target.closest('.card-del, .card-resize, .card-add-task, .add-board-row, .flow-pick-bar, .today-view-toggle, .make-flow-btn, .day-add-zone, .sec-picker, .zone-del, .add-pursuit-slot, .zone-resize, .zone-zoom-out, textarea, button, a')) return;
+    var task = e.target.closest('.j22-item, .zone-oneoff, .canvas-oneoff, .day-task-item');
+    var card = e.target.closest('.sec-card');
+    var zone = e.target.closest('.pursuit-zone');
+    var target = task || card || zone;
+    if (!target) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    togglePick(block, target);
+  }, true);
+
+  document.addEventListener('pointerdown', function(e){
+    var block = e.target.closest('.day-block.flow-picking');
+    if (!block || !isModClick(e)) return;
+    if (e.target.closest('.flow-pick-bar, .today-view-toggle, .make-flow-btn')) return;
+    if (e.target.closest('.j22-item, .sec-card, .zone-oneoff, .canvas-oneoff, .day-task-item, .pursuit-zone')) {
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    }
+  }, true);
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restore);
+  else setTimeout(restore, 0);
+  [400, 1200, 2800].forEach(function(ms){ setTimeout(restore, ms); });
+  if (window.MutationObserver) {
+    var t = null;
+    new MutationObserver(function(){
+      clearTimeout(t);
+      t = setTimeout(restore, 400);
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  window.__makeFlowFromSelect = true;
+})();
+</script>
+<style id="aug25-ambition-task-shot-css">
+html body .day-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card.is-empty.shot-card,
+html body .day-block.fmt22:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform > .sec-card.is-empty.shot-card,
+html body .day-block.fmt22 .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card {
+  width: min(640px, 94%) !important;
+  height: auto !important;
+  max-width: 640px !important;
+  max-height: none !important;
+  min-width: 280px !important;
+  min-height: 0 !important;
+  flex: 0 1 640px !important;
+  aspect-ratio: auto !important;
+  align-self: flex-start !important;
+  cursor: zoom-in;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual,
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-visual {
+  position: relative !important;
+  inset: auto !important;
+  height: auto !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #161310 !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-visual img {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1024 / 375 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  opacity: 1 !important;
+  filter: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual .j22-group {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  font-size: 14px !important;
+  padding: 8px 12px 10px !important;
+  background: rgba(28, 22, 16, 0.94) !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-body {
+  display: none !important;
+}
+.shot-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(12, 10, 8, 0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  cursor: zoom-out;
+}
+.shot-lightbox img {
+  max-width: min(1100px, 96vw);
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+}
+</style>
+<script id="aug25-ambition-handshake-js">
+(function(){
+  if (window.__aug25HandshakeGsa) return;
+  var DATE = '2026-08-25';
+  var TASK = 'Pepperdine GSA · Top Applicant';
+  var IMG = 'manus-storage/handshake-pepperdine-gsa.jpg';
+  var NAME_LC = TASK.toLowerCase();
+
+  function stripAmbitionPolaroid(block){
+    try {
+      var o = JSON.parse(localStorage.getItem('btm_grids_v1')||'{}') || {};
+      if (o[DATE]) {
+        o[DATE] = o[DATE].filter(function(r){ return String((r && r.name) || '').toLowerCase() !== 'ambition'; });
+        localStorage.setItem('btm_grids_v1', JSON.stringify(o));
+      }
+    } catch(e){}
+    [].slice.call(block.querySelectorAll('.sec-card')).forEach(function(c){
+      if (c.classList.contains('shot-card')) return;
+      var g = c.querySelector('.j22-group');
+      var n = ((g && (g.getAttribute('data-newhdr') || g.textContent)) || '').trim().toLowerCase();
+      if (n === 'ambition') c.remove();
+    });
+  }
+  function openShot(src){
+    var old = document.querySelector('.shot-lightbox');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.className = 'shot-lightbox';
+    box.innerHTML = '<img alt="">';
+    box.querySelector('img').src = src;
+    box.addEventListener('click', function(){ box.remove(); });
+    document.body.appendChild(box);
+  }
+  function ensure(){
+    var block = document.querySelector('.day-block[data-date="'+DATE+'"]');
+    if (!block) return;
+    var grid = block.querySelector('.tv-pursuits .sec-grid') || block.querySelector('.sec-grid');
+    if (!grid || grid.classList.contains('pursuit-canvas')) return;
+    stripAmbitionPolaroid(block);
+    grid.querySelectorAll('.ambition-task-ticket, .aug25-handshake-oneoff').forEach(function(el){ el.remove(); });
+    var card = grid.querySelector('.sec-card.shot-card');
+    if (!card) {
+      [].slice.call(grid.querySelectorAll('.sec-card')).forEach(function(c){
+        var g = c.querySelector('.j22-group');
+        var n = ((g && (g.getAttribute('data-newhdr') || g.textContent)) || '').trim().toLowerCase();
+        if (n === NAME_LC) card = c;
+      });
+    }
+    if (!card) {
+      card = document.createElement('div');
+      card.className = 'j22-section card sec-card is-empty shot-card';
+      card.setAttribute('data-user-added', '1');
+      card.setAttribute('data-theme', 'warm');
+      card.innerHTML = '<div class="card-visual theme-warm"><img alt=""><p class="j22-group" spellcheck="false"></p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button>';
+      grid.insertBefore(card, grid.firstChild);
+    }
+    card.classList.add('shot-card', 'is-empty');
+    var img = card.querySelector('.card-visual img');
+    var group = card.querySelector('.j22-group');
+    if (img) { img.src = IMG; img.alt = TASK; }
+    if (group) { group.setAttribute('data-newhdr', TASK); group.textContent = TASK; }
+    if (!card._shotOpen) {
+      card._shotOpen = true;
+      card.addEventListener('click', function(e){
+        if (e.target.closest('.card-del, .card-add-task, .card-resize, button, a')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        openShot(IMG);
+      });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(ensure, 250); });
+  else setTimeout(ensure, 250);
+  [900, 2200, 4200].forEach(function(ms){ setTimeout(ensure, ms); });
+  window.__aug25HandshakeGsa = true;
+})();
+</script>
+<script id="aug20-zone-web-js">
+(function(){
+  var EDGES = [
+    ['body','life'],
+    ['life','finances'],
+    ['finances','presence'],
+    ['body','leverage'],
+    ['leverage','ambition'],
+    ['ambition','presence'],
+    ['life','ambition'],
+    ['body','ambition'],
+    ['life','leverage']
+  ];
+  function board(){
+    return document.querySelector('.day-block.pursuit-board-day[data-date="2026-08-20"] .sec-grid.pursuit-canvas')
+      || document.querySelector('.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas');
+  }
+  function ensureSvg(grid){
+    var svg = grid.querySelector(':scope > svg.aug20-zone-web');
+    if(svg) return svg;
+    svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','aug20-zone-web');
+    svg.setAttribute('aria-hidden','true');
+    grid.insertBefore(svg, grid.firstChild);
+    return svg;
+  }
+  function curve(a, b){
+    var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    var dx = b.x - a.x, dy = b.y - a.y;
+    var nx = -dy, ny = dx;
+    var len = Math.sqrt(nx * nx + ny * ny) || 1;
+    var bow = Math.min(56, Math.hypot(dx, dy) * 0.16);
+    nx = nx / len * bow;
+    ny = ny / len * bow;
+    return 'M ' + a.x + ' ' + a.y + ' Q ' + (mx + nx) + ' ' + (my + ny) + ' ' + b.x + ' ' + b.y;
+  }
+  function draw(){
+    var grid = board();
+    if(!grid) return;
+    var heroHost = grid.querySelector('.pursuit-zone-body .pursuit-zone-grid');
+    if(heroHost){
+      var cards = [].slice.call(heroHost.querySelectorAll(':scope > .sec-card'));
+      if(cards.length === 1){
+        var hero = cards[0];
+        hero.classList.add('glow-hero');
+        var img = hero.querySelector('.card-visual img');
+        if(img && /zone-body/.test(img.getAttribute('src')||'')){
+          img.setAttribute('src', 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek');
+        }
+      }
+    }
+    var svg = ensureSvg(grid);
+    var w = parseFloat(grid.style.getPropertyValue('--canvas-w')) || grid.offsetWidth || 1400;
+    var h = parseFloat(grid.style.getPropertyValue('--canvas-h')) || grid.offsetHeight || 800;
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    svg.setAttribute('width', String(w));
+    svg.setAttribute('height', String(h));
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    var map = {};
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var id = z.getAttribute('data-zone');
+      var x = parseFloat(z.style.getPropertyValue('--ff-x')) || parseFloat(z.style.left) || 0;
+      var y = parseFloat(z.style.getPropertyValue('--ff-y')) || parseFloat(z.style.top) || 0;
+      var collapsed = z.classList.contains('zone-collapsed');
+      var ww = collapsed ? 172 : (parseFloat(z.style.getPropertyValue('--zone-w')) || z.offsetWidth || 220);
+      var hh = collapsed ? 52 : (parseFloat(z.style.getPropertyValue('--zone-h')) || z.offsetHeight || 180);
+      map[id] = { x: x + ww / 2, y: y + hh / 2 };
+    });
+    EDGES.forEach(function(e){
+      var a = map[e[0]], b = map[e[1]];
+      if(!a || !b) return;
+      var p = document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d', curve(a, b));
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', 'rgba(255,244,220,0.45)');
+      p.setAttribute('stroke-width', '1.35');
+      p.setAttribute('stroke-dasharray', '5 8');
+      p.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(p);
+    });
+  }
+  window.__drawAug20Web = draw;
+  function boot(){ draw(); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 120); });
+  else setTimeout(boot, 120);
+  [500, 1400, 2800].forEach(function(ms){ setTimeout(draw, ms); });
+  document.addEventListener('pointerup', function(){ setTimeout(draw, 30); }, true);
+})();
+</script>
+<style id="no-resize-glyph">
+html body .card-resize::before,
+html body .card-resize::after,
+html body .oneoff-resize::before,
+html body .oneoff-resize::after,
+html body .zone-resize::before,
+html body .zone-resize::after,
+html body .canvas-item-resize::before,
+html body .canvas-item-resize::after,
+html body .day-block .sec-card:hover .card-resize::after,
+html body .day-block .sec-card.resizing .card-resize::after,
+html body .day-block .zone-oneoff:hover .oneoff-resize::after,
+html body .day-block .pursuit-zone:hover .zone-resize::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+html body .card-resize,
+html body .oneoff-resize,
+html body .zone-resize {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  color: transparent !important;
+}
+html body .canvas-item-resize {
+  color: transparent !important;
+  font-size: 0 !important;
+}
+</style>
+<script src="icon-grid.js?v=nosidebar"></script>
 </body>
 </html>
+

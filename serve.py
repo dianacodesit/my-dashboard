@@ -210,7 +210,7 @@ def main():
     # Avoid serving parent paths; stay in ROOT.
     os.chdir(ROOT)
     httpd = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
-    print(f"dashboard server on http://127.0.0.1:{PORT}/dashboard.html", flush=True)
+    print(f"dashboard server on http://127.0.0.1:{PORT}/", flush=True)
     print("POST /bake to persist localStorage into GitHub", flush=True)
     print("POST /brain-dump to write thoughts into brain-dump.html", flush=True)
     httpd.serve_forever()

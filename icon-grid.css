@@ -1,0 +1,284 @@
+/* Grids page: section titles stay titles. Cards scatter freeform
+   inside each section — not neat rows of two. */
+
+body:not(.icon-grid-page) #icon-grid-host {
+  display: none !important;
+}
+
+html body.icon-grid-page #icon-grid-host {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  margin: 56px auto 0;
+  padding: 8px 12px 40px;
+  max-width: 1180px;
+}
+
+html body.icon-grid-page #icon-grid-host .grid,
+html body.icon-grid-page .grid.icon-task-grid {
+  display: block !important;
+  grid-template-columns: none !important;
+  flex-direction: unset !important;
+  gap: 0 !important;
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section {
+  display: block !important;
+  position: relative !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 0 28px !important;
+  margin: 0 0 8px !important;
+  min-height: 0 !important;
+  transform: none !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section::before {
+  content: none !important;
+  display: none !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  min-height: 160px;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .section-label,
+html body.icon-grid-page .grid.icon-task-grid .grid-section-title,
+html body.icon-grid-page .grid.icon-task-grid .grid-section .section-label {
+  display: block !important;
+  text-align: center !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.3em !important;
+  text-transform: uppercase !important;
+  color: #B5A99A !important;
+  border: none !important;
+  border-bottom: 1px solid #D4DDD1 !important;
+  padding: 28px 0 10px !important;
+  margin: 0 0 12px !important;
+  line-height: 1.4 !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: auto !important;
+  background: none !important;
+  grid-column: auto !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .section-label.collapsible-header {
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center !important;
+  gap: 8px;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card,
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card {
+  background: #FAF6EC !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+  filter: none;
+  position: absolute !important;
+  right: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+  overflow: hidden !important;
+  display: block !important;
+  cursor: grab;
+  transform: rotate(var(--card-rot, 0deg));
+  transition: box-shadow 0.25s, opacity 0.4s;
+  z-index: 1;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card:hover,
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card:hover {
+  transform: rotate(var(--card-rot, 0deg)) translateY(-4px) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09) !important;
+  z-index: 4;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.is-dragging {
+  cursor: grabbing;
+  z-index: 20 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14) !important;
+  transition: none !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.done,
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card.done {
+  opacity: 0.4 !important;
+  filter: grayscale(0.7);
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.single,
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card.single {
+  grid-column: auto;
+  max-width: none;
+  margin: 0 !important;
+  justify-self: auto;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card-visual {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card-body {
+  padding: 14px 16px 16px;
+  border-top: 1px solid #f0ece6;
+  background: #FAF6EC;
+  position: relative;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .task-num {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  color: #B5A99A;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .task-title {
+  font-family: "Newsreader", serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  color: #2A2A25;
+  line-height: 1.2;
+  margin-bottom: 5px;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .task-desc {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  color: #8a7a68;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .subtask {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  line-height: 1.8;
+  width: 100%;
+  color: #2A2A25;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .subtask input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #B5A99A;
+  background: white;
+  cursor: pointer;
+  flex-shrink: 0;
+  order: 2;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .subtask input[type="checkbox"]:checked {
+  background: #8A9E85;
+  border-color: #8A9E85;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .done-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #B5A99A;
+  background: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .done-check.checked {
+  background: #8A9E85;
+  border-color: #8A9E85;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .theme-warm { background: linear-gradient(135deg, #f8f4ee, #ede5d8); }
+html body.icon-grid-page .grid.icon-task-grid .theme-sage { background: linear-gradient(135deg, #eef1ee, #dde6dd); }
+html body.icon-grid-page .grid.icon-task-grid .theme-lavender { background: linear-gradient(135deg, #f0edf8, #e4dff0); }
+html body.icon-grid-page .grid.icon-task-grid .theme-blush { background: linear-gradient(135deg, #f8f2ee, #ede0d6); }
+html body.icon-grid-page .grid.icon-task-grid .theme-amber { background: linear-gradient(135deg, #f5f0e4, #e8dfc8); }
+html body.icon-grid-page .grid.icon-task-grid .theme-mint { background: linear-gradient(135deg, #eef4ee, #d8ecda); }
+
+body.icon-grid-page {
+  margin: 0;
+  background: #E7E0D2;
+  font-family: "Newsreader", serif;
+  color: #2A2A25;
+}
+body.icon-grid-page header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+body.icon-grid-page header .eyebrow {
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: #B5A99A;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+body.icon-grid-page header h1 {
+  font-size: clamp(36px, 8vw, 64px);
+  font-weight: 400;
+  font-style: italic;
+  color: #1c140e;
+  line-height: 1.1;
+  margin: 0;
+}
+body.icon-grid-page header .page-note {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  color: #8A9E85;
+  letter-spacing: 0.2em;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  html body.icon-grid-page #icon-grid-host {
+    padding: 8px 8px 40px;
+  }
+  html body.icon-grid-page .grid.icon-task-grid .card,
+  html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card {
+    max-width: calc(100% - 16px);
+  }
+}

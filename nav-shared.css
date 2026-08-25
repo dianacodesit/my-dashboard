@@ -1,11 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,400&family=DM+Mono:wght@400&family=Italiana&display=swap');
 
 /* Shared hamburger + sidebar for every dashboard page */
+#nav-root {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  pointer-events: none;
+}
 #hamburger-menu {
   position: fixed;
   top: 18px;
   left: 18px;
-  z-index: 10000;
+  z-index: 200010;
   background: transparent;
   border: none;
   border-radius: 4px;
@@ -16,6 +22,7 @@
   gap: 3px;
   box-shadow: none;
   transition: opacity 0.2s;
+  pointer-events: auto;
 }
 #hamburger-menu:hover { opacity: 0.7; }
 #hamburger-menu span {
@@ -31,7 +38,8 @@
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.3);
-  z-index: 10000;
+  z-index: 200000;
+  pointer-events: auto;
 }
 #nav-overlay.open { display: block; }
 #nav-sidebar {
@@ -42,12 +50,13 @@
   height: 100vh;
   background: #F5F0E8;
   border-right: 1px solid rgba(196,168,130,0.4);
-  z-index: 10001;
+  z-index: 200005;
   padding: 60px 0 20px;
   box-shadow: 4px 0 24px rgba(0,0,0,0.12);
   transition: left 0.3s ease;
   overflow-y: auto;
   box-sizing: border-box;
+  pointer-events: auto;
 }
 #nav-sidebar.open { left: 0; }
 #nav-close {
