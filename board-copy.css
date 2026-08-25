@@ -10142,15 +10142,77 @@ body.editing .add-task-here-btn { display: block; }
   margin:2px auto 10px; position:relative; z-index:12; width:100%;
 }
 .day-block.fmt22 .add-board-row .add-grid,
-.day-block.fmt22 .add-board-row .add-card-btn{
+.day-block.fmt22 .add-board-row .add-card-btn,
+.day-block.fmt22 .add-board-row .add-task-day-btn{
   margin:0; padding:6px 16px; border:none; border-radius:16px;
   background:rgba(255,250,240,0.86); color:#41373a;
   font-family:'Jost',sans-serif; font-size:12px; letter-spacing:0.05em; cursor:pointer;
   box-shadow:0 1px 8px rgba(20,12,6,0.12);
 }
 .day-block.fmt22 .add-board-row .add-grid:hover,
-.day-block.fmt22 .add-board-row .add-card-btn:hover{
+.day-block.fmt22 .add-board-row .add-card-btn:hover,
+.day-block.fmt22 .add-board-row .add-task-day-btn:hover{
   background:#fffaf2;
+}
+html body.agenda-copy-page .agenda-dump{
+  width:min(520px,92%);
+  margin:0 auto 14px;
+  padding:12px 14px 12px;
+  background:rgba(255,250,240,0.9);
+  border:1px solid rgba(255,255,255,0.35);
+  border-radius:14px;
+  box-shadow:0 8px 24px rgba(20,12,6,0.14);
+  position:relative;
+  z-index:11;
+}
+html body.agenda-copy-page .agenda-dump-label{
+  margin:0 0 8px;
+  font-family:"DM Mono",monospace;
+  font-size:9px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:#6f5f54;
+}
+html body.agenda-copy-page .agenda-dump-input{
+  display:block;
+  width:100%;
+  min-height:72px;
+  resize:vertical;
+  box-sizing:border-box;
+  padding:8px 10px;
+  border:1px solid rgba(110,100,86,0.35);
+  border-radius:10px;
+  background:#fffaf2;
+  color:#41373a;
+  font-family:"Newsreader",Georgia,serif;
+  font-size:15px;
+  line-height:1.4;
+  outline:none;
+}
+html body.agenda-copy-page .agenda-dump-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:8px;
+}
+html body.agenda-copy-page .agenda-dump-go{
+  border:none;
+  border-radius:16px;
+  padding:6px 14px;
+  background:#41373a;
+  color:#fffaf2;
+  font-family:"Jost",sans-serif;
+  font-size:12px;
+  letter-spacing:0.04em;
+  cursor:pointer;
+}
+html body.agenda-copy-page .agenda-dump-go:hover{ background:#2c2420; }
+html body.agenda-copy-page .agenda-dump-status{
+  font-family:"DM Mono",monospace;
+  font-size:9px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#6f5f54;
 }
 .day-block.fmt22 .flow-chart-card .add-grid-input{ position:absolute; top:12px; left:12px; z-index:30; padding:6px 13px; border:1px solid rgba(110,100,86,0.45); border-radius:16px; background:#faf6ee; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:0.04em; color:#41373a; width:160px; outline:none; }
 .day-block.fmt22 .sec-picker,
@@ -10163,10 +10225,16 @@ body.editing .add-task-here-btn { display: block; }
   margin:0 0 8px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em;
   text-transform:uppercase; color:#6f5f54; opacity:0.85;
 }
+.day-block.fmt22 .sec-picker-group{
+  margin:10px 0 4px; padding:0; border:none; background:none;
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em;
+  text-transform:uppercase; color:#6f5f54; opacity:0.85;
+}
+.day-block.fmt22 .sec-picker-list .sec-picker-group:first-child{ margin-top:0; }
 .day-block.fmt22 .sec-picker-list,
 .day-block.fmt22.today-block .sec-picker-list{
   display:flex; flex-direction:column; align-items:stretch; gap:4px;
-  max-height:220px; overflow:auto; margin:0 0 10px;
+  max-height:280px; overflow:auto; margin:0 0 10px;
 }
 .day-block.fmt22 .sec-picker-opt,
 .day-block.fmt22.today-block .sec-picker-opt{
@@ -14551,8 +14619,21 @@ html body .day-block[data-date="2026-08-20"] .sec-grid.zone-zoomed > .pursuit-zo
 .copied-page header h1 { font-size:clamp(36px,8vw,64px); font-weight:400; font-style:italic; color:#1c140e; line-height:1.1; }
 .copied-page .page-note { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--sage); margin-top:10px; }
 html body.copied-page #hamburger-menu span { background:#1c140e !important; box-shadow:0 1px 3px rgba(20,12,6,0.45); }
-.dimensions-host { margin:0 !important; }
-.dimensions-host .sec-grid {
+html body.agenda-copy-page #hamburger-menu span { background:#f7efe4 !important; box-shadow:0 1px 4px rgba(8,4,2,0.55); }
+html body.agenda-copy-page header .eyebrow,
+html body.agenda-copy-page .page-note {
+  color: rgba(247,239,228,0.78) !important;
+  text-shadow: 0 1px 10px rgba(8,4,2,0.45);
+}
+html body.agenda-copy-page header h1 {
+  color: #f7efe4 !important;
+  -webkit-text-fill-color: #f7efe4 !important;
+  text-shadow: 0 2px 18px rgba(8,4,2,0.55);
+}
+.dimensions-host,
+.grids-host { margin:0 !important; }
+.dimensions-host .sec-grid,
+.grids-host .sec-grid {
   width:100%;
   display:flex !important;
   flex-wrap:wrap !important;
@@ -14560,9 +14641,292 @@ html body.copied-page #hamburger-menu span { background:#1c140e !important; box-
   height:auto !important;
   position:relative !important;
 }
-.dimensions-host .sec-card {
+.dimensions-host .sec-card,
+.grids-host .sec-card {
   position:relative !important;
   top:auto !important;
   left:auto !important;
   right:auto !important;
+}
+
+/* Agenda: cards stay square; one-off tasks are landscape chips */
+html body.agenda-copy-page .day-block.fmt22 .sec-grid,
+html body.agenda-copy-page .day-block.fmt22 .sec-grid.freeform,
+html body.agenda-copy-page .day-block.fmt22.today-block .sec-grid,
+html body.agenda-copy-page .day-block.fmt22.today-block .sec-grid.freeform {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+  gap: 12px !important;
+  columns: auto !important;
+  column-count: auto !important;
+  position: relative !important;
+  height: auto !important;
+}
+html body.agenda-copy-page .sec-card:not(.is-section) .card-visual .j22-group::before {
+  content: "card";
+  display: block;
+  font-family: "DM Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-style: normal;
+  opacity: 0.8;
+  margin-bottom: 2px;
+}
+html body.agenda-copy-page .agenda-oneoff {
+  position: relative !important;
+  width: 228px !important;
+  height: 88px !important;
+  max-width: 228px !important;
+  max-height: 88px !important;
+  min-width: 228px !important;
+  min-height: 88px !important;
+  flex: 0 0 228px !important;
+  aspect-ratio: auto !important;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #1c1814;
+  box-shadow: 1px 2px 8px rgba(40,28,18,0.28);
+  isolation: isolate;
+}
+html body.agenda-copy-page .agenda-oneoff-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+html body.agenda-copy-page .agenda-oneoff-bar {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 28px 8px 12px;
+  background: linear-gradient(180deg, rgba(12,8,6,0.15), rgba(12,8,6,0.45));
+}
+html body.agenda-copy-page .agenda-oneoff-kicker {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f7f1e6;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+html body.agenda-copy-page .agenda-oneoff-t {
+  font-family: "Reenie Beanie", cursive;
+  font-size: 28px;
+  line-height: 0.95;
+  color: #f7f1e6;
+  -webkit-text-fill-color: #f7f1e6;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 0 16px rgba(0,0,0,0.7);
+  text-align: center;
+  max-width: 86%;
+}
+html body.agenda-copy-page .agenda-oneoff.is-done .agenda-oneoff-t {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+html body.agenda-copy-page .agenda-oneoff-check {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+html body.agenda-copy-page .agenda-oneoff-check .agenda-check {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1.5px solid rgba(247,241,230,0.85);
+  border-radius: 3px;
+  background: rgba(20,16,12,0.35);
+  cursor: pointer;
+}
+html body.agenda-copy-page .agenda-oneoff-check .agenda-check:checked {
+  background: rgba(247,241,230,0.9);
+}
+html body.agenda-copy-page .agenda-oneoff-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 3;
+  border: 0;
+  background: rgba(20,16,12,0.45);
+  color: #f7f1e6;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  padding: 0;
+}
+html body.agenda-copy-page .sec-picker-opt.is-oneoff-dest {
+  font-style: italic;
+}
+
+/* In-zone one-off tasks on the Aug 20 / pursuit board */
+html body .day-block.pursuit-board-day .zone-oneoffs,
+html body .day-block[data-date="2026-08-20"] .zone-oneoffs {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day .zone-oneoff,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff {
+  pointer-events: auto;
+  position: absolute;
+  left: var(--ff-x, 12px);
+  top: var(--ff-y, 52px);
+  width: var(--card-w, 220px);
+  height: var(--card-h, 88px);
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  background: #1c1814;
+  box-shadow: 1px 2px 8px rgba(40,28,18,0.35);
+  border-radius: 4px;
+  cursor: grab;
+  touch-action: none;
+  z-index: 5;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-img,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-bar,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-bar,
+html body .day-block.today-block .zone-oneoff-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: none;
+  text-align: center;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-t {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-family: "Reenie Beanie", cursive;
+  font-size: 28px;
+  line-height: 0.95;
+  color: #f7f1e6;
+  -webkit-text-fill-color: #f7f1e6;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+  overflow: hidden;
+  text-align: center;
+}
+html body .day-block.pursuit-board-day .zone-oneoff.need-halo .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.need-halo .zone-oneoff-t {
+  text-shadow:
+    0 1px 2px #000,
+    0 0 8px #000,
+    0 0 16px rgba(0,0,0,0.95),
+    0 0 28px rgba(0,0,0,0.7);
+}
+html body .day-block.pursuit-board-day .zone-oneoff-kicker,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-kicker,
+html body .day-block.today-block .zone-oneoff-kicker {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  z-index: 3;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f7f1e6;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.75);
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-check,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-check,
+html body .day-block.today-block .zone-oneoff-check {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-check .agenda-check,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-check .agenda-check,
+html body .day-block.today-block .zone-oneoff-check .agenda-check {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  border: 1.5px solid rgba(247,241,230,0.9);
+  border-radius: 3px;
+  background: rgba(20,16,12,0.35);
+  cursor: pointer;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-check .agenda-check:checked,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-check .agenda-check:checked,
+html body .day-block.today-block .zone-oneoff-check .agenda-check:checked {
+  background: rgba(247,241,230,0.92);
+}
+html body .day-block.pursuit-board-day .zone-oneoff.is-done .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.is-done .zone-oneoff-t,
+html body .day-block.today-block .zone-oneoff.is-done .zone-oneoff-t {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-n,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-n {
+  display: none !important;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-del,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 3;
+  border: 0;
+  background: rgba(20,16,12,0.45);
+  color: #f7f1e6;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  padding: 0;
+}
+html body .day-block.pursuit-board-day .pursuit-zone.zone-collapsed .zone-oneoffs,
+html body .day-block[data-date="2026-08-20"] .pursuit-zone.zone-collapsed .zone-oneoffs {
+  display: none !important;
+}
+html body .day-block.pursuit-board-day.fmt22 .pursuit-zone-grid > .sec-card .card-visual .j22-group::before,
+html body .day-block[data-date="2026-08-20"].fmt22 .pursuit-zone-grid > .sec-card .card-visual .j22-group::before {
+  content: "card";
+  display: block;
+  font-family: "DM Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-style: normal;
+  opacity: 0.85;
+  margin-bottom: 2px;
 }

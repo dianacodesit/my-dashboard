@@ -8784,16 +8784,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 }
 /* But show add-section-btn inside tv-pursuits */
 .day-block.fmt22 .tv-pursuits .add-section-btn {
-  display: inline-block !important;
-  margin: 10px auto 0;
-  font-size: 11px;
-  padding: 5px 14px;
-  border: 1px dashed rgba(110,100,86,0.3);
-  border-radius: 14px;
-  background: transparent;
-  color: #6e6456;
-  cursor: pointer;
-  letter-spacing: 0.04em;
+  display: none !important;
 }
 .day-block.fmt22.zone-board-day .tv-pursuits .add-section-btn,
 .day-block.fmt22.pursuit-board-day .tv-pursuits .add-section-btn,
@@ -13001,15 +12992,15 @@ window.__j22fnApply=run;
     return 'life';
   }
   window.__zoneForPursuit = zoneFor;
-  var POSKEY='btm_zonepos_v11_boardair';
+  var POSKEY='btm_zonepos_v13_stack';
   var ZONE_GAP=64;
   var DEFAULT_POS = {
     body:{x:28,y:24,w:260,h:248},
     life:{x:368,y:48,w:260,h:248},
     finances:{x:708,y:20,w:270,h:248},
     leverage:{x:40,y:360,w:270,h:248},
-    ambition:{x:384,y:384,w:400,h:260},
-    presence:{x:760,y:348,w:260,h:248}
+    ambition:{x:352,y:360,w:280,h:260},
+    presence:{x:708,y:360,w:270,h:248}
   };
   function loadPos(){ try{ return JSON.parse(localStorage.getItem(POSKEY)||'{}'); }catch(e){ return {}; } }
   function savePos(map){ try{ localStorage.setItem(POSKEY, JSON.stringify(map)); }catch(e){} scheduleCloudSave(); }
@@ -13160,15 +13151,14 @@ window.__j22fnApply=run;
       life:{x:pad+zw+hgap, y:pad+22, w:zw, h:zh},
       finances:{x:pad+(zw+hgap)*2, y:pad+6, w:zw, h:zh},
       leverage:{x:pad+12, y:pad+zh+vgap, w:zw, h:zh},
-      ambition:{x:pad+zw+hgap-10, y:pad+zh+vgap+18, w:Math.min(zw+36, Math.max(zw, 280)), h:zh+12},
-      presence:{x:pad+(zw+hgap)*2+8, y:pad+zh+vgap-8, w:zw, h:zh}
+      ambition:{x:pad+zw+hgap-10, y:pad+zh+vgap, w:zw, h:zh},
+      presence:{x:pad+(zw+hgap)*2, y:pad+zh+vgap, w:zw, h:zh}
     };
     [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
       var id=z.getAttribute('data-zone');
       var d=pos[id];
       if(!d) return;
-      var need=zoneMinSizeFromCards(z);
-      writeRect({el:z, id:id, x:d.x, y:d.y, w:Math.max(d.w, need.w), h:Math.max(d.h, need.h)});
+      writeRect({el:z, id:id, x:d.x, y:d.y, w:d.w, h:d.h});
     });
   }
   window.__airSpreadZones=airSpreadZones;
@@ -13188,6 +13178,23 @@ window.__j22fnApply=run;
     }
     writeRect({el:row, x:d.x, y:d.y, w:d.w, h:d.h});
     readPos(row, id);
+  }
+  function sameZoneColumn(a, b){
+    var overlap=Math.min(a.x+a.w, b.x+b.w)-Math.max(a.x, b.x);
+    return overlap > Math.min(a.w, b.w)*0.4;
+  }
+  function pinPresenceUnderFinances(grid){
+    if(!grid) return;
+    var fin=grid.querySelector(':scope > .pursuit-zone[data-zone="finances"]:not(.zone-collapsed)');
+    var q=grid.querySelector(':scope > .pursuit-zone[data-zone="presence"]:not(.zone-collapsed)');
+    if(!fin || !q) return;
+    var a=zoneRect(fin), b=zoneRect(q);
+    if(!sameZoneColumn(a, b)) return;
+    var floor=a.y+a.h+ZONE_GAP;
+    if(b.y<floor){
+      b.y=floor;
+      writeRect(b);
+    }
   }
   function resolveOverlaps(grid, keepId, opts){
     if(!grid) return;
@@ -13211,18 +13218,11 @@ window.__j22fnApply=run;
           if(keepId && a.id===keepId){ mover=b; other=a; }
           else if(keepId && b.id===keepId){ mover=a; other=b; }
           else { mover=b; other=a; }
-          var mcx=mover.x+mover.w/2, mcy=mover.y+mover.h/2;
-          var ocx=other.x+other.w/2, ocy=other.y+other.h/2;
-          var signX=mcx>=ocx?1:-1;
-          var signY=mcy>=ocy?1:-1;
-          if(!mcx && !mcy){ signX=1; signY=0; }
-          if(overlapX<overlapY){
-            mover.x=Math.max(0, mover.x+signX*(overlapX+1));
-          } else if(overlapY<overlapX){
-            mover.y=Math.max(0, mover.y+signY*(overlapY+1));
+          var stack=sameZoneColumn(mover, other);
+          if(stack || overlapY<=overlapX){
+            mover.y=Math.max(mover.y, other.y+other.h+gap);
           } else {
-            mover.x=Math.max(0, mover.x+signX*(overlapX+1));
-            mover.y=Math.max(0, mover.y+signY*(overlapY+1));
+            mover.x=Math.max(mover.x, other.x+other.w+gap);
           }
           writeRect(mover);
           moved=true;
@@ -13230,6 +13230,7 @@ window.__j22fnApply=run;
       }
       if(!moved) break;
     }
+    pinPresenceUnderFinances(grid);
     var finalRects=zones.map(zoneRect).concat(
       [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone.zone-collapsed')).map(zoneRect)
     );
@@ -13243,25 +13244,7 @@ window.__j22fnApply=run;
   }
   function fitZoneToCards(zone){
     if(!zone) return;
-    var box=zone.querySelector('.pursuit-zone-grid');
-    if(!box) return;
-    var r=zoneRect(zone);
-    var needW=r.w, needH=r.h;
-    [].slice.call(box.querySelectorAll('.sec-card')).concat(
-      [].slice.call(zone.querySelectorAll(':scope > .zone-oneoffs .zone-oneoff'))
-    ).forEach(function(c){
-      var cs=getComputedStyle(c);
-      var x=parseFloat(cs.getPropertyValue('--ff-x'))||0;
-      var y=parseFloat(cs.getPropertyValue('--ff-y'))||0;
-      var w=c.offsetWidth||parseFloat(cs.getPropertyValue('--card-w'))||118;
-      var h=c.offsetHeight||parseFloat(cs.getPropertyValue('--card-h'))||118;
-      needW=Math.max(needW, Math.ceil(x+w+56));
-      needH=Math.max(needH, Math.ceil(y+h+92));
-    });
-    if(needW<=r.w && needH<=r.h) return;
-    writeRect({el:zone, id:r.id, x:r.x, y:r.y, w:needW, h:needH});
-    var canvas=zone.closest('.sec-grid');
-    if(canvas) resolveOverlaps(canvas, r.id, {skipSave:true});
+    layoutZonePieces(zone, zone.classList.contains('is-zoomed') ? 'zoom' : 'fit');
   }
   window.__fitZoneToCards=fitZoneToCards;
   function readPos(row, id){
@@ -13342,54 +13325,95 @@ window.__j22fnApply=run;
     return a.x < b.x+b.w+gap && a.x+a.w+gap > b.x && a.y < b.y+b.h+gap && a.y+a.h+gap > b.y;
   }
   function zoneMinSizeFromCards(zone){
-    var host=zone && zone.querySelector('.pursuit-zone-grid');
-    var cards=host ? [].slice.call(host.querySelectorAll(':scope > .sec-card:not(.card-collapsed)')) : [];
-    if(!cards.length) return {w:220,h:180};
-    var gap=22, x=12, y=28, right=12, bottom=y;
-    cards.forEach(function(card){
-      var w=parseFloat(card.style.getPropertyValue('--card-w'))||148;
-      var h=parseFloat(card.style.getPropertyValue('--card-h'))||148;
-      if(w<130) w=148;
-      if(h<130) h=148;
+    var pieces=zoneInnerPieces(zone);
+    if(!pieces.length) return {w:220,h:180};
+    var gap=16, x=12, y=28, right=12, bottom=y;
+    pieces.forEach(function(el){
+      var w=parseFloat(el.style.getPropertyValue('--card-w'))||(el.classList.contains('zone-oneoff')?176:148);
+      var h=parseFloat(el.style.getPropertyValue('--card-h'))||(el.classList.contains('zone-oneoff')?88:148);
       right=Math.max(right, x+w);
       bottom=Math.max(bottom, y+h);
       x += w + gap;
     });
     return {w:Math.ceil(right+52), h:Math.ceil(bottom+44)};
   }
+  function zoneInnerPieces(zone){
+    if(!zone) return [];
+    var host=zone.querySelector('.pursuit-zone-grid');
+    var cards=host ? [].slice.call(host.querySelectorAll(':scope > .sec-card:not(.card-collapsed)')) : [];
+    var offs=[].slice.call(zone.querySelectorAll(':scope > .zone-oneoffs .zone-oneoff'));
+    return cards.concat(offs);
+  }
+  function layoutZonePieces(zone, mode){
+    if(!zone || zone.classList.contains('zone-collapsed')) return;
+    var host=zone.querySelector('.pursuit-zone-grid');
+    if(!host) return;
+    var pieces=zoneInnerPieces(zone);
+    if(!pieces.length) return;
+    var zoom=mode==='zoom' || zone.classList.contains('is-zoomed');
+    var blk=zone.closest('.day-block');
+    var hidden=!!(blk && blk.classList.contains('collapsed'));
+    var zr=zone.getBoundingClientRect();
+    var hr=host.getBoundingClientRect();
+    var zoneW=zone.clientWidth || zr.width || parseFloat(zone.style.getPropertyValue('--zone-w')) || 260;
+    var zoneH=zone.clientHeight || zr.height || parseFloat(zone.style.getPropertyValue('--zone-h')) || 248;
+    var hostW=(hr.width>=60 && !hidden) ? hr.width : Math.max(80, zoneW - (zoom?32:16));
+    var hostH=(hr.height>=60 && !hidden) ? hr.height : Math.max(60, zoneH - (zoom?80:80));
+    var n=pieces.length;
+    var pad=Math.max(8, Math.round(Math.min(hostW, hostH)*0.045));
+    var gap=Math.max(10, Math.min(22, Math.round(hostW*0.035)));
+    var innerW=Math.max(80, hostW-pad*2);
+    var innerH=Math.max(60, hostH-pad*2);
+    var cols=n;
+    var minCard=zoom ? 110 : 86;
+    while(cols>1 && (innerW-gap*(cols-1))/cols < minCard) cols--;
+    var rows=Math.ceil(n/cols);
+    var cellW=Math.floor((innerW-gap*(cols-1))/cols);
+    var cellH=Math.floor((innerH-gap*(rows-1))/rows);
+    if(cellW<72) cellW=72;
+    if(cellH<64) cellH=64;
+    if(!zoom && n===1){
+      cellW=Math.min(cellW, 148);
+      cellH=Math.min(cellH, 148);
+    }
+    var dx=(hr.width>=60 ? hr.left-zr.left : (zoom?16:8));
+    var dy=(hr.height>=60 ? hr.top-zr.top : (zoom?64:44));
+    if(!isFinite(dx) || dx<0 || dx>80) dx=zoom?16:8;
+    if(!isFinite(dy) || dy<0 || dy>120) dy=zoom?64:44;
+    var prev=window.__zoneZoomLayout;
+    if(zoom) window.__zoneZoomLayout=true;
+    var persist=!zoom && !hidden;
+    try{
+      pieces.forEach(function(el,i){
+        var col=i%cols;
+        var row=Math.floor(i/cols);
+        var off=el.classList.contains('zone-oneoff');
+        var w=cellW;
+        var h=off && !zoom ? Math.max(72, Math.min(cellH, Math.round(cellW*0.62))) : cellH;
+        var x=pad+col*(cellW+gap);
+        var y=pad+row*(cellH+gap)+Math.max(0, Math.round((cellH-h)/2));
+        el.style.setProperty('--card-w', w+'px');
+        el.style.setProperty('--card-h', h+'px');
+        if(off){
+          el.style.setProperty('--ff-x', Math.round(x+dx)+'px');
+          el.style.setProperty('--ff-y', Math.round(y+dy)+'px');
+          if(persist && typeof saveOneoffRect==='function') saveOneoffRect(el);
+        } else {
+          el.style.setProperty('--ff-x', x+'px');
+          el.style.setProperty('--ff-y', y+'px');
+          el.style.removeProperty('top');
+          el.style.removeProperty('left');
+          if(persist && typeof saveMini==='function') saveMini(el);
+        }
+      });
+    } finally {
+      window.__zoneZoomLayout=prev;
+    }
+  }
+  window.__layoutZonePieces=layoutZonePieces;
   function layoutZoneCardsRow(host, gap){
     if(!host) return;
-    if(window.__zoneZoomLayout) return;
-    var zone=host.closest('.pursuit-zone');
-    if(zone && zone.classList.contains('is-zoomed')) return;
-    gap=gap||22;
-    var cards=[].slice.call(host.querySelectorAll(':scope > .sec-card:not(.card-collapsed)'));
-    if(!cards.length) return;
-    var x=12, y=28;
-    cards.forEach(function(card){
-      var w=parseFloat(card.style.getPropertyValue('--card-w'))||148;
-      var h=parseFloat(card.style.getPropertyValue('--card-h'))||148;
-      if(w<130){ w=148; card.style.setProperty('--card-w','148px'); }
-      if(h<130 && !card.classList.contains('card-collapsed')){ h=148; card.style.setProperty('--card-h','148px'); }
-      card.style.setProperty('--ff-x', x+'px');
-      card.style.setProperty('--ff-y', y+'px');
-      card.style.removeProperty('top');
-      card.style.removeProperty('left');
-      saveMini(card);
-      x += w + gap;
-    });
-    if(zone){
-      var r=zoneRect(zone);
-      var need=zoneMinSizeFromCards(zone);
-      if(need.w>r.w || need.h>r.h){
-        writeRect({el:zone, id:r.id, x:r.x, y:r.y, w:Math.max(r.w, need.w), h:Math.max(r.h, need.h)});
-      }
-      var canvas=zone.closest('.sec-grid');
-      if(canvas){
-        resolveOverlaps(canvas, r.id);
-        expandCanvas(canvas);
-      }
-    }
+    layoutZonePieces(host.closest('.pursuit-zone'), 'fit');
   }
   function resolveZoneCardOverlaps(host){
     if(!host) return;
@@ -13415,12 +13439,14 @@ window.__j22fnApply=run;
     }
   }
   window.__resolveZoneCardOverlaps=resolveZoneCardOverlaps;
+  function isOneoffTaskName(name){
+    var n=String(name||'').trim().toLowerCase();
+    if(!n || /elevate/.test(n)) return false;
+    return /document translation|translat.*arabic/.test(n);
+  }
   function prepareMini(card){
     if(!card) return;
-    if(/elevate|document translation|arabic/.test(cardName(card))){
-      card.classList.add('hide-card-title');
-      if(/document translation|arabic/.test(cardName(card))) card.classList.add('caption-large');
-    }
+    if(isOneoffTaskName(cardName(card))) return;
     if(!card.querySelector('.card-del')){
       var d=document.createElement('button');
       d.type='button'; d.className='card-del'; d.setAttribute('aria-label','delete card'); d.textContent='×';
@@ -13571,8 +13597,14 @@ window.__j22fnApply=run;
     if(m[k]) delete m[k]; else m[k]=1;
     saveCol(m);
     applyZoneCollapse(zone);
+    if(!zone.classList.contains('zone-collapsed')){
+      requestAnimationFrame(function(){ layoutZonePieces(zone, 'fit'); });
+    }
     var grid=zone.closest('.sec-grid');
-    if(grid) expandCanvas(grid);
+    if(grid){
+      resolveOverlaps(grid);
+      expandCanvas(grid);
+    }
   }
   function clearZoomedZoneLayout(zone){
     if(!zone) return;
@@ -13660,30 +13692,7 @@ window.__j22fnApply=run;
     [].slice.call(zone.querySelectorAll(':scope > .zone-zoom-fill')).forEach(function(el){ el.remove(); });
   }
   function layoutZoomedZoneCards(zone){
-    var host=zone && zone.querySelector('.pursuit-zone-grid');
-    if(!host) return;
-    var cards=[].slice.call(host.querySelectorAll(':scope > .sec-card:not(.card-collapsed)'));
-    if(!cards.length) return;
-    window.__zoneZoomLayout=true;
-    try{
-      var pad=28, gap=22;
-      var hostW=Math.max(host.clientWidth||0, 320);
-      var hostH=Math.max(host.clientHeight||0, 220);
-      var n=cards.length;
-      var cardW=Math.min(240, Math.max(148, Math.floor((hostW - pad*2 - gap*(n-1)) / n)));
-      var cardH=Math.min(cardW, Math.max(140, hostH - 56));
-      var total=n*cardW + (n-1)*gap;
-      var x=Math.max(pad, Math.round((hostW - total)/2));
-      var y=Math.max(20, Math.round((hostH - cardH)/2));
-      cards.forEach(function(card){
-        card.style.setProperty('--card-w', cardW+'px');
-        card.style.setProperty('--card-h', cardH+'px');
-        applyZoneCardPos(card, x, y);
-        x += cardW + gap;
-      });
-    } finally {
-      window.__zoneZoomLayout=false;
-    }
+    layoutZonePieces(zone, 'zoom');
   }
   function restoreUnzoomedZoneCards(grid){
     [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
@@ -14023,7 +14032,6 @@ window.__j22fnApply=run;
       var stored=loadMiniTasks(name);
       if(stored.length) fillCardTasks(el, stored);
       else if(/elevate/.test(String(name||'').toLowerCase())) fillCardTasks(el, ['text Dr Betty']);
-      else if(/document translation|arabic/.test(String(name||'').toLowerCase())) fillCardTasks(el, ['document translation into arabic']);
     } else saveMiniTasks(name, tasks);
   }
   function clearCardDragChrome(el){
@@ -14404,7 +14412,7 @@ window.__j22fnApply=run;
       }
       var chip=e.target.closest('.zone-oneoff');
       if(chip && grid.contains(chip)){
-        if(e.target.closest('.zone-oneoff-del')) return;
+        if(e.target.closest('.zone-oneoff-del, .zone-oneoff-check, input, label')) return;
         var fromZone=chip.closest('.pursuit-zone');
         var startX=e.clientX, startY=e.clientY;
         var ox=parseFloat(getComputedStyle(chip).getPropertyValue('--ff-x'))||12;
@@ -14490,6 +14498,7 @@ window.__j22fnApply=run;
         }
         if(resizing){
           writeRect({el:zone, id:id, x:ox, y:oy, w:ow+dx, h:oh+dy});
+          layoutZonePieces(zone, 'fit');
         } else {
           writeRect({el:zone, id:id, x:ox+dx, y:oy+dy, w:ow, h:oh});
         }
@@ -14507,6 +14516,7 @@ window.__j22fnApply=run;
           return;
         }
         readPos(zone, id);
+        if(resizing) layoutZonePieces(zone, 'fit');
         resolveOverlaps(grid, id);
       }
       document.addEventListener('pointermove', move, true);
@@ -14560,6 +14570,10 @@ window.__j22fnApply=run;
   }
   function addNamedMini(host, name){
     if(!host || !name) return;
+    if(isOneoffTaskName(name)){
+      var zone=host.closest('.pursuit-zone');
+      if(zone){ addZoneTask(zone, name.trim()); return; }
+    }
     var want=name.trim().toLowerCase();
     var grid=host.closest('.sec-grid');
     if(grid && nameIsOnCanvas(grid, want)) return;
@@ -14777,6 +14791,7 @@ window.__j22fnApply=run;
       syncDomToAllowed(g, baked);
       all[LIVE_DAY]=harvestLiveFromGrid(g);
       saveLive(all);
+      promoteOneoffCards(g);
       return;
     }
     syncDomToAllowed(g, baked);
@@ -14798,6 +14813,7 @@ window.__j22fnApply=run;
     });
     all[LIVE_DAY]=harvestLiveFromGrid(g);
     saveLive(all);
+    promoteOneoffCards(g);
   }
   function loadPick(){ try{ return JSON.parse(localStorage.getItem(PICKKEY)||'{}'); }catch(e){ return {}; } }
   function savePick(m){ try{ localStorage.setItem(PICKKEY, JSON.stringify(m)); }catch(e){} }
@@ -14813,6 +14829,7 @@ window.__j22fnApply=run;
     var out=[], seen={};
     function add(n){
       var t=String(n||'').trim(); if(!t) return;
+      if(typeof isOneoffTaskName==='function' && isOneoffTaskName(t)) return;
       var k=t.toLowerCase(); if(seen[k]) return; seen[k]=1; out.push(t);
     }
     (PRESETS[zid]||[]).forEach(add);
@@ -14845,7 +14862,8 @@ window.__j22fnApply=run;
       x:typeof o.x==='number' ? o.x : (12+(i||0)*16),
       y:typeof o.y==='number' ? o.y : (52+(i||0)*30),
       w:typeof o.w==='number' ? o.w : 176,
-      h:typeof o.h==='number' ? o.h : 118
+      h:typeof o.h==='number' ? o.h : 118,
+      done:!!o.done
     };
   }
   function taskList(zid){
@@ -14903,30 +14921,35 @@ window.__j22fnApply=run;
       }
       return;
     }
-    if(zone && zone.closest('.pursuit-board-day')){
-      var skipHost=zone.querySelector(':scope > .zone-oneoffs');
-      if(skipHost) skipHost.innerHTML='';
-      return;
-    }
     var zid=zone.getAttribute('data-zone');
     var host=ensureOneoffHost(zone);
     host.innerHTML='';
     (taskList(zid)||[]).forEach(function(item, i){
       item=normTask(item, i);
       var w=item.w, h=item.h;
-      if(h<80) h=118;
-      if(w<130) w=176;
+      if(h<64) h=88;
+      if(w<80) w=148;
       var chip=document.createElement('div');
       chip.className='zone-oneoff';
+      if(item.done) chip.classList.add('is-done');
       if(/translat|arabic|عربي/i.test(item.name||'')) chip.classList.add('need-halo');
       chip.setAttribute('data-i', String(i));
       chip.style.setProperty('--ff-x', item.x+'px');
       chip.style.setProperty('--ff-y', item.y+'px');
       chip.style.setProperty('--card-w', w+'px');
       chip.style.setProperty('--card-h', h+'px');
-      chip.innerHTML='<img class="zone-oneoff-img" alt=""><div class="zone-oneoff-bar"><span class="zone-oneoff-n">'+(i+1)+'</span><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
+      chip.innerHTML='<img class="zone-oneoff-img" alt=""><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
       chip.querySelector('.zone-oneoff-img').src=oneoffPhoto(zid, item.name);
       chip.querySelector('.zone-oneoff-t').textContent=item.name;
+      var ck=chip.querySelector('.agenda-check');
+      ck.checked=!!item.done;
+      ck.addEventListener('click', function(ev){ ev.stopPropagation(); });
+      ck.addEventListener('change', function(){
+        var arr=taskList(zid);
+        if(arr[i]) arr[i].done=ck.checked;
+        saveTaskList(zid, arr);
+        chip.classList.toggle('is-done', ck.checked);
+      });
       chip.querySelector('.zone-oneoff-del').addEventListener('click', function(ev){
         ev.preventDefault(); ev.stopPropagation();
         var g=loadGone();
@@ -14939,6 +14962,38 @@ window.__j22fnApply=run;
       host.appendChild(chip);
     });
     fitZoneToCards(zone);
+  }
+  function promoteOneoffCards(grid){
+    if(!grid) return;
+    [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(function(card){
+      var n=cardName(card);
+      if(!isOneoffTaskName(n)) return;
+      var zone=card.closest('.pursuit-zone');
+      if(!zone) return;
+      var zid=zone.getAttribute('data-zone');
+      var cs=getComputedStyle(card);
+      var x=parseFloat(card.style.getPropertyValue('--ff-x'))||parseFloat(cs.getPropertyValue('--ff-x'))||170;
+      var y=parseFloat(card.style.getPropertyValue('--ff-y'))||parseFloat(cs.getPropertyValue('--ff-y'))||52;
+      var done=!!card.querySelector('.agenda-check:checked');
+      forgetLive(zid, n);
+      putOneoffInZone(zone, n, x, y, 220, 88);
+      if(done){
+        var arr=taskList(zid);
+        arr.forEach(function(it){ if(taskName(it).toLowerCase()===n) it.done=true; });
+        saveTaskList(zid, arr);
+        renderOneoffs(zone);
+      }
+      if(card.parentNode) card.remove();
+    });
+    seedKnownOneoffs(grid);
+  }
+  function seedKnownOneoffs(grid){
+    var zone=grid && grid.querySelector('.pursuit-zone[data-zone="ambition"]');
+    if(!zone) return;
+    var name='document translation into arabic';
+    if(isGone('ambition', name) || isGone('ambition', 'oneoff:'+name)) return;
+    if(taskList('ambition').some(function(t){ return taskName(t).toLowerCase()===name; })) return;
+    putOneoffInZone(zone, name, 170, 28, 220, 88);
   }
   function addZoneTask(zone, name){
     name=(name||'').trim();
@@ -15211,7 +15266,7 @@ window.__j22fnApply=run;
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
       wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); });
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
       restoreLoose(grid);
       expandCanvas(grid);
       return;
@@ -15224,7 +15279,7 @@ window.__j22fnApply=run;
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
       wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); });
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
       restoreLoose(grid);
       expandCanvas(grid);
       return;
@@ -15237,7 +15292,7 @@ window.__j22fnApply=run;
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
       [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
       wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); });
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
       restoreLoose(grid);
       expandCanvas(grid);
       snapshotGoodBoard();
@@ -15263,7 +15318,7 @@ window.__j22fnApply=run;
     dedupeZoneCards(grid);
     [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
     wireZoneDrag(grid);
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); });
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); renderOneoffs(z); layoutZonePieces(z, 'fit'); });
     restoreLoose(grid);
     expandCanvas(grid);
     snapshotGoodBoard();
@@ -16707,8 +16762,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:368px;top:50px;width:260px;height:248px;--ff-x:368px;--ff-y:50px;--zone-w:260px;--zone-h:248px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="blush" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-blush"><img alt="Text Mom" src="manus-storage/pursuit-persons_be56f167.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Text Mom">Text Mom</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">Text Mom back</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:168px;--ff-y:44px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="curated lifestyle" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2"><p class="j22-group" spellcheck="false" data-newhdr="curated lifestyle">curated lifestyle</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-finances" data-zone="finances" style="left:708px;top:20px;width:270px;height:248px;--ff-x:708px;--ff-y:20px;--zone-w:270px;--zone-h:248px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-leverage" data-zone="leverage" style="left:40px;top:360px;width:270px;height:248px;--ff-x:40px;--ff-y:360px;--zone-w:270px;--zone-h:248px;--zone-photo:url('manus-storage/mock-power.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:384px;top:384px;width:400px;height:260px;--ff-x:384px;--ff-y:384px;--zone-w:400px;--zone-h:260px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized hide-card-title" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate"></p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div><div class="j22-section card sec-card has-tasks card-sized hide-card-title caption-large" data-user-added="1" data-theme="warm" style="--ff-x:182px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-warm"><img alt="document translation into arabic" src="manus-storage/pursuit-arabic-translation.jpg"><p class="j22-group" spellcheck="false" data-newhdr="document translation into arabic">document translation into arabic</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">document translation into arabic</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-presence" data-zone="presence" style="left:760px;top:348px;width:260px;height:248px;--ff-x:760px;--ff-y:348px;--zone-w:260px;--zone-h:248px;--zone-photo:url('manus-storage/zone-quantum-v14.jpg?v=symbol')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:352px;top:360px;width:280px;height:260px;--ff-x:352px;--ff-y:360px;--zone-w:280px;--zone-h:260px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-presence" data-zone="presence" style="left:708px;top:360px;width:270px;height:248px;--ff-x:708px;--ff-y:360px;--zone-w:270px;--zone-h:248px;--zone-photo:url('manus-storage/zone-quantum-v14.jpg?v=symbol')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 </div>
 </div>
 <div class="tv-panel tv-flow" style="display:none">
@@ -20407,8 +20462,9 @@ function refreshPursuitBoardLayout(block){
     if(window.__airSpreadZones && window.__boardSpreadTooTight && window.__boardSpreadTooTight(grid)){
       window.__airSpreadZones(grid);
     }
-    [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(function(host){
-      if(window.__resolveZoneCardOverlaps) window.__resolveZoneCardOverlaps(host);
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      if(window.__layoutZonePieces) window.__layoutZonePieces(z, 'fit');
+      else if(window.__resolveZoneCardOverlaps) window.__resolveZoneCardOverlaps(z.querySelector('.pursuit-zone-grid'));
     });
     if(window.__expandPursuitCanvas) window.__expandPursuitCanvas(grid);
   }
@@ -26010,6 +26066,17 @@ function handleMay18No(btn) {
   display:flex; justify-content:center; align-items:center; gap:8px;
   margin:2px auto 10px; position:relative; z-index:12; width:100%;
 }
+.day-block.collapsed .add-board-row,
+.day-block.fmt22.collapsed .add-board-row,
+.day-block.fmt22.past .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date^="2026-07"] .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date="2026-08-20"] .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date="2026-08-21"] .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date="2026-08-22"] .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date="2026-08-23"] .add-board-row,
+.day-block.fmt22:not(.today-block)[data-date="2026-08-24"] .add-board-row{
+  display:none !important;
+}
 .day-block.fmt22 .add-board-row .add-grid,
 .day-block.fmt22 .add-board-row .add-card-btn{
   margin:0; padding:6px 16px; border:none; border-radius:16px;
@@ -26032,10 +26099,16 @@ function handleMay18No(btn) {
   margin:0 0 8px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em;
   text-transform:uppercase; color:#6f5f54; opacity:0.85;
 }
+.day-block.fmt22 .sec-picker-group{
+  margin:10px 0 4px; padding:0; border:none; background:none;
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em;
+  text-transform:uppercase; color:#6f5f54; opacity:0.85;
+}
+.day-block.fmt22 .sec-picker-list .sec-picker-group:first-child{ margin-top:0; }
 .day-block.fmt22 .sec-picker-list,
 .day-block.fmt22.today-block .sec-picker-list{
   display:flex; flex-direction:column; align-items:stretch; gap:4px;
-  max-height:220px; overflow:auto; margin:0 0 10px;
+  max-height:280px; overflow:auto; margin:0 0 10px;
 }
 .day-block.fmt22 .sec-picker-opt,
 .day-block.fmt22.today-block .sec-picker-opt{
@@ -26060,7 +26133,7 @@ function handleMay18No(btn) {
 </style>
 <script>
 (function(){
-  if(window.__j22addgrid) return; window.__j22addgrid=1;
+  if(window.__j22addgrid3) return; window.__j22addgrid3=1;
   var KEY='btm_grids_v1';
   var THEMES=[['blush','#bf8f93'],['warm','#c4a882'],['lavender','#9b8ec4'],['amber','#c4a882'],['sage','#8a9e85']];
   var CHECK='<button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button>';
@@ -26099,6 +26172,10 @@ function handleMay18No(btn) {
   function isZoneSkip(blk){
     return !!(blk && (blk.classList.contains('zone-board-day') || blk.classList.contains('pursuit-board-day')));
   }
+  function isAddBoardDay(blk){
+    var d = (blk && blk.getAttribute('data-date')) || '';
+    return /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-25';
+  }
   function makeCard(name,idx){
     name=(name||'').trim();
     var theme=(window.__secThemeFor&&window.__secThemeFor(name))||THEMES[(idx||0)%THEMES.length][0];
@@ -26120,34 +26197,48 @@ function handleMay18No(btn) {
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
   var CANONICAL_SECTIONS=['GLOW UP','LIFESTYLE','FINANCES','POWER','AMBITION','QUANTUM'];
-  var ZONE_TITLES=['glow up','lifestyle','finances','power','ambition','quantum','body','life ops','leverage','presence','glow-up'];
-  var ZONE_TITLE_LC={};
-  ZONE_TITLES.forEach(function(s){ ZONE_TITLE_LC[s]=1; });
-  function cardHdr(g){ return ((g.getAttribute('data-newhdr')||g.textContent||'').trim()); }
-  function isZoneTitle(name){
-    return !!ZONE_TITLE_LC[String(name||'').trim().toLowerCase()];
+  var SECTION_LC={};
+  CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
+  var SECTION_BY_ZONE={body:'GLOW UP', life:'LIFESTYLE', finances:'FINANCES', leverage:'POWER', ambition:'AMBITION', presence:'QUANTUM'};
+  var SEEDED_CARDS={
+    'GLOW UP':['body','Text Mom','adderall'],
+    'LIFESTYLE':['curated lifestyle','persons','social media','vibes','postal','traveler','returns','pickups'],
+    'FINANCES':['capital blueprint'],
+    'POWER':['litigation wins','leverage','workflow'],
+    'AMBITION':['momentum','UX Design','Frequency','Elevate'],
+    'QUANTUM':[]
+  };
+  var CARD_SECTION={};
+  CANONICAL_SECTIONS.forEach(function(s){
+    (SEEDED_CARDS[s]||[]).forEach(function(n){ CARD_SECTION[n.toLowerCase()]=s; });
+  });
+  function cardHdr(g){
+    var vis=(g.textContent||'').trim();
+    var hdr=(g.getAttribute('data-newhdr')||'').trim();
+    return vis || hdr;
+  }
+  function isSectionName(name){
+    return !!SECTION_LC[String(name||'').trim().toLowerCase()];
+  }
+  function sectionForCard(name){
+    var k=String(name||'').trim().toLowerCase();
+    if(CARD_SECTION[k]) return CARD_SECTION[k];
+    var id = (window.__zoneForPursuit && window.__zoneForPursuit(name)) || 'life';
+    return SECTION_BY_ZONE[id] || 'LIFESTYLE';
   }
   function collectSectionPresets(grid){
-    var seen={}; var out=[];
-    function add(n){
-      n=(n||'').trim(); if(!n) return;
-      var k=n.toLowerCase();
-      if(seen[k]) return;
-      seen[k]=1; out.push(n);
-    }
-    CANONICAL_SECTIONS.forEach(add);
-    document.querySelectorAll('.pursuit-zone-title').forEach(function(t){ add(t.textContent); });
     var have=existing(grid);
-    return out.filter(function(n){ return have.indexOf(n.toLowerCase())<0; });
+    return CANONICAL_SECTIONS.filter(function(n){ return have.indexOf(n.toLowerCase())<0; });
   }
   function collectCardPresets(grid){
     var seen={}; var out=[];
     function add(n){
       n=(n||'').trim(); if(!n) return;
       var k=n.toLowerCase();
-      if(seen[k] || isZoneTitle(n)) return;
+      if(seen[k] || isSectionName(n)) return;
       seen[k]=1; out.push(n);
     }
+    CANONICAL_SECTIONS.forEach(function(s){ (SEEDED_CARDS[s]||[]).forEach(add); });
     document.querySelectorAll('.day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card .j22-group').forEach(function(g){
       add(cardHdr(g));
     });
@@ -26160,7 +26251,26 @@ function handleMay18No(btn) {
       });
     }catch(e){}
     var have=existing(grid);
-    return out.filter(function(n){ return have.indexOf(n.toLowerCase())<0; });
+    var filtered=out.filter(function(n){ return have.indexOf(n.toLowerCase())<0; });
+    return filtered.filter(function(n,i){
+      var k=n.toLowerCase();
+      return !filtered.some(function(other,j){
+        if(i===j) return false;
+        var o=other.toLowerCase();
+        if(o===k) return j<i;
+        return o.indexOf(k)===0 && o.length>k.length;
+      });
+    });
+  }
+  function groupCardsBySection(names){
+    var groups={};
+    CANONICAL_SECTIONS.forEach(function(s){ groups[s]=[]; });
+    (names||[]).forEach(function(n){
+      var s=sectionForCard(n);
+      if(!groups[s]) groups[s]=[];
+      groups[s].push(n);
+    });
+    return groups;
   }
   function closeSecPicker(){
     document.querySelectorAll('.sec-picker').forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
@@ -26239,7 +26349,7 @@ function handleMay18No(btn) {
       box.appendChild(slab);
       var list=document.createElement('div');
       list.className='sec-picker-list';
-      names.forEach(function(name){
+      function addOpt(name){
         var b=document.createElement('button');
         b.type='button';
         b.className='sec-picker-opt';
@@ -26250,7 +26360,21 @@ function handleMay18No(btn) {
           addCard(grid, name);
         });
         list.appendChild(b);
-      });
+      }
+      if(isCard){
+        var groups=groupCardsBySection(names);
+        CANONICAL_SECTIONS.forEach(function(sec){
+          var items=groups[sec]||[];
+          if(!items.length) return;
+          var h=document.createElement('p');
+          h.className='sec-picker-group';
+          h.textContent=sec;
+          list.appendChild(h);
+          items.forEach(addOpt);
+        });
+      } else {
+        names.forEach(addOpt);
+      }
       box.appendChild(list);
     }
     var typed=addTypedRow(names.length ? '' : label, placeholder, function(v){ addCard(grid, v); });
@@ -26267,35 +26391,47 @@ function handleMay18No(btn) {
     if(isZoneSkip(blk) || g.classList.contains('pursuit-canvas')) return;
     var arr=load()[dayOf(g)]||[]; var ex=existing(g); arr.forEach(function(r){ if(ex.indexOf((r.name||'').toLowerCase())<0){ g.appendChild(makeCard(r.name,r.idx||ex.length)); ex.push((r.name||'').toLowerCase()); } });
   }); }
+  function wireAddRow(row, grid){
+    if(!row || row.__addWired) return;
+    row.__addWired=1;
+    var sec=row.querySelector('.add-grid');
+    var card=row.querySelector('.add-card-btn');
+    if(sec) sec.addEventListener('click', function(e){
+      e.stopPropagation(); e.preventDefault();
+      openNamedPicker(row, grid, 'section');
+    });
+    if(card) card.addEventListener('click', function(e){
+      e.stopPropagation(); e.preventDefault();
+      openNamedPicker(row, grid, 'card');
+    });
+  }
   function ensureBtn(){
     document.querySelectorAll('.day-block.fmt22').forEach(function(blk){
-      if(isZoneSkip(blk)) return;
+      if(isZoneSkip(blk) || !isAddBoardDay(blk)){
+        blk.querySelectorAll('.add-board-row, .sec-picker').forEach(function(el){ el.remove(); });
+        return;
+      }
       var grid=blk.querySelector('.tv-pursuits .sec-grid')||blk.querySelector('.sec-grid');
       if(!grid || grid.classList.contains('pursuit-canvas')) return;
-      if(blk.querySelector('.add-board-row')) return;
-      var row=document.createElement('div');
-      row.className='add-board-row';
-      function mk(cls, text, kind){
-        var b=document.createElement('button');
-        b.className=cls; b.type='button'; b.textContent=text;
-        b.addEventListener('click', function(e){
-          e.stopPropagation(); e.preventDefault();
-          openNamedPicker(row, grid, kind);
-        });
-        return b;
+      var panel=blk.querySelector('.tv-pursuits');
+      var row=blk.querySelector('.add-board-row');
+      if(!row){
+        row=document.createElement('div');
+        row.className='add-board-row';
+        row.innerHTML='<button class="add-grid" type="button">+ section</button><button class="add-card-btn" type="button">+ card</button>';
+        if(panel){
+          var chart=panel.querySelector('.flow-chart-card');
+          if(chart) panel.insertBefore(row, chart);
+          else panel.insertBefore(row, panel.firstChild);
+        } else if(grid.parentNode){
+          grid.parentNode.insertBefore(row, grid);
+        }
+      } else if(panel && row.parentNode!==panel){
+        var host=panel.querySelector('.flow-chart-card');
+        if(host) panel.insertBefore(row, host);
+        else panel.insertBefore(row, panel.firstChild);
       }
-      row.appendChild(mk('add-grid','+ section','section'));
-      row.appendChild(mk('add-card-btn','+ card','card'));
-      var toggle=blk.querySelector('.today-view-toggle');
-      if(toggle && toggle.parentNode===blk.querySelector('.day-card')){
-        toggle.insertAdjacentElement('afterend', row);
-      } else if(toggle && toggle.parentNode){
-        toggle.insertAdjacentElement('afterend', row);
-      } else {
-        var panel=blk.querySelector('.tv-pursuits');
-        if(panel) panel.insertBefore(row, panel.firstChild);
-        else if(grid.parentNode) grid.parentNode.insertBefore(row, grid);
-      }
+      wireAddRow(row, grid);
     });
   }
   if(!window.__secPickerCloseWired){
@@ -33987,6 +34123,121 @@ html body .day-block.today-block.fmt22 .pursuit-zone-grid > .sec-card.card-colla
   padding: 0;
 }
 .day-block.today-block .pursuit-zone.zone-collapsed .zone-oneoffs {
+  display: none !important;
+}
+html body .day-block.pursuit-board-day .zone-oneoffs,
+html body .day-block[data-date="2026-08-20"] .zone-oneoffs {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day .zone-oneoff:not(.canvas-oneoff),
+html body .day-block[data-date="2026-08-20"] .zone-oneoff:not(.canvas-oneoff) {
+  pointer-events: auto;
+  position: absolute;
+  left: var(--ff-x, 12px);
+  top: var(--ff-y, 52px);
+  width: var(--card-w, 176px);
+  height: var(--card-h, 88px);
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  background: #1c1814;
+  box-shadow: 1px 2px 8px rgba(40,28,18,0.35);
+  border-radius: 4px;
+  cursor: grab;
+  touch-action: none;
+  z-index: 5;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-img,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-bar,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: none;
+  text-align: center;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-t {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-family: "Reenie Beanie", cursive;
+  font-size: 28px;
+  line-height: 0.95;
+  color: #f7f1e6;
+  -webkit-text-fill-color: #f7f1e6;
+  text-shadow: 0 1px 8px rgba(40,28,18,0.55);
+  overflow: hidden;
+  text-align: center;
+}
+html body .day-block.pursuit-board-day .zone-oneoff.need-halo .zone-oneoff-t,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff.need-halo .zone-oneoff-t {
+  text-shadow:
+    0 1px 2px #000,
+    0 0 8px #000,
+    0 0 16px rgba(0,0,0,0.95),
+    0 0 28px rgba(0,0,0,0.7);
+}
+html body .day-block.pursuit-board-day .zone-oneoff-kicker,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-kicker,
+html body .day-block.today-block .zone-oneoff-kicker {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  z-index: 3;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f7f1e6;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.75);
+  pointer-events: none;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-check,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-check,
+html body .day-block.today-block .zone-oneoff-check {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+html body .day-block.pursuit-board-day .zone-oneoff-del,
+html body .day-block[data-date="2026-08-20"] .zone-oneoff-del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 3;
+  border: 0;
+  background: rgba(20,16,12,0.45);
+  color: #f7f1e6;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  padding: 0;
+}
+html body .day-block.pursuit-board-day .pursuit-zone.zone-collapsed .zone-oneoffs,
+html body .day-block[data-date="2026-08-20"] .pursuit-zone.zone-collapsed .zone-oneoffs {
   display: none !important;
 }
 html body .day-block.today-block.fmt22 .pursuit-zone-grid > .sec-card .card-visual,

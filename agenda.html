@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="board-copy.css"/>
 </head>
 <body class="copied-page agenda-copy-page" data-save-key="agenda_page_v1">
-<img id="page-bg-img" src="manus-storage/_339ab459.jpg" style="position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;" alt=""/>
+<img id="page-bg-img" src="manus-storage/dashboard-bg.jpg" style="position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;" alt=""/>
 <div id="page-bg-wrapper" style="padding:48px 24px 80px; margin:0; min-height:100vh; box-sizing:border-box; position:relative; z-index:1;">
   <header>
     <p class="eyebrow">from aug 25</p>
@@ -42,7 +42,7 @@
   </div>
 </div>
 <script src="nav-shared.js"></script>
-<script>window.__COPIED_CARD_NAMES = ["persons", "adderall", "capital blueprint", "social media", "glow up", "vibes", "litigation wins", "momentum", "UX Design", "workflow", "Frequency", "Power", "postal", "traveler", "returns", "pickups", "body", "Text Mom", "curated lifestyle", "leverage", "Elevate", "document translation into arabic"];</script>
+<script>window.__COPIED_CARD_NAMES = ["persons", "adderall", "capital blueprint", "social media", "glow up", "vibes", "litigation wins", "momentum", "UX Design", "workflow", "Frequency", "Power", "postal", "traveler", "returns", "pickups", "body", "Text Mom", "curated lifestyle", "leverage", "Elevate"];</script>
 <script>
 (function(){
   var START = '2026-08-25';
@@ -169,6 +169,10 @@
     'pickups':'manus-storage/pursuit-pickups.jpg',
     'social media':'manus-storage/pursuit-social-media-v7_c5f03b96.jpg',
     'quantum':'manus-storage/zone-quantum-v14.jpg?v=symbol',
+    'ambition':'manus-storage/zone-ambition-v4.jpg',
+    'glow up':'manus-storage/mock-glow-up-skin.jpg?v=1',
+    'finances':'manus-storage/zone-finances-v2.jpg?v=2',
+    'lifestyle':'manus-storage/pursuit-lifestyle_577937e8.jpg',
     'adderall / adhd meds':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'adderall':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'litigation wins':'manus-storage/pursuit-legal_b70d3da7.jpg',
@@ -227,6 +231,67 @@
   var CARD_NAMES = window.__COPIED_CARD_NAMES || [];
   var SECTION_NAMES = ['GLOW UP','LIFESTYLE','FINANCES','POWER','AMBITION','QUANTUM'];
   var ZONE_LC = { 'glow up':1,'lifestyle':1,'finances':1,'power':1,'ambition':1,'quantum':1 };
+  var SECTION_BY_ZONE={body:'GLOW UP', life:'LIFESTYLE', finances:'FINANCES', leverage:'POWER', ambition:'AMBITION', presence:'QUANTUM'};
+  var CARD_SECTION={
+    body:'GLOW UP','text mom':'GLOW UP',adderall:'GLOW UP',
+    'curated lifestyle':'LIFESTYLE',persons:'LIFESTYLE','social media':'LIFESTYLE',vibes:'LIFESTYLE',
+    postal:'LIFESTYLE',traveler:'LIFESTYLE',returns:'LIFESTYLE',pickups:'LIFESTYLE',shopped:'LIFESTYLE',
+    'capital blueprint':'FINANCES',
+    'litigation wins':'POWER',leverage:'POWER',workflow:'POWER',
+    momentum:'AMBITION','ux design':'AMBITION',frequency:'AMBITION',elevate:'AMBITION',
+    'document translation into arabic':'AMBITION'
+  };
+  function isSectionCard(name){
+    return !!ZONE_LC[String(name||'').trim().toLowerCase()];
+  }
+  function isOneoffName(name){
+    var n=String(name||'').trim().toLowerCase();
+    if(!n || /elevate/.test(n)) return false;
+    return /document translation|translat.*arabic/.test(n);
+  }
+  function sectionForCard(name){
+    var n=(name||'').trim().toLowerCase();
+    if(CARD_SECTION[n]) return CARD_SECTION[n];
+    if(n==='power'||n==='leverage') return 'POWER';
+    if(n==='quantum') return 'QUANTUM';
+    if(n==='body'||n==='glow up'||n==='adderall') return 'GLOW UP';
+    if(/capital|money|finance/.test(n)) return 'FINANCES';
+    if(/litigat|legal|workflow|leverage/.test(n)) return 'POWER';
+    if(/momentum|ux|frequency|betty|elevate|translat|arabic/.test(n)) return 'AMBITION';
+    if(/quantum|entangle/.test(n)) return 'QUANTUM';
+    if(/body|adderall|glow|skincare|mom/.test(n)) return 'GLOW UP';
+    return inferSection(name) || 'LIFESTYLE';
+  }
+  var SECTION_KEYS = {
+    'GLOW UP': /\b(glow\s*up|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera|adderall|workout|gym|health|sleep|weight|body|dentist|vitamin|lotion|makeup|face|nails)\b/i,
+    'LIFESTYLE': /\b(lifestyle|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran|prayer|salah|family|friend|errand|home|house|apartment|grocer|clean|laundry|shop(?:ping|ped)?|\bbuy\b|bought|purchase|order|amazon|sephora|nordstrom|target|return|\bring\b|rings|jewel|necklace|earring|bracelet|watch|clothes|dress|shoes|bag|purse|hijab|abaya)\b/i,
+    'FINANCES': /\b(capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger|pay|paid|cash|tax|salary|budget|invoice|owe|venmo|zelle)\b/i,
+    'POWER': /\b(litigat|legal|lawyer|court|letter|power|workflow|leverage|influence|contract|paperwork|notary|lawsuit|case)\b/i,
+    'AMBITION': /\b(momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude|job|school|study|deadline|portfolio|interview|resume|client|project)\b/i,
+    'QUANTUM': /\b(quantum|superposition|entangle|particle|atom|manifest|journal|dream|meditat|intention)\b/i
+  };
+  function inferSection(name){
+    var n = String(name||'');
+    var best = '', bestScore = 0;
+    SECTION_NAMES.forEach(function(sec){
+      var re = SECTION_KEYS[sec];
+      if(!re) return;
+      var m = n.match(re);
+      var score = m ? m.length : 0;
+      if(score > bestScore){ best = sec; bestScore = score; }
+    });
+    return bestScore ? best : 'LIFESTYLE';
+  }
+  function groupCardsBySection(names){
+    var groups={};
+    SECTION_NAMES.forEach(function(s){ groups[s]=[]; });
+    (names||[]).forEach(function(n){
+      var s=sectionForCard(n);
+      if(!groups[s]) groups[s]=[];
+      groups[s].push(n);
+    });
+    return groups;
+  }
 
   function makeCard(name){
     name = (name||'').trim();
@@ -246,49 +311,400 @@
   function closePicker(){
     document.querySelectorAll('.sec-picker').forEach(function(el){ el.remove(); });
   }
+  function cardNameOf(card){
+    var g = card && card.querySelector('.j22-group');
+    return g ? ((g.textContent||g.getAttribute('data-newhdr')||'').trim()) : '';
+  }
+  function cardsOnGrid(grid){
+    return [].slice.call((grid||document).querySelectorAll(':scope > .sec-card')).map(function(card){
+      return { card: card, name: cardNameOf(card) };
+    }).filter(function(x){ return x.name && !isSectionCard(x.name); });
+  }
+  function oneoffText(el){
+    var t = el && el.querySelector('.agenda-oneoff-t');
+    return t ? (t.textContent||'').trim() : '';
+  }
+  function makeOneoff(name, section){
+    name = (name||'').trim();
+    var chip = document.createElement('div');
+    chip.className = 'agenda-oneoff';
+    if(section) chip.setAttribute('data-section', section);
+    chip.innerHTML = '<img class="agenda-oneoff-img" alt=""><span class="agenda-oneoff-kicker">task</span><div class="agenda-oneoff-bar"><label class="agenda-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="agenda-oneoff-t" contenteditable="true" spellcheck="false"></span></div><button type="button" class="agenda-oneoff-del" aria-label="delete task">×</button>';
+    var img = chip.querySelector('.agenda-oneoff-img');
+    img.alt = name; img.src = resolveImg(name);
+    chip.querySelector('.agenda-oneoff-t').textContent = name;
+    return chip;
+  }
+  function lastInSection(grid, section){
+    var last = null;
+    [].slice.call(grid.children).forEach(function(n){
+      if(n.classList.contains('agenda-oneoff')){
+        if((n.getAttribute('data-section')||'') === section) last = n;
+        return;
+      }
+      if(!n.classList.contains('sec-card')) return;
+      var name = cardNameOf(n);
+      if(!name) return;
+      if(isSectionCard(name) && name.toUpperCase() === section) last = n;
+      else if(!isSectionCard(name) && sectionForCard(name) === section) last = n;
+    });
+    return last;
+  }
+  function placeInSection(grid, el, section){
+    if(section) el.setAttribute('data-section', section);
+    var last = lastInSection(grid, section);
+    if(last && last.nextSibling) grid.insertBefore(el, last.nextSibling);
+    else if(last) grid.appendChild(el);
+    else grid.appendChild(el);
+  }
+  function looksLikeOneoffCard(card){
+    var name = cardNameOf(card);
+    if(!name || isSectionCard(name)) return false;
+    if(isOneoffName(name)) return true;
+    var tasks = [].slice.call(card.querySelectorAll('.j22-section-items > .j22-item .j22-t'))
+      .map(function(t){ return (t.textContent||'').trim().toLowerCase(); }).filter(Boolean);
+    return tasks.length === 1 && tasks[0] === name.toLowerCase();
+  }
+  function convertOneoffCards(grid){
+    if(!grid) return;
+    [].slice.call(grid.querySelectorAll(':scope > .sec-card')).forEach(function(card){
+      if(!looksLikeOneoffCard(card)) return;
+      var name = cardNameOf(card);
+      var section = sectionForCard(name);
+      var chip = makeOneoff(name, section);
+      var checked = card.querySelector('.agenda-check:checked');
+      if(checked){
+        chip.querySelector('.agenda-check').checked = true;
+        chip.classList.add('is-done');
+      }
+      card.parentNode.insertBefore(chip, card);
+      card.remove();
+    });
+  }
+  function addTaskToCard(card, text, silent){
+    if(!card) return;
+    var box = card.querySelector('.j22-section-items');
+    if(!box) return;
+    var want = (text||'').trim() || 'new task';
+    var have = [].slice.call(box.querySelectorAll('.j22-t')).some(function(el){
+      return (el.textContent||'').trim().toLowerCase() === want.toLowerCase();
+    });
+    if(have) return;
+    var lab = document.createElement('label');
+    lab.className = 'j22-item';
+    lab.innerHTML = '<input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false"></span>';
+    var t = lab.querySelector('.j22-t');
+    t.textContent = want;
+    box.appendChild(lab);
+    card.classList.remove('is-empty');
+    card.classList.add('has-tasks');
+    if(!silent) t.focus();
+    if(!silent) savePage();
+    return t;
+  }
+  function splitDump(raw){
+    var out = [];
+    String(raw||'').split(/\r?\n+/).forEach(function(line){
+      line = line.trim();
+      if(!line) return;
+      line.split(/\s*[•·]\s+/).forEach(function(bit){
+        bit = bit.replace(/^[-*]\s+/, '').replace(/^\d+[.)]\s+/, '').trim();
+        if(bit) out.push(bit);
+      });
+    });
+    return out;
+  }
+  function knownCardName(line){
+    var n = String(line||'').trim().toLowerCase();
+    if(!n || isSectionCard(n)) return '';
+    var names = CARD_NAMES.concat(Object.keys(CARD_SECTION));
+    for(var i=0;i<names.length;i++){
+      var c = names[i];
+      if(String(c).toLowerCase()===n && !isSectionCard(c)) return c;
+    }
+    return '';
+  }
+  function innerTaskCard(line, grid){
+    var n = String(line||'').trim().toLowerCase();
+    if(/^(text\s+)?dr\.?\s*betty$|^text\s+betty$/.test(n)) return 'Elevate';
+    if(/^text mom$/.test(n)) return 'Text Mom';
+    var hit = '';
+    cardsOnGrid(grid).forEach(function(x){
+      var cn = String(x.name||'').trim();
+      if(cn.length < 4) return;
+      try{
+        var re = new RegExp('\\b'+cn.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i');
+        if(re.test(line) && cn.length >= hit.length) hit = cn;
+      }catch(e){}
+    });
+    return hit;
+  }
+  function findSectionEl(grid, section){
+    return [].slice.call(grid.querySelectorAll(':scope > .sec-card')).filter(function(c){
+      var name = cardNameOf(c);
+      return isSectionCard(name) && name.toUpperCase() === section;
+    })[0] || null;
+  }
+  function findCardEl(grid, name){
+    var want = String(name||'').trim().toLowerCase();
+    var hit = cardsOnGrid(grid).filter(function(x){ return x.name.toLowerCase()===want; })[0];
+    return hit ? hit.card : null;
+  }
+  function oneoffExists(grid, name, section){
+    var want = String(name||'').trim().toLowerCase();
+    return [].slice.call(grid.querySelectorAll(':scope > .agenda-oneoff')).some(function(el){
+      if(section && (el.getAttribute('data-section')||'') !== section) return false;
+      return oneoffText(el).toLowerCase() === want;
+    });
+  }
+  function ensureSection(grid, section){
+    if(!section) return null;
+    var el = findSectionEl(grid, section);
+    if(el) return el;
+    el = makeCard(section);
+    el.classList.add('is-section');
+    var idx = SECTION_NAMES.indexOf(section);
+    var nextSec = null;
+    for(var i=idx+1;i<SECTION_NAMES.length;i++){
+      nextSec = findSectionEl(grid, SECTION_NAMES[i]);
+      if(nextSec) break;
+    }
+    if(nextSec) grid.insertBefore(el, nextSec);
+    else {
+      var prev = null;
+      for(var j=idx-1;j>=0;j--){
+        prev = lastInSection(grid, SECTION_NAMES[j]);
+        if(prev) break;
+      }
+      if(prev && prev.nextSibling) grid.insertBefore(el, prev.nextSibling);
+      else if(prev) grid.appendChild(el);
+      else grid.appendChild(el);
+    }
+    return el;
+  }
+  function ensureCard(grid, name, section){
+    var el = findCardEl(grid, name);
+    if(el) return el;
+    ensureSection(grid, section);
+    el = makeCard(name);
+    placeInSection(grid, el, section);
+    return el;
+  }
+  function dumpLine(grid, line){
+    var text = String(line||'').trim();
+    if(!text) return;
+    if(isSectionCard(text)){
+      var secName = SECTION_NAMES.filter(function(s){ return s.toLowerCase()===text.toLowerCase(); })[0];
+      if(secName) ensureSection(grid, secName);
+      return;
+    }
+    var cardName = knownCardName(text);
+    if(cardName){
+      var sec = sectionForCard(cardName);
+      var card = ensureCard(grid, cardName, sec);
+      if(/^elevate$/i.test(cardName)) addTaskToCard(card, 'text Dr Betty', true);
+      return;
+    }
+    if(isOneoffName(text)){
+      var offSec = sectionForCard(text);
+      ensureSection(grid, offSec);
+      if(!oneoffExists(grid, text, offSec)) placeInSection(grid, makeOneoff(text, offSec), offSec);
+      return;
+    }
+    var hostName = innerTaskCard(text, grid);
+    if(hostName){
+      var hostSec = sectionForCard(hostName);
+      var host = ensureCard(grid, hostName, hostSec);
+      addTaskToCard(host, text, true);
+      return;
+    }
+    var dest = inferSection(text);
+    ensureSection(grid, dest);
+    if(!oneoffExists(grid, text, dest)) placeInSection(grid, makeOneoff(text, dest), dest);
+  }
+  function commitDump(blk){
+    var ta = blk && blk.querySelector('.agenda-dump-input');
+    var grid = blk && (blk.querySelector('.tv-pursuits .sec-grid') || blk.querySelector('.sec-grid'));
+    if(!ta || !grid) return;
+    var lines = splitDump(ta.value);
+    if(!lines.length) return;
+    lines.forEach(function(line){ dumpLine(grid, line); });
+    ta.value = '';
+    normalizeCards(blk);
+    savePage();
+    var note = blk.querySelector('.agenda-dump-status');
+    if(note){
+      note.textContent = 'sorted '+lines.length+(lines.length===1?' item':' items');
+      setTimeout(function(){ if(note.textContent.indexOf('sorted')===0) note.textContent = ''; }, 2400);
+    }
+  }
+  function ensureDump(blk){
+    if(!blk || blk.classList.contains('dimensions-host') || blk.classList.contains('grids-host')) return;
+    var panel = blk.querySelector('.tv-pursuits');
+    if(!panel) return;
+    if(panel.querySelector('.agenda-dump')) return;
+    var box = document.createElement('div');
+    box.className = 'agenda-dump';
+    box.innerHTML = '<p class="agenda-dump-label">brain dump</p><textarea class="agenda-dump-input" rows="3" placeholder="one thing per line — they’ll land in a section, a card, or a task"></textarea><div class="agenda-dump-row"><button type="button" class="agenda-dump-go">sort onto this day</button><span class="agenda-dump-status"></span></div>';
+    var row = panel.querySelector('.add-board-row');
+    if(row && row.nextSibling) panel.insertBefore(box, row.nextSibling);
+    else if(row) panel.appendChild(box);
+    else {
+      var chart = panel.querySelector('.flow-chart-card');
+      if(chart) panel.insertBefore(box, chart);
+      else panel.insertBefore(box, panel.firstChild);
+    }
+    var go = box.querySelector('.agenda-dump-go');
+    var ta = box.querySelector('.agenda-dump-input');
+    go.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      commitDump(blk);
+    });
+    ta.addEventListener('keydown', function(e){
+      if((e.metaKey||e.ctrlKey) && e.key==='Enter'){
+        e.preventDefault();
+        commitDump(blk);
+      }
+    });
+  }
   function openPicker(anchor, grid, kind){
     closePicker();
     var box = document.createElement('div');
     box.className = 'sec-picker';
     var lab = document.createElement('p');
     lab.className = 'sec-picker-label';
-    lab.textContent = kind === 'section' ? 'add a section' : 'add a card';
+    lab.textContent = kind === 'section' ? 'new section' : kind === 'task' ? 'new task' : 'new card';
     box.appendChild(lab);
-    var names = kind === 'section' ? SECTION_NAMES : CARD_NAMES.filter(function(n){ return !ZONE_LC[n.toLowerCase()]; });
     var list = document.createElement('div');
     list.className = 'sec-picker-list';
-    names.forEach(function(name){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'sec-picker-opt';
-      b.textContent = name;
-      b.addEventListener('click', function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        closePicker();
-        if(kind === 'card') grid.appendChild(makeCard(name));
-        else grid.appendChild(makeCard(name));
-        savePage();
-      });
-      list.appendChild(b);
-    });
-    box.appendChild(list);
     var row = document.createElement('div');
     row.className = 'sec-picker-new';
     var inp = document.createElement('input');
     inp.className = 'plus-name-input';
-    inp.placeholder = kind === 'section' ? 'or type a section' : 'or type a name';
+    inp.type = 'text';
+    inp.setAttribute('autocomplete','off');
     var go = document.createElement('button');
     go.type = 'button';
     go.textContent = 'add';
-    function submit(){
-      var v = (inp.value||'').trim();
-      if(!v) return;
-      closePicker();
-      grid.appendChild(makeCard(v));
-      savePage();
+
+    if(kind === 'task'){
+      var onDay = cardsOnGrid(grid);
+      function addTaskOpt(name){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sec-picker-opt';
+        b.textContent = name;
+        b.addEventListener('click', function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          var dest = byName[name.toLowerCase()];
+          var v = (inp.value||'').trim();
+          closePicker();
+          addTaskToCard(dest, v);
+        });
+        list.appendChild(b);
+      }
+      function addOneoffOpt(sec){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sec-picker-opt is-oneoff-dest';
+        b.textContent = sec;
+        b.addEventListener('click', function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          var v = (inp.value||'').trim();
+          if(!v) return;
+          closePicker();
+          placeInSection(grid, makeOneoff(v, sec), sec);
+          savePage();
+        });
+        list.appendChild(b);
+      }
+      if(onDay.length){
+        var groups = groupCardsBySection(onDay.map(function(x){ return x.name; }));
+        var byName = {};
+        onDay.forEach(function(x){ byName[x.name.toLowerCase()] = x.card; });
+        var h1 = document.createElement('p');
+        h1.className = 'sec-picker-group';
+        h1.textContent = 'inside a card';
+        list.appendChild(h1);
+        SECTION_NAMES.forEach(function(sec){
+          var items = groups[sec] || [];
+          if(!items.length) return;
+          var h = document.createElement('p');
+          h.className = 'sec-picker-group';
+          h.textContent = sec;
+          list.appendChild(h);
+          items.forEach(addTaskOpt);
+        });
+      }
+      var h2 = document.createElement('p');
+      h2.className = 'sec-picker-group';
+      h2.textContent = 'as its own task';
+      list.appendChild(h2);
+      SECTION_NAMES.forEach(addOneoffOpt);
+      box.appendChild(list);
+      inp.placeholder = 'type a task, then pick where it goes';
+      function submitTask(){
+        var v = (inp.value||'').trim();
+        if(!v) return;
+        var only = cardsOnGrid(grid);
+        if(only.length === 1){
+          closePicker();
+          addTaskToCard(only[0].card, v);
+          return;
+        }
+      }
+      go.addEventListener('click', submitTask);
+      inp.addEventListener('keydown', function(e){ if(e.key==='Enter') submitTask(); });
+    } else {
+      var names = kind === 'section' ? SECTION_NAMES : CARD_NAMES.filter(function(n){ return !ZONE_LC[n.toLowerCase()] && !isOneoffName(n); });
+      function addOpt(name){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'sec-picker-opt';
+        b.textContent = name;
+        b.addEventListener('click', function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          closePicker();
+          if(kind === 'card' && isOneoffName(name)){
+            placeInSection(grid, makeOneoff(name, sectionForCard(name)), sectionForCard(name));
+            savePage();
+            return;
+          }
+          grid.appendChild(makeCard(name));
+          savePage();
+        });
+        list.appendChild(b);
+      }
+      if(kind === 'card'){
+        var groups = groupCardsBySection(names);
+        SECTION_NAMES.forEach(function(sec){
+          var items = groups[sec] || [];
+          if(!items.length) return;
+          var h = document.createElement('p');
+          h.className = 'sec-picker-group';
+          h.textContent = sec;
+          list.appendChild(h);
+          items.forEach(addOpt);
+        });
+      } else {
+        names.forEach(addOpt);
+      }
+      box.appendChild(list);
+      inp.placeholder = kind === 'section' ? 'type a new section name' : 'type a new card';
+      function submit(){
+        var v = (inp.value||'').trim();
+        if(!v) return;
+        closePicker();
+        if(kind === 'card' && isOneoffName(v)){
+          placeInSection(grid, makeOneoff(v, sectionForCard(v)), sectionForCard(v));
+        } else {
+          grid.appendChild(makeCard(v));
+        }
+        savePage();
+      }
+      go.addEventListener('click', submit);
+      inp.addEventListener('keydown', function(e){ if(e.key==='Enter') submit(); });
     }
-    go.addEventListener('click', submit);
-    inp.addEventListener('keydown', function(e){ if(e.key==='Enter') submit(); });
     row.appendChild(inp); row.appendChild(go);
     box.appendChild(row);
     if(anchor && anchor.parentNode) anchor.parentNode.insertBefore(box, anchor.nextSibling);
@@ -296,12 +712,9 @@
   }
   function ensureBtns(){
     document.querySelectorAll('.day-block.fmt22').forEach(function(blk){
-      if(blk.classList.contains('dimensions-host')) return;
+      if(blk.classList.contains('dimensions-host') || blk.classList.contains('grids-host')) return;
       var grid = blk.querySelector('.tv-pursuits .sec-grid') || blk.querySelector('.sec-grid');
       if(!grid) return;
-      if(blk.querySelector('.add-board-row')) return;
-      var row = document.createElement('div');
-      row.className = 'add-board-row';
       function mk(cls, text, kind){
         var b = document.createElement('button');
         b.className = cls; b.type = 'button'; b.textContent = text;
@@ -311,11 +724,26 @@
         });
         return b;
       }
+      var row = blk.querySelector('.add-board-row');
+      if(row){
+        if(!row.querySelector('.add-task-day-btn')) row.appendChild(mk('add-task-day-btn','+ task','task'));
+        ensureDump(blk);
+        return;
+      }
+      row = document.createElement('div');
+      row.className = 'add-board-row';
       row.appendChild(mk('add-grid','+ section','section'));
       row.appendChild(mk('add-card-btn','+ card','card'));
-      var toggle = blk.querySelector('.today-view-toggle');
-      if(toggle && toggle.parentNode) toggle.insertAdjacentElement('afterend', row);
-      else if(grid.parentNode) grid.parentNode.insertBefore(row, grid);
+      row.appendChild(mk('add-task-day-btn','+ task','task'));
+      var panel = blk.querySelector('.tv-pursuits');
+      if(panel){
+        var chart = panel.querySelector('.flow-chart-card');
+        if(chart) panel.insertBefore(row, chart);
+        else panel.insertBefore(row, panel.firstChild);
+      } else if(grid.parentNode){
+        grid.parentNode.insertBefore(row, grid);
+      }
+      ensureDump(blk);
     });
   }
   var SAVE_KEY = document.body.getAttribute('data-save-key') || 'agenda_page_v1';
@@ -350,30 +778,33 @@
     }catch(e){}
   }
   document.addEventListener('click', function(e){
-    if(e.target.closest('.sec-picker, .add-grid, .add-card-btn, .add-board-row')) return;
+    if(e.target.closest('.sec-picker, .add-grid, .add-card-btn, .add-task-day-btn, .add-board-row, .agenda-dump')) return;
     closePicker();
   });
   document.addEventListener('click', function(e){
+    var del = e.target.closest('.agenda-oneoff-del');
+    if(del){
+      e.preventDefault();
+      var chip = del.closest('.agenda-oneoff');
+      if(chip) chip.remove();
+      savePage();
+      return;
+    }
     var add = e.target.closest('.card-add-task');
     if(!add) return;
-    var card = add.closest('.sec-card');
-    if(!card) return;
-    var box = card.querySelector('.j22-section-items');
-    if(!box) return;
-    var lab = document.createElement('label');
-    lab.className = 'j22-item';
-    lab.innerHTML = '<input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">new task</span>';
-    box.appendChild(lab);
-    card.classList.remove('is-empty');
-    card.classList.add('has-tasks');
-    var t = lab.querySelector('.j22-t');
-    if(t){ t.focus(); }
-    savePage();
+    addTaskToCard(add.closest('.sec-card'), 'new task');
+  });
+  document.addEventListener('change', function(e){
+    var ck = e.target.closest('.agenda-oneoff .agenda-check');
+    if(!ck) return;
+    var chip = ck.closest('.agenda-oneoff');
+    if(chip) chip.classList.toggle('is-done', ck.checked);
   });
   document.addEventListener('input', savePage);
   document.addEventListener('change', savePage);
 
   function normalizeCards(root){
+    (root||document).querySelectorAll('.sec-grid').forEach(convertOneoffCards);
     (root||document).querySelectorAll('.sec-card').forEach(function(card){
       var vis = card.querySelector('.card-visual');
       var group = card.querySelector('.j22-group');
@@ -385,6 +816,7 @@
         var theme = resolveTheme(name);
         card.setAttribute('data-theme', theme);
         if(vis) vis.className = 'card-visual theme-' + theme;
+        card.classList.toggle('is-section', isSectionCard(name));
       }
     });
   }
@@ -395,6 +827,7 @@
     restorePage();
     normalizeCards();
     ensureBtns();
+    document.querySelectorAll('.day-block.fmt22').forEach(ensureDump);
     wireDots();
     var dimAdd = document.getElementById('dimAddCard');
     if(dimAdd){
