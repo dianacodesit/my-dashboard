@@ -8586,11 +8586,17 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </script>
 <style>
   /* ===== Hamburger nav menu + sidebar ===== */
+  #nav-root {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    pointer-events: none;
+  }
   #hamburger-menu {
     position: fixed;
     top: 18px;
     left: 18px;
-    z-index: 10000;
+    z-index: 200010;
     background: transparent;
     border: none;
     border-radius: 4px;
@@ -8601,6 +8607,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     gap: 3px;
     box-shadow: none;
     transition: opacity 0.2s;
+    pointer-events: auto;
   }
   #hamburger-menu:hover {
     background: transparent;
@@ -8619,8 +8626,9 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.3);
-    z-index: 10000;
+    z-index: 200000;
     transition: opacity 0.3s;
+    pointer-events: auto;
   }
   #nav-overlay.open { display: block; }
   #nav-sidebar {
@@ -8631,12 +8639,13 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     height: 100vh;
     background: #F5F0E8;
     border-right: 1px solid rgba(196,168,130,0.4);
-    z-index: 10001;
+    z-index: 200005;
     padding: 60px 0 20px;
     box-shadow: 4px 0 24px rgba(0,0,0,0.12);
     transition: left 0.3s ease;
     overflow-y: auto;
     box-sizing: border-box;
+    pointer-events: auto;
   }
   #nav-sidebar.open { left: 0; }
   #nav-close {
@@ -10014,6 +10023,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     tick();
   })();
 </script>
+<div id="nav-root">
 <button aria-label="open menu" id="hamburger-menu" type="button"><span></span><span></span><span></span></button>
 <div id="nav-overlay"></div>
 <aside aria-hidden="true" id="nav-sidebar">
@@ -10036,8 +10046,10 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 <a href="goals.html">goals</a>
 <a href="projects.html">projects</a>
 <a href="agenda.html">agenda</a>
+<a href="thoughts.html">thoughts</a>
 <a href="deen.html">deen</a>
 <a href="dimensions.html">dimensions</a>
+<a href="grids.html">grids</a>
 <a class="current" href="everything.html">everything</a>
 <a href="dashboard.html">dashboard</a>
 <a href="brain-dump.html">brain dump</a>
@@ -10056,6 +10068,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </nav>
 </details>
 </aside>
+</div>
 <script>
 (function(){
   function setup(){
@@ -10074,15 +10087,26 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
       overlay.classList.remove('open');
       sidebar.setAttribute('aria-hidden', 'true');
     }
-    btn.addEventListener('click', open);
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    overlay.addEventListener('click', close);
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      open();
+    }, true);
+    if (closeBtn) closeBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      close();
+    }, true);
+    overlay.addEventListener('click', function(e){
+      e.preventDefault();
+      close();
+    });
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape' && sidebar.classList.contains('open')) close();
     });
     // Mark the current page based on URL
     try {
-      var path = window.location.pathname;
+      var path = (window.location.pathname || '').split('/').pop() || 'everything.html';
       document.querySelectorAll('#nav-sidebar nav a').forEach(function(a){
         a.classList.toggle('current', a.getAttribute('href') === path);
       });
@@ -36832,6 +36856,21 @@ html body #hamburger-menu span,
 html body.enh-dark #hamburger-menu span {
   background: #1c140e !important;
   box-shadow: 0 1px 3px rgba(20,12,6,0.45);
+}
+html body #nav-root {
+  z-index: 200000 !important;
+  pointer-events: none !important;
+}
+html body #hamburger-menu {
+  z-index: 200010 !important;
+  pointer-events: auto !important;
+}
+html body #nav-overlay {
+  z-index: 200000 !important;
+}
+html body #nav-sidebar {
+  z-index: 200005 !important;
+  pointer-events: auto !important;
 }
 html body .day-block.collapsed .day-date,
 html body.enh-dark .day-date,

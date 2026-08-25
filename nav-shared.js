@@ -84,8 +84,16 @@
     }
     if (!btn.dataset.wired) {
       btn.dataset.wired = '1';
-      btn.addEventListener('click', open);
-      if (closeBtn) closeBtn.addEventListener('click', close);
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        open();
+      }, true);
+      if (closeBtn) closeBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+      }, true);
       overlay.addEventListener('click', close);
       document.addEventListener('keydown', function(e){
         if (e.key === 'Escape' && sidebar.classList.contains('open')) close();
