@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>brain dump · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cinzel:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css"/>
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --paper: #FAF6EE;
+    --ink: #1c140e;
+    --muted: #6f5f54;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: 'Newsreader', Georgia, serif;
+    color: var(--ink);
+    background: #F5F0E8;
+    overflow-x: hidden;
+  }
+  body.brain-dump-page #hamburger-menu span {
+    background: #4a3d32;
+    box-shadow: none;
+  }
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(180deg, rgba(245,240,232,0.28) 0%, rgba(250,246,238,0.08) 38%, rgba(245,240,232,0.32) 100%),
+      url('manus-storage/brain-dump-bg-light.jpg?v=1') center/cover no-repeat;
+    filter: saturate(0.96) brightness(1.05);
+  }
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 64px 20px 140px;
+  }
+  .dump-hero {
+    text-align: center;
+    margin: 8px auto 28px;
+    max-width: 640px;
+  }
+  .dump-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6f5f54;
+    text-shadow: none;
+    margin-bottom: 8px;
+  }
+  .dump-hero h1 {
+    font-family: 'Italiana', serif;
+    font-size: clamp(36px, 7vw, 56px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: #2a221c;
+    line-height: 1.05;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.55);
+  }
+  .dump-sub {
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #6f5f54;
+    text-shadow: none;
+  }
+  #save-status {
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8a7a6a;
+    text-shadow: none;
+    min-height: 14px;
+  }
+  .dump-empty {
+    display: none;
+    text-align: center;
+    margin: 48px auto 0;
+    max-width: 420px;
+    color: #6f5f54;
+    font-style: italic;
+    font-size: 18px;
+    text-shadow: none;
+  }
+  .dump-empty.show { display: block; }
+
+  .dump-board {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 22px;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .cluster {
+    flex: 1 1 240px;
+    max-width: 360px;
+    min-width: 220px;
+  }
+  .cluster.is-empty { display: none; }
+  .cluster-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #4a3d32;
+    text-align: center;
+    margin-bottom: 14px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .cluster-notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .note {
+    position: relative;
+    width: min(220px, 100%);
+    background:
+      radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,0.55), transparent 46%),
+      var(--paper);
+    color: var(--ink);
+    border-radius: 16px;
+    padding: 16px 16px 14px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.85) inset,
+      0 10px 24px rgba(90,70,40,0.12),
+      0 2px 6px rgba(90,70,40,0.08);
+    transform: rotate(var(--tilt, -1.4deg));
+    animation: pop-in 0.42s cubic-bezier(.18,1.15,.32,1) both;
+    border: 1px solid rgba(196,168,130,0.35);
+  }
+  .note::before {
+    content: '';
+    position: absolute;
+    inset: auto 18px -6px 18px;
+    height: 10px;
+    background: inherit;
+    filter: blur(6px);
+    opacity: 0.35;
+    z-index: -1;
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: rotate(var(--tilt, -1.4deg)) scale(0.82) translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--tilt, -1.4deg)) scale(1) translateY(0);
+    }
+  }
+  .note-text {
+    font-size: 16px;
+    line-height: 1.45;
+    min-height: 1.4em;
+    outline: none;
+    word-break: break-word;
+  }
+  .note-x {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    background: transparent;
+    color: #8a7a6a;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  .note-x:hover { background: rgba(28,20,14,0.08); color: var(--ink); }
+
+  .composer-dock {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 40;
+    width: min(680px, calc(100% - 28px));
+  }
+  .composer {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: rgba(250,246,238,0.96);
+    border: 1px solid rgba(196,168,130,0.45);
+    border-radius: 22px;
+    padding: 8px 8px 8px 18px;
+    box-shadow: 0 18px 40px rgba(12,8,4,0.35);
+  }
+  #dump-input {
+    flex: 1;
+    border: 0;
+    outline: none;
+    background: transparent;
+    resize: none;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--ink);
+    min-height: 28px;
+    max-height: 120px;
+    padding: 8px 0;
+  }
+  #dump-input::placeholder {
+    color: rgba(111,95,84,0.55);
+    font-style: italic;
+  }
+  .dump-send {
+    flex: 0 0 auto;
+    border: 0;
+    background: #2a221c;
+    color: #f7efe4;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 12px 16px;
+    cursor: pointer;
+  }
+  .dump-send:hover { background: #1c140e; }
+</style>
+</head>
+<body class="brain-dump-page">
+<script id="brain-dump-data" type="application/json">[{"id":"n_restore_tuition","text":"tuition","section":"finances","at":"2026-08-25T01:35:00.000Z"},{"id":"n_restore_ring","text":"Nominal islamic ring","section":"inbox","at":"2026-08-25T01:35:00.000Z"},{"id":"n_mt7u23vb_vohcy","text":"scholarship 'general application'","section":"ambition","at":"2026-08-24T22:54:07.895Z"}]</script><!--/brain-dump-data-->
+<div class="page-bg" aria-hidden="true"></div>
+
+<main class="page-shell">
+  <header class="dump-hero">
+    <p class="dump-eyebrow">one thought · one popup</p>
+    <h1>brain dump</h1>
+    <p class="dump-sub">sorted from the words · saved in this page</p>
+    <p id="save-status">saved in this page</p>
+  </header>
+  <p class="dump-empty" id="dump-empty">nothing here yet — type a thought below</p>
+  <div class="dump-board" id="dump-board"></div>
+</main>
+
+<form class="composer-dock" id="dump-form" autocomplete="off">
+  <div class="composer">
+    <textarea id="dump-input" rows="1" placeholder="one thought — enter to drop it as a popup"></textarea>
+    <button class="dump-send" type="submit">drop</button>
+  </div>
+</form>
+
+<script src="nav-shared.js"></script>
+<script>
+(function(){
+  var SECTION_META = [
+    { id:'body', title:'glow up' },
+    { id:'life', title:'lifestyle' },
+    { id:'shopping', title:'shopping' },
+    { id:'finances', title:'finances' },
+    { id:'leverage', title:'power' },
+    { id:'ambition', title:'ambition' },
+    { id:'presence', title:'quantum' },
+    { id:'inbox', title:'unsorted' }
+  ];
+  var RANK = { ambition:6, finances:5, shopping:4, leverage:3, body:2, presence:2, life:1, inbox:0 };
+  var KEYS = {
+    body: /\b(glow\s*up|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera|adderall|workout|gym|health|sleep|food|eat|weight|body|dentist|doctor(?!\s+betty)|vitamin|lotion|makeup|face|nails)\b/gi,
+    life: /\b(lifestyle|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran|prayer|salah|fajr|mom|dad|family|friend|errand|home|house|apartment|grocer|clean|laundry|call\s+mom|text\s+mom)\b/gi,
+    shopping: /\b(shop(?:ping|ped)?|\bbuy\b|bought|purchase|order|amazon|sephora|nordstrom|target|return|\bring\b|rings|jewel(?:ry|lery)|necklace|earring|bracelet|watch|clothes|clothing|dress(?:es)?|shoes|bag|purse|cart|wishlist|store|retail|haul|wardrobe|outfit|hijab|abaya)\b/gi,
+    finances: /\b(capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger|pay|paid|cash|tax|salary|budget|invoice|owe|owed|venmo|zelle)\b/gi,
+    leverage: /\b(litigat|legal|lawyer|court|letter|power|workflow|leverage|influence|contract|paperwork|notary|lawsuit|case)\b/gi,
+    ambition: /\b(momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude|job|work|school|study|deadline|portfolio|interview|resume|client|project)\b/gi,
+    presence: /\b(quantum|superposition|entangle|particle|atom|manifest|journal|dream|energy|spirit|meditat|intention)\b/gi
+  };
+
+  function categorize(text){
+    var n = String(text || '').toLowerCase();
+    if (!n.trim()) return 'inbox';
+    var best = 'inbox', bestScore = 0, bestRank = 0;
+    Object.keys(KEYS).forEach(function(id){
+      var m = n.match(KEYS[id]);
+      var score = m ? m.length : 0;
+      var rank = RANK[id] || 0;
+      if (score > bestScore || (score === bestScore && score > 0 && rank > bestRank)) {
+        best = id;
+        bestScore = score;
+        bestRank = rank;
+      }
+    });
+    return bestScore ? best : 'inbox';
+  }
+
+  function splitThoughts(raw){
+    var out = [];
+    String(raw || '').split(/\r?\n+/).forEach(function(line){
+      line = line.trim();
+      if (!line) return;
+      line.split(/\s*[•·]\s+/).forEach(function(bit){
+        bit = bit.replace(/^[-*]\s+/, '').replace(/^\d+[.)]\s+/, '').trim();
+        if (bit) out.push(bit);
+      });
+    });
+    return out;
+  }
+
+  function uid(){
+    return 'n_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+  }
+  function tiltFor(id){
+    var n = 0;
+    String(id).split('').forEach(function(c){ n = (n * 31 + c.charCodeAt(0)) % 17; });
+    return ((n - 8) * 0.38).toFixed(2) + 'deg';
+  }
+  function esc(s){
+    return String(s || '').replace(/[&<>"']/g, function(ch){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch];
+    });
+  }
+
+  var dataEl = document.getElementById('brain-dump-data');
+  var board = document.getElementById('dump-board');
+  var emptyEl = document.getElementById('dump-empty');
+  var statusEl = document.getElementById('save-status');
+  var form = document.getElementById('dump-form');
+  var input = document.getElementById('dump-input');
+  var entries = [];
+  var saveTimer;
+
+  try { entries = JSON.parse((dataEl && dataEl.textContent) || '[]') || []; }
+  catch (e) { entries = []; }
+  if (!Array.isArray(entries)) entries = [];
+  entries.forEach(function(e){
+    if (!e || !e.text) return;
+    e.section = categorize(e.text);
+  });
+
+  (function recoverOldDump(){
+    var raw = '';
+    try { raw = localStorage.getItem('brain_dump_v1') || ''; } catch (e) { raw = ''; }
+    if (!raw.trim()) return;
+    var have = {};
+    entries.forEach(function(e){ have[String(e.text || '').trim().toLowerCase()] = 1; });
+    var added = 0;
+    splitThoughts(raw).forEach(function(text){
+      if (have[text.toLowerCase()]) return;
+      entries.push({
+        id: uid(),
+        text: text,
+        section: categorize(text),
+        at: new Date().toISOString()
+      });
+      have[text.toLowerCase()] = 1;
+      added++;
+    });
+    if (added) {
+      try { localStorage.removeItem('brain_dump_v1'); } catch (e) {}
+    }
+  })();
+
+  function persist(){
+    statusEl.textContent = 'saving…';
+    var payload = JSON.stringify({ entries: entries });
+    return fetch('/brain-dump', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload,
+      cache: 'no-store'
+    }).then(function(r){
+      return r.json().then(function(j){
+        if (!r.ok || !j.ok) throw new Error((j && j.error) || 'save failed');
+        if (dataEl) dataEl.textContent = JSON.stringify(entries);
+        statusEl.textContent = 'saved in this page';
+      });
+    }).catch(function(){
+      statusEl.textContent = 'couldn’t save into the page — start the dashboard server';
+    });
+  }
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(persist, 180);
+  }
+
+  function render(){
+    board.innerHTML = '';
+    emptyEl.classList.toggle('show', !entries.length);
+    SECTION_META.forEach(function(sec){
+      var items = entries.filter(function(e){ return e.section === sec.id; });
+      var cluster = document.createElement('section');
+      cluster.className = 'cluster' + (items.length ? '' : ' is-empty');
+      cluster.setAttribute('data-section', sec.id);
+      cluster.innerHTML = '<h2 class="cluster-title">'+esc(sec.title)+'</h2><div class="cluster-notes"></div>';
+      var hold = cluster.querySelector('.cluster-notes');
+      items.forEach(function(item){
+        var note = document.createElement('article');
+        note.className = 'note';
+        note.style.setProperty('--tilt', tiltFor(item.id));
+        note.setAttribute('data-id', item.id);
+        note.innerHTML =
+          '<button class="note-x" type="button" aria-label="remove">×</button>' +
+          '<div class="note-text" contenteditable="true" spellcheck="true">'+esc(item.text)+'</div>';
+        hold.appendChild(note);
+      });
+      board.appendChild(cluster);
+    });
+  }
+
+  function addThoughts(raw){
+    var bits = splitThoughts(raw);
+    if (!bits.length) return;
+    bits.forEach(function(text){
+      entries.push({
+        id: uid(),
+        text: text,
+        section: categorize(text),
+        at: new Date().toISOString()
+      });
+    });
+    render();
+    persist();
+  }
+
+  board.addEventListener('click', function(e){
+    var note = e.target.closest('.note');
+    if (!note) return;
+    var id = note.getAttribute('data-id');
+    var item = entries.filter(function(x){ return x.id === id; })[0];
+    if (!item) return;
+    if (e.target.classList.contains('note-x')) {
+      entries = entries.filter(function(x){ return x.id !== id; });
+      render();
+      persist();
+    }
+  });
+
+  board.addEventListener('focusout', function(e){
+    if (!e.target.classList.contains('note-text')) return;
+    var note = e.target.closest('.note');
+    if (!note) return;
+    var item = entries.filter(function(x){ return x.id === note.getAttribute('data-id'); })[0];
+    if (!item) return;
+    var next = (e.target.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!next) {
+      entries = entries.filter(function(x){ return x.id !== item.id; });
+      render();
+      persist();
+      return;
+    }
+    if (next === item.text) return;
+    item.text = next;
+    item.section = categorize(next);
+    render();
+    persist();
+  });
+
+  function grow(){
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  }
+  input.addEventListener('input', grow);
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var raw = input.value;
+    input.value = '';
+    grow();
+    addThoughts(raw);
+    input.focus();
+  });
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  render();
+  if (entries.length) {
+    statusEl.textContent = 'saved in this page';
+    persist();
+  }
+})();
+</script>
+</body>
+</html>
