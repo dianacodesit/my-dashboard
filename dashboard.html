@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>dashboard · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cinzel:wght@500;600&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css"/>
+<link rel="stylesheet" href="nav-shared.css?v=navclear"/>
 <style>
   :root {
     --ink: #f7efe4;
@@ -160,15 +160,31 @@
   }
   .focus-box::placeholder { color: rgba(247,239,228,0.45); }
   .today { --photo: url("manus-storage/zone-ambition-v4.jpg"); }
-  .agenda { --photo: url("manus-storage/planner-bg-timeblock.jpg?v=blocks"); }
+  .agenda { --photo: url("manus-storage/planner-bg-timewarp-light.jpg?v=light"); }
+  .agenda::before {
+    opacity: 0.82;
+    background-position: center 38%;
+  }
+  .agenda::after {
+    background: linear-gradient(180deg, rgba(10,7,5,0.04) 18%, rgba(10,7,5,0.58) 100%);
+  }
+  .wins { --photo: url("manus-storage/dashboard-hq-bg.jpg"); }
   .dims { --photo: url("manus-storage/pursuit-ux-design-v12_f2f2c818.jpg"); }
   .glow { --photo: url("manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"); }
   .life { --photo: url("manus-storage/agenda-bg-wall.jpg?v=wall"); }
   .money { --photo: url("manus-storage/zone-finances-v2.jpg?v=2"); }
   .power { --photo: url("manus-storage/mock-power.jpg"); }
   .ambition { --photo: url("manus-storage/zone-ambition-v4.jpg"); }
-  .quantum { --photo: url("manus-storage/zone-quantum-v14.jpg?v=symbol"); }
+  .quantum { --photo: url("manus-storage/zone-quantum-v15.jpg?v=observe"); }
   .dump { --photo: url("manus-storage/_339ab459.jpg"); min-height: 150px; }
+  .adhd { --photo: url("manus-storage/adhd-bg.jpg?v=trails"); }
+  .research { --photo: url("manus-storage/research-proposals-bg.jpg?v=stacks"); }
+  .biz { --photo: url("manus-storage/business-ideas-bg.jpg?v=skyline"); }
+  .powerops { --photo: url("manus-storage/power-opportunities-bg.jpg?v=open"); }
+  .qmind { --photo: url("manus-storage/quantum-consciousness-bg.jpg?v=nebula"); }
+  .prime { --photo: url("manus-storage/priming-bg.jpg?v=stage"); }
+  .abundance { --photo: url("manus-storage/abundance-bg.jpg?v=field"); }
+  .parallels { --photo: url("manus-storage/parallel-timelines-bg.jpg?v=linen"); }
   .dump-preview {
     margin-top: 8px;
     font-size: 15px;
@@ -220,9 +236,15 @@
     </a>
 
     <a class="tile agenda" href="planner.html">
-      <p class="tile-kicker">hours</p>
-      <h2 class="tile-title">Time-Block Planner</h2>
-      <p class="tile-note">the day in blocks</p>
+      <p class="tile-kicker">warp</p>
+      <h2 class="tile-title">Planner</h2>
+      <p class="tile-note">hours warping into one another</p>
+    </a>
+
+    <a class="tile wins" href="accomplishments.html">
+      <p class="tile-kicker">kept</p>
+      <h2 class="tile-title">Accomplishments</h2>
+      <p class="tile-note">wins already sealed</p>
     </a>
 
     <a class="tile dims" href="grids.html">
@@ -266,9 +288,49 @@
       <h2 class="tile-title">Brain Dump</h2>
       <p class="dump-preview" id="dump-preview">open the page to write</p>
     </a>
+    <a class="tile adhd" href="adhd.html">
+      <p class="tile-kicker">wiring</p>
+      <h2 class="tile-title">ADHD / neurodiversity</h2>
+      <p class="tile-note">how this mind works</p>
+    </a>
+    <a class="tile research" href="research-proposals.html">
+      <p class="tile-kicker">prove</p>
+      <h2 class="tile-title">research proposals</h2>
+      <p class="tile-note">what you want to prove</p>
+    </a>
+    <a class="tile biz" href="business-ideas.html">
+      <p class="tile-kicker">seed</p>
+      <h2 class="tile-title">business ideas</h2>
+      <p class="tile-note">things that could become real</p>
+    </a>
+    <a class="tile powerops" href="power-opportunities.html">
+      <p class="tile-kicker">opening</p>
+      <h2 class="tile-title">power opportunities</h2>
+      <p class="tile-note">where influence can land</p>
+    </a>
+    <a class="tile qmind" href="quantum-consciousness.html">
+      <p class="tile-kicker">observe</p>
+      <h2 class="tile-title">quantum consciousness</h2>
+      <p class="tile-note">the unseen layer</p>
+    </a>
+    <a class="tile prime" href="priming.html">
+      <p class="tile-kicker">cue</p>
+      <h2 class="tile-title">priming & prompting</h2>
+      <p class="tile-note">words that set the mind</p>
+    </a>
+    <a class="tile abundance" href="abundance.html">
+      <p class="tile-kicker">overflow</p>
+      <h2 class="tile-title">abundance economics</h2>
+      <p class="tile-note">economics of enough</p>
+    </a>
+    <a class="tile parallels" href="parallel-timelines.html">
+      <p class="tile-kicker">fork</p>
+      <h2 class="tile-title">Timelines</h2>
+      <p class="tile-note">this line, adjacent, chosen</p>
+    </a>
   </section>
 </main>
-<script src="nav-shared.js?v=timeblock"></script>
+<script src="nav-shared.js?v=navnames1"></script>
 <script>
 (function(){
   var FOCUS_KEY = "dash_focus_v1";

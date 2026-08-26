@@ -310,7 +310,7 @@ PAGE_JS = r"""
     'returns':'manus-storage/pursuit-returns-v2.jpg',
     'pickups':'manus-storage/pursuit-pickups.jpg',
     'social media':'manus-storage/pursuit-social-media-v7_c5f03b96.jpg',
-    'quantum':'manus-storage/zone-quantum-v14.jpg?v=symbol',
+    'quantum':'manus-storage/zone-quantum-v15.jpg?v=observe',
     'adderall / adhd meds':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'adderall':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'litigation wins':'manus-storage/pursuit-legal_b70d3da7.jpg',

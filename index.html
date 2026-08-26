@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>home · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&family=DM+Mono:wght@300;400&family=Italiana&family=Cinzel:wght@500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css"/>
+<link rel="stylesheet" href="nav-shared.css?v=navclear"/>
 <style>
   :root {
     --ink: #f7efe4;
@@ -137,7 +137,15 @@
   .room:hover::before { opacity: 0.64; }
   .today { --photo: url("manus-storage/zone-ambition-v4.jpg"); grid-column: span 2; min-height: 210px; }
   .today .room-title { font-size: 22px; }
-  .agenda { --photo: url("manus-storage/planner-bg-timeblock.jpg?v=blocks"); }
+  .agenda { --photo: url("manus-storage/planner-bg-timewarp-light.jpg?v=light"); }
+  .agenda::before {
+    opacity: 0.82;
+    background-position: center 38%;
+  }
+  .agenda::after {
+    background: linear-gradient(180deg, rgba(10,7,5,0.04) 18%, rgba(10,7,5,0.58) 100%);
+  }
+  .wins { --photo: url("manus-storage/dashboard-hq-bg.jpg"); }
   .life { --photo: url("manus-storage/agenda-bg-wall.jpg?v=wall"); }
   .everything { --photo: url("manus-storage/_339ab459.jpg"); }
   .dims { --photo: url("manus-storage/pursuit-ux-design-v12_f2f2c818.jpg"); }
@@ -145,6 +153,14 @@
   .dump { --photo: url("manus-storage/brain-dump-bg-linen.jpg?v=linen"); }
   .dash { --photo: url("manus-storage/dashboard-hq-bg.jpg"); }
   .grids { --photo: url("manus-storage/pursuit-curated-lifestyle.jpg?v=2"); }
+  .adhd { --photo: url("manus-storage/adhd-bg.jpg?v=trails"); }
+  .research { --photo: url("manus-storage/research-proposals-bg.jpg?v=stacks"); }
+  .biz { --photo: url("manus-storage/business-ideas-bg.jpg?v=skyline"); }
+  .powerops { --photo: url("manus-storage/power-opportunities-bg.jpg?v=open"); }
+  .qmind { --photo: url("manus-storage/quantum-consciousness-bg.jpg?v=nebula"); }
+  .prime { --photo: url("manus-storage/priming-bg.jpg?v=stage"); }
+  .abundance { --photo: url("manus-storage/abundance-bg.jpg?v=field"); }
+  .parallels { --photo: url("manus-storage/parallel-timelines-bg.jpg?v=linen"); }
   @media (max-width: 860px) {
     .rooms { grid-template-columns: 1fr 1fr; }
     .today { grid-column: 1 / -1; }
@@ -171,8 +187,12 @@
       <h2 class="room-title">Today</h2>
     </a>
     <a class="room agenda" href="planner.html">
-      <p class="room-kicker">hours</p>
-      <h2 class="room-title">Time-Block Planner</h2>
+      <p class="room-kicker">warp</p>
+      <h2 class="room-title">Planner</h2>
+    </a>
+    <a class="room wins" href="accomplishments.html">
+      <p class="room-kicker">kept</p>
+      <h2 class="room-title">Accomplishments</h2>
     </a>
     <a class="room life" href="lifestyle.html">
       <p class="room-kicker">home</p>
@@ -202,9 +222,41 @@
       <p class="room-kicker">command</p>
       <h2 class="room-title">Dashboard</h2>
     </a>
+    <a class="room adhd" href="adhd.html">
+      <p class="room-kicker">wiring</p>
+      <h2 class="room-title">ADHD / neurodiversity</h2>
+    </a>
+    <a class="room research" href="research-proposals.html">
+      <p class="room-kicker">prove</p>
+      <h2 class="room-title">research proposals</h2>
+    </a>
+    <a class="room biz" href="business-ideas.html">
+      <p class="room-kicker">seed</p>
+      <h2 class="room-title">business ideas</h2>
+    </a>
+    <a class="room powerops" href="power-opportunities.html">
+      <p class="room-kicker">opening</p>
+      <h2 class="room-title">power opportunities</h2>
+    </a>
+    <a class="room qmind" href="quantum-consciousness.html">
+      <p class="room-kicker">field</p>
+      <h2 class="room-title">quantum consciousness</h2>
+    </a>
+    <a class="room prime" href="priming.html">
+      <p class="room-kicker">cue</p>
+      <h2 class="room-title">priming & prompting</h2>
+    </a>
+    <a class="room abundance" href="abundance.html">
+      <p class="room-kicker">overflow</p>
+      <h2 class="room-title">abundance economics</h2>
+    </a>
+    <a class="room parallels" href="parallel-timelines.html">
+      <p class="room-kicker">fork</p>
+      <h2 class="room-title">Timelines</h2>
+    </a>
   </nav>
 </main>
-<script src="nav-shared.js?v=timeblock"></script>
+<script src="nav-shared.js?v=navnames1"></script>
 <script>
 (function(){
   function pad(n){ return String(n).padStart(2, "0"); }

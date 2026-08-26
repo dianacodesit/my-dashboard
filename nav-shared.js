@@ -11,13 +11,22 @@
     { href: 'goals.html', label: 'goals', group: 'wip' },
     { href: 'projects.html', label: 'projects', group: 'wip' },
     { href: 'lifestyle.html', label: 'lifestyle', group: 'wip' },
-    { href: 'planner.html', label: 'time-block planner', group: 'main' },
+    { href: 'planner.html', label: 'planner', group: 'main' },
+    { href: 'accomplishments.html', label: 'accomplishments', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
     { href: 'dimensions.html', label: 'dimensions', group: 'main' },
     { href: 'grids.html', label: 'grids', group: 'main' },
     { href: 'everything.html', label: 'everything', group: 'main' },
     { href: 'dashboard.html', label: 'dashboard', group: 'main' },
     { href: 'brain-dump.html', label: 'brain dump', group: 'main' },
+    { href: 'adhd.html', label: 'ADHD / neurodiversity', group: 'main' },
+    { href: 'research-proposals.html', label: 'research proposals', group: 'main' },
+    { href: 'business-ideas.html', label: 'business ideas', group: 'main' },
+    { href: 'power-opportunities.html', label: 'power opportunities', group: 'main' },
+    { href: 'quantum-consciousness.html', label: 'quantum consciousness', group: 'main' },
+    { href: 'priming.html', label: 'priming & prompting', group: 'main' },
+    { href: 'abundance.html', label: 'abundance economics', group: 'main' },
+    { href: 'parallel-timelines.html', label: 'parallel timelines', group: 'main' },
     { href: 'palettes.html', label: 'color palettes', group: 'design' },
     { href: 'backgrounds.html', label: 'background images', group: 'design' },
     { href: 'colors.html', label: 'individual colors', group: 'design' },
@@ -31,7 +40,7 @@
   var GROUPS = [
     { id: 'top', title: '' },
     { id: 'main', title: 'main' },
-    { id: 'wip', title: 'work in progress' },
+    { id: 'wip', title: 'work in progress', details: true },
     { id: 'design', title: 'design previews', details: true }
   ];
 
@@ -87,11 +96,14 @@
   }
   function sidebarInner(cur){
     var items = resolvedLinks();
-    var html = '<button aria-label="close menu" id="nav-close" type="button">×</button><h2>pages</h2>';
+    var html = '<button aria-label="close menu" id="nav-close" type="button">×</button>';
     GROUPS.forEach(function(g){
       var nav = '<nav>' + linksFor(g.id, items, cur) + '</nav>';
       if (g.details) {
-        html += '<details class="nav-group nav-bucket" data-group="'+g.id+'">' +
+        var inGroup = items.some(function(x){
+          return x.group === g.id && fileOf(x.href) === cur;
+        });
+        html += '<details class="nav-group nav-bucket" data-group="'+g.id+'"'+(inGroup?' open':'')+'>' +
           '<summary class="nav-section">'+g.title+'</summary>' + nav + '</details>';
         return;
       }
@@ -107,11 +119,16 @@
     s.id = 'nav-drag-css';
     s.textContent =
       '#nav-sidebar .nav-bucket nav { min-height: 28px; }' +
-      '#nav-sidebar .nav-bucket nav:empty::after { content: "drop a page here"; display: block; padding: 8px 24px 12px; font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 14px; color: #8a7a60; }' +
+      '#nav-sidebar .nav-bucket nav:empty::after { content: "drop a page here"; display: block; padding: 8px 24px 12px; font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 14px; color: rgba(243,230,208,0.7); }' +
       '#nav-sidebar .nav-bucket.is-drop { background: rgba(138,158,133,0.12); }' +
       '#nav-sidebar nav a { cursor: grab; }' +
       '#nav-sidebar nav a.is-dragging { opacity: 0.35; }' +
       '#nav-sidebar nav a.is-insert { box-shadow: inset 0 2px 0 #8a9e85; }' +
+      'html body #hamburger-menu, html body.enh-dark #hamburger-menu { background: transparent !important; box-shadow: none !important; }' +
+      'html body #hamburger-menu span, html body.enh-dark #hamburger-menu span { box-shadow: none !important; }' +
+      'html body #nav-sidebar, html body.enh-dark #nav-sidebar { background: transparent !important; box-shadow: none !important; border-right: 1px solid rgba(255,255,255,0.12) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }' +
+      'html body #nav-sidebar nav a, html body.enh-dark #nav-sidebar nav a { color: #f3e6d0 !important; text-shadow: 0 1px 2px rgba(20,12,6,0.5), 0 2px 8px rgba(20,12,6,0.3); }' +
+      'html body #nav-sidebar h2 { display: none !important; }' +
       '.nav-drag-ghost { position: fixed; z-index: 200040; pointer-events: none; padding: 8px 16px; background: #F5F0E8; border: 1px solid rgba(196,168,130,0.55); box-shadow: 0 10px 24px rgba(20,12,6,0.18); font-family: "Newsreader", Georgia, serif; font-size: 17px; color: #3a3530; white-space: nowrap; }';
     document.head.appendChild(s);
   }

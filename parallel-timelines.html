@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>parallel timelines · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=parallels"/>
+<link rel="stylesheet" href="capture-page.css?v=nocream"/>
+<style>
+  .page-bg {
+    background:
+      linear-gradient(180deg, rgba(246,234,216,0.18) 0%, rgba(246,234,216,0.04) 42%, rgba(246,234,216,0.28) 100%),
+      url("manus-storage/parallel-timelines-bg.jpg?v=linen") center/cover no-repeat;
+  }
+  body.capture-page #hamburger-menu span { background: #3a3228; }
+  .eyebrow, .sub {
+    color: #3a3228;
+    text-shadow: 0 1px 0 rgba(255,248,238,0.75);
+  }
+  h1 {
+    color: #241c16;
+    text-shadow: 0 1px 0 rgba(255,248,238,0.7), 0 2px 16px rgba(246,234,216,0.45);
+  }
+  .page-shell { max-width: 1180px; margin: 0 auto; }
+  .tracks {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    width: min(1100px, 100%);
+    align-items: start;
+  }
+  .track {
+    background: rgba(250,246,238,0.92);
+    color: #1c140e;
+    border-radius: 18px;
+    padding: 18px 16px 14px;
+    border: 1px solid rgba(196,168,130,0.4);
+    box-shadow: 0 24px 60px rgba(20,10,4,0.28);
+    min-height: 280px;
+  }
+  .track-head {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6f5f54;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(196,168,130,0.28);
+  }
+  .status { text-align: center; width: min(1100px, 100%); }
+  @media (max-width: 820px) {
+    .tracks { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="capture-page" data-store="page_parallel_v1">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">here · adjacent · chosen</p>
+    <h1>parallel timelines</h1>
+    <p class="sub">three lines running at once</p>
+  </header>
+  <div class="tracks">
+    <section class="track" data-track="this">
+      <p class="track-head">this line</p>
+      <div class="add-row">
+        <input type="text" placeholder="what is happening here" autocomplete="off"/>
+        <button type="button">keep</button>
+      </div>
+      <div class="list"></div>
+    </section>
+    <section class="track" data-track="adjacent">
+      <p class="track-head">adjacent</p>
+      <div class="add-row">
+        <input type="text" placeholder="a nearby version" autocomplete="off"/>
+        <button type="button">keep</button>
+      </div>
+      <div class="list"></div>
+    </section>
+    <section class="track" data-track="chosen">
+      <p class="track-head">chosen</p>
+      <div class="add-row">
+        <input type="text" placeholder="the line you step into" autocomplete="off"/>
+        <button type="button">keep</button>
+      </div>
+      <div class="list"></div>
+    </section>
+  </div>
+  <p class="status" id="status">saved here</p>
+</main>
+<script src="nav-shared.js?v=parallels"></script>
+<script>
+(function(){
+  var KEY = 'page_parallel_v1';
+  var TRACKS = ['this', 'adjacent', 'chosen'];
+  var status = document.getElementById('status');
+  function emptyStore(){
+    return { this: [], adjacent: [], chosen: [] };
+  }
+  function load(){
+    try {
+      var raw = JSON.parse(localStorage.getItem(KEY) || '{}');
+      var out = emptyStore();
+      TRACKS.forEach(function(k){
+        out[k] = Array.isArray(raw[k]) ? raw[k] : [];
+      });
+      return out;
+    } catch (e) { return emptyStore(); }
+  }
+  function save(data){
+    try {
+      localStorage.setItem(KEY, JSON.stringify(data));
+      if (status) status.textContent = 'saved here';
+    } catch (e) {
+      if (status) status.textContent = 'save failed';
+    }
+  }
+  function renderTrack(sec, items){
+    var key = sec.getAttribute('data-track');
+    var list = sec.querySelector('.list');
+    list.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('p');
+      empty.className = 'empty';
+      var quiet = key === 'adjacent' ? 'nothing adjacent yet' : (key === 'chosen' ? 'nothing chosen yet' : 'this line is quiet');
+      empty.textContent = quiet;
+      list.appendChild(empty);
+      return;
+    }
+    items.forEach(function(it, i){
+      var row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = '<span class="mark">✦</span><div class="t" contenteditable="true" spellcheck="false"></div><button class="x" type="button" aria-label="remove">×</button>';
+      row.querySelector('.t').textContent = it.t || '';
+      row.querySelector('.t').addEventListener('blur', function(){
+        var all = load();
+        if (!all[key][i]) return;
+        all[key][i].t = this.textContent.trim();
+        save(all);
+      });
+      row.querySelector('.x').addEventListener('click', function(){
+        var all = load();
+        all[key].splice(i, 1);
+        save(all);
+        render();
+      });
+      list.appendChild(row);
+    });
+  }
+  function render(){
+    var data = load();
+    document.querySelectorAll('.track').forEach(function(sec){
+      var key = sec.getAttribute('data-track');
+      renderTrack(sec, data[key] || []);
+    });
+  }
+  function add(sec){
+    var key = sec.getAttribute('data-track');
+    var input = sec.querySelector('input');
+    var t = (input.value || '').trim();
+    if (!t) return;
+    var all = load();
+    all[key].unshift({ t: t });
+    save(all);
+    input.value = '';
+    render();
+  }
+  document.querySelectorAll('.track').forEach(function(sec){
+    sec.querySelector('button').addEventListener('click', function(){ add(sec); });
+    sec.querySelector('input').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') { e.preventDefault(); add(sec); }
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

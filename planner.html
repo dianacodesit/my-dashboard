@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>time-block planner · diana's board</title>
+<title>planner · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css"/>
+<link rel="stylesheet" href="nav-shared.css?v=navclear"/>
 <style>
   :root {
     --ink: #1c140e;
@@ -18,7 +18,7 @@
   body {
     font-family: "Newsreader", Georgia, serif;
     color: var(--ink);
-    background: #2a2218;
+    background: #f4ead8;
   }
   #page-bg-img {
     position: fixed; inset: 0; width: 100%; height: 100%;
@@ -26,8 +26,8 @@
   }
   .page-shell {
     position: relative; z-index: 1;
-    padding: 56px 20px 80px;
-    max-width: 760px;
+    padding: 56px 80px 80px;
+    max-width: 1180px;
     margin: 0 auto;
   }
   header { text-align: center; margin-bottom: 28px; }
@@ -36,8 +36,8 @@
     font-size: 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #f7efe4;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+    color: #3a2e24;
+    text-shadow: 0 1px 10px rgba(248,241,226,0.9);
     margin-bottom: 8px;
   }
   h1 {
@@ -46,8 +46,8 @@
     font-weight: 400;
     letter-spacing: 0.03em;
     line-height: 1.08;
-    color: #f7efe4;
-    text-shadow: 0 2px 22px rgba(0,0,0,0.55);
+    color: #1c140e;
+    text-shadow: 0 1px 14px rgba(248,241,226,0.95);
   }
   .page-note {
     margin-top: 8px;
@@ -55,20 +55,20 @@
     font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(247,239,228,0.72);
+    color: rgba(58,46,36,0.7);
   }
-  .timeline { position: relative; padding-left: 22px; }
+  .timeline { position: relative; padding-left: 0; }
   .timeline::before {
     content: "";
-    position: absolute; left: 3px; top: 8px; bottom: 8px;
-    width: 1px; background: rgba(247,239,228,0.28);
+    position: absolute; left: -56px; top: 8px; bottom: 8px;
+    width: 1px; background: rgba(28,20,14,0.22);
   }
   .day-block { position: relative; margin-bottom: 22px; }
   .day-dot {
-    position: absolute; left: -22px; top: 18px;
+    position: absolute; left: -60px; top: 18px;
     width: 8px; height: 8px; border-radius: 50%;
-    background: #f7efe4; cursor: pointer; z-index: 2;
-    box-shadow: 0 0 0 4px rgba(247,239,228,0.12);
+    background: #1c140e; cursor: pointer; z-index: 2;
+    box-shadow: 0 0 0 4px rgba(28,20,14,0.1);
   }
   .day-card {
     background: rgba(250,246,238,0.88);
@@ -88,10 +88,53 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+  .day-block.collapsed {
+    position: absolute;
+    left: -92px;
+    top: 0;
+    height: 0;
+    margin: 0;
+    min-height: 0;
+    z-index: 3;
+  }
   .day-block.collapsed .day-body { display: none; }
-  .day-block.collapsed .day-card { background: transparent; border: 0; box-shadow: none; }
-  .day-block.collapsed .day-card-header { border: 0; padding-left: 0; }
-  .day-block.collapsed .day-date { color: #f7efe4; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+  .day-block.collapsed .day-card {
+    position: absolute;
+    left: 0;
+    top: calc(8px + (var(--chip-i, 0) * 40px));
+    background: transparent; border: 0; box-shadow: none;
+    display: inline-flex; width: auto;
+  }
+  .day-block.collapsed .day-card-header { border: 0; padding: 0; }
+  .day-block.collapsed .day-date {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(250,246,238,0.94);
+    border: 1px solid rgba(28,20,14,0.2);
+    color: #1c140e;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    text-shadow: none;
+    box-shadow: 0 4px 14px rgba(8,4,2,0.16);
+  }
+  .day-block.collapsed:hover .day-date {
+    color: #1c140e;
+    background: #fffaf2;
+  }
+  .day-block.collapsed .day-dot { display: none; }
+  .day-block.today-block:not(.collapsed) { opacity: 1; }
+
+  .time-item { cursor: grab; touch-action: none; }
+  .time-item.is-dragging { opacity: 0.4; }
+  .time-item .t { user-select: text; }
+  .time-item.is-dragging .t { user-select: none; }
+  .time-row.drop-on { background: rgba(246,234,216,0.55); outline: 1px solid rgba(28,20,14,0.12); }
 
   .agenda-dump {
     margin: 14px 18px 8px;
@@ -206,16 +249,16 @@
 </style>
 </head>
 <body>
-<img id="page-bg-img" src="manus-storage/planner-bg-timeblock.jpg?v=blocks" alt=""/>
+<img id="page-bg-img" src="manus-storage/planner-bg-timewarp-light.jpg?v=light" alt=""/>
 <main class="page-shell">
   <header>
-    <p class="eyebrow">hour by hour</p>
-    <h1>time-block planner</h1>
-    <p class="page-note">the day in blocks</p>
+    <p class="eyebrow">when time folds</p>
+    <h1>planner</h1>
+    <p class="page-note">hours warping into one another</p>
   </header>
   <div class="timeline" id="agendaRail"></div>
 </main>
-<script src="nav-shared.js?v=timeblock"></script>
+<script src="nav-shared.js?v=navplanner"></script>
 <script>
 (function(){
   var START = '2026-08-25';
@@ -225,6 +268,7 @@
   var SAVE_KEY = 'agenda_times_v1';
   var OLD_KEY = 'agenda_page_v1';
   var days = {};
+  var openIso = todayStr();
 
   function pad(n){ return String(n).padStart(2,'0'); }
   function todayStr(){
@@ -240,6 +284,11 @@
     var p = iso.split('-').map(Number);
     var t = new Date(p[0], p[1]-1, p[2]);
     return MONTHS[t.getMonth()] + ' ' + t.getDate() + ' · ' + WD[t.getDay()];
+  }
+  function chipLabel(iso){
+    var p = iso.split('-').map(Number);
+    var t = new Date(p[0], p[1]-1, p[2]);
+    return MONTHS[t.getMonth()] + ' ' + t.getDate();
   }
   function hourLabel(h){
     if(h === 12) return '12 PM';
@@ -399,12 +448,59 @@
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(days)); } catch(e){}
   }
 
+  function moveItem(fromIso, fromHour, id, toIso, toHour){
+    fromHour = parseInt(fromHour, 10);
+    toHour = parseInt(toHour, 10);
+    if(!id || !fromIso || !toIso) return;
+    if(fromIso === toIso && fromHour === toHour) return;
+    var src = ensureDay(fromIso)[fromHour] || [];
+    var idx = -1;
+    src.forEach(function(it, i){ if(it.id === id) idx = i; });
+    if(idx < 0) return;
+    var item = src.splice(idx, 1)[0];
+    ensureDay(toIso);
+    if(!days[toIso][toHour]) days[toIso][toHour] = [];
+    days[toIso][toHour].push(item);
+    save();
+    render();
+  }
+  function hourRowUnder(x, y){
+    var els = document.elementsFromPoint(x, y);
+    for(var i = 0; i < els.length; i++){
+      if(els[i].closest && els[i].closest('.time-item.is-dragging')) continue;
+      var hit = els[i].closest && els[i].closest('.time-row');
+      if(hit) return hit;
+    }
+    return null;
+  }
+  function bindHourDrop(row, iso){
+    row.addEventListener('dragover', function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      row.classList.add('drop-on');
+    });
+    row.addEventListener('dragleave', function(e){
+      if(!row.contains(e.relatedTarget)) row.classList.remove('drop-on');
+    });
+    row.addEventListener('drop', function(e){
+      e.preventDefault();
+      row.classList.remove('drop-on');
+      var raw = e.dataTransfer.getData('text/plain');
+      if(!raw) return;
+      try {
+        var data = JSON.parse(raw);
+        moveItem(data.iso, data.hour, data.id, iso, row.getAttribute('data-hour'));
+      } catch(err){}
+    });
+  }
+
   function renderItem(iso, hour, it){
     var row = document.createElement('div');
     row.className = 'time-item';
     row.setAttribute('data-id', it.id);
     row.innerHTML = '<span class="t" contenteditable="true" spellcheck="false"></span><button class="x" type="button" aria-label="remove">×</button>';
     row.querySelector('.t').textContent = it.text;
+    row.querySelector('.t').setAttribute('draggable', 'false');
     row.querySelector('.t').addEventListener('blur', function(){
       var next = (this.textContent||'').replace(/\s+/g,' ').trim();
       if(!next){
@@ -419,9 +515,56 @@
       days[iso][hour] = days[iso][hour].filter(function(x){ return x.id !== it.id; });
       save(); render();
     });
+    var origin = null;
+    var dragging = false;
+    var didDrag = false;
+    row.addEventListener('pointerdown', function(e){
+      if(e.button !== 0) return;
+      if(e.target.closest && e.target.closest('.x')) return;
+      if(document.activeElement === row.querySelector('.t')) return;
+      origin = { x: e.clientX, y: e.clientY, iso: iso, hour: hour, id: it.id };
+      dragging = false;
+      didDrag = false;
+      try { row.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    row.addEventListener('pointermove', function(e){
+      if(!origin) return;
+      var dx = e.clientX - origin.x, dy = e.clientY - origin.y;
+      if(!dragging && (dx * dx + dy * dy) < 36) return;
+      if(!dragging){
+        dragging = true;
+        didDrag = true;
+        row.classList.add('is-dragging');
+        if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      }
+      document.querySelectorAll('.time-row.drop-on').forEach(function(el){ el.classList.remove('drop-on'); });
+      var hit = hourRowUnder(e.clientX, e.clientY);
+      if(hit) hit.classList.add('drop-on');
+    });
+    function endPointerDrag(e){
+      if(!origin) return;
+      document.querySelectorAll('.time-row.drop-on').forEach(function(el){ el.classList.remove('drop-on'); });
+      row.classList.remove('is-dragging');
+      if(dragging){
+        var hit = hourRowUnder(e.clientX, e.clientY);
+        if(hit){
+          var toIso = hit.closest('.day-block').getAttribute('data-date');
+          moveItem(origin.iso, origin.hour, origin.id, toIso, hit.getAttribute('data-hour'));
+        }
+      }
+      origin = null;
+      dragging = false;
+    }
+    row.addEventListener('pointerup', endPointerDrag);
+    row.addEventListener('pointercancel', endPointerDrag);
+    row.addEventListener('click', function(e){
+      if(e.target.closest && e.target.closest('.x')) return;
+      if(didDrag){ e.preventDefault(); return; }
+      row.querySelector('.t').focus();
+    });
     return row;
   }
-  function renderDay(iso, isToday){
+  function renderDay(iso, isToday, isOpen){
     var blk = document.createElement('div');
     blk.className = 'day-block' + (isToday ? ' today-block' : '');
     blk.setAttribute('data-date', iso);
@@ -435,14 +578,14 @@
         '<div class="day-card-header"><span class="day-date"></span></div>' +
         '<div class="day-body">' +
           '<div class="agenda-dump">' +
-            '<p class="agenda-dump-label">brain dump</p>' +
-            '<textarea class="agenda-dump-input" rows="3" placeholder="one thing per line — they’ll land on a time today"></textarea>' +
+            '<p class="agenda-dump-label">anytime</p>' +
+            '<textarea class="agenda-dump-input" rows="3" placeholder="no set time — one thing per line"></textarea>' +
             '<div class="agenda-dump-row"><button type="button" class="agenda-dump-go">sort onto this day</button><span class="agenda-dump-status"></span></div>' +
           '</div>' +
           '<div class="time-grid">'+hoursHtml+'</div>' +
         '</div>' +
       '</div>';
-    blk.querySelector('.day-date').textContent = labelFor(iso);
+    blk.querySelector('.day-date').textContent = isOpen ? labelFor(iso) : chipLabel(iso);
     HOURS.forEach(function(h){
       var slot = blk.querySelector('.time-row[data-hour="'+h+'"] .time-slot');
       (d[h]||[]).forEach(function(it){ slot.appendChild(renderItem(iso, h, it)); });
@@ -460,6 +603,7 @@
         save(); render();
       });
       slot.appendChild(add);
+      bindHourDrop(blk.querySelector('.time-row[data-hour="'+h+'"]'), iso);
     });
     var ta = blk.querySelector('.agenda-dump-input');
     var go = blk.querySelector('.agenda-dump-go');
@@ -479,12 +623,13 @@
     });
     blk.querySelector('.day-dot').addEventListener('click', function(e){
       e.stopPropagation();
-      blk.classList.toggle('collapsed');
-      try{
-        var set = new Set(JSON.parse(localStorage.getItem('agenda-collapsed-days')||'[]'));
-        if(blk.classList.contains('collapsed')) set.add(iso); else set.delete(iso);
-        localStorage.setItem('agenda-collapsed-days', JSON.stringify(Array.from(set)));
-      }catch(err){}
+      openIso = iso;
+      render();
+    });
+    blk.querySelector('.day-date').addEventListener('click', function(e){
+      e.stopPropagation();
+      openIso = iso;
+      render();
     });
     return blk;
   }
@@ -492,20 +637,20 @@
     var rail = document.getElementById('agendaRail');
     var last = todayStr();
     if(last < START) last = START;
+    if(openIso > last) openIso = last;
     rail.innerHTML = '';
     var iso = START;
+    var chipI = 0;
     while(iso <= last){
       ensureDay(iso);
-      rail.appendChild(renderDay(iso, iso === last));
+      var blk = renderDay(iso, iso === last, iso === openIso);
+      if(iso !== openIso){
+        blk.classList.add('collapsed');
+        blk.style.setProperty('--chip-i', String(chipI++));
+      }
+      rail.appendChild(blk);
       iso = isoAdd(iso, 1);
     }
-    try{
-      var collapsed = JSON.parse(localStorage.getItem('agenda-collapsed-days')||'[]');
-      collapsed.forEach(function(d){
-        var b = document.querySelector('.day-block[data-date="'+d+'"]');
-        if(b && !b.classList.contains('today-block')) b.classList.add('collapsed');
-      });
-    }catch(e){}
   }
 
   load();
