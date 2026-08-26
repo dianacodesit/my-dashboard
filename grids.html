@@ -6,7 +6,7 @@
 <title>grids · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&family=DM+Mono:wght@300;400&family=Cinzel:wght@500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="nav-shared.css"/>
-<link rel="stylesheet" href="icon-grid.css?v=freeform"/>
+<link rel="stylesheet" href="icon-grid.css?v=headers2"/>
 <style>
 :root { --cream:#F5F0E8; --sage:#8A9E85; --dark:#2A2A25; --warm:#C4A882; --dusty:#B5A99A; --light-sage:#D4DDD1; --accent:#7A8C6E; }
 html, body { margin:0; padding:0; }
@@ -23,14 +23,13 @@ body.copied-page { font-family: Newsreader, serif; color:#2A2A25; }
 <img id="page-bg-img" src="manus-storage/_339ab459.jpg" style="position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;" alt=""/>
 <div id="page-bg-wrapper" style="padding:48px 24px 80px; margin:0; min-height:100vh; box-sizing:border-box; position:relative; z-index:1;">
   <header>
-    <p class="eyebrow">copied from everything</p>
     <h1>grids</h1>
-    <p class="page-note">icon cards · sections, not polaroids</p>
+    <p class="page-note">by section</p>
   </header>
 <div id="icon-grid-host">
 <div class="grid icon-task-grid" id="iconTaskGrid">
 <!-- 1. BOA -->
-<div class="section-label">banking · legal</div>
+<div class="section-label">banking legal</div>
 <div class="card" id="c1"><div class="card-visual theme-warm"><button class="done-check" onclick="toggle('c1',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><circle cx="45" cy="45" r="32" stroke="#C4A882" stroke-dasharray="4 3" stroke-width="1"></circle><text fill="#2A2A25" font-family="Georgia" font-size="11" font-style="italic" text-anchor="middle" x="45" y="38">resolve</text><text fill="#C4A882" font-family="monospace" font-size="18" text-anchor="middle" x="45" y="52">$$$</text><line stroke="#C4A882" stroke-width="0.5" x1="28" x2="62" y1="60" y2="60"></line><text fill="#B5A99A" font-family="monospace" font-size="8" text-anchor="middle" x="45" y="70">dispute</text></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">bank of america</p><p class="task-title" contenteditable="false">Resolve dispute</p><p class="task-desc"><label class="subtask">call to follow up on dispute<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">↳ escalate to branch if needed<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">restore account to target balance</span><span class="task-target" contenteditable="false">~$227k savings</span></div></div>
 </div>
@@ -39,12 +38,12 @@ body.copied-page { font-family: Newsreader, serif; color:#2A2A25; }
 <div class="card-body"><p class="task-num" contenteditable="false">chase · wells fargo</p><p class="task-title" contenteditable="false">Deposit check</p><p class="task-desc"><label class="subtask done-subtask">$3,500 check from WF<input checked="" onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">deposit check at Chase<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">increase accounts balances</span><span class="task-target" contenteditable="false">~$22k checking</span></div></div>
 </div>
 <!-- 3. Adderall -->
-<div class="section-label">health · pharmacy</div>
+<div class="section-label">health pharmacy</div>
 <div class="card single" id="c3"><div class="card-visual theme-lavender"><button class="done-check" onclick="toggle('c3',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="#E8E2F4" height="18" rx="9" stroke="#9B8EC4" stroke-width="1" width="40" x="25" y="36"></rect><line stroke="#9B8EC4" stroke-width="0.75" x1="45" x2="45" y1="36" y2="54"></line><text fill="#9B8EC4" font-family="monospace" font-size="9" text-anchor="middle" x="35" y="49">Rx</text><text fill="#C4BADE" font-family="monospace" font-size="9" text-anchor="middle" x="55" y="49">×3</text><ellipse cx="30" cy="66" fill="none" rx="6" ry="3.5" stroke="#C4BADE" stroke-width="0.75"></ellipse><ellipse cx="45" cy="68" fill="none" rx="6" ry="3.5" stroke="#C4BADE" stroke-width="0.75"></ellipse><ellipse cx="60" cy="66" fill="none" rx="6" ry="3.5" stroke="#C4BADE" stroke-width="0.75"></ellipse><text fill="#7A6FA0" font-family="Georgia" font-size="10" font-style="italic" text-anchor="middle" x="45" y="24">fill before leaving</text></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">pharmacies</p><p class="task-title" contenteditable="false">Fill Adderall IR Rx</p><p class="task-desc"><label class="subtask">Costco<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Walgreens<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">have sufficient supply for Doha</span><span class="task-target" contenteditable="false">2–3 month supply</span></div></div>
 </div>
 <!-- 4. Hair -->
-<div class="section-label">beauty · shopping</div>
+<div class="section-label">beauty shopping</div>
 <div class="card single" id="c4"><div class="card-visual theme-blush"><button class="done-check" onclick="toggle('c4',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><path d="M30 20 Q38 35 34 55 Q32 65 36 75" fill="none" stroke="#C4A882" stroke-linecap="round" stroke-width="1.5"></path><path d="M38 18 Q46 34 42 54 Q40 65 44 74" fill="none" stroke="#B5956A" stroke-linecap="round" stroke-width="1"></path><path d="M46 19 Q52 36 50 56 Q48 66 52 74" fill="none" stroke="#C4A882" stroke-linecap="round" stroke-width="1.5"></path><path d="M54 22 Q58 38 56 57 Q55 66 58 74" fill="none" stroke="#D4B896" stroke-linecap="round" stroke-width="1"></path><circle cx="68" cy="28" fill="none" r="6" stroke="#B5A99A" stroke-width="0.75"></circle><line stroke="#B5A99A" stroke-width="0.75" x1="64" x2="72" y1="24" y2="32"></line><line stroke="#B5A99A" stroke-width="0.75" x1="64" x2="72" y1="32" y2="24"></line></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">beauty</p><p class="task-title" contenteditable="false">Hair appointment</p><p class="task-desc"><label class="subtask">book extension / styling appointment<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">feel your best before the move</span><span class="task-target" contenteditable="false">book in LA</span></div></div>
 </div>
@@ -54,12 +53,12 @@ body.copied-page { font-family: Newsreader, serif; color:#2A2A25; }
 <div class="card-body"><p class="task-num" contenteditable="false">storage</p><p class="task-title" contenteditable="false">Move storage unit</p><p class="task-desc"><label class="subtask done-subtask">OC units: move / consolidate<input checked="" onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask done-subtask">DTLA: vacate A2023 · N Main<input checked="" onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">consolidate and clear space</span><span class="task-target" contenteditable="false">Extra Space OC + DTLA</span></div></div>
 </div>
 <!-- 6. EBT -->
-<div class="section-label">benefits · social</div>
+<div class="section-label">benefits social</div>
 <div class="card" id="c6"><div class="card-visual theme-mint"><button class="done-check" onclick="toggle('c6',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="#E4F0E4" height="34" rx="4" stroke="#8A9E85" stroke-width="1" width="54" x="18" y="32"></rect><rect fill="#D4DDD1" height="8" width="54" x="18" y="40"></rect><rect fill="none" height="8" rx="1" stroke="#8A9E85" stroke-width="0.75" width="12" x="26" y="54"></rect><text fill="#8A9E85" font-family="monospace" font-size="9" text-anchor="middle" x="62" y="61">EBT</text><line stroke="#8A9E85" stroke-linecap="round" stroke-width="1" x1="45" x2="45" y1="20" y2="28"></line><polyline fill="none" points="40,24 45,29 50,24" stroke="#8A9E85" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></polyline><text fill="#7A8C6E" font-family="Georgia" font-size="9" font-style="italic" text-anchor="middle" x="45" y="16">retrieve funds</text></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">benefits</p><p class="task-title" contenteditable="false">Retrieve EBT funds</p><p class="task-desc"><label class="subtask">reclaim benefits withdrawn (due to account inactivity)<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">reclaim what's yours</span><span class="task-target" contenteditable="false">CalFresh · SNAP</span></div></div>
 </div>
 <!-- 7. iPhone 16 -->
-<div class="section-label">devices · repairs</div>
+<div class="section-label">devices repairs</div>
 <div class="card" id="c7"><div class="card-visual theme-blush"><button class="done-check" onclick="toggle('c7',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="none" height="46" rx="4" stroke="#C4A882" stroke-width="1" width="26" x="32" y="15"></rect><line stroke="#C4A882" stroke-width="0.75" x1="32" x2="58" y1="24" y2="24"></line><line stroke="#C4A882" stroke-width="0.75" x1="32" x2="58" y1="52" y2="52"></line><circle cx="45" cy="57" fill="none" r="2" stroke="#C4A882" stroke-width="0.75"></circle><line stroke="#B5956A" stroke-dasharray="2 2" stroke-linecap="round" stroke-width="1" x1="45" x2="45" y1="65" y2="75"></line><polyline fill="none" points="40,70 45,76 50,70" stroke="#B5956A" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></polyline></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">repairs</p><p class="task-title" contenteditable="false">Send iPhone 16</p><p class="task-desc"><label class="subtask">ship to MDRepairs to recover photos<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">recover lost photos</span><span class="task-target" contenteditable="false">MDRepairs</span></div></div>
 </div>
@@ -166,7 +165,7 @@ body.copied-page { font-family: Newsreader, serif; color:#2A2A25; }
 <div class="card-body"><p class="task-num" contenteditable="false">scholarships · aid</p><p class="task-title" contenteditable="false">Secure funding</p><p class="task-desc"><label class="subtask">Complete SCLA onboarding<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Apply to Pepperdine scholarships<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Research external MFT scholarships<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">CAMFT student grants<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">reduce out-of-pocket tuition</span><span class="task-target" contenteditable="false">GSEP · MFT</span></div></div>
 </div>
 <!-- 36. CFPB complaint -->
-<div class="section-label">advocacy · legal</div>
+<div class="section-label">advocacy legal</div>
 <div class="card" id="c36"><div class="card-visual theme-sage"><button class="done-check" onclick="toggle('c36',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><rect fill="#eef3eb" height="46" rx="2" stroke="#8A9E85" stroke-width="1" width="34" x="28" y="22"></rect><line stroke="#8A9E85" stroke-width="0.75" x1="34" x2="56" y1="32" y2="32"></line><line stroke="#8A9E85" stroke-width="0.75" x1="34" x2="56" y1="38" y2="38"></line><line stroke="#8A9E85" stroke-width="0.75" x1="34" x2="52" y1="44" y2="44"></line><line stroke="#8A9E85" stroke-width="0.75" x1="34" x2="56" y1="50" y2="50"></line><circle cx="58" cy="60" fill="#C4A882" r="7" stroke="#8A9E85" stroke-width="0.75"></circle><text fill="white" font-family="Georgia" font-size="8" font-weight="bold" text-anchor="middle" x="58" y="63">!</text></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">complaint</p><p class="task-title" contenteditable="false">File CFPB complaint</p><p class="task-desc"><label class="subtask">Gather BOA dispute documentation<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Draft complaint narrative<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Submit at consumerfinance.gov<input onchange="updateSubtask(this)" type="checkbox"/></label><br/><label class="subtask">Save confirmation number<input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">escalate if BOA denies appeal</span><span class="task-target" contenteditable="false">CFPB · federal</span></div></div>
 </div>
@@ -221,9 +220,7 @@ body.copied-page { font-family: Newsreader, serif; color:#2A2A25; }
 <div class="card" id="c48"><div class="card-visual theme-warm"><button class="done-check" onclick="toggle('c48',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><circle cx="45" cy="45" fill="#fff" r="22" stroke="#C4A882" stroke-width="1"></circle><path d="M30 50 L45 30 L60 50 Z" fill="none" stroke="#C4A882" stroke-width="0.75"></path><circle cx="45" cy="44" fill="#F0E6CE" r="3"></circle><line stroke="#C4A882" stroke-width="0.5" x1="38" x2="52" y1="55" y2="55"></line><text fill="#B5A99A" font-family="monospace" font-size="7" text-anchor="middle" x="45" y="78">events</text></svg></div>
 <div class="card-body"><p class="task-num" contenteditable="false">events</p><p class="task-title" contenteditable="false">Events</p><p class="task-desc"><label class="subtask">Fever Hans Zimmer<a class="subtask-link" href="https://feverup.com/m/533634?utm_source=Instagram_Feed&amp;utm_medium=ad_smartly_cbo&amp;utm_campaign=533634_sna&amp;ad_id=120249664301540715&amp;utm_id=120244824089240715&amp;utm_content=120249664301540715&amp;utm_term=120244824117900715&amp;fbclid=PAZnRzaARtQnZleHRuA2FlbQEwAGFkaWQBqzZvC95Xy3NydGMGYXBwX2lkDzEyNDAyNDU3NDI4NzQxNAABp_LTRW6L5JYRsKB95m2cArh6zS8Xm2Y-4ZHw2XGRv0Q65m2FgSLes9b-hMEv_aem_fqEOLz2_lmphmCyWr2J9sQ&amp;campaign_id=120244824089240715" onclick="event.stopPropagation()" rel="noopener" target="_blank" title="open Fever event">🔗</a><input onchange="updateSubtask(this)" type="checkbox"/></label></p><div class="task-meta"><span class="task-goal" contenteditable="false">cultural enrichment</span><span class="task-target" contenteditable="false">—</span></div></div>
 </div>
-<div class="section-label collapsible-header" onclick="toggleSection('after-arrival')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
-<span class="chevron" id="chevron-after-arrival">▾</span> doha
-  </div>
+<div class="section-label collapsible-header" onclick="toggleSection('after-arrival')"><span class="chevron" id="chevron-after-arrival">▾</span> doha</div>
 <div class="collapsible-content" id="section-after-arrival">
 <!-- 39. Join professional organizations -->
 <div class="card" id="c39"><div class="card-visual theme-sage"><button class="done-check" onclick="toggle('c39',this)"><svg class="checkmark" fill="none" viewbox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg></button><svg fill="none" height="90" viewbox="0 0 90 90" width="90"><circle cx="45" cy="32" fill="none" r="6" stroke="#8A9E85" stroke-width="1"></circle><circle cx="28" cy="42" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><circle cx="62" cy="42" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><circle cx="35" cy="58" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><circle cx="55" cy="58" fill="none" r="5" stroke="#8A9E85" stroke-width="1"></circle><line stroke="#C4A882" stroke-width="0.75" x1="45" x2="33" y1="38" y2="42"></line><line stroke="#C4A882" stroke-width="0.75" x1="45" x2="57" y1="38" y2="42"></line><line stroke="#C4A882" stroke-width="0.75" x1="32" x2="35" y1="47" y2="53"></line><line stroke="#C4A882" stroke-width="0.75" x1="58" x2="55" y1="47" y2="53"></line><line stroke="#C4A882" stroke-width="0.75" x1="40" x2="50" y1="58" y2="58"></line><line stroke="#C4A882" stroke-width="0.75" x1="33" x2="57" y1="42" y2="42"></line></svg></div>
@@ -233,7 +230,7 @@ body.copied-page { font-family: Newsreader, serif; color:#2A2A25; }
 </div>
 </div>
 </div>
-<script src="nav-shared.js"></script>
+<script src="nav-shared.js?v=timeblock"></script>
 <script>
 function saveState(){
   try {
@@ -262,6 +259,6 @@ function toggleSection(id){
   if (chevron) chevron.classList.toggle('closed', collapsed);
 }
 </script>
-<script src="icon-grid.js?v=freeform"></script>
+<script src="icon-grid.js?v=cluster2"></script>
 </body>
 </html>

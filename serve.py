@@ -37,11 +37,16 @@ BRAIN_END = "</script><!--/brain-dump-data-->"
 ALLOWED_SECTIONS = {
     "body",
     "life",
+    "shopping",
     "finances",
     "leverage",
     "ambition",
     "presence",
     "inbox",
+    "later",
+    "cancelled",
+    "deferred",
+    "review",
 }
 
 
