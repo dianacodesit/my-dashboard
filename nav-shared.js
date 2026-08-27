@@ -13,6 +13,7 @@
     { href: 'lifestyle.html', label: 'lifestyle', group: 'wip' },
     { href: 'planner.html', label: 'planner', group: 'main' },
     { href: 'accomplishments.html', label: 'accomplishments', group: 'main' },
+    { href: 'striving.html', label: 'Striving', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
     { href: 'dimensions.html', label: 'dimensions', group: 'main' },
     { href: 'grids.html', label: 'grids', group: 'main' },
@@ -21,6 +22,7 @@
     { href: 'brain-dump.html', label: 'brain dump', group: 'main' },
     { href: 'adhd.html', label: 'ADHD / neurodiversity', group: 'main' },
     { href: 'research-proposals.html', label: 'research proposals', group: 'main' },
+    { href: 'curriculum-vitae.html', label: 'Curriculum Vitae', group: 'main' },
     { href: 'business-ideas.html', label: 'business ideas', group: 'main' },
     { href: 'power-opportunities.html', label: 'power opportunities', group: 'main' },
     { href: 'quantum-consciousness.html', label: 'quantum consciousness', group: 'main' },
@@ -126,7 +128,7 @@
       '#nav-sidebar nav a.is-insert { box-shadow: inset 0 2px 0 #8a9e85; }' +
       'html body #hamburger-menu, html body.enh-dark #hamburger-menu { background: transparent !important; box-shadow: none !important; }' +
       'html body #hamburger-menu span, html body.enh-dark #hamburger-menu span { box-shadow: none !important; }' +
-      'html body #nav-sidebar, html body.enh-dark #nav-sidebar { background: transparent !important; box-shadow: none !important; border-right: 1px solid rgba(255,255,255,0.12) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }' +
+      'html body #nav-sidebar, html body.enh-dark #nav-sidebar { background: linear-gradient(180deg, rgba(48, 28, 38, 0.38) 0%, rgba(32, 20, 28, 0.32) 100%) !important; box-shadow: 8px 0 28px rgba(8, 4, 2, 0.28) !important; border-right: 1px solid rgba(243, 230, 208, 0.18) !important; backdrop-filter: blur(5px) saturate(1.05) !important; -webkit-backdrop-filter: blur(5px) saturate(1.05) !important; }' +
       'html body #nav-sidebar nav a, html body.enh-dark #nav-sidebar nav a { color: #f3e6d0 !important; text-shadow: 0 1px 2px rgba(20,12,6,0.5), 0 2px 8px rgba(20,12,6,0.3); }' +
       'html body #nav-sidebar h2 { display: none !important; }' +
       '.nav-drag-ghost { position: fixed; z-index: 200040; pointer-events: none; padding: 8px 16px; background: #F5F0E8; border: 1px solid rgba(196,168,130,0.55); box-shadow: 0 10px 24px rgba(20,12,6,0.18); font-family: "Newsreader", Georgia, serif; font-size: 17px; color: #3a3530; white-space: nowrap; }';

@@ -2,6 +2,7 @@
    cards stay close, and dragging one makes the others accommodate. */
 (function () {
   var POS_KEY = "grids_freeform_pos_v3";
+  var SEC_KEY = "grids_card_section_v1";
   var zTop = 6;
   var GAP = 16;
   var FOLLOW_R = 560;
@@ -25,6 +26,13 @@
   }
   function savePos(map) {
     try { localStorage.setItem(POS_KEY, JSON.stringify(map)); } catch (e) {}
+  }
+  function loadSections() {
+    try { return JSON.parse(localStorage.getItem(SEC_KEY) || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+  function saveSections(map) {
+    try { localStorage.setItem(SEC_KEY, JSON.stringify(map)); } catch (e) {}
   }
 
   function findGrid() {
@@ -208,6 +216,8 @@
 
   function persistCanvas(canvas) {
     var saved = loadPos();
+    var secs = loadSections();
+    var title = sectionTitle(canvas);
     queryCards(canvas).forEach(function (card) {
       if (!card.id) return;
       saved[card.id] = {
@@ -216,8 +226,31 @@
         r: parseFloat((card.style.getPropertyValue("--card-rot") || "0").replace("deg", "")) || 0,
         w: parseFloat(card.style.width) || card.offsetWidth
       };
+      if (title) secs[card.id] = title;
     });
     savePos(saved);
+    saveSections(secs);
+  }
+
+  function applySavedSections(grid) {
+    var secs = loadSections();
+    if (!secs || !Object.keys(secs).length) return;
+    var byTitle = {};
+    Array.from(grid.querySelectorAll(":scope > .grid-section")).forEach(function (sec) {
+      var canvas = sec.querySelector(":scope > .grid-section-cards");
+      var title = sectionTitle(canvas);
+      if (canvas && title) byTitle[title.toLowerCase()] = canvas;
+    });
+    Object.keys(secs).forEach(function (id) {
+      var card = document.getElementById(id);
+      if (!card || !grid.contains(card)) return;
+      var want = String(secs[id] || "").toLowerCase();
+      var dest = byTitle[want];
+      if (!dest) return;
+      if (card.closest(".grid-section-cards") === dest) return;
+      dest.appendChild(card);
+      setCardSectionLabel(card, dest);
+    });
   }
 
   function stepForces(nodes, pinnedEl, W, opts) {
@@ -355,6 +388,82 @@
     savePos(saved);
   }
 
+  function sectionTitle(canvas) {
+    var sec = canvas && canvas.closest(".grid-section");
+    var label = sec && sec.querySelector(".section-label");
+    if (!label) return "";
+    return String(label.textContent || "")
+      .replace(/[▾▾▲△]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function setCardSectionLabel(card, canvas) {
+    var title = sectionTitle(canvas);
+    if (!title) return;
+    var num = card.querySelector(".task-num");
+    if (num) num.textContent = title;
+  }
+
+  function clearDropTargets(grid) {
+    Array.from(grid.querySelectorAll(".grid-section-cards.is-drop-target")).forEach(function (el) {
+      el.classList.remove("is-drop-target");
+    });
+  }
+
+  function canvasAtPoint(grid, clientX, clientY) {
+    var list = Array.from(grid.querySelectorAll(":scope > .grid-section > .grid-section-cards"));
+    var hit = null;
+    var best = 1e12;
+    list.forEach(function (canvas) {
+      var sec = canvas.closest(".grid-section");
+      var r = (sec || canvas).getBoundingClientRect();
+      var pad = 28;
+      if (clientX < r.left - pad || clientX > r.right + pad ||
+          clientY < r.top - pad || clientY > r.bottom + pad) return;
+      var cx = (r.left + r.right) / 2;
+      var cy = (r.top + r.bottom) / 2;
+      var d = Math.hypot(clientX - cx, clientY - cy);
+      if (d < best) {
+        best = d;
+        hit = canvas;
+      }
+    });
+    return hit;
+  }
+
+  function settleCanvas(canvas, pinnedEl) {
+    if (!canvas) return;
+    var W = canvasWidth(canvas);
+    var nodes = readNodes(canvas);
+    var k;
+    for (k = 0; k < 14; k++) stepForces(nodes, pinnedEl || null, W, { pad: GAP, attract: true });
+    applyNodes(nodes);
+    persistCanvas(canvas);
+    fitCanvas(canvas, nodes);
+  }
+
+  function transferCard(card, fromCanvas, toCanvas, clientX, clientY, grabDx, grabDy) {
+    if (!card || !toCanvas || fromCanvas === toCanvas) return fromCanvas;
+    if (fromCanvas) {
+      queryCards(fromCanvas).forEach(function (c) { c.classList.remove("is-relating"); });
+    }
+    toCanvas.appendChild(card);
+    setCardSectionLabel(card, toCanvas);
+    var crect = toCanvas.getBoundingClientRect();
+    var x = clientX - crect.left - grabDx;
+    var y = clientY - crect.top - grabDy;
+    x = Math.max(-20, x);
+    y = Math.max(0, y);
+    card.style.left = x + "px";
+    card.style.top = y + "px";
+    queryCards(toCanvas).forEach(function (c) {
+      if (c !== card) c.classList.add("is-relating");
+    });
+    if (fromCanvas) settleCanvas(fromCanvas, null);
+    return toCanvas;
+  }
+
   function bindDrag(grid) {
     if (grid.getAttribute("data-drag") === "1") return;
     grid.setAttribute("data-drag", "1");
@@ -370,6 +479,7 @@
       dragging = {
         card: card,
         canvas: canvas,
+        originCanvas: canvas,
         dx: e.clientX - rect.left,
         dy: e.clientY - rect.top,
         lastX: parseFloat(card.style.left) || 0,
@@ -385,6 +495,25 @@
     });
     grid.addEventListener("pointermove", function (e) {
       if (!dragging) return;
+      var target = canvasAtPoint(grid, e.clientX, e.clientY) || dragging.canvas;
+      if (target !== dragging.canvas) {
+        dragging.canvas = transferCard(
+          dragging.card,
+          dragging.canvas,
+          target,
+          e.clientX,
+          e.clientY,
+          dragging.dx,
+          dragging.dy
+        );
+      }
+      clearDropTargets(grid);
+      if (dragging.canvas !== dragging.originCanvas) {
+        dragging.canvas.classList.add("is-drop-target");
+      } else if (target && target !== dragging.originCanvas) {
+        target.classList.add("is-drop-target");
+      }
+
       var canvas = dragging.canvas;
       var W = canvasWidth(canvas);
       var crect = canvas.getBoundingClientRect();
@@ -414,15 +543,15 @@
       if (!dragging) return;
       var card = dragging.card;
       var canvas = dragging.canvas;
-      var W = canvasWidth(canvas);
+      var origin = dragging.originCanvas;
+      clearDropTargets(grid);
       card.classList.remove("is-dragging");
       queryCards(canvas).forEach(function (c) { c.classList.remove("is-relating"); });
-      var nodes = readNodes(canvas);
-      var k;
-      for (k = 0; k < 14; k++) stepForces(nodes, card, W, { pad: GAP, attract: true });
-      applyNodes(nodes);
-      persistCanvas(canvas);
-      fitCanvas(canvas, nodes);
+      if (origin && origin !== canvas) {
+        queryCards(origin).forEach(function (c) { c.classList.remove("is-relating"); });
+        settleCanvas(origin, null);
+      }
+      settleCanvas(canvas, card);
       dragging = null;
     }
     grid.addEventListener("pointerup", endDrag);
@@ -441,6 +570,7 @@
       host.appendChild(grid);
     }
     wrapIntoSections(grid);
+    applySavedSections(grid);
     scatterAll(grid);
     bindDrag(grid);
   }

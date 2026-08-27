@@ -53,6 +53,15 @@ html body.icon-grid-page .grid.icon-task-grid .grid-section-cards {
   box-shadow: none !important;
   padding: 0 !important;
   margin: 0 !important;
+  border-radius: 18px;
+  transition: background 0.15s ease, outline-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 6px;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards.is-drop-target {
+  background: rgba(250, 246, 238, 0.14) !important;
+  outline-color: rgba(246, 234, 216, 0.55);
 }
 
 html body.icon-grid-page .grid.icon-task-grid .section-label,
@@ -156,11 +165,26 @@ html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card.single
 }
 
 html body.icon-grid-page .grid.icon-task-grid .card-visual {
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 140px;
+  display: block;
+  align-items: unset;
+  justify-content: unset;
   position: relative;
+  overflow: hidden;
+  background: #e8dfd2;
+  padding: 0;
+}
+html body.icon-grid-page .grid.icon-task-grid .card-visual > img.card-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  pointer-events: none;
+}
+html body.icon-grid-page .grid.icon-task-grid .card-visual > svg:not(.checkmark) {
+  display: none !important;
 }
 
 html body.icon-grid-page .grid.icon-task-grid .card-body {
@@ -233,8 +257,9 @@ html body.icon-grid-page .grid.icon-task-grid .done-check {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 1.5px solid #B5A99A;
-  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 8px rgba(20, 12, 8, 0.28);
   cursor: pointer;
   z-index: 10;
   display: flex;
