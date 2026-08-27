@@ -206,12 +206,13 @@
     });
   }
 
-  function fitCanvas(canvas, nodes) {
+  function fitCanvas(canvas, nodes, ignoreEl) {
     var maxB = 0;
     (nodes || readNodes(canvas)).forEach(function (n) {
+      if (ignoreEl && n.el === ignoreEl) return;
       maxB = Math.max(maxB, n.y + n.h);
     });
-    canvas.style.height = (maxB + 32) + "px";
+    canvas.style.height = Math.max(160, maxB + 32) + "px";
   }
 
   function persistCanvas(canvas) {
@@ -411,24 +412,35 @@
     });
   }
 
+  // Section ownership by label midpoints — never by canvas height.
+  // Growing a section while dragging used to push the next label down forever.
   function canvasAtPoint(grid, clientX, clientY) {
-    var list = Array.from(grid.querySelectorAll(":scope > .grid-section > .grid-section-cards"));
+    var sections = Array.from(grid.querySelectorAll(":scope > .grid-section"));
+    if (!sections.length) return null;
+    var bands = sections.map(function (sec) {
+      var canvas = sec.querySelector(":scope > .grid-section-cards");
+      var label = sec.querySelector(".section-label");
+      var lr = label ? label.getBoundingClientRect() : sec.getBoundingClientRect();
+      var sr = sec.getBoundingClientRect();
+      return {
+        canvas: canvas,
+        mid: (lr.top + lr.bottom) / 2,
+        left: sr.left - 40,
+        right: sr.right + 40
+      };
+    }).filter(function (b) { return b.canvas; });
+
     var hit = null;
-    var best = 1e12;
-    list.forEach(function (canvas) {
-      var sec = canvas.closest(".grid-section");
-      var r = (sec || canvas).getBoundingClientRect();
-      var pad = 28;
-      if (clientX < r.left - pad || clientX > r.right + pad ||
-          clientY < r.top - pad || clientY > r.bottom + pad) return;
-      var cx = (r.left + r.right) / 2;
-      var cy = (r.top + r.bottom) / 2;
-      var d = Math.hypot(clientX - cx, clientY - cy);
-      if (d < best) {
-        best = d;
-        hit = canvas;
+    for (var i = 0; i < bands.length; i++) {
+      var b = bands[i];
+      if (clientX < b.left || clientX > b.right) continue;
+      var top = i === 0 ? -1e9 : (bands[i - 1].mid + b.mid) / 2;
+      var bottom = i === bands.length - 1 ? 1e9 : (b.mid + bands[i + 1].mid) / 2;
+      if (clientY >= top && clientY < bottom) {
+        hit = b.canvas;
+        break;
       }
-    });
+    }
     return hit;
   }
 
@@ -447,20 +459,22 @@
     if (!card || !toCanvas || fromCanvas === toCanvas) return fromCanvas;
     if (fromCanvas) {
       queryCards(fromCanvas).forEach(function (c) { c.classList.remove("is-relating"); });
+      // Shrink source without the card still counting toward height
+      fitCanvas(fromCanvas, readNodes(fromCanvas).filter(function (n) { return n.el !== card; }));
     }
     toCanvas.appendChild(card);
     setCardSectionLabel(card, toCanvas);
     var crect = toCanvas.getBoundingClientRect();
     var x = clientX - crect.left - grabDx;
     var y = clientY - crect.top - grabDy;
-    x = Math.max(-20, x);
-    y = Math.max(0, y);
+    x = Math.max(-20, Math.min(x, Math.max(4, canvasWidth(toCanvas) - 40)));
+    // Keep drop near the top of the destination cluster — don't stretch it
+    y = Math.max(0, Math.min(y, 220));
     card.style.left = x + "px";
     card.style.top = y + "px";
     queryCards(toCanvas).forEach(function (c) {
       if (c !== card) c.classList.add("is-relating");
     });
-    if (fromCanvas) settleCanvas(fromCanvas, null);
     return toCanvas;
   }
 
@@ -468,33 +482,13 @@
     if (grid.getAttribute("data-drag") === "1") return;
     grid.setAttribute("data-drag", "1");
     var dragging = null;
-    grid.addEventListener("pointerdown", function (e) {
-      if (e.button && e.button !== 0) return;
-      if (e.target.closest("input, button, a, label, [contenteditable]")) return;
-      var card = e.target.closest(".card");
-      if (!card || !grid.contains(card)) return;
-      var canvas = card.closest(".grid-section-cards");
-      if (!canvas) return;
-      var rect = card.getBoundingClientRect();
-      dragging = {
-        card: card,
-        canvas: canvas,
-        originCanvas: canvas,
-        dx: e.clientX - rect.left,
-        dy: e.clientY - rect.top,
-        lastX: parseFloat(card.style.left) || 0,
-        lastY: parseFloat(card.style.top) || 0
-      };
-      card.classList.add("is-dragging");
-      queryCards(canvas).forEach(function (c) {
-        if (c !== card) c.classList.add("is-relating");
-      });
-      card.style.zIndex = String(++zTop);
-      try { card.setPointerCapture(e.pointerId); } catch (err) {}
-      e.preventDefault();
-    });
-    grid.addEventListener("pointermove", function (e) {
+    var activePointerId = null;
+
+    function onMove(e) {
       if (!dragging) return;
+      if (activePointerId != null && e.pointerId !== activePointerId) return;
+      e.preventDefault();
+
       var target = canvasAtPoint(grid, e.clientX, e.clientY) || dragging.canvas;
       if (target !== dragging.canvas) {
         dragging.canvas = transferCard(
@@ -508,9 +502,7 @@
         );
       }
       clearDropTargets(grid);
-      if (dragging.canvas !== dragging.originCanvas) {
-        dragging.canvas.classList.add("is-drop-target");
-      } else if (target && target !== dragging.originCanvas) {
+      if (target && target !== dragging.originCanvas) {
         target.classList.add("is-drop-target");
       }
 
@@ -520,27 +512,43 @@
       var x = e.clientX - crect.left - dragging.dx;
       var y = e.clientY - crect.top - dragging.dy;
       x = Math.max(-20, x);
-      y = Math.max(0, y);
+      // While still in the origin section, allow free placement but do not
+      // let the canvas height chase the pointer (exclude card from fit).
+      if (canvas === dragging.originCanvas) {
+        y = Math.max(0, y);
+      } else {
+        y = Math.max(0, Math.min(y, Math.max(80, crect.height - 40)));
+      }
 
       var nodes = readNodes(canvas);
       var pinned = null;
       nodes.forEach(function (n) { if (n.el === dragging.card) pinned = n; });
-      if (!pinned) return;
+      if (!pinned) {
+        dragging.card.style.left = x + "px";
+        dragging.card.style.top = y + "px";
+        fitCanvas(canvas, readNodes(canvas), dragging.card);
+        return;
+      }
 
       var dx = x - pinned.x;
       var dy = y - pinned.y;
       pinned.x = x;
       pinned.y = y;
-      followPinned(nodes, pinned, dx, dy);
-      var k;
-      for (k = 0; k < 5; k++) stepForces(nodes, pinned.el, W, { pad: 12, attract: false });
+      // Only shove neighbors while staying inside the same section
+      if (canvas === dragging.originCanvas) {
+        followPinned(nodes, pinned, dx, dy);
+        var k;
+        for (k = 0; k < 5; k++) stepForces(nodes, pinned.el, W, { pad: 12, attract: false });
+      }
       applyNodes(nodes);
-      fitCanvas(canvas, nodes);
+      fitCanvas(canvas, nodes, dragging.card);
       dragging.lastX = pinned.x;
       dragging.lastY = pinned.y;
-    });
-    function endDrag() {
+    }
+
+    function endDrag(e) {
       if (!dragging) return;
+      if (e && activePointerId != null && e.pointerId !== activePointerId) return;
       var card = dragging.card;
       var canvas = dragging.canvas;
       var origin = dragging.originCanvas;
@@ -553,9 +561,43 @@
       }
       settleCanvas(canvas, card);
       dragging = null;
+      activePointerId = null;
+      document.removeEventListener("pointermove", onMove, true);
+      document.removeEventListener("pointerup", endDrag, true);
+      document.removeEventListener("pointercancel", endDrag, true);
     }
-    grid.addEventListener("pointerup", endDrag);
-    grid.addEventListener("pointercancel", endDrag);
+
+    grid.addEventListener("pointerdown", function (e) {
+      if (e.button && e.button !== 0) return;
+      if (e.target.closest("input, button, a, label, [contenteditable]")) return;
+      var card = e.target.closest(".card");
+      if (!card || !grid.contains(card)) return;
+      var canvas = card.closest(".grid-section-cards");
+      if (!canvas) return;
+      if (dragging) endDrag(null);
+      var rect = card.getBoundingClientRect();
+      dragging = {
+        card: card,
+        canvas: canvas,
+        originCanvas: canvas,
+        dx: e.clientX - rect.left,
+        dy: e.clientY - rect.top,
+        lastX: parseFloat(card.style.left) || 0,
+        lastY: parseFloat(card.style.top) || 0
+      };
+      activePointerId = e.pointerId;
+      card.classList.add("is-dragging");
+      queryCards(canvas).forEach(function (c) {
+        if (c !== card) c.classList.add("is-relating");
+      });
+      card.style.zIndex = String(++zTop);
+      // No setPointerCapture — moving the card between sections breaks capture
+      // and left later drags dead until refresh.
+      document.addEventListener("pointermove", onMove, true);
+      document.addEventListener("pointerup", endDrag, true);
+      document.addEventListener("pointercancel", endDrag, true);
+      e.preventDefault();
+    });
   }
 
   function wrapGrid(grid) {

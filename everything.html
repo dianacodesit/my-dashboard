@@ -10045,10 +10045,11 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </nav>
 <div class="nav-section">main</div>
 <nav>
-<a href="planner.html">planner</a>
+<a href="planner.html">timelines</a>
 <a href="accomplishments.html">accomplishments</a>
 <a href="striving.html">Striving</a>
 <a href="deen.html">deen</a>
+<a href="duaa.html">Dua'a</a>
 <a href="dimensions.html">dimensions</a>
 <a href="grids.html">grids</a>
 <a class="current" href="everything.html">everything</a>
@@ -10136,7 +10137,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   else setup();
 })();
 </script>
-<script src="nav-shared.js?v=navveil5"></script>
+<script src="nav-shared.js?v=navtimelines1"></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -15165,7 +15166,10 @@ window.__j22fnApply=run;
   function saveCustomZones(a){ try{ localStorage.setItem(ZONE_CUSTOM_KEY, JSON.stringify(a||[])); }catch(e){} }
   function isAug20Board(el){
     var blk=el && el.closest ? el.closest('.day-block') : el;
-    return !!(blk && (blk.classList.contains('pursuit-board-day') || blk.getAttribute('data-date')==='2026-08-20'));
+    if(!blk) return false;
+    if(blk.classList.contains('pursuit-board-day') || blk.getAttribute('data-date')==='2026-08-20') return true;
+    var d=blk.getAttribute('data-date')||'';
+    return !!(/^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-27' && blk.querySelector('.tv-panel.tv-nodes'));
   }
   function zoneSlug(title){
     var s=String(title||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
@@ -17682,7 +17686,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-08-26">
+<div class="day-block fmt22 vision-collage-day" data-date="2026-08-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 26 · wed</span></div>
@@ -17748,23 +17752,91 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 </div>
 </div>
-<div class="day-block fmt22 freeplace-day" data-date="2026-08-27">
+<div class="day-block fmt22 vision-collage-day" data-date="2026-08-27">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 27 · thu</span></div>
 <div class="today-view-toggle">
 <button class="tv-pill active" data-view="pursuits">pursuits</button>
 <button class="tv-pill" data-view="flow">flow</button>
+<button class="tv-pill" data-view="nodes">nodes</button>
 </div>
 <div class="day-tasks">
 <div class="tv-panel tv-pursuits active">
-<div class="flow-chart-card"><div class="sec-grid freeform">
-<div class="j22-section card sec-card is-empty shot-card" data-user-added="1" data-theme="warm" data-shot="Pepperdine GSA · Top Applicant"><div class="card-visual theme-warm"><img alt="Pepperdine GSA · Top Applicant" src="manus-storage/handshake-pepperdine-gsa.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Pepperdine GSA · Top Applicant">Pepperdine GSA · Top Applicant</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button></div>
-<div class="j22-section card sec-card is-empty shot-card" data-user-added="1" data-theme="warm" data-shot="Committee check-in"><div class="card-visual theme-warm"><img alt="Committee check-in" src="manus-storage/pepperdine-committee-checkin.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Committee check-in">Committee check-in</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button></div>
-</div></div>
+<div class="vision-board" aria-label="vision collage">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero vision-hero-duo">
+<article class="vision-tile vision-tile-shot vision-tile-gsa" data-focus="gsa" style="--tile-photo:url('manus-storage/handshake-pepperdine-gsa.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">Top Applicant</h3>
+<div class="vision-tile-details"></div>
+</article>
+<article class="vision-tile vision-tile-shot vision-tile-committee" data-focus="committee" style="--tile-photo:url('manus-storage/pepperdine-committee-checkin.jpg?v=orig')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">Committee check-in</h3>
+<div class="vision-tile-details"></div>
+</article>
+</div>
+</div>
 </div>
 <div class="tv-panel tv-flow" style="display:none">
 <div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+
+<div class="tv-panel tv-nodes" style="display:none">
+<div class="nodes-edit-bar">
+<button type="button" class="nodes-add-btn">+ node</button>
+<button type="button" class="nodes-link-btn">connect</button>
+<span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>
+</div>
+<div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="day-block fmt22 vision-collage-day today-block make-flow-day" data-date="2026-08-28">
+<div class="day-dot"></div>
+<div class="day-card">
+<div class="day-card-header"><span class="day-date">aug 28 · fri</span></div>
+<div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits">pursuits</button>
+<button class="tv-pill" data-view="flow">flow</button>
+<button class="tv-pill" data-view="nodes">nodes</button>
+</div>
+<div class="day-tasks">
+<div class="tv-panel tv-pursuits active">
+<div class="vision-board" aria-label="vision collage">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero vision-hero-solo">
+<article class="vision-tile vision-tile-house" data-focus="grad" style="--tile-photo:url('manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">grad school</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px:10%;--py:22%">
+<img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg">
+<span>Top Applicant</span>
+</div>
+<div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px:54%;--py:28%">
+<img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig">
+<span>Committee check-in</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+</div>
+<div class="tv-panel tv-flow" style="display:none">
+<div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+<div class="tv-panel tv-nodes" style="display:none">
+<div class="nodes-edit-bar">
+<button type="button" class="nodes-add-btn">+ node</button>
+<button type="button" class="nodes-link-btn">connect</button>
+<span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>
+</div>
+<div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div>
 </div>
 </div>
 </div>
@@ -21742,7 +21814,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (yEl) saveShell(yIso, yEl);
     };
     let lastDay = todayStr();
-    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="flow">flow</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="flow-chart-card"><div class="sec-grid freeform"></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div></div></div>';
+    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="flow">flow</button><button class="tv-pill" data-view="nodes">nodes</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="vision-board" aria-label="vision collage"><button type="button" class="vision-zoom-out" hidden>all of today</button><p class="vision-hint">the day, wide — click a focus to go in</p><div class="vision-hero"></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div></div></div>';
     const pickSrc = iso => {
       const days = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'));
       let src = null;
@@ -21784,10 +21856,12 @@ document.addEventListener('DOMContentLoaded',()=>{
       }
       clone.setAttribute('data-date', iso);
       if (iso >= '2026-08-26') {
-        clone.classList.add('freeplace-day');
+        clone.classList.add('vision-collage-day');
+        clone.classList.remove('freeplace-day');
         clone.querySelectorAll('.add-board-row, .add-section-btn, .add-card-btn, .j22-actions').forEach(function(el){ el.remove(); });
-        var fpGrid = clone.querySelector('.tv-pursuits .sec-grid') || clone.querySelector('.sec-grid');
-        if (fpGrid) fpGrid.classList.add('freeform');
+      }
+      if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
+        try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
       }
       clone.classList.remove('past', 'featured-block', 'collapsed', 'zone-board-day', 'pursuit-board-day', 'today-block');
       clone.querySelectorAll('.sec-grid.pursuit-canvas').forEach(function(g){
@@ -21802,13 +21876,13 @@ document.addEventListener('DOMContentLoaded',()=>{
       });
       if (iso === '2026-08-20') clone.classList.add('pursuit-board-day');
       else if (iso === todayStr()) clone.classList.add('today-block');
-      if (iso >= '2026-08-26') clone.classList.add('freeplace-day');
+      if (iso >= '2026-08-26') { clone.classList.add('vision-collage-day'); clone.classList.remove('freeplace-day'); }
       const dateEl = clone.querySelector('.day-date');
       if (dateEl) dateEl.textContent = labelFor(iso);
       insertDay(clone, iso);
       saveShell(iso, clone);
-      if (iso >= '2026-08-26' && window.__layoutFreeplaceDays) {
-        try { window.__layoutFreeplaceDays(); } catch (e) {}
+      if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
+        try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
       }
     };
     const ensureTodayCard = () => {
@@ -35546,7 +35620,8 @@ html body .day-block.today-block .tv-panel[style*="display: none"] {
 }
 html body .day-block.today-block .today-view-toggle,
 html body .day-block.make-flow-day .today-view-toggle,
-html body .day-block.freeplace-day .today-view-toggle {
+html body .day-block.freeplace-day .today-view-toggle,
+html body .day-block.vision-collage-day .today-view-toggle {
   display: flex !important;
   justify-content: center;
   align-items: stretch;
@@ -35554,7 +35629,7 @@ html body .day-block.freeplace-day .today-view-toggle {
   margin: 8px auto 14px;
   width: fit-content;
   min-width: min(280px, 90%);
-  max-width: min(460px, 94%);
+  max-width: min(560px, 96%);
   background: rgba(245,240,233,0.28);
   border: 1px solid rgba(255,255,255,0.35);
   border-radius: 999px;
@@ -35564,7 +35639,8 @@ html body .day-block.freeplace-day .today-view-toggle {
 }
 html body .day-block.today-block .tv-pill,
 html body .day-block.make-flow-day .tv-pill,
-html body .day-block.freeplace-day .tv-pill {
+html body .day-block.freeplace-day .tv-pill,
+html body .day-block.vision-collage-day .tv-pill {
   flex: 1 0 auto;
   border: 0 !important;
   background: transparent !important;
@@ -35575,11 +35651,12 @@ html body .day-block.freeplace-day .tv-pill {
   text-transform: lowercase;
   white-space: nowrap !important;
   color: rgba(255,255,255,0.72) !important;
-  padding: 8px 12px !important;
+  padding: 8px 10px !important;
 }
 html body .day-block.today-block .tv-pill.active,
 html body .day-block.make-flow-day .tv-pill.active,
-html body .day-block.freeplace-day .tv-pill.active {
+html body .day-block.freeplace-day .tv-pill.active,
+html body .day-block.vision-collage-day .tv-pill.active {
   background: rgba(255,255,255,0.88) !important;
   color: #2a2a25 !important;
 }
@@ -37771,7 +37848,10 @@ html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flow > .flow-timeline-
 }
 html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flowchart,
 html body .day-block.pursuit-board-day .tv-panel.tv-flowchart,
-html body .day-block.make-flow-day .tv-panel.tv-flowchart {
+html body .day-block.make-flow-day .tv-panel.tv-flowchart,
+html body .day-block.vision-collage-day .tv-panel.tv-flowchart,
+html body .day-block.make-flow-day .tv-panel.tv-nodes,
+html body .day-block.vision-collage-day .tv-panel.tv-nodes {
   width: 100% !important;
   max-width: 100% !important;
   min-height: 420px !important;
@@ -38004,6 +38084,60 @@ html body .day-block.flow-picking .vision-tile {
     });
   }
 
+  function wantsNodesFlowchart(block){
+    var d = block && block.getAttribute('data-date');
+    return !!(d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-27');
+  }
+
+  function ensureNodesView(block){
+    if (!block) return null;
+    ensureToggle(block);
+    var tog = block.querySelector('.today-view-toggle');
+    if (tog && !tog.querySelector('.tv-pill[data-view="nodes"]')) {
+      var np = document.createElement('button');
+      np.type = 'button';
+      np.className = 'tv-pill';
+      np.setAttribute('data-view', 'nodes');
+      np.textContent = 'nodes';
+      var flowPill = tog.querySelector('.tv-pill[data-view="flow"]');
+      if (flowPill && flowPill.nextSibling) tog.insertBefore(np, flowPill.nextSibling);
+      else if (flowPill) tog.appendChild(np);
+      else tog.appendChild(np);
+    }
+    var wrap = block.querySelector('.day-tasks');
+    if (!wrap) return null;
+    var panel = wrap.querySelector('.tv-panel.tv-nodes');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.className = 'tv-panel tv-nodes';
+      panel.style.display = 'none';
+      panel.innerHTML = '<div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div>';
+      var flow = wrap.querySelector('.tv-panel.tv-flow');
+      if (flow && flow.nextSibling) wrap.insertBefore(panel, flow.nextSibling);
+      else if (flow) wrap.appendChild(panel);
+      else wrap.appendChild(panel);
+    } else if (!panel.querySelector('.sec-grid.pursuit-canvas')) {
+      if (!panel.querySelector('.nodes-edit-bar')) {
+        var bar = document.createElement('div');
+        bar.className = 'nodes-edit-bar';
+        bar.innerHTML = '<button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>';
+        panel.insertBefore(bar, panel.firstChild);
+      }
+      var g = document.createElement('div');
+      g.className = 'sec-grid freeform pursuit-canvas pursuit-categories';
+      g.setAttribute('data-zoned', '1');
+      panel.appendChild(g);
+    }
+    return panel;
+  }
+
+  function ensureNodesAndFlowchart(block){
+    if (!block || !wantsNodesFlowchart(block)) return;
+    ensureNodesView(block);
+    placeMakeFlowBtn(block);
+  }
+  window.__ensureNodesAndFlowchart = ensureNodesAndFlowchart;
+
   function ensureToggle(block){
     var card = block.querySelector('.day-card') || block;
     var tog = block.querySelector('.today-view-toggle');
@@ -38015,13 +38149,15 @@ html body .day-block.flow-picking .vision-tile {
       if (header && header.parentNode) header.parentNode.insertBefore(tog, header.nextSibling);
       else card.insertBefore(tog, card.firstChild);
     }
-    if (block.querySelector('.tv-panel.tv-nodes') && !tog.querySelector('.tv-pill[data-view="nodes"]')) {
+    if ((block.querySelector('.tv-panel.tv-nodes') || wantsNodesFlowchart(block)) && !tog.querySelector('.tv-pill[data-view="nodes"]')) {
       var np = document.createElement('button');
       np.type = 'button';
       np.className = 'tv-pill';
       np.setAttribute('data-view', 'nodes');
       np.textContent = 'nodes';
-      tog.appendChild(np);
+      var flowPill = tog.querySelector('.tv-pill[data-view="flow"]');
+      if (flowPill && flowPill.nextSibling) tog.insertBefore(np, flowPill.nextSibling);
+      else tog.appendChild(np);
     }
     tog.querySelectorAll('.make-flow-btn, .tv-pill').forEach(function(p){
       if (p.classList.contains('make-flow-btn') || ((p.textContent||'').trim().toLowerCase() === 'make flow' && !p.getAttribute('data-view'))) {
@@ -38299,8 +38435,17 @@ html body .day-block.flow-picking .vision-tile {
       var date = block.getAttribute('data-date');
       if (date === '2026-08-20' || block.classList.contains('pursuit-board-day')) ensureToggle(block);
       else placeMakeFlowBtn(block);
+      if (wantsNodesFlowchart(block)) ensureNodesAndFlowchart(block);
+      // Strip empty flowchart views (only keep when a chart exists)
       var steps = all[date];
-      var wants = (steps && steps.length) && isMakeFlowDay(block);
+      var hasChart = !!(steps && steps.length);
+      if (!hasChart) {
+        var emptyPanel = block.querySelector('.tv-panel.tv-flowchart');
+        var emptyPill = block.querySelector('.tv-pill[data-view="flowchart"]');
+        if (emptyPanel && !emptyPanel.querySelector('.made-flow-diagram')) emptyPanel.remove();
+        if (emptyPill) emptyPill.remove();
+      }
+      var wants = hasChart && isMakeFlowDay(block);
       if (!wants) return;
       var host = flowHost(block);
       if (!host) return;
@@ -38386,6 +38531,7 @@ html body .day-block.flow-picking .vision-tile {
 })();
 </script>
 <style id="aug25-ambition-task-shot-css">
+/* Full-tile bleed: photo IS the card. Title overlays the photo. Never a black footer bar. */
 html body .day-block.fmt22[data-date="2026-08-25"] .sec-grid > .sec-card:not(.shot-card) {
   display: none !important;
 }
@@ -38409,6 +38555,8 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-grid.freeform > .sec-car
   transform: none !important;
   z-index: 1 !important;
   cursor: zoom-in;
+  overflow: hidden !important;
+  background: transparent !important;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-visual,
 html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-visual {
@@ -38416,9 +38564,9 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-vis
   inset: auto !important;
   height: auto !important;
   width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  background: #161310 !important;
+  display: block !important;
+  flex-direction: unset !important;
+  background: transparent !important;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-visual img,
 html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-visual img {
@@ -38427,7 +38575,7 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-vis
   width: 100% !important;
   height: auto !important;
   aspect-ratio: auto !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center center !important;
   opacity: 1 !important;
   filter: none !important;
@@ -38435,17 +38583,23 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-vis
   transform: none !important;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-visual .j22-group {
-  position: relative !important;
+  position: absolute !important;
   inset: auto !important;
-  top: auto !important;
+  top: 0 !important;
   bottom: auto !important;
-  left: auto !important;
-  right: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2 !important;
   font-size: 14px !important;
-  padding: 8px 12px 10px !important;
-  background: rgba(28, 22, 16, 0.94) !important;
+  padding: 10px 12px 22px !important;
+  background: linear-gradient(to bottom, rgba(20,16,12,0.62) 0%, rgba(20,16,12,0) 100%) !important;
+  pointer-events: none;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-body {
+  display: none !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-add-task,
+html body .day-block.fmt22 .sec-card.shot-card .card-resize {
   display: none !important;
 }
 .shot-lightbox {
@@ -38460,12 +38614,13 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
   cursor: zoom-out;
 }
 .shot-lightbox img {
-  max-width: min(1100px, 96vw);
+  max-width: min(1200px, 96vw);
   max-height: 92vh;
   width: auto;
   height: auto;
   object-fit: contain;
   box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+  background: #fff;
 }
 </style>
 <script id="aug25-ambition-handshake-js">
@@ -38565,7 +38720,7 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
 })();
 </script>
 <style id="aug27-dual-shot-css">
-/* Aug 27: two proof shots side-by-side (Top Applicant + committee check-in) */
+/* Aug 27: two full-bleed proof tiles side-by-side — photo fills the tile, title on the photo */
 html body .day-block.fmt22[data-date="2026-08-27"] .tv-pursuits .sec-grid.freeform,
 html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .tv-pursuits .sec-grid.freeform,
 html body .day-block.fmt22[data-date="2026-08-27"].today-block.freeplace-day .tv-pursuits .sec-grid.freeform {
@@ -38600,6 +38755,8 @@ html body .day-block.fmt22[data-date="2026-08-27"].today-block.freeplace-day .tv
   cursor: zoom-in !important;
   overflow: hidden !important;
   z-index: 1 !important;
+  background: transparent !important;
+  border-radius: 14px !important;
 }
 html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-visual,
 html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .sec-card.shot-card .card-visual {
@@ -38607,9 +38764,9 @@ html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .sec-card.shot-
   inset: auto !important;
   height: auto !important;
   width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  background: #161310 !important;
+  display: block !important;
+  flex-direction: unset !important;
+  background: transparent !important;
 }
 html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-visual img,
 html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .sec-card.shot-card .card-visual img {
@@ -38618,18 +38775,24 @@ html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .sec-card.shot-
   width: 100% !important;
   height: auto !important;
   aspect-ratio: auto !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   opacity: 1 !important;
   filter: none !important;
   border-radius: 0 !important;
   transform: none !important;
 }
 html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-visual .j22-group {
-  position: relative !important;
+  position: absolute !important;
   inset: auto !important;
+  top: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2 !important;
   font-size: 13px !important;
-  padding: 8px 12px 10px !important;
-  background: rgba(28, 22, 16, 0.94) !important;
+  padding: 10px 12px 22px !important;
+  background: linear-gradient(to bottom, rgba(20,16,12,0.62) 0%, rgba(20,16,12,0) 100%) !important;
+  pointer-events: none;
 }
 html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-body {
   display: none !important;
@@ -38637,105 +38800,19 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 </style>
 <script id="aug27-dual-shot-js">
 (function(){
+  /* retired: Aug 27+ uses vision collage sections, not shot-cards */
   if (window.__aug27DualShot) return;
   window.__aug27DualShot = true;
-  var DATE = '2026-08-27';
-  var SHOTS = [
-    { name: 'Pepperdine GSA · Top Applicant', img: 'manus-storage/handshake-pepperdine-gsa.jpg' },
-    { name: 'Committee check-in', img: 'manus-storage/pepperdine-committee-checkin.jpg' }
-  ];
-  function openShot(src){
-    var old = document.querySelector('.shot-lightbox');
-    if (old) old.remove();
-    var box = document.createElement('div');
-    box.className = 'shot-lightbox';
-    box.innerHTML = '<img alt="">';
-    box.querySelector('img').src = src;
-    box.addEventListener('click', function(){ box.remove(); });
-    document.body.appendChild(box);
-  }
-  function makeCard(shot){
-    var card = document.createElement('div');
-    card.className = 'j22-section card sec-card is-empty shot-card';
-    card.setAttribute('data-user-added', '1');
-    card.setAttribute('data-theme', 'warm');
-    card.setAttribute('data-shot', shot.name);
-    card.innerHTML = '<div class="card-visual theme-warm"><img alt=""><p class="j22-group" spellcheck="false"></p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button>';
-    var img = card.querySelector('img');
-    var group = card.querySelector('.j22-group');
-    if (img) { img.src = shot.img; img.alt = shot.name; }
-    if (group) { group.setAttribute('data-newhdr', shot.name); group.textContent = shot.name; }
-    card.addEventListener('click', function(e){
-      if (e.target.closest('.card-del, .card-add-task, .card-resize, button, a')) return;
-      e.preventDefault();
-      e.stopPropagation();
-      openShot(shot.img);
-    });
-    return card;
-  }
-  function ensure(){
-    var block = document.querySelector('.day-block[data-date="'+DATE+'"]');
-    if (!block) return;
-    var grid = block.querySelector('.tv-pursuits .sec-grid') || block.querySelector('.sec-grid');
-    if (!grid || grid.classList.contains('pursuit-canvas')) return;
-    grid.classList.add('freeform');
-    try {
-      var o = JSON.parse(localStorage.getItem('btm_grids_v1')||'{}') || {};
-      o[DATE] = SHOTS.map(function(s, i){ return { name: s.name, idx: i }; });
-      localStorage.setItem('btm_grids_v1', JSON.stringify(o));
-    } catch(e){}
-    [].slice.call(grid.querySelectorAll('.sec-card')).forEach(function(c){
-      if (!c.classList.contains('shot-card')) c.remove();
-    });
-    SHOTS.forEach(function(shot){
-      var existing = null;
-      [].slice.call(grid.querySelectorAll('.sec-card.shot-card')).forEach(function(c){
-        var g = c.querySelector('.j22-group');
-        var n = ((g && (g.getAttribute('data-newhdr') || g.textContent)) || '').trim();
-        if (n === shot.name || c.getAttribute('data-shot') === shot.name) existing = c;
-      });
-      if (!existing) {
-        grid.appendChild(makeCard(shot));
-        return;
-      }
-      existing.classList.add('shot-card', 'is-empty');
-      existing.setAttribute('data-shot', shot.name);
-      var img = existing.querySelector('.card-visual img');
-      var group = existing.querySelector('.j22-group');
-      if (img) { img.src = shot.img; img.alt = shot.name; }
-      if (group) { group.setAttribute('data-newhdr', shot.name); group.textContent = shot.name; }
-      if (!existing._shotOpen) {
-        existing._shotOpen = true;
-        existing.addEventListener('click', function(e){
-          if (e.target.closest('.card-del, .card-add-task, .card-resize, button, a')) return;
-          e.preventDefault();
-          e.stopPropagation();
-          openShot(shot.img);
-        });
-      }
-    });
-  }
-  function boot(){
-    ensure();
-    if (window.__aug27DualShotMo) return;
-    window.__aug27DualShotMo = new MutationObserver(function(){
-      clearTimeout(window.__aug27DualShotT);
-      window.__aug27DualShotT = setTimeout(ensure, 200);
-    });
-    window.__aug27DualShotMo.observe(document.body, { childList: true, subtree: true });
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 80); });
-  else setTimeout(boot, 80);
-  [500, 1200, 2800, 5000].forEach(function(ms){ setTimeout(ensure, ms); });
 })();
 </script>
+</script>
 <style id="aug20-vision-board-css">
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .tv-panel.tv-pursuits:has(.vision-board),
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .tv-panel.tv-pursuits.active:has(.vision-board) {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .tv-panel.tv-pursuits:has(.vision-board),
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .tv-panel.tv-pursuits.active:has(.vision-board) {
   overflow: visible !important;
   padding: 4px 4px 10px !important;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -38745,7 +38822,7 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   height: min(80vh, 800px);
   box-sizing: border-box;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-hero {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
   display: grid;
   grid-template-columns: 1.35fr 1fr 1fr;
   grid-template-rows: minmax(250px, 1.15fr) minmax(210px, 1fr);
@@ -38753,7 +38830,7 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   flex: 1 1 auto;
   min-height: 0;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-more {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-more {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
@@ -38761,7 +38838,7 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   height: auto;
   align-items: stretch;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-mini {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini {
   width: auto;
   height: auto;
   min-width: 0;
@@ -38770,13 +38847,13 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   justify-self: stretch;
   align-self: stretch;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-hint {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hint {
   display: none;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-glow { grid-column: 1; grid-row: 1 / 3; }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-gym { grid-column: 2 / 4; grid-row: 1; }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-house { grid-column: 2; grid-row: 2; }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-ambition { grid-column: 3; grid-row: 2; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-glow { grid-column: 1; grid-row: 1 / 3; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-gym { grid-column: 2 / 4; grid-row: 1; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-house { grid-column: 2; grid-row: 2; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-ambition { grid-column: 3; grid-row: 2; }
 html body .day-block[data-date="2026-08-26"] .vision-tile-gym { grid-column: 1; grid-row: 1 / 3; }
 html body .day-block[data-date="2026-08-26"] .vision-tile-glow { grid-column: 2 / 4; grid-row: 1; }
 html body .day-block[data-date="2026-08-26"] .vision-tile-house .vision-tile-photo {
@@ -38784,7 +38861,7 @@ html body .day-block[data-date="2026-08-26"] .vision-tile-house .vision-tile-pho
   background-size: cover;
 }
 html body .day-block[data-date="2026-08-26"] .vision-tile-ambition { grid-column: 3; grid-row: 2; }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile {
   position: relative;
   overflow: hidden;
   border-radius: 16px;
@@ -38794,7 +38871,7 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   isolation: isolate;
   min-height: 0;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-photo {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-photo {
   position: absolute;
   inset: 0;
   background-image: var(--tile-photo);
@@ -38804,7 +38881,7 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 0;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile::after {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -38812,10 +38889,10 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   z-index: 1;
   pointer-events: none;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile:hover .vision-tile-photo {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile:hover .vision-tile-photo {
   transform: scale(1.08);
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-title {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-title {
   position: absolute;
   left: 18px;
   right: 18px;
@@ -38831,30 +38908,30 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
   pointer-events: none;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-mini .vision-tile-title {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini .vision-tile-title {
   left: 12px;
   right: 10px;
   bottom: 10px;
   font-size: clamp(14px, 1.5vw, 18px);
   line-height: 1.15;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-details {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-details {
   display: none;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-hero,
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-more {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-hero,
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-more {
   display: contents;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-hint,
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-tile:not(.is-zoomed) {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-hint,
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile:not(.is-zoomed) {
   display: none !important;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-tile.is-zoomed {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed {
   grid-column: 1;
   grid-row: 1;
   cursor: default;
@@ -38865,22 +38942,22 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   justify-self: stretch;
   align-self: stretch;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-photo {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-photo {
   transform: scale(1);
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
   top: 18px;
   bottom: auto;
   font-size: 36px;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
   display: block;
   position: absolute;
   inset: 0;
   z-index: 4;
   pointer-events: none;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-polaroid {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid {
   position: absolute;
   left: var(--px, 10%);
   top: var(--py, 18%);
@@ -38891,13 +38968,13 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   transform: rotate(-3.5deg);
   pointer-events: auto;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-polaroid img {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid img {
   display: block;
   width: 100%;
   height: 132px;
   object-fit: cover;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-polaroid span {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid span {
   position: absolute;
   left: 10px;
   right: 10px;
@@ -38908,11 +38985,11 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   color: #2a2218;
   text-align: center;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-polaroid.vision-class {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid.vision-class {
   width: 210px;
   transform: rotate(2.5deg);
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-check {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-check {
   position: absolute;
   left: var(--px, 50%);
   top: var(--py, 30%);
@@ -38931,15 +39008,15 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   pointer-events: auto;
   cursor: pointer;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-check:nth-of-type(even) {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-check:nth-of-type(even) {
   transform: rotate(-2.2deg);
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-check input {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-check input {
   accent-color: #5a8a4a;
   width: 14px;
   height: 14px;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-zoom-out {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-zoom-out {
   position: absolute;
   left: 10px;
   top: 10px;
@@ -38954,43 +39031,111 @@ html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vis
   cursor: pointer;
   backdrop-filter: blur(8px);
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
   display: inline-block;
 }
-html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]).collapsed .vision-board {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day).collapsed .vision-board {
   display: none;
 }
 @media (max-width: 820px) {
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-board {
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board {
     height: auto;
     min-height: 0;
   }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-hero {
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 220px 220px 220px;
     flex: none;
   }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-more {
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-more {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     height: auto;
     flex: none;
   }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-mini {
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini {
     width: auto;
     height: auto;
     min-height: 0;
     aspect-ratio: 1 / 1;
   }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-glow { grid-column: 1 / 3; grid-row: 1; }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-gym { grid-column: 1 / 3; grid-row: 2; }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-house { grid-column: 1; grid-row: 3; }
-  html body .day-block:is([data-date="2026-08-20"], [data-date="2026-08-26"]) .vision-tile-ambition { grid-column: 2; grid-row: 3; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-glow { grid-column: 1 / 3; grid-row: 1; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-gym { grid-column: 1 / 3; grid-row: 2; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-house { grid-column: 1; grid-row: 3; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-ambition { grid-column: 2; grid-row: 3; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-gym { grid-column: 1 / 3; grid-row: 1; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-glow { grid-column: 1 / 3; grid-row: 2; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-house { grid-column: 1; grid-row: 3; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-ambition { grid-column: 2; grid-row: 3; }
 }
 html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-hero-duo {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(420px, 1fr);
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa {
+  grid-column: 1;
+  grid-row: 1;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee {
+  grid-column: 2;
+  grid-row: 1;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa .vision-tile-photo {
+  background-position: center 35%;
+}
+html body .day-block.vision-collage-day .vision-tile-shot {
+  cursor: zoom-in;
+}
+
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee .vision-tile-photo {
+  background-position: center top;
+  background-size: cover;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile::after {
+  background: linear-gradient(180deg, rgba(12, 8, 4, 0.02) 45%, rgba(12, 8, 4, 0.42) 100%);
+}
+
+@media (max-width: 820px) {
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-hero-duo {
+    grid-template-columns: 1fr;
+    grid-template-rows: 240px 240px;
+  }
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa,
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee {
+    grid-column: 1;
+  }
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa { grid-row: 1; }
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee { grid-row: 2; }
+}
+
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-hero-solo {
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(520px, 1fr);
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-tile-house {
+  grid-column: 1;
+  grid-row: 1;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-tile-house .vision-tile-photo {
+  background-position: center 40%;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid.vision-shot-card {
+  width: 220px;
+  padding: 10px 10px 36px;
+  cursor: zoom-in;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid.vision-shot-card img {
+  height: 168px;
+  object-fit: cover;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid.vision-shot-card:nth-of-type(2) {
+  transform: rotate(2.8deg);
+}
+@media (max-width: 820px) {
+  html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-hero-solo {
+    grid-template-rows: minmax(360px, 1fr);
+  }
+}
 </style>
 <script id="aug20-vision-board-js">
 (function(){
@@ -38998,7 +39143,7 @@ html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
   window.__aug20VisionBoard = true;
   function boardEl(from){
     return (from && from.closest && from.closest('.vision-board'))
-      || document.querySelector('.day-block[data-date="2026-08-26"] .vision-board')
+      || document.querySelector('.day-block.vision-collage-day .vision-board')
       || document.querySelector('.day-block[data-date="2026-08-20"] .vision-board');
   }
   function closeBoard(vb){
@@ -39014,6 +39159,36 @@ html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
     var btn = vb.querySelector('.vision-zoom-out');
     if (btn) { btn.hidden = false; btn.removeAttribute('hidden'); }
   }
+  function tilePhotoSrc(tile){
+    if (!tile) return '';
+    var st = tile.getAttribute('style') || '';
+    var m = st.match(/--tile-photo:\s*url\(['"]?([^'")]+)['"]?\)/i);
+    if (m && m[1]) return m[1];
+    var photo = tile.querySelector('.vision-tile-photo');
+    if (photo) {
+      var bg = getComputedStyle(photo).backgroundImage || '';
+      var m2 = bg.match(/url\(["']?([^"')]+)["']?\)/i);
+      if (m2 && m2[1]) return m2[1];
+    }
+    return '';
+  }
+  function openFullShot(src){
+    if (!src) return;
+    var old = document.querySelector('.shot-lightbox');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.className = 'shot-lightbox';
+    box.innerHTML = '<img alt="">';
+    var img = box.querySelector('img');
+    img.src = src;
+    img.style.maxWidth = 'min(1200px, 96vw)';
+    img.style.maxHeight = '92vh';
+    img.style.width = 'auto';
+    img.style.height = 'auto';
+    img.style.objectFit = 'contain';
+    box.addEventListener('click', function(){ box.remove(); });
+    document.body.appendChild(box);
+  }
   document.addEventListener('click', function(e){
     var out = e.target.closest('.vision-zoom-out');
     var tile = e.target.closest('.vision-tile');
@@ -39025,7 +39200,28 @@ html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
       return;
     }
     if (!vb || !tile || !vb.contains(tile)) return;
-    if (e.target.closest('.vision-tile-details')) return;
+    var shotCard = e.target.closest('.vision-shot-card');
+    if (shotCard && vb.contains(shotCard)) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullShot(shotCard.getAttribute('data-shot-src') || (shotCard.querySelector('img') && shotCard.querySelector('img').src) || '');
+      return;
+    }
+    if (e.target.closest('.vision-tile-details') && !e.target.closest('.vision-shot-card, .vision-polaroid')) return;
+    var shotPolaroid = e.target.closest('.vision-polaroid.vision-shot-card, .vision-shot-card');
+    if (shotPolaroid && vb.contains(shotPolaroid)) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullShot(shotPolaroid.getAttribute('data-shot-src') || (shotPolaroid.querySelector('img') && shotPolaroid.querySelector('img').src) || '');
+      return;
+    }
+    /* Screenshot sections: collage may crop; click opens the full uncropped image */
+    if (tile.classList.contains('vision-tile-shot')) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullShot(tilePhotoSrc(tile));
+      return;
+    }
     if (vb.classList.contains('is-zoomed')) {
       if (tile.classList.contains('is-zoomed')) closeBoard(vb);
       return;
@@ -39034,6 +39230,8 @@ html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
   });
   document.addEventListener('keydown', function(e){
     if (e.key !== 'Escape') return;
+    var lb = document.querySelector('.shot-lightbox');
+    if (lb) { lb.remove(); return; }
     document.querySelectorAll('.vision-board.is-zoomed').forEach(closeBoard);
   });
 })();
@@ -39094,7 +39292,9 @@ html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
 })();
 </script>
 <style id="aug20-nodes-edit-css">
-html body .day-block[data-date="2026-08-20"] .nodes-edit-bar {
+html body .day-block[data-date="2026-08-20"] .nodes-edit-bar,
+html body .day-block.make-flow-day .nodes-edit-bar,
+html body .day-block.vision-collage-day .nodes-edit-bar {
   display: flex !important;
   align-items: center !important;
   flex-wrap: wrap !important;
@@ -39104,7 +39304,11 @@ html body .day-block[data-date="2026-08-20"] .nodes-edit-bar {
   z-index: 8 !important;
 }
 html body .day-block[data-date="2026-08-20"] .nodes-add-btn,
-html body .day-block[data-date="2026-08-20"] .nodes-link-btn {
+html body .day-block[data-date="2026-08-20"] .nodes-link-btn,
+html body .day-block.make-flow-day .nodes-add-btn,
+html body .day-block.make-flow-day .nodes-link-btn,
+html body .day-block.vision-collage-day .nodes-add-btn,
+html body .day-block.vision-collage-day .nodes-link-btn {
   font-family: "DM Mono", monospace !important;
   font-size: 11px !important;
   letter-spacing: 0.08em !important;
@@ -39117,14 +39321,22 @@ html body .day-block[data-date="2026-08-20"] .nodes-link-btn {
   cursor: pointer !important;
 }
 html body .day-block[data-date="2026-08-20"] .nodes-add-btn:hover,
-html body .day-block[data-date="2026-08-20"] .nodes-link-btn:hover {
+html body .day-block[data-date="2026-08-20"] .nodes-link-btn:hover,
+html body .day-block.make-flow-day .nodes-add-btn:hover,
+html body .day-block.make-flow-day .nodes-link-btn:hover,
+html body .day-block.vision-collage-day .nodes-add-btn:hover,
+html body .day-block.vision-collage-day .nodes-link-btn:hover {
   background: rgba(255,255,255,0.28) !important;
 }
-html body .day-block[data-date="2026-08-20"] .nodes-link-btn.is-on {
+html body .day-block[data-date="2026-08-20"] .nodes-link-btn.is-on,
+html body .day-block.make-flow-day .nodes-link-btn.is-on,
+html body .day-block.vision-collage-day .nodes-link-btn.is-on {
   background: rgba(255,255,255,0.88) !important;
   color: #2a2a25 !important;
 }
-html body .day-block[data-date="2026-08-20"] .nodes-edit-hint {
+html body .day-block[data-date="2026-08-20"] .nodes-edit-hint,
+html body .day-block.make-flow-day .nodes-edit-hint,
+html body .day-block.vision-collage-day .nodes-edit-hint {
   font-family: "DM Mono", monospace !important;
   font-size: 10px !important;
   letter-spacing: 0.05em !important;
@@ -39157,6 +39369,7 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
 <script id="aug20-zone-web-js">
 (function(){
   var EDGE_KEY = 'btm_aug20_node_edges_v1';
+  var EDGE_BY_DAY = 'btm_node_edges_by_day_v1';
   var DEFAULT_EDGES = [
     ['z:body','z:life'],
     ['z:life','z:finances'],
@@ -39169,13 +39382,26 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
     ['z:life','z:leverage']
   ];
   var fromEl = null;
-  function blockEl(){
-    return document.querySelector('.day-block[data-date="2026-08-20"]');
+  var edges = [];
+  var edgesDay = '';
+  function blockEl(from){
+    if (from && from.closest) {
+      var hit = from.closest('.day-block');
+      if (hit && hit.querySelector('.tv-panel.tv-nodes')) return hit;
+    }
+    return document.querySelector('.day-block.nodes-linking')
+      || (document.querySelector('.tv-panel.tv-nodes.active') && document.querySelector('.tv-panel.tv-nodes.active').closest('.day-block'))
+      || document.querySelector('.day-block[data-date="2026-08-20"]');
   }
-  function board(){
-    return document.querySelector('.day-block[data-date="2026-08-20"] .tv-panel.tv-nodes .sec-grid.pursuit-canvas')
-      || document.querySelector('.day-block.pursuit-board-day[data-date="2026-08-20"] .sec-grid.pursuit-canvas')
-      || document.querySelector('.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas');
+  function board(from){
+    var blk = blockEl(from);
+    if (!blk) return null;
+    return blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas')
+      || blk.querySelector('.sec-grid.pursuit-canvas');
+  }
+  function dayKey(blk){
+    var d = blk && blk.getAttribute('data-date');
+    return (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) ? d : '2026-08-20';
   }
   function pair(a, b){
     return a < b ? [a, b] : [b, a];
@@ -39186,22 +39412,50 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
     if(id.indexOf(':') >= 0) return id;
     return 'z:' + id;
   }
-  function loadEdges(){
-    try{
-      var raw = JSON.parse(localStorage.getItem(EDGE_KEY) || 'null');
-      if(Array.isArray(raw) && raw.length){
-        return raw.map(function(e){
-          if(!e || e.length < 2) return null;
-          return pair(normId(e[0]), normId(e[1]));
-        }).filter(function(e){ return e && e[0] && e[1] && e[0] !== e[1]; });
-      }
-    }catch(err){}
-    return DEFAULT_EDGES.map(function(e){ return [e[0], e[1]]; });
+  function loadDayMap(){
+    try { return JSON.parse(localStorage.getItem(EDGE_BY_DAY) || '{}') || {}; } catch(e){ return {}; }
   }
-  function saveEdges(list){
-    try{ localStorage.setItem(EDGE_KEY, JSON.stringify(list || [])); }catch(err){}
+  function saveDayMap(m){
+    try { localStorage.setItem(EDGE_BY_DAY, JSON.stringify(m || {})); } catch(e){}
   }
-  var edges = loadEdges();
+  function loadEdges(day){
+    day = day || '2026-08-20';
+    var map = loadDayMap();
+    if (Array.isArray(map[day]) && map[day].length) {
+      return map[day].map(function(e){
+        if(!e || e.length < 2) return null;
+        return pair(normId(e[0]), normId(e[1]));
+      }).filter(function(e){ return e && e[0] && e[1] && e[0] !== e[1]; });
+    }
+    if (day === '2026-08-20') {
+      try{
+        var raw = JSON.parse(localStorage.getItem(EDGE_KEY) || 'null');
+        if(Array.isArray(raw) && raw.length){
+          return raw.map(function(e){
+            if(!e || e.length < 2) return null;
+            return pair(normId(e[0]), normId(e[1]));
+          }).filter(function(e){ return e && e[0] && e[1] && e[0] !== e[1]; });
+        }
+      }catch(err){}
+      return DEFAULT_EDGES.map(function(e){ return [e[0], e[1]]; });
+    }
+    return [];
+  }
+  function saveEdges(list, day){
+    day = day || edgesDay || '2026-08-20';
+    var map = loadDayMap();
+    map[day] = list || [];
+    saveDayMap(map);
+    if (day === '2026-08-20') {
+      try{ localStorage.setItem(EDGE_KEY, JSON.stringify(list || [])); }catch(err){}
+    }
+  }
+  function ensureEdges(day){
+    if (edgesDay === day && Array.isArray(edges)) return edges;
+    edgesDay = day;
+    edges = loadEdges(day);
+    return edges;
+  }
   function slug(s){
     return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'node';
   }
@@ -39273,7 +39527,7 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
     var next = edges.filter(function(e){ return map[e[0]] && map[e[1]]; });
     if(next.length !== edges.length){
       edges = next;
-      saveEdges(edges);
+      saveEdges(edges, edgesDay);
     }
   }
   function ensureSvg(grid){
@@ -39295,52 +39549,58 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
     ny = ny / len * bow;
     return 'M ' + a.x + ' ' + a.y + ' Q ' + (mx + nx) + ' ' + (my + ny) + ' ' + b.x + ' ' + b.y;
   }
-  function setHint(text){
-    var el = document.querySelector('.day-block[data-date="2026-08-20"] .nodes-edit-hint');
+  function setHint(text, blk){
+    blk = blk || blockEl(fromEl);
+    var el = blk && blk.querySelector('.nodes-edit-hint');
     if(el) el.textContent = text;
   }
   function clearFrom(){
     document.querySelectorAll('.node-link-from').forEach(function(n){ n.classList.remove('node-link-from'); });
     fromEl = null;
   }
-  function isLinking(){
-    var blk = blockEl();
+  function isLinking(from){
+    var blk = blockEl(from || fromEl);
     return !!(blk && blk.classList.contains('nodes-linking'));
   }
-  function setLinking(on){
-    var blk = blockEl();
+  function setLinking(on, from){
+    var blk = blockEl(from || fromEl);
     if(!blk) return;
+    ensureEdges(dayKey(blk));
     blk.classList.toggle('nodes-linking', !!on);
     var btn = blk.querySelector('.nodes-link-btn');
     if(btn) btn.classList.toggle('is-on', !!on);
     if(!on){
       clearFrom();
-      setHint('click two nodes to link them · click a line to remove it');
+      setHint('click two nodes to link them · click a line to remove it', blk);
     } else {
-      setHint(fromEl ? 'now click what it connects to' : 'click a node, then click what it connects to');
+      setHint(fromEl ? 'now click what it connects to' : 'click a node, then click what it connects to', blk);
     }
   }
   function startLinkFrom(el){
     if(!el) return;
-    setLinking(true);
+    setLinking(true, el);
     clearFrom();
     fromEl = el;
     el.classList.add('node-link-from');
-    setHint('now click what it connects to');
+    setHint('now click what it connects to', blockEl(el));
   }
   function addEdge(a, b){
     if(!a || !b || a === b) return;
+    var blk = blockEl(fromEl);
+    ensureEdges(dayKey(blk));
     var p = pair(a, b);
     if(edges.some(function(e){ return e[0] === p[0] && e[1] === p[1]; })) return;
     edges.push(p);
-    saveEdges(edges);
-    draw();
+    saveEdges(edges, dayKey(blk));
+    draw(blk);
   }
-  function dropEdge(a, b){
+  function dropEdge(a, b, from){
+    var blk = blockEl(from);
+    ensureEdges(dayKey(blk));
     var p = pair(a, b);
     edges = edges.filter(function(e){ return !(e[0] === p[0] && e[1] === p[1]); });
-    saveEdges(edges);
-    draw();
+    saveEdges(edges, dayKey(blk));
+    draw(blk);
   }
   function closestNode(t){
     if(!t || !t.closest) return null;
@@ -39348,16 +39608,18 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
   }
   function pickNode(el){
     if(!el) return;
+    var blk = blockEl(el);
+    ensureEdges(dayKey(blk));
     if(!fromEl){
       fromEl = el;
       el.classList.add('node-link-from');
-      setHint('now click what it connects to');
+      setHint('now click what it connects to', blk);
       return;
     }
     if(fromEl === el){
       el.classList.remove('node-link-from');
       fromEl = null;
-      setHint('click a node, then click what it connects to');
+      setHint('click a node, then click what it connects to', blk);
       return;
     }
     var a = fromEl.getAttribute('data-node-id') || wantedId(fromEl);
@@ -39367,11 +39629,13 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
     fromEl.classList.remove('node-link-from');
     fromEl = el;
     el.classList.add('node-link-from');
-    setHint('linked · click another node to keep connecting');
+    setHint('linked · click another node to keep connecting', blk);
   }
-  function draw(){
-    var grid = board();
+  function draw(from){
+    var grid = board(from);
     if(!grid) return;
+    var blk = grid.closest('.day-block');
+    ensureEdges(dayKey(blk));
     var panel = grid.closest('.tv-panel');
     if(panel && (panel.style.display === 'none' || getComputedStyle(panel).display === 'none')) return;
     var heroHost = grid.querySelector('.pursuit-zone-body .pursuit-zone-grid');
@@ -39439,7 +39703,8 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
       if(linkBtn){
         e.preventDefault();
         e.stopPropagation();
-        setLinking(!isLinking());
+        var on = !isLinking(linkBtn);
+        setLinking(on, linkBtn);
         return;
       }
     }, true);
@@ -39450,13 +39715,13 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
         e.preventDefault();
         e.stopPropagation();
         if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-        dropEdge(hit.getAttribute('data-a'), hit.getAttribute('data-b'));
+        dropEdge(hit.getAttribute('data-a'), hit.getAttribute('data-b'), hit);
         return;
       }
-      if(!isLinking()) return;
+      if(!isLinking(e.target)) return;
       if(e.target.closest('.nodes-add-btn, .nodes-link-btn, .nodes-edit-bar, .zone-add-picker, .zone-del, .card-del, .zone-oneoff-del, .day-add-zone, input, textarea, button.tv-pill')) return;
       var node = closestNode(e.target);
-      var grid = board();
+      var grid = board(e.target);
       if(node && grid && grid.contains(node)){
         e.preventDefault();
         e.stopPropagation();
@@ -39466,7 +39731,7 @@ html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.
       }
       if(e.target.closest('.tv-panel.tv-nodes')){
         clearFrom();
-        setHint('click a node, then click what it connects to');
+        setHint('click a node, then click what it connects to', blockEl(e.target));
       }
     }, true);
     document.addEventListener('keydown', function(e){
@@ -39863,6 +40128,18 @@ html body .day-block.fmt22.today-block.freeplace-day.fp-empty .make-flow-btn {
       grid.classList.add('freeform');
       var saved=store[day]||{};
       [].slice.call(grid.querySelectorAll(':scope > .sec-card')).forEach(function(card,i){
+        /* Screenshot / proof tiles: full-bleed natural aspect — never freeplace squares */
+        if(card.classList.contains('shot-card')){
+          card.classList.remove('card-sized');
+          ['width','height','max-width','max-height','min-width','min-height','flex','flex-basis','position','top','left','right','bottom','--ff-x','--ff-y','--card-w','--card-h'].forEach(function(p){
+            card.style.removeProperty(p);
+          });
+          card.style.removeProperty('--ff-x');
+          card.style.removeProperty('--ff-y');
+          card.style.removeProperty('--card-w');
+          card.style.removeProperty('--card-h');
+          return;
+        }
         card.classList.remove('card-sized');
         ['width','height','max-width','max-height','min-width','min-height','flex','flex-basis','position','top','left','right','bottom'].forEach(function(p){
           card.style.removeProperty(p);
@@ -39884,6 +40161,7 @@ html body .day-block.fmt22.today-block.freeplace-day.fp-empty .make-flow-btn {
     if(!e || !card) return;
     if(e.button && e.button!==0) return;
     if(!card.closest('.freeplace-day')) return;
+    if(card.classList.contains('shot-card')) return;
     if(e.target.closest('.j22-item, .j22-t, .j22-group, .card-del, .card-add-task, .card-resize, .done-check, button, input, a, .del-x, .agenda-check')) return;
     var grid=card.closest('.sec-grid.freeform');
     if(!grid) return;
@@ -39936,6 +40214,105 @@ html body .day-block.fmt22.today-block.freeplace-day.fp-empty .make-flow-btn {
   } catch(err) {}
 })();
 </script>
+<style id="full-tile-bleed-shot-cards">
+/* HARD RULE: Everything page screenshot/proof tiles are always full-bleed.
+   Photo fills the tile. Title overlays the photo. Never a black bottom bar.
+   Must beat freeplace absolute/inset card-visual rules. */
+html body .day-block.fmt22 .sec-card.shot-card,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22.today-block.freeplace-day .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.is-empty.shot-card,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.is-empty.shot-card,
+html body .day-block.fmt22[data-date="2026-08-27"] .tv-pursuits .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day.today-block .tv-pursuits .sec-grid.freeform > .sec-card.shot-card {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(460px, calc(50% - 12px)) !important;
+  height: auto !important;
+  min-width: 240px !important;
+  min-height: 0 !important;
+  max-width: 560px !important;
+  max-height: none !important;
+  flex: 1 1 320px !important;
+  margin: 0 !important;
+  aspect-ratio: auto !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  cursor: zoom-in !important;
+}
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-grid.freeform > .sec-card.shot-card {
+  width: min(920px, 100%) !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.freeplace-day .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.is-empty.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.is-empty.shot-card .card-visual {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  flex: none !important;
+  z-index: 0 !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.freeplace-day .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty.shot-card .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty.shot-card .card-visual img {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  filter: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.freeplace-day .sec-card.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.is-empty.shot-card .card-visual .j22-group {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 10px 12px 22px !important;
+  background: linear-gradient(to bottom, rgba(20,16,12,0.62) 0%, rgba(20,16,12,0) 100%) !important;
+  color: #f6efe4 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+  pointer-events: none;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-body {
+  display: none !important;
+}
+</style>
 <script src="icon-grid.js?v=crosssec1"></script>
 </body>
 </html>

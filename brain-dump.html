@@ -674,7 +674,7 @@
   </div>
 </form>
 
-<script src="nav-shared.js?v=navclear"></script>
+<script src="nav-shared.js?v=navtimelines1"></script>
 <script>
 (function(){
   var SECTION_META = [
@@ -975,7 +975,7 @@
     presence:  { x: 930, y: 210, w: 210, rot:  0.9 },
     inbox:     { x: 680, y: 560, w: 290, rot: -1.1 }
   };
-  var FORCE_GAP = 10;
+  var FORCE_GAP = 16; // gap between on-screen (rotated) bounds
   function placeCluster(c, x, y, w, rot, h){
     x = Math.max(0, Math.round(x));
     y = Math.max(0, Math.round(y));
@@ -992,12 +992,18 @@
     }
   }
   function clusterState(c){
+    var br = board.getBoundingClientRect();
+    var r = c.getBoundingClientRect();
     return {
       el: c,
-      x: parseFloat(c.style.getPropertyValue('--dx')) || 0,
-      y: parseFloat(c.style.getPropertyValue('--dy')) || 0,
-      w: c.offsetWidth || parseFloat(c.style.getPropertyValue('--cw')) || 280,
-      h: c.offsetHeight || 160,
+      // Visual (rotated) box — this is what must not overlap
+      x: r.left - br.left,
+      y: r.top - br.top,
+      w: r.width,
+      h: r.height,
+      // Layout vars we actually write
+      dx: parseFloat(c.style.getPropertyValue('--dx')) || 0,
+      dy: parseFloat(c.style.getPropertyValue('--dy')) || 0,
       rot: parseFloat(c.style.getPropertyValue('--rot')) || 0,
       cw: parseFloat(c.style.getPropertyValue('--cw')) || undefined,
       ch: c.classList.contains('has-fixed-h') ? (parseFloat(c.style.getPropertyValue('--ch')) || undefined) : undefined
@@ -1015,23 +1021,43 @@
     return a.x < b.x + b.w + gap && a.x + a.w + gap > b.x &&
            a.y < b.y + b.h + gap && a.y + a.h + gap > b.y;
   }
-  // Force-directed collision: overlapping nodes push apart (dragged stays put)
+  function clampDx(n, bw){
+    n.dx = Math.max(0, Math.min(Math.max(0, bw - (n.cw || n.w) - 8), n.dx));
+    n.dy = Math.max(0, n.dy);
+  }
+  function pushNode(n, px, py, bw){
+    var odx = n.dx, ody = n.dy;
+    n.dx += px;
+    n.dy += py;
+    clampDx(n, bw);
+    // If the side wall ate a horizontal shove, dump the rest downward
+    if (Math.abs(px) > 1 && Math.abs(n.dx - odx) < 0.5) {
+      n.dy = ody + Math.max(Math.abs(py), Math.abs(px), 8);
+      clampDx(n, bw);
+    }
+  }
+  // Force-directed collision using on-screen (rotated) bounds
   function applyForces(anchorEl, iterations){
-    iterations = iterations == null ? 4 : iterations;
+    iterations = iterations == null ? 64 : iterations;
     var bw = board.clientWidth || 1100;
-    var nodes = Array.from(board.querySelectorAll('.cluster')).map(clusterState);
     for (var iter = 0; iter < iterations; iter++) {
+      var nodes = Array.from(board.querySelectorAll('.cluster')).map(clusterState);
+      var moved = false;
       for (var i = 0; i < nodes.length; i++) {
         for (var j = i + 1; j < nodes.length; j++) {
           var a = nodes[i], b = nodes[j];
           if (!rectsOverlap(a, b, FORCE_GAP)) continue;
+          moved = true;
           var cxA = a.x + a.w / 2, cyA = a.y + a.h / 2;
           var cxB = b.x + b.w / 2, cyB = b.y + b.h / 2;
           var dx = cxB - cxA, dy = cyB - cyA;
+          if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+            dx = (j % 2 ? 1 : -1);
+            dy = 1;
+          }
           var overlapX = (a.w / 2 + b.w / 2 + FORCE_GAP) - Math.abs(dx);
           var overlapY = (a.h / 2 + b.h / 2 + FORCE_GAP) - Math.abs(dy);
           if (overlapX <= 0 || overlapY <= 0) continue;
-          // Prefer the smaller push axis so packing stays tight
           var pushX = 0, pushY = 0;
           if (overlapX < overlapY) {
             pushX = (dx >= 0 ? 1 : -1) * (overlapX / 2 + 1);
@@ -1041,27 +1067,21 @@
           var moveA = a.el !== anchorEl;
           var moveB = b.el !== anchorEl;
           if (moveA && moveB) {
-            a.x = Math.max(0, Math.min(bw - a.w - 8, a.x - pushX));
-            a.y = Math.max(0, a.y - pushY);
-            b.x = Math.max(0, Math.min(bw - b.w - 8, b.x + pushX));
-            b.y = Math.max(0, b.y + pushY);
+            pushNode(a, -pushX, -pushY, bw);
+            pushNode(b, pushX, pushY, bw);
           } else if (moveB) {
-            b.x = Math.max(0, Math.min(bw - b.w - 8, b.x + pushX * 2));
-            b.y = Math.max(0, b.y + pushY * 2);
+            pushNode(b, pushX * 2, pushY * 2, bw);
           } else if (moveA) {
-            a.x = Math.max(0, Math.min(bw - a.w - 8, a.x - pushX * 2));
-            a.y = Math.max(0, a.y - pushY * 2);
+            pushNode(a, -pushX * 2, -pushY * 2, bw);
           }
         }
       }
       nodes.forEach(function(n){
         if (n.el === anchorEl) return;
-        placeCluster(n.el, n.x, n.y, n.cw, n.rot, n.ch);
-        n.w = n.el.offsetWidth || n.w;
-        n.h = n.el.offsetHeight || n.h;
-        n.x = parseFloat(n.el.style.getPropertyValue('--dx')) || n.x;
-        n.y = parseFloat(n.el.style.getPropertyValue('--dy')) || n.y;
+        placeCluster(n.el, n.dx, n.dy, n.cw, n.rot, n.ch);
       });
+      if (!moved) break;
+      growBoard();
     }
     growBoard();
   }
@@ -1122,7 +1142,11 @@
       }
       placeCluster(c, x, y, w, rot, h);
     });
-    if (wide) applyForces(null, 8);
+    if (wide) {
+      // Real heights are known after place — separate until clear, then save
+      applyForces(null, 120);
+      persistAllClusterPos();
+    }
     growBoard();
   }
   function persistClusterPos(c){
@@ -1171,7 +1195,7 @@
         document.removeEventListener('pointerup', onResizeUp, true);
         document.removeEventListener('pointercancel', onResizeUp, true);
         cluster.classList.remove('is-resizing');
-        applyForces(cluster, 6);
+        applyForces(cluster, 12);
         persistAllClusterPos();
       }
       document.addEventListener('pointermove', onResizeMove, true);
@@ -1200,7 +1224,7 @@
       if (!moved && Math.abs(dx) + Math.abs(dy) < 3) return;
       moved = true;
       placeCluster(cluster, Math.max(0, ox + dx), Math.max(0, oy + dy), ow, orot, oh);
-      applyForces(cluster, 3);
+      applyForces(cluster, 8);
     }
     function onUp(){
       try { cluster.releasePointerCapture(e.pointerId); } catch (err) {}
@@ -1210,7 +1234,7 @@
       cluster.classList.remove('is-dragging-cluster');
       clusterDrag = null;
       if (moved) {
-        applyForces(cluster, 8);
+        applyForces(cluster, 48);
         persistAllClusterPos();
       }
     }
