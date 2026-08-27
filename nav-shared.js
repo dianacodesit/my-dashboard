@@ -13,7 +13,7 @@
     { href: 'lifestyle.html', label: 'lifestyle', group: 'wip' },
     { href: 'planner.html', label: 'timelines', group: 'main' },
     { href: 'accomplishments.html', label: 'accomplishments', group: 'main' },
-    { href: 'striving.html', label: 'Striving', group: 'main' },
+    { href: 'striving.html', label: 'striving', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
     { href: 'duaa.html', label: "Dua'a", group: 'main' },
     { href: 'dimensions.html', label: 'dimensions', group: 'main' },
