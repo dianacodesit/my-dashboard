@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>dashboard · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cinzel:wght@500;600&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css"/>
+<link rel="stylesheet" href="nav-shared.css?v=navveil5"/>
 <style>
   :root {
     --ink: #f7efe4;
@@ -160,15 +160,33 @@
   }
   .focus-box::placeholder { color: rgba(247,239,228,0.45); }
   .today { --photo: url("manus-storage/zone-ambition-v4.jpg"); }
-  .agenda { --photo: url("manus-storage/zone-finances-v2.jpg?v=2"); }
+  .agenda { --photo: url("manus-storage/planner-bg-timewarp.jpg"); }
+  .agenda::before {
+    opacity: 0.82;
+    background-position: center 38%;
+  }
+  .agenda::after {
+    background: linear-gradient(180deg, rgba(10,7,5,0.04) 18%, rgba(10,7,5,0.58) 100%);
+  }
+  .wins { --photo: url("manus-storage/accomplishments-bg.jpg?v=summit"); }
+  .strive { --photo: url("manus-storage/striving-path-horizon.jpg?v=path"); }
   .dims { --photo: url("manus-storage/pursuit-ux-design-v12_f2f2c818.jpg"); }
   .glow { --photo: url("manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"); }
-  .life { --photo: url("manus-storage/pursuit-lifestyle_577937e8.jpg"); }
+  .life { --photo: url("manus-storage/agenda-bg-wall.jpg?v=wall"); }
   .money { --photo: url("manus-storage/zone-finances-v2.jpg?v=2"); }
   .power { --photo: url("manus-storage/mock-power.jpg"); }
   .ambition { --photo: url("manus-storage/zone-ambition-v4.jpg"); }
-  .quantum { --photo: url("manus-storage/zone-quantum-v14.jpg?v=symbol"); }
+  .quantum { --photo: url("manus-storage/zone-quantum-v15.jpg?v=observe"); }
   .dump { --photo: url("manus-storage/_339ab459.jpg"); min-height: 150px; }
+  .adhd { --photo: url("manus-storage/adhd-bg.jpg?v=revertcover"); }
+  .research { --photo: url("manus-storage/research-diana-jundi-journal.jpg?v=eco"); }
+  .cv { --photo: url("manus-storage/curriculum-vitae-real.jpg?v=cv5"); }
+  .biz { --photo: url("manus-storage/business-jundi-building.jpg?v=facade"); }
+  .powerops { --photo: url("manus-storage/power-boardroom-table.jpg?v=table"); }
+  .qmind { --photo: url("manus-storage/quantum-how-you-look.jpg?v=stars14"); }
+  .prime { --photo: url("manus-storage/priming-fountain-pen.jpg?v=pen"); }
+  .abundance { --photo: url("manus-storage/abundance-bg.jpg?v=rows"); }
+  .parallels { --photo: url("manus-storage/parallel-timelines-bg.jpg?v=linen"); }
   .dump-preview {
     margin-top: 8px;
     font-size: 15px;
@@ -219,10 +237,22 @@
       <p class="tile-note">the full board — every day, every section</p>
     </a>
 
-    <a class="tile agenda" href="agenda.html">
-      <p class="tile-kicker">schedule</p>
-      <h2 class="tile-title">Agenda</h2>
-      <p class="tile-note">day cards from aug 25</p>
+    <a class="tile agenda" href="planner.html">
+      <p class="tile-kicker">warp</p>
+      <h2 class="tile-title">Timelines</h2>
+      <p class="tile-note">hours warping into one another</p>
+    </a>
+
+    <a class="tile wins" href="accomplishments.html">
+      <p class="tile-kicker">kept</p>
+      <h2 class="tile-title">Accomplishments</h2>
+      <p class="tile-note">wins already sealed</p>
+    </a>
+
+    <a class="tile strive" href="striving.html">
+      <p class="tile-kicker">toward</p>
+      <h2 class="tile-title">Striving</h2>
+      <p class="tile-note">what you’re still moving toward</p>
     </a>
 
     <a class="tile dims" href="grids.html">
@@ -236,7 +266,7 @@
       <h2 class="tile-title">Glow Up</h2>
       <p class="tile-note">skin, body, rituals</p>
     </a>
-    <a class="tile life" href="everything.html">
+    <a class="tile life" href="lifestyle.html">
       <p class="tile-kicker">world</p>
       <h2 class="tile-title">Lifestyle</h2>
       <p class="tile-note">home, people, the way it looks</p>
@@ -266,9 +296,54 @@
       <h2 class="tile-title">Brain Dump</h2>
       <p class="dump-preview" id="dump-preview">open the page to write</p>
     </a>
+    <a class="tile adhd" href="adhd.html">
+      <p class="tile-kicker">wiring</p>
+      <h2 class="tile-title">ADHD / neurodiversity</h2>
+      <p class="tile-note">how this mind works</p>
+    </a>
+    <a class="tile research" href="research-proposals.html">
+      <p class="tile-kicker">prove</p>
+      <h2 class="tile-title">research proposals</h2>
+      <p class="tile-note">what you want to prove</p>
+    </a>
+    <a class="tile cv" href="curriculum-vitae.html">
+      <p class="tile-kicker">record</p>
+      <h2 class="tile-title">Curriculum Vitae</h2>
+      <p class="tile-note">the work, in order</p>
+    </a>
+    <a class="tile biz" href="business-ideas.html">
+      <p class="tile-kicker">seed</p>
+      <h2 class="tile-title">business ideas</h2>
+      <p class="tile-note">things that could become real</p>
+    </a>
+    <a class="tile powerops" href="power-opportunities.html">
+      <p class="tile-kicker">opening</p>
+      <h2 class="tile-title">power opportunities</h2>
+      <p class="tile-note">where influence can land</p>
+    </a>
+    <a class="tile qmind" href="quantum-consciousness.html">
+      <p class="tile-kicker">observe</p>
+      <h2 class="tile-title">quantum consciousness</h2>
+      <p class="tile-note">the unseen layer</p>
+    </a>
+    <a class="tile prime" href="priming.html">
+      <p class="tile-kicker">cue</p>
+      <h2 class="tile-title">priming & prompting</h2>
+      <p class="tile-note">words that set the mind</p>
+    </a>
+    <a class="tile abundance" href="abundance.html">
+      <p class="tile-kicker">overflow</p>
+      <h2 class="tile-title">abundance economics</h2>
+      <p class="tile-note">economics of enough</p>
+    </a>
+    <a class="tile parallels" href="parallel-timelines.html">
+      <p class="tile-kicker">fork</p>
+      <h2 class="tile-title">parallel timelines</h2>
+      <p class="tile-note">this line, adjacent, chosen</p>
+    </a>
   </section>
 </main>
-<script src="nav-shared.js"></script>
+<script src="nav-shared.js?v=navtimelines1"></script>
 <script>
 (function(){
   var FOCUS_KEY = "dash_focus_v1";

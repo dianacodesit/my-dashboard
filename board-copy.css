@@ -8519,18 +8519,20 @@ body.editing .add-task-here-btn { display: block; }
     z-index: 10000;
     transition: opacity 0.3s;
   }
-  #nav-overlay.open { display: block; }
+  #nav-overlay.open { display: block; left: 280px; }
   #nav-sidebar {
     position: fixed;
     top: 0;
     left: -320px;
     width: 280px;
     height: 100vh;
-    background: #F5F0E8;
-    border-right: 1px solid rgba(196,168,130,0.4);
+    background: rgba(245, 240, 232, 0.9);
+    backdrop-filter: blur(22px) saturate(1.12);
+    -webkit-backdrop-filter: blur(22px) saturate(1.12);
+    border-right: 1px solid rgba(28, 20, 14, 0.10);
     z-index: 10001;
     padding: 60px 0 20px;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+    box-shadow: 8px 0 28px rgba(8, 4, 2, 0.12);
     transition: left 0.3s ease;
     overflow-y: auto;
     box-sizing: border-box;
@@ -8549,15 +8551,7 @@ body.editing .add-task-here-btn { display: block; }
     line-height: 1;
   }
   #nav-close:hover { color: #2a2a2a; }
-  #nav-sidebar h2 {
-    font-family: 'Italiana', serif;
-    font-weight: 400;
-    font-size: 26px;
-    margin: 0 0 18px;
-    padding: 0 24px;
-    letter-spacing: 0.04em;
-    color: #2a2a2a;
-  }
+  #nav-sidebar h2 { display: none; }
   #nav-sidebar .nav-section {
     font-family: 'DM Mono', monospace;
     font-size: 9px;

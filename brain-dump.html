@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>brain dump · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cinzel:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css"/>
+<link rel="stylesheet" href="nav-shared.css?v=navclear"/>
 <style>
   :root {
     --cream: #F5F0E8;
@@ -38,7 +38,7 @@
     position: relative;
     z-index: 1;
     min-height: 100vh;
-    padding: 64px 20px 140px;
+    padding: 64px 20px 200px;
   }
   .dump-hero {
     text-align: center;
@@ -94,79 +94,155 @@
   .dump-empty.show { display: block; }
 
   .dump-board {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 28px 22px;
-    align-items: flex-start;
-    justify-content: center;
-    max-width: 1280px;
+    display: block;
+    position: relative;
+    max-width: 1320px;
+    min-height: 720px;
     margin: 0 auto;
+    /* freeform canvas — categories float, not in rows/columns */
   }
-  .cluster {
-    flex: 1 1 240px;
-    max-width: 360px;
-    min-width: 220px;
+  .dump-board .cluster {
+    position: absolute;
+    left: var(--dx, 16px);
+    top: var(--dy, 16px);
+    width: var(--cw, 300px);
+    height: var(--ch, auto);
+    max-width: calc(100% - 20px);
+    min-width: 160px;
+    min-height: 88px;
+    z-index: 2;
+    flex: none;
+    overflow: visible;
+    background: rgba(250, 246, 238, 0.94);
+    border: 1px solid rgba(42, 34, 28, 0.18);
+    border-radius: 18px;
+    padding: 0 0 8px;
+    box-shadow: 0 10px 24px rgba(28, 20, 14, 0.08);
+    transform: rotate(var(--rot, 0deg));
+    transform-origin: 50% 12%;
+    cursor: grab;
+    touch-action: none;
   }
-  .cluster.is-empty { display: none; }
+  .dump-board .cluster.has-fixed-h {
+    overflow: hidden;
+  }
+  .dump-board .cluster.is-dragging-cluster,
+  .dump-board .cluster.is-resizing {
+    cursor: grabbing;
+    z-index: 40;
+    box-shadow: 0 16px 36px rgba(28, 20, 14, 0.16);
+  }
+  .dump-board .cluster-title {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 12px 16px 11px;
+    background: #2a221c;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-align: left;
+    cursor: grab;
+  }
+  .dump-board .cluster-notes {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows, auto), auto);
+    grid-auto-flow: column;
+    gap: 0 28px;
+    padding: 6px 16px 14px;
+    justify-content: stretch;
+    align-items: start;
+    max-height: none;
+    overflow: visible;
+  }
+  .dump-board .cluster.has-fixed-h .cluster-notes {
+    max-height: calc(var(--ch) - 52px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .dump-board .cluster-resize {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 0 0 16px 0;
+    cursor: nwse-resize;
+    touch-action: none;
+    z-index: 5;
+    background:
+      linear-gradient(135deg, transparent 55%, rgba(42,34,28,0.35) 55%, rgba(42,34,28,0.35) 62%, transparent 62%),
+      linear-gradient(135deg, transparent 70%, rgba(42,34,28,0.28) 70%, rgba(42,34,28,0.28) 77%, transparent 77%);
+  }
+  .dump-board .cluster-resize:hover {
+    background:
+      linear-gradient(135deg, transparent 55%, rgba(42,34,28,0.55) 55%, rgba(42,34,28,0.55) 62%, transparent 62%),
+      linear-gradient(135deg, transparent 70%, rgba(42,34,28,0.45) 70%, rgba(42,34,28,0.45) 77%, transparent 77%);
+  }
+  .dump-board .note {
+    width: 100%;
+    padding: 8px 28px 8px 2px;
+  }
+  @media (max-width: 700px) {
+    .dump-board { min-height: 880px; }
+    .dump-board .cluster {
+      width: min(300px, calc(100% - 16px)) !important;
+      transform: none;
+    }
+    .dump-board .cluster-notes { grid-template-columns: 1fr; }
+  }
+  .cluster.is-empty { opacity: 0.78; }
+  .cluster.is-empty .cluster-notes {
+    min-height: 64px;
+    margin: 8px 12px 10px;
+    border: 1px dashed rgba(42, 34, 28, 0.22);
+    border-radius: 12px;
+    background: rgba(245, 240, 232, 0.55);
+  }
+  .cluster.is-drop-target {
+    outline: 2px solid #2a221c;
+    outline-offset: 2px;
+  }
+  .cluster.is-drop-target .cluster-notes {
+    outline: none;
+    background: rgba(245, 240, 232, 0.7);
+  }
   .cluster-title {
     font-family: 'Cinzel', serif;
-    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #4a3d32;
-    text-align: center;
-    margin-bottom: 14px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    color: #f7efe4;
+    text-shadow: none;
   }
   .cluster-notes {
     display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
   }
 
   .note {
     position: relative;
-    width: min(220px, 100%);
-    background:
-      radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,0.55), transparent 46%),
-      var(--paper);
+    width: 100%;
+    background: transparent;
     color: var(--ink);
-    border-radius: 16px;
-    padding: 16px 16px 14px;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.85) inset,
-      0 10px 24px rgba(90,70,40,0.12),
-      0 2px 6px rgba(90,70,40,0.08);
-    transform: rotate(var(--tilt, -1.4deg));
-    animation: pop-in 0.42s cubic-bezier(.18,1.15,.32,1) both;
-    border: 1px solid rgba(196,168,130,0.35);
+    border: none;
+    border-bottom: 1px solid rgba(42, 34, 28, 0.1);
+    border-radius: 0;
+    padding: 9px 28px 9px 2px;
+    box-shadow: none;
+    transform: none;
   }
-  .note::before {
-    content: '';
-    position: absolute;
-    inset: auto 18px -6px 18px;
-    height: 10px;
-    background: inherit;
-    filter: blur(6px);
-    opacity: 0.35;
-    z-index: -1;
-  }
-  @keyframes pop-in {
-    from {
-      opacity: 0;
-      transform: rotate(var(--tilt, -1.4deg)) scale(0.82) translateY(14px);
-    }
-    to {
-      opacity: 1;
-      transform: rotate(var(--tilt, -1.4deg)) scale(1) translateY(0);
-    }
-  }
+  .note:last-child { border-bottom: none; }
+  .note:hover { background: rgba(28, 20, 14, 0.04); }
   .note-text {
     font-size: 16px;
-    line-height: 1.45;
+    line-height: 1.4;
     min-height: 1.4em;
     outline: none;
     word-break: break-word;
@@ -184,8 +260,53 @@
     line-height: 1;
     cursor: pointer;
     border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .note:hover .note-x,
+  .note:focus-within .note-x {
+    opacity: 1;
+    pointer-events: auto;
   }
   .note-x:hover { background: rgba(28,20,14,0.08); color: var(--ink); }
+  .note-plus {
+    position: absolute;
+    top: 3px;
+    right: 32px;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    background: rgba(250,246,238,0.94);
+    color: #2a221c;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(28,20,14,0.16);
+    z-index: 2;
+    transition: opacity 0.16s ease, background 0.16s ease, color 0.16s ease;
+  }
+  .note:hover .note-plus,
+  .note:focus-within .note-plus {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .note-plus:hover { background: #2a221c; color: #f7efe4; }
+  .note-plus.is-sent {
+    opacity: 1;
+    pointer-events: none;
+    font-size: 15px;
+    background: #5a8a4a;
+    color: #fff8ee;
+  }
+  .note { cursor: grab; }
+  .note.is-dragging {
+    opacity: 0.45;
+    cursor: grabbing;
+  }
+  .note-text { cursor: text; }
 
   .composer-dock {
     position: fixed;
@@ -195,6 +316,8 @@
     z-index: 40;
     width: min(680px, calc(100% - 28px));
   }
+  body.review-open .composer-dock,
+  body.review-open .dump-holding { visibility: hidden; pointer-events: none; }
   .composer {
     display: flex;
     align-items: flex-end;
@@ -237,31 +360,321 @@
     cursor: pointer;
   }
   .dump-send:hover { background: #1c140e; }
+
+  .dump-holding {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 1280px;
+    margin: 52px auto 140px;
+    padding: 20px 18px 22px;
+    scroll-margin-bottom: 160px;
+    background: rgba(250, 246, 238, 0.94);
+    border: 1px solid rgba(42, 34, 28, 0.2);
+    border-radius: 22px;
+    box-shadow: 0 16px 36px rgba(28, 20, 14, 0.14);
+  }
+  @media (max-width: 720px) {
+    .dump-holding { grid-template-columns: 1fr; }
+  }
+  .dump-holding .cluster.is-empty { opacity: 1; }
+  .cluster.hold-lane {
+    flex: none;
+    max-width: none;
+    min-width: 0;
+    background: #faf6ee;
+    border: 1px solid rgba(42, 34, 28, 0.22);
+    border-radius: 16px;
+    padding: 16px 16px 18px;
+    box-shadow: 0 8px 18px rgba(28, 20, 14, 0.08);
+  }
+  .cluster.hold-lane .cluster-title {
+    display: table;
+    width: auto;
+    margin: 0 0 14px;
+    padding: 8px 16px 7px;
+    background: #2a221c;
+    border: 1px solid #1c140e;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(28, 20, 14, 0.22);
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 500;
+    font-style: normal;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #f7efe4;
+    text-align: center;
+  }
+  .cluster.hold-lane .cluster-notes {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-height: 112px;
+  }
+  .cluster.hold-lane.is-empty .cluster-notes {
+    min-height: 112px;
+    border: 1px dashed rgba(42, 34, 28, 0.28);
+    border-radius: 12px;
+    background: rgba(245, 240, 232, 0.72);
+  }
+  .cluster.hold-lane .note {
+    width: 100%;
+    border-radius: 0;
+    transform: none;
+    animation: none;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid rgba(42, 34, 28, 0.1);
+    background: transparent;
+    padding: 9px 24px 9px 2px;
+  }
+  .cluster.hold-lane .note::before { display: none; }
+  .cluster.hold-lane .note:hover {
+    background: rgba(250, 246, 238, 0.55);
+  }
+  .cluster.hold-lane .note-text {
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.4;
+    color: #3d322a;
+  }
+  .cluster.hold-lane.is-drop-target {
+    outline: 2px solid #2a221c;
+    outline-offset: 2px;
+    background: rgba(250, 246, 238, 0.7);
+  }
+  .cluster.hold-lane.is-drop-target .cluster-notes {
+    outline: none;
+    background: transparent;
+  }
+
+  .cluster.review-door {
+    grid-column: 1 / -1;
+    flex: none;
+    max-width: none;
+    min-width: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 22px 13px 24px;
+    background: #4a3048;
+    border: 1px solid #351f34;
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(28, 20, 14, 0.22);
+  }
+  .cluster.review-door .cluster-title {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #f7efe4;
+    text-align: left;
+  }
+  .cluster.review-door .review-hint {
+    margin: 0;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(247, 239, 228, 0.82);
+  }
+  .cluster.review-door.is-empty { opacity: 1; }
+  .cluster.review-door.is-drop-target {
+    outline: 2px solid #f7efe4;
+    outline-offset: 3px;
+    background: #5c3d59;
+  }
+  .review-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    align-items: stretch;
+    justify-content: center;
+    padding: 18px 18px 22px;
+    background: rgba(28, 20, 14, 0.55);
+  }
+  .review-overlay.is-open { display: flex; }
+  .review-panel {
+    position: relative;
+    width: min(1120px, calc(100vw - 36px));
+    height: min(92vh, 980px);
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.42), transparent 18%),
+      #faf6ee;
+    border: 1px solid rgba(196, 168, 130, 0.45);
+    border-radius: 22px;
+    box-shadow: 0 24px 60px rgba(12, 8, 4, 0.35);
+    padding: 28px 28px 18px;
+  }
+  .review-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    color: #6f5f54;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  .review-close:hover { background: rgba(28,20,14,0.08); color: #1c140e; }
+  .review-panel h2 {
+    font-family: 'Italiana', serif;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #4a3048;
+    text-align: center;
+  }
+  .review-panel .review-sub {
+    margin: 4px 0 18px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8a7a6a;
+  }
+  .review-drop {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(74, 48, 72, 0.18);
+    border-radius: 18px;
+    padding: 6px 6px 6px 16px;
+    margin-bottom: 16px;
+  }
+  #review-input {
+    flex: 1;
+    border: 0;
+    outline: none;
+    background: transparent;
+    resize: none;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--ink);
+    min-height: 28px;
+    max-height: 96px;
+    padding: 8px 0;
+  }
+  #review-input::placeholder {
+    color: rgba(106, 78, 102, 0.55);
+    font-style: italic;
+  }
+  .review-drop .dump-send {
+    background: #4a3048;
+  }
+  .review-drop .dump-send:hover { background: #351f34; }
+  .review-notes {
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+    align-content: start;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-right: 6px;
+  }
+  @media (max-width: 720px) {
+    .review-panel {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      border-radius: 16px;
+      padding: 24px 16px 14px;
+    }
+    .review-notes { grid-template-columns: 1fr; }
+  }
+  .review-notes .note {
+    width: 100%;
+    transform: none;
+    animation: none;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid rgba(74, 48, 72, 0.12);
+    background: transparent;
+    padding: 9px 26px 9px 2px;
+  }
+  .review-notes .note::before { display: none; }
+  .review-notes .note:hover { background: rgba(74, 48, 72, 0.05); }
+  .review-notes .note-text {
+    font-size: 16px;
+    font-style: italic;
+    color: #3d322a;
+  }
+  .review-empty {
+    display: none;
+    margin: 18px 8px;
+    text-align: center;
+    font-style: italic;
+    color: #8a7a6a;
+  }
+  .review-empty.show { display: block; }
 </style>
 </head>
 <body class="brain-dump-page">
-<script id="brain-dump-data" type="application/json">[{"id":"n_restore_tuition","text":"tuition","section":"finances","at":"2026-08-25T01:35:00.000Z"},{"id":"n_restore_ring","text":"Nominal islamic ring","section":"inbox","at":"2026-08-25T01:35:00.000Z"},{"id":"n_mt7u23vb_vohcy","text":"scholarship 'general application'","section":"ambition","at":"2026-08-24T22:54:07.895Z"},{"id":"n_mt91lm41_7txsv","text":"Amazon account recovery","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_2ka2r","text":"return QR codes Judd","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_gl166","text":"Addiction Counselor CV for Naufar","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_qglxf","text":"Pepperdine","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_7xhu4","text":"Conn class","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_a9ib2","text":"tuition","section":"finances","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_nb1db","text":"scholarship","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_xru2q","text":"document translation","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_t7c13","text":"text to Dr Betty","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_dhv6a","text":"PLUS loan","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_ejn89","text":"Mission Viejo Towing","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_2ihuv","text":"Adderall dispute","section":"body","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_ied9f","text":"WF check","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt95geu2_x8ohx","text":"JUL 1","section":"inbox","at":"2026-08-25T21:00:57.242Z"},{"id":"n_mt95geu2_uro7m","text":"Redbox RX","section":"body","at":"2026-08-25T21:00:57.242Z"},{"id":"n_mt95geu2_ude8n","text":"JUL 6","section":"inbox","at":"2026-08-25T21:00:57.242Z"},{"id":"n_mt95geu2_jsiln","text":"tuition funds","section":"finances","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_sppxu","text":"Psi Chi Graduate Scholarships","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_zieta","text":"SCLA Community Champions Kick-off","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_py8k2","text":"AERA 2027 Proposal Development Workshop","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_41hxz","text":"Psi Chi meeting","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_p428w","text":"G8TS gold weekly membership","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_pg1dz","text":"General Meeting #1","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1ow1l","text":"ELEVATE Impact Circle – Brainstorming Session","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_30c5k","text":"Leo","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qtym9","text":"aera","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ghq6k","text":"handshake","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_jxbor","text":"claude","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_c441m","text":"musly","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_orglo","text":"Gen and Kelly Tanabe Giving Back Scholarship - Spring","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_i1tnu","text":"JUL 14","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_u3fuh","text":"message to Dr Nugent","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qa4iv","text":"message to Dr Fuller","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_yjgbz","text":"Superhuman mail","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1exyp","text":"Certified Letters","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ag1lm","text":"JUL 17","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_b6v2w","text":"halo","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_7rkiu","text":"Snoonu: Ariete","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_xclq5","text":"Kohl's: Bagsmart","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_t6ksv","text":"Amazon","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_v37ol","text":"Sam's Club","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_o42lt","text":"Brown & Welin Pharmacy","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ujot1","text":"Adderall 20mg 270q stock","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_4hsih","text":"Klarity","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_gqbk6","text":"letter to Tirey","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_0wgxq","text":"letter to tow company","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ibd4e","text":"letters to credit reporting agencies","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_99zsu","text":"Advisory Board","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_n3ym8","text":"Anthropic program","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_j5b4c","text":"Handshake saved jobs","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uoaso","text":"AERA Reserarch Proposal","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qfys0","text":"Executive Assistant proposal","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_i5nk5","text":"Certified Letter to Tirey, Williamson.","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_a5pzw","text":"Certified Letter to Mission Viejo Towing","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_cp81i","text":"MacBook Air","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_p3u53","text":"Bellami hair extensions","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_3kwnz","text":"Smile Set fittings","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ve8s8","text":"Smile Set impressions","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_hzj0v","text":"JUL 20","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_0u8tb","text":"Waves of Development: Riding the Waves – Core 3 Relationships w/Dr. Judy Ho","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1yh9b","text":"JUL 22","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_wzr1z","text":"Nordstrom Rack","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_cpylb","text":"Sally Hershberger","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_kw7og","text":"Apple","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_khkis","text":"Target","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ne2y7","text":"Whoosh","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qeusn","text":"Prior Authorizations statuses","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_94dan","text":"request for Sandoz at L. Tokyo phar.","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qqehm","text":"follow-up message to Dr Fuller","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1nee4","text":"luggage","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_v8mjd","text":"laundry","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_evfad","text":"medications","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_83wj0","text":"Saturday's flight","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_dskly","text":"JUL 23","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_n8ewb","text":"Qatar; [air wrap hair tool], SkinCeuticals","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_76swh","text":"Sephora | Armani foundation","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_e9pjb","text":"Dr Melaxin | Medicube ?","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qkgxm","text":"Best Buy","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_wxs0y","text":"Forward2Me parcels to Qatar","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uot12","text":"Vivarin","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ndbzi","text":"Brown & Wellin Sandoz order follow-up","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_d6ky1","text":"Redbox Rx; phar. change follow-up","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_bss01","text":"reply message to Dr Nugent","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uorkg","text":"Blossom $400 refund","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_xuojw","text":"Kohl's","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_kf5vx","text":"Nordstrom","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_3dcw3","text":"JUL 24","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_40y0m","text":"MacBook Air backup to Time Machine via LaCie","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_9htyi","text":"meeting w/ Dr Betty, Paula, Carolina","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_mj035","text":"Bloomingdale's order","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_26yma","text":"Sephora order","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_lzhj6","text":"JUL 25","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_0wkow","text":"Kaiser SC","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_j770w","text":"CVS Marguerite","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_m8vnu","text":"Verizon","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_fgpxn","text":"53 Le Mans","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_o88s7","text":"Wells Fargo","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_9ej81","text":"Sephora","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_vlmou","text":"bikini razor","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_lrm2e","text":"Kaiser 4700 Sunset","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_fkp53","text":"Qelbree discount card","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1ddj7","text":"payment","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1gf6c","text":"delivery from CVS via courier","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_npc6f","text":"Best Buy order","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_lzzk2","text":"Sam's Club order","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_3ak44","text":"GSEP Career Designing Retreat (day 1)","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_j9cgc","text":"GSEP Career Designing Retreat (day 2)","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_12mxp","text":"research proposal — Psi Chi 2026–27 NICE Crowd","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_s4rcl","text":"nicechair@psichi.org","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_fkw38","text":"instructions","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_8ho5v","text":"Text Mom","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_zmdq1","text":"Elevate","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_2v7v1","text":"text Dr Betty","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_89owb","text":"document translation into Arabic","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_cvte0","text":"2nd Circle Meeting","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_tq7ac","text":"Pepperdine GSA","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uca7v","text":"Top Applicant","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt9679cb_ro9ky","text":"Nienke","section":"inbox","at":"2026-08-25T21:21:49.835Z"},{"id":"n_mt967f38_2j06k","text":"Wells Fargp check","section":"inbox","at":"2026-08-25T21:21:57.284Z"},{"id":"n_mt967j1t_2ores","text":"Psi Chi committee chair meeting","section":"inbox","at":"2026-08-25T21:22:02.417Z"},{"id":"n_mt96804s_ls53p","text":"SCLA Chamption follow-up","section":"inbox","at":"2026-08-25T21:22:24.556Z"},{"id":"n_mt9683c7_ehzmk","text":"Musly application","section":"ambition","at":"2026-08-25T21:22:28.711Z"},{"id":"n_mt968gqt_o0nqo","text":"Anthropic Fellowship application","section":"ambition","at":"2026-08-25T21:22:46.085Z"},{"id":"n_mt96atqh_p43i1","text":"Blossom refund follow-up","section":"inbox","at":"2026-08-25T21:24:36.233Z"},{"id":"n_mt97kr2k_daw55","text":"Manus $750 refund","section":"inbox","at":"2026-08-25T22:00:18.956Z"},{"id":"n_mt97kz73_ruafm","text":"Manus task data restoration","section":"inbox","at":"2026-08-25T22:00:29.487Z"}]</script><!--/brain-dump-data-->
+<script id="brain-dump-data" type="application/json">[{"id":"n_restore_tuition","text":"tuition","section":"finances","at":"2026-08-25T01:35:00.000Z"},{"id":"n_restore_ring","text":"Nominal islamic ring","section":"shopping","at":"2026-08-25T01:35:00.000Z"},{"id":"n_mt7u23vb_vohcy","text":"scholarship 'general application'","section":"ambition","at":"2026-08-24T22:54:07.895Z"},{"id":"n_mt91lm41_7txsv","text":"Amazon account recovery","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_2ka2r","text":"return QR codes Judd","section":"inbox","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_gl166","text":"Addiction Counselor CV for Naufar","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_qglxf","text":"Pepperdine","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_7xhu4","text":"Conn class","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_a9ib2","text":"tuition","section":"finances","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_nb1db","text":"scholarship","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_xru2q","text":"document translation","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_t7c13","text":"text to Dr Betty","section":"ambition","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_dhv6a","text":"PLUS loan","section":"finances","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_ejn89","text":"Mission Viejo Towing","section":"leverage","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_2ihuv","text":"Adderall dispute","section":"finances","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt91lm42_ied9f","text":"WF check","section":"finances","at":"2026-08-25T19:13:01.490Z"},{"id":"n_mt95geu2_x8ohx","text":"JUL 1","section":"inbox","at":"2026-08-25T21:00:57.242Z"},{"id":"n_mt95geu2_uro7m","text":"Redbox RX","section":"body","at":"2026-08-25T21:00:57.242Z"},{"id":"n_mt95geu2_ude8n","text":"JUL 6","section":"inbox","at":"2026-08-25T21:00:57.242Z"},{"id":"n_mt95geu2_jsiln","text":"tuition funds","section":"finances","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_sppxu","text":"Psi Chi Graduate Scholarships","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_zieta","text":"SCLA Community Champions Kick-off","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_py8k2","text":"AERA 2027 Proposal Development Workshop","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_41hxz","text":"Psi Chi meeting","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_p428w","text":"G8TS gold weekly membership","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_pg1dz","text":"General Meeting #1","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1ow1l","text":"ELEVATE Impact Circle – Brainstorming Session","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_30c5k","text":"Leo","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qtym9","text":"aera","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ghq6k","text":"handshake","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_jxbor","text":"claude","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_c441m","text":"musly","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_orglo","text":"Gen and Kelly Tanabe Giving Back Scholarship - Spring","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_i1tnu","text":"JUL 14","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_u3fuh","text":"message to Dr Nugent","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qa4iv","text":"message to Dr Fuller","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_yjgbz","text":"Superhuman mail","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1exyp","text":"Certified Letters","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ag1lm","text":"JUL 17","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_b6v2w","text":"halo","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_7rkiu","text":"Snoonu: Ariete","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_xclq5","text":"Kohl's: Bagsmart","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_t6ksv","text":"Amazon","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_v37ol","text":"Sam's Club","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_o42lt","text":"Brown & Welin Pharmacy","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ujot1","text":"Adderall 20mg 270q stock","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_4hsih","text":"Klarity","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_gqbk6","text":"letter to Tirey","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_0wgxq","text":"letter to tow company","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ibd4e","text":"letters to credit reporting agencies","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_99zsu","text":"Advisory Board","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_n3ym8","text":"Anthropic program","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_j5b4c","text":"Handshake saved jobs","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uoaso","text":"AERA Reserarch Proposal","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qfys0","text":"Executive Assistant proposal","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_i5nk5","text":"Certified Letter to Tirey, Williamson.","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_a5pzw","text":"Certified Letter to Mission Viejo Towing","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_cp81i","text":"MacBook Air","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_p3u53","text":"Bellami hair extensions","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_3kwnz","text":"Smile Set fittings","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ve8s8","text":"Smile Set impressions","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_hzj0v","text":"JUL 20","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_0u8tb","text":"Waves of Development: Riding the Waves – Core 3 Relationships w/Dr. Judy Ho","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1yh9b","text":"JUL 22","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_wzr1z","text":"Nordstrom Rack","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_cpylb","text":"Sally Hershberger","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_kw7og","text":"Apple","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_khkis","text":"Target","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ne2y7","text":"Whoosh","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qeusn","text":"Prior Authorizations statuses","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_94dan","text":"request for Sandoz at L. Tokyo phar.","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qqehm","text":"follow-up message to Dr Fuller","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1nee4","text":"luggage","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_v8mjd","text":"laundry","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_evfad","text":"medications","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_83wj0","text":"Saturday's flight","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_dskly","text":"JUL 23","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_n8ewb","text":"Qatar; [air wrap hair tool], SkinCeuticals","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_76swh","text":"Sephora | Armani foundation","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_e9pjb","text":"Dr Melaxin | Medicube ?","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_qkgxm","text":"Best Buy","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_wxs0y","text":"Forward2Me parcels to Qatar","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uot12","text":"Vivarin","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_ndbzi","text":"Brown & Wellin Sandoz order follow-up","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_d6ky1","text":"Redbox Rx; phar. change follow-up","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_bss01","text":"reply message to Dr Nugent","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uorkg","text":"Blossom $400 refund","section":"finances","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_xuojw","text":"Kohl's","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_kf5vx","text":"Nordstrom","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_3dcw3","text":"JUL 24","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_40y0m","text":"MacBook Air backup to Time Machine via LaCie","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_9htyi","text":"meeting w/ Dr Betty, Paula, Carolina","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_mj035","text":"Bloomingdale's order","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_26yma","text":"Sephora order","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_lzhj6","text":"JUL 25","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_0wkow","text":"Kaiser SC","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_j770w","text":"CVS Marguerite","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_m8vnu","text":"Verizon","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_fgpxn","text":"53 Le Mans","section":"leverage","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_o88s7","text":"Wells Fargo","section":"finances","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_9ej81","text":"Sephora","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_vlmou","text":"bikini razor","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_lrm2e","text":"Kaiser 4700 Sunset","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_fkp53","text":"Qelbree discount card","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1ddj7","text":"payment","section":"finances","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_1gf6c","text":"delivery from CVS via courier","section":"body","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_npc6f","text":"Best Buy order","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_lzzk2","text":"Sam's Club order","section":"shopping","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_3ak44","text":"GSEP Career Designing Retreat (day 1)","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_j9cgc","text":"GSEP Career Designing Retreat (day 2)","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_12mxp","text":"research proposal — Psi Chi 2026–27 NICE Crowd","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_s4rcl","text":"nicechair@psichi.org","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_fkw38","text":"instructions","section":"inbox","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_8ho5v","text":"Text Mom","section":"life","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_zmdq1","text":"Elevate","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_2v7v1","text":"text Dr Betty","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_89owb","text":"document translation into Arabic","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_cvte0","text":"2nd Circle Meeting","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_tq7ac","text":"Pepperdine GSA","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt95geu3_uca7v","text":"Top Applicant","section":"ambition","at":"2026-08-25T21:00:57.243Z"},{"id":"n_mt9679cb_ro9ky","text":"Nienke","section":"inbox","at":"2026-08-25T21:21:49.835Z"},{"id":"n_mt967f38_2j06k","text":"Wells Fargp check","section":"finances","at":"2026-08-25T21:21:57.284Z"},{"id":"n_mt967j1t_2ores","text":"Psi Chi committee chair meeting","section":"ambition","at":"2026-08-25T21:22:02.417Z"},{"id":"n_mt96804s_ls53p","text":"SCLA Chamption follow-up","section":"ambition","at":"2026-08-25T21:22:24.556Z"},{"id":"n_mt9683c7_ehzmk","text":"Musly application","section":"ambition","at":"2026-08-25T21:22:28.711Z"},{"id":"n_mt968gqt_o0nqo","text":"Anthropic Fellowship application","section":"ambition","at":"2026-08-25T21:22:46.085Z"},{"id":"n_mt96atqh_p43i1","text":"Blossom refund follow-up","section":"finances","at":"2026-08-25T21:24:36.233Z"},{"id":"n_mt97kr2k_daw55","text":"Manus $750 refund","section":"finances","at":"2026-08-25T22:00:18.956Z"},{"id":"n_mt97kz73_ruafm","text":"Manus task data restoration","section":"inbox","at":"2026-08-25T22:00:29.487Z"},{"id":"n_mt9fkaud_rrykk","text":"RISE event","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_hucq3","text":"Pepperdine University","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ulfhy","text":"Malibu","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sug48","text":"Order replacement cards — Cred.ai ✓","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_o3iq8","text":"PayPal ✓","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sy29e","text":"Chase debit 6176 (pending)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ced8t","text":"Social wajibs — Taylor ✓","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_7jjcy","text":"Mohamed ✓","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_cy7x6","text":"Marah (pending)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3hr0m","text":"APR 12","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ztkkc","text":"Called BOA","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_1ht1l","text":"follow up on dispute ✓","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_c43ay","text":"Open new checking account (pending)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_w4o4g","text":"Social wajibs — Sabrina (pending)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ylcc3","text":"Call data recovery","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jworw","text":"confirm pickup in a few days","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_o8wfb","text":"Call MDRepairs","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_db6e2","text":"confirm if they can restore iPhone 16","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_awr34","text":"APR 16","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_cx8rc","text":"Extra Space OC — move / consolidate units","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_wb5f6","text":"Ship iPhone 16 → MDRepairs","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_75n3u","text":"UPS / FedEx drop-off","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_7obrc","text":"Kohl's — return Samsonite weekender","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_x325m","text":"Sephora — return unwanted items","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xqg54","text":"APR 17","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ndhy2","text":"Extra Space DTLA — vacate unit A2023","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_b4hx4","text":"N Main","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_k6k9h","text":"OC → DTLA","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3tavq","text":"dedicated day for the drive","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_l9hwq","text":"APR 20","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_i6rpa","text":"صلاة | قصر وجمع: ظهر","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rgmiq","text":"SCLA orientation","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_g1quj","text":"PSY-623 session 3","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xw2qr","text":"Continue drafting email to tenants send","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ua50t","text":"Tend to threads Heba","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_r9qch","text":"Switch Turo car","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_yh0hf","text":"Share Shahid password Sabrina","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_vkij0","text":"Schedule psychiatrist appointment","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ttoym","text":"Nordstrom Rack (before noon)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_l9yzc","text":"Sephora (same-day pick up)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_1brcy","text":"ShockClock Pavlov","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_vzbme","text":"Afobazole","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3turu","text":"Luxe Hair extensions","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_35pad","text":"Anxiolytics","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_y167v","text":"Ahmed to ask Motaz if he knows any lawyers here","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_56ssw","text":"Mom to order Guanfacine & Cytomel","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_07ksc","text":"APR 21","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ed6d2","text":"Part 2: Follow the Money (Elizabeth Fuchs) Zoom session","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_20yed","text":"Call Ernesto","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_d9w8t","text":"Admin work | Call SCLA","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jl0g6","text":"Submit mail forwarding requests","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_w3y3t","text":"Sephora (pick up + return)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ymd16","text":"Apple Irvine Spectrum appointment","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_37e72","text":"APR 22","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_er1ad","text":"ZocDoc psychiatrist appt","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_w4a1n","text":"Costco pharmacy — Adderall IR Rx","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_0h14l","text":"Walgreens — Adderall IR Rx","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_e0psw","text":"Hair appointment — extensions / styling","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_gqtly","text":"APR 23","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_juhra","text":"53 Le Mans inspection","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_wymws","text":"Order Sephora items — same-day pick up","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ikt41","text":"pick up * Nordstrom Rack","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_or333","text":"Order anxiolytics Afobazole","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_50o7e","text":"Tend to threads Maggie","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_bon3n","text":"APR 24","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_a3zeu","text":"Pick up Sephora order","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_flo1h","text":"APR 25","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_fj6s0","text":"Call CVS","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_5q9ci","text":"request brand-name Cytomel","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8aqmk","text":"Bank of America branch visit","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_oxz1g","text":"Kaiser > Adderall XRs","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_bie51","text":"return * Ounass > 2 dresses","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rnwsk","text":"gifts > Ahmed, Maram + kids","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_720tv","text":"Unload","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_9lu9v","text":"change clothes","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_1ljwx","text":"eat if you haven't","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_7hamb","text":"hydrate","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_lje5x","text":"no screens","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jkqhz","text":"file * Answer to Unlawful Detainer (Irvine Company)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2rmzv","text":"Intake forms > Dr. Rogers","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_swzxi","text":"Email * Amanda (proofs of payment)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_gm24y","text":"Walk","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_h7xjc","text":"stretch","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_967n8","text":"step away from screen","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_j6ctn","text":"Appeal dispute * Bank of America","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_tjj63","text":"monthly reflection papers","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_lx1yj","text":"Psi Chi International Honor Society > membership","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jug49","text":"Eat","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ga3i7","text":"move body","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_pw96g","text":"transition out of work mode","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sg452","text":"tend to threads Aftkar","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2wja7","text":"Amazon items","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_y705b","text":"THC | CBD","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4g5tv","text":"Muji bins","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_5z3f7","text":"Adapalene","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4b2l3","text":"TelyRx","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_c6uou","text":"ADHD Advisor","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_q0phb","text":"Kaiser","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_g3yni","text":"Carpe","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_45sm2","text":"Oriveda (CA reseller)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_v2drx","text":"hair care products","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2ppri","text":"piercings > find spot","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_0ikk7","text":"laser hair removal > find spot","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_gsza0","text":"Vyvanse | Adderall ?","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4hnx6","text":"APR 25","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jctbb","text":"B","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_6jtai","text":"USPS COAs","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_yg9j6","text":"Salwa","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8sezf","text":"Ounass","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_gsyr5","text":"APR 26","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_9axv7","text":"apply * CalFresh > benefits","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4yucg","text":"CalFresh","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_wtvss","text":"Vegamour","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_j9ul6","text":"Muji","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_6iy4i","text":"Notify Taylor & Parker","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_9hc79","text":"demo can start tomorrow","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xx29h","text":"Dr. Betty","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_6c89w","text":"Marisa","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_mshm0","text":"Aftkar","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_p8goz","text":"Maram","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_6d5n8","text":"APR 27","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2dor1","text":"Adderall XR","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xksyc","text":"Dr. Fuller","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_vpfjz","text":"PSY 623","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4wgef","text":"APR 28","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_cr6ld","text":"53 Le Mans","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rp7g0","text":"demo Day 2","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2vbkh","text":"demand letter","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_uzifu","text":"denial letter","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_m3oyp","text":"water restoration project","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_x937n","text":"demo status update","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_5jaxl","text":"graduation from Dr. Betty's program","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_t2pu1","text":"Amanda","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kopbo","text":"APR 29","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3jpln","text":"1:1 w/ Dr. Betty","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sdkwm","text":"Waves of Development: I/O Psy","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rlabx","text":"PSY-658","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_bru4l","text":"mold clearance status","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_q7y96","text":"project completion status","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_dwygn","text":"earphones refund","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rpc8u","text":"Psi Chi membership","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kcvnm","text":"APR 30","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_zrrpw","text":"Adderall IR","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kg9ls","text":"Vyvanse","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8ak1r","text":"mold clearance test","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kbaoz","text":"notice to tenants","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_j99dh","text":"public storage payment","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_f7qbx","text":"midnight deadline","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_j3e8n","text":"CAMFT 2026 Conference tickets (may 1–2)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_diava","text":"Psi Chi Spring Banquet tickets (may 30)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_tvu8l","text":"Bailouni","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_r3r0z","text":"MAY 1","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_346c8","text":"CAMFT 2026 Conference","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_nf05v","text":"day 1","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_76f5g","text":"CAMFT 2026 Conference","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_yfb2z","text":"day 2","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sgboa","text":"boarding passes","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_1o88x","text":"monthly refills","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kp0lt","text":"in progress","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_wxfpg","text":"follow-up request to Dr. Leivant","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_nw5g5","text":"water restoration project completion","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3maio","text":"monthly refills","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3efcn","text":"Creyos assessment","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_th8we","text":"Strattera","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ibov3","text":"PsyD virtual event registration","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_agpcp","text":"email from ___","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_v8v52","text":"Spring Term Midday Mentors","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8ern0","text":"Condor flight change to Mon 5/11","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_7poc3","text":"stools","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_70n7r","text":"Understanding the Quran","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8bmuf","text":"MAY 6","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sa6sn","text":"volunteer research experience","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_0lwoc","text":"reply to PsyConnect email","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kjcj9","text":"reply to Kristen Dial","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_wqif6","text":"AT&T line","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_gi6gj","text":"Call SNAP office","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ces24","text":"reclaim EBT funds","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_m3g8l","text":"Follow up BOA dispute","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_w9ibj","text":"push for resolution","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_q1uu5","text":"Follow up MDRepairs","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2vfxu","text":"Confirm supplement + card orders received","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rwwq1","text":"OC SSA","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_u5mh5","text":"Wells Fargo bank statements","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_yvuhy","text":"Nienke","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8f8ou","text":"Colleen","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_15qzz","text":"Levothyroxine refill","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_uy9x5","text":"Thyreogen","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_pi4ov","text":"RuPharma payment","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jx21e","text":"email thread reply","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_21q87","text":"SNAP EBT monthly benefits","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_09vsj","text":"Jetta check","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3b004","text":"AAA tow to 53 Le Mans","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_zkusa","text":"safety inspection","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kvgqy","text":"follow-up text to Dr. Leivant","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_q2ao3","text":"email reply to Dr. Rogers","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_o4ul4","text":"Rx check at CVS Marguerite","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ahahb","text":"card update for appt w/ Dr. Cody","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xr5go","text":"email follow-up to Dr. Rogers","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_gywu7","text":"morning adhkar","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_r30jy","text":"12:20 – 12:48 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_co6co","text":"PSY-658 study guide","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jfj8q","text":"dhuhr prayer + qadaa","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3ijgc","text":"2:45 – 3:00 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4l0mr","text":"Jetta tow to 53 Le Mans","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_vccf4","text":"3:30 – 6:50 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8rhhu","text":"original bottle check at KP 4700 Sunset","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_eiwsy","text":"3:15 – 3:30 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_25quz","text":"PSY-658 class","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_fr5uh","text":"5 – 7 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_t0c64","text":"Sephora return (Huda, LP, etc.)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_lc8ht","text":"8:30 – 9:00 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ea2ps","text":"tenant exit inspection","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_oihd4","text":"appointment","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_s9x9f","text":"qadaa Isha & Fajr prayers","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jihb8","text":"Adderall XR 25 mg + 10 mg Rx request","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_zhlk9","text":"laundry wash cycle","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_sfege","text":"Tesla re-rental Fri – Mon","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3np9y","text":"reply message to Marissa","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_tt0hj","text":"أذكار الصباح","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_f1vyx","text":"Maggie","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ajgti","text":"Dr. Betty she called","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_0e3c8","text":"laundry dry cycle","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_mewxi","text":"laundry wash cycle #2","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_tnxu3","text":"Addie ready check at CVS Marguerite","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_orlw5","text":"prior authorization request to Dr. Cody","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rrsqt","text":"صلاة الظهر","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_7oyjp","text":"inspection appointment for Monday [tentative]","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_myymv","text":"pending thread w/ Maggie","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_u7rtq","text":"صلاة العصر","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_x5fjq","text":"أذكار المساء","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_36j00","text":"صلاة المغرب","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_2q25x","text":"سورة الواقعة","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_vdnfb","text":"call to Bailouni","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_1g4a1","text":"Luxy order","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_wxqno","text":"laundry hang dry","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_g69d7","text":"MAY 8","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rnxhq","text":"call to Kaiser Sand Canyon pharmacy","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_88czm","text":"message to Dr. Fuller's team AGAIN","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_tzayk","text":"new message thread to Dr. Fuller","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_yurjp","text":"email thread reply to Daruty","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_jgs1o","text":"call to Kaiser, call to Costco, call to Kaiser, call to Costco, call to Kaiser","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_3qfjd","text":"MAY 9","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_8y7si","text":"Marissa","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_4lzk1","text":"Elevate with Dr. Betty 8:30 am – 12 pm","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kk4eb","text":"action items for Stephanie Paul (during class)","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xanoh","text":"Torrey Pines hike","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_js2f3","text":"Advanced Data Solutions pickup","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_puqv3","text":"payments for Extra Space units","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_rj27d","text":"refund for Luxy 12\"","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_xndjj","text":"taskers via Taskrabbit","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_cnveb","text":"Hadia & Amer","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_ldcj6","text":"Ilham & Judd","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_um3vw","text":"Islamic wedding rings","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_94v7b","text":"ring doorbell camera","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_kzpah","text":"MAY 10","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_6es2j","text":"requests","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_7l6fl","text":"email correspondence","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_vumns","text":"rebuttal to tenants [and lawyer]","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaud_19pkh","text":"high-rise jeans","section":"review","at":"2026-08-26T01:43:54.853Z"},{"id":"n_mt9fkaue_lyrey","text":"ASOS","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_8o8z5","text":"T-shirts","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qc6zv","text":"BB cream","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4bs02","text":"brow pencil","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_9aqnv","text":"highlighter","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_3z5nv","text":"lipgloss","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_yhwz9","text":"face serum","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_cq9ec","text":"facial toner","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_k4sd2","text":"headphones","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_if18o","text":"portable triple monitor","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_1llay","text":"iPhone 16 Pro Max pickup","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qph21","text":"PSY-658 exam due","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_9xstl","text":"Extra Space over-lock check","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_29qe9","text":"keypad with keyhole lock","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_hoj4y","text":"PSY–658 midterm","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_7haeh","text":"reply message to Maggie","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_8tcqw","text":"lunch w/ Maggie 5 – 7:50 pm","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_mfflj","text":"The Container Store order","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_nnw4a","text":"inspection cancellation","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ppr25","text":"SDGE service","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_rv7dt","text":"call to Marah","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_b3nhm","text":"L & L lock unit 2007","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_jeg5j","text":"53 Le Mans smart cameras","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_uyujh","text":"Maram's requests","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_yu2a0","text":"MAY 11","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4lgr9","text":"LA → Doha","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_jc5vv","text":"bags ready for check-in","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_fh05d","text":"voice note message reply to Nienke","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_htznq","text":"MacBook Neo","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_b9ztl","text":"Sephora items","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_x25ti","text":"Ulta items","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_bkpay","text":"Best Buy items","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_8o3zh","text":"Tirosint","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_kdp1e","text":"mobile hotspot device","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_hd78z","text":"smart cameras","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_b80z3","text":"Sephora return","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qrzma","text":"lock rekey for 53 Le Mans","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_u7m2b","text":"call to Extra Space","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_t4t0x","text":"email reply to Daruty","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_wj1h4","text":"you've got this","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_0cezs","text":"everything is handled","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5yzu1","text":"safe travels 🌿","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_petp5","text":"MAY 12","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_zobov","text":"Arab landlord-tenant lawyer","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_pu28m","text":"sheer blazer","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ny29h","text":"MAY 15","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_wd1fq","text":"The Bridge, 2nd gathering","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_m2uep","text":"email to Dr. Blas","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_et7er","text":"The Bridge zoom meeting 3 pm PST","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_spbfm","text":"MAY 16","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_myn86","text":"calls to","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_j5jtz","text":"call to Amer","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_lo46r","text":"MAY 17","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_czpux","text":"dishes","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_7tw9d","text":"microfiber wash dry cycle","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_swxjb","text":"PSY-623 quiz 5","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_18aff","text":"Best Buy return","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ye8hm","text":"MAY 19","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_etu9t","text":"reply message [& photos] to Sabrina","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_6slcd","text":"Adderall IR quantity check","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vortb","text":"groceries","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_dfd5k","text":"pumpkin seeds","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_lhu0p","text":"Callipo tuna","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_oiurk","text":"Rio tuna","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4p416","text":"Organyc cotton swabs","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_j5qjz","text":"Nike sneakers odor treatment","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4hh7h","text":"screenshots of Snoonu carts","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_a6dwv","text":"Capital One statement screenshot","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_8lrkr","text":"reply message [& follow-up inquiry] to MD Repairs","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_6dq44","text":"PSY-623","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_on6e2","text":"Fajr","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_otwm7","text":"'Self Within' speech script * * * * * * * *","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_l8y0s","text":"SCLA onboarding","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_er2sp","text":"MAY 20","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_531cg","text":"PSY-658 Module 7","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_2fks1","text":"security deposit disposition * * * * *","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_0e4rz","text":"Psi Chi induction info reply","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_1ritm","text":"MAY 22","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_0m0cc","text":"email reply to Psi Chi","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_d6ve8","text":"video call w/ Ilham & Judd","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5wsbv","text":"Elevate 15 min speech","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_egqiv","text":"SCLA Career Readiness Certificate","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_h1hfh","text":"glow-up sesh","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_w7m3p","text":"Burj al-Hammam","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5axvv","text":"Citi","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_swxqa","text":"voice note message to Nienke","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ixc63","text":"speech final draft","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ub7no","text":"MAY 23","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_snyk5","text":"Elevate speech rehearsal","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_okqk7","text":"MAY 24","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ewutg","text":"Summer 2026 registration","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_t0c4j","text":"MAY 25","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_fd2jg","text":"chat with Dr. Betty","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_y2o7b","text":"PayPal","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_odmov","text":"MAY 26","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vlioy","text":"registration for Pepperdine / PsyConnect events","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qg9bf","text":"registration for Para Ella Symposium","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vk0my","text":"Ounass returns","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_lx5wu","text":"photo share w/ Sabrina","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_okogs","text":"MAY 27","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_wowqv","text":"Spring Midday Mentors Event w/ Dr. Dennis Lowe","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_j3itu","text":"colors & intmates","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_h4v14","text":"PSY-658 Module 8","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_421kn","text":"Eid glow-up","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_exviv","text":"professional headshot for Psi Chi induction","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qikz0","text":"mu'ayadeh to friends","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ityjb","text":"Maram's house","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vdx38","text":"fit check in 2 dresses","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_0h7ea","text":"Stargold green luggage set","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5hyby","text":"check-in ready","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_e5zpm","text":"washing machine cleaner","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_inpv4","text":"MAY 28","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_d1ubq","text":"PSY-658 interview paper","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_k3m0k","text":"SCLA BIG Celebration","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_l80g9","text":"HIA","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_o6xc6","text":"Turo booking","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vfujs","text":"practice run for speech","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_bt7nr","text":"Meet Dr. Betty","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_imnrj","text":"her house","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_a1ety","text":"motion to vacate unlawful detainer judgment","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_paapl","text":"MAY 30","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4xmge","text":"Self Within speech transcript","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_91th1","text":"Poised review of May 7 session","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_y606g","text":"CFPB claim","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_414d2","text":"Bonus Elevate Exclusive Opportunity: Voice & Delivery Training","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4lq31","text":"Psi Chi Membership Certificate","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_9z8wv","text":"Psi Chi GSEP Spring Banquet","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_l12n9","text":"appt. w/ Student Success Advisor","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ljo88","text":"interview paper","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5buol","text":"photos to Sabrina","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_wa6xm","text":"photoshop on Psi Chi induction photos","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_xpz02","text":"radianthotyoga month membership","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_9gik4","text":"register for BBS webinar","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vbg7l","text":"Lock & Leave Storage 1020 unit","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_s8i8b","text":"modafinil","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_xx1zv","text":"Dr. Ray's intake forms","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_gzuot","text":"move-outs of Extra Space units","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_81q5f","text":"mom","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qdg7j","text":"dad","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_v5a9d","text":"Ahmad","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_zj3b7","text":"AAA membership downgrade","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_eqt2m","text":"JUN 7","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_40i3v","text":"Pepperdine speech","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_bux2k","text":"JUN 12","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_z9qbn","text":"PsyConnect: Virtual Employer Meetup","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vcf00","text":"PsyConnect","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_svqsf","text":"Fri Jun 12","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_2981y","text":"10 AM - NOON PT","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_vpqjm","text":"VIRTUAL via ZOOM","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5sghe","text":"JUN 22","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_14rx9","text":"UCLA PEERS for Careers","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_xk71o","text":"EXP Realty","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_t9hh7","text":"Haidy","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_6p6pt","text":"Gia","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5uroy","text":"Lina Safa","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_xreua","text":"Fatin","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_cqsd4","text":"early refill","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_4bjwq","text":"90-day supply","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_u1amq","text":"Dr Cody Nugent","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_2zs8t","text":"90-day fill","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5z49n","text":"Qelbree prescription","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_m5gb5","text":"Wellbutrin SR","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_r52ih","text":"Sunday Natural supplements","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_3ksm2","text":"SS/ES-2401 override key","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_95r1s","text":"SkinCeuticals","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_7fjkd","text":"A.G.E. Eye Complex (2)","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_zg0ds","text":"reply letter to Daruty","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_s5evc","text":"Bloomingdale's","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_sw82x","text":"dresses (2)","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_733pn","text":"pants","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_d3luj","text":"heels","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_1evmj","text":"carrier bag","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_apzy5","text":"called Ounass","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_bdy2u","text":"scheduled DHL delivery","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_qmx0t","text":"some of Wells Fargo balance","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_oz862","text":"extended Turo rental","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_3n9dh","text":"rented Extra Space unit 2408","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_5cg5u","text":"sent flowers to Dr Betty","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_8g601","text":"worked on dashboard app","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_996kn","text":"backed up MacBook Air for return","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_7dsws","text":"posted Ashura IG stories","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_2jwwm","text":"edited rest of June '26 photos","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_dbljq","text":"Islamic Fiqh","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_uafvk","text":"Qasr & Jam' rulings","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_2q4eg","text":"differences between Islamic schools on prioritizing Qur'an in rulings","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_zp68q","text":"which sheikhs are which schools","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_m0zz0","text":"whether hotspot device works in storage units","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_age2s","text":"best skincare for:","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ag0wp","text":"jawline","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_nsgw7","text":"undereye folds","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_x6d75","text":"threw out trash","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_n7tlt","text":"tidied up","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_fh9do","text":"bank statements Wells Fargo, MacArthur","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_12oyz","text":"shipped iPhone 16 to data recovery lab","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mt9fkaue_ucvm2","text":"Blossom Health","section":"review","at":"2026-08-26T01:43:54.854Z"},{"id":"n_mtag6979_gt3pi","text":"Turo Avios","section":"inbox","at":"2026-08-26T18:48:45.334Z"}]</script><!--/brain-dump-data-->
 <div class="page-bg" aria-hidden="true"></div>
 
 <main class="page-shell">
   <header class="dump-hero">
-    <p class="dump-eyebrow">one thought · one popup</p>
+    <p class="dump-eyebrow">one thought · one line</p>
     <h1>brain dump</h1>
-    <p class="dump-sub">sorted from the words · saved in this page</p>
+    <p class="dump-sub">sorted into sections · saved in this page</p>
     <p id="save-status">saved in this page</p>
   </header>
   <p class="dump-empty" id="dump-empty">nothing here yet — type a thought below</p>
+  <div id="dump-stage">
   <div class="dump-board" id="dump-board"></div>
+    <div class="dump-holding" id="dump-holding"></div>
+  </div>
 </main>
+
+<div class="review-overlay" id="review-overlay" hidden>
+  <div class="review-panel" role="dialog" aria-modal="true" aria-labelledby="review-heading">
+    <button class="review-close" type="button" aria-label="close review">×</button>
+    <h2 id="review-heading">Review</h2>
+    <p class="review-sub">look again · then send them on</p>
+    <form class="review-drop" id="review-form" autocomplete="off">
+      <textarea id="review-input" rows="1" placeholder="one thought — drop it into review"></textarea>
+      <button class="dump-send" type="submit">drop</button>
+    </form>
+    <p class="review-empty" id="review-empty">nothing to review yet</p>
+    <div class="review-notes" id="review-notes"></div>
+  </div>
+</div>
 
 <form class="composer-dock" id="dump-form" autocomplete="off">
   <div class="composer">
-    <textarea id="dump-input" rows="1" placeholder="one thought — enter to drop it as a popup"></textarea>
+    <textarea id="dump-input" rows="1" placeholder="one thought — enter to drop it into a section"></textarea>
     <button class="dump-send" type="submit">drop</button>
   </div>
 </form>
 
-<script src="nav-shared.js"></script>
+<script src="nav-shared.js?v=navtimelines1"></script>
 <script>
 (function(){
   var SECTION_META = [
@@ -274,6 +687,15 @@
     { id:'presence', title:'quantum' },
     { id:'inbox', title:'unsorted' }
   ];
+  var HOLD_META = [
+    { id:'later', title:'Later' },
+    { id:'cancelled', title:'Cancelled' },
+    { id:'deferred', title:'Deferred' }
+  ];
+  var SECTION_IDS = {};
+  SECTION_META.forEach(function(sec){ SECTION_IDS[sec.id] = 1; });
+  HOLD_META.forEach(function(sec){ SECTION_IDS[sec.id] = 1; });
+  SECTION_IDS.review = 1;
   var RANK = { ambition:6, finances:5, shopping:4, leverage:3, body:2, presence:2, life:1, inbox:0 };
   var KEYS = {
     body: /\b(glow\s*up|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera|adderall|workout|gym|health|sleep|food|eat|weight|body|dentist|doctor(?!\s+betty)|vitamin|lotion|makeup|face|nails)\b/gi,
@@ -318,11 +740,6 @@
   function uid(){
     return 'n_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
   }
-  function tiltFor(id){
-    var n = 0;
-    String(id).split('').forEach(function(c){ n = (n * 31 + c.charCodeAt(0)) % 17; });
-    return ((n - 8) * 0.38).toFixed(2) + 'deg';
-  }
   function esc(s){
     return String(s || '').replace(/[&<>"']/g, function(ch){
       return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch];
@@ -330,7 +747,14 @@
   }
 
   var dataEl = document.getElementById('brain-dump-data');
+  var stage = document.getElementById('dump-stage');
   var board = document.getElementById('dump-board');
+  var holding = document.getElementById('dump-holding');
+  var overlay = document.getElementById('review-overlay');
+  var reviewNotesEl = document.getElementById('review-notes');
+  var reviewEmptyEl = document.getElementById('review-empty');
+  var reviewForm = document.getElementById('review-form');
+  var reviewInput = document.getElementById('review-input');
   var emptyEl = document.getElementById('dump-empty');
   var statusEl = document.getElementById('save-status');
   var form = document.getElementById('dump-form');
@@ -343,7 +767,7 @@
   if (!Array.isArray(entries)) entries = [];
   entries.forEach(function(e){
     if (!e || !e.text) return;
-    e.section = categorize(e.text);
+    if (!SECTION_IDS[e.section]) e.section = categorize(e.text);
   });
 
   (function recoverOldDump(){
@@ -369,6 +793,89 @@
     }
   })();
 
+  function noteMarkup(item){
+    return '<button class="note-plus" type="button" aria-label="add to today\'s planner" title="add to today">+</button>' +
+      '<button class="note-x" type="button" aria-label="remove">×</button>' +
+      '<div class="note-text" contenteditable="true" spellcheck="true">'+esc(item.text)+'</div>';
+  }
+
+  function todayIso(){
+    var t = new Date();
+    function pad(n){ return String(n).padStart(2,'0'); }
+    return t.getFullYear() + '-' + pad(t.getMonth()+1) + '-' + pad(t.getDate());
+  }
+  function sendToTodayAgenda(text, btn){
+    text = String(text || '').replace(/\s+/g, ' ').trim();
+    if (!text) return false;
+    var iso = todayIso();
+    var hours = [9,10,11,12,13,14,15,16,17,18,19,20,21];
+    var added = false;
+    try {
+      var days = JSON.parse(localStorage.getItem('agenda_times_v1') || '{}') || {};
+      if (!days || typeof days !== 'object') days = {};
+      if (!days[iso] || typeof days[iso] !== 'object') days[iso] = {};
+      hours.forEach(function(h){
+        if (!Array.isArray(days[iso][h])) days[iso][h] = [];
+      });
+      var already = hours.some(function(h){
+        return (days[iso][h] || []).some(function(it){
+          return String(it && it.text || '').trim().toLowerCase() === text.toLowerCase();
+        });
+      });
+      if (!already) {
+        var n = text.toLowerCase();
+        var hour = 11;
+        var clock = n.match(/\b(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)\b/i);
+        if (clock) {
+          hour = parseInt(clock[1], 10);
+          if (/p/i.test(clock[3]) && hour < 12) hour += 12;
+          if (/a/i.test(clock[3]) && hour === 12) hour = 9;
+        } else if (/\b(morning|breakfast|fajr|gym|workout|meds?)\b/.test(n)) hour = 9;
+        else if (/\b(lunch|noon)\b/.test(n)) hour = 12;
+        else if (/\b(evening|tonight|dinner)\b/.test(n)) hour = 18;
+        else if (/\b(class|meeting|betty|elevate|school)\b/.test(n)) hour = 14;
+        if (hour < 9) hour = 9;
+        if (hour > 21) hour = 21;
+        days[iso][hour].push({
+          id: 'a_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,6),
+          text: text
+        });
+        localStorage.setItem('agenda_times_v1', JSON.stringify(days));
+        added = true;
+      }
+    } catch (e) {}
+    try {
+      var flow = JSON.parse(localStorage.getItem('btm_flow_items_v1') || '{}') || {};
+      if (!flow || typeof flow !== 'object') flow = {};
+      var list = Array.isArray(flow[iso]) ? flow[iso].slice() : [];
+      var has = list.some(function(x){
+        var t = typeof x === 'string' ? x : String(x && (x.t || x.text) || '');
+        return t.trim().toLowerCase() === text.toLowerCase();
+      });
+      if (!has) {
+        list.push({ t: text, s: 0 });
+        flow[iso] = list;
+        localStorage.setItem('btm_flow_items_v1', JSON.stringify(flow));
+        added = true;
+      }
+    } catch (e) {}
+    if (btn) {
+      btn.classList.add('is-sent');
+      btn.textContent = '✓';
+      btn.setAttribute('aria-label', 'added to today');
+      btn.title = 'added to today';
+    }
+    if (statusEl) {
+      statusEl.textContent = added ? 'added to today' : 'already on today';
+      clearTimeout(statusEl._agendaT);
+      statusEl._agendaT = setTimeout(function(){
+        if (statusEl.textContent === 'added to today' || statusEl.textContent === 'already on today') {
+          statusEl.textContent = '';
+        }
+      }, 2200);
+    }
+    return added;
+  }
   function persist(){
     statusEl.textContent = 'saving…';
     var payload = JSON.stringify({ entries: entries });
@@ -392,28 +899,361 @@
     saveTimer = setTimeout(persist, 180);
   }
 
-  function render(){
-    board.innerHTML = '';
-    emptyEl.classList.toggle('show', !entries.length);
-    SECTION_META.forEach(function(sec){
+  function fillCluster(host, sec, hold){
       var items = entries.filter(function(e){ return e.section === sec.id; });
       var cluster = document.createElement('section');
-      cluster.className = 'cluster' + (items.length ? '' : ' is-empty');
+    cluster.className = 'cluster' + (hold ? ' hold-lane' : '') + (items.length ? '' : ' is-empty');
       cluster.setAttribute('data-section', sec.id);
-      cluster.innerHTML = '<h2 class="cluster-title">'+esc(sec.title)+'</h2><div class="cluster-notes"></div>';
-      var hold = cluster.querySelector('.cluster-notes');
+    cluster.innerHTML = '<h2 class="cluster-title">'+esc(sec.title)+'</h2><div class="cluster-notes"></div>' +
+      (hold ? '' : '<div class="cluster-resize" aria-label="resize section" title="drag to resize"></div>');
+    var holdEl = cluster.querySelector('.cluster-notes');
+    items.forEach(function(item){
+      var note = document.createElement('article');
+      note.className = 'note';
+      note.setAttribute('data-id', item.id);
+      note.innerHTML = noteMarkup(item);
+      holdEl.appendChild(note);
+    });
+    host.appendChild(cluster);
+  }
+
+  function fillReviewDoor(){
+    var items = entries.filter(function(e){ return e.section === 'review'; });
+    var door = document.createElement('section');
+    door.className = 'cluster review-door' + (items.length ? '' : ' is-empty');
+    door.setAttribute('data-section', 'review');
+    door.innerHTML =
+      '<h2 class="cluster-title">Review</h2>' +
+      '<p class="review-hint">' + (items.length ? (items.length + ' to look at') : 'click to open') + '</p>';
+    holding.appendChild(door);
+  }
+
+  function fillReviewOverlay(){
+    if (!reviewNotesEl) return;
+    var items = entries.filter(function(e){ return e.section === 'review'; });
+    reviewNotesEl.innerHTML = '';
+    if (reviewEmptyEl) reviewEmptyEl.classList.toggle('show', !items.length);
       items.forEach(function(item){
         var note = document.createElement('article');
         note.className = 'note';
-        note.style.setProperty('--tilt', tiltFor(item.id));
         note.setAttribute('data-id', item.id);
-        note.innerHTML =
-          '<button class="note-x" type="button" aria-label="remove">×</button>' +
-          '<div class="note-text" contenteditable="true" spellcheck="true">'+esc(item.text)+'</div>';
-        hold.appendChild(note);
-      });
-      board.appendChild(cluster);
+      note.innerHTML = noteMarkup(item);
+      reviewNotesEl.appendChild(note);
     });
+  }
+
+  function openReview(){
+    if (!overlay) return;
+    overlay.hidden = false;
+    overlay.classList.add('is-open');
+    document.body.classList.add('review-open');
+    fillReviewOverlay();
+    if (reviewInput) {
+      reviewInput.value = '';
+      reviewInput.style.height = 'auto';
+      setTimeout(function(){ try { reviewInput.focus(); } catch (e) {} }, 0);
+    }
+  }
+  function closeReview(){
+    if (!overlay) return;
+    overlay.classList.remove('is-open');
+    overlay.hidden = true;
+    document.body.classList.remove('review-open');
+  }
+
+  var POS_KEY = 'brain_dump_xy_v4';
+  function loadPos(){ try{ return JSON.parse(localStorage.getItem(POS_KEY)||'{}'); }catch(e){ return {}; } }
+  function savePos(o){ try{ localStorage.setItem(POS_KEY, JSON.stringify(o)); }catch(e){} }
+  // Tight organic scatter — tilted, close neighbors (force-directed packing)
+  var DEFAULT_SCATTER = {
+    body:      { x: 18,  y: 12,  w: 360, rot: -1.5 },
+    shopping:  { x: 390, y: 8,  w: 320, rot:  1.3 },
+    life:      { x: 720, y: 28,  w: 260, rot:  0.75 },
+    finances:  { x: 28,  y: 340, w: 290, rot:  1.2 },
+    ambition:  { x: 340, y: 360, w: 310, rot: -1.05 },
+    leverage:  { x: 670, y: 320, w: 250, rot: -0.65 },
+    presence:  { x: 930, y: 210, w: 210, rot:  0.9 },
+    inbox:     { x: 680, y: 560, w: 290, rot: -1.1 }
+  };
+  var FORCE_GAP = 16; // gap between on-screen (rotated) bounds
+  function placeCluster(c, x, y, w, rot, h){
+    x = Math.max(0, Math.round(x));
+    y = Math.max(0, Math.round(y));
+    c.style.setProperty('--dx', x + 'px');
+    c.style.setProperty('--dy', y + 'px');
+    if (w != null) c.style.setProperty('--cw', Math.round(w) + 'px');
+    if (rot != null) c.style.setProperty('--rot', rot + 'deg');
+    if (h == null || h === '' || h === 'auto') {
+      c.style.removeProperty('--ch');
+      c.classList.remove('has-fixed-h');
+    } else {
+      c.style.setProperty('--ch', Math.round(h) + 'px');
+      c.classList.add('has-fixed-h');
+    }
+  }
+  function clusterState(c){
+    var br = board.getBoundingClientRect();
+    var r = c.getBoundingClientRect();
+    return {
+      el: c,
+      // Visual (rotated) box — this is what must not overlap
+      x: r.left - br.left,
+      y: r.top - br.top,
+      w: r.width,
+      h: r.height,
+      // Layout vars we actually write
+      dx: parseFloat(c.style.getPropertyValue('--dx')) || 0,
+      dy: parseFloat(c.style.getPropertyValue('--dy')) || 0,
+      rot: parseFloat(c.style.getPropertyValue('--rot')) || 0,
+      cw: parseFloat(c.style.getPropertyValue('--cw')) || undefined,
+      ch: c.classList.contains('has-fixed-h') ? (parseFloat(c.style.getPropertyValue('--ch')) || undefined) : undefined
+    };
+  }
+  function growBoard(){
+    var max = 640;
+    Array.from(board.querySelectorAll('.cluster')).forEach(function(c){
+      var y = parseFloat(c.style.getPropertyValue('--dy')) || 0;
+      max = Math.max(max, y + (c.offsetHeight || 180) + 56);
+    });
+    board.style.minHeight = Math.round(max) + 'px';
+  }
+  function rectsOverlap(a, b, gap){
+    return a.x < b.x + b.w + gap && a.x + a.w + gap > b.x &&
+           a.y < b.y + b.h + gap && a.y + a.h + gap > b.y;
+  }
+  function clampDx(n, bw){
+    n.dx = Math.max(0, Math.min(Math.max(0, bw - (n.cw || n.w) - 8), n.dx));
+    n.dy = Math.max(0, n.dy);
+  }
+  function pushNode(n, px, py, bw){
+    var odx = n.dx, ody = n.dy;
+    n.dx += px;
+    n.dy += py;
+    clampDx(n, bw);
+    // If the side wall ate a horizontal shove, dump the rest downward
+    if (Math.abs(px) > 1 && Math.abs(n.dx - odx) < 0.5) {
+      n.dy = ody + Math.max(Math.abs(py), Math.abs(px), 8);
+      clampDx(n, bw);
+    }
+  }
+  // Force-directed collision using on-screen (rotated) bounds
+  function applyForces(anchorEl, iterations){
+    iterations = iterations == null ? 64 : iterations;
+    var bw = board.clientWidth || 1100;
+    for (var iter = 0; iter < iterations; iter++) {
+      var nodes = Array.from(board.querySelectorAll('.cluster')).map(clusterState);
+      var moved = false;
+      for (var i = 0; i < nodes.length; i++) {
+        for (var j = i + 1; j < nodes.length; j++) {
+          var a = nodes[i], b = nodes[j];
+          if (!rectsOverlap(a, b, FORCE_GAP)) continue;
+          moved = true;
+          var cxA = a.x + a.w / 2, cyA = a.y + a.h / 2;
+          var cxB = b.x + b.w / 2, cyB = b.y + b.h / 2;
+          var dx = cxB - cxA, dy = cyB - cyA;
+          if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+            dx = (j % 2 ? 1 : -1);
+            dy = 1;
+          }
+          var overlapX = (a.w / 2 + b.w / 2 + FORCE_GAP) - Math.abs(dx);
+          var overlapY = (a.h / 2 + b.h / 2 + FORCE_GAP) - Math.abs(dy);
+          if (overlapX <= 0 || overlapY <= 0) continue;
+          var pushX = 0, pushY = 0;
+          if (overlapX < overlapY) {
+            pushX = (dx >= 0 ? 1 : -1) * (overlapX / 2 + 1);
+          } else {
+            pushY = (dy >= 0 ? 1 : -1) * (overlapY / 2 + 1);
+          }
+          var moveA = a.el !== anchorEl;
+          var moveB = b.el !== anchorEl;
+          if (moveA && moveB) {
+            pushNode(a, -pushX, -pushY, bw);
+            pushNode(b, pushX, pushY, bw);
+          } else if (moveB) {
+            pushNode(b, pushX * 2, pushY * 2, bw);
+          } else if (moveA) {
+            pushNode(a, -pushX * 2, -pushY * 2, bw);
+          }
+        }
+      }
+      nodes.forEach(function(n){
+        if (n.el === anchorEl) return;
+        placeCluster(n.el, n.dx, n.dy, n.cw, n.rot, n.ch);
+      });
+      if (!moved) break;
+      growBoard();
+    }
+    growBoard();
+  }
+  function persistAllClusterPos(){
+    var o = loadPos();
+    Array.from(board.querySelectorAll('.cluster')).forEach(function(c){
+      var id = c.getAttribute('data-section');
+      if (!id) return;
+      o[id] = {
+        x: parseFloat(c.style.getPropertyValue('--dx')) || 0,
+        y: parseFloat(c.style.getPropertyValue('--dy')) || 0,
+        w: parseFloat(c.style.getPropertyValue('--cw')) || undefined,
+        h: c.classList.contains('has-fixed-h') ? (parseFloat(c.style.getPropertyValue('--ch')) || undefined) : undefined,
+        rot: parseFloat(c.style.getPropertyValue('--rot')) || 0
+      };
+    });
+    savePos(o);
+  }
+  function balanceBoard(){
+    var clusters = Array.from(board.querySelectorAll('.cluster'));
+    if (!clusters.length) return;
+    var saved = loadPos();
+    var wide = (board.clientWidth || 1100) >= 720;
+    var bw = board.clientWidth || 1100;
+    clusters.forEach(function(c){
+      var n = c.querySelectorAll('.note').length;
+      var cols = (wide && n >= 8) ? 2 : 1;
+      var rows = Math.max(1, Math.ceil((n || 1) / cols));
+      c.style.setProperty('--cols', String(cols));
+      c.style.setProperty('--rows', String(rows));
+    });
+    clusters.forEach(function(c, i){
+      var id = c.getAttribute('data-section') || '';
+      var rec = saved[id];
+      var def = DEFAULT_SCATTER[id] || {
+        x: 24 + (i * 88) % Math.max(120, bw - 300),
+        y: 20 + i * 190 + ((i % 2) ? 40 : 0),
+        w: 250 + (i % 3) * 28,
+        rot: ((i % 2) ? 1 : -1) * (0.6 + (i % 3) * 0.35)
+      };
+      var x, y, w, rot, h;
+      if (rec && rec.x != null && rec.y != null) {
+        x = rec.x; y = rec.y;
+        w = rec.w != null ? rec.w : def.w;
+        rot = rec.rot != null ? rec.rot : def.rot;
+        h = rec.h != null ? rec.h : null;
+      } else {
+        x = def.x; y = def.y; w = def.w; rot = def.rot; h = null;
+      }
+      if (!wide) {
+        x = 10 + ((i * 17) % 36);
+        y = 16 + i * 200;
+        w = Math.min(300, bw - 24);
+        rot = 0;
+        h = null;
+      } else {
+        x = Math.min(x, Math.max(0, bw - 140));
+      }
+      placeCluster(c, x, y, w, rot, h);
+    });
+    if (wide) {
+      // Real heights are known after place — separate until clear, then save
+      applyForces(null, 120);
+      persistAllClusterPos();
+    }
+    growBoard();
+  }
+  function persistClusterPos(c){
+    var id = c.getAttribute('data-section');
+    if (!id) return;
+    var o = loadPos();
+    o[id] = {
+      x: parseFloat(c.style.getPropertyValue('--dx')) || 0,
+      y: parseFloat(c.style.getPropertyValue('--dy')) || 0,
+      w: parseFloat(c.style.getPropertyValue('--cw')) || undefined,
+      h: c.classList.contains('has-fixed-h') ? (parseFloat(c.style.getPropertyValue('--ch')) || undefined) : undefined,
+      rot: parseFloat(c.style.getPropertyValue('--rot')) || 0
+    };
+    savePos(o);
+  }
+  // Drag whole category clusters by their title (notes still drag between sections)
+  var clusterDrag = null;
+  board.addEventListener('pointerdown', function(e){
+    if (e.button && e.button !== 0) return;
+    if (e.target.closest('.note, .note-x, .note-plus')) return;
+
+    // Resize handle — drag to expand / shrink width & height
+    var handle = e.target.closest('.cluster-resize');
+    if (handle) {
+      var cluster = handle.closest('.cluster');
+      if (!cluster || !board.contains(cluster)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var startX = e.clientX, startY = e.clientY;
+      var ow = cluster.offsetWidth;
+      var oh = cluster.offsetHeight;
+      var orot = parseFloat(cluster.style.getPropertyValue('--rot')) || 0;
+      var ox = parseFloat(cluster.style.getPropertyValue('--dx')) || 0;
+      var oy = parseFloat(cluster.style.getPropertyValue('--dy')) || 0;
+      cluster.classList.add('is-resizing');
+      try { cluster.setPointerCapture(e.pointerId); } catch (err) {}
+      function onResizeMove(ev){
+        var nw = Math.max(160, Math.min((board.clientWidth || 1100) - ox - 8, ow + (ev.clientX - startX)));
+        var nh = Math.max(88, oh + (ev.clientY - startY));
+        placeCluster(cluster, ox, oy, nw, orot, nh);
+        applyForces(cluster, 3);
+      }
+      function onResizeUp(){
+        try { cluster.releasePointerCapture(e.pointerId); } catch (err) {}
+        document.removeEventListener('pointermove', onResizeMove, true);
+        document.removeEventListener('pointerup', onResizeUp, true);
+        document.removeEventListener('pointercancel', onResizeUp, true);
+        cluster.classList.remove('is-resizing');
+        applyForces(cluster, 12);
+        persistAllClusterPos();
+      }
+      document.addEventListener('pointermove', onResizeMove, true);
+      document.addEventListener('pointerup', onResizeUp, true);
+      document.addEventListener('pointercancel', onResizeUp, true);
+      return;
+    }
+
+    var title = e.target.closest('.cluster-title');
+    var cluster = title && title.closest('.cluster');
+    if (!cluster || !board.contains(cluster)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var startX = e.clientX, startY = e.clientY;
+    var ox = parseFloat(cluster.style.getPropertyValue('--dx')) || 0;
+    var oy = parseFloat(cluster.style.getPropertyValue('--dy')) || 0;
+    var ow = parseFloat(cluster.style.getPropertyValue('--cw')) || cluster.offsetWidth;
+    var orot = parseFloat(cluster.style.getPropertyValue('--rot')) || 0;
+    var oh = cluster.classList.contains('has-fixed-h') ? (parseFloat(cluster.style.getPropertyValue('--ch')) || null) : null;
+    var moved = false;
+    clusterDrag = cluster;
+    cluster.classList.add('is-dragging-cluster');
+    try { cluster.setPointerCapture(e.pointerId); } catch (err) {}
+    function onMove(ev){
+      var dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if (!moved && Math.abs(dx) + Math.abs(dy) < 3) return;
+      moved = true;
+      placeCluster(cluster, Math.max(0, ox + dx), Math.max(0, oy + dy), ow, orot, oh);
+      applyForces(cluster, 8);
+    }
+    function onUp(){
+      try { cluster.releasePointerCapture(e.pointerId); } catch (err) {}
+      document.removeEventListener('pointermove', onMove, true);
+      document.removeEventListener('pointerup', onUp, true);
+      document.removeEventListener('pointercancel', onUp, true);
+      cluster.classList.remove('is-dragging-cluster');
+      clusterDrag = null;
+      if (moved) {
+        applyForces(cluster, 48);
+        persistAllClusterPos();
+      }
+    }
+    document.addEventListener('pointermove', onMove, true);
+    document.addEventListener('pointerup', onUp, true);
+    document.addEventListener('pointercancel', onUp, true);
+  });
+
+  window.addEventListener('resize', function(){ clearTimeout(window.__bdBal); window.__bdBal = setTimeout(balanceBoard, 120); });
+
+  function render(){
+    board.innerHTML = '';
+    holding.innerHTML = '';
+    emptyEl.classList.toggle('show', !entries.length);
+    SECTION_META.forEach(function(sec){ fillCluster(board, sec, false); });
+    balanceBoard();
+    fillReviewDoor();
+    HOLD_META.forEach(function(sec){ fillCluster(holding, sec, true); });
+    if (overlay && overlay.classList.contains('is-open')) fillReviewOverlay();
   }
 
   function addThoughts(raw){
@@ -431,12 +1271,23 @@
     persist();
   }
 
-  board.addEventListener('click', function(e){
+  stage.addEventListener('click', function(e){
+    var door = e.target.closest('.review-door');
+    if (door) {
+      openReview();
+      return;
+    }
     var note = e.target.closest('.note');
     if (!note) return;
     var id = note.getAttribute('data-id');
     var item = entries.filter(function(x){ return x.id === id; })[0];
     if (!item) return;
+    if (e.target.classList.contains('note-plus')) {
+      e.preventDefault();
+      e.stopPropagation();
+      sendToTodayAgenda(item.text, e.target);
+      return;
+    }
     if (e.target.classList.contains('note-x')) {
       entries = entries.filter(function(x){ return x.id !== id; });
       render();
@@ -444,7 +1295,99 @@
     }
   });
 
-  board.addEventListener('focusout', function(e){
+  if (overlay) {
+    overlay.addEventListener('click', function(e){
+      if (e.target === overlay || e.target.closest('.review-close')) {
+        closeReview();
+        return;
+      }
+      var note = e.target.closest('.note');
+      if (!note) return;
+      var id = note.getAttribute('data-id');
+      var item = entries.filter(function(x){ return x.id === id; })[0];
+      if (!item) return;
+      if (e.target.classList.contains('note-plus')) {
+        e.preventDefault();
+        e.stopPropagation();
+        sendToTodayAgenda(item.text, e.target);
+        return;
+      }
+      if (!e.target.classList.contains('note-x')) return;
+      entries = entries.filter(function(x){ return x.id !== id; });
+      render();
+      persist();
+    });
+    overlay.addEventListener('focusout', function(e){
+      if (!e.target.classList.contains('note-text')) return;
+      var note = e.target.closest('.note');
+      if (!note) return;
+      var item = entries.filter(function(x){ return x.id === note.getAttribute('data-id'); })[0];
+      if (!item) return;
+      var next = (e.target.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!next) {
+        entries = entries.filter(function(x){ return x.id !== item.id; });
+        render();
+        persist();
+        return;
+      }
+      if (next === item.text) return;
+      item.text = next;
+      persist();
+    });
+  }
+
+  var dragId = null;
+  var dragOrigin = null;
+  function clearDrag(){
+    dragId = null;
+    dragOrigin = null;
+    Array.from(stage.querySelectorAll('.is-dragging, .is-drop-target')).forEach(function(el){
+      el.classList.remove('is-dragging');
+      el.classList.remove('is-drop-target');
+    });
+  }
+  function clusterUnder(x, y){
+    var el = document.elementFromPoint(x, y);
+    if (!el || !el.closest) return null;
+    if (el.closest('.review-panel')) return holding.querySelector('.review-door');
+    return el.closest('.cluster');
+  }
+  stage.addEventListener('pointerdown', function(e){
+    if (e.button && e.button !== 0) return;
+    if (e.target.closest('.note-x, .note-plus, .review-close, .review-drop, .review-door')) return;
+    var note = e.target.closest('.note');
+    if (!note) return;
+    dragId = note.getAttribute('data-id');
+    dragOrigin = { x: e.clientX, y: e.clientY };
+    note.classList.add('is-dragging');
+    try { note.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  stage.addEventListener('pointermove', function(e){
+    if (!dragId) return;
+    var cluster = clusterUnder(e.clientX, e.clientY);
+    Array.from(stage.querySelectorAll('.cluster.is-drop-target')).forEach(function(el){
+      if (el !== cluster) el.classList.remove('is-drop-target');
+    });
+    if (cluster) cluster.classList.add('is-drop-target');
+  });
+  stage.addEventListener('pointerup', function(e){
+    if (!dragId) return;
+    var id = dragId;
+    var origin = dragOrigin;
+    var cluster = clusterUnder(e.clientX, e.clientY);
+    var nextSec = cluster && cluster.getAttribute('data-section');
+    var item = entries.filter(function(x){ return x.id === id; })[0];
+    var dist = origin ? Math.hypot(e.clientX - origin.x, e.clientY - origin.y) : 0;
+    clearDrag();
+    if (dist < 14) return;
+    if (!item || !SECTION_IDS[nextSec] || item.section === nextSec) return;
+    item.section = nextSec;
+    render();
+    persist();
+  });
+  stage.addEventListener('pointercancel', function(){ clearDrag(); });
+
+  stage.addEventListener('focusout', function(e){
     if (!e.target.classList.contains('note-text')) return;
     var note = e.target.closest('.note');
     if (!note) return;
@@ -459,8 +1402,6 @@
     }
     if (next === item.text) return;
     item.text = next;
-    item.section = categorize(next);
-    render();
     persist();
   });
 
@@ -483,6 +1424,47 @@
       e.preventDefault();
       form.requestSubmit();
     }
+  });
+
+  function growReview(){
+    if (!reviewInput) return;
+    reviewInput.style.height = 'auto';
+    reviewInput.style.height = Math.min(reviewInput.scrollHeight, 96) + 'px';
+  }
+  if (reviewInput) reviewInput.addEventListener('input', growReview);
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var bits = splitThoughts(reviewInput && reviewInput.value);
+      if (reviewInput) reviewInput.value = '';
+      growReview();
+      if (!bits.length) return;
+      bits.forEach(function(text){
+        entries.push({
+          id: uid(),
+          text: text,
+          section: 'review',
+          at: new Date().toISOString()
+        });
+      });
+      render();
+      persist();
+      if (reviewInput) reviewInput.focus();
+    });
+    if (reviewInput) reviewInput.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        reviewForm.requestSubmit();
+      }
+    });
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && overlay && overlay.classList.contains('is-open')) closeReview();
+  });
+
+  window.addEventListener('resize', function(){
+    clearTimeout(balanceBoard._t);
+    balanceBoard._t = setTimeout(balanceBoard, 80);
   });
 
   render();

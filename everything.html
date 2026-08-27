@@ -1291,9 +1291,13 @@ body.editing .add-task-here-btn { display: block; }
   .day-block.today-block.fmt22 .tv-panel.tv-pursuits,
   .day-block.zone-board-day.fmt22 .tv-panel.tv-pursuits,
   .day-block.pursuit-board-day.fmt22 .tv-panel.tv-pursuits,
+  .day-block.pursuit-board-day.fmt22 .tv-panel.tv-nodes,
+  .day-block.pursuit-board-day.fmt22 .tv-panel.tv-flowchart,
   .day-block.today-block.fmt22 .tv-panel.tv-pursuits.active,
   .day-block.zone-board-day.fmt22 .tv-panel.tv-pursuits.active,
-  .day-block.pursuit-board-day.fmt22 .tv-panel.tv-pursuits.active {
+  .day-block.pursuit-board-day.fmt22 .tv-panel.tv-pursuits.active,
+  .day-block.pursuit-board-day.fmt22 .tv-panel.tv-nodes.active,
+  .day-block.pursuit-board-day.fmt22 .tv-panel.tv-flowchart.active {
     max-width: none !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -8620,6 +8624,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     height: 2px;
     background: #5a4d33;
     border-radius: 1px;
+    box-shadow: none;
   }
   #nav-overlay {
     display: none;
@@ -8630,18 +8635,20 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     transition: opacity 0.3s;
     pointer-events: auto;
   }
-  #nav-overlay.open { display: block; }
+  #nav-overlay.open { display: block; left: 280px; }
   #nav-sidebar {
     position: fixed;
     top: 0;
     left: -320px;
     width: 280px;
     height: 100vh;
-    background: #F5F0E8;
-    border-right: 1px solid rgba(196,168,130,0.4);
+    background: linear-gradient(180deg, rgba(48, 28, 38, 0.38) 0%, rgba(32, 20, 28, 0.32) 100%);
+    backdrop-filter: blur(5px) saturate(1.05);
+    -webkit-backdrop-filter: blur(5px) saturate(1.05);
+    border-right: 1px solid rgba(243, 230, 208, 0.18);
     z-index: 200005;
-    padding: 60px 0 20px;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+    padding: 52px 0 20px;
+    box-shadow: none;
     transition: left 0.3s ease;
     overflow-y: auto;
     box-sizing: border-box;
@@ -8655,27 +8662,19 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     background: transparent;
     border: none;
     font-size: 22px;
-    color: #5a4d33;
+    color: #f3e6d0;
     cursor: pointer;
     padding: 6px 10px;
     line-height: 1;
   }
-  #nav-close:hover { color: #2a2a2a; }
-  #nav-sidebar h2 {
-    font-family: 'Italiana', serif;
-    font-weight: 400;
-    font-size: 26px;
-    margin: 0 0 18px;
-    padding: 0 24px;
-    letter-spacing: 0.04em;
-    color: #2a2a2a;
-  }
+  #nav-close:hover { color: #fff8ee; }
+  #nav-sidebar h2 { display: none; }
   #nav-sidebar .nav-section {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: #8a7e62;
+    color: rgba(243, 230, 208, 0.72);
     padding: 14px 24px 6px;
   }
   #nav-sidebar nav { display: flex; flex-direction: column; }
@@ -8684,18 +8683,19 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     font-style: italic;
     font-size: 16px;
     padding: 9px 24px;
-    color: #2a2a2a;
+    color: #f3e6d0;
     text-decoration: none;
-    border-bottom: 1px solid rgba(196,168,130,0.18);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    text-shadow: 0 1px 2px rgba(20,12,6,0.5), 0 2px 8px rgba(20,12,6,0.3);
     transition: background 0.15s, color 0.15s;
   }
   #nav-sidebar nav a:hover {
-    background: rgba(196,168,130,0.18);
-    color: #5a4d33;
+    background: rgba(255,255,255,0.08);
+    color: #fff8ee;
   }
   #nav-sidebar nav a.current {
-    background: rgba(196,168,130,0.25);
-    color: #5a4d33;
+    background: rgba(255,255,255,0.1);
+    color: #fff8ee;
     font-weight: 500;
   }
 </style>
@@ -8748,16 +8748,16 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   opacity: 0.85 !important;
 }
 
-/* FIX 4: Header text - EDITORIAL, bold, readable, below the photo */
+/* FIX 4: Header text - EDITORIAL, bold, readable, always on top of the card */
 .day-block.fmt22 .sec-card .card-visual .j22-group {
   position: absolute !important;
-  bottom: 0 !important;
+  top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  top: auto !important;
+  bottom: auto !important;
   margin: 0 !important;
   padding: 6px 12px !important;
-  background: linear-gradient(to top, rgba(40,35,28,0.7) 0%, rgba(40,35,28,0) 100%) !important;
+  background: linear-gradient(to bottom, rgba(40,35,28,0.7) 0%, rgba(40,35,28,0) 100%) !important;
   font-family: "Playfair Display", "Newsreader", Georgia, serif !important;
   font-style: normal !important;
   font-weight: 700 !important;
@@ -8816,7 +8816,11 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   border-radius: 0 !important;
 }
 .day-block.collapsed .today-view-toggle,
-.day-block.fmt22.collapsed .today-view-toggle {
+.day-block.fmt22.collapsed .today-view-toggle,
+.day-block.collapsed .tv-toggle-row,
+.day-block.fmt22.collapsed .tv-toggle-row,
+.day-block.collapsed .make-flow-btn,
+.day-block.fmt22.collapsed .make-flow-btn {
   display: none !important;
 }
 .day-block.collapsed .day-tasks,
@@ -9133,6 +9137,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   function beginVbScrapDrag(e, card, item){
     if(!e || !card || !item) return false;
     if(card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card')) return false;
+    if(card.closest('.freeplace-day')) return false;
     if(e.button && e.button !== 0) return false;
     if(e.target.closest('.agenda-check, .pin-btn, button, input, .del-x')) return false;
     if(item.__vbMoving) return true;
@@ -9183,8 +9188,8 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
       item.__vbMoving = 0;
       card.classList.remove('vb-dragging');
       window.__vbScrapDragging = false;
-      var grid = card.closest('.sec-grid.pursuit-canvas');
-      var photoBoard = card.closest('.today-block, .pursuit-board-day');
+      var grid = card.closest('.sec-grid.pursuit-canvas') || (card.closest('[data-date="2026-08-26"]') && card.closest('.sec-grid.freeform'));
+      var photoBoard = card.closest('.today-block, .pursuit-board-day, [data-date="2026-08-26"]');
       if(moved && grid && photoBoard && window.__detachTaskAsOneoff){
         var ir = item.getBoundingClientRect();
         var cr = card.getBoundingClientRect();
@@ -9229,7 +9234,8 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   }
   function layoutCard(card){
     if(!card || !card.classList.contains('has-tasks') || card.classList.contains('card-collapsed')) return;
-    var photoMini=!!(card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card') || card.closest('.today-block, .zone-board-day, .pursuit-board-day'));
+    var onFreeplace=!!(card.closest('.freeplace-day'));
+    var photoMini=!!(card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card') || card.closest('.today-block, .zone-board-day, .pursuit-board-day') || onFreeplace);
     if(photoMini){
       var zItems=[].slice.call(card.querySelectorAll('.j22-section-items > .j22-item:not(.j22-sub):not(.j22-sub2)'));
       zItems.forEach(function(item){
@@ -9260,7 +9266,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     }
     var n = items.length;
     var zoneMini = !!(card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card'));
-    if(!zoneMini){
+    if(!zoneMini && !onAug26){
       var px = sizeForCount(n);
       if(card.classList.contains('card-sized') && !card.classList.contains('resizing')){
         var cur = Math.max(card.offsetWidth || 0, card.offsetHeight || 0);
@@ -9956,7 +9962,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </style>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="icon-grid.css?v=nosidebar"/>
+<link rel="stylesheet" href="icon-grid.css?v=crosssec1"/>
 </head>
 <body>
 <!-- Global SVG defs for pin markers -->
@@ -10028,7 +10034,6 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 <div id="nav-overlay"></div>
 <aside aria-hidden="true" id="nav-sidebar">
 <button aria-label="close menu" id="nav-close" type="button">×</button>
-<h2>pages</h2>
 <style>
 #nav-sidebar details.nav-group > summary.nav-section { cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; }
 #nav-sidebar details.nav-group > summary.nav-section::-webkit-details-marker { display:none; }
@@ -10037,27 +10042,43 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 </style>
 <nav>
 <a href="index.html">home</a>
-<a href="today.html">today</a>
 </nav>
 <div class="nav-section">main</div>
 <nav>
-<a href="tasks-obsidian-v1127.html">taskboard</a>
-<a href="identity.html">identity</a>
-<a href="goals.html">goals</a>
-<a href="projects.html">projects</a>
-<a href="agenda.html">agenda</a>
-<a href="thoughts.html">thoughts</a>
+<a href="planner.html">timelines</a>
+<a href="accomplishments.html">accomplishments</a>
+<a href="striving.html">Striving</a>
 <a href="deen.html">deen</a>
+<a href="duaa.html">Dua'a</a>
 <a href="dimensions.html">dimensions</a>
 <a href="grids.html">grids</a>
 <a class="current" href="everything.html">everything</a>
 <a href="dashboard.html">dashboard</a>
 <a href="brain-dump.html">brain dump</a>
+<a href="adhd.html">ADHD / neurodiversity</a>
+<a href="research-proposals.html">research proposals</a>
+<a href="curriculum-vitae.html">Curriculum Vitae</a>
+<a href="business-ideas.html">business ideas</a>
+<a href="power-opportunities.html">power opportunities</a>
+<a href="quantum-consciousness.html">quantum consciousness</a>
+<a href="priming.html">priming & prompting</a>
+<a href="abundance.html">abundance economics</a>
+<a href="parallel-timelines.html">parallel timelines</a>
+</nav>
+<div class="nav-section">work in progress</div>
+<nav>
+<a href="today.html">today</a>
+<a href="tasks-obsidian-v1127.html">taskboard</a>
+<a href="identity.html">identity</a>
+<a href="goals.html">goals</a>
+<a href="projects.html">projects</a>
+<a href="lifestyle.html">lifestyle</a>
 </nav>
 <details class="nav-group">
 <summary class="nav-section">design previews</summary>
 <nav>
 <a href="palettes.html">color palettes</a>
+<a href="backgrounds.html">background images</a>
 <a href="colors.html">individual colors</a>
 <a href="fonts.html">editorial fonts</a>
 <a href="flow-fonts.html">cursive flow fonts</a>
@@ -10116,6 +10137,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   else setup();
 })();
 </script>
+<script src="nav-shared.js?v=navtimelines1"></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -12873,7 +12895,7 @@ window.__j22fnApply=run;
     'returns':'manus-storage/pursuit-returns-v2.jpg',
     'pickups':'manus-storage/pursuit-pickups.jpg',
     'social media':'manus-storage/pursuit-social-media-v7_c5f03b96.jpg',
-    'quantum':'manus-storage/zone-quantum-v14.jpg?v=symbol',
+    'quantum':'manus-storage/zone-quantum-v15.jpg?v=observe',
     'social':'manus-storage/pursuit-social-media-v7_c5f03b96.jpg',
     'adderall / adhd meds':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'adderall':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
@@ -12885,7 +12907,9 @@ window.__j22fnApply=run;
     'travel-ready':'manus-storage/pursuit-travel.jpg',
     'traveler':'manus-storage/pursuit-travel.jpg',
     'travel':'manus-storage/pursuit-travel.jpg',
-    'document translation into arabic':'manus-storage/pursuit-arabic-translation.jpg'
+    'document translation into arabic':'manus-storage/pursuit-arabic-translation.jpg',
+    'grad school':'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial',
+    'grad':'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial'
   };
   var KEYWORDS = [
     [/translat|arabic|عربي|bilingual|interpret/, 'manus-storage/pursuit-arabic-translation.jpg'],
@@ -12897,7 +12921,7 @@ window.__j22fnApply=run;
     [/\bbody\b|abs|workout|fitness/, 'manus-storage/zone-body.jpg?v=abs'],
     [/skincare|skin care|beauty|hair|halo|smile/, 'manus-storage/pursuit-skincare_e30839d6.jpg'],
     [/money|capital|fund|finance|bank/, 'manus-storage/pursuit-money_57ff14e0.jpg'],
-    [/quantum|particle|atom|physics|superposition|entangle|interference/, 'manus-storage/zone-quantum-v14.jpg?v=symbol'],
+    [/quantum|particle|atom|physics|superposition|entangle|interference/, 'manus-storage/zone-quantum-v15.jpg?v=observe'],
     [/social|instagram|media/, 'manus-storage/pursuit-social-media-v7_c5f03b96.jpg'],
     [/person|people|friend|buddy|doctor|\bdr\.?\b|soul|\bmom\b|\bdad\b|mother|father|family|\btext\b|message|sms|whatsapp|\bcall\b|phone|aunt|uncle|sister|brother/, 'manus-storage/pursuit-persons_be56f167.jpg'],
     [/ux|design|ui|figma/, 'manus-storage/pursuit-ux-design-v12_f2f2c818.jpg'],
@@ -12909,14 +12933,16 @@ window.__j22fnApply=run;
     [/return|refund|exchange/, 'manus-storage/pursuit-returns-v2.jpg'],
     [/pickup|pickups|curbside|bopis/, 'manus-storage/pursuit-pickups.jpg'],
     [/shop|lifestyle|order|buy/, 'manus-storage/pursuit-lifestyle_577937e8.jpg'],
-    [/curat/, 'manus-storage/pursuit-curated-lifestyle.jpg?v=2']
+    [/curat/, 'manus-storage/pursuit-curated-lifestyle.jpg?v=2'],
+    [/grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial']
   ];
   var THEMES = {
     'persons':'blush','capital blueprint':'amber','body':'blush','glow up':'blush','glow-up':'blush','shopped':'warm','returns':'warm','pickups':'warm',
     'curated lifestyle':'warm','social media':'sage','vibes':'lavender','adderall':'lavender',
     'litigation wins':'sage','momentum':'coral','frequency':'coral','ux design':'warm',
     'workflow':'sage','postal':'warm','power':'amber','leverage':'warm','added':'amber','quantum':'lavender',
-    'travel-ready':'warm','traveler':'warm','travel':'warm'
+    'travel-ready':'warm','traveler':'warm','travel':'warm',
+    'grad school':'lavender','grad':'lavender'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -12983,7 +13009,7 @@ window.__j22fnApply=run;
     {id:'finances', title:'FINANCES', subs:'capital blueprint', img:'manus-storage/zone-finances-v2.jpg?v=2', keys:/capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger/},
     {id:'leverage', title:'POWER', subs:'litigation wins, leverage, workflow', img:'manus-storage/mock-power.jpg', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
     {id:'ambition', title:'AMBITION', subs:'momentum, UX design, frequency', img:'manus-storage/zone-ambition-v4.jpg', keys:/momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude/},
-    {id:'presence', title:'QUANTUM', subs:'entanglement', img:'manus-storage/zone-quantum-v14.jpg?v=symbol', keys:/quantum|superposition|entangle|particle|atom/}
+    {id:'presence', title:'QUANTUM', subs:'entanglement', img:'manus-storage/zone-quantum-v15.jpg?v=observe', keys:/quantum|superposition|entangle|particle|atom/}
   ];
   window.ZONE_BANNERS = {};
   ZONES.forEach(function(z){ window.ZONE_BANNERS[z.id] = z.img; });
@@ -13797,7 +13823,7 @@ window.__j22fnApply=run;
         var nOffs=zone.querySelectorAll('.zone-oneoff').length;
         if(zone.getAttribute('data-zone')==='body' && nCards<=1){
           openW='248px'; openH='288px';
-        } else if(nCards===0 && nOffs===0){
+        } else if(nCards===0 && nOffs===0 && zone.getAttribute('data-zone')!=='life'){
           openW='220px'; openH='176px';
         }
         zone.style.setProperty('--zone-w', openW);
@@ -14478,6 +14504,7 @@ window.__j22fnApply=run;
   window.__detachTaskAsOneoff=function(item, card, grid, clientX, clientY){
     if(!item || !card || !grid) return false;
     if(grid.closest('.zone-board-day')) return false;
+    if(grid.closest('.zone-board-day')) return false;
     var txt=item.querySelector('.j22-t');
     var nm=txt ? txt.textContent.trim() : '';
     if(!nm) return false;
@@ -14514,6 +14541,7 @@ window.__j22fnApply=run;
   }
   function restoreLoose(grid){
     if(!grid) return;
+    if(grid.closest('.zone-board-day') || grid.closest('.pursuit-board-day')) return;
     pinBoardDay(grid);
     var strictZone=!!grid.closest('.zone-board-day');
     var photoBoard=!!grid.closest('.today-block, .pursuit-board-day');
@@ -14632,6 +14660,7 @@ window.__j22fnApply=run;
       else zoomIntoZone(grid, zone);
     }
     grid.addEventListener('click', function(e){
+      if(e.target.closest('.day-block.nodes-linking')) return;
       if(window.__zoneTapHandled && (Date.now()-window.__zoneTapHandled)<500) return;
       if(window.__ffMoved || window.__cardDragging) return;
       if((e.metaKey||e.ctrlKey) && e.target.closest('.day-block.flow-picking')) return;
@@ -14640,6 +14669,7 @@ window.__j22fnApply=run;
       tapZone(zone, e.target);
     });
     grid.addEventListener('pointerdown', function(e){
+      if(e.target.closest('.day-block.nodes-linking')) return;
       if(e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
         window.__ffMoved=false;
         return;
@@ -15136,7 +15166,10 @@ window.__j22fnApply=run;
   function saveCustomZones(a){ try{ localStorage.setItem(ZONE_CUSTOM_KEY, JSON.stringify(a||[])); }catch(e){} }
   function isAug20Board(el){
     var blk=el && el.closest ? el.closest('.day-block') : el;
-    return !!(blk && (blk.classList.contains('pursuit-board-day') || blk.getAttribute('data-date')==='2026-08-20'));
+    if(!blk) return false;
+    if(blk.classList.contains('pursuit-board-day') || blk.getAttribute('data-date')==='2026-08-20') return true;
+    var d=blk.getAttribute('data-date')||'';
+    return !!(/^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-27' && blk.querySelector('.tv-panel.tv-nodes'));
   }
   function zoneSlug(title){
     var s=String(title||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
@@ -15248,18 +15281,20 @@ window.__j22fnApply=run;
     return id;
   }
   function addAug20Zone(grid, title){
-    if(!grid || !isAug20Board(grid)) return;
+    if(!grid || !isAug20Board(grid)) return null;
     title=String(title||'').trim();
-    if(!title) return;
+    if(!title) return null;
     var gone=loadZoneGone();
+    var created=null;
     var match=ZONES.filter(function(z){ return String(z.title).toLowerCase()===title.toLowerCase() || z.id===title.toLowerCase(); })[0];
     if(match && gone[match.id]){
       delete gone[match.id];
       saveZoneGone(gone);
-      if(!grid.querySelector(':scope > .pursuit-zone[data-zone="'+match.id+'"]')){
-        var restored=makeZoneRow(match);
-        grid.appendChild(restored);
-        applyPos(restored, match.id);
+      created=grid.querySelector(':scope > .pursuit-zone[data-zone="'+match.id+'"]');
+      if(!created){
+        created=makeZoneRow(match);
+        grid.appendChild(created);
+        applyPos(created, match.id);
       }
     } else {
       var id=nextCustomZoneId(grid, title);
@@ -15276,30 +15311,38 @@ window.__j22fnApply=run;
       custom.push({id:id, title:title, img:img});
       saveCustomZones(custom);
       applyPos(row, id);
+      created=row;
     }
     resolveOverlaps(grid);
     wireZoneDrag(grid);
     ensureAug20EditChrome(grid);
     expandCanvas(grid);
     if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
+    var nodesOn=grid.closest('.tv-panel.tv-nodes');
+    if(created && nodesOn && (nodesOn.classList.contains('active') || nodesOn.style.display!=='none')){
+      if(typeof window.__aug20StartLinkFrom==='function') window.__aug20StartLinkFrom(created);
+    }
+    return created;
   }
   function openAddAug20Zone(btn){
     var blk=btn && btn.closest('.day-block');
     if(!blk || !isAug20Board(blk)) return;
     var row=btn.closest('.tv-toggle-row')||blk.querySelector('.tv-toggle-row');
+    var bar=btn.closest('.nodes-edit-bar');
     var existing=blk.querySelector('.zone-add-picker');
     if(existing){ existing.remove(); return; }
     document.querySelectorAll('.zone-add-picker').forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
+    var onNodes=!!(bar || blk.querySelector('.tv-pill.active[data-view="nodes"]'));
     var box=document.createElement('div');
     box.className='zone-add-picker';
-    box.innerHTML='<input class="plus-name-input" type="text" placeholder="new section name" autocomplete="off"><button type="button" class="plus-picker-go">add</button>';
-    (row||blk.querySelector('.day-card')).appendChild(box);
+    box.innerHTML='<input class="plus-name-input" type="text" placeholder="'+(onNodes?'new node name':'new section name')+'" autocomplete="off"><button type="button" class="plus-picker-go">add</button>';
+    (bar||row||blk.querySelector('.day-card')).appendChild(box);
     var inp=box.querySelector('input');
     var go=box.querySelector('button');
     function commit(){
       var name=(inp.value||'').trim();
       if(!name) return;
-      var grid=blk.querySelector('.sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid');
+      var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid');
       addAug20Zone(grid, name);
       box.remove();
     }
@@ -15767,7 +15810,7 @@ window.__j22fnApply=run;
         if(plus.closest('.sec-grid')) openPlusName(plus);
         return;
       }
-      if(e.target.closest('.zone-del, .day-add-zone, .zone-add-picker, .card-del, .del-x')){
+      if(e.target.closest('.zone-del, .day-add-zone, .zone-add-picker, .card-del, .del-x, .nodes-add-btn, .nodes-link-btn, .nodes-edit-bar')){
         e.stopPropagation();
         return;
       }
@@ -15789,7 +15832,7 @@ window.__j22fnApply=run;
         if(typeof window.__deleteAug20Zone==='function') window.__deleteAug20Zone(zdel.closest('.pursuit-zone'));
         return;
       }
-      var addZ=e.target.closest('.day-add-zone');
+      var addZ=e.target.closest('.day-add-zone, .nodes-add-btn');
       if(addZ){
         e.preventDefault();
         e.stopPropagation();
@@ -15803,7 +15846,7 @@ window.__j22fnApply=run;
             if(p.parentNode) p.parentNode.removeChild(p);
           });
         }
-        if(!e.target.closest('.zone-add-picker, .day-add-zone')){
+        if(!e.target.closest('.zone-add-picker, .day-add-zone, .nodes-add-btn, .nodes-edit-bar')){
           document.querySelectorAll('.zone-add-picker').forEach(function(p){
             if(p.parentNode) p.parentNode.removeChild(p);
           });
@@ -16151,8 +16194,10 @@ window.__j22fnApply=run;
     window.__sectionDragDoc=1;
     document.addEventListener('pointerdown', function(e){
       if(e.button && e.button!==0) return;
+      if(e.target.closest('.day-block.nodes-linking')) return;
+      if(e.target.closest('svg.aug20-zone-web, path.aug20-edge, path.aug20-edge-hit')) return;
       var handleEarly=e.target.closest('.zone-resize');
-      if(!handleEarly && e.target.closest('.add-pursuit-slot,.plus-picker,.card-del,.del-x-sec,.card-resize,.oneoff-resize,.zone-oneoff-del,.zone-oneoff,.zone-del,.day-add-zone,.zone-add-picker,.del-x,input,textarea,a,.add-task-sec,.card-add-task')) return;
+      if(!handleEarly && e.target.closest('.add-pursuit-slot,.plus-picker,.card-del,.del-x-sec,.card-resize,.oneoff-resize,.zone-oneoff-del,.zone-oneoff,.zone-del,.day-add-zone,.zone-add-picker,.del-x,.nodes-add-btn,.nodes-link-btn,.nodes-edit-bar,input,textarea,a,.add-task-sec,.card-add-task')) return;
       if(!handleEarly && e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
         /* header click collapses — do not start a section drag that swallows the tap */
         return;
@@ -16426,6 +16471,10 @@ document.addEventListener('click', function(e){
 function ensureActions(){
 [].forEach.call(document.querySelectorAll('.day-block.fmt22'), function(blk){
 var date=blk.dataset.date; if(!date) return;
+if(date >= '2026-08-26'){
+  blk.querySelectorAll('.j22-actions').forEach(function(el){ el.remove(); });
+  return;
+}
 var dayCard=blk.querySelector('.day-card'); if(!dayCard) return;
 var dayTasks=dayCard.querySelector('.day-tasks'); if(!dayTasks) return;
 var ex=dayTasks.querySelector('.j22-actions'); if(ex) return;
@@ -17434,23 +17483,133 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="today-view-toggle">
 <button class="tv-pill active" data-view="pursuits">pursuits</button>
 <button class="tv-pill" data-view="flow">flow</button>
+<button class="tv-pill" data-view="nodes">nodes</button>
 </div>
 <button type="button" class="day-add-zone" aria-label="add section">+</button>
 </div>
 <div class="day-tasks">
 <div class="tv-panel tv-pursuits active">
-<div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1">
-<div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:248px;height:288px;--ff-x:28px;--ff-y:28px;--zone-w:248px;--zone-h:288px;--zone-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">GLOW UP</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty glow-hero" data-user-added="1" data-theme="blush" style="--ff-x:16px;--ff-y:8px;--card-w:196px;--card-h:228px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="blush" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-blush"><img alt="Text Mom" src="manus-storage/pursuit-persons_be56f167.jpg"><p class="j22-group" spellcheck="false" data-newhdr="Text Mom">Text Mom</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">Text Mom back</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:168px;--ff-y:44px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="curated lifestyle" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2"><p class="j22-group" spellcheck="false" data-newhdr="curated lifestyle">curated lifestyle</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-finances" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-leverage" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-presence" data-zone="presence" style="left:836px;top:420px;width:340px;height:320px;--ff-x:836px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v14.jpg?v=symbol')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="vision-board" aria-label="today's vision board">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero">
+<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">glow up</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:8%;--py:16%">
+<img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg">
+<span>vanity</span>
+</div>
+<label class="vision-check" style="--px:46%;--py:18%"><input class="agenda-check" type="checkbox"><span>cleanse</span></label>
+<label class="vision-check" style="--px:62%;--py:34%"><input class="agenda-check" type="checkbox"><span>serum</span></label>
+<label class="vision-check" style="--px:48%;--py:50%"><input class="agenda-check" type="checkbox"><span>SPF</span></label>
+<label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-gym" data-focus="gym" style="--tile-photo:url('manus-storage/zone-body-abs.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">gym</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
+<img alt="" src="manus-storage/zone-body-abs.jpg">
+<span>reformer pilates · 6:00</span>
+</div>
+<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox"><span>pack gym bag</span></label>
+<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-house" data-focus="house" style="--tile-photo:url('manus-storage/pursuit-curated-lifestyle.jpg?v=2')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">house</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2">
+<span>reset the rooms</span>
+</div>
+<label class="vision-check" style="--px:52%;--py:22%"><input class="agenda-check" type="checkbox"><span>kitchen</span></label>
+<label class="vision-check" style="--px:58%;--py:40%"><input class="agenda-check" type="checkbox"><span>floors</span></label>
+<label class="vision-check" style="--px:50%;--py:58%"><input class="agenda-check" type="checkbox"><span>laundry</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-ambition" data-focus="ambition" style="--tile-photo:url('manus-storage/zone-ambition-v4.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">ambition</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:8%;--py:16%">
+<img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
+<span>Elevate</span>
+</div>
+<label class="vision-check" style="--px:48%;--py:22%"><input class="agenda-check" type="checkbox"><span>text Dr Betty</span></label>
+<label class="vision-check" style="--px:52%;--py:42%"><input class="agenda-check" type="checkbox"><span>module work</span></label>
+</div>
+</article>
+</div>
+<div class="vision-more">
+<article class="vision-tile vision-tile-mini" data-focus="quantum" style="--tile-photo:url('manus-storage/zone-quantum-v15.jpg?v=observe')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">quantum</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/zone-quantum-v15.jpg?v=observe">
+<span>entanglement</span>
+</div>
+</div>
+</article>
+<article class="vision-tile vision-tile-mini" data-focus="finances" style="--tile-photo:url('manus-storage/zone-finances-v2.jpg?v=2')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">finances</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/zone-finances-v2.jpg?v=2">
+<span>capital blueprint</span>
+</div>
+</div>
+</article>
+<article class="vision-tile vision-tile-mini" data-focus="power" style="--tile-photo:url('manus-storage/mock-power.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">power</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/pursuit-leverage-v4.jpg?v=key">
+<span>leverage</span>
+</div>
+</div>
+</article>
+<article class="vision-tile vision-tile-mini" data-focus="lifestyle" style="--tile-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">curated lifestyle</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/pursuit-lifestyle_577937e8.jpg">
+<span>curated lifestyle</span>
+</div>
+</div>
+</article>
+</div>
 </div>
 </div>
 <div class="tv-panel tv-flow" style="display:none">
 <div class="flow-chart-card"><p class="flow-title">flow</p></div>
 </div>
+<div class="tv-panel tv-nodes" style="display:none">
+<div class="nodes-edit-bar">
+<button type="button" class="nodes-add-btn">+ node</button>
+<button type="button" class="nodes-link-btn">connect</button>
+<span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>
+</div>
+<div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1">
+<div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:248px;height:288px;--ff-x:28px;--ff-y:28px;--zone-w:248px;--zone-h:288px;--zone-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">GLOW UP</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty glow-hero" data-user-added="1" data-theme="blush" style="--ff-x:16px;--ff-y:8px;--card-w:196px;--card-h:228px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-finances zone-collapsed" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-leverage zone-collapsed" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-presence zone-collapsed" data-zone="presence" style="left:836px;top:210px;width:340px;height:320px;--ff-x:836px;--ff-y:210px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v15.jpg?v=observe')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="zone-oneoff canvas-oneoff" data-i="mom" style="--ff-x:620px;--ff-y:392px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-persons_be56f167.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">text mom back</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div>
+
+</div>
+</div>
+
 </div>
 </div>
 </div><div class="day-block fmt22" data-date="2026-08-22">
@@ -17527,7 +17686,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-08-26">
+<div class="day-block fmt22 vision-collage-day" data-date="2026-08-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 26 · wed</span></div>
@@ -17537,10 +17696,147 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 <div class="day-tasks">
 <div class="tv-panel tv-pursuits active">
-<div class="flow-chart-card"><div class="sec-grid freeform"></div></div>
+<div class="vision-board" aria-label="today's vision board">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero">
+<article class="vision-tile vision-tile-gym" data-focus="gym" style="--tile-photo:url('manus-storage/zone-body-abs.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">gym</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
+<img alt="" src="manus-storage/zone-body-abs.jpg">
+<span>reformer pilates · 6:00</span>
+</div>
+<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox"><span>pack gym bag</span></label>
+<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">glow up</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:8%;--py:16%">
+<img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg">
+<span>vanity</span>
+</div>
+<label class="vision-check" style="--px:46%;--py:18%"><input class="agenda-check" type="checkbox"><span>cleanse</span></label>
+<label class="vision-check" style="--px:62%;--py:34%"><input class="agenda-check" type="checkbox"><span>serum</span></label>
+<label class="vision-check" style="--px:48%;--py:50%"><input class="agenda-check" type="checkbox"><span>SPF</span></label>
+<label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-house" data-focus="grad" style="--tile-photo:url('manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">grad school</h3>
+<div class="vision-tile-details"></div>
+</article>
+<article class="vision-tile vision-tile-ambition" data-focus="ambition" style="--tile-photo:url('manus-storage/zone-ambition-v4.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">ambition</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:8%;--py:16%">
+<img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
+<span>Elevate</span>
+</div>
+<label class="vision-check" style="--px:48%;--py:22%"><input class="agenda-check" type="checkbox"><span>text Dr Betty</span></label>
+<label class="vision-check" style="--px:52%;--py:42%"><input class="agenda-check" type="checkbox"><span>module work</span></label>
+</div>
+</article>
+</div>
+</div>
 </div>
 <div class="tv-panel tv-flow" style="display:none">
 <div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+</div>
+</div>
+</div>
+<div class="day-block fmt22 vision-collage-day" data-date="2026-08-27">
+<div class="day-dot"></div>
+<div class="day-card">
+<div class="day-card-header"><span class="day-date">aug 27 · thu</span></div>
+<div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits">pursuits</button>
+<button class="tv-pill" data-view="flow">flow</button>
+<button class="tv-pill" data-view="nodes">nodes</button>
+</div>
+<div class="day-tasks">
+<div class="tv-panel tv-pursuits active">
+<div class="vision-board" aria-label="vision collage">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero vision-hero-duo">
+<article class="vision-tile vision-tile-shot vision-tile-gsa" data-focus="gsa" style="--tile-photo:url('manus-storage/handshake-pepperdine-gsa.jpg')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">Top Applicant</h3>
+<div class="vision-tile-details"></div>
+</article>
+<article class="vision-tile vision-tile-shot vision-tile-committee" data-focus="committee" style="--tile-photo:url('manus-storage/pepperdine-committee-checkin.jpg?v=orig')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">Committee check-in</h3>
+<div class="vision-tile-details"></div>
+</article>
+</div>
+</div>
+</div>
+<div class="tv-panel tv-flow" style="display:none">
+<div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+
+<div class="tv-panel tv-nodes" style="display:none">
+<div class="nodes-edit-bar">
+<button type="button" class="nodes-add-btn">+ node</button>
+<button type="button" class="nodes-link-btn">connect</button>
+<span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>
+</div>
+<div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="day-block fmt22 vision-collage-day today-block make-flow-day" data-date="2026-08-28">
+<div class="day-dot"></div>
+<div class="day-card">
+<div class="day-card-header"><span class="day-date">aug 28 · fri</span></div>
+<div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits">pursuits</button>
+<button class="tv-pill" data-view="flow">flow</button>
+<button class="tv-pill" data-view="nodes">nodes</button>
+</div>
+<div class="day-tasks">
+<div class="tv-panel tv-pursuits active">
+<div class="vision-board" aria-label="vision collage">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero vision-hero-solo">
+<article class="vision-tile vision-tile-house" data-focus="grad" style="--tile-photo:url('manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial')">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">grad school</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px:10%;--py:22%">
+<img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg">
+<span>Top Applicant</span>
+</div>
+<div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px:54%;--py:28%">
+<img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig">
+<span>Committee check-in</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+</div>
+<div class="tv-panel tv-flow" style="display:none">
+<div class="flow-chart-card"><p class="flow-title">flow</p></div>
+</div>
+<div class="tv-panel tv-nodes" style="display:none">
+<div class="nodes-edit-bar">
+<button type="button" class="nodes-add-btn">+ node</button>
+<button type="button" class="nodes-link-btn">connect</button>
+<span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>
+</div>
+<div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div>
 </div>
 </div>
 </div>
@@ -19168,6 +19464,10 @@ function applyDateRoles() {
         block.classList.remove('today-block');
       } else {
         block.classList.remove('pursuit-board-day');
+      }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateKey) && dateKey >= '2026-08-26') {
+        if (block.querySelector('.vision-board')) block.classList.remove('freeplace-day');
+        else block.classList.add('freeplace-day');
       }
       // Future cards beyond tomorrow stay as plain day-block
     });
@@ -21514,7 +21814,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (yEl) saveShell(yIso, yEl);
     };
     let lastDay = todayStr();
-    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="flow">flow</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="flow-chart-card"><div class="sec-grid freeform"></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div></div></div>';
+    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="flow">flow</button><button class="tv-pill" data-view="nodes">nodes</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="vision-board" aria-label="vision collage"><button type="button" class="vision-zoom-out" hidden>all of today</button><p class="vision-hint">the day, wide — click a focus to go in</p><div class="vision-hero"></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div></div></div>';
     const pickSrc = iso => {
       const days = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'));
       let src = null;
@@ -21523,6 +21823,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || d >= iso) return;
         if (b.classList.contains('zone-board-day') || b.classList.contains('pursuit-board-day')) return;
         if (b.querySelector('.sec-grid.pursuit-canvas .pursuit-zone')) return;
+        if (b.querySelector('.vision-board')) return;
         src = b;
       });
       return src;
@@ -21548,18 +21849,20 @@ document.addEventListener('DOMContentLoaded',()=>{
         clone = wrap.firstElementChild;
       }
       if (!clone) {
-        const src = pickSrc(iso);
-        if (!src) {
-          clone = document.createElement('div');
-          clone.className = 'day-block fmt22';
-          clone.innerHTML = emptyShellHtml;
-        } else {
-          clone = src.cloneNode(true);
-          clone.querySelectorAll('.j22-section-items').forEach(el => { el.innerHTML = ''; });
-          clone.querySelectorAll('.sec-card, .j22-section.card, .zone-oneoff, .canvas-oneoff').forEach(el => el.remove());
-        }
+        // NEVER auto-copy another day's cards/sections without explicit user action
+        clone = document.createElement('div');
+        clone.className = 'day-block fmt22';
+        clone.innerHTML = emptyShellHtml;
       }
       clone.setAttribute('data-date', iso);
+      if (iso >= '2026-08-26') {
+        clone.classList.add('vision-collage-day');
+        clone.classList.remove('freeplace-day');
+        clone.querySelectorAll('.add-board-row, .add-section-btn, .add-card-btn, .j22-actions').forEach(function(el){ el.remove(); });
+      }
+      if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
+        try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
+      }
       clone.classList.remove('past', 'featured-block', 'collapsed', 'zone-board-day', 'pursuit-board-day', 'today-block');
       clone.querySelectorAll('.sec-grid.pursuit-canvas').forEach(function(g){
         g.classList.remove('pursuit-canvas', 'pursuit-categories');
@@ -21573,10 +21876,14 @@ document.addEventListener('DOMContentLoaded',()=>{
       });
       if (iso === '2026-08-20') clone.classList.add('pursuit-board-day');
       else if (iso === todayStr()) clone.classList.add('today-block');
+      if (iso >= '2026-08-26') { clone.classList.add('vision-collage-day'); clone.classList.remove('freeplace-day'); }
       const dateEl = clone.querySelector('.day-date');
       if (dateEl) dateEl.textContent = labelFor(iso);
       insertDay(clone, iso);
       saveShell(iso, clone);
+      if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
+        try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
+      }
     };
     const ensureTodayCard = () => {
       const iso = todayStr();
@@ -26656,8 +26963,14 @@ function handleMay18No(btn) {
   function layout(){
     document.querySelectorAll('.day-block.fmt22 .sec-grid').forEach(function(grid){
       if(grid.classList.contains('pursuit-canvas') || grid.querySelector(':scope > .pursuit-zone')) return;
-      grid.classList.add('freeform');
       var day=grid.closest('.day-block').getAttribute('data-date');
+      if(day>='2026-08-26'){
+        if(grid.closest('.day-block').querySelector('.vision-board')) return;
+        grid.classList.add('freeform');
+        grid.closest('.day-block').classList.add('freeplace-day');
+        return;
+      }
+      grid.classList.add('freeform');
       applyOrder(grid, day);
       if(grid.__sortableInited || grid.__cardSortable) return;
       if(!grid.querySelector(':scope > .sec-card')) return;
@@ -26848,18 +27161,25 @@ function handleMay18No(btn) {
 .day-block.fmt22 .flow-chart-card .add-grid:hover{ background:rgba(110,100,86,0.27); }
 .day-block.fmt22 .acc-toggle-bar .add-grid{ display:none !important; }
 .day-block.fmt22 .add-board-row{
-  display:flex; justify-content:center; align-items:center; gap:8px;
+  display:none !important;
+  justify-content:center; align-items:center; gap:8px;
   margin:2px auto 10px; position:relative; z-index:12; width:100%;
 }
-.day-block.collapsed .add-board-row,
-.day-block.fmt22.collapsed .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date^="2026-07"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-20"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-21"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-22"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-23"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-24"] .add-board-row,
-.day-block.fmt22:not(.today-block)[data-date="2026-08-25"] .add-board-row{
+.day-block.fmt22[data-date="2026-08-25"]:not(.collapsed) .add-board-row{
+  display:flex !important;
+}
+html body .day-block.fmt22[data-date="2026-08-26"] .add-board-row,
+html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .add-board-row,
+html body .day-block.fmt22[data-date="2026-08-26"] .add-section-btn,
+html body .day-block.fmt22[data-date="2026-08-26"] .add-card-btn,
+html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .add-section-btn,
+html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .add-card-btn{
+  display:none !important;
+}
+html body .day-block.fmt22[data-date="2026-08-26"] .j22-actions,
+html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .j22-actions,
+html body .day-block.fmt22[data-date="2026-08-26"] .flow-chart-card.flow-collapsed > .j22-actions,
+html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart-card.flow-collapsed > .j22-actions{
   display:none !important;
 }
 .day-block.fmt22 .add-board-row .add-grid,
@@ -26959,7 +27279,7 @@ function handleMay18No(btn) {
   }
   function isAddBoardDay(blk){
     var d = (blk && blk.getAttribute('data-date')) || '';
-    return /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-25';
+    return d === '2026-08-25';
   }
   function makeCard(name,idx){
     name=(name||'').trim();
@@ -27071,7 +27391,7 @@ function handleMay18No(btn) {
     if(srcBlk && !isZoneSkip(srcBlk) && /^\d{4}-\d{2}-\d{2}$/.test(day||'')){
       document.querySelectorAll('.day-block.fmt22[data-date]').forEach(function(b){
         var d=b.getAttribute('data-date')||'';
-        if(d<=day || isZoneSkip(b)) return;
+        if(d<=day || d==='2026-08-25' || isZoneSkip(b)) return;
         var sg=b.querySelector('.tv-pursuits .sec-grid')||b.querySelector('.sec-grid');
         if(!sg || sg.classList.contains('pursuit-canvas')) return;
         if(existing(sg).indexOf(name.toLowerCase())>=0) return;
@@ -27186,6 +27506,7 @@ function handleMay18No(btn) {
     var blk=g.closest('.day-block');
     if(isZoneSkip(blk) || g.classList.contains('pursuit-canvas')) return;
     var day=dayOf(g);
+    if(day==='2026-08-25') return;
     var arr=load()[day]||[]; var ex=existing(g); arr.forEach(function(r){
       var nm=(r.name||'').trim();
       if(!nm || gone[day+'|'+nm.toLowerCase()]) return;
@@ -27266,7 +27587,7 @@ function handleMay18No(btn) {
 <style id="card-tweaks-x">
 /* 1. section name as faint overlay behind the svg icon */
 .day-block.fmt22 .sec-card .card-visual{ position:relative; }
-.day-block.fmt22 .sec-card .card-visual .j22-group{ position:absolute !important; bottom:0 !important; top:auto !important; left:0 !important; right:0 !important; margin:0 !important; padding:6px 12px !important; background:linear-gradient(to top, rgba(40,35,28,0.7) 0%, rgba(40,35,28,0) 100%) !important; text-align:left !important; z-index:3 !important; opacity:1 !important; font-family:"Playfair Display","Newsreader",Georgia,serif !important; font-style:normal !important; font-weight:700 !important; font-size:13px !important; letter-spacing:0.02em !important; color:#ffffff !important; pointer-events:auto; cursor:text; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:none; }
+.day-block.fmt22 .sec-card .card-visual .j22-group{ position:absolute !important; top:0 !important; bottom:auto !important; left:0 !important; right:0 !important; margin:0 !important; padding:6px 12px !important; background:linear-gradient(to bottom, rgba(40,35,28,0.7) 0%, rgba(40,35,28,0) 100%) !important; text-align:left !important; z-index:3 !important; opacity:1 !important; font-family:"Playfair Display","Newsreader",Georgia,serif !important; font-style:normal !important; font-weight:700 !important; font-size:13px !important; letter-spacing:0.02em !important; color:#ffffff !important; pointer-events:auto; cursor:text; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:none; }
 .day-block.fmt22 .sec-card .card-visual svg:not(.checkmark){ position:relative; z-index:1; }
 /* 2. main-task checkmarks on the right */
 .day-block.fmt22 .sec-card .j22-item:not(.j22-sub):not(.j22-sub2) > .agenda-check{ order:2 !important; margin-left:auto !important; margin-right:0 !important; }
@@ -27628,6 +27949,7 @@ html body .day-block[data-date="2026-08-20"] .task-count-badge {
   function gen(){
     /* Handle tabbed days: sec-grid may be in tv-pursuits panel, flow display in tv-flow panel */
     document.querySelectorAll('.day-block.fmt22').forEach(function(dayBlock){
+      if(dayBlock.getAttribute('data-date')==='2026-08-20' || dayBlock.classList.contains('pursuit-board-day')) return;
       var grid = dayBlock.querySelector('.sec-grid');
       if(!grid) return;
       /* Find the flow display container - could be flow-body[data-acc="flow"] or the flow-chart-card in tv-flow panel */
@@ -27783,6 +28105,7 @@ html body .day-block[data-date="2026-08-20"] .task-count-badge {
     var st=load();
     document.querySelectorAll('.day-block.fmt22 .sec-card').forEach(function(c){
       if(c.classList.contains('resizing')) return;
+      if(c.closest('.freeplace-day')) return;
       var d=dayOf(c),h=hdrOf(c); var sz=st[d]&&st[d][h];
       if(!sz) return;
       // Prefer square size; migrate old height-only saves
@@ -28202,10 +28525,10 @@ body.enh-dark .day-badge {
   color: #8A9E85 !important;
 }
 body.enh-dark #nav-sidebar {
-  background: rgba(26, 26, 31, 0.97) !important;
-  border-right-color: rgba(196,168,130,0.2) !important;
+  background: linear-gradient(180deg, rgba(48, 28, 38, 0.38) 0%, rgba(32, 20, 28, 0.32) 100%) !important;
+  border-right-color: rgba(243, 230, 208, 0.18) !important;
 }
-body.enh-dark #nav-sidebar nav a { color: #e8e4dc !important; }
+body.enh-dark #nav-sidebar nav a { color: #f3e6d0 !important; }
 body.enh-dark #nav-sidebar h2 { color: #c4a882 !important; }
 body.enh-dark .timeline::before {
   background: linear-gradient(180deg, rgba(138,158,133,0.3) 0%, rgba(138,158,133,0.5) 50%, transparent 100%) !important;
@@ -28630,10 +28953,20 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
     block.querySelectorAll('.tv-panel').forEach(function(panel){
       var show = panel.classList.contains('tv-' + view);
       panel.style.display = show ? '' : 'none';
+      panel.style.opacity = show ? '1' : '';
+      panel.style.transform = show ? 'none' : '';
+      panel.style.filter = show ? 'none' : '';
       panel.classList.toggle('active', show);
     });
     if(view === 'flow' && window.__syncFlowFromPins) window.__syncFlowFromPins();
     if(view === 'pursuits' && window.__ensurePursuitZones) window.__ensurePursuitZones(block);
+    if(view === 'nodes'){
+      requestAnimationFrame(function(){
+        if(window.__pinAug20NodesLook) window.__pinAug20NodesLook();
+        if(window.__ensurePursuitZones) window.__ensurePursuitZones(block);
+        if(window.__drawAug20Web) window.__drawAug20Web();
+      });
+    }
   }
   window.__switchDayView = switchView;
   document.addEventListener('click', function(e){
@@ -28729,6 +29062,8 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
     if(!toggle) return;
     var card = toggle.closest('.day-card');
     if(!card) return;
+    var block = card.closest('.day-block');
+    if(block && (block.getAttribute('data-date')==='2026-08-20' || block.querySelector('.tv-panel.tv-nodes'))) return;
     var pills = toggle.querySelectorAll('.tv-pill');
     var panels = card.querySelectorAll('.tv-panel');
     var view = pill.getAttribute('data-view');
@@ -28828,7 +29163,7 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
     var today=!!(card.closest('.today-block, .zone-board-day, .pursuit-board-day'));
     var zoneMini=!!(card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card'));
     if(!has && !today) card.classList.remove('card-collapsed');
-    if(zoneMini) return;
+    if(zoneMini || card.closest('.freeplace-day')) return;
     card.style.top = '';
     card.style.left = '';
     card.style.right = '';
@@ -28932,7 +29267,7 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
   }
   function addBtns(){
     document.querySelectorAll('.day-block.fmt22 .sec-card').forEach(function(card){
-      card.style.position = 'relative';
+      if(!card.closest('.freeplace-day')) card.style.position = 'relative';
       var btn = card.querySelector('.card-add-task');
       if(!btn){
         btn = document.createElement('button');
@@ -28969,6 +29304,36 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 <style id="card-auto-expand">
 /* Lock square sizes — empty 148; with-tasks grows via --vb-size.
    Today’s zone minis are excluded — they use --card-w/--card-h and must not pulse. */
+.day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day) .sec-grid,
+.day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform {
+  position: relative !important;
+  height: auto !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+}
+.day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card,
+.day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform > .sec-card {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+.day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card.is-empty,
+.day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform > .sec-card.is-empty {
+  width: 148px !important;
+  height: 148px !important;
+  max-width: 148px !important;
+  max-height: 148px !important;
+  min-height: 0 !important;
+  flex: 0 0 148px !important;
+  overflow: hidden !important;
+}
 .day-block.fmt22:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card.is-empty,
 .day-block.fmt22:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform > .sec-card.is-empty,
 .day-block.fmt22:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card.card-collapsed.has-tasks,
@@ -32172,8 +32537,12 @@ window.__refreshPinnedAgenda = function(){};
     blocks.forEach(function(blk){
       var dateStr = blk.getAttribute('data-date') || '';
       var existingGrid = blk.querySelector('.sec-grid');
+      // Do not auto-add cards to freeplace / vision-board days or Aug 26+
+      if(blk.classList.contains('freeplace-day') || blk.querySelector('.vision-board') || (dateStr >= '2026-08-26')){
+        return;
+      }
       if(blk.classList.contains('today-block') || blk.classList.contains('zone-board-day') || (existingGrid && existingGrid.classList.contains('pursuit-canvas'))){
-        if(existingGrid){
+        if(existingGrid && (blk.classList.contains('zone-board-day') || existingGrid.classList.contains('pursuit-canvas'))){
           [].slice.call(existingGrid.querySelectorAll(':scope > .sec-card')).forEach(function(c){ c.remove(); });
         }
         return;
@@ -32320,11 +32689,12 @@ window.__refreshPinnedAgenda = function(){};
   }
   function propagateFlowTimeline(){
     document.querySelectorAll('.day-block.fmt22').forEach(function(block){
+      if(block.getAttribute('data-date')==='2026-08-20' || block.classList.contains('pursuit-board-day')) return;
       var tvFlow = block.querySelector('.tv-panel.tv-flow');
       if(!tvFlow) return;
       var gsepCard = tvFlow.querySelector('.gsep-retreat-card');
       // Never delete GSEP retreat card
-      var oldCard = tvFlow.querySelector('.flow-chart-card:not(.gsep-retreat-card)');
+      var oldCard = tvFlow.querySelector('.flow-chart-card:not(.gsep-retreat-card):not(.made-flow-host)');
       if(oldCard && !oldCard.querySelector('.flow-step, .j22-item, .j22-group') && !hasGsep(oldCard)){
         oldCard.remove();
       }
@@ -35248,20 +35618,30 @@ html body .day-block.today-block .tv-panel {
 html body .day-block.today-block .tv-panel[style*="display: none"] {
   opacity: 0;
 }
-html body .day-block.today-block .today-view-toggle {
+html body .day-block.today-block .today-view-toggle,
+html body .day-block.make-flow-day .today-view-toggle,
+html body .day-block.freeplace-day .today-view-toggle,
+html body .day-block.vision-collage-day .today-view-toggle {
   display: flex !important;
   justify-content: center;
+  align-items: stretch;
   gap: 0;
   margin: 8px auto 14px;
-  width: min(320px, 90%);
+  width: fit-content;
+  min-width: min(280px, 90%);
+  max-width: min(560px, 96%);
   background: rgba(245,240,233,0.28);
   border: 1px solid rgba(255,255,255,0.35);
   border-radius: 999px;
   padding: 3px;
   backdrop-filter: blur(10px);
+  flex-wrap: nowrap !important;
 }
-html body .day-block.today-block .tv-pill {
-  flex: 1;
+html body .day-block.today-block .tv-pill,
+html body .day-block.make-flow-day .tv-pill,
+html body .day-block.freeplace-day .tv-pill,
+html body .day-block.vision-collage-day .tv-pill {
+  flex: 1 0 auto;
   border: 0 !important;
   background: transparent !important;
   border-radius: 999px !important;
@@ -35269,10 +35649,14 @@ html body .day-block.today-block .tv-pill {
   font-size: 9px;
   letter-spacing: 0.16em;
   text-transform: lowercase;
+  white-space: nowrap !important;
   color: rgba(255,255,255,0.72) !important;
   padding: 8px 10px !important;
 }
-html body .day-block.today-block .tv-pill.active {
+html body .day-block.today-block .tv-pill.active,
+html body .day-block.make-flow-day .tv-pill.active,
+html body .day-block.freeplace-day .tv-pill.active,
+html body .day-block.vision-collage-day .tv-pill.active {
   background: rgba(255,255,255,0.88) !important;
   color: #2a2a25 !important;
 }
@@ -35294,7 +35678,7 @@ html body .day-block.today-block .today-agenda-list {
 <script>
 (function(){
   if(window.__quantumZoneLock) return; window.__quantumZoneLock=1;
-  var SRC='manus-storage/zone-quantum-v14.jpg?v=symbol';
+  var SRC='manus-storage/zone-quantum-v15.jpg?v=observe';
   window.ZONE_BANNERS = window.ZONE_BANNERS || {};
   window.ZONE_BANNERS.presence = SRC;
   function lock(){
@@ -35491,25 +35875,30 @@ html body .day-block.pursuit-board-day .today-view-toggle {
   justify-content: center;
   gap: 0;
   margin: 8px auto 14px;
-  width: min(320px, 90%);
+  width: auto;
+  min-width: 340px;
+  max-width: min(460px, 92%);
   background: rgba(245,240,233,0.28);
   border: 1px solid rgba(255,255,255,0.35);
   border-radius: 999px;
   padding: 3px;
   backdrop-filter: blur(10px);
+  flex-wrap: nowrap !important;
 }
 html body .day-block.zone-board-day .tv-pill,
 html body .day-block.pursuit-board-day .tv-pill {
-  flex: 1;
+  flex: 1 0 auto;
   border: 0 !important;
   background: transparent !important;
   border-radius: 999px !important;
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 0.16em;
+  font-family: "DM Mono", monospace !important;
+  font-style: normal !important;
+  font-size: 11px !important;
+  letter-spacing: 0.12em;
   text-transform: lowercase;
+  white-space: nowrap !important;
   color: rgba(255,255,255,0.72) !important;
-  padding: 8px 10px !important;
+  padding: 8px 14px !important;
 }
 html body .day-block.zone-board-day .tv-pill.active,
 html body .day-block.pursuit-board-day .tv-pill.active {
@@ -35751,29 +36140,8 @@ html body .day-block[data-date="2026-08-20"] .tv-toggle-row {
   margin: 8px 0 14px !important;
   padding: 0 44px 0 12px !important;
 }
-html body .day-block[data-date="2026-08-20"] .tv-toggle-row .make-flow-btn {
-  grid-column: 1 !important;
-  justify-self: start !important;
-  align-self: center !important;
-  margin: 0 !important;
-  padding: 4px 8px !important;
-  width: auto !important;
-  height: auto !important;
-  white-space: nowrap !important;
-  background: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  font: italic 13px/1.1 "Newsreader", Georgia, serif !important;
-  letter-spacing: 0.02em !important;
-  text-transform: none !important;
-  color: rgba(255, 248, 238, 0.88) !important;
-  cursor: pointer !important;
-}
-html body .day-block[data-date="2026-08-20"] .tv-toggle-row .make-flow-btn.active-pick,
-html body .day-block[data-date="2026-08-20"] .tv-toggle-row .make-flow-btn:hover {
-  color: #fff8ee !important;
-  text-decoration: underline !important;
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row > .make-flow-btn {
+  display: none !important;
 }
 html body .day-block[data-date="2026-08-20"].collapsed .tv-toggle-row {
   display: none !important;
@@ -35782,8 +36150,9 @@ html body .day-block[data-date="2026-08-20"] .tv-toggle-row .today-view-toggle {
   grid-column: 2 !important;
   justify-self: center !important;
   margin: 0 !important;
-  width: min(340px, 72%) !important;
-  max-width: min(340px, 72%) !important;
+  width: auto !important;
+  min-width: 340px !important;
+  max-width: none !important;
   align-self: center !important;
 }
 html body .day-block[data-date="2026-08-20"] .today-view-toggle {
@@ -35791,10 +36160,12 @@ html body .day-block[data-date="2026-08-20"] .today-view-toggle {
   justify-content: center !important;
   align-items: center !important;
   align-self: center !important;
+  flex-wrap: nowrap !important;
   gap: 0 !important;
   margin: 8px auto 14px !important;
-  width: min(320px, 90%) !important;
-  max-width: min(320px, 90%) !important;
+  width: auto !important;
+  min-width: 340px !important;
+  max-width: none !important;
   background: rgba(245,240,233,0.28) !important;
   border: 1px solid rgba(255,255,255,0.35) !important;
   border-radius: 999px !important;
@@ -35835,6 +36206,11 @@ html body .day-block[data-date="2026-08-20"] .zone-add-picker {
   border: 1px solid rgba(110,100,86,0.28) !important;
   border-radius: 12px !important;
   box-shadow: 0 8px 22px rgba(20,12,8,0.16) !important;
+}
+html body .day-block[data-date="2026-08-20"] .nodes-edit-bar .zone-add-picker {
+  position: relative !important;
+  right: auto !important;
+  top: auto !important;
 }
 html body .day-block[data-date="2026-08-20"] .zone-add-picker .plus-name-input {
   width: 160px !important;
@@ -35903,24 +36279,39 @@ html body .day-block.pursuit-board-day .sec-card > .card-del:hover {
   opacity: 1 !important;
 }
 html body .day-block[data-date="2026-08-20"] .tv-pill {
-  flex: 1 !important;
+  flex: 1 0 auto !important;
   border: 0 !important;
   background: transparent !important;
   border-radius: 999px !important;
   font-family: "DM Mono", monospace !important;
-  font-size: 9px !important;
-  letter-spacing: 0.16em !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em !important;
   text-transform: lowercase !important;
-  color: rgba(255,255,255,0.72) !important;
-  padding: 8px 10px !important;
+  white-space: nowrap !important;
+  color: rgba(255,255,255,0.92) !important;
+  padding: 9px 18px !important;
+}
+html body .day-block[data-date="2026-08-20"] .today-view-toggle .make-flow-btn,
+html body .day-block[data-date="2026-08-20"] .tv-toggle-row > .make-flow-btn {
+  display: none !important;
 }
 html body .day-block[data-date="2026-08-20"] .tv-pill.active {
   background: rgba(255,255,255,0.88) !important;
   color: #2a2a25 !important;
 }
+html body .day-block[data-date="2026-08-20"] .tv-panel.active {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
 html body .day-block[data-date="2026-08-20"] .day-tasks,
 html body .day-block[data-date="2026-08-20"] .tv-panel.tv-pursuits,
-html body .day-block[data-date="2026-08-20"] .tv-panel.tv-pursuits.active {
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-pursuits.active,
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-nodes,
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-nodes.active,
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flowchart,
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flowchart.active {
   width: 100% !important;
   max-width: 100% !important;
   align-self: stretch !important;
@@ -36165,7 +36556,9 @@ html body .day-block[data-date="2026-08-20"].zone-page-zoom .day-card {
 html body .day-block.pursuit-board-day.zone-page-zoom .day-tasks,
 html body .day-block[data-date="2026-08-20"].zone-page-zoom .day-tasks,
 html body .day-block.pursuit-board-day.zone-page-zoom .tv-panel.tv-pursuits,
-html body .day-block[data-date="2026-08-20"].zone-page-zoom .tv-panel.tv-pursuits {
+html body .day-block[data-date="2026-08-20"].zone-page-zoom .tv-panel.tv-pursuits,
+html body .day-block.pursuit-board-day.zone-page-zoom .tv-panel.tv-nodes,
+html body .day-block[data-date="2026-08-20"].zone-page-zoom .tv-panel.tv-nodes {
   width: 100% !important;
   max-width: none !important;
   padding: 0 !important;
@@ -36515,9 +36908,16 @@ html body .day-block[data-date="2026-08-20"] .pursuit-zone-body:not(.zone-collap
   top: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  pointer-events: auto;
   z-index: 0;
   overflow: visible;
+}
+.day-block.pursuit-board-day .sec-grid.pursuit-canvas > svg.aug20-zone-web path.aug20-edge-hit,
+.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas > svg.aug20-zone-web path.aug20-edge-hit,
+.day-block.pursuit-board-day .sec-grid.pursuit-canvas > svg.aug20-zone-web path.aug20-edge,
+.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas > svg.aug20-zone-web path.aug20-edge {
+  pointer-events: stroke;
+  cursor: pointer;
 }
 .day-block.pursuit-board-day .sec-grid.pursuit-canvas > .pursuit-zone,
 .day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas > .pursuit-zone {
@@ -36855,7 +37255,7 @@ html body.enh-dark .progress-fill {
 html body #hamburger-menu span,
 html body.enh-dark #hamburger-menu span {
   background: #1c140e !important;
-  box-shadow: 0 1px 3px rgba(20,12,6,0.45);
+  box-shadow: none;
 }
 html body #nav-root {
   z-index: 200000 !important;
@@ -37321,27 +37721,52 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
 })();
 </script>
 <style id="make-flow-from-select-css">
-.make-flow-btn {
-  display: inline-block;
-  margin: 0 0 8px 4px;
-  padding: 4px 8px;
-  border: 0;
-  background: none;
-  font: italic 13px/1.1 "Newsreader", Georgia, serif;
-  color: #8a6a20;
-  cursor: pointer;
-  text-transform: none;
-  letter-spacing: 0.02em;
-}
-.make-flow-btn:hover,
-.make-flow-btn.active-pick {
-  color: #5c4810;
-  text-decoration: underline;
-}
-.today-view-toggle .make-flow-btn {
+html body .make-flow-btn,
+html body .day-block .make-flow-btn,
+html body .day-block .tv-toggle-row > .make-flow-btn,
+html body .day-block .today-view-toggle .make-flow-btn {
   display: none !important;
 }
+html body .day-block.make-flow-day:not(.collapsed) .day-card > .make-flow-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  margin: 6px auto 18px !important;
+  padding: 9px 18px !important;
+  width: auto !important;
+  height: auto !important;
+  white-space: nowrap !important;
+  border: 1px solid rgba(232, 214, 228, 0.42) !important;
+  border-radius: 999px !important;
+  background: rgba(168, 132, 168, 0.46) !important;
+  box-shadow: 0 6px 18px rgba(40, 18, 36, 0.16) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: "DM Mono", monospace !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: lowercase !important;
+  text-decoration: none !important;
+  color: #f7eef6 !important;
+  cursor: pointer !important;
+}
+html body .day-block.make-flow-day:not(.collapsed) .day-card > .make-flow-btn:hover {
+  background: rgba(186, 148, 186, 0.62) !important;
+  color: #fff8fb !important;
+  text-decoration: none !important;
+}
+html body .day-block.make-flow-day:not(.collapsed) .day-card > .make-flow-btn.active-pick {
+  background: rgba(246, 236, 244, 0.9) !important;
+  color: #4a3048 !important;
+  text-decoration: none !important;
+}
 .sec-card.flow-pick-on {
+  outline: 3px solid #c4a035 !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(196,160,53,.18) !important;
+}
+.vision-tile.flow-pick-on {
   outline: 3px solid #c4a035 !important;
   outline-offset: 3px;
   box-shadow: 0 0 0 6px rgba(196,160,53,.18) !important;
@@ -37412,20 +37837,143 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
 }
 .flow-pick-go { background: #c4a035; color: #2a220c; border-color: #8a6a20; }
 .flow-pick-go:disabled { opacity: .45; cursor: default; }
-.made-select-flow { margin: 8px 4px 16px; }
-.sec-grid.pursuit-canvas > .made-select-flow.canvas-flow-chart,
-.tv-pursuits .sec-grid.freeform > .made-select-flow.canvas-flow-chart {
-  position: absolute !important;
-  left: var(--ff-x, 28px) !important;
-  top: var(--ff-y, 24px) !important;
-  width: min(280px, 86%) !important;
-  max-width: 320px !important;
-  z-index: 6;
-  margin: 0 !important;
-  padding: 12px 14px 10px !important;
-  background: rgba(246, 239, 228, 0.92) !important;
-  border: 1px solid rgba(180,140,50,.4) !important;
-  box-shadow: 2px 3px 0 rgba(90,70,40,.12) !important;
+.made-select-flow { display: none !important; }
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flow {
+  min-height: 420px;
+  padding: 8px 8px 20px;
+}
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flow > .flow-chart-card:not(.made-flow-host),
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flow > .flow-timeline-card {
+  display: none !important;
+}
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flowchart,
+html body .day-block.pursuit-board-day .tv-panel.tv-flowchart,
+html body .day-block.make-flow-day .tv-panel.tv-flowchart,
+html body .day-block.vision-collage-day .tv-panel.tv-flowchart,
+html body .day-block.make-flow-day .tv-panel.tv-nodes,
+html body .day-block.vision-collage-day .tv-panel.tv-nodes {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 420px !important;
+  padding: 12px 8px 28px !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
+html body .day-block[data-date="2026-08-20"] .today-view-toggle .tv-pill {
+  padding: 9px 12px !important;
+}
+.made-flow-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px 28px;
+  min-height: 360px;
+}
+.made-flow-title {
+  margin: 4px 0 20px;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 248, 238, 0.92);
+}
+.made-flow-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(420px, 92%);
+}
+.made-flow-node {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: rgba(250, 246, 238, 0.94);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 26px rgba(20, 12, 8, 0.18);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 18px;
+  line-height: 1.35;
+  color: #2e2820;
+  text-align: center;
+}
+.made-flow-col > .made-flow-node:first-child,
+.made-flow-col > .made-flow-node:last-child {
+  border-radius: 999px;
+}
+.made-flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+  height: 42px;
+  margin: 2px 0;
+  pointer-events: none;
+}
+.made-flow-shaft {
+  display: block;
+  width: 2px;
+  flex: 1;
+  background: rgba(255, 248, 238, 0.78);
+}
+.made-flow-head {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid rgba(255, 248, 238, 0.88);
+}
+.made-flow-empty {
+  margin: 40px 16px;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(255, 248, 238, 0.72);
+  text-align: center;
+}
+.made-flow-host {
+  position: relative;
+}
+.made-flow-del {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 8;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 14, 10, 0.45);
+  color: rgba(255, 248, 238, 0.92);
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.made-flow-host:hover > .made-flow-del,
+.made-flow-diagram:hover > .made-flow-del,
+.made-flow-del:focus-visible {
+  opacity: 0.9;
+}
+.made-flow-del:hover {
+  opacity: 1 !important;
+  background: rgba(120, 48, 40, 0.72);
+}
+html body .day-block.flow-picking .sec-card,
+html body .day-block.flow-picking .pursuit-zone,
+html body .day-block.flow-picking .zone-oneoff,
+html body .day-block.flow-picking .canvas-oneoff,
+html body .day-block.flow-picking .j22-item,
+html body .day-block.flow-picking .vision-tile {
+  cursor: pointer !important;
 }
 </style>
 <script id="make-flow-from-select-js">
@@ -37483,6 +38031,113 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
     return flow;
   }
 
+  function isMakeFlowDay(block){
+    var d = block && block.getAttribute('data-date');
+    return !!(d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-20');
+  }
+
+  function placeMakeFlowBtn(block){
+    if (!block) return;
+    var eligible = isMakeFlowDay(block);
+    block.classList.toggle('make-flow-day', eligible);
+    var card = block.querySelector('.day-card') || block;
+    card.querySelectorAll('.tv-toggle-row > .make-flow-btn, .today-view-toggle > .make-flow-btn, :scope > .make-flow-btn').forEach(function(el){
+      if (!eligible) el.remove();
+    });
+    if (!eligible) {
+      block.querySelectorAll('.make-flow-btn').forEach(function(el){ el.remove(); });
+      var stray = block.querySelector('.tv-toggle-row');
+      if (stray && !stray.querySelector('.day-add-zone') && !block.classList.contains('pursuit-board-day')) {
+        var togOnly = stray.querySelector('.today-view-toggle');
+        if (togOnly && stray.parentNode) {
+          stray.parentNode.insertBefore(togOnly, stray);
+          stray.remove();
+        }
+      }
+      return;
+    }
+    var btn = card.querySelector(':scope > .make-flow-btn');
+    if (!btn) {
+      btn = block.querySelector('.make-flow-btn');
+      if (!btn) {
+        btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'make-flow-btn';
+        btn.textContent = 'make flow';
+      }
+    }
+    btn.type = 'button';
+    btn.className = 'make-flow-btn';
+    btn.textContent = 'make flow';
+    btn.title = 'Click, then tap cards, sections, or tasks in order';
+    var row = card.querySelector('.add-board-row');
+    var tasks = card.querySelector('.day-tasks');
+    if (row && row.parentNode === card) {
+      if (btn.previousElementSibling !== row) card.insertBefore(btn, row.nextSibling);
+    } else if (tasks && tasks.parentNode === card) {
+      if (btn.previousElementSibling !== tasks) card.insertBefore(btn, tasks.nextSibling);
+    } else if (btn.parentNode !== card) {
+      card.appendChild(btn);
+    }
+    block.querySelectorAll('.make-flow-btn').forEach(function(el){
+      if (el !== btn) el.remove();
+    });
+  }
+
+  function wantsNodesFlowchart(block){
+    var d = block && block.getAttribute('data-date');
+    return !!(d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-27');
+  }
+
+  function ensureNodesView(block){
+    if (!block) return null;
+    ensureToggle(block);
+    var tog = block.querySelector('.today-view-toggle');
+    if (tog && !tog.querySelector('.tv-pill[data-view="nodes"]')) {
+      var np = document.createElement('button');
+      np.type = 'button';
+      np.className = 'tv-pill';
+      np.setAttribute('data-view', 'nodes');
+      np.textContent = 'nodes';
+      var flowPill = tog.querySelector('.tv-pill[data-view="flow"]');
+      if (flowPill && flowPill.nextSibling) tog.insertBefore(np, flowPill.nextSibling);
+      else if (flowPill) tog.appendChild(np);
+      else tog.appendChild(np);
+    }
+    var wrap = block.querySelector('.day-tasks');
+    if (!wrap) return null;
+    var panel = wrap.querySelector('.tv-panel.tv-nodes');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.className = 'tv-panel tv-nodes';
+      panel.style.display = 'none';
+      panel.innerHTML = '<div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div>';
+      var flow = wrap.querySelector('.tv-panel.tv-flow');
+      if (flow && flow.nextSibling) wrap.insertBefore(panel, flow.nextSibling);
+      else if (flow) wrap.appendChild(panel);
+      else wrap.appendChild(panel);
+    } else if (!panel.querySelector('.sec-grid.pursuit-canvas')) {
+      if (!panel.querySelector('.nodes-edit-bar')) {
+        var bar = document.createElement('div');
+        bar.className = 'nodes-edit-bar';
+        bar.innerHTML = '<button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>';
+        panel.insertBefore(bar, panel.firstChild);
+      }
+      var g = document.createElement('div');
+      g.className = 'sec-grid freeform pursuit-canvas pursuit-categories';
+      g.setAttribute('data-zoned', '1');
+      panel.appendChild(g);
+    }
+    return panel;
+  }
+
+  function ensureNodesAndFlowchart(block){
+    if (!block || !wantsNodesFlowchart(block)) return;
+    ensureNodesView(block);
+    placeMakeFlowBtn(block);
+  }
+  window.__ensureNodesAndFlowchart = ensureNodesAndFlowchart;
+
   function ensureToggle(block){
     var card = block.querySelector('.day-card') || block;
     var tog = block.querySelector('.today-view-toggle');
@@ -37494,24 +38149,29 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
       if (header && header.parentNode) header.parentNode.insertBefore(tog, header.nextSibling);
       else card.insertBefore(tog, card.firstChild);
     }
-    var stuck = tog.querySelector('.make-flow-btn');
-    if (stuck) stuck.parentNode.removeChild(stuck);
-    var btn = block.querySelector(':scope > .make-flow-btn, .day-card > .make-flow-btn, .tv-toggle-row > .make-flow-btn');
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'make-flow-btn';
-      btn.textContent = 'make flow';
-      btn.title = 'Then ⌘-click cards, sections, or tasks on this board to build a flowchart';
+    if ((block.querySelector('.tv-panel.tv-nodes') || wantsNodesFlowchart(block)) && !tog.querySelector('.tv-pill[data-view="nodes"]')) {
+      var np = document.createElement('button');
+      np.type = 'button';
+      np.className = 'tv-pill';
+      np.setAttribute('data-view', 'nodes');
+      np.textContent = 'nodes';
+      var flowPill = tog.querySelector('.tv-pill[data-view="flow"]');
+      if (flowPill && flowPill.nextSibling) tog.insertBefore(np, flowPill.nextSibling);
+      else tog.appendChild(np);
     }
+    tog.querySelectorAll('.make-flow-btn, .tv-pill').forEach(function(p){
+      if (p.classList.contains('make-flow-btn') || ((p.textContent||'').trim().toLowerCase() === 'make flow' && !p.getAttribute('data-view'))) {
+        if (p.parentNode) p.parentNode.removeChild(p);
+      }
+    });
     var row = tog.closest('.tv-toggle-row');
-    if (row) {
-      if (btn.parentNode !== row || btn !== row.firstElementChild) row.insertBefore(btn, row.firstChild);
-    } else if (tog.parentNode) {
-      if (btn.parentNode !== tog.parentNode || btn.previousElementSibling !== tog) tog.parentNode.insertBefore(btn, tog.nextSibling);
-    } else if (!btn.parentNode) {
-      card.appendChild(btn);
+    if (!row && tog.parentNode && (block.getAttribute('data-date') === '2026-08-20' || block.classList.contains('pursuit-board-day'))) {
+      row = document.createElement('div');
+      row.className = 'tv-toggle-row';
+      tog.parentNode.insertBefore(row, tog);
+      row.appendChild(tog);
     }
+    placeMakeFlowBtn(block);
     return tog;
   }
 
@@ -37520,11 +38180,11 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
     if (!bar) {
       bar = document.createElement('div');
       bar.className = 'flow-pick-bar';
-      bar.innerHTML = '<span class="flow-pick-count">⌘-click cards, sections, or tasks, in order</span>' +
+      bar.innerHTML = '<span class="flow-pick-count">click cards, sections, or tasks, in order</span>' +
         '<button type="button" class="flow-pick-go" disabled>create flowchart</button>' +
         '<button type="button" class="flow-pick-cancel">cancel</button>';
     }
-    var purs = block.querySelector('.tv-panel.tv-pursuits') || block.querySelector('.day-card') || block;
+    var purs = block.querySelector('.tv-panel.tv-nodes') || block.querySelector('.tv-panel.tv-pursuits') || block.querySelector('.day-card') || block;
     if (bar.parentNode !== purs) purs.insertBefore(bar, purs.firstChild);
     return bar;
   }
@@ -37543,7 +38203,7 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
     });
     var n = list.length;
     var el = block.querySelector('.flow-pick-count');
-    if (el) el.textContent = n ? (n + ' selected') : '⌘-click cards, sections, or tasks, in order';
+    if (el) el.textContent = n ? (n + ' selected') : 'click cards, sections, or tasks, in order';
     var go = block.querySelector('.flow-pick-go');
     if (go) go.disabled = n === 0;
   }
@@ -37551,7 +38211,8 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
   function startPick(block){
     var prev = document.querySelector('.day-block.flow-picking');
     if (prev && prev !== block) endPick(prev);
-    if (window.__switchDayView) window.__switchDayView(block, 'pursuits');
+    var nodes = block.querySelector('.tv-panel.tv-nodes');
+    if (window.__switchDayView) window.__switchDayView(block, nodes ? 'nodes' : 'pursuits');
     block.classList.add('flow-picking');
     window.__flowPicking = true;
     var btn = block.querySelector('.make-flow-btn');
@@ -37593,6 +38254,15 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
     renumber(block);
   }
 
+  function isVisionEl(el){
+    return !!(el && el.classList.contains('vision-tile'));
+  }
+  function visionName(el){
+    var t = el && el.querySelector('.vision-tile-title, h3');
+    var n = ((t && t.textContent) || el.getAttribute('data-focus') || 'focus').replace(/\s+/g,' ').trim();
+    return n || 'focus';
+  }
+
   function collectSteps(block){
     var list = pickList(block).filter(function(el){ return el.isConnected && el.classList.contains('flow-pick-on'); });
     var steps = [];
@@ -37607,73 +38277,134 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
     }
     list.forEach(function(el){
       if (isTaskEl(el)) { push(taskName(el)); return; }
+      if (isVisionEl(el)) { push(visionName(el)); return; }
       if (isZoneEl(el)) { push(zoneName(el)); return; }
       if (el.classList.contains('sec-card')) push(cardName(el));
     });
     return steps;
   }
 
-  function makeStep(name){
-    var step = document.createElement('div');
-    step.className = 'flow-step';
-    step.setAttribute('data-name', name);
-    var input = document.createElement('input');
-    input.className = 'flow-check';
-    input.type = 'checkbox';
-    input.setAttribute('onchange', "this.closest('.flow-step').classList.toggle('done', this.checked)");
-    var span = document.createElement('span');
-    span.className = 'flow-step-text';
-    span.setAttribute('contenteditable', 'true');
-    span.setAttribute('spellcheck', 'false');
-    span.textContent = name;
-    var delBtn = document.createElement('button');
-    delBtn.className = 'flow-delete';
-    delBtn.type = 'button';
-    delBtn.setAttribute('aria-label', 'delete task');
-    delBtn.textContent = '×';
-    step.appendChild(input);
-    step.appendChild(span);
-    step.appendChild(delBtn);
-    return step;
+  function ensureFlowchartView(block){
+    if (!block) return null;
+    ensureToggle(block);
+    var tog = block.querySelector('.today-view-toggle');
+    if (tog && !tog.querySelector('.tv-pill[data-view="flowchart"]')) {
+      var pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'tv-pill';
+      pill.setAttribute('data-view', 'flowchart');
+      pill.textContent = 'flowchart';
+      var nodesPill = tog.querySelector('.tv-pill[data-view="nodes"]');
+      if (nodesPill) {
+        if (nodesPill.nextSibling) tog.insertBefore(pill, nodesPill.nextSibling);
+        else tog.appendChild(pill);
+      } else {
+        tog.appendChild(pill);
+      }
+    }
+    var wrap = block.querySelector('.day-tasks');
+    if (!wrap) return null;
+    var panel = wrap.querySelector('.tv-panel.tv-flowchart');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.className = 'tv-panel tv-flowchart';
+      panel.style.display = 'none';
+      var nodesPanel = wrap.querySelector('.tv-panel.tv-nodes');
+      if (nodesPanel) {
+        if (nodesPanel.nextSibling) wrap.insertBefore(panel, nodesPanel.nextSibling);
+        else wrap.appendChild(panel);
+      } else wrap.appendChild(panel);
+    }
+    var stray = block.querySelector('.tv-flow .made-flow-host');
+    if (stray && stray.parentNode !== panel) panel.insertBefore(stray, panel.firstChild);
+    return panel;
   }
 
-  function placeOnCanvas(grid, card){
-    var maxB = 24;
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone, :scope > .made-select-flow')).forEach(function(el){
-      if (el === card) return;
-      var y = parseFloat(el.style.getPropertyValue('--ff-y')) || 0;
-      var h = parseFloat(el.style.getPropertyValue('--zone-h')) || el.offsetHeight || 200;
-      maxB = Math.max(maxB, y + h + 28);
-    });
-    card.style.setProperty('--ff-x', '28px');
-    card.style.setProperty('--ff-y', Math.round(maxB) + 'px');
+  function flowHost(block){
+    var panel = ensureFlowchartView(block);
+    if (!panel) return null;
+    panel.querySelectorAll('.flow-timeline-card').forEach(function(el){ el.remove(); });
+    var host = panel.querySelector('.made-flow-host');
+    if (!host) {
+      host = document.createElement('div');
+      host.className = 'flow-chart-card made-flow-host';
+      panel.insertBefore(host, panel.firstChild);
+    }
+    return host;
   }
 
   function renderChart(host, date, steps){
-    if (!host || !steps.length) return;
-    var existing = host.querySelector('.made-select-flow');
-    if (existing) existing.remove();
-    var canvas = (host.classList.contains('sec-grid') && host.classList.contains('pursuit-canvas'))
-      ? host
-      : (host.querySelector && host.querySelector('.sec-grid.pursuit-canvas'));
-    var mount = canvas || host;
-    var card = document.createElement('div');
-    card.className = 'flow-chart-card made-select-flow';
-    card.setAttribute('data-date', date);
-    var title = document.createElement('p');
-    title.className = 'flow-title';
-    title.textContent = 'flowchart';
-    card.appendChild(title);
-    steps.forEach(function(name){ card.appendChild(makeStep(name)); });
-    if (canvas) {
-      card.classList.add('canvas-flow-chart');
-      canvas.appendChild(card);
-      placeOnCanvas(canvas, card);
-      if (typeof window.__expandPursuitCanvas === 'function') window.__expandPursuitCanvas(canvas);
-    } else {
-      mount.insertBefore(card, mount.firstChild);
+    if (!host) return;
+    host.querySelectorAll('.made-flow-diagram, .made-select-flow, .made-flow-empty, .made-flow-del').forEach(function(el){ el.remove(); });
+    if (!steps.length) {
+      var empty = document.createElement('p');
+      empty.className = 'made-flow-empty';
+      empty.textContent = 'click make flow, then tap cards, sections, or tasks';
+      host.appendChild(empty);
+      return;
     }
-    if (typeof window.rebuildArrows === 'function') window.rebuildArrows(card);
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'made-flow-del';
+    del.setAttribute('aria-label', 'delete flowchart');
+    del.title = 'delete flowchart';
+    del.textContent = '×';
+    host.appendChild(del);
+    var wrap = document.createElement('div');
+    wrap.className = 'made-flow-diagram';
+    wrap.setAttribute('data-date', date || '');
+    var title = document.createElement('p');
+    title.className = 'made-flow-title';
+    title.textContent = 'flowchart';
+    wrap.appendChild(title);
+    var col = document.createElement('div');
+    col.className = 'made-flow-col';
+    steps.forEach(function(name, i){
+      if (i) {
+        var conn = document.createElement('div');
+        conn.className = 'made-flow-arrow';
+        conn.setAttribute('aria-hidden', 'true');
+        conn.innerHTML = '<span class="made-flow-shaft"></span><span class="made-flow-head"></span>';
+        col.appendChild(conn);
+      }
+      var node = document.createElement('div');
+      node.className = 'made-flow-node';
+      node.textContent = name;
+      col.appendChild(node);
+    });
+    wrap.appendChild(col);
+    host.appendChild(wrap);
+  }
+
+  function deleteFlow(block){
+    if (!block) return;
+    var date = block.getAttribute('data-date');
+    if (date) {
+      var all = loadAll();
+      if (all[date]) {
+        delete all[date];
+        saveAll(all);
+      }
+    }
+    var host = block.querySelector('.made-flow-host');
+    if (host) {
+      host.querySelectorAll('.made-flow-diagram, .made-select-flow, .made-flow-empty, .made-flow-del').forEach(function(el){ el.remove(); });
+    }
+    var panel = block.querySelector('.tv-panel.tv-flowchart');
+    if (panel) panel.remove();
+    var pill = block.querySelector('.tv-pill[data-view="flowchart"]');
+    if (pill) pill.remove();
+    if (window.__switchDayView) window.__switchDayView(block, 'pursuits');
+    else {
+      block.querySelectorAll('.tv-pill[data-view]').forEach(function(p){
+        p.classList.toggle('active', p.getAttribute('data-view') === 'pursuits');
+      });
+      block.querySelectorAll('.tv-panel').forEach(function(panelEl){
+        var show = panelEl.classList.contains('tv-pursuits');
+        panelEl.style.display = show ? '' : 'none';
+        panelEl.classList.toggle('active', show);
+      });
+    }
   }
 
   function persist(date, steps){
@@ -37687,35 +38418,63 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
     var date = block.getAttribute('data-date');
     var steps = collectSteps(block);
     if (!steps.length) return;
-    var purs = block.querySelector('.tv-panel.tv-pursuits');
-    if (!purs) return;
-    var canvas = purs.querySelector('.sec-grid.pursuit-canvas');
-    renderChart(canvas || purs, date, steps);
+    var host = flowHost(block);
+    if (!host) return;
+    block.querySelectorAll('.made-select-flow').forEach(function(el){ el.remove(); });
+    renderChart(host, date, steps);
     persist(date, steps);
     endPick(block);
-    if (window.__switchDayView) window.__switchDayView(block, 'pursuits');
-    if (window.initSortable) try { window.initSortable(); } catch(e) {}
+    if (window.__switchDayView) window.__switchDayView(block, 'flowchart');
+    var dest = block.querySelector('.tv-panel.tv-flowchart') || block.querySelector('.tv-pill[data-view="flowchart"]');
+    if (dest && dest.scrollIntoView) dest.scrollIntoView({ block: 'nearest' });
   }
 
   function restore(){
     var all = loadAll();
     document.querySelectorAll('.day-block.fmt22[data-date]').forEach(function(block){
-      ensureToggle(block);
       var date = block.getAttribute('data-date');
+      if (date === '2026-08-20' || block.classList.contains('pursuit-board-day')) ensureToggle(block);
+      else placeMakeFlowBtn(block);
+      if (wantsNodesFlowchart(block)) ensureNodesAndFlowchart(block);
+      // Strip empty flowchart views (only keep when a chart exists)
       var steps = all[date];
-      if (steps && steps.length) {
-        var purs = block.querySelector('.tv-panel.tv-pursuits');
-        if (purs && !purs.querySelector('.made-select-flow')) {
-          var canvas = purs.querySelector('.sec-grid.pursuit-canvas');
-          renderChart(canvas || purs, date, steps);
-        }
+      var hasChart = !!(steps && steps.length);
+      if (!hasChart) {
+        var emptyPanel = block.querySelector('.tv-panel.tv-flowchart');
+        var emptyPill = block.querySelector('.tv-pill[data-view="flowchart"]');
+        if (emptyPanel && !emptyPanel.querySelector('.made-flow-diagram')) emptyPanel.remove();
+        if (emptyPill) emptyPill.remove();
       }
+      var wants = hasChart && isMakeFlowDay(block);
+      if (!wants) return;
+      var host = flowHost(block);
+      if (!host) return;
+      if (host.querySelector('.made-flow-diagram')) {
+        if (!host.querySelector('.made-flow-del')) {
+          var del = document.createElement('button');
+          del.type = 'button';
+          del.className = 'made-flow-del';
+          del.setAttribute('aria-label', 'delete flowchart');
+          del.title = 'delete flowchart';
+          del.textContent = '×';
+          host.insertBefore(del, host.firstChild);
+        }
+        return;
+      }
+      renderChart(host, date, steps || []);
     });
   }
 
   document.addEventListener('click', function(e){
     var block = e.target.closest('.day-block.fmt22');
     if (!block) return;
+    if (e.target.closest('.made-flow-del')) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      deleteFlow(block);
+      return;
+    }
     if (e.target.closest('.make-flow-btn')) {
       e.preventDefault();
       e.stopPropagation();
@@ -37735,12 +38494,12 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
       return;
     }
     if (!block.classList.contains('flow-picking')) return;
-    if (!isModClick(e)) return;
-    if (e.target.closest('.card-del, .card-resize, .card-add-task, .add-board-row, .flow-pick-bar, .today-view-toggle, .make-flow-btn, .day-add-zone, .sec-picker, .zone-del, .add-pursuit-slot, .zone-resize, .zone-zoom-out, textarea, button, a')) return;
+    if (e.target.closest('.card-del, .card-resize, .card-add-task, .add-board-row, .flow-pick-bar, .today-view-toggle, .make-flow-btn, .day-add-zone, .sec-picker, .zone-del, .add-pursuit-slot, .zone-resize, .zone-zoom-out, textarea, button, a, input')) return;
     var task = e.target.closest('.j22-item, .zone-oneoff, .canvas-oneoff, .day-task-item');
     var card = e.target.closest('.sec-card');
+    var tile = e.target.closest('.vision-tile');
     var zone = e.target.closest('.pursuit-zone');
-    var target = task || card || zone;
+    var target = task || card || tile || zone;
     if (!target) return;
     e.preventDefault();
     e.stopPropagation();
@@ -37750,9 +38509,9 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
 
   document.addEventListener('pointerdown', function(e){
     var block = e.target.closest('.day-block.flow-picking');
-    if (!block || !isModClick(e)) return;
+    if (!block) return;
     if (e.target.closest('.flow-pick-bar, .today-view-toggle, .make-flow-btn')) return;
-    if (e.target.closest('.j22-item, .sec-card, .zone-oneoff, .canvas-oneoff, .day-task-item, .pursuit-zone')) {
+    if (e.target.closest('.j22-item, .sec-card, .zone-oneoff, .canvas-oneoff, .day-task-item, .pursuit-zone, .vision-tile')) {
       e.stopPropagation();
       if (e.stopImmediatePropagation) e.stopImmediatePropagation();
     }
@@ -37772,20 +38531,32 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
 })();
 </script>
 <style id="aug25-ambition-task-shot-css">
+/* Full-tile bleed: photo IS the card. Title overlays the photo. Never a black footer bar. */
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-grid > .sec-card:not(.shot-card) {
+  display: none !important;
+}
 html body .day-block.fmt22:not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card.is-empty.shot-card,
 html body .day-block.fmt22:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform > .sec-card.is-empty.shot-card,
 html body .day-block.fmt22 .sec-card.shot-card,
-html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card {
-  width: min(640px, 94%) !important;
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-grid.freeform > .sec-card.shot-card {
+  width: min(920px, 100%) !important;
   height: auto !important;
-  max-width: 640px !important;
+  max-width: 100% !important;
   max-height: none !important;
   min-width: 280px !important;
   min-height: 0 !important;
-  flex: 0 1 640px !important;
+  flex: 1 1 100% !important;
   aspect-ratio: auto !important;
-  align-self: flex-start !important;
+  align-self: stretch !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  z-index: 1 !important;
   cursor: zoom-in;
+  overflow: hidden !important;
+  background: transparent !important;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-visual,
 html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-visual {
@@ -37793,9 +38564,9 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-vis
   inset: auto !important;
   height: auto !important;
   width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  background: #161310 !important;
+  display: block !important;
+  flex-direction: unset !important;
+  background: transparent !important;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-visual img,
 html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-visual img {
@@ -37803,8 +38574,8 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-vis
   display: block !important;
   width: 100% !important;
   height: auto !important;
-  aspect-ratio: 1024 / 375 !important;
-  object-fit: contain !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
   object-position: center center !important;
   opacity: 1 !important;
   filter: none !important;
@@ -37812,17 +38583,23 @@ html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card .card-vis
   transform: none !important;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-visual .j22-group {
-  position: relative !important;
+  position: absolute !important;
   inset: auto !important;
-  top: auto !important;
+  top: 0 !important;
   bottom: auto !important;
-  left: auto !important;
-  right: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2 !important;
   font-size: 14px !important;
-  padding: 8px 12px 10px !important;
-  background: rgba(28, 22, 16, 0.94) !important;
+  padding: 10px 12px 22px !important;
+  background: linear-gradient(to bottom, rgba(20,16,12,0.62) 0%, rgba(20,16,12,0) 100%) !important;
+  pointer-events: none;
 }
 html body .day-block.fmt22 .sec-card.shot-card .card-body {
+  display: none !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-add-task,
+html body .day-block.fmt22 .sec-card.shot-card .card-resize {
   display: none !important;
 }
 .shot-lightbox {
@@ -37837,35 +38614,46 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
   cursor: zoom-out;
 }
 .shot-lightbox img {
-  max-width: min(1100px, 96vw);
+  max-width: min(1200px, 96vw);
   max-height: 92vh;
   width: auto;
   height: auto;
   object-fit: contain;
   box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+  background: #fff;
 }
 </style>
 <script id="aug25-ambition-handshake-js">
 (function(){
-  if (window.__aug25HandshakeGsa) return;
+  if (window.__aug25HandshakeGsaV2) return;
   var DATE = '2026-08-25';
   var TASK = 'Pepperdine GSA · Top Applicant';
   var IMG = 'manus-storage/handshake-pepperdine-gsa.jpg';
   var NAME_LC = TASK.toLowerCase();
 
-  function stripAmbitionPolaroid(block){
+  function keepOnlyShot(block){
     try {
       var o = JSON.parse(localStorage.getItem('btm_grids_v1')||'{}') || {};
-      if (o[DATE]) {
-        o[DATE] = o[DATE].filter(function(r){ return String((r && r.name) || '').toLowerCase() !== 'ambition'; });
-        localStorage.setItem('btm_grids_v1', JSON.stringify(o));
-      }
+      o[DATE] = [{name: TASK, idx: 0}];
+      localStorage.setItem('btm_grids_v1', JSON.stringify(o));
+    } catch(e){}
+    try {
+      var live = JSON.parse(localStorage.getItem('btm_live_minicards_v1')||'{}') || {};
+      if (live[DATE]) { delete live[DATE]; localStorage.setItem('btm_live_minicards_v1', JSON.stringify(live)); }
+    } catch(e){}
+    try {
+      var loose = JSON.parse(localStorage.getItem('btm_canvas_loose_v1')||'{}') || {};
+      if (loose[DATE]) { delete loose[DATE]; localStorage.setItem('btm_canvas_loose_v1', JSON.stringify(loose)); }
     } catch(e){}
     [].slice.call(block.querySelectorAll('.sec-card')).forEach(function(c){
       if (c.classList.contains('shot-card')) return;
       var g = c.querySelector('.j22-group');
       var n = ((g && (g.getAttribute('data-newhdr') || g.textContent)) || '').trim().toLowerCase();
-      if (n === 'ambition') c.remove();
+      if (n === NAME_LC) {
+        c.classList.add('shot-card', 'is-empty');
+        return;
+      }
+      c.remove();
     });
   }
   function openShot(src){
@@ -37883,7 +38671,7 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
     if (!block) return;
     var grid = block.querySelector('.tv-pursuits .sec-grid') || block.querySelector('.sec-grid');
     if (!grid || grid.classList.contains('pursuit-canvas')) return;
-    stripAmbitionPolaroid(block);
+    keepOnlyShot(block);
     grid.querySelectorAll('.ambition-task-ticket, .aug25-handshake-oneoff').forEach(function(el){ el.remove(); });
     var card = grid.querySelector('.sec-card.shot-card');
     if (!card) {
@@ -37916,35 +38704,838 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
       });
     }
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(ensure, 250); });
-  else setTimeout(ensure, 250);
-  [900, 2200, 4200].forEach(function(ms){ setTimeout(ensure, ms); });
-  window.__aug25HandshakeGsa = true;
+  function boot(){
+    ensure();
+    if (window.__aug25HandshakeMo) return;
+    window.__aug25HandshakeMo = new MutationObserver(function(){
+      clearTimeout(window.__aug25HandshakeT);
+      window.__aug25HandshakeT = setTimeout(ensure, 200);
+    });
+    window.__aug25HandshakeMo.observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 50); });
+  else setTimeout(boot, 50);
+  [400, 900, 2200, 4200].forEach(function(ms){ setTimeout(ensure, ms); });
+  window.__aug25HandshakeGsaV2 = true;
 })();
 </script>
+<style id="aug27-dual-shot-css">
+/* Aug 27: two full-bleed proof tiles side-by-side — photo fills the tile, title on the photo */
+html body .day-block.fmt22[data-date="2026-08-27"] .tv-pursuits .sec-grid.freeform,
+html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .tv-pursuits .sec-grid.freeform,
+html body .day-block.fmt22[data-date="2026-08-27"].today-block.freeplace-day .tv-pursuits .sec-grid.freeform {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  position: relative !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 12px 8px 24px !important;
+}
+html body .day-block.fmt22[data-date="2026-08-27"] .tv-pursuits .sec-grid.freeform > .sec-card:not(.shot-card) {
+  display: none !important;
+}
+html body .day-block.fmt22[data-date="2026-08-27"] .tv-pursuits .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .tv-pursuits .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-27"].today-block.freeplace-day .tv-pursuits .sec-grid.freeform > .sec-card.shot-card {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(460px, calc(50% - 12px)) !important;
+  min-width: 240px !important;
+  max-width: 520px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 1 1 320px !important;
+  transform: none !important;
+  cursor: zoom-in !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+  background: transparent !important;
+  border-radius: 14px !important;
+}
+html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-visual,
+html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .sec-card.shot-card .card-visual {
+  position: relative !important;
+  inset: auto !important;
+  height: auto !important;
+  width: 100% !important;
+  display: block !important;
+  flex-direction: unset !important;
+  background: transparent !important;
+}
+html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day .sec-card.shot-card .card-visual img {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  filter: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-visual .j22-group {
+  position: absolute !important;
+  inset: auto !important;
+  top: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2 !important;
+  font-size: 13px !important;
+  padding: 10px 12px 22px !important;
+  background: linear-gradient(to bottom, rgba(20,16,12,0.62) 0%, rgba(20,16,12,0) 100%) !important;
+  pointer-events: none;
+}
+html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-body {
+  display: none !important;
+}
+</style>
+<script id="aug27-dual-shot-js">
+(function(){
+  /* retired: Aug 27+ uses vision collage sections, not shot-cards */
+  if (window.__aug27DualShot) return;
+  window.__aug27DualShot = true;
+})();
+</script>
+</script>
+<style id="aug20-vision-board-css">
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .tv-panel.tv-pursuits:has(.vision-board),
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .tv-panel.tv-pursuits.active:has(.vision-board) {
+  overflow: visible !important;
+  padding: 4px 4px 10px !important;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-height: 680px;
+  height: min(80vh, 800px);
+  box-sizing: border-box;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  grid-template-rows: minmax(250px, 1.15fr) minmax(210px, 1fr);
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-more {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  flex: 0 0 auto;
+  height: auto;
+  align-items: stretch;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini {
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  justify-self: stretch;
+  align-self: stretch;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hint {
+  display: none;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-glow { grid-column: 1; grid-row: 1 / 3; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-gym { grid-column: 2 / 4; grid-row: 1; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-house { grid-column: 2; grid-row: 2; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-ambition { grid-column: 3; grid-row: 2; }
+html body .day-block[data-date="2026-08-26"] .vision-tile-gym { grid-column: 1; grid-row: 1 / 3; }
+html body .day-block[data-date="2026-08-26"] .vision-tile-glow { grid-column: 2 / 4; grid-row: 1; }
+html body .day-block[data-date="2026-08-26"] .vision-tile-house .vision-tile-photo {
+  background-position: 42% 58%;
+  background-size: cover;
+}
+html body .day-block[data-date="2026-08-26"] .vision-tile-ambition { grid-column: 3; grid-row: 2; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow: 0 14px 32px rgba(20, 12, 8, 0.3);
+  cursor: pointer;
+  isolation: isolate;
+  min-height: 0;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-photo {
+  position: absolute;
+  inset: 0;
+  background-image: var(--tile-photo);
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12, 8, 4, 0.05) 30%, rgba(12, 8, 4, 0.55) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile:hover .vision-tile-photo {
+  transform: scale(1.08);
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-title {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 14px;
+  margin: 0;
+  z-index: 2;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(26px, 3vw, 42px);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: #fff8ee;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini .vision-tile-title {
+  left: 12px;
+  right: 10px;
+  bottom: 10px;
+  font-size: clamp(14px, 1.5vw, 18px);
+  line-height: 1.15;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-details {
+  display: none;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-hero,
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-more {
+  display: contents;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-hint,
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile:not(.is-zoomed) {
+  display: none !important;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed {
+  grid-column: 1;
+  grid-row: 1;
+  cursor: default;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0;
+  min-height: 0;
+  justify-self: stretch;
+  align-self: stretch;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-photo {
+  transform: scale(1);
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+  top: 18px;
+  bottom: auto;
+  font-size: 36px;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid {
+  position: absolute;
+  left: var(--px, 10%);
+  top: var(--py, 18%);
+  width: 176px;
+  padding: 10px 10px 32px;
+  background: #f6efe4;
+  box-shadow: 0 12px 28px rgba(12, 8, 4, 0.35);
+  transform: rotate(-3.5deg);
+  pointer-events: auto;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid img {
+  display: block;
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid span {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  font-family: "Reenie Beanie", cursive;
+  font-size: 24px;
+  line-height: 1;
+  color: #2a2218;
+  text-align: center;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-polaroid.vision-class {
+  width: 210px;
+  transform: rotate(2.5deg);
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-check {
+  position: absolute;
+  left: var(--px, 50%);
+  top: var(--py, 30%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  background: rgba(255, 248, 238, 0.94);
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(12, 8, 4, 0.22);
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  color: #2a2218;
+  transform: rotate(1.8deg);
+  pointer-events: auto;
+  cursor: pointer;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-check:nth-of-type(even) {
+  transform: rotate(-2.2deg);
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-check input {
+  accent-color: #5a8a4a;
+  width: 14px;
+  height: 14px;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-zoom-out {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 12;
+  display: none;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: rgba(20, 16, 12, 0.42);
+  color: #fff8ee;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: italic 13px/1 "Newsreader", Georgia, serif;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
+  display: inline-block;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day).collapsed .vision-board {
+  display: none;
+}
+@media (max-width: 820px) {
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board {
+    height: auto;
+    min-height: 0;
+  }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 220px 220px 220px;
+    flex: none;
+  }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-more {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: auto;
+    flex: none;
+  }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini {
+    width: auto;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+  }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-glow { grid-column: 1 / 3; grid-row: 1; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-gym { grid-column: 1 / 3; grid-row: 2; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-house { grid-column: 1; grid-row: 3; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-ambition { grid-column: 2; grid-row: 3; }
+  html body .day-block[data-date="2026-08-26"] .vision-tile-gym { grid-column: 1 / 3; grid-row: 1; }
+  html body .day-block[data-date="2026-08-26"] .vision-tile-glow { grid-column: 1 / 3; grid-row: 2; }
+  html body .day-block[data-date="2026-08-26"] .vision-tile-house { grid-column: 1; grid-row: 3; }
+  html body .day-block[data-date="2026-08-26"] .vision-tile-ambition { grid-column: 2; grid-row: 3; }
+}
+html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-hero-duo {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(420px, 1fr);
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa {
+  grid-column: 1;
+  grid-row: 1;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee {
+  grid-column: 2;
+  grid-row: 1;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa .vision-tile-photo {
+  background-position: center 35%;
+}
+html body .day-block.vision-collage-day .vision-tile-shot {
+  cursor: zoom-in;
+}
+
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee .vision-tile-photo {
+  background-position: center top;
+  background-size: cover;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile::after {
+  background: linear-gradient(180deg, rgba(12, 8, 4, 0.02) 45%, rgba(12, 8, 4, 0.42) 100%);
+}
+
+@media (max-width: 820px) {
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-hero-duo {
+    grid-template-columns: 1fr;
+    grid-template-rows: 240px 240px;
+  }
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa,
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee {
+    grid-column: 1;
+  }
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-gsa { grid-row: 1; }
+  html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-tile-committee { grid-row: 2; }
+}
+
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-hero-solo {
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(520px, 1fr);
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-tile-house {
+  grid-column: 1;
+  grid-row: 1;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-tile-house .vision-tile-photo {
+  background-position: center 40%;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid.vision-shot-card {
+  width: 220px;
+  padding: 10px 10px 36px;
+  cursor: zoom-in;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid.vision-shot-card img {
+  height: 168px;
+  object-fit: cover;
+}
+html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid.vision-shot-card:nth-of-type(2) {
+  transform: rotate(2.8deg);
+}
+@media (max-width: 820px) {
+  html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-hero-solo {
+    grid-template-rows: minmax(360px, 1fr);
+  }
+}
+</style>
+<script id="aug20-vision-board-js">
+(function(){
+  if (window.__aug20VisionBoard) return;
+  window.__aug20VisionBoard = true;
+  function boardEl(from){
+    return (from && from.closest && from.closest('.vision-board'))
+      || document.querySelector('.day-block.vision-collage-day .vision-board')
+      || document.querySelector('.day-block[data-date="2026-08-20"] .vision-board');
+  }
+  function closeBoard(vb){
+    if (!vb) return;
+    vb.classList.remove('is-zoomed');
+    vb.querySelectorAll('.vision-tile.is-zoomed').forEach(function(t){ t.classList.remove('is-zoomed'); });
+    var btn = vb.querySelector('.vision-zoom-out');
+    if (btn) { btn.hidden = true; btn.setAttribute('hidden',''); }
+  }
+  function openTile(vb, tile){
+    vb.classList.add('is-zoomed');
+    vb.querySelectorAll('.vision-tile').forEach(function(t){ t.classList.toggle('is-zoomed', t === tile); });
+    var btn = vb.querySelector('.vision-zoom-out');
+    if (btn) { btn.hidden = false; btn.removeAttribute('hidden'); }
+  }
+  function tilePhotoSrc(tile){
+    if (!tile) return '';
+    var st = tile.getAttribute('style') || '';
+    var m = st.match(/--tile-photo:\s*url\(['"]?([^'")]+)['"]?\)/i);
+    if (m && m[1]) return m[1];
+    var photo = tile.querySelector('.vision-tile-photo');
+    if (photo) {
+      var bg = getComputedStyle(photo).backgroundImage || '';
+      var m2 = bg.match(/url\(["']?([^"')]+)["']?\)/i);
+      if (m2 && m2[1]) return m2[1];
+    }
+    return '';
+  }
+  function openFullShot(src){
+    if (!src) return;
+    var old = document.querySelector('.shot-lightbox');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.className = 'shot-lightbox';
+    box.innerHTML = '<img alt="">';
+    var img = box.querySelector('img');
+    img.src = src;
+    img.style.maxWidth = 'min(1200px, 96vw)';
+    img.style.maxHeight = '92vh';
+    img.style.width = 'auto';
+    img.style.height = 'auto';
+    img.style.objectFit = 'contain';
+    box.addEventListener('click', function(){ box.remove(); });
+    document.body.appendChild(box);
+  }
+  document.addEventListener('click', function(e){
+    var out = e.target.closest('.vision-zoom-out');
+    var tile = e.target.closest('.vision-tile');
+    var vb = boardEl(e.target);
+    if (out) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeBoard(out.closest('.vision-board') || vb);
+      return;
+    }
+    if (!vb || !tile || !vb.contains(tile)) return;
+    var shotCard = e.target.closest('.vision-shot-card');
+    if (shotCard && vb.contains(shotCard)) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullShot(shotCard.getAttribute('data-shot-src') || (shotCard.querySelector('img') && shotCard.querySelector('img').src) || '');
+      return;
+    }
+    if (e.target.closest('.vision-tile-details') && !e.target.closest('.vision-shot-card, .vision-polaroid')) return;
+    var shotPolaroid = e.target.closest('.vision-polaroid.vision-shot-card, .vision-shot-card');
+    if (shotPolaroid && vb.contains(shotPolaroid)) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullShot(shotPolaroid.getAttribute('data-shot-src') || (shotPolaroid.querySelector('img') && shotPolaroid.querySelector('img').src) || '');
+      return;
+    }
+    /* Screenshot sections: collage may crop; click opens the full uncropped image */
+    if (tile.classList.contains('vision-tile-shot')) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullShot(tilePhotoSrc(tile));
+      return;
+    }
+    if (vb.classList.contains('is-zoomed')) {
+      if (tile.classList.contains('is-zoomed')) closeBoard(vb);
+      return;
+    }
+    openTile(vb, tile);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    var lb = document.querySelector('.shot-lightbox');
+    if (lb) { lb.remove(); return; }
+    document.querySelectorAll('.vision-board.is-zoomed').forEach(closeBoard);
+  });
+})();
+</script>
+<script id="aug20-nodes-freeze-js">
+(function(){
+  if (window.__aug20NodesFreeze) return;
+  window.__aug20NodesFreeze = true;
+  var COLKEY = 'btm_zone_collapsed_v1';
+  var PIN = {
+    '2026-08-20|finances': 1,
+    '2026-08-20|leverage': 1,
+    '2026-08-20|presence': 1
+  };
+  function gridEl(){
+    return document.querySelector('.day-block[data-date="2026-08-20"] .tv-panel.tv-nodes .sec-grid.pursuit-canvas')
+      || document.querySelector('.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas');
+  }
+  function pinCollapse(){
+    var m = {};
+    try { m = JSON.parse(localStorage.getItem(COLKEY) || '{}'); } catch(e) { m = {}; }
+    ['life','body','ambition'].forEach(function(id){ delete m['2026-08-20|' + id]; });
+    Object.keys(PIN).forEach(function(k){ m[k] = 1; });
+    try { localStorage.setItem(COLKEY, JSON.stringify(m)); } catch(e) {}
+  }
+  function applyLook(){
+    pinCollapse();
+    var grid = gridEl();
+    if (!grid) return;
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var id = z.getAttribute('data-zone');
+      var on = !!PIN['2026-08-20|' + id];
+      z.classList.toggle('zone-collapsed', on);
+      if (on) {
+        z.style.setProperty('width', '172px', 'important');
+        z.style.setProperty('height', '52px', 'important');
+        z.style.setProperty('min-height', '52px', 'important');
+      } else {
+        var open = ({
+          body: ['248px', '288px'],
+          life: ['340px', '320px'],
+          ambition: ['400px', '380px']
+        })[id] || [z.style.getPropertyValue('--zone-w') || '320px', z.style.getPropertyValue('--zone-h') || '280px'];
+        z.style.setProperty('--zone-w', open[0]);
+        z.style.setProperty('--zone-h', open[1]);
+        z.style.setProperty('width', open[0], 'important');
+        z.style.setProperty('height', open[1], 'important');
+        z.style.setProperty('min-height', '0px', 'important');
+      }
+    });
+    if (typeof window.__drawAug20Web === 'function') window.__drawAug20Web();
+  }
+  window.__pinAug20NodesLook = applyLook;
+  pinCollapse();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyLook, 80); });
+  else setTimeout(applyLook, 80);
+  [400, 1200, 2400].forEach(function(ms){ setTimeout(applyLook, ms); });
+})();
+</script>
+<style id="aug20-nodes-edit-css">
+html body .day-block[data-date="2026-08-20"] .nodes-edit-bar,
+html body .day-block.make-flow-day .nodes-edit-bar,
+html body .day-block.vision-collage-day .nodes-edit-bar {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 2px 10px 10px !important;
+  position: relative !important;
+  z-index: 8 !important;
+}
+html body .day-block[data-date="2026-08-20"] .nodes-add-btn,
+html body .day-block[data-date="2026-08-20"] .nodes-link-btn,
+html body .day-block.make-flow-day .nodes-add-btn,
+html body .day-block.make-flow-day .nodes-link-btn,
+html body .day-block.vision-collage-day .nodes-add-btn,
+html body .day-block.vision-collage-day .nodes-link-btn {
+  font-family: "DM Mono", monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: lowercase !important;
+  color: rgba(255,255,255,0.92) !important;
+  background: rgba(245,240,233,0.18) !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+  border-radius: 999px !important;
+  padding: 6px 14px !important;
+  cursor: pointer !important;
+}
+html body .day-block[data-date="2026-08-20"] .nodes-add-btn:hover,
+html body .day-block[data-date="2026-08-20"] .nodes-link-btn:hover,
+html body .day-block.make-flow-day .nodes-add-btn:hover,
+html body .day-block.make-flow-day .nodes-link-btn:hover,
+html body .day-block.vision-collage-day .nodes-add-btn:hover,
+html body .day-block.vision-collage-day .nodes-link-btn:hover {
+  background: rgba(255,255,255,0.28) !important;
+}
+html body .day-block[data-date="2026-08-20"] .nodes-link-btn.is-on,
+html body .day-block.make-flow-day .nodes-link-btn.is-on,
+html body .day-block.vision-collage-day .nodes-link-btn.is-on {
+  background: rgba(255,255,255,0.88) !important;
+  color: #2a2a25 !important;
+}
+html body .day-block[data-date="2026-08-20"] .nodes-edit-hint,
+html body .day-block.make-flow-day .nodes-edit-hint,
+html body .day-block.vision-collage-day .nodes-edit-hint {
+  font-family: "DM Mono", monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.05em !important;
+  color: rgba(255,255,255,0.62) !important;
+}
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-nodes .pursuit-zone:hover > .zone-del,
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-nodes .sec-card:hover > .card-del,
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-nodes .zone-oneoff:hover > .zone-oneoff-del {
+  opacity: 1 !important;
+  z-index: 220 !important;
+}
+html body .day-block[data-date="2026-08-20"] .tv-panel.tv-nodes .pursuit-zone-head {
+  padding-right: 34px !important;
+}
+html body .day-block[data-date="2026-08-20"].nodes-linking,
+html body .day-block[data-date="2026-08-20"].nodes-linking .pursuit-zone,
+html body .day-block[data-date="2026-08-20"].nodes-linking .sec-card,
+html body .day-block[data-date="2026-08-20"].nodes-linking .zone-oneoff {
+  cursor: crosshair !important;
+}
+html body .day-block[data-date="2026-08-20"] .node-link-from {
+  outline: 2px solid rgba(255,244,220,0.92) !important;
+  outline-offset: 3px !important;
+}
+html body .day-block[data-date="2026-08-20"] svg.aug20-zone-web path.aug20-edge.is-hot {
+  stroke: rgba(255,220,180,0.95) !important;
+  stroke-width: 2.2 !important;
+}
+</style>
 <script id="aug20-zone-web-js">
 (function(){
-  var EDGES = [
-    ['body','life'],
-    ['life','finances'],
-    ['finances','presence'],
-    ['body','leverage'],
-    ['leverage','ambition'],
-    ['ambition','presence'],
-    ['life','ambition'],
-    ['body','ambition'],
-    ['life','leverage']
+  var EDGE_KEY = 'btm_aug20_node_edges_v1';
+  var EDGE_BY_DAY = 'btm_node_edges_by_day_v1';
+  var DEFAULT_EDGES = [
+    ['z:body','z:life'],
+    ['z:life','z:finances'],
+    ['z:finances','z:presence'],
+    ['z:body','z:leverage'],
+    ['z:leverage','z:ambition'],
+    ['z:ambition','z:presence'],
+    ['z:life','z:ambition'],
+    ['z:body','z:ambition'],
+    ['z:life','z:leverage']
   ];
-  function board(){
-    return document.querySelector('.day-block.pursuit-board-day[data-date="2026-08-20"] .sec-grid.pursuit-canvas')
-      || document.querySelector('.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas');
+  var fromEl = null;
+  var edges = [];
+  var edgesDay = '';
+  function blockEl(from){
+    if (from && from.closest) {
+      var hit = from.closest('.day-block');
+      if (hit && hit.querySelector('.tv-panel.tv-nodes')) return hit;
+    }
+    return document.querySelector('.day-block.nodes-linking')
+      || (document.querySelector('.tv-panel.tv-nodes.active') && document.querySelector('.tv-panel.tv-nodes.active').closest('.day-block'))
+      || document.querySelector('.day-block[data-date="2026-08-20"]');
+  }
+  function board(from){
+    var blk = blockEl(from);
+    if (!blk) return null;
+    return blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas')
+      || blk.querySelector('.sec-grid.pursuit-canvas');
+  }
+  function dayKey(blk){
+    var d = blk && blk.getAttribute('data-date');
+    return (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) ? d : '2026-08-20';
+  }
+  function pair(a, b){
+    return a < b ? [a, b] : [b, a];
+  }
+  function normId(id){
+    id = String(id || '');
+    if(!id) return '';
+    if(id.indexOf(':') >= 0) return id;
+    return 'z:' + id;
+  }
+  function loadDayMap(){
+    try { return JSON.parse(localStorage.getItem(EDGE_BY_DAY) || '{}') || {}; } catch(e){ return {}; }
+  }
+  function saveDayMap(m){
+    try { localStorage.setItem(EDGE_BY_DAY, JSON.stringify(m || {})); } catch(e){}
+  }
+  function loadEdges(day){
+    day = day || '2026-08-20';
+    var map = loadDayMap();
+    if (Array.isArray(map[day]) && map[day].length) {
+      return map[day].map(function(e){
+        if(!e || e.length < 2) return null;
+        return pair(normId(e[0]), normId(e[1]));
+      }).filter(function(e){ return e && e[0] && e[1] && e[0] !== e[1]; });
+    }
+    if (day === '2026-08-20') {
+      try{
+        var raw = JSON.parse(localStorage.getItem(EDGE_KEY) || 'null');
+        if(Array.isArray(raw) && raw.length){
+          return raw.map(function(e){
+            if(!e || e.length < 2) return null;
+            return pair(normId(e[0]), normId(e[1]));
+          }).filter(function(e){ return e && e[0] && e[1] && e[0] !== e[1]; });
+        }
+      }catch(err){}
+      return DEFAULT_EDGES.map(function(e){ return [e[0], e[1]]; });
+    }
+    return [];
+  }
+  function saveEdges(list, day){
+    day = day || edgesDay || '2026-08-20';
+    var map = loadDayMap();
+    map[day] = list || [];
+    saveDayMap(map);
+    if (day === '2026-08-20') {
+      try{ localStorage.setItem(EDGE_KEY, JSON.stringify(list || [])); }catch(err){}
+    }
+  }
+  function ensureEdges(day){
+    if (edgesDay === day && Array.isArray(edges)) return edges;
+    edgesDay = day;
+    edges = loadEdges(day);
+    return edges;
+  }
+  function slug(s){
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'node';
+  }
+  function wantedId(el){
+    if(!el) return '';
+    if(el.classList.contains('pursuit-zone')){
+      return 'z:' + (el.getAttribute('data-zone') || slug((el.querySelector('.pursuit-zone-title') || {}).textContent));
+    }
+    if(el.classList.contains('sec-card')){
+      var zone = el.closest('.pursuit-zone');
+      var zid = zone ? (zone.getAttribute('data-zone') || 'loose') : 'loose';
+      var g = el.querySelector('.j22-group');
+      var name = ((g && (g.getAttribute('data-newhdr') || g.textContent)) || 'card').trim();
+      return 'c:' + zid + ':' + slug(name);
+    }
+    if(el.classList.contains('zone-oneoff')){
+      var oz = el.closest('.pursuit-zone');
+      var oid = oz ? (oz.getAttribute('data-zone') || 'canvas') : 'canvas';
+      var t = ((el.querySelector('.zone-oneoff-t') || {}).textContent || el.getAttribute('data-i') || 'task').trim();
+      return 'o:' + oid + ':' + slug(t);
+    }
+    return '';
+  }
+  function assignId(el, used){
+    var base = el.getAttribute('data-node-id') || wantedId(el);
+    if(!base) return '';
+    var id = base, n = 2;
+    while(used[id] && used[id] !== el){
+      id = base + '-' + n;
+      n++;
+    }
+    used[id] = el;
+    el.setAttribute('data-node-id', id);
+    return id;
+  }
+  function centerOf(el, grid, w, h){
+    if(!el) return null;
+    var r = el.getBoundingClientRect();
+    if(r.width < 8 || r.height < 8){
+      var z = el.closest('.pursuit-zone');
+      if(z && z !== el) return centerOf(z, grid, w, h);
+      return null;
+    }
+    var g = grid.getBoundingClientRect();
+    if(!g.width || !g.height) return null;
+    return {
+      x: (r.left + r.width / 2 - g.left) * (w / g.width),
+      y: (r.top + r.height / 2 - g.top) * (h / g.height)
+    };
+  }
+  function collect(grid, w, h){
+    var used = {};
+    var map = {};
+    function add(el){
+      var id = assignId(el, used);
+      if(!id) return;
+      var pt = centerOf(el, grid, w, h);
+      if(pt) map[id] = { el: el, pt: pt };
+    }
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(add);
+    [].slice.call(grid.querySelectorAll('.sec-card')).forEach(add);
+    [].slice.call(grid.querySelectorAll('.zone-oneoff')).forEach(add);
+    return map;
+  }
+  function prune(map){
+    var n = 0, k;
+    for(k in map){ if(Object.prototype.hasOwnProperty.call(map, k)) n++; }
+    if(n < 2) return;
+    var next = edges.filter(function(e){ return map[e[0]] && map[e[1]]; });
+    if(next.length !== edges.length){
+      edges = next;
+      saveEdges(edges, edgesDay);
+    }
   }
   function ensureSvg(grid){
     var svg = grid.querySelector(':scope > svg.aug20-zone-web');
     if(svg) return svg;
-    svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('class','aug20-zone-web');
-    svg.setAttribute('aria-hidden','true');
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'aug20-zone-web');
+    svg.setAttribute('aria-hidden', 'true');
     grid.insertBefore(svg, grid.firstChild);
     return svg;
   }
@@ -37958,9 +39549,95 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
     ny = ny / len * bow;
     return 'M ' + a.x + ' ' + a.y + ' Q ' + (mx + nx) + ' ' + (my + ny) + ' ' + b.x + ' ' + b.y;
   }
-  function draw(){
-    var grid = board();
+  function setHint(text, blk){
+    blk = blk || blockEl(fromEl);
+    var el = blk && blk.querySelector('.nodes-edit-hint');
+    if(el) el.textContent = text;
+  }
+  function clearFrom(){
+    document.querySelectorAll('.node-link-from').forEach(function(n){ n.classList.remove('node-link-from'); });
+    fromEl = null;
+  }
+  function isLinking(from){
+    var blk = blockEl(from || fromEl);
+    return !!(blk && blk.classList.contains('nodes-linking'));
+  }
+  function setLinking(on, from){
+    var blk = blockEl(from || fromEl);
+    if(!blk) return;
+    ensureEdges(dayKey(blk));
+    blk.classList.toggle('nodes-linking', !!on);
+    var btn = blk.querySelector('.nodes-link-btn');
+    if(btn) btn.classList.toggle('is-on', !!on);
+    if(!on){
+      clearFrom();
+      setHint('click two nodes to link them · click a line to remove it', blk);
+    } else {
+      setHint(fromEl ? 'now click what it connects to' : 'click a node, then click what it connects to', blk);
+    }
+  }
+  function startLinkFrom(el){
+    if(!el) return;
+    setLinking(true, el);
+    clearFrom();
+    fromEl = el;
+    el.classList.add('node-link-from');
+    setHint('now click what it connects to', blockEl(el));
+  }
+  function addEdge(a, b){
+    if(!a || !b || a === b) return;
+    var blk = blockEl(fromEl);
+    ensureEdges(dayKey(blk));
+    var p = pair(a, b);
+    if(edges.some(function(e){ return e[0] === p[0] && e[1] === p[1]; })) return;
+    edges.push(p);
+    saveEdges(edges, dayKey(blk));
+    draw(blk);
+  }
+  function dropEdge(a, b, from){
+    var blk = blockEl(from);
+    ensureEdges(dayKey(blk));
+    var p = pair(a, b);
+    edges = edges.filter(function(e){ return !(e[0] === p[0] && e[1] === p[1]); });
+    saveEdges(edges, dayKey(blk));
+    draw(blk);
+  }
+  function closestNode(t){
+    if(!t || !t.closest) return null;
+    return t.closest('.sec-card, .zone-oneoff, .pursuit-zone');
+  }
+  function pickNode(el){
+    if(!el) return;
+    var blk = blockEl(el);
+    ensureEdges(dayKey(blk));
+    if(!fromEl){
+      fromEl = el;
+      el.classList.add('node-link-from');
+      setHint('now click what it connects to', blk);
+      return;
+    }
+    if(fromEl === el){
+      el.classList.remove('node-link-from');
+      fromEl = null;
+      setHint('click a node, then click what it connects to', blk);
+      return;
+    }
+    var a = fromEl.getAttribute('data-node-id') || wantedId(fromEl);
+    var b = el.getAttribute('data-node-id') || wantedId(el);
+    if(!a || !b) return;
+    addEdge(a, b);
+    fromEl.classList.remove('node-link-from');
+    fromEl = el;
+    el.classList.add('node-link-from');
+    setHint('linked · click another node to keep connecting', blk);
+  }
+  function draw(from){
+    var grid = board(from);
     if(!grid) return;
+    var blk = grid.closest('.day-block');
+    ensureEdges(dayKey(blk));
+    var panel = grid.closest('.tv-panel');
+    if(panel && (panel.style.display === 'none' || getComputedStyle(panel).display === 'none')) return;
     var heroHost = grid.querySelector('.pursuit-zone-body .pursuit-zone-grid');
     if(heroHost){
       var cards = [].slice.call(heroHost.querySelectorAll(':scope > .sec-card'));
@@ -37968,7 +39645,7 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
         var hero = cards[0];
         hero.classList.add('glow-hero');
         var img = hero.querySelector('.card-visual img');
-        if(img && /zone-body/.test(img.getAttribute('src')||'')){
+        if(img && /zone-body/.test(img.getAttribute('src') || '')){
           img.setAttribute('src', 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek');
         }
       }
@@ -37980,30 +39657,89 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
     svg.setAttribute('width', String(w));
     svg.setAttribute('height', String(h));
     while(svg.firstChild) svg.removeChild(svg.firstChild);
-    var map = {};
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-      var id = z.getAttribute('data-zone');
-      var x = parseFloat(z.style.getPropertyValue('--ff-x')) || parseFloat(z.style.left) || 0;
-      var y = parseFloat(z.style.getPropertyValue('--ff-y')) || parseFloat(z.style.top) || 0;
-      var collapsed = z.classList.contains('zone-collapsed');
-      var ww = collapsed ? 172 : (parseFloat(z.style.getPropertyValue('--zone-w')) || z.offsetWidth || 220);
-      var hh = collapsed ? 52 : (parseFloat(z.style.getPropertyValue('--zone-h')) || z.offsetHeight || 180);
-      map[id] = { x: x + ww / 2, y: y + hh / 2 };
-    });
-    EDGES.forEach(function(e){
+    var map = collect(grid, w, h);
+    prune(map);
+    edges.forEach(function(e){
       var a = map[e[0]], b = map[e[1]];
       if(!a || !b) return;
-      var p = document.createElementNS('http://www.w3.org/2000/svg','path');
-      p.setAttribute('d', curve(a, b));
+      var d = curve(a.pt, b.pt);
+      var hit = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      hit.setAttribute('class', 'aug20-edge-hit');
+      hit.setAttribute('d', d);
+      hit.setAttribute('fill', 'none');
+      hit.setAttribute('stroke', 'transparent');
+      hit.setAttribute('stroke-width', '14');
+      hit.setAttribute('stroke-linecap', 'round');
+      hit.setAttribute('data-a', e[0]);
+      hit.setAttribute('data-b', e[1]);
+      hit.style.pointerEvents = 'stroke';
+      hit.style.cursor = 'pointer';
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('class', 'aug20-edge');
+      p.setAttribute('d', d);
       p.setAttribute('fill', 'none');
       p.setAttribute('stroke', 'rgba(255,244,220,0.45)');
       p.setAttribute('stroke-width', '1.35');
       p.setAttribute('stroke-dasharray', '5 8');
       p.setAttribute('stroke-linecap', 'round');
+      p.setAttribute('data-a', e[0]);
+      p.setAttribute('data-b', e[1]);
+      p.style.pointerEvents = 'stroke';
+      p.style.cursor = 'pointer';
+      hit.addEventListener('mouseenter', function(){ p.classList.add('is-hot'); });
+      hit.addEventListener('mouseleave', function(){ p.classList.remove('is-hot'); });
+      p.addEventListener('mouseenter', function(){ p.classList.add('is-hot'); });
+      p.addEventListener('mouseleave', function(){ p.classList.remove('is-hot'); });
+      svg.appendChild(hit);
       svg.appendChild(p);
     });
   }
   window.__drawAug20Web = draw;
+  window.__aug20StartLinkFrom = startLinkFrom;
+  if(!window.__aug20NodesEditWired){
+    window.__aug20NodesEditWired = 1;
+    document.addEventListener('click', function(e){
+      var linkBtn = e.target.closest('.nodes-link-btn');
+      if(linkBtn){
+        e.preventDefault();
+        e.stopPropagation();
+        var on = !isLinking(linkBtn);
+        setLinking(on, linkBtn);
+        return;
+      }
+    }, true);
+    document.addEventListener('pointerdown', function(e){
+      if(e.button && e.button !== 0) return;
+      var hit = e.target.closest && e.target.closest('path.aug20-edge-hit, path.aug20-edge');
+      if(hit && hit.closest('svg.aug20-zone-web')){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+        dropEdge(hit.getAttribute('data-a'), hit.getAttribute('data-b'), hit);
+        return;
+      }
+      if(!isLinking(e.target)) return;
+      if(e.target.closest('.nodes-add-btn, .nodes-link-btn, .nodes-edit-bar, .zone-add-picker, .zone-del, .card-del, .zone-oneoff-del, .day-add-zone, input, textarea, button.tv-pill')) return;
+      var node = closestNode(e.target);
+      var grid = board(e.target);
+      if(node && grid && grid.contains(node)){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+        pickNode(node);
+        return;
+      }
+      if(e.target.closest('.tv-panel.tv-nodes')){
+        clearFrom();
+        setHint('click a node, then click what it connects to', blockEl(e.target));
+      }
+    }, true);
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && isLinking()){
+        setLinking(false);
+      }
+    });
+  }
   function boot(){ draw(); }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 120); });
   else setTimeout(boot, 120);
@@ -38046,7 +39782,538 @@ html body .canvas-item-resize {
   font-size: 0 !important;
 }
 </style>
-<script src="icon-grid.js?v=nosidebar"></script>
+<style id="aug26-freeplace-css">
+/* Days from Aug 26 onward: real free-placement canvas. Cards sit where you drop them. Headers stay on top. */
+html body .day-block.fmt22.freeplace-day .day-card,
+html body .day-block.fmt22.today-block.freeplace-day .day-card,
+html body .day-block.fmt22.freeplace-day .day-tasks,
+html body .day-block.fmt22.today-block.freeplace-day .day-tasks,
+html body .day-block.fmt22.freeplace-day .tv-panel.tv-pursuits,
+html body .day-block.fmt22.today-block.freeplace-day .tv-panel.tv-pursuits,
+html body .day-block.fmt22.freeplace-day .flow-chart-card {
+  overflow: visible !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-grid,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform,
+html body .day-block.fmt22.today-block.freeplace-day .sec-grid,
+html body .day-block.fmt22.today-block.freeplace-day .sec-grid.freeform,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day .sec-grid.freeform,
+html body .day-block.fmt22.freeplace-day:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid,
+html body .day-block.fmt22.freeplace-day:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform,
+html body .day-block.fmt22.featured-block.freeplace-day .sec-grid,
+html body .day-block.fmt22.featured-block.freeplace-day .sec-grid.freeform,
+html body .day-block.fmt22.past.freeplace-day .sec-grid.freeform {
+  display: block !important;
+  position: relative !important;
+  flex-wrap: unset !important;
+  align-items: unset !important;
+  gap: 0 !important;
+  width: 100% !important;
+  min-height: 640px !important;
+  height: var(--fp-h, 720px) !important;
+  margin: 8px 0 0 !important;
+  overflow: visible !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.today-block.freeplace-day .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.is-empty,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.has-tasks,
+html body .day-block.fmt22.freeplace-day:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid .sec-card,
+html body .day-block.fmt22.freeplace-day:not(.today-block):not(.zone-board-day):not(.pursuit-board-day) .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.featured-block.freeplace-day .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.past.freeplace-day .sec-grid.freeform > .sec-card,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.is-empty,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.has-tasks,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.is-empty.card-sized,
+html body .day-block.fmt22.today-block.freeplace-day .sec-grid.freeform > .sec-card.is-empty.card-sized {
+  position: absolute !important;
+  left: var(--ff-x, 16px) !important;
+  top: var(--ff-y, 16px) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--card-w, 248px) !important;
+  height: var(--card-h, 248px) !important;
+  min-width: 160px !important;
+  min-height: var(--card-h, 180px) !important;
+  max-width: none !important;
+  max-height: none !important;
+  flex: none !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  z-index: 2;
+  cursor: grab;
+  aspect-ratio: auto !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.is-dragging {
+  cursor: grabbing;
+  z-index: 40 !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card .card-visual,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty .card-visual,
+html body .day-block.fmt22.freeplace-day .sec-card.has-tasks .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.is-empty .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.has-tasks .card-visual {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  flex: none !important;
+  z-index: 0 !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card .card-visual img,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card .card-visual img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card .card-visual .j22-group,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty .card-visual .j22-group,
+html body .day-block.fmt22.freeplace-day .sec-card.has-tasks .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty .card-visual .j22-group {
+  display: block !important;
+  position: absolute !important;
+  left: 16px !important;
+  right: 16px !important;
+  bottom: 12px !important;
+  top: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  font-size: clamp(22px, 2.6vw, 36px) !important;
+  letter-spacing: 0.01em !important;
+  color: #fff8ee !important;
+  -webkit-text-fill-color: #fff8ee !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55) !important;
+  text-align: left !important;
+  z-index: 4 !important;
+  pointer-events: auto !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card .card-del,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card .card-del,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty .card-del {
+  opacity: 0 !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card:hover .card-del,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card:hover .card-del {
+  opacity: 1 !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card.has-tasks:not(.card-collapsed) .card-body,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.has-tasks:not(.card-collapsed) .card-body {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  overflow: visible !important;
+  padding: 8px 12px 14px !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty .card-body,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty .card-body {
+  display: none !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-card.has-tasks .j22-section-items > .j22-item:not(.j22-sub):not(.j22-sub2) {
+  display: flex !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 0 4px !important;
+  padding: 2px 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .canvas-oneoff,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .zone-oneoff {
+  position: absolute !important;
+  left: var(--ff-x, 12px) !important;
+  top: var(--ff-y, 12px) !important;
+  width: var(--card-w, 220px) !important;
+  height: var(--card-h, 72px) !important;
+  z-index: 6;
+}
+html body .day-block.fmt22.freeplace-day.collapsed .sec-grid.freeform {
+  display: none !important;
+}
+/* Empty freeplace day: same width as sibling day cards (e.g. Aug 26), short shell */
+html body .day-block.fmt22.freeplace-day .day-card,
+html body .day-block.fmt22.today-block.freeplace-day .day-card,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day .day-card,
+html body .day-block.fmt22.freeplace-day.fp-empty .day-card,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .day-card,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day.fp-empty .day-card {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+html body .day-block.fmt22.freeplace-day.fp-empty .day-card,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .day-card,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day.fp-empty .day-card {
+  min-height: 0 !important;
+  height: auto !important;
+}
+html body .day-block.fmt22.freeplace-day.fp-empty .sec-grid,
+html body .day-block.fmt22.freeplace-day.fp-empty .sec-grid.freeform,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .sec-grid,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .sec-grid.freeform,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day.fp-empty .sec-grid.freeform,
+html body .day-block.fmt22.freeplace-day:not(.today-block):not(.zone-board-day):not(.pursuit-board-day).fp-empty .sec-grid,
+html body .day-block.fmt22.freeplace-day:not(.today-block):not(.zone-board-day):not(.pursuit-board-day).fp-empty .sec-grid.freeform,
+html body .day-block.fmt22.featured-block.freeplace-day.fp-empty .sec-grid.freeform,
+html body .day-block.fmt22.past.freeplace-day.fp-empty .sec-grid.freeform {
+  display: block !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+html body .day-block.fmt22.freeplace-day.fp-empty .day-tasks,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .day-tasks,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day.fp-empty .day-tasks,
+html body .day-block.fmt22.freeplace-day.fp-empty .tv-panel.tv-pursuits,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .tv-panel.tv-pursuits,
+html body .day-block.fmt22.today-block:not(.zone-board-day):not(.pursuit-board-day).freeplace-day.fp-empty .tv-panel.tv-pursuits,
+html body .day-block.fmt22.freeplace-day.fp-empty .flow-chart-card,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .flow-chart-card {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-bottom: 8px !important;
+  overflow: visible !important;
+}
+html body .day-block.fmt22.freeplace-day.fp-empty .make-flow-btn,
+html body .day-block.fmt22.today-block.freeplace-day.fp-empty .make-flow-btn {
+  margin: 8px auto 10px !important;
+}
+</style>
+<style id="aug26-sections-css">
+/* Aug 26+ uses the free-placement canvas in #aug26-freeplace-css. */
+</style>
+<script id="aug26-freeplace-js">
+(function(){
+  if (window.__freeplaceFromAug26) return;
+  window.__freeplaceFromAug26 = true;
+  var KEY = 'btm_freeplace_xy_v1';
+  var FROM = '2026-08-26';
+  function isFpDate(d){ return !!(d && d >= FROM && /^\d{4}-\d{2}-\d{2}$/.test(d)); }
+  function blkOf(el){ return el && el.closest && el.closest('.day-block.fmt22'); }
+  function dateOf(el){ var b=blkOf(el); return b ? (b.getAttribute('data-date')||'') : ''; }
+  function hdr(card){
+    var g=card.querySelector('.j22-group');
+    return g ? (g.getAttribute('data-newhdr')||g.textContent||'').trim().toLowerCase() : '';
+  }
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function place(card, x, y, w, h){
+    x=Math.max(0, Math.round(x)); y=Math.max(0, Math.round(y));
+    card.style.setProperty('--ff-x', x+'px');
+    card.style.setProperty('--ff-y', y+'px');
+    if(w) card.style.setProperty('--card-w', Math.round(w)+'px');
+    if(h) card.style.setProperty('--card-h', Math.round(h)+'px');
+  }
+  function persist(card){
+    var day=dateOf(card); if(!isFpDate(day)) return;
+    var store=load();
+    if(!store[day]) store[day]={};
+    store[day][hdr(card) || ('card-'+Date.now())] = {
+      x: parseFloat(card.style.getPropertyValue('--ff-x'))||0,
+      y: parseFloat(card.style.getPropertyValue('--ff-y'))||0,
+      w: parseFloat(card.style.getPropertyValue('--card-w'))||card.offsetWidth,
+      h: parseFloat(card.style.getPropertyValue('--card-h'))||card.offsetHeight
+    };
+    save(store);
+  }
+  function grow(grid){
+    if(!grid) return;
+    var cards=[].slice.call(grid.querySelectorAll(':scope > .sec-card, :scope > .canvas-oneoff, :scope > .zone-oneoff'));
+    var blk=grid.closest('.day-block');
+    if(!cards.length){
+      grid.style.setProperty('--fp-h', '0px');
+      grid.style.setProperty('min-height', '0px', 'important');
+      grid.style.setProperty('height', '0px', 'important');
+      if(blk) blk.classList.add('fp-empty');
+      return;
+    }
+    if(blk) blk.classList.remove('fp-empty');
+    grid.style.removeProperty('min-height');
+    grid.style.removeProperty('height');
+    var max=48;
+    cards.forEach(function(c){
+      var y=parseFloat(c.style.getPropertyValue('--ff-y'))||0;
+      var h=c.offsetHeight||180;
+      max=Math.max(max, y+h+24);
+    });
+    grid.style.setProperty('--fp-h', Math.round(max)+'px');
+  }
+  function itemHtml(name){
+    return '<label class="j22-item" draggable="true"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">'+name+'</span><span class="del-x" aria-label="delete">×</span></label>';
+  }
+  function convertVision(blk){
+    var board=blk.querySelector('.vision-board');
+    if(!board) return;
+    var panel=board.closest('.tv-pursuits')||blk.querySelector('.tv-pursuits');
+    if(!panel) return;
+    var themes=['blush','warm','lavender','coral'];
+    var wrap=document.createElement('div');
+    wrap.className='flow-chart-card';
+    var grid=document.createElement('div');
+    grid.className='sec-grid freeform';
+    [].slice.call(board.querySelectorAll('.vision-tile')).forEach(function(tile,i){
+      var title=((tile.querySelector('.vision-tile-title')||{}).textContent||'').trim()||'card';
+      var img='';
+      var st=tile.getAttribute('style')||'';
+      var m=st.match(/url\(['"]?([^'")]+)['"]?\)/);
+      if(m) img=m[1];
+      var tasks=[].slice.call(tile.querySelectorAll('.vision-check span')).map(function(sp){ return (sp.textContent||'').trim(); }).filter(Boolean);
+      var card=document.createElement('div');
+      card.className='j22-section card sec-card '+(tasks.length?'has-tasks':'is-empty');
+      card.setAttribute('data-user-added','1');
+      card.setAttribute('data-theme', themes[i%themes.length]);
+      var x=16+(i%3)*272, y=16+Math.floor(i/3)*300;
+      card.setAttribute('style','--ff-x:'+x+'px;--ff-y:'+y+'px;--card-w:248px;--card-h:260px');
+      card.innerHTML='<div class="card-visual theme-'+themes[i%themes.length]+'">'
+        +(img?('<img alt="'+title+'" src="'+img+'">'):'')
+        +'<p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="'+title+'">'+title+'</p></div>'
+        +'<div class="card-body"><div class="j22-section-items">'+tasks.map(itemHtml).join('')+'</div></div>'
+        +'<button type="button" class="card-del" aria-label="delete card">×</button>'
+        +'<div class="card-resize"></div>'
+        +'<button type="button" class="card-add-task" aria-label="add task to this pursuit">+</button>';
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    board.replaceWith(wrap);
+  }
+  function mark(){
+    document.querySelectorAll('.day-block.fmt22[data-date]').forEach(function(b){
+      var d=b.getAttribute('data-date')||'';
+      if(isFpDate(d)){
+        if(b.querySelector('.vision-board')){
+          b.classList.remove('freeplace-day');
+        } else {
+          b.classList.add('freeplace-day');
+          convertVision(b);
+          var g=b.querySelector('.tv-pursuits .sec-grid')||b.querySelector('.sec-grid');
+          if(g) g.classList.add('freeform');
+        }
+      } else {
+        b.classList.remove('freeplace-day');
+      }
+    });
+  }
+  function layout(){
+    mark();
+    var store=load();
+    document.querySelectorAll('.day-block.fmt22.freeplace-day').forEach(function(b){
+      var day=b.getAttribute('data-date')||'';
+      var grid=b.querySelector('.tv-pursuits .sec-grid')||b.querySelector('.sec-grid');
+      if(!grid) return;
+      grid.classList.add('freeform');
+      var saved=store[day]||{};
+      [].slice.call(grid.querySelectorAll(':scope > .sec-card')).forEach(function(card,i){
+        /* Screenshot / proof tiles: full-bleed natural aspect — never freeplace squares */
+        if(card.classList.contains('shot-card')){
+          card.classList.remove('card-sized');
+          ['width','height','max-width','max-height','min-width','min-height','flex','flex-basis','position','top','left','right','bottom','--ff-x','--ff-y','--card-w','--card-h'].forEach(function(p){
+            card.style.removeProperty(p);
+          });
+          card.style.removeProperty('--ff-x');
+          card.style.removeProperty('--ff-y');
+          card.style.removeProperty('--card-w');
+          card.style.removeProperty('--card-h');
+          return;
+        }
+        card.classList.remove('card-sized');
+        ['width','height','max-width','max-height','min-width','min-height','flex','flex-basis','position','top','left','right','bottom'].forEach(function(p){
+          card.style.removeProperty(p);
+        });
+        var name=hdr(card);
+        var rec=saved[name];
+        var x=rec&&rec.x!=null?rec.x:(parseFloat(card.style.getPropertyValue('--ff-x'))|| (16+(i%3)*272));
+        var y=rec&&rec.y!=null?rec.y:(parseFloat(card.style.getPropertyValue('--ff-y'))|| (16+Math.floor(i/3)*300));
+        var w=rec&&rec.w?rec.w:(parseFloat(card.style.getPropertyValue('--card-w'))||248);
+        var h=rec&&rec.h?rec.h:(parseFloat(card.style.getPropertyValue('--card-h'))||260);
+        place(card, x, y, w, h);
+      });
+      grow(grid);
+      if(!(grid.querySelector(':scope > .sec-card, :scope > .canvas-oneoff, :scope > .zone-oneoff'))) b.classList.add('fp-empty');
+      else b.classList.remove('fp-empty');
+    });
+  }
+  function beginDrag(e, card){
+    if(!e || !card) return;
+    if(e.button && e.button!==0) return;
+    if(!card.closest('.freeplace-day')) return;
+    if(card.classList.contains('shot-card')) return;
+    if(e.target.closest('.j22-item, .j22-t, .j22-group, .card-del, .card-add-task, .card-resize, .done-check, button, input, a, .del-x, .agenda-check')) return;
+    var grid=card.closest('.sec-grid.freeform');
+    if(!grid) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var startX=e.clientX, startY=e.clientY;
+    var ox=parseFloat(card.style.getPropertyValue('--ff-x'))||0;
+    var oy=parseFloat(card.style.getPropertyValue('--ff-y'))||0;
+    var moved=false;
+    var pid=e.pointerId;
+    window.__cardDragging=true;
+    card.classList.add('is-dragging');
+    try{ card.setPointerCapture(pid); }catch(err){}
+    function onMove(ev){
+      var dx=ev.clientX-startX, dy=ev.clientY-startY;
+      if(!moved && Math.abs(dx)+Math.abs(dy)<3) return;
+      moved=true;
+      ev.preventDefault();
+      place(card, Math.max(0, ox+dx), Math.max(0, oy+dy));
+      grow(grid);
+    }
+    function onUp(){
+      try{ card.releasePointerCapture(pid); }catch(err){}
+      document.removeEventListener('pointermove', onMove, true);
+      document.removeEventListener('pointerup', onUp, true);
+      document.removeEventListener('pointercancel', onUp, true);
+      card.classList.remove('is-dragging');
+      window.__cardDragging=false;
+      if(moved) persist(card);
+    }
+    document.addEventListener('pointermove', onMove, true);
+    document.addEventListener('pointerup', onUp, true);
+    document.addEventListener('pointercancel', onUp, true);
+  }
+  document.addEventListener('pointerdown', function(e){
+    var card=e.target.closest('.day-block.freeplace-day .sec-grid.freeform > .sec-card');
+    if(card) beginDrag(e, card);
+  }, true);
+  function boot(){ layout(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+  [200, 800, 2000].forEach(function(ms){ setTimeout(boot, ms); });
+  window.__layoutFreeplaceDays = layout;
+  var moT=null;
+  try {
+    new MutationObserver(function(){
+      clearTimeout(moT);
+      moT=setTimeout(layout, 250);
+    }).observe(document.body, {childList:true, subtree:true});
+  } catch(err) {}
+})();
+</script>
+<style id="full-tile-bleed-shot-cards">
+/* HARD RULE: Everything page screenshot/proof tiles are always full-bleed.
+   Photo fills the tile. Title overlays the photo. Never a black bottom bar.
+   Must beat freeplace absolute/inset card-visual rules. */
+html body .day-block.fmt22 .sec-card.shot-card,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22.today-block.freeplace-day .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.is-empty.shot-card,
+html body .day-block.fmt22.freeplace-day .sec-grid.freeform > .sec-card.is-empty.shot-card,
+html body .day-block.fmt22[data-date="2026-08-27"] .tv-pursuits .sec-grid.freeform > .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-27"].freeplace-day.today-block .tv-pursuits .sec-grid.freeform > .sec-card.shot-card {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(460px, calc(50% - 12px)) !important;
+  height: auto !important;
+  min-width: 240px !important;
+  min-height: 0 !important;
+  max-width: 560px !important;
+  max-height: none !important;
+  flex: 1 1 320px !important;
+  margin: 0 !important;
+  aspect-ratio: auto !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  cursor: zoom-in !important;
+}
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-card.shot-card,
+html body .day-block.fmt22[data-date="2026-08-25"] .sec-grid.freeform > .sec-card.shot-card {
+  width: min(920px, 100%) !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.freeplace-day .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.is-empty.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.shot-card .card-visual,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .flow-chart-card .sec-grid.freeform > .sec-card.is-empty.shot-card .card-visual {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  flex: none !important;
+  z-index: 0 !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.freeplace-day .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.shot-card .card-visual img,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty.shot-card .card-visual img,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty.shot-card .card-visual img {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  filter: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.freeplace-day .sec-card.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.freeplace-day .sec-card.is-empty.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day .sec-card.is-empty.shot-card .card-visual .j22-group,
+html body .day-block.fmt22.today-block.freeplace-day:not(.zone-board-day):not(.pursuit-board-day) .tv-panel.tv-pursuits .sec-card.is-empty.shot-card .card-visual .j22-group {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 10px 12px 22px !important;
+  background: linear-gradient(to bottom, rgba(20,16,12,0.62) 0%, rgba(20,16,12,0) 100%) !important;
+  color: #f6efe4 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+  pointer-events: none;
+}
+html body .day-block.fmt22 .sec-card.shot-card .card-body {
+  display: none !important;
+}
+</style>
+<script src="icon-grid.js?v=crosssec1"></script>
 </body>
 </html>
 

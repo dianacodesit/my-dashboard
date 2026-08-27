@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>accomplishments · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navacc"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body.accomplishments-page {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    background: #1c140e;
+    overflow-x: hidden;
+  }
+  body.accomplishments-page #hamburger-menu span {
+    background: #f3e6d0;
+    box-shadow: none;
+  }
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(180deg, rgba(20,12,6,0.28) 0%, rgba(20,12,6,0.08) 38%, rgba(12,8,4,0.42) 100%),
+      url("manus-storage/accomplishments-bg.jpg?v=summit") center/cover no-repeat;
+  }
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 72px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 28px;
+    max-width: 560px;
+  }
+  .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #f7efe4;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.55);
+  }
+  h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(36px, 7vw, 58px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: #fff8ee;
+    text-shadow: 0 2px 22px rgba(8,4,2,0.55);
+  }
+  .sub {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.78);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  }
+  .panel {
+    width: min(640px, 100%);
+    background: transparent;
+    color: #fff8ee;
+    border-radius: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+  .add-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .add-row input {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+    border-radius: 0;
+    background: transparent;
+    font-family: "Newsreader", serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #fff8ee;
+    outline: none;
+    text-shadow: 0 1px 8px rgba(8,4,2,0.55);
+  }
+  .add-row input::placeholder { color: rgba(247,239,228,0.55); }
+  .add-row button {
+    padding: 8px 14px;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: #fff8ee;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+  }
+  .item .mark {
+    flex: 0 0 auto;
+    margin-top: 4px;
+    color: rgba(247,239,228,0.7);
+    font-size: 12px;
+  }
+  .item .t {
+    flex: 1;
+    font-size: 18px;
+    line-height: 1.4;
+    font-style: italic;
+    color: #fff8ee;
+    outline: none;
+    text-shadow: 0 1px 8px rgba(8,4,2,0.55);
+  }
+  .item .x { background: none; border: none; color: rgba(247,239,228,0.7); cursor: pointer; font-size: 16px; }
+  .empty {
+    font-style: italic;
+    color: rgba(247,239,228,0.7);
+    padding: 8px 0 4px;
+    text-shadow: 0 1px 8px rgba(8,4,2,0.55);
+  }
+  .status {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.55);
+    margin-top: 12px;
+    text-shadow: 0 1px 8px rgba(8,4,2,0.45);
+  }
+</style>
+</head>
+<body class="accomplishments-page">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">wins · sealed · kept</p>
+    <h1>accomplishments</h1>
+    <p class="sub">what already happened</p>
+  </header>
+  <section class="panel">
+    <div class="add-row">
+      <input id="new-item" type="text" placeholder="a win to keep" autocomplete="off"/>
+      <button id="add-btn" type="button">keep</button>
+    </div>
+    <div id="list"></div>
+    <p class="status" id="status">saved here</p>
+  </section>
+</main>
+<script src="nav-shared.js?v=navacc"></script>
+<script>
+(function(){
+  var KEY = 'page_accomplishments_v1';
+  var listEl = document.getElementById('list');
+  var input = document.getElementById('new-item');
+  var status = document.getElementById('status');
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch(e){ return []; } }
+  function save(items){
+    try { localStorage.setItem(KEY, JSON.stringify(items)); status.textContent='saved here'; }
+    catch(e){ status.textContent='save failed'; }
+  }
+  function render(){
+    var items = load();
+    listEl.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('p');
+      empty.className = 'empty';
+      empty.textContent = 'nothing kept yet';
+      listEl.appendChild(empty);
+      return;
+    }
+    items.forEach(function(it, i){
+      var row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = '<span class="mark">✦</span><div class="t" contenteditable="true" spellcheck="false"></div><button class="x" type="button" aria-label="remove">×</button>';
+      row.querySelector('.t').textContent = it.t || '';
+      row.querySelector('.t').addEventListener('blur', function(){
+        var all = load(); all[i].t = this.textContent.trim(); save(all);
+      });
+      row.querySelector('.x').addEventListener('click', function(){
+        var all = load(); all.splice(i,1); save(all); render();
+      });
+      listEl.appendChild(row);
+    });
+  }
+  function add(){
+    var t = (input.value||'').trim(); if(!t) return;
+    var all = load(); all.unshift({t:t}); save(all); input.value=''; render();
+  }
+  document.getElementById('add-btn').addEventListener('click', add);
+  input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); add(); } });
+  render();
+})();
+</script>
+</body>
+</html>
