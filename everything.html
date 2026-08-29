@@ -12907,7 +12907,7 @@ window.__j22fnApply=run;
     'adderall':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'litigation wins':'manus-storage/pursuit-legal_b70d3da7.jpg',
     'legal':'manus-storage/pursuit-legal_b70d3da7.jpg',
-    'power':'manus-storage/mock-power-glam.jpg?v=glam1',
+    'power':'manus-storage/mock-power-lion.jpg?v=lion1',
     'lifestyle':'manus-storage/pursuit-lifestyle_577937e8.jpg',
     'added':'manus-storage/pursuit-power.jpg',
     'travel-ready':'manus-storage/pursuit-travel.jpg',
@@ -12915,7 +12915,8 @@ window.__j22fnApply=run;
     'travel':'manus-storage/pursuit-travel.jpg',
     'document translation into arabic':'manus-storage/pursuit-arabic-translation.jpg',
     'grad school':'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial',
-    'grad':'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial'
+    'grad':'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial',
+    'pursuits':'manus-storage/zone-pursuits.jpg?v=pursuits1'
   };
   var KEYWORDS = [
     [/translat|arabic|عربي|bilingual|interpret/, 'manus-storage/pursuit-arabic-translation.jpg'],
@@ -12944,7 +12945,8 @@ window.__j22fnApply=run;
     [/pickup|pickups|curbside|bopis/, 'manus-storage/pursuit-pickups.jpg'],
     [/shop|lifestyle|order|buy/, 'manus-storage/pursuit-lifestyle_577937e8.jpg'],
     [/curat/, 'manus-storage/pursuit-curated-lifestyle.jpg?v=2'],
-    [/grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial']
+    [/grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial'],
+    [/\bpursuits?\b/, 'manus-storage/zone-pursuits.jpg?v=pursuits1']
   ];
   var THEMES = {
     'persons':'blush','capital blueprint':'amber','body':'blush','glow up':'blush','glow-up':'blush','shopped':'warm','returns':'warm','pickups':'warm',
@@ -12952,7 +12954,8 @@ window.__j22fnApply=run;
     'litigation wins':'sage','momentum':'coral','frequency':'coral','ux design':'warm',
     'workflow':'sage','postal':'warm','power':'amber','leverage':'warm','added':'amber','quantum':'lavender',
     'travel-ready':'warm','traveler':'warm','travel':'warm',
-    'grad school':'lavender','grad':'lavender'
+    'grad school':'lavender','grad':'lavender',
+    'pursuits':'warm'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -13014,12 +13017,12 @@ window.__j22fnApply=run;
 (function(){
   window.__pursuitZones = 2;
   var ZONES = [
-    {id:'body', title:'GLOW UP', subs:'body', img:'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek', keys:/\bbody\b|adderall|glow|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera/},
-    {id:'life', title:'LIFESTYLE', subs:'curated lifestyle, returns, postal, traveler, persons, social, vibes', img:'manus-storage/pursuit-lifestyle_577937e8.jpg', keys:/lifestyle|shopped|\bshop\b|sephora|amazon|nordstrom|target|return|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran/},
-    {id:'finances', title:'FINANCES', subs:'capital blueprint', img:'manus-storage/zone-finances-v2.jpg?v=2', keys:/capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger/},
-    {id:'leverage', title:'POWER', subs:'litigation wins, leverage, workflow', img:'manus-storage/mock-power-glam.jpg?v=glam1', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
-    {id:'ambition', title:'AMBITION', subs:'momentum, UX design, frequency', img:'manus-storage/zone-ambition-v4.jpg', keys:/momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude/},
-    {id:'presence', title:'QUANTUM', subs:'entanglement', img:'manus-storage/zone-quantum-v15.jpg?v=observe', keys:/quantum|superposition|entangle|particle|atom/}
+    {id:'body', title:'glow up', subs:'body', img:'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek', keys:/\bbody\b|adderall|glow|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera/},
+    {id:'life', title:'lifestyle', subs:'curated lifestyle, returns, postal, traveler, persons, social, vibes', img:'manus-storage/pursuit-lifestyle_577937e8.jpg', keys:/lifestyle|shopped|\bshop\b|sephora|amazon|nordstrom|target|return|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran/},
+    {id:'finances', title:'finances', subs:'capital blueprint', img:'manus-storage/zone-finances-v2.jpg?v=2', keys:/capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger/},
+    {id:'leverage', title:'power', subs:'litigation wins, leverage, workflow', img:'manus-storage/mock-power-lion.jpg?v=lion1', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
+    {id:'ambition', title:'ambition', subs:'momentum, UX design, frequency', img:'manus-storage/zone-ambition-v4.jpg', keys:/momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude/},
+    {id:'presence', title:'quantum', subs:'entanglement', img:'manus-storage/zone-quantum-v15.jpg?v=observe', keys:/quantum|superposition|entangle|particle|atom/}
   ];
   window.ZONE_BANNERS = {};
   ZONES.forEach(function(z){ window.ZONE_BANNERS[z.id] = z.img; });
@@ -15210,6 +15213,20 @@ window.__j22fnApply=run;
     if(!k) return [];
     var m=loadOverviewNodesMap();
     if(!Array.isArray(m[k])) m[k]=[];
+    var dirty=false;
+    m[k].forEach(function(rec){
+      if(!rec) return;
+      if(rec.title){
+        var low=String(rec.title).replace(/\s+/g,' ').trim().toLowerCase();
+        if(rec.title !== low){ rec.title=low; dirty=true; }
+      }
+      var img=String(rec.img||'');
+      if(/mock-power-glam\.jpg/i.test(img) || (/power/i.test(rec.title||rec.id||'') && /chess|king/i.test(img))){
+        rec.img='manus-storage/mock-power-lion.jpg?v=lion1';
+        dirty=true;
+      }
+    });
+    if(dirty) saveOverviewNodesMap(m);
     return m[k];
   }
   function persistOverviewNodesFromGrid(grid){
@@ -15224,15 +15241,16 @@ window.__j22fnApply=run;
       var photo=(z.style.getPropertyValue('--zone-photo')||'').replace(/^url\(["']?|["']?\)$/g,'');
       return {
         id:z.getAttribute('data-zone')||'',
-        title:((titleEl&&titleEl.textContent)||'').replace(/\s+/g,' ').trim(),
+        title:((titleEl&&titleEl.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase(),
         img:photo,
         x:r.x, y:r.y, w:r.w, h:r.h
       };
     }).filter(function(z){ return z.id; });
     saveOverviewNodesMap(m);
   }
+  var OVERVIEW_NODE_GAP=40;
   function nextOverviewSlot(grid){
-    var pad=28, gap=24, zw=220, zh=176;
+    var pad=28, gap=OVERVIEW_NODE_GAP, zw=220, zh=176;
     var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
     if(!zones.length) return {x:pad, y:pad, w:zw, h:zh};
     var maxY=pad;
@@ -15246,7 +15264,7 @@ window.__j22fnApply=run;
   }
   function packOverviewNodesToTop(grid){
     if(!grid) return;
-    var pad=28, gap=24, x=pad, y=pad, rowH=0, maxW=0;
+    var pad=28, gap=OVERVIEW_NODE_GAP, x=pad, y=pad, rowH=0, maxW=0;
     var host=grid.parentElement;
     var limit=((host&&host.clientWidth)||grid.clientWidth||720)-pad;
     if(limit<280) limit=720;
@@ -15301,7 +15319,7 @@ window.__j22fnApply=run;
     row.style.backgroundImage='none';
     row.innerHTML='<div class="pursuit-zone-head"><p class="pursuit-zone-title"></p></div><div class="pursuit-zone-grid" data-zone=""></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div><button type="button" class="zone-del" aria-label="delete section">×</button>';
     var titleEl=row.querySelector('.pursuit-zone-title');
-    if(titleEl) titleEl.textContent=z.title||z.id;
+    if(titleEl) titleEl.textContent=String(z.title||z.id||'').replace(/\s+/g,' ').trim().toLowerCase();
     var host=row.querySelector('.pursuit-zone-grid');
     if(host) host.setAttribute('data-zone', z.id);
     var plus=row.querySelector('.add-pursuit-slot');
@@ -15335,6 +15353,12 @@ window.__j22fnApply=run;
     var blk=grid.closest('.day-block');
     ensureAug20TogglePlus(blk);
     [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var titleEl=z.querySelector('.pursuit-zone-title');
+      if(titleEl){
+        var t=((titleEl.textContent)||'').replace(/\s+/g,' ').trim();
+        var low=t.toLowerCase();
+        if(t && t !== low) titleEl.textContent=low;
+      }
       if(!z.querySelector(':scope > .zone-del')){
         var d=document.createElement('button');
         d.type='button';
@@ -15376,17 +15400,23 @@ window.__j22fnApply=run;
         if(!rec || !rec.id || gone[rec.id]) return;
         wanted[rec.id]=1;
         var row=grid.querySelector(':scope > .pursuit-zone[data-zone="'+rec.id+'"]');
+        var wantTitle=String(rec.title||rec.id||'').replace(/\s+/g,' ').trim().toLowerCase();
+        var rx=typeof rec.x==='number'?rec.x:28;
+        var ry=typeof rec.y==='number'?rec.y:28;
+        var rw=typeof rec.w==='number'?rec.w:220;
+        var rh=typeof rec.h==='number'?rec.h:176;
         if(!row){
-          row=makeZoneRow({id:rec.id, title:rec.title||rec.id, img:rec.img||'', custom:true});
+          row=makeZoneRow({id:rec.id, title:wantTitle, img:rec.img||'', custom:true});
           grid.appendChild(row);
-          writeRect({
-            el:row, id:rec.id,
-            x:typeof rec.x==='number'?rec.x:28,
-            y:typeof rec.y==='number'?rec.y:28,
-            w:typeof rec.w==='number'?rec.w:220,
-            h:typeof rec.h==='number'?rec.h:176
-          });
+        } else {
+          var titleEl=row.querySelector('.pursuit-zone-title');
+          if(titleEl){
+            var cur=((titleEl.textContent)||'').replace(/\s+/g,' ').trim();
+            if(cur !== wantTitle) titleEl.textContent=wantTitle;
+          }
+          if(rec.img) row.style.setProperty('--zone-photo', 'url("'+rec.img+'")');
         }
+        writeRect({el:row, id:rec.id, x:rx, y:ry, w:rw, h:rh});
       });
       // Keep live custom nodes even if store was stale; just re-persist.
       [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone[data-custom-zone="1"]')).forEach(function(z){
@@ -15397,6 +15427,8 @@ window.__j22fnApply=run;
         return (zoneRect(z).y||0) > 420;
       });
       if(tooLow) packOverviewNodesToTop(grid);
+      // Always keep air between nodes — flush/touching rects break the nodes concept.
+      resolveOverlaps(grid);
       persistOverviewNodesFromGrid(grid);
       ensureAug20EditChrome(grid);
       return;
@@ -15444,7 +15476,7 @@ window.__j22fnApply=run;
   }
   function addAug20Zone(grid, title){
     if(!grid || !isAug20Board(grid)) return null;
-    title=String(title||'').trim();
+    title=String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
     if(!title) return null;
     var gone=loadZoneGone();
     var created=null;
@@ -16365,7 +16397,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, finances:1, power:1, ambition:1, quantum:1 };
+        var titles={ 'glow up':1, lifestyle:1, finances:1, power:1, ambition:1, quantum:1, pursuits:1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -18025,7 +18057,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 </div>
 </article>
-<article class="vision-tile vision-tile-mini" data-focus="power" style="--tile-photo:url('manus-storage/mock-power-glam.jpg?v=glam1')">
+<article class="vision-tile vision-tile-mini" data-focus="power" style="--tile-photo:url('manus-storage/mock-power-lion.jpg?v=lion1')">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">power</h3>
 <div class="vision-tile-details">
@@ -18058,12 +18090,12 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <span class="nodes-edit-hint">click two nodes to link them · click a line to remove it</span>
 </div>
 <div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1">
-<div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:248px;height:288px;--ff-x:28px;--ff-y:28px;--zone-w:248px;--zone-h:288px;--zone-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">GLOW UP</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty glow-hero" data-user-added="1" data-theme="blush" style="--ff-x:16px;--ff-y:8px;--card-w:196px;--card-h:228px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-finances zone-collapsed" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-leverage zone-collapsed" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power-glam.jpg?v=glam1')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-presence zone-collapsed" data-zone="presence" style="left:836px;top:210px;width:340px;height:320px;--ff-x:836px;--ff-y:210px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v15.jpg?v=observe')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:248px;height:288px;--ff-x:28px;--ff-y:28px;--zone-w:248px;--zone-h:288px;--zone-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">glow up</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty glow-hero" data-user-added="1" data-theme="blush" style="--ff-x:16px;--ff-y:8px;--card-w:196px;--card-h:228px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">lifestyle</p></div><div class="pursuit-zone-grid" data-zone="life"></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-finances zone-collapsed" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">finances</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-leverage zone-collapsed" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power-lion.jpg?v=lion1')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">power</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">ambition</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-presence zone-collapsed" data-zone="presence" style="left:836px;top:210px;width:340px;height:320px;--ff-x:836px;--ff-y:210px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v15.jpg?v=observe')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">quantum</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="zone-oneoff canvas-oneoff" data-i="mom" style="--ff-x:620px;--ff-y:392px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-persons_be56f167.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">text mom back</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div>
 
 </div>
@@ -18268,7 +18300,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero vision-hero-solo">
+<div class="vision-hero vision-hero-duo">
 <article class="vision-tile vision-tile-house" data-focus="grad" style="--tile-photo:url('manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial')">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">grad school</h3>
@@ -27754,7 +27786,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       var nl=name.toLowerCase();
       if(nl==='ambition') src='manus-storage/zone-ambition-v4.jpg';
       else if(nl==='finances') src='manus-storage/zone-finances-v2.jpg?v=2';
-      else if(nl==='power') src='manus-storage/mock-power-glam.jpg?v=glam1';
+      else if(nl==='power') src='manus-storage/mock-power-lion.jpg?v=lion1';
     }
     var sec=document.createElement('div');
     sec.className='j22-section card sec-card is-empty';
@@ -27766,17 +27798,18 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['GLOW UP','LIFESTYLE','FINANCES','POWER','AMBITION','QUANTUM'];
+  var CANONICAL_SECTIONS=['glow up','lifestyle','finances','power','ambition','quantum','pursuits'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
-  var SECTION_BY_ZONE={body:'GLOW UP', life:'LIFESTYLE', finances:'FINANCES', leverage:'POWER', ambition:'AMBITION', presence:'QUANTUM'};
+  var SECTION_BY_ZONE={body:'glow up', life:'lifestyle', finances:'finances', leverage:'power', ambition:'ambition', presence:'quantum'};
   var SEEDED_CARDS={
-    'GLOW UP':['body','adderall'],
-    'LIFESTYLE':['curated lifestyle','persons','Text Mom','social media','vibes','postal','traveler','returns','pickups'],
-    'FINANCES':['capital blueprint'],
-    'POWER':['litigation wins','leverage','workflow'],
-    'AMBITION':['momentum','UX Design','Frequency','Elevate'],
-    'QUANTUM':[]
+    'glow up':['body','adderall'],
+    'lifestyle':['curated lifestyle','persons','Text Mom','social media','vibes','postal','traveler','returns','pickups'],
+    'finances':['capital blueprint'],
+    'power':['litigation wins','leverage','workflow'],
+    'ambition':['momentum','UX Design','Frequency','Elevate'],
+    'quantum':[],
+    'pursuits':[]
   };
   var CARD_SECTION={};
   CANONICAL_SECTIONS.forEach(function(s){
@@ -27794,7 +27827,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     var k=String(name||'').trim().toLowerCase();
     if(CARD_SECTION[k]) return CARD_SECTION[k];
     var id = (window.__zoneForPursuit && window.__zoneForPursuit(name)) || 'life';
-    return SECTION_BY_ZONE[id] || 'LIFESTYLE';
+    return SECTION_BY_ZONE[id] || 'lifestyle';
   }
   function collectSectionPresets(grid){
     var have=existing(grid);
@@ -29287,25 +29320,29 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 <style id="jul-rail-styles">
 .jul-rail-fixed {
   position: fixed;
-  right: -44px;
+  left: -44px;
+  right: auto;
   top: 50%;
   transform: translateY(-50%);
   z-index: 900;
-  transition: right 0.3s cubic-bezier(0.23,1,0.32,1), opacity 0.3s ease;
+  transition: left 0.3s cubic-bezier(0.23,1,0.32,1), opacity 0.3s ease;
   opacity: 0.6;
 }
 #julRail:hover {
-  right: 10px;
+  left: 10px;
+  right: auto;
   opacity: 1;
 }
 #julRail.rail-peeking {
-  right: -30px;
+  left: -30px;
+  right: auto;
   opacity: 0.4;
 }
 .jul-rail-trigger {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
+  right: auto;
   bottom: 0;
   width: 60px;
   pointer-events: auto;
@@ -29617,14 +29654,16 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 (function(){
   var rail = document.getElementById('julRail');
   if (!rail) return;
-  // Show rail when mouse is within 80px of right edge
+  // Show rail when mouse is within 80px of left edge
   document.addEventListener('mousemove', function(e) {
-    var fromRight = window.innerWidth - e.clientX;
-    if (fromRight < 80) {
-      rail.style.right = '10px';
+    var fromLeft = e.clientX;
+    if (fromLeft < 80) {
+      rail.style.left = '10px';
+      rail.style.right = 'auto';
       rail.style.opacity = '1';
-    } else if (fromRight > 200) {
-      rail.style.right = '-44px';
+    } else if (fromLeft > 200) {
+      rail.style.left = '-44px';
+      rail.style.right = 'auto';
       rail.style.opacity = '0.4';
     }
   }, { passive: true });
@@ -39688,11 +39727,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var host = heroHost(blk);
     if(!host) return;
     var n = host.querySelectorAll(':scope > .vision-tile').length;
-    host.classList.remove('vision-hero-solo', 'vision-hero-duo', 'vision-hero-trio');
+    host.classList.remove('vision-hero-solo', 'vision-hero-duo', 'vision-hero-trio', 'vision-hero-quad', 'vision-hero-many');
     if(n === 1) host.classList.add('vision-hero-solo');
     else if(n === 2) host.classList.add('vision-hero-duo');
     else if(n === 3) host.classList.add('vision-hero-trio');
-    // 4+ keeps the full collage grid (no count class)
+    else if(n === 4) host.classList.add('vision-hero-quad');
+    else if(n >= 5) host.classList.add('vision-hero-many');
     var vb = host.closest('.vision-board');
     if(vb){
       vb.classList.toggle('vision-board-sparse', n > 0 && n < 4);
@@ -39741,7 +39781,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, power:1,
-      ambition:1, quantum:1, gym:1, house:1, 'grad school':1
+      ambition:1, quantum:1, gym:1, house:1, 'grad school':1, pursuits:1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -39751,13 +39791,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     function push(raw){
       var name = String(raw || '').replace(/\s+/g, ' ').trim();
       if(!name || looksLikeTask(name)) return;
-      name = name.toUpperCase();
-      var low = name.toLowerCase();
+      name = name.toLowerCase();
+      var low = name;
       if(already[low] || seen[low]) return;
       seen[low] = 1;
       out.push(name);
     }
-    ['GLOW UP','LIFESTYLE','FINANCES','POWER','AMBITION','QUANTUM','GYM','HOUSE','GRAD SCHOOL','CURATED LIFESTYLE'].forEach(push);
+    ['glow up','lifestyle','finances','power','ambition','quantum','gym','house','grad school','curated lifestyle','pursuits'].forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
       var t = String(el.textContent || '').replace(/\s+/g, ' ').trim();
       if(KNOWN[t.toLowerCase()]) push(t);
@@ -39775,20 +39815,28 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function cardPresets(blk, tile){
     var already = existingCardNames(tile);
     var seen = {}, out = [];
+    var SECTION_NAMES = {
+      'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, power:1,
+      ambition:1, quantum:1, gym:1, house:1, 'grad school':1, body:1, pursuits:1
+    };
+    // Curated seeds — reviewable card names (not every task on the board).
+    var CARD_SEED = [
+      'vanity', 'elevate', 'top applicant', 'committee check-in',
+      'reformer pilates', 'text Dr Betty', 'module work',
+      'capital blueprint', 'momentum', 'leverage', 'litigation wins'
+    ];
     function push(raw){
       var name = String(raw || '').replace(/\s+/g, ' ').trim();
       if(!name) return;
       var low = name.toLowerCase();
-      if(already[low] || seen[low]) return;
+      if(already[low] || seen[low] || SECTION_NAMES[low]) return;
+      if(name.length > 48) return;
       seen[low] = 1;
       out.push(name);
     }
-    if(window.__overviewTasksForDay) window.__overviewTasksForDay(blk).forEach(push);
+    CARD_SEED.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-polaroid > span, .day-block.overview-era-day .vision-polaroid > span').forEach(function(el){
       push(el.textContent);
-    });
-    document.querySelectorAll('.day-block .sec-card .j22-group, .day-block .zone-oneoff-t').forEach(function(el){
-      push(el.getAttribute && el.getAttribute('data-newhdr') || el.textContent);
     });
     return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
   }
@@ -39975,8 +40023,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Re-bind any section tile to its hardwired photo by name.
     var photoDirty = false;
     [].slice.call(vb.querySelectorAll('.vision-tile')).forEach(function(tile){
-      var title = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim();
+      var titleEl = tile.querySelector('.vision-tile-title');
+      var title = ((titleEl&&titleEl.textContent)||'').replace(/\s+/g,' ').trim();
       if(!title) return;
+      // Section names stay lowercase (undo prior UPPERCASE normalize).
+      var low = title.toLowerCase();
+      if(titleEl && title !== low){
+        titleEl.textContent = low;
+        title = low;
+        photoDirty = true;
+      }
       var want = hardwiredSectionPhoto(blk, title);
       if(!want) return;
       var cur = cssUrlSrc(tile.style.getPropertyValue('--tile-photo')||'');
@@ -39987,6 +40043,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       (data.addedSections||[]).forEach(function(rec){
         if(!rec) return;
         if((rec.focus||slug(rec.title)) === tileFocus(tile) || String(rec.title||'').toLowerCase() === title.toLowerCase()){
+          rec.title = low;
           rec.photo = want;
         }
       });
@@ -40037,6 +40094,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     (data.addedSections || []).forEach(function(rec){
       if(!rec || !rec.title) return;
+      rec.title = String(rec.title).replace(/\s+/g,' ').trim().toLowerCase();
       var want = hardwiredSectionPhoto(blk, rec.title);
       if(want) rec.photo = want;
       if(vb.querySelector('.vision-tile[data-focus="'+(rec.focus||slug(rec.title))+'"]')) return;
@@ -40086,7 +40144,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     persistDay(blk);
   }
   function addTile(blk, title){
-    title = String(title||'').replace(/\s+/g,' ').trim().toUpperCase();
+    title = String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
     if(!title || !blkOk(blk)) return;
     var host = heroHost(blk);
     if(!host) return;
@@ -40119,11 +40177,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     ensurePolaroidChrome(det.lastElementChild);
     persistDay(blk);
   }
-  function closePicker(box){ if(box && box.parentNode) box.parentNode.removeChild(box); }
+  function closePicker(box){
+    if(!box) return;
+    var modal = box.classList && box.classList.contains('overview-card-modal')
+      ? box
+      : (box.closest && box.closest('.overview-card-modal'));
+    var kill = modal || box;
+    if(kill.parentNode) kill.parentNode.removeChild(kill);
+  }
   function openSectionPicker(btn){
     var blk = btn.closest('.day-block');
     if(!blkOk(blk)) return;
-    document.querySelectorAll('.overview-add-picker').forEach(function(p){ closePicker(p); });
+    document.querySelectorAll('.overview-add-picker, .overview-card-modal').forEach(function(p){ closePicker(p); });
     var row = btn.closest('.tv-toggle-row') || btn.closest('.day-card');
     var box = document.createElement('div');
     box.className = 'zone-add-picker overview-add-picker';
@@ -40142,18 +40207,47 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var tile = btn.closest('.vision-tile');
     if(!tile) return;
     var blk = tile.closest('.day-block');
-    document.querySelectorAll('.overview-card-picker').forEach(function(p){ closePicker(p); });
+    var vb = tile.closest('.vision-board');
+    if(!vb) return;
+    document.querySelectorAll('.overview-card-modal, .overview-card-picker').forEach(function(p){ closePicker(p); });
+    var modal = document.createElement('div');
+    modal.className = 'overview-card-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-label', 'add a card');
     var box = document.createElement('div');
     box.className = 'zone-add-picker overview-card-picker';
-    tile.appendChild(box);
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'overview-card-picker-close';
+    closeBtn.setAttribute('aria-label', 'close');
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      closePicker(modal);
+    });
+    box.appendChild(closeBtn);
+    var head = document.createElement('p');
+    head.className = 'overview-card-picker-title';
+    head.textContent = 'add a card';
+    box.appendChild(head);
+    modal.appendChild(box);
+    vb.appendChild(modal);
     var picks = cardPresets(blk, tile);
-    appendPresetPicker(box, picks.length ? 'cards & tasks from overview / other days' : 'no presets yet — type a name', picks, function(name){
+    appendPresetPicker(box, picks.length ? 'choose a preset' : 'no presets yet — type a name', picks, function(name){
       addCard(tile, name);
-      closePicker(box);
+      closePicker(modal);
     });
     appendCustomRow(box, 'custom card name', function(name){
       addCard(tile, name);
-      closePicker(box);
+      closePicker(modal);
+    });
+    modal.addEventListener('click', function(ev){
+      if(ev.target === modal){
+        ev.preventDefault();
+        ev.stopPropagation();
+        closePicker(modal);
+      }
     });
   }
   document.addEventListener('click', function(e){
@@ -40181,12 +40275,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       deletePolaroid(e.target.closest('.vision-card-del').closest('.vision-polaroid'));
       return;
     }
-    if(!e.target.closest('.overview-add-picker, .overview-card-picker')){
-      document.querySelectorAll('.overview-add-picker, .overview-card-picker').forEach(closePicker);
+    if(!e.target.closest('.overview-add-picker, .overview-card-modal, .overview-card-picker')){
+      document.querySelectorAll('.overview-add-picker, .overview-card-modal').forEach(closePicker);
     }
   }, true);
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('.overview-card-modal, .overview-add-picker').forEach(closePicker);
+  }, true);
   document.addEventListener('pointerdown', function(e){
-    if(e.target.closest('.overview-add-section, .overview-add-picker, .overview-card-picker, .vision-tile-del, .vision-card-del, .vision-add-card, .plus-name-input, .plus-picker-go')) {
+    if(e.target.closest('.overview-add-section, .overview-add-picker, .overview-card-modal, .overview-card-picker, .vision-tile-del, .vision-card-del, .vision-add-card, .plus-name-input, .plus-picker-go')) {
       e.stopPropagation();
     }
   }, true);
@@ -40225,9 +40323,17 @@ html body .day-block.overview-era-day .overview-toggle-row .today-view-toggle {
   grid-column: 2 !important;
   justify-self: center !important;
   margin: 0 !important;
-  width: fit-content !important;
-  min-width: min(280px, 90%) !important;
+  /* Fixed 280px — same as Aug 27 vision-collage toggles.
+     Do NOT use min(280px, 90%): inside grid `auto` the % collapses to content width. */
+  width: 280px !important;
+  min-width: 280px !important;
   max-width: min(560px, 96%) !important;
+}
+html body .day-block.overview-era-day .overview-toggle-row .tv-pill {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  padding: 8px 10px !important;
 }
 html body .day-block.overview-era-day.view-overview .overview-add-section {
   grid-column: 3 !important;
@@ -40328,13 +40434,100 @@ html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zo
   background: rgba(255,255,255,0.32) !important;
   opacity: 1 !important;
 }
+/* Zoom + card picker: fixed popup over the zoomed full view */
+html body .day-block.overview-era-day .overview-card-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1200 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+  background: rgba(10, 6, 4, 0.42) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  pointer-events: auto !important;
+}
+html body .day-block.overview-era-day .overview-card-modal .overview-card-picker,
 html body .day-block.overview-era-day .overview-card-picker {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  z-index: 41 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  width: min(360px, 92%) !important;
+  max-width: 380px !important;
+  max-height: min(72vh, 520px) !important;
+  margin: 0 !important;
+  padding: 18px 16px 16px !important;
+  overflow: auto !important;
+  background: rgba(250, 246, 238, 0.97) !important;
+  border: 1px solid rgba(255, 248, 238, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 18px 48px rgba(8, 4, 2, 0.35) !important;
+}
+html body .day-block.overview-era-day .overview-card-picker-title {
+  margin: 0 28px 2px 0 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+  color: #2c281f !important;
+  text-transform: none !important;
+}
+html body .day-block.overview-era-day .overview-card-picker-close {
   position: absolute !important;
-  left: 50% !important;
-  bottom: 18px !important;
-  transform: translateX(-50%) !important;
-  z-index: 20 !important;
-  min-width: 220px !important;
+  top: 10px !important;
+  right: 10px !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: rgba(44, 40, 31, 0.72) !important;
+  font-size: 18px !important;
+  line-height: 28px !important;
+  cursor: pointer !important;
+}
+html body .day-block.overview-era-day .overview-card-picker-close:hover {
+  background: rgba(44, 40, 31, 0.08) !important;
+  color: #2c281f !important;
+}
+html body .day-block.overview-era-day .overview-card-modal .plus-picker-label {
+  text-transform: none !important;
+  letter-spacing: 0.04em !important;
+  color: rgba(65, 55, 58, 0.62) !important;
+}
+html body .day-block.overview-era-day .overview-card-modal .plus-picker-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin: 0 0 4px !important;
+}
+html body .day-block.overview-era-day .overview-card-modal .plus-picker-opt {
+  background: rgba(44, 40, 31, 0.06) !important;
+  border: 1px solid rgba(110, 100, 86, 0.18) !important;
+  border-radius: 999px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+html body .day-block.overview-era-day .overview-card-modal .plus-picker-opt:hover {
+  background: rgba(44, 40, 31, 0.12) !important;
 }
 html body .day-block.overview-era-day .tv-panel.tv-nodes .zone-del,
 html body .day-block.overview-era-day .tv-panel.tv-nodes .sec-card > .card-del {
@@ -40378,16 +40571,13 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-b
   height: min(80vh, 800px);
   box-sizing: border-box;
 }
-/* Overview-era: board hugs tiles — no giant empty collage stage for 1–3 sections */
+/* Overview-era: keep full collage stage (same presence as Aug 26) */
 html body .day-block.overview-era-day .vision-board,
-html body .day-block.overview-era-day .vision-board.vision-board-sparse {
-  min-height: 0 !important;
-  height: auto !important;
-  max-height: none !important;
-}
+html body .day-block.overview-era-day .vision-board.vision-board-sparse,
 html body .day-block.overview-era-day .vision-board.vision-board-filled {
-  min-height: min(68vh, 680px) !important;
-  height: auto !important;
+  min-height: 680px !important;
+  height: min(80vh, 800px) !important;
+  max-height: none !important;
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
   display: grid;
@@ -40397,66 +40587,106 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-h
   flex: 1 1 auto;
   min-height: 0;
 }
+/* Overview-era collage packing — NEVER equal rows/columns.
+   Same asymmetric composition as Aug 26: tall left, wide top, varied bottom. */
 html body .day-block.overview-era-day .vision-hero {
-  flex: 0 0 auto !important;
-  height: auto !important;
+  display: grid !important;
+  grid-template-columns: 1.35fr 1fr 1fr !important;
+  grid-template-rows: minmax(250px, 1.15fr) minmax(210px, 1fr) !important;
+  gap: 12px !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
   min-height: 0 !important;
-  align-content: start !important;
+  align-content: stretch !important;
 }
-html body .day-block.overview-era-day .vision-hero-solo {
-  grid-template-columns: minmax(280px, min(720px, 100%)) !important;
-  grid-template-rows: minmax(260px, 42vh) !important;
-  width: 100% !important;
-  max-width: min(720px, 100%) !important;
-}
-html body .day-block.overview-era-day .vision-hero-solo > .vision-tile {
-  grid-column: 1 !important;
-  grid-row: 1 !important;
-  min-height: 260px !important;
-}
-html body .day-block.overview-era-day .vision-hero-duo {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  grid-template-rows: minmax(260px, 40vh) !important;
-  width: 100% !important;
+html body .day-block.overview-era-day .vision-hero-solo > .vision-tile:nth-child(1) {
+  grid-column: 1 / 3 !important;
+  grid-row: 1 / 3 !important;
 }
 html body .day-block.overview-era-day .vision-hero-duo > .vision-tile:nth-child(1) {
   grid-column: 1 !important;
-  grid-row: 1 !important;
+  grid-row: 1 / 3 !important;
 }
 html body .day-block.overview-era-day .vision-hero-duo > .vision-tile:nth-child(2) {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-}
-html body .day-block.overview-era-day .vision-hero-trio {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  grid-template-rows: minmax(240px, 38vh) !important;
-  width: 100% !important;
+  grid-column: 2 / 4 !important;
+  grid-row: 1 / 3 !important;
 }
 html body .day-block.overview-era-day .vision-hero-trio > .vision-tile:nth-child(1) {
   grid-column: 1 !important;
-  grid-row: 1 !important;
+  grid-row: 1 / 3 !important;
 }
 html body .day-block.overview-era-day .vision-hero-trio > .vision-tile:nth-child(2) {
-  grid-column: 2 !important;
+  grid-column: 2 / 4 !important;
   grid-row: 1 !important;
 }
 html body .day-block.overview-era-day .vision-hero-trio > .vision-tile:nth-child(3) {
-  grid-column: 3 !important;
+  grid-column: 2 / 4 !important;
+  grid-row: 2 !important;
+}
+html body .day-block.overview-era-day .vision-hero-quad > .vision-tile:nth-child(1) {
+  grid-column: 1 !important;
+  grid-row: 1 / 3 !important;
+}
+html body .day-block.overview-era-day .vision-hero-quad > .vision-tile:nth-child(2) {
+  grid-column: 2 / 4 !important;
   grid-row: 1 !important;
 }
+html body .day-block.overview-era-day .vision-hero-quad > .vision-tile:nth-child(3) {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+}
+html body .day-block.overview-era-day .vision-hero-quad > .vision-tile:nth-child(4) {
+  grid-column: 3 !important;
+  grid-row: 2 !important;
+}
+/* 5+: keep collage top band, add a third row for the rest */
+html body .day-block.overview-era-day .vision-hero-many {
+  grid-template-columns: 1.35fr 1fr 1fr 1fr !important;
+  grid-template-rows: minmax(220px, 1.1fr) minmax(180px, 0.9fr) minmax(160px, 0.85fr) !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(1) {
+  grid-column: 1 !important;
+  grid-row: 1 / 3 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(2) {
+  grid-column: 2 / 5 !important;
+  grid-row: 1 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(3) {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(4) {
+  grid-column: 3 !important;
+  grid-row: 2 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(5) {
+  grid-column: 4 !important;
+  grid-row: 2 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(6) {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(7) {
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+}
+html body .day-block.overview-era-day .vision-hero-many > .vision-tile:nth-child(8) {
+  grid-column: 3 / 5 !important;
+  grid-row: 3 !important;
+}
 @media (max-width: 820px) {
-  html body .day-block.overview-era-day .vision-hero-solo {
-    grid-template-rows: minmax(220px, 36vh) !important;
-    max-width: 100% !important;
-  }
-  html body .day-block.overview-era-day .vision-hero-duo,
-  html body .day-block.overview-era-day .vision-hero-trio {
+  html body .day-block.overview-era-day .vision-hero,
+  html body .day-block.overview-era-day .vision-hero-many {
     grid-template-columns: 1fr !important;
     grid-template-rows: none !important;
-    grid-auto-rows: minmax(200px, 32vh) !important;
+    grid-auto-rows: minmax(200px, 28vh) !important;
   }
-  html body .day-block.overview-era-day .vision-hero-duo > .vision-tile,
-  html body .day-block.overview-era-day .vision-hero-trio > .vision-tile {
+  html body .day-block.overview-era-day .vision-hero > .vision-tile,
+  html body .day-block.overview-era-day .vision-hero-many > .vision-tile {
     grid-column: 1 !important;
     grid-row: auto !important;
   }
@@ -40821,7 +41051,7 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     document.body.appendChild(box);
   }
   document.addEventListener('click', function(e){
-    if (e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .overview-add-section, .overview-add-picker, .overview-card-picker')) return;
+    if (e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .overview-add-section, .overview-add-picker, .overview-card-picker, .overview-card-modal')) return;
     var out = e.target.closest('.vision-zoom-out');
     var tile = e.target.closest('.vision-tile');
     var vb = boardEl(e.target);
