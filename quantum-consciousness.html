@@ -11,17 +11,20 @@
   .page-bg {
     background-color: #040208;
     background-image: url("manus-storage/quantum-how-you-look.jpg?v=field-clean1");
-    background-position: calc(50% + 56px) top;
+    background-position: center top;
     background-repeat: no-repeat;
     background-size: cover;
   }
-  /* constellation lettering — sits in the SAVED HERE band above the field */
+  /* constellation lettering — wider than the 640px panel; center on the viewport */
   .constellation-phrase {
     display: block;
-    width: min(920px, 96vw);
+    width: min(920px, 92vw);
+    max-width: none;
     height: auto;
-    margin: 10px auto 0;
-    transform: translateX(-28px);
+    margin: 10px 0 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     pointer-events: none;
     user-select: none;
     opacity: 0.96;
