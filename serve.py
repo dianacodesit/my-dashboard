@@ -120,6 +120,120 @@ def bake_to_github(data: dict) -> dict:
         }
 
 
+def replace_vision_hero_inner(html: str, date: str, new_inner: str) -> str:
+    """Replace children of .vision-hero inside a dated day-block."""
+    date = str(date or "").strip()
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        raise ValueError(f"invalid overview date: {date}")
+
+    marker = f'data-date="{date}"'
+    block_i = html.find(marker)
+    if block_i < 0:
+        raise ValueError(f"day block {date} not found in everything.html")
+
+    vh_i = html.find("vision-hero", block_i)
+    if vh_i < 0:
+        raise ValueError(f"vision-hero for {date} not found")
+
+    open_end = html.find(">", vh_i)
+    if open_end < 0:
+        raise ValueError(f"vision-hero tag for {date} is malformed")
+
+    pos = open_end + 1
+    depth = 1
+    start_inner = pos
+    end_inner = -1
+    while pos < len(html):
+        next_open = html.find("<div", pos)
+        next_close = html.find("</div>", pos)
+        if next_close < 0:
+            raise ValueError(f"unclosed vision-hero for {date}")
+        if next_open >= 0 and next_open < next_close:
+            depth += 1
+            pos = next_open + 4
+            continue
+        depth -= 1
+        if depth == 0:
+            end_inner = next_close
+            break
+        pos = next_close + 6
+
+    if end_inner < 0:
+        raise ValueError(f"could not parse vision-hero for {date}")
+
+    inner = str(new_inner or "")
+    if inner and not inner.endswith("\n"):
+        inner += "\n"
+    return html[:start_inner] + inner + html[end_inner:]
+
+
+def save_overview_hero(date: str, hero_html: str) -> dict:
+    """Write vision-collage hero HTML for a day into everything.html; commit when possible."""
+    html = DASHBOARD.read_text(encoding="utf-8")
+    new_html = replace_vision_hero_inner(html, date, hero_html)
+    DASHBOARD.write_text(new_html, encoding="utf-8")
+
+    with GIT_LOCK:
+        status = _git("status", "--porcelain")
+        if status.returncode != 0:
+            return {
+                "ok": True,
+                "committed": False,
+                "pushed": False,
+                "date": date,
+                "warning": status.stderr.strip() or "git status failed",
+            }
+        if not status.stdout.strip():
+            return {"ok": True, "committed": False, "pushed": False, "date": date, "message": "already up to date"}
+
+        add = _git("add", "everything.html")
+        if add.returncode != 0:
+            return {
+                "ok": True,
+                "committed": False,
+                "pushed": False,
+                "date": date,
+                "warning": add.stderr.strip() or "git add failed",
+            }
+
+        stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        msg = f"Save overview collage for {date} ({stamp})."
+        commit = _git("commit", "-m", msg)
+        if commit.returncode != 0:
+            return {
+                "ok": True,
+                "committed": False,
+                "pushed": False,
+                "date": date,
+                "warning": commit.stderr.strip() or commit.stdout.strip() or "git commit failed",
+            }
+
+        branch = _git("rev-parse", "--abbrev-ref", "HEAD")
+        branch_name = (branch.stdout or "main").strip()
+        push = _git("push", "-u", "origin", branch_name)
+        if push.returncode != 0:
+            sha = _git("rev-parse", "--short", "HEAD")
+            return {
+                "ok": True,
+                "committed": True,
+                "pushed": False,
+                "date": date,
+                "branch": branch_name,
+                "sha": (sha.stdout or "").strip(),
+                "warning": push.stderr.strip() or push.stdout.strip() or "git push failed",
+            }
+
+        sha = _git("rev-parse", "--short", "HEAD")
+        return {
+            "ok": True,
+            "committed": True,
+            "pushed": True,
+            "date": date,
+            "branch": branch_name,
+            "sha": (sha.stdout or "").strip(),
+        }
+
+
 def save_brain_dump(entries) -> dict:
     """Write brain-dump entries into brain-dump.html. Does not git commit."""
     if not isinstance(entries, list):
@@ -192,6 +306,12 @@ class Handler(SimpleHTTPRequestHandler):
                 entries = body.get("entries") if isinstance(body, dict) else None
                 result = save_brain_dump(entries)
                 return self._json(200, result)
+            if path == "/save-overview":
+                body = self._read_json()
+                date = body.get("date") if isinstance(body, dict) else None
+                hero_html = body.get("html") if isinstance(body, dict) else None
+                result = save_overview_hero(str(date or ""), str(hero_html or ""))
+                return self._json(200, result)
             if path in ("/save", "/move-cards"):
                 # Acknowledge UI autosave hooks; durable path is /bake.
                 length = int(self.headers.get("Content-Length") or "0")
@@ -218,6 +338,7 @@ def main():
     print(f"dashboard server on http://127.0.0.1:{PORT}/", flush=True)
     print("POST /bake to persist localStorage into GitHub", flush=True)
     print("POST /brain-dump to write thoughts into brain-dump.html", flush=True)
+    print("POST /save-overview to write vision collage into everything.html", flush=True)
     httpd.serve_forever()
 
 

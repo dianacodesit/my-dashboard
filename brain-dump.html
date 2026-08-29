@@ -12,6 +12,18 @@
     --paper: #FAF6EE;
     --ink: #1c140e;
     --muted: #6f5f54;
+    --frost-panel: linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.26) 0%,
+      rgba(255, 252, 248, 0.12) 52%,
+      rgba(255, 248, 240, 0.06) 100%
+    );
+    --frost-blur: blur(48px) saturate(1.7);
+    --frost-border: 1px solid rgba(255, 255, 255, 0.62);
+    --frost-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.14),
+      0 16px 36px rgba(40, 28, 16, 0.07);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { min-height: 100%; }
@@ -30,9 +42,9 @@
     inset: 0;
     z-index: 0;
     background:
-      linear-gradient(180deg, rgba(245,240,232,0.22) 0%, rgba(250,246,238,0.06) 40%, rgba(245,240,232,0.26) 100%),
-      url('manus-storage/brain-dump-bg-linen.jpg?v=linen') center/cover no-repeat;
-    filter: saturate(0.94) brightness(1.04);
+      linear-gradient(180deg, rgba(245,240,232,0.42) 0%, rgba(250,246,238,0.18) 38%, rgba(245,240,232,0.48) 100%),
+      url('manus-storage/brain-dump-bg-mind.jpg?v=mind1') center/cover no-repeat;
+    filter: saturate(0.92) brightness(1.06);
   }
   .page-shell {
     position: relative;
@@ -113,53 +125,98 @@
     z-index: 2;
     flex: none;
     overflow: visible;
-    background: rgba(250, 246, 238, 0.94);
-    border: 1px solid rgba(42, 34, 28, 0.18);
-    border-radius: 18px;
-    padding: 0 0 8px;
-    box-shadow: 0 10px 24px rgba(28, 20, 14, 0.08);
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     transform: rotate(var(--rot, 0deg));
     transform-origin: 50% 12%;
     cursor: grab;
     touch-action: none;
   }
-  .dump-board .cluster.has-fixed-h {
+  /* Neighbors ease aside when one section pushes them */
+  .dump-board.is-live .cluster:not(.is-dragging-cluster):not(.is-resizing) {
+    transition: left 0.2s ease, top 0.2s ease;
+  }
+  .dump-board .cluster-surface {
+    position: relative;
+    height: 100%;
+    min-height: inherit;
+    background: var(--frost-panel);
+    backdrop-filter: var(--frost-blur);
+    -webkit-backdrop-filter: var(--frost-blur);
+    border: var(--frost-border);
+    border-radius: 22px;
+    padding: 0 0 10px;
+    box-shadow: var(--frost-shadow);
+    overflow: hidden;
+  }
+  .dump-board .cluster.has-fixed-h .cluster-surface {
+    height: 100%;
     overflow: hidden;
   }
   .dump-board .cluster.is-dragging-cluster,
   .dump-board .cluster.is-resizing {
     cursor: grabbing;
     z-index: 40;
-    box-shadow: 0 16px 36px rgba(28, 20, 14, 0.16);
+  }
+  .dump-board .cluster.is-dragging-cluster .cluster-surface,
+  .dump-board .cluster.is-resizing .cluster-surface {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.86) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.34),
+      0 26px 54px rgba(40, 28, 16, 0.22);
   }
   .dump-board .cluster-title {
     display: block;
     width: 100%;
     margin: 0;
-    padding: 12px 16px 11px;
-    background: #2a221c;
+    padding: 16px 18px 12px;
+    background: transparent;
     border: 0;
     border-radius: 0;
     box-shadow: none;
-    font-size: 13px;
-    letter-spacing: 0.16em;
+    font-family: 'Newsreader', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
     text-align: left;
+    color: #3a2e26;
+    text-shadow: 0 1px 0 rgba(255, 252, 246, 0.55);
     cursor: grab;
+    position: relative;
+  }
+  .dump-board .cluster-title::after {
+    content: "";
+    display: block;
+    margin-top: 10px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(180, 140, 90, 0.5) 0%,
+      rgba(180, 140, 90, 0.28) 55%,
+      transparent 100%
+    );
   }
   .dump-board .cluster-notes {
     display: grid;
     grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr));
     grid-template-rows: repeat(var(--rows, auto), auto);
     grid-auto-flow: column;
-    gap: 0 28px;
-    padding: 6px 16px 14px;
+    gap: 0 24px;
+    padding: 4px 18px 14px;
     justify-content: stretch;
     align-items: start;
     max-height: none;
     overflow: visible;
   }
   .dump-board .cluster.has-fixed-h .cluster-notes {
-    max-height: calc(var(--ch) - 52px);
+    max-height: calc(var(--ch) - 64px);
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -195,29 +252,33 @@
     }
     .dump-board .cluster-notes { grid-template-columns: 1fr; }
   }
-  .cluster.is-empty { opacity: 0.78; }
+  .cluster.is-empty { opacity: 0.9; }
   .cluster.is-empty .cluster-notes {
     min-height: 64px;
-    margin: 8px 12px 10px;
-    border: 1px dashed rgba(42, 34, 28, 0.22);
-    border-radius: 12px;
-    background: rgba(245, 240, 232, 0.55);
+    margin: 4px 14px 10px;
+    border: 1px dashed rgba(140, 110, 80, 0.28);
+    border-radius: 14px;
+    background: rgba(255, 252, 248, 0.22);
   }
-  .cluster.is-drop-target {
-    outline: 2px solid #2a221c;
-    outline-offset: 2px;
+  .cluster.is-drop-target .cluster-surface {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.88) inset,
+      0 0 0 1.5px rgba(120, 90, 55, 0.42),
+      0 20px 44px rgba(40, 28, 16, 0.22),
+      0 0 26px rgba(196, 160, 110, 0.22);
   }
   .cluster.is-drop-target .cluster-notes {
     outline: none;
-    background: rgba(245, 240, 232, 0.7);
+    background: rgba(255, 248, 236, 0.4);
   }
   .cluster-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'Newsreader', Georgia, serif;
+    font-style: italic;
     font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #f7efe4;
-    text-shadow: none;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: #3a2e26;
+    text-shadow: 0 1px 0 rgba(255, 252, 246, 0.45);
   }
   .cluster-notes {
     display: flex;
@@ -322,11 +383,13 @@
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    background: rgba(250,246,238,0.96);
-    border: 1px solid rgba(196,168,130,0.45);
+    background: var(--frost-panel);
+    backdrop-filter: var(--frost-blur);
+    -webkit-backdrop-filter: var(--frost-blur);
+    border: var(--frost-border);
     border-radius: 22px;
     padding: 8px 8px 8px 18px;
-    box-shadow: 0 18px 40px rgba(12,8,4,0.35);
+    box-shadow: var(--frost-shadow);
   }
   #dump-input {
     flex: 1;
@@ -367,12 +430,14 @@
     gap: 16px;
     max-width: 1280px;
     margin: 52px auto 140px;
-    padding: 20px 18px 22px;
+    padding: 22px 20px 24px;
     scroll-margin-bottom: 160px;
-    background: rgba(250, 246, 238, 0.94);
-    border: 1px solid rgba(42, 34, 28, 0.2);
-    border-radius: 22px;
-    box-shadow: 0 16px 36px rgba(28, 20, 14, 0.14);
+    background: var(--frost-panel);
+    backdrop-filter: var(--frost-blur);
+    -webkit-backdrop-filter: var(--frost-blur);
+    border: var(--frost-border);
+    border-radius: 24px;
+    box-shadow: var(--frost-shadow);
   }
   @media (max-width: 720px) {
     .dump-holding { grid-template-columns: 1fr; }
@@ -382,29 +447,45 @@
     flex: none;
     max-width: none;
     min-width: 0;
-    background: #faf6ee;
-    border: 1px solid rgba(42, 34, 28, 0.22);
-    border-radius: 16px;
+    background: var(--frost-panel);
+    backdrop-filter: var(--frost-blur);
+    -webkit-backdrop-filter: var(--frost-blur);
+    border: var(--frost-border);
+    border-radius: 18px;
     padding: 16px 16px 18px;
-    box-shadow: 0 8px 18px rgba(28, 20, 14, 0.08);
+    box-shadow: var(--frost-shadow);
   }
   .cluster.hold-lane .cluster-title {
     display: table;
     width: auto;
-    margin: 0 0 14px;
-    padding: 8px 16px 7px;
-    background: #2a221c;
-    border: 1px solid #1c140e;
-    border-radius: 999px;
-    box-shadow: 0 8px 20px rgba(28, 20, 14, 0.22);
-    font-family: 'Cinzel', serif;
-    font-size: 13px;
+    margin: 0 0 12px;
+    padding: 0 0 8px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.1rem;
     font-weight: 500;
-    font-style: normal;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #f7efe4;
-    text-align: center;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: #3a2e26;
+    text-align: left;
+    text-shadow: 0 1px 0 rgba(255, 252, 246, 0.5);
+    position: relative;
+  }
+  .cluster.hold-lane .cluster-title::after {
+    content: "";
+    display: block;
+    margin-top: 8px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(180, 140, 90, 0.45) 0%,
+      rgba(180, 140, 90, 0.2) 60%,
+      transparent 100%
+    );
   }
   .cluster.hold-lane .cluster-notes {
     display: flex;
@@ -417,9 +498,9 @@
   }
   .cluster.hold-lane.is-empty .cluster-notes {
     min-height: 112px;
-    border: 1px dashed rgba(42, 34, 28, 0.28);
-    border-radius: 12px;
-    background: rgba(245, 240, 232, 0.72);
+    border: 1px dashed rgba(140, 110, 80, 0.28);
+    border-radius: 14px;
+    background: rgba(255, 252, 246, 0.18);
   }
   .cluster.hold-lane .note {
     width: 100%;
@@ -443,9 +524,11 @@
     color: #3d322a;
   }
   .cluster.hold-lane.is-drop-target {
-    outline: 2px solid #2a221c;
-    outline-offset: 2px;
-    background: rgba(250, 246, 238, 0.7);
+    outline: none;
+    background: rgba(255, 248, 236, 0.72);
+    box-shadow:
+      0 0 0 1.5px rgba(120, 90, 55, 0.4),
+      0 10px 24px rgba(40, 28, 16, 0.12);
   }
   .cluster.hold-lane.is-drop-target .cluster-notes {
     outline: none;
@@ -674,7 +757,7 @@
   </div>
 </form>
 
-<script src="nav-shared.js?v=navtimelines1"></script>
+<script src="nav-shared.js?v=navdragfix1"></script>
 <script>
 (function(){
   var SECTION_META = [
@@ -904,8 +987,10 @@
       var cluster = document.createElement('section');
     cluster.className = 'cluster' + (hold ? ' hold-lane' : '') + (items.length ? '' : ' is-empty');
       cluster.setAttribute('data-section', sec.id);
-    cluster.innerHTML = '<h2 class="cluster-title">'+esc(sec.title)+'</h2><div class="cluster-notes"></div>' +
-      (hold ? '' : '<div class="cluster-resize" aria-label="resize section" title="drag to resize"></div>');
+    cluster.innerHTML = hold
+      ? '<h2 class="cluster-title">'+esc(sec.title)+'</h2><div class="cluster-notes"></div>'
+      : '<div class="cluster-surface"><h2 class="cluster-title">'+esc(sec.title)+'</h2><div class="cluster-notes"></div>' +
+        '<div class="cluster-resize" aria-label="resize section" title="drag to resize"></div></div>';
     var holdEl = cluster.querySelector('.cluster-notes');
     items.forEach(function(item){
       var note = document.createElement('article');
@@ -961,21 +1046,54 @@
     document.body.classList.remove('review-open');
   }
 
-  var POS_KEY = 'brain_dump_xy_v4';
-  function loadPos(){ try{ return JSON.parse(localStorage.getItem(POS_KEY)||'{}'); }catch(e){ return {}; } }
+  var POS_KEY = 'brain_dump_xy_v8';
+  function loadPos(){
+    try{
+      var o = JSON.parse(localStorage.getItem(POS_KEY)||'{}') || {};
+      var dirty = false;
+      Object.keys(o).forEach(function(k){
+        var rec = o[k];
+        if (!rec) return;
+        if (rec.y != null && (rec.y > 2400 || rec.y < 0 || !isFinite(rec.y))) {
+          delete o[k];
+          dirty = true;
+        }
+      });
+      // Tall / piled layouts hid sections — wipe and shelf-pack fresh.
+      var ys = Object.keys(o).map(function(k){ return o[k] && o[k].y; }).filter(function(y){ return y != null; });
+      if (ys.length >= 3) {
+        var deep = ys.filter(function(y){ return y >= 1100; }).length;
+        var maxY = Math.max.apply(null, ys);
+        if (deep >= 3 || maxY > 1600) {
+          o = {};
+          dirty = true;
+        }
+      }
+      if (dirty) savePos(o);
+      return o;
+    }catch(e){ return {}; }
+  }
   function savePos(o){ try{ localStorage.setItem(POS_KEY, JSON.stringify(o)); }catch(e){} }
+  try {
+    localStorage.removeItem('brain_dump_xy_v4');
+    localStorage.removeItem('brain_dump_xy_v5');
+    localStorage.removeItem('brain_dump_xy_v6');
+    localStorage.removeItem('brain_dump_xy_v7');
+  } catch (e) {}
   // Tight organic scatter — tilted, close neighbors (force-directed packing)
   var DEFAULT_SCATTER = {
-    body:      { x: 18,  y: 12,  w: 360, rot: -1.5 },
-    shopping:  { x: 390, y: 8,  w: 320, rot:  1.3 },
-    life:      { x: 720, y: 28,  w: 260, rot:  0.75 },
-    finances:  { x: 28,  y: 340, w: 290, rot:  1.2 },
-    ambition:  { x: 340, y: 360, w: 310, rot: -1.05 },
-    leverage:  { x: 670, y: 320, w: 250, rot: -0.65 },
-    presence:  { x: 930, y: 210, w: 210, rot:  0.9 },
-    inbox:     { x: 680, y: 560, w: 290, rot: -1.1 }
+    body:      { x: 18,  y: 12,  w: 360, rot: -0.8 },
+    shopping:  { x: 390, y: 8,  w: 320, rot:  0.7 },
+    life:      { x: 720, y: 28,  w: 260, rot:  0.45 },
+    finances:  { x: 28,  y: 340, w: 290, rot:  0.65 },
+    ambition:  { x: 300, y: 300, w: 480, rot: -0.55 },
+    leverage:  { x: 670, y: 320, w: 250, rot: -0.4 },
+    presence:  { x: 930, y: 210, w: 210, rot:  0.5 },
+    inbox:     { x: 680, y: 560, w: 290, rot: -0.55 }
   };
-  var FORCE_GAP = 16; // gap between on-screen (rotated) bounds
+  var FORCE_GAP = 28; // gap between logical section boxes
+  var MAX_PACK_Y = 2800;
+  var MAX_CLUSTER_H = 420;
   function placeCluster(c, x, y, w, rot, h){
     x = Math.max(0, Math.round(x));
     y = Math.max(0, Math.round(y));
@@ -992,28 +1110,33 @@
     }
   }
   function clusterState(c){
-    var br = board.getBoundingClientRect();
-    var r = c.getBoundingClientRect();
+    var dx = parseFloat(c.style.getPropertyValue('--dx')) || 0;
+    var dy = parseFloat(c.style.getPropertyValue('--dy')) || 0;
+    var cw = parseFloat(c.style.getPropertyValue('--cw')) || c.offsetWidth || 280;
+    var ch = c.classList.contains('has-fixed-h')
+      ? (parseFloat(c.style.getPropertyValue('--ch')) || c.offsetHeight || 120)
+      : Math.max(c.offsetHeight || 0, 88);
     return {
       el: c,
-      // Visual (rotated) box — this is what must not overlap
-      x: r.left - br.left,
-      y: r.top - br.top,
-      w: r.width,
-      h: r.height,
-      // Layout vars we actually write
-      dx: parseFloat(c.style.getPropertyValue('--dx')) || 0,
-      dy: parseFloat(c.style.getPropertyValue('--dy')) || 0,
+      x: dx,
+      y: dy,
+      w: cw,
+      h: ch,
+      dx: dx,
+      dy: dy,
       rot: parseFloat(c.style.getPropertyValue('--rot')) || 0,
-      cw: parseFloat(c.style.getPropertyValue('--cw')) || undefined,
-      ch: c.classList.contains('has-fixed-h') ? (parseFloat(c.style.getPropertyValue('--ch')) || undefined) : undefined
+      cw: cw,
+      ch: c.classList.contains('has-fixed-h') ? ch : undefined
     };
   }
   function growBoard(){
     var max = 640;
     Array.from(board.querySelectorAll('.cluster')).forEach(function(c){
       var y = parseFloat(c.style.getPropertyValue('--dy')) || 0;
-      max = Math.max(max, y + (c.offsetHeight || 180) + 56);
+      var h = c.classList.contains('has-fixed-h')
+        ? (parseFloat(c.style.getPropertyValue('--ch')) || c.offsetHeight || 180)
+        : (c.offsetHeight || 180);
+      max = Math.max(max, y + h + 56);
     });
     board.style.minHeight = Math.round(max) + 'px';
   }
@@ -1026,19 +1149,23 @@
     n.dy = Math.max(0, n.dy);
   }
   function pushNode(n, px, py, bw){
-    var odx = n.dx, ody = n.dy;
     n.dx += px;
     n.dy += py;
     clampDx(n, bw);
-    // If the side wall ate a horizontal shove, dump the rest downward
-    if (Math.abs(px) > 1 && Math.abs(n.dx - odx) < 0.5) {
-      n.dy = ody + Math.max(Math.abs(py), Math.abs(px), 8);
-      clampDx(n, bw);
-    }
   }
-  // Force-directed collision using on-screen (rotated) bounds
+  function anyOverlaps(gap){
+    gap = gap == null ? FORCE_GAP : gap;
+    var nodes = Array.from(board.querySelectorAll('.cluster')).map(clusterState);
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        if (rectsOverlap(nodes[i], nodes[j], gap)) return true;
+      }
+    }
+    return false;
+  }
+  // Force-directed collision on logical boxes. Dragged section stays put; neighbors move.
   function applyForces(anchorEl, iterations){
-    iterations = iterations == null ? 64 : iterations;
+    iterations = iterations == null ? 80 : iterations;
     var bw = board.clientWidth || 1100;
     for (var iter = 0; iter < iterations; iter++) {
       var nodes = Array.from(board.querySelectorAll('.cluster')).map(clusterState);
@@ -1059,7 +1186,7 @@
           var overlapY = (a.h / 2 + b.h / 2 + FORCE_GAP) - Math.abs(dy);
           if (overlapX <= 0 || overlapY <= 0) continue;
           var pushX = 0, pushY = 0;
-          if (overlapX < overlapY) {
+          if (overlapX <= overlapY) {
             pushX = (dx >= 0 ? 1 : -1) * (overlapX / 2 + 1);
           } else {
             pushY = (dy >= 0 ? 1 : -1) * (overlapY / 2 + 1);
@@ -1084,6 +1211,7 @@
       growBoard();
     }
     growBoard();
+    return !anyOverlaps(FORCE_GAP);
   }
   function persistAllClusterPos(){
     var o = loadPos();
@@ -1100,36 +1228,104 @@
     });
     savePos(o);
   }
+  // Guaranteed non-overlap shelf pack using logical sizes (not rotated AABB).
+  function packClustersRowWise(){
+    var bw = board.clientWidth || 1100;
+    var gap = FORCE_GAP;
+    var order = { shopping:0, life:1, body:2, finances:3, ambition:4, leverage:5, presence:6, inbox:7 };
+    var nodes = Array.from(board.querySelectorAll('.cluster')).map(function(c){
+      var cw = parseFloat(c.style.getPropertyValue('--cw')) || 280;
+      var rot = parseFloat(c.style.getPropertyValue('--rot')) || 0;
+      var ch = c.classList.contains('has-fixed-h') ? (parseFloat(c.style.getPropertyValue('--ch')) || undefined) : undefined;
+      placeCluster(c, 0, 0, cw, rot, ch);
+      var h = ch != null ? ch : Math.max(c.offsetHeight || 0, 88);
+      return {
+        el: c,
+        id: c.getAttribute('data-section') || '',
+        w: Math.min(cw, bw - 24),
+        h: h,
+        rot: rot,
+        cw: cw,
+        ch: ch
+      };
+    });
+    nodes.sort(function(a, b){
+      var ia = order[a.id]; if (ia == null) ia = 50;
+      var ib = order[b.id]; if (ib == null) ib = 50;
+      return ia - ib;
+    });
+    var x = 12, y = 8, rowH = 0;
+    nodes.forEach(function(n){
+      if (x > 12 && x + n.w > bw - 8) {
+        x = 12;
+        y += rowH + gap;
+        rowH = 0;
+      }
+      placeCluster(n.el, x, y, n.cw, n.rot, n.ch);
+      x += n.w + gap;
+      rowH = Math.max(rowH, n.h);
+    });
+    growBoard();
+  }
+  function resolveBoardLayout(anchorEl){
+    var ok = applyForces(anchorEl || null, anchorEl ? 72 : 48);
+    if (!ok) packClustersRowWise();
+    growBoard();
+  }
   function balanceBoard(){
+    board.classList.remove('is-live');
     var clusters = Array.from(board.querySelectorAll('.cluster'));
     if (!clusters.length) return;
     var saved = loadPos();
     var wide = (board.clientWidth || 1100) >= 720;
     var bw = board.clientWidth || 1100;
+    var needsRepack = !Object.keys(saved).length;
     clusters.forEach(function(c){
-      var n = c.querySelectorAll('.note').length;
-      var cols = (wide && n >= 8) ? 2 : 1;
-      var rows = Math.max(1, Math.ceil((n || 1) / cols));
-      c.style.setProperty('--cols', String(cols));
-      c.style.setProperty('--rows', String(rows));
+      var notes = Array.from(c.querySelectorAll('.note'));
+      var n = notes.length;
+      var longest = 0;
+      notes.forEach(function(note){
+        var t = ((note.querySelector('.note-text') || note).textContent || '').trim();
+        if (t.length > longest) longest = t.length;
+      });
+      var preferCols = 1;
+      if (n >= 6) preferCols = 2;
+      if (n >= 14 || (n >= 10 && longest < 42)) preferCols = 3;
+      if (n >= 20) preferCols = 3;
+      var naturalW = preferCols === 1 ? 250 : (preferCols === 2 ? 380 : 480);
+      if (preferCols === 3 && longest > 48) {
+        naturalW = Math.max(480, Math.min(560, 440 + longest * 1.5));
+      } else if (longest > 48 && preferCols === 2) {
+        naturalW = Math.max(360, Math.min(460, 320 + longest));
+      } else if (longest > 72 && preferCols === 1) {
+        naturalW = Math.max(260, Math.min(340, 200 + longest * 2));
+      }
+      c.dataset.preferCols = String(preferCols);
+      c.dataset.naturalW = String(Math.round(naturalW));
     });
     clusters.forEach(function(c, i){
       var id = c.getAttribute('data-section') || '';
       var rec = saved[id];
+      var naturalW = parseFloat(c.dataset.naturalW) || 260;
+      var preferCols = parseInt(c.dataset.preferCols || '1', 10) || 1;
       var def = DEFAULT_SCATTER[id] || {
         x: 24 + (i * 88) % Math.max(120, bw - 300),
         y: 20 + i * 190 + ((i % 2) ? 40 : 0),
-        w: 250 + (i % 3) * 28,
+        w: naturalW,
         rot: ((i % 2) ? 1 : -1) * (0.6 + (i % 3) * 0.35)
       };
       var x, y, w, rot, h;
-      if (rec && rec.x != null && rec.y != null) {
+      if (rec && rec.x != null && rec.y != null && rec.y <= 2400) {
         x = rec.x; y = rec.y;
-        w = rec.w != null ? rec.w : def.w;
+        var stockW = DEFAULT_SCATTER[id] ? DEFAULT_SCATTER[id].w : null;
+        var manualW = rec.w != null && (stockW == null || Math.abs(Number(rec.w) - stockW) > 28)
+          && Math.abs(Number(rec.w) - naturalW) > 40;
+        w = manualW ? Math.min(rec.w, bw - 24) : naturalW;
         rot = rec.rot != null ? rec.rot : def.rot;
-        h = rec.h != null ? rec.h : null;
+        h = rec.h != null ? Math.min(rec.h, MAX_CLUSTER_H + 40) : null;
       } else {
-        x = def.x; y = def.y; w = def.w; rot = def.rot; h = null;
+        needsRepack = true;
+        x = def.x; y = def.y; w = naturalW; rot = def.rot; h = null;
       }
       if (!wide) {
         x = 10 + ((i * 17) % 36);
@@ -1139,15 +1335,28 @@
         h = null;
       } else {
         x = Math.min(x, Math.max(0, bw - 140));
+        y = Math.min(y, MAX_PACK_Y);
+      }
+      var maxByWidth = w < 300 ? 1 : (w < 440 ? 2 : 3);
+      var cols = wide ? Math.min(preferCols, maxByWidth) : 1;
+      if (wide && preferCols >= 2) cols = Math.max(cols, Math.min(preferCols, maxByWidth));
+      var n = c.querySelectorAll('.note').length;
+      var rows = Math.max(1, Math.ceil((n || 1) / cols));
+      c.style.setProperty('--cols', String(cols));
+      c.style.setProperty('--rows', String(rows));
+      if (h == null && preferCols >= 2 && n >= 12) {
+        placeCluster(c, x, y, w, rot, null);
+        if ((c.offsetHeight || 0) > MAX_CLUSTER_H) h = MAX_CLUSTER_H;
       }
       placeCluster(c, x, y, w, rot, h);
     });
     if (wide) {
-      // Real heights are known after place — separate until clear, then save
-      applyForces(null, 120);
+      // Shelf-pack on empty/corrupt/overlap. Skip free force-settle on first paint.
+      if (needsRepack || anyOverlaps(FORCE_GAP)) packClustersRowWise();
       persistAllClusterPos();
     }
     growBoard();
+    requestAnimationFrame(function(){ board.classList.add('is-live'); });
   }
   function persistClusterPos(c){
     var id = c.getAttribute('data-section');
@@ -1185,9 +1394,9 @@
       try { cluster.setPointerCapture(e.pointerId); } catch (err) {}
       function onResizeMove(ev){
         var nw = Math.max(160, Math.min((board.clientWidth || 1100) - ox - 8, ow + (ev.clientX - startX)));
-        var nh = Math.max(88, oh + (ev.clientY - startY));
+        var nh = Math.max(88, Math.min(MAX_CLUSTER_H + 120, oh + (ev.clientY - startY)));
         placeCluster(cluster, ox, oy, nw, orot, nh);
-        applyForces(cluster, 3);
+        applyForces(cluster, 10);
       }
       function onResizeUp(){
         try { cluster.releasePointerCapture(e.pointerId); } catch (err) {}
@@ -1195,7 +1404,7 @@
         document.removeEventListener('pointerup', onResizeUp, true);
         document.removeEventListener('pointercancel', onResizeUp, true);
         cluster.classList.remove('is-resizing');
-        applyForces(cluster, 12);
+        resolveBoardLayout(cluster);
         persistAllClusterPos();
       }
       document.addEventListener('pointermove', onResizeMove, true);
@@ -1224,7 +1433,7 @@
       if (!moved && Math.abs(dx) + Math.abs(dy) < 3) return;
       moved = true;
       placeCluster(cluster, Math.max(0, ox + dx), Math.max(0, oy + dy), ow, orot, oh);
-      applyForces(cluster, 8);
+      applyForces(cluster, 14);
     }
     function onUp(){
       try { cluster.releasePointerCapture(e.pointerId); } catch (err) {}
@@ -1234,7 +1443,7 @@
       cluster.classList.remove('is-dragging-cluster');
       clusterDrag = null;
       if (moved) {
-        applyForces(cluster, 48);
+        resolveBoardLayout(cluster);
         persistAllClusterPos();
       }
     }

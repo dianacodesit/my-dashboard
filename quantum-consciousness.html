@@ -10,29 +10,23 @@
 <style>
   .page-bg {
     background-color: #040208;
-    background-image:
-      linear-gradient(180deg, rgba(6,4,12,0.28) 0%, rgba(6,4,12,0.08) 40%, rgba(4,2,8,0.50) 100%),
-      url("manus-storage/quantum-how-you-look-field.jpg?v=above1");
-    background-position: center center, center 62%;
-    background-repeat: no-repeat, no-repeat;
-    background-size: cover, 132vw auto;
+    background-image: url("manus-storage/quantum-how-you-look.jpg?v=field-clean1");
+    background-position: calc(50% + 56px) top;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  /* constellation lettering — sits in the SAVED HERE band above the field */
+  .constellation-phrase {
+    display: block;
+    width: min(920px, 96vw);
+    height: auto;
+    margin: 10px auto 0;
+    transform: translateX(-28px);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.96;
   }
   body.capture-page #hamburger-menu span { background: #f3e6d0; }
-  .quantum-phrase {
-    margin: 8px 16px 36px;
-    max-width: min(720px, 92vw);
-    text-align: center;
-    font-family: "DM Mono", monospace;
-    font-size: clamp(11px, 2.2vw, 14px);
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(255, 248, 238, 0.92);
-    text-shadow:
-      0 0 10px rgba(255,255,255,0.35),
-      0 0 28px rgba(255,220,160,0.22),
-      0 1px 8px rgba(0,0,0,0.55);
-  }
 </style>
 </head>
 <body class="capture-page" data-store="page_quantum_v1" data-empty="nothing observed yet">
@@ -43,7 +37,6 @@
     <h1>quantum consciousness</h1>
     <p class="sub">the unseen layer</p>
   </header>
-  <p class="quantum-phrase">how you look changes what you find</p>
   <section class="panel">
     <div class="add-row">
       <input id="new-item" type="text" placeholder="a note from the field" autocomplete="off"/>
@@ -51,9 +44,10 @@
     </div>
     <div id="list"></div>
     <p class="status" id="status">saved here</p>
+    <img class="constellation-phrase" src="manus-storage/quantum-constellation-phrase.png?v=1" alt="HOW YOU LOOK CHANGES WHAT YOU FIND" width="920" height="76"/>
   </section>
 </main>
-<script src="nav-shared.js?v=navtimelines1"></script>
+<script src="nav-shared.js?v=navdragfix1"></script>
 <script src="capture-page.js?v=1"></script>
 </body>
 </html>

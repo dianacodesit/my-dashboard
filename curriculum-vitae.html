@@ -10,20 +10,42 @@
 <style>
   .page-bg {
     background:
-      linear-gradient(180deg, rgba(20,12,8,0.52) 0%, rgba(20,12,8,0.16) 44%, rgba(12,8,6,0.54) 100%),
-      url("manus-storage/curriculum-vitae-real.jpg?v=cv5") center 28%/cover no-repeat;
+      linear-gradient(180deg, rgba(12,8,6,0.18) 0%, rgba(12,8,6,0.05) 38%, rgba(12,8,6,0.42) 100%),
+      url("manus-storage/curriculum-vitae-real.jpg?v=cv10") center 18%/cover no-repeat;
   }
   body.capture-page #hamburger-menu span { background: #f3e6d0; }
+  /* CV photo is the title — no competing hero overlay */
+  body.capture-page .hero { display: none; }
+  body.capture-page .page-shell {
+    padding: 56px 20px 28px;
+    justify-content: flex-end;
+    min-height: 100vh;
+  }
+  body.capture-page .panel {
+    width: min(420px, calc(100% - 24px));
+    margin-top: auto;
+    margin-bottom: 10px;
+    padding: 10px 14px 8px;
+    border-radius: 16px;
+    background: rgba(20, 12, 8, 0.38);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  body.capture-page .add-row input {
+    font-size: 15px;
+    padding: 6px 0;
+  }
+  body.capture-page .empty,
+  body.capture-page .status {
+    font-size: 13px;
+    opacity: 0.75;
+  }
 </style>
 </head>
 <body class="capture-page" data-store="page_cv_v1" data-empty="nothing drafted yet">
 <div class="page-bg" aria-hidden="true"></div>
 <main class="page-shell">
-  <header class="hero">
-    <p class="eyebrow">record · path · proof</p>
-    <h1>Curriculum Vitae</h1>
-    <p class="sub">the work, in order</p>
-  </header>
   <section class="panel">
     <div class="add-row">
       <input id="new-item" type="text" placeholder="a line for the CV" autocomplete="off"/>
@@ -33,7 +55,7 @@
     <p class="status" id="status">saved here</p>
   </section>
 </main>
-<script src="nav-shared.js?v=navtimelines1"></script>
+<script src="nav-shared.js?v=navdragfix1"></script>
 <script src="capture-page.js?v=1"></script>
 </body>
 </html>

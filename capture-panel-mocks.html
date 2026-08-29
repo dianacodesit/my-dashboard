@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>capture panel mocks · pick one</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navpanel"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #1c140e;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 64px 20px 80px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+  .hero {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 12px;
+  }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.72);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 680px;
+    margin: 0 auto 32px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.62);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  figure {
+    background: rgba(250,246,238,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .frame {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #0e0806;
+  }
+  .frame-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .frame-bg.research {
+    background-image:
+      linear-gradient(180deg, rgba(20,12,6,0.58) 0%, rgba(20,12,6,0.18) 44%, rgba(12,8,4,0.54) 100%),
+      url("manus-storage/research-diana-jundi-journal.jpg?v=nat2");
+    background-position: center center, center 46%;
+    background-size: cover, auto 132vh;
+  }
+  .frame-bg.business {
+    background-image:
+      linear-gradient(180deg, rgba(20,12,8,0.45) 0%, rgba(20,12,8,0.12) 42%, rgba(12,8,6,0.48) 100%),
+      url("manus-storage/business-jundi-building.jpg?v=blend14");
+    background-position: center center, center 40%;
+    background-size: cover, cover;
+  }
+  .frame-shell {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+  }
+  .mini-hero {
+    text-align: center;
+    margin-bottom: 14px;
+    max-width: 92%;
+  }
+  .mini-hero .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 7px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .mini-hero h2 {
+    font-family: "Italiana", serif;
+    font-size: clamp(18px, 3.2vw, 28px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+  }
+  .mini-hero .sub {
+    margin-top: 4px;
+    font-family: "DM Mono", monospace;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .mini-panel {
+    width: min(420px, 92%);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .sample-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .sample-row .field {
+    flex: 1;
+    font-size: 11px;
+    font-style: italic;
+    padding: 6px 0;
+    border-bottom: 1px solid currentColor;
+    opacity: 0.55;
+  }
+  .sample-row .btn {
+    font-family: "DM Mono", monospace;
+    font-size: 7px;
+    letter-spacing: 0.08em;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    background: transparent;
+    opacity: 0.85;
+  }
+  .sample-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px solid currentColor;
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.35;
+  }
+  .sample-item .mark { font-size: 8px; margin-top: 2px; opacity: 0.7; }
+  figcaption {
+    padding: 14px 18px 16px;
+  }
+  figcaption strong {
+    display: block;
+    font-family: "Italiana", serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: #fff8ee;
+    margin-bottom: 4px;
+  }
+  figcaption span {
+    display: block;
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(247,239,228,0.78);
+    margin-bottom: 6px;
+  }
+  figcaption em {
+    display: block;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.5);
+    font-style: normal;
+  }
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(247,239,228,0.65);
+    text-decoration: none;
+  }
+  .back:hover { color: #fff8ee; }
+
+  /* ── 1 · Ghost ink (live now) ── */
+  .style-ghost .mini-hero .eyebrow,
+  .style-ghost .mini-hero h2,
+  .style-ghost .mini-hero .sub,
+  .style-ghost .mini-panel { color: #fff8ee; }
+  .style-ghost .mini-hero .eyebrow,
+  .style-ghost .mini-hero h2,
+  .style-ghost .mini-hero .sub,
+  .style-ghost .sample-item,
+  .style-ghost .sample-row .field { text-shadow: 0 1px 8px rgba(8,4,2,0.55); }
+  .style-ghost .mini-panel { background: transparent; border: none; box-shadow: none; padding: 0; }
+  .style-ghost .sample-item,
+  .style-ghost .sample-row .field { border-color: rgba(255,255,255,0.35); }
+  .style-ghost .sample-row .btn { border-color: rgba(255,255,255,0.35); color: #fff8ee; }
+
+  /* ── 2 · Cream paper card ── */
+  .style-paper .mini-hero .eyebrow { color: #6f5f54; text-shadow: none; }
+  .style-paper .mini-hero h2 { color: #2a2520; text-shadow: none; }
+  .style-paper .mini-hero .sub { color: #6f5f54; text-shadow: none; }
+  .style-paper .mini-panel {
+    background: #faf6ee;
+    color: #2a2520;
+    border: 1px solid rgba(42,37,32,0.08);
+    border-radius: 14px;
+    padding: 14px 16px 10px;
+    box-shadow: 0 10px 28px rgba(8,4,2,0.22);
+  }
+  .style-paper .sample-item,
+  .style-paper .sample-row .field { border-color: rgba(42,37,32,0.14); }
+  .style-paper .sample-row .btn {
+    border-color: rgba(42,37,32,0.22);
+    color: #2a2520;
+  }
+  .style-paper .sample-row .field { color: rgba(42,37,32,0.45); }
+
+  /* ── 3 · Soft parchment (opaque, no blur) ── */
+  .style-parchment .mini-hero .eyebrow,
+  .style-parchment .mini-hero h2,
+  .style-parchment .mini-hero .sub { color: #fff8ee; text-shadow: 0 1px 8px rgba(8,4,2,0.45); }
+  .style-parchment .mini-panel {
+    background: rgba(250,246,238,0.88);
+    color: #2a2520;
+    border: 1px solid rgba(255,248,238,0.55);
+    border-radius: 12px;
+    padding: 14px 16px 10px;
+    box-shadow: 0 8px 24px rgba(8,4,2,0.18);
+  }
+  .style-parchment .sample-item,
+  .style-parchment .sample-row .field { border-color: rgba(42,37,32,0.16); }
+  .style-parchment .sample-row .btn {
+    border-color: rgba(42,37,32,0.24);
+    color: #2a2520;
+  }
+  .style-parchment .sample-row .field { color: rgba(42,37,32,0.45); }
+
+  /* ── 4 · Dark ledger strip ── */
+  .style-ledger .mini-hero .eyebrow,
+  .style-ledger .mini-hero h2,
+  .style-ledger .mini-hero .sub { color: #fff8ee; text-shadow: 0 1px 8px rgba(8,4,2,0.55); }
+  .style-ledger .mini-panel {
+    background: rgba(18,12,8,0.82);
+    color: #f7efe4;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 16px 10px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  }
+  .style-ledger .sample-item,
+  .style-ledger .sample-row .field { border-color: rgba(255,255,255,0.16); }
+  .style-ledger .sample-row .btn {
+    border-color: rgba(255,255,255,0.28);
+    color: #f7efe4;
+  }
+  .style-ledger .sample-row .field { color: rgba(247,239,228,0.5); }
+
+  /* ── 5 · Frosted glass (alt — not live) ── */
+  .style-frosted .mini-hero .eyebrow,
+  .style-frosted .mini-hero h2,
+  .style-frosted .mini-hero .sub { color: #fff8ee; text-shadow: 0 1px 8px rgba(8,4,2,0.45); }
+  .style-frosted .mini-panel {
+    background: rgba(255,255,255,0.12);
+    color: #fff8ee;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 16px;
+    padding: 14px 16px 10px;
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    box-shadow: 0 8px 28px rgba(8,4,2,0.2);
+  }
+  .style-frosted .sample-item,
+  .style-frosted .sample-row .field { border-color: rgba(255,255,255,0.22); }
+  .style-frosted .sample-row .btn {
+    border-color: rgba(255,255,255,0.32);
+    color: #fff8ee;
+  }
+  .style-frosted .sample-row .field { color: rgba(247,239,228,0.52); }
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <h1>capture panel mocks</h1>
+    <p>five panel chrome options · same photo behind each</p>
+  </header>
+  <p class="note">Live pages use <strong>1 · ghost ink</strong> — transparent text on the photo, no panel box. Pick a number (or blend) and I’ll apply it to research proposals, business ideas, and the rest.</p>
+
+  <div class="grid">
+    <figure>
+      <div class="frame style-ghost">
+        <div class="frame-bg research" aria-hidden="true"></div>
+        <div class="frame-shell">
+          <header class="mini-hero">
+            <p class="eyebrow">question · method · claim</p>
+            <h2>research proposals</h2>
+            <p class="sub">what you want to prove</p>
+          </header>
+          <section class="mini-panel">
+            <div class="sample-row"><div class="field">a proposal or research thread</div><div class="btn">keep</div></div>
+            <div class="sample-item"><span class="mark">✦</span><span>attention bias under social threat</span></div>
+            <div class="sample-item"><span class="mark">✦</span><span>priming and self-concept stability</span></div>
+          </section>
+        </div>
+      </div>
+      <figcaption>
+        <strong>1 · Ghost ink</strong>
+        <span>transparent overlay — italic cream text, underline inputs</span>
+        <em>this is what you have now</em>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame style-paper">
+        <div class="frame-bg research" aria-hidden="true"></div>
+        <div class="frame-shell">
+          <header class="mini-hero">
+            <p class="eyebrow">question · method · claim</p>
+            <h2>research proposals</h2>
+            <p class="sub">what you want to prove</p>
+          </header>
+          <section class="mini-panel">
+            <div class="sample-row"><div class="field">a proposal or research thread</div><div class="btn">keep</div></div>
+            <div class="sample-item"><span class="mark">✦</span><span>attention bias under social threat</span></div>
+            <div class="sample-item"><span class="mark">✦</span><span>priming and self-concept stability</span></div>
+          </section>
+        </div>
+      </div>
+      <figcaption>
+        <strong>2 · Cream paper card</strong>
+        <span>solid opaque notepad — dark ink, rounded card, full read</span>
+        <em>most paper-like</em>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame style-parchment">
+        <div class="frame-bg research" aria-hidden="true"></div>
+        <div class="frame-shell">
+          <header class="mini-hero">
+            <p class="eyebrow">question · method · claim</p>
+            <h2>research proposals</h2>
+            <p class="sub">what you want to prove</p>
+          </header>
+          <section class="mini-panel">
+            <div class="sample-row"><div class="field">a proposal or research thread</div><div class="btn">keep</div></div>
+            <div class="sample-item"><span class="mark">✦</span><span>attention bias under social threat</span></div>
+            <div class="sample-item"><span class="mark">✦</span><span>priming and self-concept stability</span></div>
+          </section>
+        </div>
+      </div>
+      <figcaption>
+        <strong>3 · Soft parchment</strong>
+        <span>~88% cream opacity — photo still peeks through, no blur</span>
+        <em>middle ground</em>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame style-ledger">
+        <div class="frame-bg research" aria-hidden="true"></div>
+        <div class="frame-shell">
+          <header class="mini-hero">
+            <p class="eyebrow">question · method · claim</p>
+            <h2>research proposals</h2>
+            <p class="sub">what you want to prove</p>
+          </header>
+          <section class="mini-panel">
+            <div class="sample-row"><div class="field">a proposal or research thread</div><div class="btn">keep</div></div>
+            <div class="sample-item"><span class="mark">✦</span><span>attention bias under social threat</span></div>
+            <div class="sample-item"><span class="mark">✦</span><span>priming and self-concept stability</span></div>
+          </section>
+        </div>
+      </div>
+      <figcaption>
+        <strong>4 · Dark ledger</strong>
+        <span>deep ink strip — cream text, strong contrast on busy photos</span>
+        <em>good for business ideas too</em>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame style-frosted">
+        <div class="frame-bg business" aria-hidden="true"></div>
+        <div class="frame-shell">
+          <header class="mini-hero">
+            <p class="eyebrow">seed · venture · next</p>
+            <h2>business ideas</h2>
+            <p class="sub">things that could become real</p>
+          </header>
+          <section class="mini-panel">
+            <div class="sample-row"><div class="field">an idea to grow</div><div class="btn">keep</div></div>
+            <div class="sample-item"><span class="mark">✦</span><span>executive coaching for founders</span></div>
+            <div class="sample-item"><span class="mark">✦</span><span>research-to-product pipeline</span></div>
+          </section>
+        </div>
+      </div>
+      <figcaption>
+        <strong>5 · Frosted glass</strong>
+        <span>blur + translucent white — photo visible through the panel</span>
+        <em>not live; shown on business ideas bg</em>
+      </figcaption>
+    </figure>
+  </div>
+
+  <a class="back" href="research-proposals.html">← back to research proposals</a>
+</main>
+<script src="nav-shared.js?v=navdragfix1"></script>
+</body>
+</html>

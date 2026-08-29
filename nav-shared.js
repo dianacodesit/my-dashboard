@@ -11,14 +11,16 @@
     { href: 'goals.html', label: 'goals', group: 'wip' },
     { href: 'projects.html', label: 'projects', group: 'wip' },
     { href: 'lifestyle.html', label: 'lifestyle', group: 'wip' },
-    { href: 'planner.html', label: 'timelines', group: 'main' },
+    { href: 'planner.html', label: 'timelapses', group: 'main' },
     { href: 'accomplishments.html', label: 'accomplishments', group: 'main' },
     { href: 'striving.html', label: 'striving', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
-    { href: 'duaa.html', label: "Dua'a", group: 'main' },
+    { href: 'quran.html', label: 'Quran', group: 'main', parent: 'deen.html' },
+    { href: 'duaa.html', label: "Dua'a", group: 'main', parent: 'deen.html' },
     { href: 'dimensions.html', label: 'dimensions', group: 'main' },
     { href: 'grids.html', label: 'grids', group: 'main' },
     { href: 'everything.html', label: 'everything', group: 'main' },
+    { href: 'prototypes.html', label: 'prototypes', group: 'main' },
     { href: 'dashboard.html', label: 'dashboard', group: 'main' },
     { href: 'brain-dump.html', label: 'brain dump', group: 'main' },
     { href: 'adhd.html', label: 'ADHD / neurodiversity', group: 'main' },
@@ -30,6 +32,7 @@
     { href: 'priming.html', label: 'priming & prompting', group: 'main' },
     { href: 'abundance.html', label: 'abundance economics', group: 'main' },
     { href: 'parallel-timelines.html', label: 'parallel timelines', group: 'main' },
+    { href: '2030.html', label: '2030', group: 'main' },
     { href: 'palettes.html', label: 'color palettes', group: 'design' },
     { href: 'backgrounds.html', label: 'background images', group: 'design' },
     { href: 'colors.html', label: 'individual colors', group: 'design' },
@@ -73,29 +76,52 @@
   function resolvedLinks(){
     var byHref = {};
     LINKS.forEach(function(x){
-      byHref[x.href] = { href: x.href, label: x.label, group: x.group };
+      byHref[x.href] = { href: x.href, label: x.label, group: x.group, parent: x.parent || null };
     });
     var saved = loadLayout();
     var seen = {};
     var ordered = [];
     saved.forEach(function(s){
       if (!s || !byHref[s.href] || seen[s.href]) return;
+      if (byHref[s.href].parent) return;
       if (s.group) byHref[s.href].group = s.group;
       ordered.push(byHref[s.href]);
       seen[s.href] = 1;
     });
     LINKS.forEach(function(x){
-      if (!seen[x.href]) ordered.push(byHref[x.href]);
+      if (!seen[x.href] && !x.parent) ordered.push(byHref[x.href]);
+    });
+    LINKS.forEach(function(x){
+      if (x.parent && !seen[x.href]) ordered.push(byHref[x.href]);
     });
     return ordered;
   }
-  function aTag(item, cur){
-    var cls = fileOf(item.href) === cur ? ' class="current"' : '';
-    return '<a href="'+item.href+'"'+cls+' draggable="false">'+item.label+'</a>';
+  function aTag(item, cur, depth){
+    var cls = [];
+    if (depth > 0) cls.push('nav-sub');
+    if (depth > 1) cls.push('nav-sub-2');
+    if (fileOf(item.href) === cur) cls.push('current');
+    var attr = cls.length ? ' class="'+cls.join(' ')+'"' : '';
+    // Always false — native HTML5 drag on <a> steals events and kills reorder.
+    return '<a href="'+item.href+'"'+attr+' draggable="false">'+item.label+'</a>';
+  }
+  function childrenOf(parentHref, group, items){
+    return items.filter(function(x){
+      return x.group === group && x.parent === parentHref;
+    });
   }
   function linksFor(group, items, cur){
-    return items.filter(function(x){ return x.group === group; })
-      .map(function(x){ return aTag(x, cur); }).join('');
+    var html = '';
+    function renderBranch(item, depth){
+      html += aTag(item, cur, depth);
+      childrenOf(item.href, group, items).forEach(function(child){
+        renderBranch(child, depth + 1);
+      });
+    }
+    items.filter(function(x){ return x.group === group && !x.parent; }).forEach(function(item){
+      renderBranch(item, 0);
+    });
+    return html;
   }
   function sidebarInner(cur){
     var items = resolvedLinks();
@@ -125,6 +151,10 @@
       '#nav-sidebar .nav-bucket nav:empty::after { content: "drop a page here"; display: block; padding: 8px 24px 12px; font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 14px; color: rgba(243,230,208,0.7); }' +
       '#nav-sidebar .nav-bucket.is-drop { background: rgba(138,158,133,0.12); }' +
       '#nav-sidebar nav a { cursor: grab; }' +
+      '#nav-sidebar nav a.nav-sub { cursor: pointer; padding-left: 38px !important; font-size: 15px !important; font-style: italic; opacity: 0.92; }' +
+      '#nav-sidebar nav a.nav-sub:hover { opacity: 1; }' +
+      '#nav-sidebar nav a.nav-sub-2 { padding-left: 54px !important; font-size: 14px !important; opacity: 0.88; }' +
+      '#nav-sidebar nav a.nav-sub-2:hover { opacity: 1; }' +
       '#nav-sidebar nav a.is-dragging { opacity: 0.35; }' +
       '#nav-sidebar nav a.is-insert { box-shadow: inset 0 2px 0 #8a9e85; }' +
       'html body #hamburger-menu, html body.enh-dark #hamburger-menu { background: transparent !important; box-shadow: none !important; }' +
@@ -162,6 +192,7 @@
     var moved = false;
     var startX = 0;
     var startY = 0;
+    var activePointer = null;
     function clearMarks(){
       sidebar.querySelectorAll('.is-drop, .is-insert').forEach(function(el){
         el.classList.remove('is-drop', 'is-insert');
@@ -173,13 +204,17 @@
     }
     function linkAt(x, y){
       var el = document.elementFromPoint(x, y);
-      var a = el && el.closest ? el.closest('#nav-sidebar nav a') : null;
+      var a = el && el.closest ? el.closest('#nav-sidebar nav a:not(.nav-sub)') : null;
       return a && a !== dragging ? a : null;
     }
     function endDrag(x, y){
-      document.removeEventListener('pointermove', onMove);
-      document.removeEventListener('pointerup', onUp);
-      document.removeEventListener('pointercancel', onUp);
+      document.removeEventListener('pointermove', onMove, true);
+      document.removeEventListener('pointerup', onUp, true);
+      document.removeEventListener('pointercancel', onUp, true);
+      if (dragging && activePointer != null) {
+        try { dragging.releasePointerCapture(activePointer); } catch (err) {}
+      }
+      activePointer = null;
       if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
       ghost = null;
       var src = dragging;
@@ -193,17 +228,26 @@
       if (!bucket) return;
       var nav = bucket.querySelector(':scope > nav');
       if (!nav) return;
+      // Keep nested subpages with their parent when the parent moves.
+      var kids = [];
+      var n = src.nextElementSibling;
+      while (n && n.classList && n.classList.contains('nav-sub')) {
+        kids.push(n);
+        n = n.nextElementSibling;
+      }
       if (before && before.parentNode === nav) nav.insertBefore(src, before);
       else nav.appendChild(src);
+      kids.forEach(function(k){ nav.insertBefore(k, src.nextSibling); src = k; });
       var details = bucket.closest('details');
       if (details) details.open = true;
       saveLayout();
     }
     function onMove(e){
       if (!dragging) return;
+      if (activePointer != null && e.pointerId !== activePointer) return;
       var dx = e.clientX - startX;
       var dy = e.clientY - startY;
-      if (!started && (dx * dx + dy * dy) < 64) return;
+      if (!started && (dx * dx + dy * dy) < 36) return;
       if (!started) {
         started = true;
         moved = true;
@@ -226,24 +270,27 @@
       if (before) before.classList.add('is-insert');
     }
     function onUp(e){
+      if (activePointer != null && e.pointerId !== activePointer) return;
       endDrag(e.clientX, e.clientY);
     }
     sidebar.addEventListener('pointerdown', function(e){
       if (e.button !== 0) return;
-      var a = e.target.closest('#nav-sidebar nav a');
+      var a = e.target.closest('#nav-sidebar nav a:not(.nav-sub)');
       if (!a) return;
       dragging = a;
       started = false;
       moved = false;
       startX = e.clientX;
       startY = e.clientY;
-      document.addEventListener('pointermove', onMove);
-      document.addEventListener('pointerup', onUp);
-      document.addEventListener('pointercancel', onUp);
+      activePointer = e.pointerId;
+      try { a.setPointerCapture(e.pointerId); } catch (err) {}
+      document.addEventListener('pointermove', onMove, true);
+      document.addEventListener('pointerup', onUp, true);
+      document.addEventListener('pointercancel', onUp, true);
     });
     sidebar.addEventListener('click', function(e){
       if (!moved) return;
-      var a = e.target.closest('#nav-sidebar nav a');
+      var a = e.target.closest('#nav-sidebar nav a:not(.nav-sub)');
       if (!a) return;
       e.preventDefault();
       e.stopPropagation();

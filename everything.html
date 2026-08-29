@@ -10049,6 +10049,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 <a href="accomplishments.html">accomplishments</a>
 <a href="striving.html">striving</a>
 <a href="deen.html">deen</a>
+<a href="quran.html">Quran</a>
 <a href="duaa.html">Dua'a</a>
 <a href="dimensions.html">dimensions</a>
 <a href="grids.html">grids</a>
@@ -10137,7 +10138,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
   else setup();
 })();
 </script>
-<script src="nav-shared.js?v=navtimelines1"></script>
+<script src="nav-shared.js?v=navdragfix1"></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -12888,7 +12889,12 @@ window.__j22fnApply=run;
     'skin care':'manus-storage/pursuit-skincare_e30839d6.jpg',
     'glow up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'glow-up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
+    'glow':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'body':'manus-storage/zone-body.jpg?v=abs',
+    'gym':'manus-storage/zone-body-abs.jpg',
+    'ambition':'manus-storage/zone-ambition-v4.jpg',
+    'finances':'manus-storage/zone-finances-v2.jpg?v=2',
+    'house':'manus-storage/pursuit-curated-lifestyle.jpg?v=2',
     'beauty':'manus-storage/pursuit-skincare_e30839d6.jpg',
     'curated lifestyle':'manus-storage/pursuit-curated-lifestyle.jpg?v=2',
     'shopped':'manus-storage/pursuit-lifestyle_577937e8.jpg',
@@ -12901,7 +12907,7 @@ window.__j22fnApply=run;
     'adderall':'manus-storage/pursuit-pharmacy-new_8ec4cd7a.jpg',
     'litigation wins':'manus-storage/pursuit-legal_b70d3da7.jpg',
     'legal':'manus-storage/pursuit-legal_b70d3da7.jpg',
-    'power':'manus-storage/mock-power.jpg',
+    'power':'manus-storage/mock-power-glam.jpg?v=glam1',
     'lifestyle':'manus-storage/pursuit-lifestyle_577937e8.jpg',
     'added':'manus-storage/pursuit-power.jpg',
     'travel-ready':'manus-storage/pursuit-travel.jpg',
@@ -12929,6 +12935,10 @@ window.__j22fnApply=run;
     [/work|flow|process|system/, 'manus-storage/pursuit-workflow-v6_6f889c15.jpg'],
     [/momentum|progress|forward/, 'manus-storage/pursuit-momentum-v13.jpg?v=work'],
     [/frequency/, 'manus-storage/pursuit-momentum-v5_f7c3e8ce.jpg'],
+    [/ambition|ambitions/, 'manus-storage/zone-ambition-v4.jpg'],
+    [/glow\s*up|\bglow\b/, 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'],
+    [/\bgym\b/, 'manus-storage/zone-body-abs.jpg'],
+    [/finance|finances/, 'manus-storage/zone-finances-v2.jpg?v=2'],
     [/vibe|mood|home|calm/, 'manus-storage/pursuit-vibes_e645a2da.jpg'],
     [/return|refund|exchange/, 'manus-storage/pursuit-returns-v2.jpg'],
     [/pickup|pickups|curbside|bopis/, 'manus-storage/pursuit-pickups.jpg'],
@@ -13007,7 +13017,7 @@ window.__j22fnApply=run;
     {id:'body', title:'GLOW UP', subs:'body', img:'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek', keys:/\bbody\b|adderall|glow|skincare|skin care|beauty|hair|halo|smile|pharmacy|meds|\brx\b|pill|qelbree|strattera/},
     {id:'life', title:'LIFESTYLE', subs:'curated lifestyle, returns, postal, traveler, persons, social, vibes', img:'manus-storage/pursuit-lifestyle_577937e8.jpg', keys:/lifestyle|shopped|\bshop\b|sephora|amazon|nordstrom|target|return|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran/},
     {id:'finances', title:'FINANCES', subs:'capital blueprint', img:'manus-storage/zone-finances-v2.jpg?v=2', keys:/capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger/},
-    {id:'leverage', title:'POWER', subs:'litigation wins, leverage, workflow', img:'manus-storage/mock-power.jpg', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
+    {id:'leverage', title:'POWER', subs:'litigation wins, leverage, workflow', img:'manus-storage/mock-power-glam.jpg?v=glam1', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
     {id:'ambition', title:'AMBITION', subs:'momentum, UX design, frequency', img:'manus-storage/zone-ambition-v4.jpg', keys:/momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude/},
     {id:'presence', title:'QUANTUM', subs:'entanglement', img:'manus-storage/zone-quantum-v15.jpg?v=observe', keys:/quantum|superposition|entangle|particle|atom/}
   ];
@@ -13058,7 +13068,7 @@ window.__j22fnApply=run;
   function loadPos(){ try{ return JSON.parse(localStorage.getItem(POSKEY)||'{}'); }catch(e){ return {}; } }
   function savePos(map){ try{ localStorage.setItem(POSKEY, JSON.stringify(map)); }catch(e){} scheduleCloudSave(); }
   function writeRect(r){
-    var board=!!(r.el && r.el.closest('.pursuit-board-day, [data-date="2026-08-20"]'));
+    var board=!!(r.el && r.el.closest('.pursuit-board-day, [data-date="2026-08-20"], .overview-era-day'));
     var collapsed=!!(r.el && r.el.classList.contains('zone-collapsed'));
     var x=Math.max(0, Math.round(r.x));
     var y=Math.max(0, Math.round(r.y));
@@ -13150,7 +13160,12 @@ window.__j22fnApply=run;
     });
     if(right<80) right=fitW;
     var eraBlk=grid.closest('.day-block.overview-era-day');
-    if(bottom<80) bottom=eraBlk ? 160 : 280;
+    if(bottom<80) bottom=eraBlk ? 140 : 280;
+    var nodesPanel=grid.closest('.tv-panel.tv-nodes');
+    if(eraBlk && nodesPanel && nodesPanel.classList.contains('nodes-panel-empty')){
+      bottom=140;
+      right=Math.max(right, fitW);
+    }
     var isBoard=!!(grid.closest('.pursuit-board-day, .day-block[data-date="2026-08-20"]') || (eraBlk && grid.closest('.tv-panel.tv-nodes')));
     var scale=1;
     if(!isBoard){
@@ -13350,6 +13365,12 @@ window.__j22fnApply=run;
     }
     expandCanvas(grid, [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).map(zoneRect));
     if(opts && opts.skipSave) return;
+    var eraBlk=grid.closest('.day-block.overview-era-day');
+    if(eraBlk){
+      persistOverviewNodesFromGrid(grid);
+      if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
+      return;
+    }
     var map=loadPos();
     [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
       var id=z.getAttribute('data-zone');
@@ -13369,6 +13390,12 @@ window.__j22fnApply=run;
   }
   window.__fitZoneToCards=fitZoneToCards;
   function readPos(row, id){
+    var blk=row && row.closest('.day-block');
+    if(blk && isOverviewEra(blk)){
+      var grid=row.closest('.sec-grid.pursuit-canvas');
+      if(grid) persistOverviewNodesFromGrid(grid);
+      return;
+    }
     var map=loadPos();
     map[id]={
       x:parseFloat(row.style.getPropertyValue('--ff-x'))||0,
@@ -15164,10 +15191,95 @@ window.__j22fnApply=run;
   window.__deleteMiniCard=deleteMiniCard;
   var ZONE_GONE_KEY='btm_aug20_zones_gone_v1';
   var ZONE_CUSTOM_KEY='btm_aug20_custom_zones_v1';
+  var OVERVIEW_NODES_KEY='btm_overview_nodes_v1';
   function loadZoneGone(){ try{ return JSON.parse(localStorage.getItem(ZONE_GONE_KEY)||'{}'); }catch(e){ return {}; } }
   function saveZoneGone(m){ try{ localStorage.setItem(ZONE_GONE_KEY, JSON.stringify(m||{})); }catch(e){} }
   function loadCustomZones(){ try{ var a=JSON.parse(localStorage.getItem(ZONE_CUSTOM_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
   function saveCustomZones(a){ try{ localStorage.setItem(ZONE_CUSTOM_KEY, JSON.stringify(a||[])); }catch(e){} }
+  function loadOverviewNodesMap(){
+    try{ return JSON.parse(localStorage.getItem(OVERVIEW_NODES_KEY)||'{}')||{}; }catch(e){ return {}; }
+  }
+  function saveOverviewNodesMap(m){
+    try{ localStorage.setItem(OVERVIEW_NODES_KEY, JSON.stringify(m||{})); }catch(e){}
+  }
+  function overviewDayKey(blk){
+    return (blk && blk.getAttribute('data-date')) || '';
+  }
+  function overviewNodesFor(blk){
+    var k=overviewDayKey(blk);
+    if(!k) return [];
+    var m=loadOverviewNodesMap();
+    if(!Array.isArray(m[k])) m[k]=[];
+    return m[k];
+  }
+  function persistOverviewNodesFromGrid(grid){
+    var blk=grid && grid.closest('.day-block');
+    if(!blk || !isOverviewEra(blk)) return;
+    var k=overviewDayKey(blk);
+    if(!k) return;
+    var m=loadOverviewNodesMap();
+    m[k]=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).map(function(z){
+      var r=zoneRect(z);
+      var titleEl=z.querySelector('.pursuit-zone-title');
+      var photo=(z.style.getPropertyValue('--zone-photo')||'').replace(/^url\(["']?|["']?\)$/g,'');
+      return {
+        id:z.getAttribute('data-zone')||'',
+        title:((titleEl&&titleEl.textContent)||'').replace(/\s+/g,' ').trim(),
+        img:photo,
+        x:r.x, y:r.y, w:r.w, h:r.h
+      };
+    }).filter(function(z){ return z.id; });
+    saveOverviewNodesMap(m);
+  }
+  function nextOverviewSlot(grid){
+    var pad=28, gap=24, zw=220, zh=176;
+    var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
+    if(!zones.length) return {x:pad, y:pad, w:zw, h:zh};
+    var maxY=pad;
+    zones.forEach(function(z){
+      var r=zoneRect(z);
+      maxY=Math.max(maxY, (r.y||0)+(r.h||0)+gap);
+    });
+    // Keep new nodes near the top cluster — never inherit Aug 20 bottom Y.
+    if(maxY > 520) maxY=pad;
+    return {x:pad, y:maxY, w:zw, h:zh};
+  }
+  function packOverviewNodesToTop(grid){
+    if(!grid) return;
+    var pad=28, gap=24, x=pad, y=pad, rowH=0, maxW=0;
+    var host=grid.parentElement;
+    var limit=((host&&host.clientWidth)||grid.clientWidth||720)-pad;
+    if(limit<280) limit=720;
+    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+      var r=zoneRect(z);
+      var w=Math.max(200, Math.min(r.w||220, 260));
+      var h=Math.max(168, Math.min(r.h||176, 220));
+      if(x+w>limit && x>pad){
+        x=pad;
+        y+=rowH+gap;
+        rowH=0;
+      }
+      writeRect({el:z, id:z.getAttribute('data-zone'), x:x, y:y, w:w, h:h});
+      x+=w+gap;
+      rowH=Math.max(rowH, h);
+      maxW=Math.max(maxW, x);
+    });
+  }
+  function findCustomZoneByTitle(title){
+    var want=String(title||'').trim().toLowerCase();
+    if(!want) return null;
+    var found=null;
+    loadCustomZones().forEach(function(z){
+      if(z && String(z.title||'').trim().toLowerCase()===want) found=z;
+    });
+    return found;
+  }
+  function upsertCustomZone(entry){
+    if(!entry || !entry.id) return;
+    var custom=loadCustomZones().filter(function(z){ return z && z.id!==entry.id; });
+    custom.push(entry);
+    saveCustomZones(custom);
+  }
   function isAug20Board(el){
     var blk=el && el.closest ? el.closest('.day-block') : el;
     if(!blk) return false;
@@ -15245,26 +15357,55 @@ window.__j22fnApply=run;
   }
   function applyAug20ZoneEdits(grid){
     if(!grid || !isAug20Board(grid)) return;
+    var blk=grid.closest('.day-block');
     var gone=loadZoneGone();
     [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
       var id=z.getAttribute('data-zone')||'';
       if(id && gone[id]) z.remove();
     });
+    // Overview-era days keep their own node list — never auto-clone Aug 20 globals.
+    if(blk && isOverviewEra(blk)){
+      var dayList=overviewNodesFor(blk);
+      // First visit: adopt whatever is already on this day's canvas into per-day storage.
+      if(!dayList.length){
+        persistOverviewNodesFromGrid(grid);
+        dayList=overviewNodesFor(blk);
+      }
+      var wanted={};
+      dayList.forEach(function(rec){
+        if(!rec || !rec.id || gone[rec.id]) return;
+        wanted[rec.id]=1;
+        var row=grid.querySelector(':scope > .pursuit-zone[data-zone="'+rec.id+'"]');
+        if(!row){
+          row=makeZoneRow({id:rec.id, title:rec.title||rec.id, img:rec.img||'', custom:true});
+          grid.appendChild(row);
+          writeRect({
+            el:row, id:rec.id,
+            x:typeof rec.x==='number'?rec.x:28,
+            y:typeof rec.y==='number'?rec.y:28,
+            w:typeof rec.w==='number'?rec.w:220,
+            h:typeof rec.h==='number'?rec.h:176
+          });
+        }
+      });
+      // Keep live custom nodes even if store was stale; just re-persist.
+      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone[data-custom-zone="1"]')).forEach(function(z){
+        var id=z.getAttribute('data-zone')||'';
+        if(id) wanted[id]=1;
+      });
+      var tooLow=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).some(function(z){
+        return (zoneRect(z).y||0) > 420;
+      });
+      if(tooLow) packOverviewNodesToTop(grid);
+      persistOverviewNodesFromGrid(grid);
+      ensureAug20EditChrome(grid);
+      return;
+    }
     loadCustomZones().forEach(function(z){
       if(!z || !z.id || gone[z.id]) return;
       if(grid.querySelector(':scope > .pursuit-zone[data-zone="'+z.id+'"]')) return;
       var row=makeZoneRow({id:z.id, title:z.title||z.id, img:z.img||'', custom:true});
-      var blk=grid.closest('.day-block');
-      if(blk && isOverviewEra(blk)){
-        var maxY=36;
-        [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(zz){
-          var r=zoneRect(zz);
-          maxY=Math.max(maxY, (r.y||0)+(r.h||0)+40);
-        });
-        writeRect({el:row, id:z.id, x:36, y:maxY, w:320, h:280});
-      } else {
-        applyPos(row, z.id);
-      }
+      applyPos(row, z.id);
       grid.appendChild(row);
     });
     ensureAug20EditChrome(grid);
@@ -15273,7 +15414,8 @@ window.__j22fnApply=run;
     if(!zone || !isAug20Board(zone)) return;
     var id=zone.getAttribute('data-zone')||'';
     var grid=zone.closest('.sec-grid');
-    if(id){
+    var blk=zone.closest('.day-block');
+    if(id && !(blk && isOverviewEra(blk))){
       var gone=loadZoneGone();
       gone[id]=1;
       saveZoneGone(gone);
@@ -15281,9 +15423,14 @@ window.__j22fnApply=run;
     }
     zone.remove();
     if(grid){
-      resolveOverlaps(grid);
+      if(blk && isOverviewEra(blk)){
+        persistOverviewNodesFromGrid(grid);
+      } else {
+        resolveOverlaps(grid);
+      }
       expandCanvas(grid);
       if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
+      if(typeof window.__syncOverviewEraChrome==='function' && blk) window.__syncOverviewEraChrome(blk);
     }
   }
   function nextCustomZoneId(grid, title){
@@ -15309,31 +15456,55 @@ window.__j22fnApply=run;
       if(!created){
         created=makeZoneRow(match);
         grid.appendChild(created);
-        applyPos(created, match.id);
+        var blkMatch=grid.closest('.day-block');
+        if(blkMatch && isOverviewEra(blkMatch)){
+          var slotM=nextOverviewSlot(grid);
+          writeRect({el:created, id:match.id, x:slotM.x, y:slotM.y, w:slotM.w, h:slotM.h});
+        } else {
+          applyPos(created, match.id);
+        }
       }
     } else {
-      var id=nextCustomZoneId(grid, title);
+      var prior=findCustomZoneByTitle(title);
+      var id=prior ? prior.id : nextCustomZoneId(grid, title);
+      if(gone[id]){
+        delete gone[id];
+        saveZoneGone(gone);
+      }
       var blk=grid.closest('.day-block');
-      var img='manus-storage/pursuit-vibes_e645a2da.jpg';
+      var img=(prior && prior.img) ? prior.img : '';
       if(blk && isOverviewEra(blk)){
         var mapped=overviewPhotoForName(blk, title);
         if(mapped) img=mapped;
       }
-      var row=makeZoneRow({id:id, title:title, img:img, custom:true});
-      var maxY=36;
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-        var r=zoneRect(z);
-        maxY=Math.max(maxY, (r.y||0)+(r.h||0)+40);
-      });
-      writeRect({el:row, id:id, x:36, y:maxY, w:320, h:280});
-      grid.appendChild(row);
-      var custom=loadCustomZones();
-      custom.push({id:id, title:title, img:img});
-      saveCustomZones(custom);
-      if(!(blk && isOverviewEra(blk))) applyPos(row, id);
-      created=row;
+      if(!img && window.__secImgFor) img=window.__secImgFor(title)||'';
+      if(!img) img='manus-storage/pursuit-vibes_e645a2da.jpg';
+      created=grid.querySelector(':scope > .pursuit-zone[data-zone="'+id+'"]');
+      if(!created){
+        var row=makeZoneRow({id:id, title:title, img:img, custom:true});
+        if(blk && isOverviewEra(blk)){
+          var slot=nextOverviewSlot(grid);
+          writeRect({el:row, id:id, x:slot.x, y:slot.y, w:slot.w, h:slot.h});
+        } else {
+          var maxY=36;
+          [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
+            var r=zoneRect(z);
+            maxY=Math.max(maxY, (r.y||0)+(r.h||0)+40);
+          });
+          writeRect({el:row, id:id, x:36, y:maxY, w:320, h:280});
+          applyPos(row, id);
+        }
+        grid.appendChild(row);
+        created=row;
+      }
+      if(!(blk && isOverviewEra(blk))) upsertCustomZone({id:id, title:title, img:img});
     }
-    resolveOverlaps(grid);
+    if(blk && isOverviewEra(blk)){
+      packOverviewNodesToTop(grid);
+      persistOverviewNodesFromGrid(grid);
+    } else {
+      resolveOverlaps(grid);
+    }
     wireZoneDrag(grid);
     ensureAug20EditChrome(grid);
     expandCanvas(grid);
@@ -15405,10 +15576,16 @@ window.__j22fnApply=run;
     return (m ? m[1] : raw).replace(/^['"]|['"]$/g,'');
   }
   function overviewPhotoForName(blk, title){
-    if(!blk || !title) return '';
-    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
+    if(!title) return '';
     var want=String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
     if(!want) return '';
+    // Hardwired name → photo first (section photos stay bound to their names).
+    if(window.__secImgFor){
+      var mapped=window.__secImgFor(title);
+      if(mapped) return mapped;
+    }
+    if(!blk) return '';
+    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
     function normSrc(src){
       if(!src) return '';
       return String(src).replace(/^\//,'');
@@ -15499,13 +15676,48 @@ window.__j22fnApply=run;
     blk.classList.toggle('view-overview', view === 'pursuits');
     var panel=blk.querySelector('.tv-panel.tv-nodes');
     if(panel){
-      var grid=panel.querySelector('.sec-grid');
-      var empty=!grid || !grid.querySelector('.pursuit-zone, .sec-card, .zone-oneoff, .canvas-oneoff');
+      var grid=panel.querySelector('.sec-grid.pursuit-canvas') || panel.querySelector('.sec-grid');
+      var empty=!grid || !grid.querySelector(':scope > .pursuit-zone, :scope > .sec-card, :scope > .zone-oneoff, :scope > .canvas-oneoff');
       panel.classList.toggle('nodes-panel-empty', empty);
-      if(view === 'nodes') syncOverviewNodePhotos(blk);
+      blk.classList.toggle('nodes-empty', empty);
+      if(view === 'nodes'){
+        ensureOverviewNodesGrid(blk);
+        syncOverviewNodePhotos(blk);
+        // Recompute after restore — nested empty .sec-grid must not win.
+        grid=panel.querySelector('.sec-grid.pursuit-canvas') || panel.querySelector('.sec-grid');
+        empty=!grid || !grid.querySelector(':scope > .pursuit-zone, :scope > .sec-card, :scope > .zone-oneoff, :scope > .canvas-oneoff');
+        panel.classList.toggle('nodes-panel-empty', empty);
+        blk.classList.toggle('nodes-empty', empty);
+        if(empty && grid && window.__expandPursuitCanvas) window.__expandPursuitCanvas(grid);
+      }
+    }
+    var pursuits=blk.querySelector('.tv-panel.tv-pursuits');
+    if(pursuits){
+      var hasTiles=!!pursuits.querySelector('.vision-tile');
+      pursuits.classList.toggle('overview-panel-empty', !hasTiles);
+      blk.classList.toggle('overview-empty', !hasTiles);
     }
     if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
   }
+  function ensureOverviewNodesGrid(blk){
+    if(!blk || !isOverviewEra(blk)) return;
+    var panel=blk.querySelector('.tv-panel.tv-nodes');
+    if(panel){
+      [].slice.call(panel.children).forEach(function(el){
+        if(el.classList && el.classList.contains('sec-grid') && !el.classList.contains('pursuit-canvas')){
+          try{ el.remove(); }catch(e){}
+        }
+      });
+    }
+    var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas');
+    if(!grid) return;
+    applyAug20ZoneEdits(grid);
+    ensureAug20EditChrome(grid);
+    wireZoneDrag(grid);
+    expandCanvas(grid);
+    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
+  }
+  window.__ensureOverviewNodesGrid=ensureOverviewNodesGrid;
   window.__isOverviewEra=isOverviewEra;
   window.__overviewTasksForDay=overviewTasksForDay;
   window.__overviewPhotoForName=overviewPhotoForName;
@@ -16313,7 +16525,17 @@ window.__j22fnApply=run;
     else card.appendChild(box);
   }
   window.__ensurePursuitZones=function(root){
-    (root||document).querySelectorAll('.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas').forEach(function(grid){
+    var sel='.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas, .day-block.overview-era-day .tv-panel.tv-nodes .sec-grid.pursuit-canvas';
+    (root||document).querySelectorAll(sel).forEach(function(grid){
+      var blk=grid.closest('.day-block');
+      if(blk && isOverviewEra(blk)){
+        applyAug20ZoneEdits(grid);
+        ensureAug20EditChrome(grid);
+        wireZoneDrag(grid);
+        expandCanvas(grid);
+        if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
+        return;
+      }
       if(!grid.querySelector(':scope > .pursuit-zone')) return;
       try{ ensureGrid(grid); }catch(err){ try{ console.error(err); }catch(e){} }
     });
@@ -17803,7 +18025,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 </div>
 </article>
-<article class="vision-tile vision-tile-mini" data-focus="power" style="--tile-photo:url('manus-storage/mock-power.jpg')">
+<article class="vision-tile vision-tile-mini" data-focus="power" style="--tile-photo:url('manus-storage/mock-power-glam.jpg?v=glam1')">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">power</h3>
 <div class="vision-tile-details">
@@ -17839,7 +18061,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="pursuit-zone pursuit-zone-body" data-zone="body" style="left:28px;top:28px;width:248px;height:288px;--ff-x:28px;--ff-y:28px;--zone-w:248px;--zone-h:288px;--zone-photo:url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">GLOW UP</p></div><div class="pursuit-zone-grid" data-zone="body"><div class="j22-section card sec-card is-empty glow-hero" data-user-added="1" data-theme="blush" style="--ff-x:16px;--ff-y:8px;--card-w:196px;--card-h:228px"><div class="card-visual theme-blush"><img alt="body" src="manus-storage/mock-glow-up-skin-v3.jpg?v=cheek"><p class="j22-group" spellcheck="false" data-newhdr="body">body</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="body" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">LIFESTYLE</p></div><div class="pursuit-zone-grid" data-zone="life"></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-finances zone-collapsed" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">FINANCES</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-leverage zone-collapsed" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-leverage zone-collapsed" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/mock-power-glam.jpg?v=glam1')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">POWER</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-ambition-v4.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">AMBITION</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-presence zone-collapsed" data-zone="presence" style="left:836px;top:210px;width:340px;height:320px;--ff-x:836px;--ff-y:210px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v15.jpg?v=observe')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">QUANTUM</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="zone-oneoff canvas-oneoff" data-i="mom" style="--ff-x:620px;--ff-y:392px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-persons_be56f167.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">text mom back</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div>
@@ -27532,7 +27754,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       var nl=name.toLowerCase();
       if(nl==='ambition') src='manus-storage/zone-ambition-v4.jpg';
       else if(nl==='finances') src='manus-storage/zone-finances-v2.jpg?v=2';
-      else if(nl==='power') src='manus-storage/mock-power.jpg';
+      else if(nl==='power') src='manus-storage/mock-power-glam.jpg?v=glam1';
     }
     var sec=document.createElement('div');
     sec.className='j22-section card sec-card is-empty';
@@ -29204,10 +29426,18 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
     if(view === 'flow' && window.__syncFlowFromPins) window.__syncFlowFromPins();
     if(view === 'pursuits' && window.__ensurePursuitZones) window.__ensurePursuitZones(block);
     if(view === 'nodes'){
+      block.classList.remove('flow-picking');
+      block.querySelectorAll('.flow-pick-on').forEach(function(el){
+        el.classList.remove('flow-pick-on');
+        var num = el.querySelector(':scope > .flow-pick-num');
+        if(num) num.remove();
+      });
+      if(block._flowPick) block._flowPick = [];
       requestAnimationFrame(function(){
+        if(window.__ensureOverviewNodesGrid) window.__ensureOverviewNodesGrid(block);
         if(window.__pinAug20NodesLook) window.__pinAug20NodesLook();
         if(window.__ensurePursuitZones) window.__ensurePursuitZones(block);
-        if(window.__drawAug20Web) window.__drawAug20Web();
+        if(window.__drawAug20Web) window.__drawAug20Web(block);
       });
     }
     block.classList.toggle('view-nodes', view === 'nodes');
@@ -35277,7 +35507,9 @@ html body .day-block.today-block.fmt22 .sec-grid.pursuit-canvas > .sec-card.loos
 }
 .day-block.today-block .pursuit-zone::before,
 .day-block.zone-board-day .pursuit-zone::before,
-.day-block[data-date="2026-08-20"] .pursuit-zone::before {
+.day-block[data-date="2026-08-20"] .pursuit-zone::before,
+.day-block.overview-era-day .tv-panel.tv-nodes .pursuit-zone::before,
+.day-block.vision-collage-day .tv-panel.tv-nodes .pursuit-zone::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -36766,7 +36998,9 @@ html body .day-block[data-date="2026-08-20"] .pursuit-zone {
   box-shadow: 0 12px 28px rgba(20,12,8,0.28) !important;
 }
 html body .day-block.pursuit-board-day .pursuit-zone:not(.is-zoomed)::before,
-html body .day-block[data-date="2026-08-20"] .pursuit-zone:not(.is-zoomed)::before {
+html body .day-block[data-date="2026-08-20"] .pursuit-zone:not(.is-zoomed)::before,
+html body .day-block.overview-era-day .tv-panel.tv-nodes .pursuit-zone:not(.is-zoomed)::before,
+html body .day-block.vision-collage-day .tv-panel.tv-nodes .pursuit-zone:not(.is-zoomed)::before {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
@@ -37318,13 +37552,18 @@ html body .day-block[data-date="2026-08-20"] .pursuit-zone-body:not(.zone-collap
 .day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas > svg.aug20-zone-web,
 .day-block.overview-era-day .sec-grid.pursuit-canvas > svg.aug20-zone-web,
 .day-block.vision-collage-day .tv-panel.tv-nodes .sec-grid.pursuit-canvas > svg.aug20-zone-web {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   pointer-events: none;
-  z-index: 0;
+  z-index: 30;
   overflow: visible;
 }
 .day-block.pursuit-board-day .sec-grid.pursuit-canvas > svg.aug20-zone-web path.aug20-edge-hit,
@@ -38189,14 +38428,94 @@ html body .day-block.overview-era-day.make-flow-day:not(.collapsed) .day-card > 
 html body .day-block.overview-era-day.view-nodes:not(.collapsed) .day-card > .make-flow-btn {
   display: flex !important;
 }
-/* Aug 28+ — compact empty nodes panel (match flow) */
-html body .day-block.overview-era-day .tv-panel.tv-nodes.nodes-panel-empty {
+/* Aug 28+ — compact empty nodes (beat vision-collage 420px rule; no flow purple) */
+html body .day-block.overview-era-day .tv-panel.tv-nodes.nodes-panel-empty,
+html body .day-block.overview-era-day.make-flow-day .tv-panel.tv-nodes.nodes-panel-empty,
+html body .day-block.overview-era-day.vision-collage-day .tv-panel.tv-nodes.nodes-panel-empty,
+html body .day-block.overview-era-day.today-block .tv-panel.tv-nodes.nodes-panel-empty {
   min-height: 200px !important;
-  padding: 12px 8px 20px !important;
+  height: 200px !important;
+  max-height: 220px !important;
+  padding: 12px 8px 16px !important;
+  overflow: hidden !important;
+  background: transparent !important;
 }
-html body .day-block.overview-era-day .tv-panel.tv-nodes.nodes-panel-empty .sec-grid.pursuit-canvas {
+html body .day-block.overview-era-day .tv-panel.tv-nodes.nodes-panel-empty .pursuit-zoom-host,
+html body .day-block.overview-era-day.make-flow-day .tv-panel.tv-nodes.nodes-panel-empty .pursuit-zoom-host,
+html body .day-block.overview-era-day.vision-collage-day .tv-panel.tv-nodes.nodes-panel-empty .pursuit-zoom-host {
+  min-height: 0 !important;
+  height: 140px !important;
+  max-height: 140px !important;
+  overflow: hidden !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-nodes.nodes-panel-empty .sec-grid.pursuit-canvas,
+html body .day-block.overview-era-day.make-flow-day .tv-panel.tv-nodes.nodes-panel-empty .sec-grid.pursuit-canvas,
+html body .day-block.overview-era-day.vision-collage-day .tv-panel.tv-nodes.nodes-panel-empty .sec-grid.pursuit-canvas {
   min-height: 100px !important;
   height: 140px !important;
+  max-height: 140px !important;
+}
+html body .day-block.overview-era-day.view-nodes.nodes-empty:not(.collapsed) .day-card > .make-flow-btn {
+  margin: 8px auto 12px !important;
+}
+/* Aug 28+ — compact empty overview (clear glass, NOT flow purple) */
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty,
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty.active {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .vision-board {
+  min-height: 200px !important;
+  height: 200px !important;
+  max-height: 200px !important;
+  gap: 0 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 16px !important;
+  padding: 24px 20px 28px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  backdrop-filter: blur(10px) saturate(1.1) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.1) !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .vision-hero {
+  display: none !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .vision-hint,
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .vision-zoom-out,
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .vision-more {
+  display: none !important;
+}
+/* Center the + inside the collapsed empty overview shell (same as flow) */
+html body .day-block.overview-era-day.overview-empty.view-overview .overview-toggle-row > .overview-add-section {
+  display: none !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .overview-empty-add {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(180, 160, 120, 0.3) !important;
+  background: rgba(180, 160, 120, 0.08) !important;
+  color: rgba(200, 180, 150, 0.75) !important;
+  font-size: 1.2rem !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-pursuits.overview-panel-empty .overview-empty-add:hover {
+  background: rgba(180, 160, 120, 0.2) !important;
+  color: rgba(200, 180, 150, 0.95) !important;
+  border-color: rgba(180, 160, 120, 0.6) !important;
 }
 html body .day-block.overview-era-day.today-block .overview-pursuits-label {
   margin-left: auto;
@@ -38294,12 +38613,19 @@ html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flow > .flow-chart-car
 html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flow > .flow-timeline-card {
   display: none !important;
 }
+html body .day-block.make-flow-day:not(.overview-era-day) .tv-panel.tv-flowchart,
+html body .day-block.vision-collage-day:not(.overview-era-day) .tv-panel.tv-flowchart,
+html body .day-block.make-flow-day:not(.overview-era-day) .tv-panel.tv-nodes,
+html body .day-block.vision-collage-day:not(.overview-era-day) .tv-panel.tv-nodes {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 420px !important;
+  padding: 12px 8px 28px !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
 html body .day-block[data-date="2026-08-20"] .tv-panel.tv-flowchart,
-html body .day-block.pursuit-board-day .tv-panel.tv-flowchart,
-html body .day-block.make-flow-day .tv-panel.tv-flowchart,
-html body .day-block.vision-collage-day .tv-panel.tv-flowchart,
-html body .day-block.make-flow-day .tv-panel.tv-nodes,
-html body .day-block.vision-collage-day .tv-panel.tv-nodes {
+html body .day-block.pursuit-board-day .tv-panel.tv-flowchart {
   width: 100% !important;
   max-width: 100% !important;
   min-height: 420px !important;
@@ -38308,8 +38634,29 @@ html body .day-block.vision-collage-day .tv-panel.tv-nodes {
   box-sizing: border-box !important;
 }
 html body .day-block.overview-era-day .tv-panel.tv-nodes {
+  width: 100% !important;
+  max-width: 100% !important;
   min-height: 0 !important;
   padding: 8px 8px 16px !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+}
+/* Junk freeform grids left over from day shells — never show in overview-era nodes */
+html body .day-block.overview-era-day .tv-panel.tv-nodes > .sec-grid:not(.pursuit-canvas),
+html body .day-block.overview-era-day.today-block .tv-panel.tv-nodes > .sec-grid:not(.pursuit-canvas),
+html body .day-block.overview-era-day.vision-collage-day .tv-panel.tv-nodes > .sec-grid:not(.pursuit-canvas),
+html body .day-block.overview-era-day.make-flow-day .tv-panel.tv-nodes > .sec-grid:not(.pursuit-canvas) {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 html body .day-block.overview-era-day .tv-panel.tv-nodes:not(.nodes-panel-empty) {
   min-height: 240px !important;
@@ -38323,6 +38670,31 @@ html body .day-block.overview-era-day .tv-panel.tv-nodes .pursuit-zoom-host {
 html body .day-block.overview-era-day .tv-panel.tv-nodes .sec-grid.pursuit-canvas {
   min-height: var(--canvas-h, 160px) !important;
   height: var(--canvas-h, 160px) !important;
+}
+/* Overview-era nodes keep photo + white title after the day is no longer .today-block */
+html body .day-block.overview-era-day .tv-panel.tv-nodes .pursuit-zone,
+html body .day-block.vision-collage-day .tv-panel.tv-nodes .pursuit-zone {
+  background-image: none !important;
+  overflow: hidden !important;
+  border-radius: 14px !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-nodes .pursuit-zone-head,
+html body .day-block.vision-collage-day .tv-panel.tv-nodes .pursuit-zone-head {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  z-index: 30 !important;
+  height: 44px !important;
+  background: linear-gradient(180deg, rgba(0,0,0,0.28), transparent) !important;
+  border: none !important;
+}
+html body .day-block.overview-era-day .tv-panel.tv-nodes .pursuit-zone-title,
+html body .day-block.vision-collage-day .tv-panel.tv-nodes .pursuit-zone-title {
+  color: #fff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5) !important;
+  font-size: 18px !important;
+  padding: 10px 12px !important;
 }
 html body .day-block.overview-era-day .tv-panel.tv-nodes:not(.nodes-panel-empty) .sec-grid.pursuit-canvas {
   min-height: var(--canvas-h, 220px) !important;
@@ -38964,8 +39336,10 @@ html body .day-block.flow-picking .vision-tile {
       createFlow(block);
       return;
     }
+    if (block.classList.contains('nodes-linking')) return;
+    if (e.target.closest('.tv-panel.tv-nodes') && block.querySelector('.nodes-link-btn.is-on')) return;
     if (!block.classList.contains('flow-picking')) return;
-    if (e.target.closest('.card-del, .card-resize, .card-add-task, .add-board-row, .flow-pick-bar, .today-view-toggle, .make-flow-btn, .day-add-zone, .sec-picker, .zone-del, .add-pursuit-slot, .zone-resize, .zone-zoom-out, textarea, button, a, input')) return;
+    if (e.target.closest('.card-del, .card-resize, .card-add-task, .add-board-row, .flow-pick-bar, .today-view-toggle, .make-flow-btn, .day-add-zone, .sec-picker, .zone-del, .add-pursuit-slot, .zone-resize, .zone-zoom-out, .nodes-link-btn, .nodes-edit-bar, textarea, button, a, input')) return;
     var task = e.target.closest('.j22-item, .zone-oneoff, .canvas-oneoff, .day-task-item');
     var card = e.target.closest('.sec-card');
     var tile = e.target.closest('.vision-tile');
@@ -38981,7 +39355,9 @@ html body .day-block.flow-picking .vision-tile {
   document.addEventListener('pointerdown', function(e){
     var block = e.target.closest('.day-block.flow-picking');
     if (!block) return;
-    if (e.target.closest('.flow-pick-bar, .today-view-toggle, .make-flow-btn')) return;
+    if (block.classList.contains('nodes-linking')) return;
+    if (e.target.closest('.tv-panel.tv-nodes') && block.querySelector('.nodes-link-btn.is-on')) return;
+    if (e.target.closest('.flow-pick-bar, .today-view-toggle, .make-flow-btn, .nodes-link-btn, .nodes-edit-bar')) return;
     if (e.target.closest('.j22-item, .sec-card, .zone-oneoff, .canvas-oneoff, .day-task-item, .pursuit-zone, .vision-tile')) {
       e.stopPropagation();
       if (e.stopImmediatePropagation) e.stopImmediatePropagation();
@@ -39290,11 +39666,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return (blk && blk.getAttribute('data-date')) || '';
   }
   function loadMap(){
-    try { return JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch(e){ return {}; }
+    if(_mapCache) return _mapCache;
+    try { _mapCache = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch(e){ _mapCache = {}; }
+    return _mapCache;
   }
   function saveMap(m){
-    try { localStorage.setItem(STORE, JSON.stringify(m || {})); } catch(e){}
+    _mapCache = m || {};
+    try { localStorage.setItem(STORE, JSON.stringify(_mapCache)); } catch(e){}
   }
+  var _mapCache = null;
   var _htmlSaveTimers = {};
   function serializeHeroHtml(blk){
     var host = heroHost(blk);
@@ -39311,7 +39691,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     host.classList.remove('vision-hero-solo', 'vision-hero-duo', 'vision-hero-trio');
     if(n === 1) host.classList.add('vision-hero-solo');
     else if(n === 2) host.classList.add('vision-hero-duo');
-    else if(n >= 3) host.classList.add('vision-hero-trio');
+    else if(n === 3) host.classList.add('vision-hero-trio');
+    // 4+ keeps the full collage grid (no count class)
+    var vb = host.closest('.vision-board');
+    if(vb){
+      vb.classList.toggle('vision-board-sparse', n > 0 && n < 4);
+      vb.classList.toggle('vision-board-filled', n >= 4);
+    }
   }
   function scheduleHtmlSave(blk){
     var k = dayKey(blk);
@@ -39352,25 +39738,38 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function sectionPresets(blk){
     var already = existingSectionNames(blk);
     var seen = {}, out = [];
+    // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
+    var KNOWN = {
+      'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, power:1,
+      ambition:1, quantum:1, gym:1, house:1, 'grad school':1
+    };
+    function looksLikeTask(name){
+      if(/^\d/.test(name)) return true;
+      if(/^[\"'″]/.test(name)) return true;
+      return false;
+    }
     function push(raw){
       var name = String(raw || '').replace(/\s+/g, ' ').trim();
-      if(!name) return;
+      if(!name || looksLikeTask(name)) return;
+      name = name.toUpperCase();
       var low = name.toLowerCase();
       if(already[low] || seen[low]) return;
       seen[low] = 1;
       out.push(name);
     }
+    ['GLOW UP','LIFESTYLE','FINANCES','POWER','AMBITION','QUANTUM','GYM','HOUSE','GRAD SCHOOL','CURATED LIFESTYLE'].forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
-      push(el.textContent);
+      var t = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if(KNOWN[t.toLowerCase()]) push(t);
     });
-    document.querySelectorAll('.day-block[data-date="2026-08-20"] .pursuit-zone-title, .day-block.pursuit-board-day .pursuit-zone-title').forEach(function(el){
-      push(el.textContent);
+    document.querySelectorAll('.day-block .tv-panel.tv-nodes .pursuit-zone-title, .day-block[data-date="2026-08-20"] .pursuit-zone-title, .day-block.pursuit-board-day .pursuit-zone-title').forEach(function(el){
+      var t = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if(KNOWN[t.toLowerCase()]) push(t);
     });
-    if(window.__overviewTasksForDay){
-      document.querySelectorAll('.day-block[data-date]').forEach(function(b){
-        window.__overviewTasksForDay(b).forEach(push);
-      });
-    }
+    try {
+      var custom = JSON.parse(localStorage.getItem('btm_aug20_custom_zones_v1') || '[]') || [];
+      custom.forEach(function(z){ if(z && z.title) push(z.title); });
+    } catch(e){}
     return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
   }
   function cardPresets(blk, tile){
@@ -39457,9 +39856,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function persistDay(blk){
     var k = dayKey(blk);
     if(!k) return;
-    var m = loadMap();
-    m[k] = dayData(blk);
-    saveMap(m);
+    // dayData() mutates the cached map in place — flush it.
+    saveMap(loadMap());
     syncHeroLayoutClass(blk);
     scheduleHtmlSave(blk);
   }
@@ -39555,11 +39953,62 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
     }
   }
+  function hardwiredSectionPhoto(blk, title){
+    title = String(title||'').replace(/\s+/g,' ').trim();
+    if(!title) return '';
+    return (window.__overviewPhotoForName && window.__overviewPhotoForName(blk, title))
+      || (window.__secImgFor && window.__secImgFor(title))
+      || '';
+  }
+  function cssUrlSrc(raw){
+    if(!raw) return '';
+    raw = String(raw).trim();
+    var m = raw.match(/url\(['"]?([^'")]+)/i);
+    return (m ? m[1] : raw).replace(/^['"]|['"]$/g, '');
+  }
   function ensureOverviewEditChrome(blk){
     if(!blkOk(blk)) return;
     ensureToggleRow(blk);
-    var vb = blk.querySelector('.tv-panel.tv-pursuits .vision-board');
+    var pursuits = blk.querySelector('.tv-panel.tv-pursuits');
+    var vb = pursuits && pursuits.querySelector('.vision-board');
     if(!vb) return;
+    // Re-bind any section tile to its hardwired photo by name.
+    var photoDirty = false;
+    [].slice.call(vb.querySelectorAll('.vision-tile')).forEach(function(tile){
+      var title = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim();
+      if(!title) return;
+      var want = hardwiredSectionPhoto(blk, title);
+      if(!want) return;
+      var cur = cssUrlSrc(tile.style.getPropertyValue('--tile-photo')||'');
+      if(cur === want) return;
+      tile.style.setProperty('--tile-photo', 'url("'+want+'")');
+      photoDirty = true;
+      var data = dayData(blk);
+      (data.addedSections||[]).forEach(function(rec){
+        if(!rec) return;
+        if((rec.focus||slug(rec.title)) === tileFocus(tile) || String(rec.title||'').toLowerCase() === title.toLowerCase()){
+          rec.photo = want;
+        }
+      });
+    });
+    if(photoDirty) persistDay(blk);
+    syncHeroLayoutClass(blk);
+    var hasTiles = !!vb.querySelector('.vision-tile');
+    pursuits.classList.toggle('overview-panel-empty', !hasTiles);
+    blk.classList.toggle('overview-empty', !hasTiles);
+    var emptyAdd = vb.querySelector(':scope > .overview-empty-add');
+    if(!hasTiles){
+      if(!emptyAdd){
+        emptyAdd = document.createElement('button');
+        emptyAdd.type = 'button';
+        emptyAdd.className = 'overview-empty-add overview-add-section';
+        emptyAdd.setAttribute('aria-label', 'add section');
+        emptyAdd.textContent = '+';
+        vb.appendChild(emptyAdd);
+      }
+    } else if(emptyAdd){
+      emptyAdd.remove();
+    }
     [].slice.call(vb.querySelectorAll('.vision-tile')).forEach(ensureTileChrome);
     [].slice.call(vb.querySelectorAll('.vision-polaroid')).forEach(ensurePolaroidChrome);
     syncZoomAddCard(vb);
@@ -39588,6 +40037,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     (data.addedSections || []).forEach(function(rec){
       if(!rec || !rec.title) return;
+      var want = hardwiredSectionPhoto(blk, rec.title);
+      if(want) rec.photo = want;
       if(vb.querySelector('.vision-tile[data-focus="'+(rec.focus||slug(rec.title))+'"]')) return;
       host.appendChild(makeTile(rec));
     });
@@ -39620,6 +40071,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     persistDay(blk);
     var vb = blk.querySelector('.vision-board.is-zoomed');
     if(vb) vb.classList.remove('is-zoomed');
+    ensureOverviewEditChrome(blk);
   }
   function deletePolaroid(pol){
     var tile = pol && pol.closest('.vision-tile');
@@ -39634,14 +40086,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     persistDay(blk);
   }
   function addTile(blk, title){
-    title = String(title||'').replace(/\s+/g,' ').trim();
+    title = String(title||'').replace(/\s+/g,' ').trim().toUpperCase();
     if(!title || !blkOk(blk)) return;
     var host = heroHost(blk);
     if(!host) return;
     var focus = slug(title);
     var n = 2;
     while(host.querySelector('.vision-tile[data-focus="'+focus+'"]')){ focus = slug(title)+'-'+n; n++; }
-    var photo = (window.__overviewPhotoForName && window.__overviewPhotoForName(blk, title)) || DEFAULT_TILE;
+    var photo = hardwiredSectionPhoto(blk, title) || DEFAULT_TILE;
     var rec = {focus:focus, title:title, photo:photo};
     dayData(blk).addedSections.push(rec);
     host.appendChild(makeTile(rec));
@@ -39659,7 +40111,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       det.className = 'vision-tile-details';
       tile.appendChild(det);
     }
-    var src = (window.__overviewPhotoForName && window.__overviewPhotoForName(blk, title)) || DEFAULT_CARD;
+    var src = hardwiredSectionPhoto(blk, title) || DEFAULT_CARD;
     var count = det.querySelectorAll('.vision-polaroid').length;
     var rec = {sectionFocus: tileFocus(tile), title:title, src:src, px:(8 + count * 18)+'%', py:(18 + (count%3)*14)+'%', shot:true};
     dayData(blk).addedCards.push(rec);
@@ -39926,6 +40378,17 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-b
   height: min(80vh, 800px);
   box-sizing: border-box;
 }
+/* Overview-era: board hugs tiles — no giant empty collage stage for 1–3 sections */
+html body .day-block.overview-era-day .vision-board,
+html body .day-block.overview-era-day .vision-board.vision-board-sparse {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+html body .day-block.overview-era-day .vision-board.vision-board-filled {
+  min-height: min(68vh, 680px) !important;
+  height: auto !important;
+}
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
   display: grid;
   grid-template-columns: 1.35fr 1fr 1fr;
@@ -39933,6 +40396,70 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-h
   gap: 12px;
   flex: 1 1 auto;
   min-height: 0;
+}
+html body .day-block.overview-era-day .vision-hero {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-content: start !important;
+}
+html body .day-block.overview-era-day .vision-hero-solo {
+  grid-template-columns: minmax(280px, min(720px, 100%)) !important;
+  grid-template-rows: minmax(260px, 42vh) !important;
+  width: 100% !important;
+  max-width: min(720px, 100%) !important;
+}
+html body .day-block.overview-era-day .vision-hero-solo > .vision-tile {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  min-height: 260px !important;
+}
+html body .day-block.overview-era-day .vision-hero-duo {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: minmax(260px, 40vh) !important;
+  width: 100% !important;
+}
+html body .day-block.overview-era-day .vision-hero-duo > .vision-tile:nth-child(1) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+html body .day-block.overview-era-day .vision-hero-duo > .vision-tile:nth-child(2) {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+html body .day-block.overview-era-day .vision-hero-trio {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-rows: minmax(240px, 38vh) !important;
+  width: 100% !important;
+}
+html body .day-block.overview-era-day .vision-hero-trio > .vision-tile:nth-child(1) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+html body .day-block.overview-era-day .vision-hero-trio > .vision-tile:nth-child(2) {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+html body .day-block.overview-era-day .vision-hero-trio > .vision-tile:nth-child(3) {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+}
+@media (max-width: 820px) {
+  html body .day-block.overview-era-day .vision-hero-solo {
+    grid-template-rows: minmax(220px, 36vh) !important;
+    max-width: 100% !important;
+  }
+  html body .day-block.overview-era-day .vision-hero-duo,
+  html body .day-block.overview-era-day .vision-hero-trio {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: none !important;
+    grid-auto-rows: minmax(200px, 32vh) !important;
+  }
+  html body .day-block.overview-era-day .vision-hero-duo > .vision-tile,
+  html body .day-block.overview-era-day .vision-hero-trio > .vision-tile {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-more {
   display: grid;
@@ -40652,6 +41179,7 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
     svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'aug20-zone-web');
     svg.setAttribute('aria-hidden', 'true');
+    svg.style.setProperty('display', 'block', 'important');
     grid.insertBefore(svg, grid.firstChild);
     return svg;
   }
@@ -40678,10 +41206,24 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
     var blk = blockEl(from || fromEl);
     return !!(blk && blk.classList.contains('nodes-linking'));
   }
+  function cancelFlowPick(blk){
+    if(!blk) return;
+    blk.classList.remove('flow-picking');
+    blk.querySelectorAll('.flow-pick-on').forEach(function(el){
+      el.classList.remove('flow-pick-on');
+      var num = el.querySelector(':scope > .flow-pick-num');
+      if(num) num.remove();
+    });
+    if(blk._flowPick) blk._flowPick = [];
+    var btn = blk.querySelector('.make-flow-btn');
+    if(btn) btn.classList.remove('active-pick');
+    window.__flowPicking = !!document.querySelector('.day-block.flow-picking');
+  }
   function setLinking(on, from){
     var blk = blockEl(from || fromEl);
     if(!blk) return;
     ensureEdges(dayKey(blk));
+    if(on) cancelFlowPick(blk);
     blk.classList.toggle('nodes-linking', !!on);
     var btn = blk.querySelector('.nodes-link-btn');
     if(btn) btn.classList.toggle('is-on', !!on);
@@ -40726,9 +41268,11 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
   function pickNode(el){
     if(!el) return;
     var blk = blockEl(el);
+    var grid = board(el);
     ensureEdges(dayKey(blk));
     if(!fromEl){
       fromEl = el;
+      if(grid) assignId(el, {});
       el.classList.add('node-link-from');
       setHint('now click what it connects to', blk);
       return;
@@ -40739,8 +41283,9 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
       setHint('click a node, then click what it connects to', blk);
       return;
     }
-    var a = fromEl.getAttribute('data-node-id') || wantedId(fromEl);
-    var b = el.getAttribute('data-node-id') || wantedId(el);
+    var used = {};
+    var a = grid ? assignId(fromEl, used) : (fromEl.getAttribute('data-node-id') || wantedId(fromEl));
+    var b = grid ? assignId(el, used) : (el.getAttribute('data-node-id') || wantedId(el));
     if(!a || !b) return;
     addEdge(a, b);
     fromEl.classList.remove('node-link-from');
@@ -40770,9 +41315,18 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
     var svg = ensureSvg(grid);
     var w = parseFloat(grid.style.getPropertyValue('--canvas-w')) || grid.offsetWidth || 1400;
     var h = parseFloat(grid.style.getPropertyValue('--canvas-h')) || grid.offsetHeight || 800;
+    if (!isFinite(w) || w < 40) w = grid.offsetWidth || 1400;
+    if (!isFinite(h) || h < 40) h = grid.offsetHeight || 800;
     svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
     svg.setAttribute('width', String(w));
     svg.setAttribute('height', String(h));
+    svg.style.setProperty('display', 'block', 'important');
+    svg.style.setProperty('width', w + 'px', 'important');
+    svg.style.setProperty('height', h + 'px', 'important');
+    svg.style.setProperty('left', '0', 'important');
+    svg.style.setProperty('top', '0', 'important');
+    svg.style.setProperty('right', 'auto', 'important');
+    svg.style.setProperty('bottom', 'auto', 'important');
     while(svg.firstChild) svg.removeChild(svg.firstChild);
     var map = collect(grid, w, h);
     prune(map);
@@ -40795,14 +41349,15 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
       p.setAttribute('class', 'aug20-edge');
       p.setAttribute('d', d);
       p.setAttribute('fill', 'none');
-      p.setAttribute('stroke', 'rgba(255,244,220,0.45)');
-      p.setAttribute('stroke-width', '1.35');
-      p.setAttribute('stroke-dasharray', '5 8');
+      p.setAttribute('stroke', 'rgba(255,248,235,0.98)');
+      p.setAttribute('stroke-width', '3');
+      p.setAttribute('stroke-dasharray', '7 6');
       p.setAttribute('stroke-linecap', 'round');
       p.setAttribute('data-a', e[0]);
       p.setAttribute('data-b', e[1]);
       p.style.pointerEvents = 'stroke';
       p.style.cursor = 'pointer';
+      p.style.filter = 'drop-shadow(0 0 3px rgba(0,0,0,0.65))';
       hit.addEventListener('mouseenter', function(){ p.classList.add('is-hot'); });
       hit.addEventListener('mouseleave', function(){ p.classList.remove('is-hot'); });
       p.addEventListener('mouseenter', function(){ p.classList.add('is-hot'); });
@@ -40820,9 +41375,26 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
       if(linkBtn){
         e.preventDefault();
         e.stopPropagation();
+        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
         var on = !isLinking(linkBtn);
         setLinking(on, linkBtn);
         return;
+      }
+      if(!isLinking(e.target)) return;
+      if(e.target.closest('.nodes-add-btn, .nodes-link-btn, .nodes-edit-bar, .zone-add-picker, .zone-del, .card-del, .zone-oneoff-del, .day-add-zone, input, textarea, button.tv-pill, path.aug20-edge, path.aug20-edge-hit')) return;
+      var node = closestNode(e.target);
+      var grid = board(e.target);
+      if(node && grid && grid.contains(node)){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+        pickNode(node);
+        draw(blockEl(node));
+        return;
+      }
+      if(e.target.closest('.tv-panel.tv-nodes')){
+        clearFrom();
+        setHint('click a node, then click what it connects to', blockEl(e.target));
       }
     }, true);
     document.addEventListener('pointerdown', function(e){
@@ -40834,21 +41406,6 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
         if(e.stopImmediatePropagation) e.stopImmediatePropagation();
         dropEdge(hit.getAttribute('data-a'), hit.getAttribute('data-b'), hit);
         return;
-      }
-      if(!isLinking(e.target)) return;
-      if(e.target.closest('.nodes-add-btn, .nodes-link-btn, .nodes-edit-bar, .zone-add-picker, .zone-del, .card-del, .zone-oneoff-del, .day-add-zone, input, textarea, button.tv-pill')) return;
-      var node = closestNode(e.target);
-      var grid = board(e.target);
-      if(node && grid && grid.contains(node)){
-        e.preventDefault();
-        e.stopPropagation();
-        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-        pickNode(node);
-        return;
-      }
-      if(e.target.closest('.tv-panel.tv-nodes')){
-        clearFrom();
-        setHint('click a node, then click what it connects to', blockEl(e.target));
       }
     }, true);
     document.addEventListener('keydown', function(e){

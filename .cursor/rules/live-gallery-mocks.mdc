@@ -1,0 +1,24 @@
+---
+description: Deliver design mock-ups as live gallery HTML pages on the dashboard
+alwaysApply: true
+---
+
+# Live gallery for mock-ups
+
+When Diana asks for mock-ups, design options, or "show me alternatives":
+
+1. **Always build a live gallery page** on `/Users/diana/my-dashboard/` (served at `http://127.0.0.1:8765/`).
+2. Pattern: stacked figures with image + label + short caption (see `accomplishments-mocks.html`, `capture-panel-mocks.html`).
+3. **Give her the URL** in the reply — do not rely on inline chat images alone.
+4. Images live in `manus-storage/`; gallery HTML links to them with cache-bust query params.
+5. After she picks, apply the winner to the live page.
+
+## Image direction
+
+- Prefer **literal, instantly readable** visuals over clever metaphors that need decoding.
+- No other people's faces or names in generated/found images (see `no-other-faces-or-names` rule).
+
+## Gallery naming
+
+- `{page}-mocks.html` for background or full-page direction mocks
+- `{feature}-mocks.html` for UI chrome / panel / component mocks
