@@ -42880,8 +42880,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var row = Math.floor(idx / cols);
       var px = Math.max(0, Math.min(90, marginX + col * stepX));
       var py = Math.max(0, Math.min(90, marginY + row * stepY));
-      var cleared = clampPyClearOfTitle(tile, pol, py);
-      if(cleared < py) py = cleared;
+      /* Only push DOWN off the title band — never pull a lower row back up into the one above. */
+      if(row === 0){
+        var cleared = clampPyClearOfTitle(tile, pol, py);
+        if(cleared > py) py = cleared;
+      }
       pol.style.setProperty('--pw', pwPx + 'px');
       pol.style.setProperty('width', pwPx + 'px', 'important');
       pol.style.setProperty('height', packH + 'px', 'important');
