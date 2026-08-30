@@ -45876,6 +45876,16 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     document.body.appendChild(box);
   }
   document.addEventListener('click', function(e){
+    /* Section→page overlay wins before drag flags / zoom (matches prototype). */
+    if (typeof window.__protoTryOpenSectionPage === 'function') {
+      if (!(e.metaKey || e.ctrlKey) && !e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-pol-resize, .overview-add-section, .overview-add-picker, .overview-card-picker, .overview-card-modal, .vision-zoom-out')) {
+        var protoTile = e.target.closest('.vision-tile');
+        var protoVb = protoTile && (typeof boardEl === 'function' ? boardEl(protoTile) : protoTile.closest('.vision-board'));
+        if (protoTile && protoVb && protoVb.contains(protoTile) && !protoVb.classList.contains('is-zoomed') && !protoTile.classList.contains('vision-tile-shot')) {
+          if (window.__protoTryOpenSectionPage(protoTile, e)) return;
+        }
+      }
+    }
     if (window.__visionTileJustDragged || window.__visionTileDragging || window.__polJustDragged || window.__polDragging) return;
     if (e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-pol-resize, .overview-add-section, .overview-add-picker, .overview-card-picker, .overview-card-modal')) return;
     /* Modifier+click archives via overview edits — never zoom. */
@@ -47343,6 +47353,338 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:no
   max-height: 48%;
 }
 </style>
+
+
+<script id="section-page-overlay-js">
+(function(){
+  if (window.__sectionPageOverlayBooted) return;
+  window.__sectionPageOverlayBooted = 1;
+
+  function pageForSection(tile){
+    if (!tile) return '';
+    var focus = String(tile.getAttribute('data-focus') || '').toLowerCase();
+    var title = String(((tile.querySelector('.vision-tile-title') || {}).textContent) || '')
+      .replace(/\s+/g, ' ').trim().toLowerCase();
+    var key = focus || title;
+    var MAP = {
+      pepperdine: 'pepperdine.html',
+      grad: 'pepperdine.html',
+      'grad-school': 'pepperdine.html',
+      'grad school': 'pepperdine.html',
+      quantum: 'quantum-consciousness.html',
+      'god-conscious': 'deen.html',
+      'god conscious': 'deen.html',
+      abundance: 'abundance.html',
+      finances: 'abundance.html',
+      prosperity: 'prosperity.html',
+      lifestyle: 'lifestyle.html',
+      'curated lifestyle': 'lifestyle.html',
+      'curated-lifestyle': 'lifestyle.html',
+      house: 'lifestyle.html',
+      'power-purpose': 'power-opportunities.html',
+      power: 'power-opportunities.html',
+      purpose: 'power-opportunities.html',
+      'power | purpose': 'power-opportunities.html',
+      executive: 'diana-jundi.html',
+      ambition: 'diana-jundi.html',
+      pursuits: 'dimensions.html',
+      potential: 'self.html',
+      'inner fire': 'center.html',
+      'inner-fire': 'center.html',
+      'future self': '2030.html',
+      'future-self': '2030.html',
+      manifestation: 'manifestation.html',
+      delusion: 'delusion.html',
+      failures: 'failures.html',
+      attraction: 'attraction.html',
+      alchemy: 'alchemy.html',
+      transmutation: 'transmutation.html',
+      victory: 'victory-docket.html',
+      'victory docket': 'victory-docket.html',
+      adhd: 'adhd.html',
+      'brain dump': 'brain-dump.html'
+    };
+    if (MAP[key]) return MAP[key];
+    if (MAP[title]) return MAP[title];
+    if (MAP[focus]) return MAP[focus];
+    return '';
+  }
+
+  var PAGE_HASH_RE = /^#page=(.+)$/;
+  var __protoPageOverlay = null;
+  var __protoPageClosing = false;
+  var __protoScrollLockY = 0;
+  var CLOSE_LABEL = (function(){
+    try {
+      var f = (location.pathname || '').split('/').pop() || 'everything.html';
+      return f.replace(/\.html$/i, '') || 'everything';
+    } catch (e) { return 'everything'; }
+  })();
+
+  function pageFile(href){
+    return String(href || '').split('?')[0].split('#')[0].split('/').pop();
+  }
+
+  function ensurePageOverlayStyles(){
+    if (document.getElementById('proto-page-overlay-css')) return;
+    var s = document.createElement('style');
+    s.id = 'proto-page-overlay-css';
+    s.textContent = [
+      'html body.proto-page-overlay-open { overflow: hidden !important; }',
+      '#proto-page-overlay {',
+      '  position: fixed; inset: 0; width: 100vw; height: 100vh;',
+      '  z-index: 199990; margin: 0; padding: 0; border: 0;',
+      '  background: #0a0806; display: none; overflow: hidden;',
+      '}',
+      '#proto-page-overlay.is-open { display: block; }',
+      '#proto-page-overlay iframe {',
+      '  position: absolute; inset: 0; width: 100%; height: 100%;',
+      '  border: 0; margin: 0; padding: 0; display: block;',
+      '  background: #0a0806;',
+      '}',
+      '#proto-page-overlay .proto-page-hit {',
+      '  position: absolute; inset: 0; z-index: 2;',
+      '  margin: 0; padding: 0; border: 0; background: transparent;',
+      '  cursor: zoom-out;',
+      '}',
+      '#proto-page-overlay .proto-page-zoom-out {',
+      '  position: absolute; right: 16px; top: 16px; z-index: 3;',
+      '  border: 1px solid rgba(255, 255, 255, 0.42);',
+      '  background: rgba(20, 16, 12, 0.42); color: #fff8ee;',
+      '  border-radius: 999px; padding: 6px 12px;',
+      '  font: italic 13px/1 "Newsreader", Georgia, serif;',
+      '  cursor: pointer; backdrop-filter: blur(8px);',
+      '  -webkit-backdrop-filter: blur(8px);',
+      '}',
+      '#proto-page-overlay .proto-page-zoom-out:hover { background: rgba(20, 16, 12, 0.58); }'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  function scrubIframeChrome(iframe){
+    try {
+      var doc = iframe && iframe.contentDocument;
+      if (!doc || !doc.head) return;
+      if (doc.getElementById('proto-embed-hide-nav')) return;
+      var s = doc.createElement('style');
+      s.id = 'proto-embed-hide-nav';
+      s.textContent =
+        '#hamburger-menu, #nav-sidebar, #nav-overlay, #nav-root, #nav-close {' +
+        '  display: none !important; visibility: hidden !important; pointer-events: none !important;' +
+        '}';
+      doc.head.appendChild(s);
+    } catch (e) {}
+  }
+
+  function clearPageHash(){
+    try {
+      if (PAGE_HASH_RE.test(location.hash || '')) {
+        history.replaceState(
+          (history.state && typeof history.state === 'object')
+            ? Object.assign({}, history.state, { protoPageOverlay: null })
+            : { protoPageOverlay: null },
+          '',
+          location.pathname + location.search
+        );
+      } else if (history.state && history.state.protoPageOverlay) {
+        history.replaceState(
+          Object.assign({}, history.state, { protoPageOverlay: null }),
+          '',
+          location.pathname + location.search + (location.hash || '')
+        );
+      }
+    } catch (e) {}
+  }
+
+  function closePageOverlay(opts){
+    opts = opts || {};
+    var el = __protoPageOverlay || document.getElementById('proto-page-overlay');
+    if (!el || !el.classList.contains('is-open')) return false;
+    if (__protoPageClosing) return true;
+    __protoPageClosing = true;
+    el.classList.remove('is-open');
+    el.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('proto-page-overlay-open');
+    document.documentElement.classList.remove('proto-page-overlay-open');
+    try {
+      window.scrollTo(0, __protoScrollLockY || 0);
+    } catch (e) {}
+    var frame = el.querySelector('iframe');
+    if (frame) {
+      try { frame.removeAttribute('src'); } catch (e2) {}
+    }
+    if (!opts.keepHash) clearPageHash();
+    __protoPageClosing = false;
+    return true;
+  }
+
+  function openPageOverlay(href, opts){
+    opts = opts || {};
+    href = pageFile(href);
+    if (!href) return false;
+    ensurePageOverlayStyles();
+    var el = __protoPageOverlay || document.getElementById('proto-page-overlay');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'proto-page-overlay';
+      el.setAttribute('aria-hidden', 'true');
+      el.innerHTML =
+        '<iframe title="page" tabindex="-1"></iframe>' +
+        '<button type="button" class="proto-page-hit" aria-label="close page"></button>' +
+        '<button type="button" class="proto-page-zoom-out"></button>';
+      document.body.appendChild(el);
+      __protoPageOverlay = el;
+      el.querySelector('.proto-page-zoom-out').textContent = CLOSE_LABEL;
+      el.querySelector('.proto-page-hit').addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        closePageOverlay();
+      });
+      el.querySelector('.proto-page-zoom-out').addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        closePageOverlay();
+      });
+    }
+    var frame = el.querySelector('iframe');
+    __protoScrollLockY = window.scrollY || window.pageYOffset || 0;
+    document.body.classList.add('proto-page-overlay-open');
+    document.documentElement.classList.add('proto-page-overlay-open');
+    el.classList.add('is-open');
+    el.setAttribute('aria-hidden', 'false');
+    if (frame) {
+      var next = href + (href.indexOf('?') >= 0 ? '&' : '?') + 'protoEmbed=1';
+      if (frame.getAttribute('src') !== next) {
+        frame.onload = function(){ scrubIframeChrome(frame); };
+        frame.src = next;
+      } else {
+        scrubIframeChrome(frame);
+      }
+    }
+    if (!opts.skipHash) {
+      try {
+        var hash = '#page=' + encodeURIComponent(href);
+        if ((location.hash || '') !== hash) {
+          history.pushState({ protoPageOverlay: href }, '', hash);
+        } else {
+          history.replaceState({ protoPageOverlay: href }, '', hash);
+        }
+      } catch (e) {}
+    }
+    return true;
+  }
+
+  function tryOpenSectionPage(tile, e){
+    if (!tile) return false;
+    if (window.__visionTileJustDragged) return false;
+    if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1)) return false;
+    var href = pageForSection(tile);
+    if (!href) return false;
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    }
+    openPageOverlay(href);
+    return true;
+  }
+
+  window.__protoTryOpenSectionPage = tryOpenSectionPage;
+  window.__protoOpenPageOverlay = openPageOverlay;
+  window.__protoClosePageOverlay = closePageOverlay;
+  window.__protoPageForSection = pageForSection;
+
+  function pageFromHash(){
+    var m = PAGE_HASH_RE.exec(location.hash || '');
+    if (!m) return '';
+    try { return pageFile(decodeURIComponent(m[1])); } catch (e) { return pageFile(m[1]); }
+  }
+
+  function isModifiedClick(e){
+    return !!(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1);
+  }
+
+  function wireSectionPages(){
+    if (window.__protoSectionPagesWired) return;
+    window.__protoSectionPagesWired = 1;
+    ensurePageOverlayStyles();
+
+    document.addEventListener('click', function(e){
+      if (window.__visionTileJustDragged) return;
+      if (e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .overview-add-section, .overview-add-picker, .overview-card-picker, .overview-card-modal, .vision-zoom-out, #proto-page-overlay, .proto-page-hit, .proto-page-zoom-out')) return;
+      var tile = e.target.closest('.vision-tile');
+      if (!tile) return;
+      var vb = tile.closest('.vision-board');
+      if (!vb || !vb.contains(tile)) return;
+      if (vb.classList.contains('is-zoomed')) return;
+      if (tile.classList.contains('vision-tile-shot')) return;
+      if (!pageForSection(tile)) return;
+      if (isModifiedClick(e) || e.button === 1) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      openPageOverlay(pageForSection(tile));
+    }, true);
+
+    document.addEventListener('auxclick', function(e){
+      if (e.button !== 1) return;
+      if (e.target.closest('#proto-page-overlay')) return;
+      var tile = e.target.closest('.vision-tile');
+      if (!tile) return;
+      var href = pageForSection(tile);
+      if (!href) return;
+      e.preventDefault();
+      window.open(href, '_blank', 'noopener');
+    }, true);
+
+    document.addEventListener('keydown', function(e){
+      if (e.key !== 'Escape') return;
+      var el = document.getElementById('proto-page-overlay');
+      if (!el || !el.classList.contains('is-open')) return;
+      var sidebar = document.getElementById('nav-sidebar');
+      if (sidebar && sidebar.classList.contains('open')) return;
+      e.preventDefault();
+      closePageOverlay();
+    }, true);
+
+    document.addEventListener('click', function(e){
+      var el = document.getElementById('proto-page-overlay');
+      if (!el || !el.classList.contains('is-open')) return;
+      var a = e.target.closest('#nav-sidebar a[href]');
+      if (!a) return;
+      var file = pageFile(a.getAttribute('href'));
+      if (file === 'everything.html' || file === 'prototype.html' || file === '' || file === '/') {
+        e.preventDefault();
+        e.stopPropagation();
+        closePageOverlay();
+        var sidebar = document.getElementById('nav-sidebar');
+        var overlay = document.getElementById('nav-overlay');
+        if (sidebar) {
+          sidebar.classList.remove('open');
+          sidebar.setAttribute('aria-hidden', 'true');
+        }
+        if (overlay) overlay.classList.remove('open');
+      }
+    }, true);
+
+    window.addEventListener('popstate', function(){
+      var want = (history.state && history.state.protoPageOverlay) || pageFromHash();
+      var el = document.getElementById('proto-page-overlay');
+      var open = el && el.classList.contains('is-open');
+      if (want) openPageOverlay(want, { skipHash: true });
+      else if (open) closePageOverlay({ keepHash: true });
+    });
+  }
+
+  function boot(){
+    wireSectionPages();
+    var hashed = pageFromHash();
+    if (hashed) openPageOverlay(hashed, { skipHash: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
 
 </html>
 ision-collage-day) .vision-tile.is-pol-drop-target {
