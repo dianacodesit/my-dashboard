@@ -42087,28 +42087,30 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
 }
 /* Flat-tummy section photo — landscape abs; keep midsection centered under cover (no letterbox). */
 
-/* Villains: light rim on the photo plane (dark center stays). Tile-scoped only —
-   not collage reorder / neighbor forcing. pointer-events none so zoom still works. */
-html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villains"] .vision-tile-photo,
-html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villain"] .vision-tile-photo {
-  position: relative;
-}
-html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villains"] .vision-tile-photo::after,
-html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villain"] .vision-tile-photo::after {
+/* Villains: light rim on THIS tile only (dark center stays). Uses ::before so we
+   don't fight the shared title-readability ::after, and don't break photo absolute fill.
+   Not collage reorder / neighbor forcing. pointer-events none so zoom still works. */
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villains"]::before,
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villain"]::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* Soft light rim on the tile plane (survives cover crop); not white chrome border */
+  border-radius: inherit;
   background: radial-gradient(
-    ellipse 78% 72% at 50% 48%,
-    rgba(0, 0, 0, 0.22) 0%,
-    rgba(0, 0, 0, 0.10) 32%,
-    transparent 55%,
-    rgba(236, 228, 214, 0.38) 78%,
-    rgba(245, 240, 230, 0.72) 100%
+    ellipse 70% 65% at 50% 48%,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0.12) 30%,
+    transparent 52%,
+    rgba(236, 228, 214, 0.42) 76%,
+    rgba(245, 240, 230, 0.78) 100%
   );
+}
+/* Soften the usual dark bottom wash so the light rim can read on villains */
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villains"]::after,
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villain"]::after {
+  background: linear-gradient(180deg, transparent 40%, rgba(12, 8, 4, 0.28) 78%, rgba(12, 8, 4, 0.55) 100%);
 }
 
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-body .vision-tile-photo,
