@@ -43500,6 +43500,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       localStorage.setItem('btm_polaroid_caption_fit_v1','1');
     }
   }catch(e){}
+  function __fillPackAllTiles(){
+    document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+      if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+        try{ packTileCards(tile, {force: true}); }catch(e){}
+      }
+    });
+  }
+  window.__fillPackAllTiles = __fillPackAllTiles;
+  [40, 240, 800].forEach(function(ms){ setTimeout(__fillPackAllTiles, ms); });
+  if(!window.__packFillResizeWired){
+    window.__packFillResizeWired = 1;
+    window.addEventListener('resize', function(){
+      clearTimeout(window.__packFillResizeT);
+      window.__packFillResizeT = setTimeout(__fillPackAllTiles, 100);
+    });
+  }
   function movePolaroidToTile(pol, destTile, clientX, clientY, grabOffsetX, grabOffsetY){
     var srcTile = pol && pol.closest('.vision-tile');
     var blk = pol && pol.closest('.day-block');
