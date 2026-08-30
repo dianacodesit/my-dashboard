@@ -31,7 +31,7 @@
     { href: 'victory-docket.html', label: 'victory docket', group: 'main' },
     { href: 'quantum-consciousness.html', label: 'quantum consciousness', group: 'main' },
     { href: 'priming.html', label: 'priming & prompting', group: 'main' },
-    { href: 'abundance.html', label: 'abundance economics', group: 'main' },
+    { href: 'prosperity.html', label: 'prosperity', group: 'main' },
     { href: 'parallel-timelines.html', label: 'parallel timelines', group: 'main' },
     { href: '2030.html', label: '2030', group: 'main' },
     { href: 'palettes.html', label: 'color palettes', group: 'design' },

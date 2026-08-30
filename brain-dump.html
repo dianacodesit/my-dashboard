@@ -71,9 +71,13 @@
     font-size: clamp(36px, 7vw, 56px);
     font-weight: 400;
     letter-spacing: 0.03em;
-    color: #2a221c;
+    color: #fff8ee;
     line-height: 1.05;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.55);
+    text-shadow:
+      0 0 10px rgba(255, 248, 230, 0.85),
+      0 0 24px rgba(255, 220, 160, 0.55),
+      0 0 42px rgba(255, 190, 100, 0.35),
+      0 2px 10px rgba(8, 4, 0, 0.55);
   }
   .dump-sub {
     margin-top: 10px;
@@ -764,7 +768,7 @@
     { id:'body', title:'glow up' },
     { id:'life', title:'lifestyle' },
     { id:'shopping', title:'shopping' },
-    { id:'finances', title:'finances' },
+    { id:'finances', title:'abundance' },
     { id:'leverage', title:'power | purpose' },
     { id:'ambition', title:'ambition' },
     { id:'presence', title:'quantum' },
@@ -1272,6 +1276,25 @@
     if (!ok) packClustersRowWise();
     growBoard();
   }
+  // If a manually resized section now has less content, drop fixed height
+  // so the glass hugs the notes again (no empty bottom).
+  function fitClusterHeights(){
+    Array.from(board.querySelectorAll('.cluster')).forEach(function(c){
+      if (!c.classList.contains('has-fixed-h')) return;
+      var x = parseFloat(c.style.getPropertyValue('--dx')) || 0;
+      var y = parseFloat(c.style.getPropertyValue('--dy')) || 0;
+      var w = parseFloat(c.style.getPropertyValue('--cw')) || c.offsetWidth || 280;
+      var rot = parseFloat(c.style.getPropertyValue('--rot')) || 0;
+      var fixed = parseFloat(c.style.getPropertyValue('--ch')) || 0;
+      if (!fixed) return;
+      placeCluster(c, x, y, w, rot, null);
+      var natural = Math.max(c.offsetHeight || 0, 88);
+      if (natural >= fixed - 4) {
+        placeCluster(c, x, y, w, rot, fixed);
+      }
+      // else leave auto-height — content shrunk after deletes / edits
+    });
+  }
   function balanceBoard(){
     board.classList.remove('is-live');
     var clusters = Array.from(board.querySelectorAll('.cluster'));
@@ -1350,6 +1373,7 @@
       }
       placeCluster(c, x, y, w, rot, h);
     });
+    fitClusterHeights();
     if (wide) {
       // Shelf-pack on empty/corrupt/overlap. Skip free force-settle on first paint.
       if (needsRepack || anyOverlaps(FORCE_GAP)) packClustersRowWise();

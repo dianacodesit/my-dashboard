@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>prosperity · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navveil5"/>
+<link rel="stylesheet" href="capture-page.css?v=nocream"/>
+<style>
+  /* Same gold photo — halfway quieter (between raw neon and full mute) */
+  .page-bg {
+    background: #1a120c;
+    overflow: hidden;
+  }
+  .page-bg::before {
+    content: "";
+    position: absolute;
+    inset: -2%;
+    background: url("manus-storage/abundance-bg-wealth.jpg?v=gold1") center 42%/cover no-repeat;
+    filter: saturate(0.72) brightness(0.84) contrast(0.95) sepia(0.06);
+    transform: scale(1.04);
+  }
+  .page-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(28, 18, 10, 0.28) 0%, rgba(36, 24, 14, 0.11) 42%, rgba(14, 9, 5, 0.32) 100%),
+      radial-gradient(ellipse 85% 70% at 50% 40%, rgba(255, 236, 210, 0.12), transparent 70%);
+    pointer-events: none;
+  }
+  body.capture-page #hamburger-menu span { background: #f3e6d0; }
+</style>
+</head>
+<body class="capture-page" data-store="page_abundance_v1" data-empty="nothing flowing yet">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">overflow · receive · flow</p>
+    <h1>prosperity</h1>
+    <p class="sub">economics of enough</p>
+  </header>
+  <section class="panel">
+    <div class="add-row">
+      <input id="new-item" type="text" placeholder="a thought about overflow" autocomplete="off"/>
+      <button id="add-btn" type="button">keep</button>
+    </div>
+    <div id="list"></div>
+    <p class="status" id="status">saved here</p>
+  </section>
+</main>
+<script src="nav-shared.js?v=navprosperity1"></script>
+<script src="capture-page.js?v=1"></script>
+</body>
+</html>
