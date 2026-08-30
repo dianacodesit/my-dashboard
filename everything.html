@@ -12916,7 +12916,7 @@ window.__j22fnApply=run;
     'glow-up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'glow':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'body':'manus-storage/zone-body-abs.jpg?v=tummy1',
-    'induction':'manus-storage/zone-body-gym-wide-dark.jpg?v=dark1',
+    'induction':'manus-storage/card-induction.jpg?v=1',
     'gym':'manus-storage/zone-body-abs.jpg?v=tummy1',
     'executive':'manus-storage/zone-ambition-v5-ascent.jpg',
     'ambition':'manus-storage/zone-ambition-v5-ascent.jpg',
@@ -13036,12 +13036,13 @@ window.__j22fnApply=run;
   window.__secImgFor = resolveImg;
   window.__secThemeFor = resolveTheme;
   var CARD_IMG = {
-    'application':'manus-storage/card-application.jpg?v=v2',
-    'scholarship application':'manus-storage/card-application.jpg?v=v2',
-    'scholarship re-application':'manus-storage/card-application.jpg?v=v2',
-    'scholarship reapplication':'manus-storage/card-application.jpg?v=v2',
-    'tuition':'manus-storage/card-tuition.jpg?v=v2',
-    'tuition money':'manus-storage/card-tuition.jpg?v=v2',
+    'induction':'manus-storage/card-induction.jpg?v=1',
+    'application':'manus-storage/card-application.jpg?v=v3',
+    'scholarship application':'manus-storage/card-application.jpg?v=v3',
+    'scholarship re-application':'manus-storage/card-application.jpg?v=v3',
+    'scholarship reapplication':'manus-storage/card-application.jpg?v=v3',
+    'tuition':'manus-storage/card-tuition.jpg?v=v3',
+    'tuition money':'manus-storage/card-tuition.jpg?v=v3',
     'committee check-in':'manus-storage/pepperdine-committee-checkin.jpg',
     'committee checkin':'manus-storage/pepperdine-committee-checkin.jpg',
     'gsa':'manus-storage/handshake-pepperdine-gsa.jpg',
@@ -15344,2408 +15345,61 @@ window.__j22fnApply=run;
   /* Strip accidental display:none on vision tiles (solo-layout tests / bad shells) */
   try{
     if(!localStorage.getItem('btm_vision_tile_unhide_v1')){
-      document.querySelectorAll('.vision-hero > .vision-tile').forEach(function(t){
-        if(t.style && t.style.display === 'none') t.style.removeProperty('display');
-        var s = t.getAttribute('style') || '';
-        if(/display\s*:\s*none/i.test(s)){
-          t.setAttribute('style', s.replace(/;?\s*display\s*:\s*none\s*;?/ig, ';').replace(/^;+|;+$/g, '').trim());
-        }
-      });
-      ['btm_day_shells_v1'].forEach(function(k){
-        var raw = localStorage.getItem(k); if(!raw || raw.indexOf('display: none') < 0 && raw.indexOf('display:none') < 0) return;
-        localStorage.setItem(k, raw.replace(/(\s|;|"|')display\s*:\s*none\s*;?/gi, '$1'));
-      });
-      localStorage.setItem('btm_vision_tile_unhide_v1','1');
-    }
-  }catch(e){}
+      document.querySelectorAll('.vision-hero >
+<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 1 / 3 / 2 !important;">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">glow up</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:8%;--py:16%">
+<img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg">
+<span>vanity</span>
+</div>
+<label class="vision-check" style="--px:46%;--py:18%"><input class="agenda-check" type="checkbox"><span>cleanse</span></label>
+<label class="vision-check" style="--px:62%;--py:34%"><input class="agenda-check" type="checkbox"><span>serum</span></label>
+<label class="vision-check" style="--px:48%;--py:50%"><input class="agenda-check" type="checkbox"><span>SPF</span></label>
+<label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-abs.jpg?v=tummy1'); grid-area: 1 / 2 / 2 / 4 !important;">
+<div class="vision-tile-photo"></div>
+<p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
+<h3 class="vision-tile-title">body</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div>
 
-
-
-  var FALLBACK_LIVE_DAY='2026-08-20';
-  var LIVE_DAY=FALLBACK_LIVE_DAY;
-  var GOODKEY='btm_last_good_board_v1';
-  function liveDayOf(el){
-    var blk=el&&el.closest&&el.closest('.day-block');
-    var d=blk&&blk.getAttribute('data-date');
-    return (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) ? d : FALLBACK_LIVE_DAY;
-  }
-  function pinBoardDay(el){
-    LIVE_DAY=liveDayOf(el);
-    return LIVE_DAY;
-  }
-  function clearPoisonedLiveSeed(){
-    var m=loadLive();
-    var day=m[LIVE_DAY];
-    if(!day || typeof day!=='object') return;
-    var baked={ body:['body'] };
-    if(liveLooksLikeFullPresetDump(day) || packIsCatalogSpam(day, baked)){
-      delete m[LIVE_DAY];
-      try{ localStorage.setItem(LIVEKEY, JSON.stringify(m)); }catch(e){}
-    }
-  }
-  function packHasItems(pack){
-    if(!pack || typeof pack!=='object') return false;
-    return Object.keys(pack).some(function(k){
-      var v=pack[k];
-      if(Array.isArray(v)) return v.length>0;
-      if(v && typeof v==='object') return Object.keys(v).some(function(kk){
-        var inner=v[kk];
-        return Array.isArray(inner) ? inner.length>0 : !!inner;
-      });
-      return !!v;
-    });
-  }
-  function refuseEmptyWrite(key, next){
-    var prev;
-    try{ prev=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){ prev={}; }
-    return !packHasItems(next) && packHasItems(prev);
-  }
-  function snapshotGoodBoard(){
-    try{
-      var st={
-        live:JSON.parse(localStorage.getItem(LIVEKEY)||'{}'),
-        oneoffs:JSON.parse(localStorage.getItem('btm_zone_oneoffs_v1')||'{}'),
-        loose:JSON.parse(localStorage.getItem('btm_canvas_loose_v1')||'{}'),
-        miniTasks:JSON.parse(localStorage.getItem('btm_mini_tasks_v1')||'{}'),
-        vbPos:JSON.parse(localStorage.getItem('btm_vb_pos_v1')||'{}')
-      };
-      if(!packHasItems(st.live) && !packHasItems(st.oneoffs) && !packHasItems(st.loose) && !packHasItems(st.miniTasks) && !packHasItems(st.vbPos)) return;
-      localStorage.setItem(GOODKEY, JSON.stringify(st));
-    }catch(e){}
-  }
-  window.__snapshotGoodBoard=snapshotGoodBoard;
-  function reviveGoodBoard(){
-    var good;
-    try{ good=JSON.parse(localStorage.getItem(GOODKEY)||'null'); }catch(e){ return; }
-    if(!good) return;
-    if(good.live && good.live[LIVE_DAY] && liveLooksLikeFullPresetDump(good.live[LIVE_DAY])) return;
-    function fillIfEmpty(key, pack){
-      if(!packHasItems(pack)) return;
-      var cur;
-      try{ cur=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){ cur={}; }
-      if(packHasItems(cur)) return;
-      try{ localStorage.setItem(key, JSON.stringify(pack)); }catch(e){}
-    }
-    fillIfEmpty(LIVEKEY, good.live);
-    fillIfEmpty('btm_zone_oneoffs_v1', good.oneoffs);
-    fillIfEmpty('btm_canvas_loose_v1', good.loose);
-    fillIfEmpty('btm_mini_tasks_v1', good.miniTasks);
-    fillIfEmpty('btm_vb_pos_v1', good.vbPos);
-  }
-  function loadLive(){ try{ return JSON.parse(localStorage.getItem(LIVEKEY)||'{}'); }catch(e){ return {}; } }
-  function saveLive(m){
-    if(refuseEmptyWrite(LIVEKEY, m)) return;
-    try{ localStorage.setItem(LIVEKEY, JSON.stringify(m)); }catch(e){}
-    snapshotGoodBoard();
-    scheduleCloudSave();
-  }
-  function goneKey(zid, name){ return LIVE_DAY+'|'+(zid||'')+'|'+String(name||'').toLowerCase(); }
-  function loadGone(){ try{ return JSON.parse(localStorage.getItem('btm_live_minicards_gone_v1')||'{}'); }catch(e){ return {}; } }
-  function saveGone(m){ try{ localStorage.setItem('btm_live_minicards_gone_v1', JSON.stringify(m)); }catch(e){} scheduleCloudSave(); }
-  function isGone(zid, name){ return !!loadGone()[goneKey(zid, name)]; }
-  function forgetLive(zid, name){
-    if(!zid || !name) return;
-    var m=loadLive();
-    m[LIVE_DAY]=m[LIVE_DAY]||{};
-    m[LIVE_DAY][zid]=(m[LIVE_DAY][zid]||[]).filter(function(x){ return String(x).toLowerCase()!==name.toLowerCase(); });
-    saveLive(m);
-    var g=loadGone();
-    g[goneKey(zid, name)]=1;
-    saveGone(g);
-    var pos=loadC();
-    delete pos[(zid||'')+'|'+name.toLowerCase()];
-    saveC(pos);
-  }
-  function isTextMomName(name){
-    return /text\s*mom/.test(String(name||'').toLowerCase());
-  }
-  function unpinTextMomFromGlowUp(grid){
-    if(!grid) return;
-    pinBoardDay(grid);
-    var m=loadLive();
-    var day=LIVE_DAY;
-    if(m[day] && m[day].body){
-      m[day].body=(m[day].body||[]).filter(function(n){ return !isTextMomName(n); });
-      saveLive(m);
-    }
-    try{
-      var good=JSON.parse(localStorage.getItem(GOODKEY)||'null');
-      if(good && good.live && good.live[day] && good.live[day].body){
-        good.live[day].body=(good.live[day].body||[]).filter(function(n){ return !isTextMomName(n); });
-        localStorage.setItem(GOODKEY, JSON.stringify(good));
-      }
-    }catch(e){}
-    var gone=loadGone();
-    gone[goneKey('body','Text Mom')]=1;
-    gone[goneKey('body','text mom')]=1;
-    gone[goneKey('body','Text Mom back')]=1;
-    saveGone(gone);
-    var bodyHost=grid.querySelector('.pursuit-zone-grid[data-zone="body"]');
-    var lifeHost=grid.querySelector('.pursuit-zone-grid[data-zone="life"]');
-    if(bodyHost){
-      [].slice.call(bodyHost.querySelectorAll('.sec-card')).forEach(function(c){
-        if(!isTextMomName(cardName(c))) return;
-        var already=lifeHost && [].slice.call(lifeHost.querySelectorAll('.sec-card')).some(function(x){ return isTextMomName(cardName(x)); });
-        if(lifeHost && !already) lifeHost.appendChild(c);
-        else c.remove();
-      });
-      [].slice.call(bodyHost.querySelectorAll('.j22-t')).forEach(function(t){
-        if(!isTextMomName(t.textContent)) return;
-        var item=t.closest('.j22-item');
-        if(item) item.remove();
-      });
-    }
-    [].slice.call(grid.querySelectorAll('.pursuit-zone[data-zone="body"] .zone-oneoff-t, .pursuit-zone[data-zone="body"] .zone-oneoffs .zone-oneoff-t')).forEach(function(t){
-      if(!isTextMomName(t.textContent)) return;
-      var chip=t.closest('.zone-oneoff');
-      if(chip) chip.remove();
-    });
-    try{
-      var tasks=JSON.parse(localStorage.getItem(TKEY)||'{}');
-      var list=tasks[day] && tasks[day].body;
-      if(Array.isArray(list)){
-        tasks[day].body=list.filter(function(t){ return !isTextMomName(taskName(t)); });
-        localStorage.setItem(TKEY, JSON.stringify(tasks));
-      }
-    }catch(e){}
-  }
-  function persistFreeformCardGone(card){
-    var blk=card.closest('.day-block');
-    var day=blk?blk.getAttribute('data-date'):'';
-    var name=cardName(card);
-    if(!day||!name) return;
-    try{
-      var a=JSON.parse(localStorage.getItem('btm_deleted_v1')||'[]');
-      var k='S|'+day+'|'+name;
-      if(a.indexOf(k)<0){ a.push(k); localStorage.setItem('btm_deleted_v1', JSON.stringify(a)); }
-    }catch(e){}
-    try{
-      var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
-      if(o[day]){
-        o[day]=(o[day]||[]).filter(function(r){ return String((r&&r.name)||'').toLowerCase()!==String(name).toLowerCase(); });
-        localStorage.setItem('btm_grids_v1', JSON.stringify(o));
-      }
-    }catch(e){}
-  }
-  function deleteMiniCard(card){
-    if(!card) return;
-    persistFreeformCardGone(card);
-    pinBoardDay(card);
-    var zone=card.closest('.pursuit-zone');
-    var zid=(zone&&zone.getAttribute('data-zone'))||'';
-    forgetLive(zid, cardName(card));
-    card.remove();
-  }
-  window.__deleteMiniCard=deleteMiniCard;
-  var ZONE_GONE_KEY='btm_aug20_zones_gone_v1';
-  var ZONE_CUSTOM_KEY='btm_aug20_custom_zones_v1';
-  var OVERVIEW_NODES_KEY='btm_overview_nodes_v1';
-  function loadZoneGone(){ try{ return JSON.parse(localStorage.getItem(ZONE_GONE_KEY)||'{}'); }catch(e){ return {}; } }
-  function saveZoneGone(m){ try{ localStorage.setItem(ZONE_GONE_KEY, JSON.stringify(m||{})); }catch(e){} }
-  function loadCustomZones(){ try{ var a=JSON.parse(localStorage.getItem(ZONE_CUSTOM_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
-  function saveCustomZones(a){ try{ localStorage.setItem(ZONE_CUSTOM_KEY, JSON.stringify(a||[])); }catch(e){} }
-  function loadOverviewNodesMap(){
-    try{ return JSON.parse(localStorage.getItem(OVERVIEW_NODES_KEY)||'{}')||{}; }catch(e){ return {}; }
-  }
-  function saveOverviewNodesMap(m){
-    try{ localStorage.setItem(OVERVIEW_NODES_KEY, JSON.stringify(m||{})); }catch(e){}
-  }
-  function overviewDayKey(blk){
-    return (blk && blk.getAttribute('data-date')) || '';
-  }
-  function overviewNodesFor(blk){
-    var k=overviewDayKey(blk);
-    if(!k) return [];
-    var m=loadOverviewNodesMap();
-    if(!Array.isArray(m[k])) m[k]=[];
-    var dirty=false;
-    m[k].forEach(function(rec){
-      if(!rec) return;
-      if(rec.title){
-        var low=String(rec.title).replace(/\s+/g,' ').trim().toLowerCase();
-        if(rec.title !== low){ rec.title=low; dirty=true; }
-      }
-      var img=String(rec.img||'');
-      if(/mock-power-glam\.jpg/i.test(img) || (/power/i.test(rec.title||rec.id||'') && /chess|king/i.test(img))){
-        rec.img='manus-storage/zone-power-purpose.jpg?v=her2';
-        dirty=true;
-      }
-      var tlow=String(rec.title||'').replace(/\s+/g,' ').trim().toLowerCase();
-      if(tlow==='grad school' || tlow==='grad'){
-        rec.title='pepperdine';
-        dirty=true;
-        tlow='pepperdine';
-      }
-      if(tlow==='power'){
-        rec.title='power | purpose';
-        dirty=true;
-        tlow='power | purpose';
-      }
-      if(tlow==='gym'){
-        rec.title='body';
-        dirty=true;
-        tlow='body';
-      }
-      if(/pursuit-grad-school|malibu-close/i.test(img) || (tlow==='pepperdine' && /grad-school|malibu/i.test(img))){
-        rec.img='manus-storage/pursuit-pepperdine.jpg?v=collage1';
-        dirty=true;
-      }
-    });
-    if(dirty) saveOverviewNodesMap(m);
-    return m[k];
-  }
-  function persistOverviewNodesFromGrid(grid){
-    var blk=grid && grid.closest('.day-block');
-    if(!blk || !isOverviewEra(blk)) return;
-    var k=overviewDayKey(blk);
-    if(!k) return;
-    var m=loadOverviewNodesMap();
-    m[k]=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).map(function(z){
-      var r=zoneRect(z);
-      var titleEl=z.querySelector('.pursuit-zone-title');
-      var photo=(z.style.getPropertyValue('--zone-photo')||'').replace(/^url\(["']?|["']?\)$/g,'');
-      return {
-        id:z.getAttribute('data-zone')||'',
-        title:((titleEl&&titleEl.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase(),
-        img:photo,
-        x:r.x, y:r.y, w:r.w, h:r.h
-      };
-    }).filter(function(z){ return z.id; });
-    saveOverviewNodesMap(m);
-  }
-  var OVERVIEW_NODE_GAP=72;
-  function nextOverviewSlot(grid){
-    var pad=28, gap=OVERVIEW_NODE_GAP, zw=220, zh=176;
-    var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
-    if(!zones.length) return {x:pad, y:pad, w:zw, h:zh};
-    var maxY=pad;
-    zones.forEach(function(z){
-      var r=zoneRect(z);
-      maxY=Math.max(maxY, (r.y||0)+(r.h||0)+gap);
-    });
-    // Keep new nodes near the top cluster — never inherit Aug 20 bottom Y.
-    if(maxY > 520) maxY=pad;
-    return {x:pad, y:maxY, w:zw, h:zh};
-  }
-  function packOverviewNodesToTop(grid){
-    if(!grid) return;
-    var pad=28, gap=OVERVIEW_NODE_GAP, x=pad, y=pad, rowH=0, maxW=0;
-    var host=grid.parentElement;
-    var limit=((host&&host.clientWidth)||grid.clientWidth||720)-pad;
-    if(limit<280) limit=720;
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-      var r=zoneRect(z);
-      var w=Math.max(200, Math.min(r.w||220, 260));
-      var h=Math.max(168, Math.min(r.h||176, 220));
-      if(x+w>limit && x>pad){
-        x=pad;
-        y+=rowH+gap;
-        rowH=0;
-      }
-      writeRect({el:z, id:z.getAttribute('data-zone'), x:x, y:y, w:w, h:h});
-      x+=w+gap;
-      rowH=Math.max(rowH, h);
-      maxW=Math.max(maxW, x);
-    });
-  }
-  function findCustomZoneByTitle(title){
-    var want=String(title||'').trim().toLowerCase();
-    if(!want) return null;
-    var found=null;
-    loadCustomZones().forEach(function(z){
-      if(z && String(z.title||'').trim().toLowerCase()===want) found=z;
-    });
-    return found;
-  }
-  function upsertCustomZone(entry){
-    if(!entry || !entry.id) return;
-    var custom=loadCustomZones().filter(function(z){ return z && z.id!==entry.id; });
-    custom.push(entry);
-    saveCustomZones(custom);
-  }
-  function isAug20Board(el){
-    var blk=el && el.closest ? el.closest('.day-block') : el;
-    if(!blk) return false;
-    if(blk.classList.contains('pursuit-board-day') || blk.getAttribute('data-date')==='2026-08-20') return true;
-    var d=blk.getAttribute('data-date')||'';
-    return !!(/^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-27' && blk.querySelector('.tv-panel.tv-nodes'));
-  }
-  function zoneSlug(title){
-    var s=String(title||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-    if(!s) s='zone';
-    return s.slice(0,28);
-  }
-  function makeZoneRow(z){
-    var row=document.createElement('div');
-    row.className='pursuit-zone pursuit-zone-'+(z.id||'custom');
-    row.setAttribute('data-zone', z.id);
-    if(z.custom) row.setAttribute('data-custom-zone','1');
-    if(z.img) row.style.setProperty('--zone-photo', 'url("'+z.img+'")');
-    row.style.backgroundImage='none';
-    row.innerHTML='<div class="pursuit-zone-head"><p class="pursuit-zone-title"></p></div><div class="pursuit-zone-grid" data-zone=""></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div><button type="button" class="zone-del" aria-label="delete section">×</button>';
-    var titleEl=row.querySelector('.pursuit-zone-title');
-    if(titleEl) titleEl.textContent=String(z.title||z.id||'').replace(/\s+/g,' ').trim().toLowerCase();
-    var host=row.querySelector('.pursuit-zone-grid');
-    if(host) host.setAttribute('data-zone', z.id);
-    var plus=row.querySelector('.add-pursuit-slot');
-    if(plus) plus.setAttribute('data-zone', z.id);
-    return row;
-  }
-  function ensureAug20TogglePlus(blk){
-    if(!isAug20Board(blk)) return;
-    if(isOverviewEra(blk)) return;
-    var card=blk.querySelector('.day-card');
-    var tog=card && card.querySelector('.today-view-toggle');
-    if(!card || !tog) return;
-    var row=tog.closest('.tv-toggle-row');
-    if(!row){
-      row=document.createElement('div');
-      row.className='tv-toggle-row';
-      tog.parentNode.insertBefore(row, tog);
-      row.appendChild(tog);
-    }
-    if(!row.querySelector('.day-add-zone')){
-      var b=document.createElement('button');
-      b.type='button';
-      b.className='day-add-zone';
-      b.setAttribute('aria-label','add section');
-      b.textContent='+';
-      row.appendChild(b);
-    }
-  }
-  function ensureAug20EditChrome(grid){
-    if(!grid || !isAug20Board(grid)) return;
-    var blk=grid.closest('.day-block');
-    ensureAug20TogglePlus(blk);
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-      var titleEl=z.querySelector('.pursuit-zone-title');
-      if(titleEl){
-        var t=((titleEl.textContent)||'').replace(/\s+/g,' ').trim();
-        var low=t.toLowerCase();
-        if(t && t !== low) titleEl.textContent=low;
-      }
-      if(!z.querySelector(':scope > .zone-del')){
-        var d=document.createElement('button');
-        d.type='button';
-        d.className='zone-del';
-        d.setAttribute('aria-label','delete section');
-        d.textContent='×';
-        z.appendChild(d);
-      }
-    });
-    [].slice.call(grid.querySelectorAll('.sec-card')).forEach(prepareMini);
-    [].slice.call(grid.querySelectorAll('.j22-item')).forEach(function(it){
-      if(!it.querySelector(':scope > .del-x')){
-        var x=document.createElement('span');
-        x.className='del-x';
-        x.textContent='×';
-        x.setAttribute('aria-label','delete');
-        it.appendChild(x);
-      }
-    });
-  }
-  function applyAug20ZoneEdits(grid){
-    if(!grid || !isAug20Board(grid)) return;
-    var blk=grid.closest('.day-block');
-    var gone=loadZoneGone();
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-      var id=z.getAttribute('data-zone')||'';
-      if(id && gone[id]) z.remove();
-    });
-    // Overview-era days keep their own node list — never auto-clone Aug 20 globals.
-    if(blk && isOverviewEra(blk)){
-      var dayList=overviewNodesFor(blk);
-      // First visit: adopt whatever is already on this day's canvas into per-day storage.
-      if(!dayList.length){
-        persistOverviewNodesFromGrid(grid);
-        dayList=overviewNodesFor(blk);
-      }
-      var wanted={};
-      dayList.forEach(function(rec){
-        if(!rec || !rec.id || gone[rec.id]) return;
-        wanted[rec.id]=1;
-        var row=grid.querySelector(':scope > .pursuit-zone[data-zone="'+rec.id+'"]');
-        var wantTitle=String(rec.title||rec.id||'').replace(/\s+/g,' ').trim().toLowerCase();
-        var rx=typeof rec.x==='number'?rec.x:28;
-        var ry=typeof rec.y==='number'?rec.y:28;
-        var rw=typeof rec.w==='number'?rec.w:220;
-        var rh=typeof rec.h==='number'?rec.h:176;
-        if(!row){
-          row=makeZoneRow({id:rec.id, title:wantTitle, img:rec.img||'', custom:true});
-          grid.appendChild(row);
-        } else {
-          var titleEl=row.querySelector('.pursuit-zone-title');
-          if(titleEl){
-            var cur=((titleEl.textContent)||'').replace(/\s+/g,' ').trim();
-            if(cur !== wantTitle) titleEl.textContent=wantTitle;
-          }
-          if(rec.img) row.style.setProperty('--zone-photo', 'url("'+rec.img+'")');
-        }
-        writeRect({el:row, id:rec.id, x:rx, y:ry, w:rw, h:rh});
-      });
-      // Keep live custom nodes even if store was stale; just re-persist.
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone[data-custom-zone="1"]')).forEach(function(z){
-        var id=z.getAttribute('data-zone')||'';
-        if(id) wanted[id]=1;
-      });
-      var tooLow=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).some(function(z){
-        return (zoneRect(z).y||0) > 420;
-      });
-      if(tooLow) packOverviewNodesToTop(grid);
-      // Always keep air between nodes — flush/touching rects break the nodes concept.
-      resolveOverlaps(grid);
-      persistOverviewNodesFromGrid(grid);
-      ensureAug20EditChrome(grid);
-      return;
-    }
-    loadCustomZones().forEach(function(z){
-      if(!z || !z.id || gone[z.id]) return;
-      if(grid.querySelector(':scope > .pursuit-zone[data-zone="'+z.id+'"]')) return;
-      var row=makeZoneRow({id:z.id, title:z.title||z.id, img:z.img||'', custom:true});
-      applyPos(row, z.id);
-      grid.appendChild(row);
-    });
-    ensureAug20EditChrome(grid);
-  }
-  function deleteAug20Zone(zone){
-    if(!zone || !isAug20Board(zone)) return;
-    var id=zone.getAttribute('data-zone')||'';
-    var grid=zone.closest('.sec-grid');
-    var blk=zone.closest('.day-block');
-    if(id && !(blk && isOverviewEra(blk))){
-      var gone=loadZoneGone();
-      gone[id]=1;
-      saveZoneGone(gone);
-      saveCustomZones(loadCustomZones().filter(function(z){ return z && z.id!==id; }));
-    }
-    zone.remove();
-    if(grid){
-      if(blk && isOverviewEra(blk)){
-        persistOverviewNodesFromGrid(grid);
-      } else {
-        resolveOverlaps(grid);
-      }
-      expandCanvas(grid);
-      if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
-      if(typeof window.__syncOverviewEraChrome==='function' && blk) window.__syncOverviewEraChrome(blk);
-    }
-  }
-  function nextCustomZoneId(grid, title){
-    var base=zoneSlug(title);
-    var id=base, n=2;
-    while(grid.querySelector(':scope > .pursuit-zone[data-zone="'+id+'"]') || DEFAULT_POS[id]){
-      id=base+'-'+n;
-      n++;
-    }
-    return id;
-  }
-  function addAug20Zone(grid, title){
-    if(!grid || !isAug20Board(grid)) return null;
-    title=String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
-    if(!title) return null;
-    var gone=loadZoneGone();
-    var created=null;
-    var match=ZONES.filter(function(z){ return String(z.title).toLowerCase()===title.toLowerCase() || z.id===title.toLowerCase(); })[0];
-    if(match && gone[match.id]){
-      delete gone[match.id];
-      saveZoneGone(gone);
-      created=grid.querySelector(':scope > .pursuit-zone[data-zone="'+match.id+'"]');
-      if(!created){
-        created=makeZoneRow(match);
-        grid.appendChild(created);
-        var blkMatch=grid.closest('.day-block');
-        if(blkMatch && isOverviewEra(blkMatch)){
-          var slotM=nextOverviewSlot(grid);
-          writeRect({el:created, id:match.id, x:slotM.x, y:slotM.y, w:slotM.w, h:slotM.h});
-        } else {
-          applyPos(created, match.id);
-        }
-      }
-    } else {
-      var prior=findCustomZoneByTitle(title);
-      var id=prior ? prior.id : nextCustomZoneId(grid, title);
-      if(gone[id]){
-        delete gone[id];
-        saveZoneGone(gone);
-      }
-      var blk=grid.closest('.day-block');
-      var img=(prior && prior.img) ? prior.img : '';
-      if(blk && isOverviewEra(blk)){
-        var mapped=overviewPhotoForName(blk, title);
-        if(mapped) img=mapped;
-      }
-      if(!img && window.__secImgFor) img=window.__secImgFor(title)||'';
-      if(!img) img='manus-storage/pursuit-vibes_e645a2da.jpg';
-      created=grid.querySelector(':scope > .pursuit-zone[data-zone="'+id+'"]');
-      if(!created){
-        var row=makeZoneRow({id:id, title:title, img:img, custom:true});
-        if(blk && isOverviewEra(blk)){
-          var slot=nextOverviewSlot(grid);
-          writeRect({el:row, id:id, x:slot.x, y:slot.y, w:slot.w, h:slot.h});
-        } else {
-          var maxY=36;
-          [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-            var r=zoneRect(z);
-            maxY=Math.max(maxY, (r.y||0)+(r.h||0)+40);
-          });
-          writeRect({el:row, id:id, x:36, y:maxY, w:320, h:280});
-          applyPos(row, id);
-        }
-        grid.appendChild(row);
-        created=row;
-      }
-      if(!(blk && isOverviewEra(blk))) upsertCustomZone({id:id, title:title, img:img});
-    }
-    if(blk && isOverviewEra(blk)){
-      packOverviewNodesToTop(grid);
-      persistOverviewNodesFromGrid(grid);
-    } else {
-      resolveOverlaps(grid);
-    }
-    wireZoneDrag(grid);
-    ensureAug20EditChrome(grid);
-    expandCanvas(grid);
-    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
-    var nodesOn=grid.closest('.tv-panel.tv-nodes');
-    if(created && nodesOn && (nodesOn.classList.contains('active') || nodesOn.style.display!=='none')){
-      var eraBlk=grid.closest('.day-block');
-      if(!isOverviewEra(eraBlk) && typeof window.__aug20StartLinkFrom==='function') window.__aug20StartLinkFrom(created);
-    }
-    if(typeof window.__syncOverviewEraChrome==='function'){
-      var blk=grid && grid.closest('.day-block');
-      if(blk) window.__syncOverviewEraChrome(blk);
-    }
-    return created;
-  }
-  function pursuitNamesForDay(blk){
-    if(!blk) return [];
-    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
-    var seen={};
-    var out=[];
-    function push(raw){
-      var name=String(raw||'').replace(/\s+/g,' ').trim();
-      if(!name) return;
-      var low=name.toLowerCase();
-      if(seen[low]) return;
-      seen[low]=1;
-      out.push(name);
-    }
-    [].slice.call(panel.querySelectorAll('.vision-tile-title')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.vision-polaroid > span, .vision-polaroid span')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.pursuit-zone-title')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.sec-card')).forEach(function(card){
-      var shot=card.getAttribute('data-shot');
-      if(shot) push(shot);
-      var g=card.querySelector('.j22-group');
-      if(g) push(g.getAttribute('data-newhdr')||g.textContent);
-    });
-    return out;
-  }
-  function isOverviewEra(blk){
-    var d=blk && blk.getAttribute('data-date');
-    return !!(d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-28');
-  }
-  function overviewTasksForDay(blk){
-    if(!blk) return [];
-    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
-    var seen={};
-    var out=[];
-    function push(raw){
-      var name=String(raw||'').replace(/\s+/g,' ').trim();
-      if(!name) return;
-      var low=name.toLowerCase();
-      if(seen[low]) return;
-      seen[low]=1;
-      out.push(name);
-    }
-    [].slice.call(panel.querySelectorAll('.vision-tile-title')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.vision-check span')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.vision-polaroid > span')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.j22-item .j22-t, .j22-t')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.day-task-text')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.zone-oneoff-t')).forEach(function(el){ push(el.textContent); });
-    return out;
-  }
-  function overviewPhotoFromUrl(raw){
-    if(!raw) return '';
-    raw=String(raw).trim();
-    var m=raw.match(/url\(['"]?([^'")]+)/i);
-    return (m ? m[1] : raw).replace(/^['"]|['"]$/g,'');
-  }
-  function overviewPhotoForName(blk, title){
-    if(!title) return '';
-    var want=String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
-    if(!want) return '';
-    if(window.__cardImgFor){
-      var cardMapped=window.__cardImgFor(title);
-      if(cardMapped) return cardMapped;
-    }
-    // Hardwired name → photo first (section photos stay bound to their names).
-    if(window.__secImgFor){
-      var mapped=window.__secImgFor(title);
-      if(mapped) return mapped;
-    }
-    if(!blk) return '';
-    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
-    function normSrc(src){
-      if(!src) return '';
-      return String(src).replace(/^\//,'');
-    }
-    function polaroidSrc(p){
-      var src=p.getAttribute('data-shot-src')||'';
-      if(!src){
-        var img=p.querySelector('img');
-        if(img) src=img.getAttribute('src')||img.currentSrc||'';
-      }
-      return normSrc(src);
-    }
-    var tiles=[].slice.call(panel.querySelectorAll('.vision-tile'));
-    for(var ti=0;ti<tiles.length;ti++){
-      var tile=tiles[ti];
-      var tEl=tile.querySelector('.vision-tile-title');
-      var tName=((tEl&&tEl.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase();
-      if(tName===want){
-        var ph=overviewPhotoFromUrl(tile.style.getPropertyValue('--tile-photo')||'');
-        if(!ph){
-          try{ ph=overviewPhotoFromUrl(getComputedStyle(tile).getPropertyValue('--tile-photo')||''); }catch(e){}
-        }
-        if(ph) return ph;
-      }
-      var pol=[].slice.call(tile.querySelectorAll('.vision-polaroid'));
-      for(var pi=0;pi<pol.length;pi++){
-        var s=pol[pi].querySelector(':scope > span');
-        var n=((s&&s.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase();
-        if(n!==want) continue;
-        var src=polaroidSrc(pol[pi]);
-        if(src) return src;
-      }
-    }
-    var found='';
-    [].slice.call(panel.querySelectorAll('.vision-polaroid')).some(function(p){
-      var s=p.querySelector(':scope > span');
-      var n=((s&&s.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase();
-      if(n!==want) return false;
-      found=polaroidSrc(p);
-      return !!found;
-    });
-    if(found) return found;
-    if(window.__cardImgFor){
-      var cardHit=window.__cardImgFor(title);
-      if(cardHit) return cardHit;
-    }
-    return found;
-  }
-  function syncOverviewNodePhotos(blk){
-    if(!blk || !isOverviewEra(blk)) return;
-    var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas');
-    if(!grid) return;
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone[data-custom-zone="1"]')).forEach(function(zone){
-      var titleEl=zone.querySelector('.pursuit-zone-title');
-      var title=titleEl && titleEl.textContent;
-      var img=overviewPhotoForName(blk, title);
-      if(!img) return;
-      zone.style.setProperty('--zone-photo', 'url("'+img+'")');
-    });
-  }
-  function syncOverviewEraChrome(blk){
-    if(!blk || !isOverviewEra(blk)) return;
-    blk.classList.add('overview-era-day');
-    var pill=blk.querySelector('.tv-pill[data-view="pursuits"]');
-    if(pill) pill.textContent='overview';
-    if(blk.classList.contains('today-block')){
-      var hdr=blk.querySelector('.day-card-header');
-      if(hdr && !hdr.querySelector('.overview-pursuits-label')){
-        var lab=document.createElement('span');
-        lab.className='day-title overview-pursuits-label';
-        lab.textContent='Pursuits';
-        hdr.appendChild(lab);
-      }
-    }
-    var active=blk.querySelector('.tv-pill.active[data-view]');
-    var view=active && active.getAttribute('data-view');
-    blk.classList.toggle('view-nodes', view === 'nodes');
-    blk.classList.toggle('view-flow', view === 'flow');
-    blk.classList.toggle('view-impulses', view === 'impulses');
-    blk.classList.toggle('view-overview', view === 'pursuits');
-    var panel=blk.querySelector('.tv-panel.tv-nodes');
-    if(panel){
-      var grid=panel.querySelector('.sec-grid.pursuit-canvas') || panel.querySelector('.sec-grid');
-      var empty=!grid || !grid.querySelector(':scope > .pursuit-zone, :scope > .sec-card, :scope > .zone-oneoff, :scope > .canvas-oneoff');
-      panel.classList.toggle('nodes-panel-empty', empty);
-      blk.classList.toggle('nodes-empty', empty);
-      if(view === 'nodes'){
-        ensureOverviewNodesGrid(blk);
-        syncOverviewNodePhotos(blk);
-        // Recompute after restore — nested empty .sec-grid must not win.
-        grid=panel.querySelector('.sec-grid.pursuit-canvas') || panel.querySelector('.sec-grid');
-        empty=!grid || !grid.querySelector(':scope > .pursuit-zone, :scope > .sec-card, :scope > .zone-oneoff, :scope > .canvas-oneoff');
-        panel.classList.toggle('nodes-panel-empty', empty);
-        blk.classList.toggle('nodes-empty', empty);
-        if(empty && grid && window.__expandPursuitCanvas) window.__expandPursuitCanvas(grid);
-      }
-    }
-    var pursuits=blk.querySelector('.tv-panel.tv-pursuits');
-    if(pursuits){
-      var hasTiles=!!pursuits.querySelector('.vision-tile');
-      pursuits.classList.toggle('overview-panel-empty', !hasTiles);
-      blk.classList.toggle('overview-empty', !hasTiles);
-    }
-    if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
-  }
-  function ensureOverviewNodesGrid(blk){
-    if(!blk || !isOverviewEra(blk)) return;
-    var panel=blk.querySelector('.tv-panel.tv-nodes');
-    if(panel){
-      [].slice.call(panel.children).forEach(function(el){
-        if(el.classList && el.classList.contains('sec-grid') && !el.classList.contains('pursuit-canvas')){
-          try{ el.remove(); }catch(e){}
-        }
-      });
-    }
-    var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas');
-    if(!grid) return;
-    applyAug20ZoneEdits(grid);
-    ensureAug20EditChrome(grid);
-    wireZoneDrag(grid);
-    expandCanvas(grid);
-    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
-  }
-  window.__ensureOverviewNodesGrid=ensureOverviewNodesGrid;
-  window.__isOverviewEra=isOverviewEra;
-  window.__overviewTasksForDay=overviewTasksForDay;
-  window.__overviewPhotoForName=overviewPhotoForName;
-  window.__syncOverviewEraChrome=syncOverviewEraChrome;
-  function existingNodeNames(blk){
-    var seen={};
-    var grid=blk && (blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid.pursuit-canvas'));
-    if(!grid) return seen;
-    [].slice.call(grid.querySelectorAll('.pursuit-zone-title')).forEach(function(el){
-      var n=String(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
-      if(n) seen[n]=1;
-    });
-    return seen;
-  }
-  function openAddAug20Zone(btn){
-    var blk=btn && btn.closest('.day-block');
-    if(!blk || !isAug20Board(blk)) return;
-    var row=btn.closest('.tv-toggle-row')||blk.querySelector('.tv-toggle-row');
-    var bar=btn.closest('.nodes-edit-bar');
-    var existing=blk.querySelector('.zone-add-picker');
-    if(existing){ existing.remove(); return; }
-    document.querySelectorAll('.zone-add-picker').forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
-    var onNodes=!!(bar || blk.querySelector('.tv-pill.active[data-view="nodes"]'));
-    var box=document.createElement('div');
-    box.className='zone-add-picker'+(onNodes?' zone-add-picker-nodes':'');
-    (bar||row||blk.querySelector('.day-card')).appendChild(box);
-
-    function commitName(name){
-      name=String(name||'').trim();
-      if(!name) return;
-      var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid.pursuit-canvas')||blk.querySelector('.sec-grid');
-      addAug20Zone(grid, name);
-      box.remove();
-    }
-
-    if(onNodes){
-      var already=existingNodeNames(blk);
-      var fromOverview=isOverviewEra(blk);
-      var picks=(fromOverview ? overviewTasksForDay(blk) : pursuitNamesForDay(blk)).filter(function(n){ return !already[n.toLowerCase()]; });
-      var lab=document.createElement('p');
-      lab.className='plus-picker-label';
-      lab.textContent=picks.length ? (fromOverview ? 'from overview' : 'from pursuits') : (fromOverview ? 'no tasks in overview yet — type a name' : 'no pursuits yet — type a name');
-      box.appendChild(lab);
-      if(picks.length){
-        var list=document.createElement('div');
-        list.className='plus-picker-list';
-        picks.forEach(function(name){
-          var b=document.createElement('button');
-          b.type='button';
-          b.className='plus-picker-opt';
-          b.textContent=name;
-          b.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); commitName(name); });
-          list.appendChild(b);
-        });
-        box.appendChild(list);
-      }
-      var clab=document.createElement('p');
-      clab.className='plus-picker-label';
-      clab.textContent='or type a name';
-      box.appendChild(clab);
-    }
-
-    var rowIn=document.createElement('div');
-    rowIn.className='plus-picker-new';
-    var inp=document.createElement('input');
-    inp.className='plus-name-input';
-    inp.type='text';
-    inp.placeholder=onNodes?'custom node name':'new section name';
-    inp.setAttribute('autocomplete','off');
-    var go=document.createElement('button');
-    go.type='button';
-    go.className='plus-picker-go';
-    go.textContent='add';
-    rowIn.appendChild(inp);
-    rowIn.appendChild(go);
-    box.appendChild(rowIn);
-    go.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); commitName(inp.value); });
-    inp.addEventListener('keydown', function(ev){
-      if(ev.key==='Enter'){ ev.preventDefault(); commitName(inp.value); }
-      if(ev.key==='Escape'){ ev.preventDefault(); box.remove(); }
-    });
-    inp.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
-    setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 0);
-  }
-  window.__deleteAug20Zone=deleteAug20Zone;
-  window.__openAddAug20Zone=openAddAug20Zone;
-  window.__addAug20Zone=addAug20Zone;
-  window.__ensureAug20EditChrome=ensureAug20EditChrome;
-  function rememberLive(zid, name){
-    if(!zid || !name) return;
-    var m=loadLive();
-    m[LIVE_DAY]=m[LIVE_DAY]||{};
-    m[LIVE_DAY][zid]=m[LIVE_DAY][zid]||[];
-    var low=name.toLowerCase();
-    if(isGone(zid, name)){
-      var g=loadGone();
-      delete g[goneKey(zid, name)];
-      saveGone(g);
-    }
-    if(!m[LIVE_DAY][zid].some(function(x){ return String(x).toLowerCase()===low; })) m[LIVE_DAY][zid].push(name);
-    saveLive(m);
-  }
-  function harvestLiveFromGrid(g){
-    var pack={};
-    [].slice.call(g.querySelectorAll('.pursuit-zone-grid[data-zone]')).forEach(function(host){
-      var zid=host.getAttribute('data-zone');
-      pack[zid]=[];
-      [].slice.call(host.querySelectorAll('.sec-card')).forEach(function(c){
-        var grp=c.querySelector('.j22-group');
-        var n=((grp&&(grp.getAttribute('data-newhdr')||grp.textContent))||'').trim();
-        if(n && pack[zid].indexOf(n)<0) pack[zid].push(n);
-      });
-    });
-    return pack;
-  }
-  function isCatalogOnlyNames(zid, names){
-    if(!names || !names.length) return false;
-    var preset=(PRESETS[zid]||[]).map(function(n){ return String(n).toLowerCase(); });
-    return names.every(function(n){ return preset.indexOf(String(n).toLowerCase())>=0; });
-  }
-  function packIsCatalogSpam(pack, baked){
-    if(!pack || !packHasItems(pack)) return false;
-    if(liveLooksLikeFullPresetDump(pack)) return true;
-    var totalStored=0, totalBaked=0;
-    Object.keys(pack).forEach(function(zid){
-      totalStored+=(pack[zid]||[]).length;
-      totalBaked+=(baked[zid]||[]).length;
-    });
-    if(totalStored>totalBaked+2) return true;
-    return Object.keys(pack).some(function(zid){
-      var stored=pack[zid]||[];
-      var bakedN=(baked[zid]||[]).length;
-      if(bakedN>0 || stored.length<2) return false;
-      return isCatalogOnlyNames(zid, stored);
-    });
-  }
-  function syncDomToAllowed(g, allowed){
-    [].slice.call(g.querySelectorAll('.pursuit-zone-grid[data-zone]')).forEach(function(host){
-      var zid=host.getAttribute('data-zone');
-      var allow=((allowed[zid]||[])).map(function(n){ return String(n).toLowerCase(); });
-      [].slice.call(host.querySelectorAll('.sec-card')).forEach(function(c){
-        if(allow.indexOf(cardName(c))<0) c.remove();
-      });
-    });
-  }
-  function liveLooksLikeFullPresetDump(pack){
-    if(!pack || typeof pack!=='object') return false;
-    return Object.keys(PRESETS).every(function(zid){
-      var want=PRESETS[zid]||[];
-      var have=(pack[zid]||[]).map(function(x){ return String(x).toLowerCase(); });
-      return want.every(function(n){ return have.indexOf(String(n).toLowerCase())>=0; });
-    });
-  }
-  function restoreLiveMinis(g){
-    if(window.__cardDragging) return;
-    pinBoardDay(g);
-    unpinTextMomFromGlowUp(g);
-    var baked=harvestLiveFromGrid(g);
-    var all=loadLive();
-    var pack=all[LIVE_DAY]||{};
-    Object.keys(PRESETS).forEach(function(zid){
-      var bakedSet=(baked[zid]||[]).map(function(n){ return String(n).toLowerCase(); });
-      pack[zid]=(pack[zid]||[]).filter(function(name){
-        var low=String(name).toLowerCase();
-        var isPreset=(PRESETS[zid]||[]).some(function(p){ return String(p).toLowerCase()===low; });
-        return !isPreset || bakedSet.indexOf(low)>=0;
-      });
-    });
-    if(!packHasItems(pack) || packIsCatalogSpam(pack, baked)){
-      syncDomToAllowed(g, baked);
-      all[LIVE_DAY]=harvestLiveFromGrid(g);
-      saveLive(all);
-      promoteOneoffCards(g);
-      return;
-    }
-    syncDomToAllowed(g, baked);
-    Object.keys(pack).forEach(function(zid){
-      var host=g.querySelector('.pursuit-zone-grid[data-zone="'+zid+'"]');
-      if(!host) return;
-      var bakedSet=(baked[zid]||[]).map(function(n){ return String(n).toLowerCase(); });
-      var inDom={};
-      [].slice.call(host.querySelectorAll('.sec-card')).forEach(function(c){ inDom[cardName(c)]=1; });
-      (pack[zid]||[]).forEach(function(name){
-        if(isGone(zid, name) || nameAlreadyOnBoard(g, name)){
-          if(nameAlreadyOnBoard(g, name)) detachLive(zid, name);
-          return;
-        }
-        var low=String(name).toLowerCase();
-        if(inDom[low]) return;
-        var isPreset=(PRESETS[zid]||[]).some(function(p){ return String(p).toLowerCase()===low; });
-        if(isPreset && bakedSet.indexOf(low)<0) return;
-        addNamedMini(host, name);
-        inDom[low]=1;
-      });
-    });
-    all[LIVE_DAY]=harvestLiveFromGrid(g);
-    saveLive(all);
-    promoteOneoffCards(g);
-  }
-  function loadPick(){ try{ return JSON.parse(localStorage.getItem(PICKKEY)||'{}'); }catch(e){ return {}; } }
-  function savePick(m){ try{ localStorage.setItem(PICKKEY, JSON.stringify(m)); }catch(e){} }
-  function rememberZoneCard(zid, name){
-    if(!zid || !name) return;
-    var m=loadPick();
-    m[zid]=m[zid]||[];
-    var low=name.toLowerCase();
-    if(!m[zid].some(function(x){ return String(x).toLowerCase()===low; })) m[zid].push(name);
-    savePick(m);
-  }
-  function optionsForZone(zid){
-    var out=[], seen={};
-    function add(n){
-      var t=String(n||'').trim(); if(!t) return;
-      if(typeof isOneoffTaskName==='function' && isOneoffTaskName(t)) return;
-      var k=t.toLowerCase(); if(seen[k]) return; seen[k]=1; out.push(t);
-    }
-    (PRESETS[zid]||[]).forEach(add);
-    (loadPick()[zid]||[]).forEach(add);
-    document.querySelectorAll('.day-block.fmt22 .sec-card .j22-group').forEach(function(g){
-      var n=(g.getAttribute('data-newhdr')||g.textContent||'').trim();
-      if(!n) return;
-      if(zoneFor(n)===zid) add(n);
-    });
-    return out;
-  }
-  var TKEY='btm_zone_oneoffs_v1';
-  function loadT(){ try{ return JSON.parse(localStorage.getItem(TKEY)||'{}'); }catch(e){ return {}; } }
-  function saveT(m){
-    if(refuseEmptyWrite(TKEY, m)) return;
-    try{ localStorage.setItem(TKEY, JSON.stringify(m)); }catch(e){}
-    snapshotGoodBoard();
-    scheduleCloudSave();
-  }
-  function taskName(item){
-    if(!item) return '';
-    if(typeof item==='string') return item;
-    return String(item.name||'');
-  }
-  function normTask(item, i){
-    var name=taskName(item);
-    var o=(item && typeof item==='object') ? item : {};
-    return {
-      name:name,
-      x:typeof o.x==='number' ? o.x : (12+(i||0)*16),
-      y:typeof o.y==='number' ? o.y : (52+(i||0)*30),
-      w:typeof o.w==='number' ? o.w : 176,
-      h:typeof o.h==='number' ? o.h : 118,
-      done:!!o.done
-    };
-  }
-  function taskList(zid){
-    var m=loadT();
-    m[LIVE_DAY]=m[LIVE_DAY]||{};
-    m[LIVE_DAY][zid]=(m[LIVE_DAY][zid]||[]).map(normTask);
-    return m[LIVE_DAY][zid];
-  }
-  function saveTaskList(zid, arr){
-    if(!window.__boardHydrated){
-      var prev=taskList(zid);
-      if((!arr || !arr.length) && prev.length) return;
-    }
-    var m=loadT();
-    m[LIVE_DAY]=m[LIVE_DAY]||{};
-    m[LIVE_DAY][zid]=(arr||[]).map(normTask);
-    saveT(m);
-  }
-  function saveOneoffRect(chip){
-    if(!chip) return;
-    var zone=chip.closest('.pursuit-zone');
-    if(!zone) return;
-    var zid=zone.getAttribute('data-zone');
-    var idx=parseInt(chip.getAttribute('data-i'),10);
-    var arr=taskList(zid);
-    if(!arr[idx]) return;
-    var cs=getComputedStyle(chip);
-    arr[idx].x=parseFloat(chip.style.getPropertyValue('--ff-x'));
-    if(!isFinite(arr[idx].x)) arr[idx].x=parseFloat(cs.getPropertyValue('--ff-x'))||0;
-    arr[idx].y=parseFloat(chip.style.getPropertyValue('--ff-y'));
-    if(!isFinite(arr[idx].y)) arr[idx].y=parseFloat(cs.getPropertyValue('--ff-y'))||0;
-    arr[idx].w=parseFloat(chip.style.getPropertyValue('--card-w'))||parseFloat(cs.getPropertyValue('--card-w'))||176;
-    arr[idx].h=parseFloat(chip.style.getPropertyValue('--card-h'))||parseFloat(cs.getPropertyValue('--card-h'))||76;
-    saveTaskList(zid, arr);
-  }
-  function ensureOneoffHost(zone){
-    if(!zone) return null;
-    var el=zone.querySelector(':scope > .zone-oneoffs');
-    if(!el){
-      el=document.createElement('div');
-      el.className='zone-oneoffs';
-      zone.appendChild(el);
-    }
-    return el;
-  }
-  function oneoffPhoto(zid, name){
-    return themedImg(name, zid);
-  }
-  function renderOneoffs(zone){
-    if(window.__oneoffDragging) return;
-    pinBoardDay(zone);
-    if(zone && zone.closest('.zone-board-day')){
-      var skip=zone.querySelector(':scope > .zone-oneoffs');
-      if(skip) skip.innerHTML='';
-      var grid=zone.closest('.sec-grid');
-      if(grid){
-        [].slice.call(grid.querySelectorAll(':scope > .zone-oneoff, :scope > .canvas-oneoff, .canvas-oneoff')).forEach(function(el){ el.remove(); });
-      }
-      return;
-    }
-    var zid=zone.getAttribute('data-zone');
-    var host=ensureOneoffHost(zone);
-    host.innerHTML='';
-    (taskList(zid)||[]).forEach(function(item, i){
-      item=normTask(item, i);
-      var w=item.w, h=item.h;
-      if(h<70 || w<220){ w=252; h=76; }
-      var chip=document.createElement('div');
-      chip.className='zone-oneoff';
-      if(item.done) chip.classList.add('is-done');
-      if(/translat|arabic|عربي/i.test(item.name||'')) chip.classList.add('need-halo');
-      chip.setAttribute('data-i', String(i));
-      chip.style.setProperty('--ff-x', item.x+'px');
-      chip.style.setProperty('--ff-y', item.y+'px');
-      chip.style.setProperty('--card-w', w+'px');
-      chip.style.setProperty('--card-h', h+'px');
-      chip.innerHTML='<img class="zone-oneoff-img" alt=""><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t"></span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div>';
-      chip.querySelector('.zone-oneoff-img').src=oneoffPhoto(zid, item.name);
-      chip.querySelector('.zone-oneoff-t').textContent=item.name;
-      var ck=chip.querySelector('.agenda-check');
-      ck.checked=!!item.done;
-      ck.addEventListener('click', function(ev){ ev.stopPropagation(); });
-      ck.addEventListener('change', function(){
-        var arr=taskList(zid);
-        if(arr[i]) arr[i].done=ck.checked;
-        saveTaskList(zid, arr);
-        chip.classList.toggle('is-done', ck.checked);
-      });
-      chip.querySelector('.zone-oneoff-del').addEventListener('click', function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        var g=loadGone();
-        g[goneKey(zid, 'oneoff:'+item.name)]=1;
-        saveGone(g);
-        var arr=taskList(zid).filter(function(n, j){ return j!==i; });
-        saveTaskList(zid, arr);
-        renderOneoffs(zone);
-      });
-      host.appendChild(chip);
-    });
-    fitZoneToCards(zone);
-  }
-  function promoteOneoffCards(grid){
-    if(!grid) return;
-    [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(function(card){
-      var n=cardName(card);
-      if(!isOneoffTaskName(n)) return;
-      var zone=card.closest('.pursuit-zone');
-      if(!zone) return;
-      var zid=zone.getAttribute('data-zone');
-      var cs=getComputedStyle(card);
-      var x=parseFloat(card.style.getPropertyValue('--ff-x'))||parseFloat(cs.getPropertyValue('--ff-x'))||170;
-      var y=parseFloat(card.style.getPropertyValue('--ff-y'))||parseFloat(cs.getPropertyValue('--ff-y'))||52;
-      var done=!!card.querySelector('.agenda-check:checked');
-      detachLive(zid, n);
-      putOneoffInZone(zone, n, x, y, 252, 76);
-      if(done){
-        var arr=taskList(zid);
-        arr.forEach(function(it){ if(taskName(it).toLowerCase()===n) it.done=true; });
-        saveTaskList(zid, arr);
-        renderOneoffs(zone);
-      }
-      if(card.parentNode) card.remove();
-    });
-    seedKnownOneoffs(grid);
-  }
-  function seedKnownOneoffs(grid){
-    var zone=grid && grid.querySelector('.pursuit-zone[data-zone="ambition"]');
-    if(!zone) return;
-    var name='document translation into arabic';
-    pinBoardDay(zone);
-    var g=loadGone();
-    var cardKey=goneKey('ambition', name);
-    if(g[cardKey]){
-      delete g[cardKey];
-      saveGone(g);
-    }
-    if(isGone('ambition', 'oneoff:'+name)) return;
-    var arr=taskList('ambition');
-    var found=false;
-    var migrated=false;
-    arr.forEach(function(t){
-      if(taskName(t).toLowerCase()!==name) return;
-      found=true;
-      var tx=typeof t.x==='number'?t.x:156;
-      var ty=typeof t.y==='number'?t.y:52;
-      var tw=t.w||252;
-      var th=t.h||76;
-      var elevate={x:20,y:72,w:148,h:148};
-      var chip={x:tx,y:ty,w:tw,h:th};
-      if(miniCardsOverlap(elevate, chip, 14)){
-        t.x=12; t.y=236; t.w=252; t.h=76;
-        migrated=true;
-      }
-    });
-    if(migrated) saveTaskList('ambition', arr);
-    if(found) return;
-    if(typeof nameAlreadyOnBoard==='function' && nameAlreadyOnBoard(grid, name)) return;
-    putOneoffInZone(zone, name, 12, 236, 252, 76);
-  }
-  function addZoneTask(zone, name){
-    name=(name||'').trim();
-    if(!zone || !name) return;
-    var zid=zone.getAttribute('data-zone');
-    var arr=taskList(zid);
-    if(arr.some(function(n){ return taskName(n).toLowerCase()===name.toLowerCase(); })) return;
-    arr.push(normTask({name:name}, arr.length));
-    saveTaskList(zid, arr);
-    if(isGone(zid, 'oneoff:'+name)){
-      var g=loadGone();
-      delete g[goneKey(zid, 'oneoff:'+name)];
-      saveGone(g);
-    }
-    renderOneoffs(zone);
-  }
-  function closePlusPicker(zone){
-    var p=zone && zone.querySelector('.plus-picker');
-    if(p && p.parentNode) p.parentNode.removeChild(p);
-  }
-  function openPlusName(plus){
-    pinBoardDay(plus);
-    var zone=plus.closest('.pursuit-zone');
-    if(!zone) return;
-    if(zone.querySelector('.plus-picker')) return;
-    document.querySelectorAll('.plus-picker').forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
-    var zid=plus.getAttribute('data-zone');
-    var host=zone.querySelector('.pursuit-zone-grid')||plus.parentElement;
-    var box=document.createElement('div');
-    box.className='plus-picker';
-    var opts=optionsForZone(zid);
-    var list=document.createElement('div');
-    list.className='plus-picker-list';
-    opts.forEach(function(name){
-      var b=document.createElement('button');
-      b.type='button';
-      b.className='plus-picker-opt';
-      b.textContent=name;
-      b.addEventListener('click', function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        closePlusPicker(zone);
-        addNamedMini(host, name);
-      });
-      list.appendChild(b);
-    });
-    var row=document.createElement('div');
-    row.className='plus-picker-new';
-    var inp=document.createElement('input');
-    inp.className='plus-name-input';
-    inp.type='text';
-    inp.placeholder='or type a new name';
-    inp.setAttribute('autocomplete','off');
-    var go=document.createElement('button');
-    go.type='button';
-    go.className='plus-picker-go';
-    go.textContent='add';
-    var committed=false;
-    function commit(){
-      if(committed) return;
-      var name=(inp.value||'').trim();
-      if(!name) return;
-      committed=true;
-      closePlusPicker(zone);
-      addNamedMini(host, name);
-    }
-    go.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); commit(); });
-    inp.addEventListener('keydown', function(ev){
-      if(ev.key==='Enter'){ ev.preventDefault(); commit(); }
-      if(ev.key==='Escape'){ ev.preventDefault(); closePlusPicker(zone); }
-    });
-    row.appendChild(inp);
-    row.appendChild(go);
-    box.appendChild(list);
-    var tlab=document.createElement('p');
-    tlab.className='plus-picker-label';
-    tlab.textContent='one-off task';
-    var trow=document.createElement('div');
-    trow.className='plus-picker-new';
-    var tinp=document.createElement('input');
-    tinp.className='plus-name-input';
-    tinp.type='text';
-    tinp.placeholder='task — no new card';
-    tinp.setAttribute('autocomplete','off');
-    var tgo=document.createElement('button');
-    tgo.type='button';
-    tgo.className='plus-picker-go';
-    tgo.textContent='task';
-    var tdone=false;
-    function commitTask(){
-      if(tdone) return;
-      var name=(tinp.value||'').trim();
-      if(!name) return;
-      tdone=true;
-      closePlusPicker(zone);
-      addZoneTask(zone, name);
-    }
-    tgo.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); commitTask(); });
-    tinp.addEventListener('keydown', function(ev){
-      if(ev.key==='Enter'){ ev.preventDefault(); commitTask(); }
-      if(ev.key==='Escape'){ ev.preventDefault(); closePlusPicker(zone); }
-    });
-    trow.appendChild(tinp);
-    trow.appendChild(tgo);
-    box.appendChild(tlab);
-    box.appendChild(trow);
-    var clab=document.createElement('p');
-    clab.className='plus-picker-label';
-    clab.textContent='or new card';
-    box.appendChild(clab);
-    box.appendChild(row);
-    zone.appendChild(box);
-    zone.style.setProperty('overflow', 'visible', 'important');
-    inp.focus();
-  }
-  function dedupeZoneCards(g){
-    [].slice.call(g.querySelectorAll('.pursuit-zone-grid')).forEach(function(host){
-      var seen={};
-      [].slice.call(host.querySelectorAll('.sec-card')).forEach(function(c){
-        var n=cardName(c);
-        if(!n) return;
-        if(seen[n]) c.remove();
-        else seen[n]=1;
-      });
-    });
-  }
-  if(!window.__pursuitPlusWired){
-    window.__pursuitPlusWired=1;
-    document.addEventListener('pointerdown', function(e){
-      var plus=e.target.closest('.add-pursuit-slot');
-      if(plus){
-        e.preventDefault();
-        e.stopPropagation();
-        if(plus.closest('.sec-grid')) openPlusName(plus);
-        return;
-      }
-      if(e.target.closest('.zone-del, .day-add-zone, .zone-add-picker, .card-del, .del-x, .nodes-add-btn, .nodes-link-btn, .nodes-edit-bar')){
-        e.stopPropagation();
-        return;
-      }
-      if(!e.target.closest('.plus-name-input, .plus-picker, .plus-picker-opt, .plus-picker-go, .zone-oneoff-del')) return;
-      e.stopPropagation();
-    }, true);
-    document.addEventListener('click', function(e){
-      var del=e.target.closest('.day-block.today-block .card-del, .day-block.today-block .pursuit-zone-grid .del-x-sec, .day-block.zone-board-day .card-del, .day-block.zone-board-day .pursuit-zone-grid .del-x-sec, .day-block.pursuit-board-day .card-del, .day-block[data-date="2026-08-20"] .card-del, .day-block.overview-era-day .tv-panel.tv-nodes .card-del, .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .card-del');
-      if(del){
-        e.preventDefault();
-        e.stopPropagation();
-        deleteMiniCard(del.closest('.sec-card'));
-        return;
-      }
-      var zdel=e.target.closest('.day-block.pursuit-board-day .zone-del, .day-block[data-date="2026-08-20"] .zone-del, .day-block.overview-era-day .tv-panel.tv-nodes .zone-del');
-      if(zdel){
-        e.preventDefault();
-        e.stopPropagation();
-        if(typeof window.__deleteAug20Zone==='function') window.__deleteAug20Zone(zdel.closest('.pursuit-zone'));
-        return;
-      }
-      var addZ=e.target.closest('.day-add-zone, .nodes-add-btn');
-      if(addZ){
-        e.preventDefault();
-        e.stopPropagation();
-        if(typeof window.__openAddAug20Zone==='function') window.__openAddAug20Zone(addZ);
-        return;
-      }
-      var plus=e.target.closest('.add-pursuit-slot');
-      if(!plus){
-        if(!e.target.closest('.plus-picker')){
-          document.querySelectorAll('.plus-picker').forEach(function(p){
-            if(p.parentNode) p.parentNode.removeChild(p);
-          });
-        }
-        if(!e.target.closest('.zone-add-picker, .day-add-zone, .nodes-add-btn, .nodes-edit-bar')){
-          document.querySelectorAll('.zone-add-picker').forEach(function(p){
-            if(p.parentNode) p.parentNode.removeChild(p);
-          });
-        }
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      if(plus.closest('.sec-grid')) openPlusName(plus);
-    }, true);
-  }
-  function boardSpreadTooTight(grid){
-    var rects=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone:not(.zone-collapsed)')).map(zoneRect);
-    if(rects.length<2) return false;
-    var minX=Infinity, minY=Infinity, maxX=0, maxY=0;
-    var minGap=Infinity;
-    rects.forEach(function(r){
-      minX=Math.min(minX, r.x); minY=Math.min(minY, r.y);
-      maxX=Math.max(maxX, r.x+r.w); maxY=Math.max(maxY, r.y+r.h);
-    });
-    if((maxX-minX)<960 || (maxY-minY)<520) return true;
-    var i,j;
-    for(i=0;i<rects.length;i++){
-      for(j=i+1;j<rects.length;j++){
-        if(zonesCollide(rects[i], rects[j], ZONE_GAP)) return true;
-        var a=rects[i], b=rects[j];
-        var voverlap=a.y<b.y+b.h && a.y+a.h>b.y;
-        var hoverlap=a.x<b.x+b.w && a.x+a.w>b.x;
-        if(voverlap){
-          var hgap=a.x<b.x ? b.x-(a.x+a.w) : a.x-(b.x+b.w);
-          minGap=Math.min(minGap, hgap);
-        }
-        if(hoverlap){
-          var vgap=a.y<b.y ? b.y-(a.y+a.h) : a.y-(b.y+b.h);
-          minGap=Math.min(minGap, vgap);
-        }
-      }
-    }
-    return minGap<56;
-  }
-  window.__boardSpreadTooTight=boardSpreadTooTight;
-  function ensureGrid(grid){
-    if(!grid) return;
-    if(window.__cardDragging || window.__oneoffDragging) return;
-    if(!grid.classList.contains('pursuit-canvas') || !grid.querySelector(':scope > .pursuit-zone')) return;
-    reviveGoodBoard();
-    try{
-    var blk=grid.closest('.day-block');
-    if(blk && blk.getAttribute('data-date')==='2026-08-20') blk.classList.add('pursuit-board-day');
-    pinBoardDay(grid);
-    applyAug20ZoneEdits(grid);
-    function adoptLooseCards(g){
-      [].slice.call(g.querySelectorAll(':scope > .sec-card, :scope > .j22-section.card')).forEach(function(c){
-        if(c.classList.contains('loose-card')) return;
-        var grp=c.querySelector('.j22-group');
-        var name=((grp&&(grp.getAttribute('data-newhdr')||grp.textContent))||'').trim();
-        if(!name){ c.remove(); return; }
-        var zid=zoneFor(name);
-        var host=g.querySelector('.pursuit-zone-grid[data-zone="'+zid+'"]');
-        if(!host){ c.remove(); return; }
-        host.appendChild(c);
-        prepareMini(c);
-        rememberLive(zid, name);
-      });
-    }
-    function adoptStoredGridCards(g){
-      try{
-        var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
-        var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1 };
-        var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
-        var pack={};
-        names.forEach(function(n){
-          var z=zoneFor(n);
-          pack[z]=pack[z]||[];
-          pack[z].push(n);
-        });
-        if(liveLooksLikeFullPresetDump(pack)) return;
-        names.forEach(function(name){
-          if(titles[String(name).toLowerCase()]) return;
-          var zid=zoneFor(name);
-          if(nameIsOnCanvas(g, name) || isGone(zid, name)) return;
-          var host=g.querySelector('.pursuit-zone-grid[data-zone="'+zid+'"]');
-          if(host) addNamedMini(host, name);
-        });
-      }catch(e){}
-    }
-    function sweepLooseCards(g){
-      adoptLooseCards(g);
-    }
-    if(grid.classList.contains('pursuit-canvas') && grid.querySelectorAll(':scope > .pursuit-zone').length===ZONES.length){
-      var stacked=false;
-      var seen={};
-      var savedMap=loadPos();
-      var fresh=!savedMap || !Object.keys(savedMap).length;
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-        var id=z.getAttribute('data-zone');
-        var s=savedMap[id];
-        var key=s? Math.round(s.x)+','+Math.round(s.y) : '';
-        if(key && seen[key]) stacked=true;
-        seen[key]=1;
-        applyPos(z, id);
-      });
-      (function(){
-        var rs=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).map(zoneRect);
-        var i,j;
-        for(i=0;i<rs.length;i++){
-          for(j=i+1;j<rs.length;j++){
-            if(zonesCollide(rs[i], rs[j], ZONE_GAP)) stacked=true;
-          }
-        }
-      })();
-      if(!grid.closest('[data-date="2026-08-20"]') && (fresh || stacked || boardSpreadTooTight(grid))){
-        savePos({});
-        airSpreadZones(grid);
-      }
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
-      clusterAug20Web(grid);
-      resolveOverlaps(grid);
-      sweepLooseCards(grid);
-      adoptStoredGridCards(grid);
-      restoreLiveMinis(grid);
-      dedupeZoneCards(grid);
-      [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
-      [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
-      wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
-      seedKnownOneoffs(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
-      restoreLoose(grid);
-      expandCanvas(grid);
-      return;
-    }
-    if(grid.querySelector(':scope > .pursuit-zone')){
-      sweepLooseCards(grid);
-      adoptStoredGridCards(grid);
-      restoreLiveMinis(grid);
-      dedupeZoneCards(grid);
-      [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
-      [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
-      wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
-      seedKnownOneoffs(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
-      restoreLoose(grid);
-      expandCanvas(grid);
-      return;
-    }
-    sweepLooseCards(grid);
-    if(grid.querySelector(':scope > .pursuit-zone')){
-      adoptStoredGridCards(grid);
-      restoreLiveMinis(grid);
-      dedupeZoneCards(grid);
-      [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
-      [].slice.call(grid.querySelectorAll('.pursuit-zone-grid')).forEach(resolveZoneCardOverlaps);
-      wireZoneDrag(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
-      seedKnownOneoffs(grid);
-      [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
-      restoreLoose(grid);
-      expandCanvas(grid);
-      snapshotGoodBoard();
-      return;
-    }
-    if(isAug20Board(grid)){
-      ensureAug20EditChrome(grid);
-      expandCanvas(grid);
-      if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
-      return;
-    }
-    grid.innerHTML='';
-    grid.classList.add('pursuit-categories','pursuit-canvas','freeform');
-    if(blk) blk.classList.add('pursuits-categorized');
-    ZONES.forEach(function(z){
-      var row=document.createElement('div');
-      row.className='pursuit-zone pursuit-zone-'+z.id;
-      row.setAttribute('data-zone', z.id);
-      row.style.setProperty('--zone-photo', 'url("'+z.img+'")');
-      row.style.backgroundImage='none';
-      applyPos(row, z.id);
-      row.innerHTML='<div class="pursuit-zone-head"><p class="pursuit-zone-title">'+z.title+'</p></div><div class="pursuit-zone-grid" data-zone="'+z.id+'"></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" data-zone="'+z.id+'" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div>';
-      grid.appendChild(row);
-    });
-    grid.setAttribute('data-zoned','1');
-    resolveOverlaps(grid);
-    adoptStoredGridCards(grid);
-    restoreLiveMinis(grid);
-    dedupeZoneCards(grid);
-    [].slice.call(grid.querySelectorAll('.pursuit-zone-grid .sec-card')).forEach(prepareMini);
-    wireZoneDrag(grid);
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ applyZoneCollapse(z); });
-    seedKnownOneoffs(grid);
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){ renderOneoffs(z); layoutZonePieces(z, 'fit'); });
-    restoreLoose(grid);
-    expandCanvas(grid);
-    snapshotGoodBoard();
-    }catch(err){ try{ console.error(err); }catch(e){} }
-    try{ resolveCanvasPieceOverlaps(grid); }catch(e){}
-    window.__boardHydrated=1;
-  }
-  function ensureTaskInbox(blk){
-    if(!blk || blk.querySelector('.day-task-inbox')) return;
-    var card=blk.querySelector('.day-card');
-    var head=card&&card.querySelector('.day-card-header');
-    if(!card || !head) return;
-    var box=document.createElement('div');
-    box.className='day-task-inbox';
-    box.innerHTML='<textarea class="day-task-inbox-input" rows="2" placeholder="add tasks, one per line — they go to a section automatically"></textarea><button type="button" class="day-task-inbox-go">add</button>';
-    var ta=box.querySelector('textarea');
-    var go=box.querySelector('button');
-    function commit(){
-      var grid=blk.querySelector('.sec-grid');
-      var lines=(ta.value||'').split(/\n+/).map(function(s){ return s.trim(); }).filter(Boolean);
-      if(!grid || !lines.length) return;
-      lines.forEach(function(line){
-        var zid=zoneFor(line);
-        var zone=grid.querySelector('.pursuit-zone[data-zone="'+zid+'"]');
-        if(zone) addZoneTask(zone, line);
-      });
-      ta.value='';
-    }
-    go.addEventListener('click', function(ev){ ev.preventDefault(); commit(); });
-    ta.addEventListener('keydown', function(ev){
-      if((ev.metaKey||ev.ctrlKey) && ev.key==='Enter'){ ev.preventDefault(); commit(); }
-    });
-    if(head.nextSibling) card.insertBefore(box, head.nextSibling);
-    else card.appendChild(box);
-  }
-  window.__ensurePursuitZones=function(root){
-    var sel='.day-block[data-date="2026-08-20"] .sec-grid.pursuit-canvas, .day-block.overview-era-day .tv-panel.tv-nodes .sec-grid.pursuit-canvas';
-    (root||document).querySelectorAll(sel).forEach(function(grid){
-      var blk=grid.closest('.day-block');
-      if(blk && isOverviewEra(blk)){
-        applyAug20ZoneEdits(grid);
-        ensureAug20EditChrome(grid);
-        wireZoneDrag(grid);
-        expandCanvas(grid);
-        if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
-        return;
-      }
-      if(!grid.querySelector(':scope > .pursuit-zone')) return;
-      try{ ensureGrid(grid); }catch(err){ try{ console.error(err); }catch(e){} }
-    });
-  };
-  var CLOUD_FILE='btm-state.json';
-  var GH_OWNER='dianacodesit';
-  var GH_REPO='dashboard';
-  var GH_PATH='btm-state.json';
-  var _cloudTimer=null;
-  var _cloudSha=null;
-  function collectCloudState(){
-    function g(k){ try{ return JSON.parse(localStorage.getItem(k)||'{}'); }catch(e){ return {}; } }
-    return {
-      v:1,
-      updatedAt:new Date().toISOString(),
-      live:g(LIVEKEY),
-      gone:g('btm_live_minicards_gone_v1'),
-      oneoffs:g(TKEY),
-      miniPos:g(CKEY),
-      zonePos:g(POSKEY),
-      loose:g('btm_canvas_loose_v1')
-    };
-  }
-  function cloudPackHasItems(pack){
-    if(!pack || typeof pack!=='object') return false;
-    return Object.keys(pack).some(function(k){
-      var v=pack[k];
-      if(Array.isArray(v)) return v.length>0;
-      if(v && typeof v==='object') return Object.keys(v).some(function(kk){
-        var inner=v[kk];
-        return Array.isArray(inner) ? inner.length>0 : !!inner;
-      });
-      return !!v;
-    });
-  }
-  function applyCloudState(st){
-    if(!st||typeof st!=='object') return;
-    try{ if(cloudPackHasItems(st.live)) localStorage.setItem(LIVEKEY, JSON.stringify(st.live)); }catch(e){}
-    try{ if(cloudPackHasItems(st.gone)) localStorage.setItem('btm_live_minicards_gone_v1', JSON.stringify(st.gone)); }catch(e){}
-    try{ if(cloudPackHasItems(st.oneoffs)) localStorage.setItem(TKEY, JSON.stringify(st.oneoffs)); }catch(e){}
-    try{ if(cloudPackHasItems(st.miniPos)) localStorage.setItem(CKEY, JSON.stringify(st.miniPos)); }catch(e){}
-    try{ if(cloudPackHasItems(st.zonePos)) localStorage.setItem(POSKEY, JSON.stringify(st.zonePos)); }catch(e){}
-    try{ if(cloudPackHasItems(st.loose)) localStorage.setItem('btm_canvas_loose_v1', JSON.stringify(st.loose)); }catch(e){}
-  }
-  function mergeCloudState(remote){
-    if(!remote||typeof remote!=='object') return;
-    if(!cloudPackHasItems(remote.live) && !cloudPackHasItems(remote.oneoffs) && !cloudPackHasItems(remote.gone) && !cloudPackHasItems(remote.miniPos) && !cloudPackHasItems(remote.zonePos) && !cloudPackHasItems(remote.loose))
-      return;
-    var localLive={};
-    try{ localLive=JSON.parse(localStorage.getItem(LIVEKEY)||'{}'); }catch(e){}
-    if(cloudPackHasItems(localLive) && !cloudPackHasItems(remote.live)) return;
-    if(remote.live && remote.live[LIVE_DAY] && liveLooksLikeFullPresetDump(remote.live[LIVE_DAY])) return;
-    applyCloudState(remote);
-  }
-  function ghToken(){ try{ return localStorage.getItem('btm_gh_token')||''; }catch(e){ return ''; } }
-  function b64utf8(s){ return btoa(unescape(encodeURIComponent(s))); }
-  function pushStateToGitHub(st){
-    var tok=ghToken();
-    if(!tok) return;
-    var url='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
-    var body={
-      message:'sync dashboard cards '+new Date().toISOString().slice(0,16),
-      content:b64utf8(JSON.stringify(st,null,2)+'\n'),
-      branch:'main'
-    };
-    if(_cloudSha) body.sha=_cloudSha;
-    fetch(url,{
-      method:'PUT',
-      headers:{
-        'Authorization':'Bearer '+tok,
-        'Accept':'application/vnd.github+json',
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify(body)
-    }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); }).then(function(res){
-      if(res.ok && res.j && res.j.content && res.j.content.sha) _cloudSha=res.j.content.sha;
-    }).catch(function(){});
-  }
-  function scheduleCloudSave(){
-    clearTimeout(_cloudTimer);
-    _cloudTimer=setTimeout(function(){
-      var st=collectCloudState();
-      try{ localStorage.setItem('btm_cloud_state_v1', JSON.stringify(st)); }catch(e){}
-      pushStateToGitHub(st);
-    },900);
-  }
-  function loadCloudState(){
-    var tok=ghToken();
-    function fromFile(){
-      return fetch(CLOUD_FILE+'?t='+Date.now()).then(function(r){
-        if(!r.ok) throw new Error('no file');
-        return r.json();
-      }).then(function(st){ mergeCloudState(st); });
-    }
-    if(!tok) return fromFile().catch(function(){});
-    return fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH,{
-      headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}
-    }).then(function(r){ return r.json(); }).then(function(j){
-      if(j&&j.sha) _cloudSha=j.sha;
-      if(j&&j.content){
-        var raw=decodeURIComponent(escape(atob(String(j.content).replace(/\n/g,''))));
-        mergeCloudState(JSON.parse(raw));
-        return;
-      }
-      throw new Error('no gh content');
-    }).catch(function(){ return fromFile(); });
-  }
-  function go(){
-    try{
-      document.querySelectorAll('.day-block.zone-board-day .canvas-oneoff, .day-block.zone-board-day .zone-oneoff.canvas-oneoff').forEach(function(el){ el.remove(); });
-    }catch(e){}
-    try{ window.__ensurePursuitZones(); }catch(e){}
-  }
-  if(!window.__sectionDragDoc){
-    window.__sectionDragDoc=1;
-    document.addEventListener('pointerdown', function(e){
-      if(e.button && e.button!==0) return;
-      if(e.target.closest('.day-block.nodes-linking')) return;
-      if(e.target.closest('svg.aug20-zone-web, path.aug20-edge, path.aug20-edge-hit')) return;
-      var handleEarly=e.target.closest('.zone-resize');
-      if(!handleEarly && e.target.closest('.add-pursuit-slot,.plus-picker,.card-del,.del-x-sec,.card-resize,.oneoff-resize,.zone-oneoff-del,.zone-oneoff,.zone-del,.day-add-zone,.zone-add-picker,.del-x,.nodes-add-btn,.nodes-link-btn,.nodes-edit-bar,input,textarea,a,.add-task-sec,.card-add-task')) return;
-      if(!handleEarly && e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
-        /* header click collapses — do not start a section drag that swallows the tap */
-        return;
-      }
-      var grid=e.target.closest('.sec-grid') || (handleEarly && handleEarly.closest('.sec-grid'));
-      if(!grid || !grid.querySelector(':scope > .pursuit-zone')) return;
-      if(!grid.closest('.zone-board-day, .pursuit-board-day, .today-block')) return;
-      var sc=boardScale(grid);
-      var startX=e.clientX, startY=e.clientY;
-      window.__ffMoved=false;
-
-      var handle=handleEarly || e.target.closest('.zone-resize');
-      if(handle){
-        var zone=handle.closest('.pursuit-zone');
-        if(!zone || !grid.contains(zone)) return;
-        var id=zone.getAttribute('data-zone');
-        var start=zoneRect(zone);
-        e.preventDefault();
-        e.stopPropagation();
-        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-        window.__ffMoved=false;
-        zone.classList.add('zone-dragging');
-        zone.style.setProperty('overflow','visible','important');
-        try{ handle.setPointerCapture(e.pointerId); }catch(err){}
-        function rmove(ev){
-          var dx=(ev.clientX-startX)/sc, dy=(ev.clientY-startY)/sc;
-          if(Math.abs(dx)+Math.abs(dy)>2) window.__ffMoved=true;
-          writeRect({el:zone, id:id, x:start.x, y:start.y, w:start.w+dx, h:start.h+dy});
-        }
-        function rup(){
-          try{ handle.releasePointerCapture(e.pointerId); }catch(err){}
-          document.removeEventListener('pointermove', rmove, true);
-          document.removeEventListener('pointerup', rup, true);
-          document.removeEventListener('pointercancel', rup, true);
-          zone.classList.remove('zone-dragging');
-          zone.style.removeProperty('overflow');
-          readPos(zone, id);
-          resolveOverlaps(grid, id);
-        }
-        document.addEventListener('pointermove', rmove, true);
-        document.addEventListener('pointerup', rup, true);
-        document.addEventListener('pointercancel', rup, true);
-        return;
-      }
-
-      var card=e.target.closest('.sec-card');
-      if(card && grid.contains(card)){
-        /* Card moves are owned by wireZoneDrag — do not lift onto document.body. */
-        return;
-      }
-
-      var zone=e.target.closest('.pursuit-zone');
-      if(!zone || !grid.contains(zone)) return;
-      if(e.target.closest('.sec-card,.zone-oneoff')) return;
-      var start=zoneRect(zone);
-      function zmove(ev){
-        var dx=(ev.clientX-startX)/sc, dy=(ev.clientY-startY)/sc;
-        if(Math.abs(dx)+Math.abs(dy)>3) window.__ffMoved=true;
-        if(!window.__ffMoved) return;
-        ev.preventDefault();
-        writeRect({el:zone, id:start.id, x:start.x+dx, y:start.y+dy, w:start.w, h:start.h});
-      }
-      function zup(){
-        window.removeEventListener('pointermove', zmove, true);
-        window.removeEventListener('pointerup', zup, true);
-        window.removeEventListener('pointercancel', zup, true);
-        zone.classList.remove('zone-dragging');
-        zone.style.zIndex='';
-      if(window.__ffMoved){
-        readPos(zone, start.id);
-        resolveOverlaps(grid, start.id);
-      }
-      /* click handler zooms photo / collapses header — do not toggle here */
-    }
-      window.addEventListener('pointermove', zmove, true);
-      window.addEventListener('pointerup', zup, true);
-      window.addEventListener('pointercancel', zup, true);
-      return;
-    }, true);
-  }
-  function boot(){
-    go();
-    loadCloudState().then(function(){ go(); }).catch(function(){});
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
-})();
-</script>
-
-<script>
-(function(){
-if(window.__j22add) return; window.__j22add=1;
-var AKEY='btm_added_v1';
-function esc(s){ return (s||'').replace(/[&<>]/g,function(c){return c==='&'?'&amp;':c==='<'?'&lt;':'&gt;';}); }
-function cleanT(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function ensureFlow(block){ if(!block) return null; if(block.querySelector('.flow-timeline-card')) return null; block.classList.add('fmt22'); var f=block.querySelector('.flow-chart-card'); if(!f){ var dt=block.querySelector('.day-tasks'); if(!dt){ dt=document.createElement('div'); dt.className='day-tasks'; (block.querySelector('.day-card')||block).appendChild(dt); } f=document.createElement('div'); f.className='flow-chart-card'; var ti=document.createElement('p'); ti.className='flow-title'; ti.textContent='flow'; f.appendChild(ti); dt.appendChild(f); } return f; }
-function makeItem(html, lv){ var l=document.createElement('label'); l.className='j22-item'+(lv===1?' j22-sub':(lv===2?' j22-sub2':'')); var inp=document.createElement('input'); inp.className='agenda-check'; inp.type='checkbox'; var sp=document.createElement('span'); sp.className='j22-t'; sp.innerHTML=html; l.appendChild(inp); l.appendChild(sp); return l; }
-function load(){ try{ return JSON.parse(localStorage.getItem(AKEY)||'[]'); }catch(e){ return []; } }
-function save(a){ try{ localStorage.setItem(AKEY, JSON.stringify(a)); }catch(e){} }
-function addRender(rec){
-var dest=document.querySelector('.day-block[data-date="'+rec.to+'"]'); if(!dest) return;
-var nm=(rec.name||'').trim(); if(!nm) return;
-// Handle sub-items
-if(rec.sub && rec.parent){ var pItem=null; [].slice.call(dest.querySelectorAll('.j22-item')).forEach(function(it){ if(it.classList.contains('j22-sub')||it.classList.contains('j22-sub2')) return; var tt=it.querySelector('.j22-t'); if(tt && cleanT(tt)===rec.parent) pItem=it; }); if(!pItem) return; var dup=false; var nn=pItem.nextElementSibling; while(nn&&nn.classList&&nn.classList.contains('j22-item')&&(nn.classList.contains('j22-sub')||nn.classList.contains('j22-sub2'))){ var st=nn.querySelector('.j22-t'); if(st&&cleanT(st)===nm){dup=true;break;} nn=nn.nextElementSibling; } if(dup) return; var sub=makeItem(esc(nm),1); var ref=pItem,rn=pItem.nextElementSibling; while(rn&&rn.classList&&rn.classList.contains('j22-item')&&(rn.classList.contains('j22-sub')||rn.classList.contains('j22-sub2'))){ref=rn;rn=rn.nextElementSibling;} ref.parentNode.insertBefore(sub,ref.nextSibling); return; }
-// Check for duplicates
-var nmLow=nm.toLowerCase(); if([].slice.call(dest.querySelectorAll('.j22-item .j22-t')).some(function(t){return cleanT(t).toLowerCase()===nmLow || (t.dataset.orig && t.dataset.orig.toLowerCase()===nmLow);})) return;
-var sect=(rec.section||'').trim();
-// Check if this block uses sec-cards (pursuit card grid) - if so, skip ensureFlow
-var hasSec=dest.querySelector('.sec-card');
-var f=hasSec?null:ensureFlow(dest);
-if(f){
-  var grp=null; [].slice.call(f.querySelectorAll('.j22-group')).forEach(function(g){ if((g.dataset.orig||g.dataset.newhdr||g.textContent.trim())===sect) grp=g; });
-  var box=null;
-  if(grp){ var sec=grp.closest('.j22-section'); if(sec) box=sec.querySelector('.j22-section-items'); }
-  else { grp=document.createElement('p'); grp.className='j22-group'; grp.setAttribute('data-orig',sect); grp.textContent=sect; f.appendChild(grp); }
-  var item=makeItem(esc(nm));
-  if(box){ box.appendChild(item); }
-  else { var ref=grp,n=grp.nextElementSibling; while(n&&n.classList&&n.classList.contains('j22-item')){ref=n;n=n.nextElementSibling;} ref.parentNode.insertBefore(item,ref.nextSibling); }
-} else {
-  // Fallback: render into matching sec-card (for blocks with flow-timeline-card/sec-cards)
-  var secCards=dest.querySelectorAll('.sec-card');
-  var targetCard=null;
-  var __secAlias={'skincare':'glow up','beauty':'glow up','travel-ready':'traveler','travel':'traveler'}; var sectLow=(__secAlias[sect.toLowerCase()]||sect).toLowerCase(); [].slice.call(secCards).forEach(function(c){ var g=c.querySelector('.j22-group'); if(g){ var h=(g.getAttribute('data-newhdr')||'').toLowerCase(); var t=g.textContent.trim().toLowerCase(); h=__secAlias[h]||h; t=__secAlias[t]||t; if(h===sectLow||t===sectLow || (/travel/.test(h||t) && /travel/.test(sectLow))) targetCard=c; }});
-  if(!targetCard){
-    if(dest.classList.contains('today-block') || dest.closest('.today-block')) return;
-    // Create new sec-card: photo banner + title overlay in header (matches existing cards)
-    targetCard=document.createElement('div'); targetCard.className='j22-section card sec-card';
-    var theme=(window.__secThemeFor&&window.__secThemeFor(sect))||'warm';
-    targetCard.setAttribute('data-theme', theme);
-    var vis=document.createElement('div'); vis.className='card-visual theme-'+theme;
-    var doneBtn=document.createElement('button'); doneBtn.className='done-check'; doneBtn.type='button';
-    doneBtn.innerHTML='<svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>';
-    vis.appendChild(doneBtn);
-    var img=document.createElement('img');
-    img.src=(window.__secImgFor&&window.__secImgFor(sect))||'manus-storage/pursuit-lifestyle_577937e8.jpg';
-    img.alt=sect;
-    vis.appendChild(img);
-    var p=document.createElement('p'); p.className='j22-group'; p.setAttribute('contenteditable','true'); p.setAttribute('spellcheck','false'); p.setAttribute('data-newhdr',sect); p.textContent=sect;
-    vis.appendChild(p); // title lives IN the photo header
-    var body=document.createElement('div'); body.className='card-body';
-    var items=document.createElement('div'); items.className='j22-section-items';
-    body.appendChild(items);
-    targetCard.appendChild(vis); targetCard.appendChild(body);
-    var grid=dest.querySelector('.sec-grid')||(dest.querySelector('.day-tasks')||dest); var zid=(window.__zoneForPursuit&&window.__zoneForPursuit(sect))||'life'; var host=dest.querySelector('.pursuit-zone-grid[data-zone="'+zid+'"], .pursuit-zone-cards[data-zone-cards="'+zid+'"]')||grid; host.appendChild(targetCard);
-    var addBtn=document.createElement('button'); addBtn.className='card-add-task'; addBtn.type='button'; addBtn.textContent='+';
-    addBtn.setAttribute('aria-label','add task to this pursuit');
-    targetCard.style.position='relative';
-    targetCard.appendChild(addBtn);
-  }
-  var box2=targetCard.querySelector('.card-body .j22-section-items');
-  var item2=makeItem(esc(nm));
-  if(box2){ box2.appendChild(item2); }
-  else { var cb=targetCard.querySelector('.card-body'); if(cb) cb.appendChild(item2); }
-}
-// Ensure pin buttons are added to newly-rendered items
-if(window.__j22addPins) setTimeout(window.__j22addPins, 50);
-}
-function replayAdded(){ var seen={}; load().forEach(function(rec){ var nm=(rec.name||'').trim().toLowerCase(); if(!nm) return; var key=(rec.date||'')+'|'+(rec.section||'').toLowerCase()+'|'+nm; if(seen[key]) return; seen[key]=true; addRender(rec); }); }
-var busy=false; function go(){ if(window.__btmEditing||busy) return; busy=true; try{ replayAdded(); }catch(e){} busy=false; }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[600,1800].forEach(function(ms){ setTimeout(go,ms); });
-window.__j22addReplay=go;
-// Also load tasks from database and render them
-fetch('/api/trpc/tasks.list').then(function(r){return r.json();}).then(function(d){
-  var items=(d&&d.result&&d.result.data&&d.result.data.json)||[];
-  var seen={};
-  items.forEach(function(t){
-    var key=(t.date||'')+'|'+(t.section||'').toLowerCase()+'|'+(t.name||'').trim().toLowerCase();
-    if(seen[key]) return; seen[key]=true;
-    addRender({to:t.date, section:t.section, name:t.name, parent:t.parent||'', sub:!!t.isSub});
-  });
-}).catch(function(e){ console.log('DB task load failed',e); });
-// One-time sync: push localStorage tasks to DB
-if(!localStorage.getItem('__btmSyncedToDB')){
-  var lsTasks=load();
-  if(lsTasks.length){
-    var items=lsTasks.map(function(r){return {date:r.to||r.date||'',section:r.section||'added',name:r.name||'',parent:r.parent||'',isSub:!!r.sub};}).filter(function(t){return t.date&&t.name;});
-    if(items.length) fetch('/api/trpc/tasks.bulkImport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({json:{items:items}})}).then(function(){localStorage.setItem('__btmSyncedToDB','1');}).catch(function(){});
-  } else { localStorage.setItem('__btmSyncedToDB','1'); }
-}
-window.openJ22AddTask=function(day){
-var dateRe=/^\d{4}-\d{2}-\d{2}$/;
-var days=[].slice.call(document.querySelectorAll('.day-block[data-date]')).filter(function(b){return b.dataset.date&&dateRe.test(b.dataset.date);}).map(function(b){return {date:b.dataset.date, display:(b.querySelector('.day-date')||{textContent:b.dataset.date}).textContent.trim()};}).sort(function(a,b){return a.date.localeCompare(b.date);});
-var ex=document.getElementById('addTaskModal'); if(ex) ex.remove();
-var ov=document.createElement('div'); ov.id='addTaskModal'; ov.className='rollover-picker-overlay';
-ov.innerHTML='<div class="rollover-picker-modal"><div class="rollover-picker-header"><span class="rollover-picker-title">add task</span><button class="rollover-picker-close" type="button">×</button></div><div class="rollover-picker-dest"><label class="rollover-picker-label">→ day:</label><select class="rollover-picker-select add-day-select"></select></div><div class="rollover-picker-dest"><label class="rollover-picker-label">section:</label><select class="rollover-picker-select add-section-select"></select></div><div class="add-field add-newsec-field" style="display:none"><input type="text" class="add-section-input" placeholder="new section name" autocomplete="off"></div><div class="rollover-picker-dest"><label class="rollover-picker-label">subtask of:</label><select class="rollover-picker-select add-parent-select"></select></div><div class="add-field"><input type="text" class="add-task-input" placeholder="task" autocomplete="off"></div><div class="rollover-picker-footer"><button class="rollover-picker-cancel" type="button">cancel</button><button class="add-confirm" type="button">add</button></div></div>';
-document.body.appendChild(ov);
-var sel=ov.querySelector('.add-day-select');
-days.forEach(function(d){ var o=document.createElement('option'); o.value=d.date; o.textContent=d.display; sel.appendChild(o); });
-sel.value=day||'2026-06-22';
-var ssel=ov.querySelector('.add-section-select');
-function popSecs(d){ ssel.innerHTML=''; var seen={}; var o0=document.createElement('option'); o0.value=''; o0.textContent='(choose existing)'; ssel.appendChild(o0); var blk=document.querySelector('.day-block[data-date="'+d+'"]'); if(blk){ [].slice.call(blk.querySelectorAll('.j22-group')).forEach(function(g){ var t=g.textContent.trim(); if(t && !seen[t]){ seen[t]=1; var o=document.createElement('option'); o.value=t; o.textContent=t; ssel.appendChild(o); } }); } var on=document.createElement('option'); on.value='__new__'; on.textContent='+ new section'; ssel.appendChild(on); }
-function syncNew(){ var nf=ov.querySelector('.add-newsec-field'); if(nf){ nf.style.display=(ssel.value==='__new__')?'block':'none'; if(ssel.value==='__new__'){ var ni=nf.querySelector('.add-section-input'); if(ni) ni.focus(); } } }
-var psel=ov.querySelector('.add-parent-select');
-function popParents(){ psel.innerHTML=''; var o0=document.createElement('option'); o0.value=''; o0.textContent='(none - top-level task)'; psel.appendChild(o0); var d=sel.value; var sc=(ssel.value==='__new__')?'':ssel.value; if(!sc) return; var blk=document.querySelector('.day-block[data-date="'+d+'"]'); if(!blk) return; var seen={}; [].slice.call(blk.querySelectorAll('.j22-item')).forEach(function(it){ if(it.classList.contains('j22-sub')||it.classList.contains('j22-sub2')) return; var sec=it.closest('.j22-section'); var g=sec?sec.querySelector('.j22-group'):null; var gn=g?(g.dataset.orig||g.textContent.trim()):''; if(gn!==sc) return; var tt=it.querySelector('.j22-t'); if(!tt) return; var cc=tt.cloneNode(true); [].slice.call(cc.querySelectorAll('.fn-num,.fn-cite,.pin-badge')).forEach(function(x){x.remove();}); var n=cc.textContent.trim(); if(n&&!seen[n]){ seen[n]=1; var o=document.createElement('option'); o.value=n; o.textContent=n; psel.appendChild(o); } }); }
-popSecs(sel.value); syncNew(); popParents(); sel.onchange=function(){ popSecs(sel.value); syncNew(); popParents(); }; ssel.onchange=function(){ syncNew(); popParents(); };
-function close(){ ov.remove(); }
-ov.querySelector('.rollover-picker-close').onclick=close;
-ov.querySelector('.rollover-picker-cancel').onclick=close;
-ov.querySelector('.add-confirm').onclick=function(){
-var day=sel.value; var __ss=ov.querySelector('.add-section-select'); var section=(__ss.value==='__new__')?ov.querySelector('.add-section-input').value.trim():__ss.value; var task=ov.querySelector('.add-task-input').value.trim();
-if(!task){ ov.querySelector('.add-task-input').focus(); return; }
-if(!section) section='added';
-var __p=ov.querySelector(".add-parent-select").value; var rec=__p?{to:day, section:section, name:task, parent:__p, sub:true}:{to:day, section:section, name:task};
-addRender(rec); close(); fetch("/api/trpc/tasks.add",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({json:{date:day,section:section,name:task,parent:__p||"",isSub:!!__p}})}).then(function(r){if(r.ok&&window.showRolloverStatus)showRolloverStatus("task saved");});
-if(window.showRolloverStatus) showRolloverStatus('added task');
-};
-setTimeout(function(){ var ti=ov.querySelector('.add-task-input'); if(ti) ti.focus(); },30);
-};
-})();
-</script>
-<script>
-/* Cleanup: remove empty j22-items AND deduplicate items within each sec-card */
-(function(){
-  function cleanupEmptyJ22Items(){
-    document.querySelectorAll('.j22-section-items .j22-item').forEach(function(item){
-      var t = item.querySelector('.j22-t');
-      if(t && !t.textContent.trim() && !t.innerHTML.trim()) item.remove();
-    });
-  }
-  function deduplicateItems(){
-    /* Dedup within each sec-card */
-    document.querySelectorAll('.sec-card .j22-section-items').forEach(function(box){
-      var seen = {};
-      [].slice.call(box.querySelectorAll('.j22-item')).forEach(function(item){
-        var t = item.querySelector('.j22-t');
-        if(!t) return;
-        var txt = t.textContent.trim().toLowerCase();
-        if(!txt) return;
-        if(seen[txt]){ item.remove(); return; }
-        seen[txt] = true;
-      });
-    });
-    /* Also dedup within each day-block's flow-chart-card */
-    document.querySelectorAll('.flow-chart-card').forEach(function(fc){
-      var seen = {};
-      [].slice.call(fc.querySelectorAll('.j22-item')).forEach(function(item){
-        var t = item.querySelector('.j22-t');
-        if(!t) return;
-        var txt = t.textContent.trim().toLowerCase();
-        if(!txt) return;
-        if(seen[txt]){ item.remove(); return; }
-        seen[txt] = true;
-      });
-    });
-  }
-  function cleanup(){ cleanupEmptyJ22Items(); deduplicateItems(); }
-  [2200, 3500, 4500, 6000, 8000].forEach(function(ms){ setTimeout(cleanup, ms); });
-  window.__cleanupEmptyJ22 = cleanup;
-})();
-</script>
-<script>
-(function(){
-if(window.__j22acts) return; window.__j22acts=1;
-// Use event delegation so buttons always work even after DOM replacement
-document.addEventListener('click', function(e){
-  var btn = e.target.closest('.j22-add-btn');
-  if(!btn) return;
-  var blk = btn.closest('.day-block');
-  if(!blk) return;
-  var date = blk.dataset.date;
-  if(!date) return;
-  e.preventDefault(); e.stopPropagation();
-  if(btn.matches('[aria-label="add task"]')){
-    if(window.openJ22AddTask) openJ22AddTask(date);
-  } else if(btn.matches('.j22-copy-btn, [aria-label="copy"]')){
-    if(window.openJ22Copy) openJ22Copy(date);
-  } else if(btn.matches('[aria-label="roll over"]')){
-    if(window.openJ22Rollover) openJ22Rollover(date);
-  }
-});
-function ensureActions(){
-[].forEach.call(document.querySelectorAll('.day-block.fmt22'), function(blk){
-var date=blk.dataset.date; if(!date) return;
-if(date >= '2026-08-26'){
-  blk.querySelectorAll('.j22-actions').forEach(function(el){ el.remove(); });
-  return;
-}
-var dayCard=blk.querySelector('.day-card'); if(!dayCard) return;
-var dayTasks=dayCard.querySelector('.day-tasks'); if(!dayTasks) return;
-var ex=dayTasks.querySelector('.j22-actions'); if(ex) return;
-var div=document.createElement('div'); div.className='j22-actions';
-var b1=document.createElement('button'); b1.type='button'; b1.className='j22-add-btn'; b1.title='roll over'; b1.setAttribute('aria-label','roll over'); b1.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
-var b2=document.createElement('button'); b2.type='button'; b2.className='j22-add-btn j22-copy-btn'; b2.title='copy'; b2.setAttribute('aria-label','copy'); b2.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
-var b3=document.createElement('button'); b3.type='button'; b3.className='j22-add-btn'; b3.setAttribute('aria-label','add task'); b3.textContent='+';
-div.appendChild(b3); div.appendChild(b2); div.appendChild(b1);
-dayTasks.appendChild(div);
-});
-}
-function run(){ try{ ensureActions(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-[500,1600].forEach(function(ms){ setTimeout(run,ms); });
-if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(run,300); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-<script>
-(function(){
-if(window.__j22drag) return; window.__j22drag=1;
-var OKEY='btm_order_v1';
-var dragging=false, applying=false, dsubs=null;
-function lvl(el){ return el.classList&&el.classList.contains('j22-sub2')?2:(el.classList&&el.classList.contains('j22-sub')?1:0); }
-function cleanT(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function nameOf(it){ var t=it.querySelector('.j22-t'); return t?cleanT(t):''; }
-function load(){ try{ return JSON.parse(localStorage.getItem(OKEY)||'{}'); }catch(e){ return {}; } }
-function save(o){ try{ localStorage.setItem(OKEY, JSON.stringify(o)); }catch(e){} }
-function keyFor(el){ var blk=el.closest('.day-block'); var sec=el.closest('.j22-section'); var g=sec?sec.querySelector('.j22-group'):null; return (blk?blk.dataset.date:'?')+'|'+(g?g.textContent.trim():'?'); }
-function topItems(el){ return [].slice.call(el.children).filter(function(c){ return c.classList&&c.classList.contains('j22-item')&&lvl(c)===0; }); }
-function subsAfter(it){ var s=[],n=it.nextElementSibling; while(n&&n.classList&&n.classList.contains('j22-item')&&lvl(n)>0){ s.push(n); n=n.nextElementSibling; } return s; }
-function saveOrder(el){ var o=load(); o[keyFor(el)]=topItems(el).map(nameOf); save(o); }
-function makeItemFromName(name){
-  var l=document.createElement('label'); l.className='j22-item'; l.setAttribute('data-addtask','1');
-  var cb=document.createElement('input'); cb.type='checkbox'; cb.className='agenda-check';
-  var sp=document.createElement('span'); sp.className='j22-t'; sp.setAttribute('contenteditable','true'); sp.textContent=name;
-  l.appendChild(cb); l.appendChild(sp);
-  return l;
-}
-function applyOne(el){
-  var o=load(); var order=o[keyFor(el)]; if(!order||!order.length) return;
-  var cur=topItems(el).map(nameOf);
-  // Recreate missing items that exist in saved order but not in DOM (today's items lost on reload)
-  order.forEach(function(nm){
-    if(nm && cur.indexOf(nm)<0){
-      el.appendChild(makeItemFromName(nm));
-    }
-  });
-  // Re-read after recreation
-  cur=topItems(el).map(nameOf);
-  var cf=cur.filter(function(n){return order.indexOf(n)>-1;}).join('||');
-  var sf=order.filter(function(n){return cur.indexOf(n)>-1;}).join('||');
-  if(cf===sf) return;
-  var groups=topItems(el).map(function(p){ return {name:nameOf(p), nodes:[p].concat(subsAfter(p))}; });
-  var byName={}; groups.forEach(function(g){ byName[g.name]=g; });
-  var newOrder=[]; order.forEach(function(nm){ if(byName[nm]){ newOrder.push(byName[nm]); delete byName[nm]; } });
-  groups.forEach(function(g){ if(byName[g.name]) newOrder.push(g); });
-  newOrder.forEach(function(g){ g.nodes.forEach(function(n){ el.appendChild(n); }); });
-}
-function applyOrder(){ if(dragging) return; applying=true; [].forEach.call(document.querySelectorAll('.day-block.fmt22 .j22-section-items'), function(el){ try{ applyOne(el); }catch(e){} }); applying=false; }
-function initSortables(){
-  if(!window.Sortable) return;
-  [].forEach.call(document.querySelectorAll('.day-block.fmt22 .j22-section-items'), function(el){
-    var card = el.closest('.sec-card');
-    // Vision-board scraps are absolutely positioned — list Sortable hides them on drag
-    if(card && card.classList.contains('has-tasks') && !card.classList.contains('card-collapsed')){
-      try{ if(el.__sortable && el.__sortable.destroy) el.__sortable.destroy(); }catch(e){}
-      el.__sortable = null;
-      return;
-    }
-    // Re-bind if list was replaced or Sortable died after a rebuild
-    if(el.__sortable && el.__sortable.el === el) return;
-    try{ if(el.__sortable && el.__sortable.destroy) el.__sortable.destroy(); }catch(e){}
-    el.__sortable = null;
-
-    // Contenteditable steals the first pointerdown — same fix as flow rows
-    if(!el.__taskFocusGuard){
-      el.__taskFocusGuard = 1;
-      el.addEventListener('pointerdown', function(e){
-        var txt = e.target.closest('.j22-t');
-        if(!txt || !el.contains(txt)) return;
-        if(document.activeElement === txt) return; // already editing
-        e.preventDefault();
-      }, true);
-      el.addEventListener('click', function(e){
-        if(window.__taskDragging || window.__cardSwipeMoved || window.__vbScrapDragging) return;
-        var txt = e.target.closest('.j22-t');
-        if(txt && el.contains(txt)){
-          try{ txt.focus(); }catch(err){}
-        }
-      });
-    }
-
-    el.__sortable=Sortable.create(el, {
-      group:'pursuit-tasks',
-      animation:150,
-      draggable:'.j22-item',
-      filter: function(evt, target){
-        if(!target || !target.closest) return false;
-        if(target.closest('.j22-sub, .j22-sub2, .task-progress-wrap, .task-meta-row, .pin-btn, .del-x, input, button')) return true;
-        // Only block when already editing the name
-        if(target.closest('.j22-t') && document.activeElement === target.closest('.j22-t')) return true;
-        return false;
-      },
-      preventOnFilter: false,
-      forceFallback: true,
-      fallbackOnBody: true,
-      touchStartThreshold: 3,
-      fallbackTolerance: 4,
-      delay: 80,
-      delayOnTouchOnly: true,
-      ghostClass: 'j22-sortable-ghost',
-      chosenClass: 'j22-sortable-chosen',
-      onStart:function(evt){
-        window.__taskDragging=true;
-        var ae=document.activeElement;
-        if(ae && ae.blur && ae.classList && ae.classList.contains('j22-t')) ae.blur();
-        if(!window.__taskHoverBound){
-          window.__taskHoverBound=true;
-          document.addEventListener('pointermove', window.__taskHoverExpand, true);
-          document.addEventListener('touchmove', window.__taskHoverExpand, true);
-        }
-        dragging=true;
-        var it=evt.item;
-        dsubs=(lvl(it)===0)?subsAfter(it):null;
-      },
-      onEnd:function(evt){
-        var it=evt.item;
-        if(dsubs&&dsubs.length){
-          var ref=it;
-          dsubs.forEach(function(s){ ref.parentNode.insertBefore(s, ref.nextSibling); ref=s; });
-        }
-        dsubs=null;
-        dragging=false;
-        saveOrder(el);
-        window.__taskDragging=false;
-        try{ window.__btmRewriteTaskHome && window.__btmRewriteTaskHome(evt.item); }catch(e){}
-      }
-    });
-  });
-}
-function run(){ try{ initSortables(); applyOrder(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-[800,2200,3600].forEach(function(ms){ setTimeout(run,ms); });
-if(window.MutationObserver){ var t=null; new MutationObserver(function(){ if(dragging||applying) return; clearTimeout(t); t=setTimeout(run,400); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script>
-(function(){
-if(window.__j22cols) return; window.__j22cols=1;
-function lvl(el){ return el.classList&&el.classList.contains('j22-sub2')?2:(el.classList&&el.classList.contains('j22-sub')?1:0); }
-function cleanT(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function nm(it){ var t=it.querySelector('.j22-t'); return t?cleanT(t):''; }
-function run(){
-[].forEach.call(document.querySelectorAll('.day-block.fmt22 .j22-section-items'), function(box){
-var kids=[].slice.call(box.children).filter(function(c){return c.classList&&c.classList.contains('j22-item');});
-var tops=kids.filter(function(c){return lvl(c)===0;});
-var hasSubs=kids.some(function(c){return lvl(c)>0;});
-var shortTop=(tops.length>=2 && tops.length<=6 && !hasSubs && tops.every(function(c){return nm(c).length<=18;}));
-box.classList.toggle('auto-cols', shortTop);
-var pairs=[];
-for(var i=0;i<kids.length;i++){ if(lvl(kids[i])===0){ var subs=[]; var j=i+1; while(j<kids.length && lvl(kids[j])>0){ subs.push(kids[j]); j++; } if(subs.length===2 && subs.every(function(s){return lvl(s)===1 && nm(s).length<=18;})){ subs.forEach(function(s){ pairs.push(s); }); } } }
-kids.forEach(function(c){ c.classList.toggle('fn-pair', pairs.indexOf(c)>-1); });
-});
-}
-function go(){ try{ run(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[700,2200,3700].forEach(function(ms){ setTimeout(go,ms); });
-if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(go,450); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script>
-(function(){
-if(window.__j22edit) return; window.__j22edit=1;
-var EKEY='btm_edits_v1';
-function cleanT(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function load(){ try{ return JSON.parse(localStorage.getItem(EKEY)||'{}'); }catch(e){ return {}; } }
-function save(o){ try{ localStorage.setItem(EKEY, JSON.stringify(o)); }catch(e){} }
-function secName(t){ var sec=t.closest('.j22-section'); var g=sec?sec.querySelector('.j22-group'):null; return g?g.textContent.trim():'?'; }
-function keyFor(t, orig){ var blk=t.closest('.day-block'); var day=(blk&&blk.dataset.date)?blk.dataset.date:'?'; if(t.classList&&t.classList.contains('j22-group')){ return day+'|__SEC__|'+orig; } return day+'|'+secName(t)+'|'+orig; }
-function applyEdits(){
-var o=load();
-[].forEach.call(document.querySelectorAll('.day-block.fmt22 .j22-t, .day-block.fmt22 .j22-group'), function(t){
-if(t.isContentEditable) return;
-var orig=t.dataset.orig || cleanT(t);
-var nv=o[keyFor(t,orig)];
-if(nv!==undefined){ if(cleanT(t)!==nv){ t.dataset.orig=orig; t.textContent=nv; } else { t.dataset.orig=orig; } }
-});
-}
-function startEdit(t){
-if(t.isContentEditable) return;
-var orig=t.dataset.orig || cleanT(t); t.dataset.orig=orig;
-t.textContent=cleanT(t);
-t.contentEditable='true'; t.spellcheck=false; t.classList.add('editing'); t.focus();
-var r=document.createRange(); r.selectNodeContents(t); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
-}
-function commit(t, cancel){
-if(!t.isContentEditable) return;
-var inEditMode = document.body.classList.contains('editing');
-if(!inEditMode){ if(!t.classList.contains('j22-group')) t.contentEditable='false'; t.classList.remove('editing'); }
-if(!t.dataset.orig){ t.dataset.orig = cleanT(t); }
-var orig=t.dataset.orig||''; var o=load(); var k=keyFor(t,orig);
-if(cancel){ var sv=o[k]; t.textContent=(sv!==undefined?sv:orig); return; }
-var nv=t.textContent.replace(/\s+/g,' ').trim();
-if(nv && nv!==orig){ o[k]=nv; save(o); if(t.classList.contains('j22-group')&&t.hasAttribute('data-newhdr')) t.setAttribute('data-newhdr',nv); if(typeof saveFullStructure==='function') saveFullStructure(); }
-else { if(o[k]!==undefined){ delete o[k]; save(o); } t.textContent=(nv||orig); if(typeof saveFullStructure==='function') saveFullStructure(); }
-}
-document.addEventListener('dblclick', function(e){ if(!e.target.closest) return; var t=e.target.closest('.day-block.fmt22 .j22-t, .day-block.fmt22 .j22-group'); if(!t) return; e.preventDefault(); startEdit(t); });
-document.addEventListener('keydown', function(e){ var t=e.target; if(!(t&&t.classList&&(t.classList.contains('j22-t')||t.classList.contains('j22-group'))&&t.isContentEditable)) return; if(e.key==='Enter'){ e.preventDefault(); commit(t,false); t.blur(); } else if(e.key==='Escape'){ e.preventDefault(); commit(t,true); t.blur(); } }, true);
-document.addEventListener('focusout', function(e){ var t=e.target; if(t&&t.classList&&(t.classList.contains('j22-t')||t.classList.contains('j22-group'))&&t.isContentEditable){ if(!t.dataset.orig){ t.dataset.orig=cleanT(t); } commit(t,false); } }, true);
-document.addEventListener('focusin', function(e){ var t=e.target; if(t&&t.classList&&(t.classList.contains('j22-t')||t.classList.contains('j22-group'))&&t.isContentEditable){ if(!t.dataset.orig){ t.dataset.orig=cleanT(t); } } }, true);
-// Robust fallback: 'input' event fires on contenteditable even inside <label> elements
-var inputTimer=null;
-document.addEventListener('input', function(e){
-  var t=e.target;
-  if(!t||!t.classList) return;
-  if(!(t.classList.contains('j22-t')||t.classList.contains('j22-group'))) return;
-  if(!t.isContentEditable) return;
-  // Set orig on first input if not already set
-  if(!t.dataset.orig){
-    // For dynamically-added items, orig comes from btm_added_v1 name
-    var item=t.closest('.j22-item');
-    var blk=t.closest('.day-block');
-    var day=blk?blk.dataset.date:'';
-    var sec=secName(t);
-    // Try to find the original name from btm_added_v1
-    var addedRecs=JSON.parse(localStorage.getItem('btm_added_v1')||'[]');
-    var origName='';
-    addedRecs.forEach(function(r){ if(r.to===day && r.section===sec && !origName){ origName=r.name; } });
-    t.dataset.orig=origName||cleanT(t);
-  }
-  // Debounced save
-  clearTimeout(inputTimer);
-  inputTimer=setTimeout(function(){ commit(t,false); },800);
-}, true);
-function go(){ if(window.__btmEditing) return; try{ applyEdits(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[800,2400,3800].forEach(function(ms){ setTimeout(go,ms); });
-if(window.MutationObserver){ var tm=null; new MutationObserver(function(){ clearTimeout(tm); tm=setTimeout(go,500); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script>
-/* ONE-TIME CLEANUP: Remove stale deletions for Jul 13 litigation wins tasks (caused by pin-button bug) */
-(function(){
-  var CLEANUP_KEY = 'btm_cleanup_jul13_litigation_v2';
-  if (localStorage.getItem(CLEANUP_KEY)) return;
-  try {
-    var dkey = 'btm_deleted_v1';
-    var raw = localStorage.getItem(dkey);
-    if (raw) {
-      var arr = JSON.parse(raw);
-      var before = arr.length;
-      arr = arr.filter(function(entry) {
-        // Remove any deletion of items in Jul 13 litigation wins section (all formats)
-        if (entry.indexOf('2026-07-13') > -1 && entry.indexOf('legal') > -1) return false;
-        return true;
-      });
-      if (arr.length !== before) {
-        localStorage.setItem(dkey, JSON.stringify(arr));
-      }
-    }
-    // Also auto-unpin any completed tasks
-    var pinsRaw = localStorage.getItem('btm_pins_v1');
-    var detailsRaw = localStorage.getItem('btm_task_details_v1');
-    if (pinsRaw && detailsRaw) {
-      var pins = JSON.parse(pinsRaw);
-      var details = JSON.parse(detailsRaw);
-      var changed = false;
-      Object.keys(pins).forEach(function(pinKey) {
-        // pinKey format: "date|section|taskname"
-        var parts = pinKey.split('|');
-        if (parts.length >= 3) {
-          var detailKey = parts[0] + '|' + parts.slice(2).join('|');
-          var d = details[detailKey];
-          if (d && d.done) {
-            delete pins[pinKey];
-            changed = true;
-          }
-        }
-      });
-      if (changed) {
-        localStorage.setItem('btm_pins_v1', JSON.stringify(pins));
-      }
-    }
-    // Also clear full-structure-v20 for Jul 13 to force fresh render
-    var fsRaw = localStorage.getItem('full-structure-v20');
-    if (fsRaw) {
-      var fs = JSON.parse(fsRaw);
-      if (fs['2026-07-13']) {
-        delete fs['2026-07-13'];
-        localStorage.setItem('full-structure-v20', JSON.stringify(fs));
-      }
-    }
-  } catch(e) {}
-  localStorage.setItem(CLEANUP_KEY, '1');
-})();
-</script>
-<script>
-(function(){
-if(window.__j22del) return; window.__j22del=1;
-var DKEY='btm_deleted_v1';
-function cleanT(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function nameOf(it){ var t=it.querySelector('.j22-t'); return t?cleanT(t):''; }
-function dayOf(el){ var b=el.closest('.day-block'); return b?b.dataset.date:'?'; }
-function secOf(el){ var s=el.closest('.j22-section'); var g=s?s.querySelector('.j22-group'):null; return g?g.textContent.trim():'?'; }
-function isSub(it){ return it.classList.contains('j22-sub')||it.classList.contains('j22-sub2'); }
-function itemKey(it){ return 'I|'+dayOf(it)+'|'+secOf(it)+'|'+nameOf(it)+'|'+(isSub(it)?'sub':'top'); }
-function secKey(sec){ var g=sec.querySelector('.j22-group'); return 'S|'+dayOf(sec)+'|'+(g?g.textContent.trim():'?'); }
-function load(){ try{ return JSON.parse(localStorage.getItem(DKEY)||'[]'); }catch(e){ return []; } }
-function save(a){ try{ localStorage.setItem(DKEY, JSON.stringify(a)); }catch(e){} }
-function mark(k){ var a=load(); if(a.indexOf(k)<0){ a.push(k); save(a); } }
-function removeGroup(it){ if(!isSub(it)){ var n=it.nextElementSibling, rm=[it]; while(n && n.classList && n.classList.contains('j22-item') && isSub(n)){ rm.push(n); n=n.nextElementSibling; } rm.forEach(function(x){x.remove();}); } else { it.remove(); } }
-function applyDeletions(){
-var a=load(); if(!a.length) return;
-[].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-section')).forEach(function(sec){ if(a.indexOf(secKey(sec))>-1) sec.remove(); });
-[].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-item')).forEach(function(it){ if(it.isConnected && a.indexOf(itemKey(it))>-1) removeGroup(it); });
-}
-function ensureX(){
-[].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-item')).forEach(function(it){ var x=it.querySelector(':scope > .del-x'); if(!x){ x=document.createElement('span'); x.className='del-x'; x.textContent='×'; x.setAttribute('aria-label','delete'); it.appendChild(x); } x.style.top=''; });
-[].slice.call(document.querySelectorAll('.day-block.fmt22 .j22-section')).forEach(function(sec){ if(sec.closest('.today-block .pursuit-zone-grid') || sec.closest('.pursuit-zone-grid') || sec.classList.contains('sec-card')) return; if(sec.querySelector(':scope > .del-x-sec')) return; var x=document.createElement('span'); x.className='del-x-sec'; x.textContent='×'; x.setAttribute('aria-label','delete section'); sec.appendChild(x); });
-}
-document.addEventListener('click', function(e){
-if(!e.target.closest) return;
-var x=e.target.closest('.del-x');
-if(x){ e.preventDefault(); e.stopPropagation(); var it=x.closest('.j22-item'); if(it){ mark(itemKey(it)); removeGroup(it); } return; }
-var xs=e.target.closest('.del-x-sec');
-if(xs){ e.preventDefault(); e.stopPropagation(); var sec=xs.closest('.j22-section'); if(sec){ mark(secKey(sec)); sec.remove(); } return; }
-}, true);
-function run(){ try{ ensureX(); applyDeletions(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-[700,2300,3800].forEach(function(ms){ setTimeout(run,ms); });
-if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(run,450); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script>
-(function(){
-if(window.__j22done) return; window.__j22done=1;
-var KEY='btm_done_v1';
-function cleanT(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.del-x,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function nameOf(it){ var t=it.querySelector('.j22-t'); return t?cleanT(t):''; }
-function keyOf(it){ var blk=it.closest('.day-block'); var sec=it.closest('.j22-section'); var g=sec?sec.querySelector('.j22-group'):null; return (blk?blk.dataset.date:'?')+'|'+(g?(g.dataset.orig||g.textContent.trim()):'?')+'|'+nameOf(it); }
-function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
-function save(a){ try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
-function apply(){ var a=load(); [].forEach.call(document.querySelectorAll('.day-block.fmt22 .j22-item'), function(it){ if(it.classList.contains('j22-sub')||it.classList.contains('j22-sub2')) return; var cb=it.querySelector(':scope > .agenda-check'); if(!cb) return; var should=a.indexOf(keyOf(it))>-1; if(cb.checked!==should) cb.checked=should; }); }
-document.addEventListener('change', function(e){ var cb=e.target; if(!cb.classList||!cb.classList.contains('agenda-check')) return; var it=cb.closest('.day-block.fmt22 .j22-item'); if(!it||it.classList.contains('j22-sub')||it.classList.contains('j22-sub2')) return; var k=keyOf(it); var a=load(); var i=a.indexOf(k); if(cb.checked&&i<0){a.push(k);save(a);} else if(!cb.checked&&i>-1){a.splice(i,1);save(a);} });
-document.addEventListener('click', function(e){ var cb=e.target; if(cb.classList&&cb.classList.contains('agenda-check')&&cb.closest('.day-block.fmt22')){ e.stopPropagation(); } }, true);
-function go(){ try{ apply(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[800,2400,3800].forEach(function(ms){ setTimeout(go,ms); });
-if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(go,500); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script>
-(function(){
-if(window.__j22verb) return; window.__j22verb=1;
-function clean(t){ var c=t.cloneNode(true); [].slice.call(c.querySelectorAll('.fn-num,.fn-cite,.del-x,.verb-prefix,.pin-badge')).forEach(function(x){x.remove();}); return c.textContent.trim(); }
-function hasVerb(text){ var w=(text.split(/\s+/)[0]||'').toLowerCase().replace(/[^a-z]/g,''); if(/ed$/.test(w)) return true; return ['sent','threw','made','paid','built','wrote','took','gave','put','got','ran','held','kept','left','met','told','went','came','did','began','drove','rode','spent','lost','won','read','set','cut','hit','let','shut','cost','dealt','felt','found'].indexOf(w)>-1; }
-function run(){
-[].forEach.call(document.querySelectorAll('.day-block.fmt22 .j22-section'), function(sec){
-var g=sec.querySelector('.j22-group'); if(!g) return; var verb=(g.dataset.orig||g.textContent.trim());
-[].forEach.call(sec.querySelectorAll('.j22-item'), function(it){
-if(it.classList.contains('j22-sub')||it.classList.contains('j22-sub2')) return;
-var t=it.querySelector('.j22-t'); if(!t) return;
-if(it.querySelector(':scope > .verb-prefix')) return;
-if(hasVerb(clean(t))) return;
-var sp=document.createElement('span'); sp.className='verb-prefix'; sp.textContent=verb+'\u00a0';
-t.parentNode.insertBefore(sp, t);
-});
-});
-}
-function go(){ try{ run(); }catch(e){} }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[900,2500,3900].forEach(function(ms){ setTimeout(go,ms); });
-if(window.MutationObserver){ var tt=null; new MutationObserver(function(){ clearTimeout(tt); tt=setTimeout(go,550); }).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
-<script>
-(function(){
-if(window.__j22sect) return; window.__j22sect=1;
-var SEL='.day-block.fmt22 .flow-chart-card';
-function firstLooseGroup(flow){ for(var c=flow.firstElementChild;c;c=c.nextElementSibling){ if(c.classList && c.classList.contains('j22-group')) return c; } return null; }
-function unwrap(flow){
-[].slice.call(flow.children).forEach(function(sec){
-if(!(sec.classList && sec.classList.contains('j22-section'))) return;
-var g=sec.querySelector(':scope > .j22-group');
-var iw=sec.querySelector(':scope > .j22-section-items');
-if(g) flow.insertBefore(g, sec);
-if(iw){ while(iw.firstChild) flow.insertBefore(iw.firstChild, sec); }
-sec.remove();
-});
-}
-function wrap(){
-[].slice.call(document.querySelectorAll(SEL)).forEach(function(flow){
-[].slice.call(flow.querySelectorAll('.j22-section')).forEach(function(s){ if(!s.querySelector('.j22-item') && !s.classList.contains('sec-card')) s.remove(); });
-if(!firstLooseGroup(flow)) return;
-unwrap(flow);
-var g, guard=0;
-while((g=firstLooseGroup(flow)) && guard++ < 50){
-var sec=document.createElement('div'); sec.className='j22-section';
-var items=document.createElement('div'); items.className='j22-section-items';
-flow.insertBefore(sec, g);
-sec.appendChild(g);
-var n=sec.nextElementSibling;
-while(n && !(n.classList && n.classList.contains('j22-group'))){
-var next=n.nextElementSibling;
-if(n.classList && (n.classList.contains('j22-item')||n.classList.contains('j22-cols'))){ items.appendChild(n); } else { break; }
-n=next;
-}
-sec.appendChild(items);
-}
-});
-}
-var pending=false;
-function schedule(){ if(pending) return; pending=true; (window.requestAnimationFrame||setTimeout)(function(){ pending=false; wrap(); }); }
-function init(){ wrap(); }
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
-if(window.MutationObserver){ new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
+<div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
+<img alt="" src="manus-storage/zone-body-gym-wide-dark.jpg?v=dark1">
+<span>reformer pilates · 6:00</span>
+</div>
+<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox"><span>pack gym bag</span></label>
+<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-house" data-focus="house" style="--tile-photo: url('manus-storage/pursuit-curated-lifestyle.jpg?v=2'); grid-area: 2 / 2 / 3 / 3 !important;">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">house</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2">
+<span>reset the rooms</span>
+</div>
+<label class="vision-check" style="--px:52%;--py:22%"><input class="agenda-check" type="checkbox"><span>kitchen</span></label>
+<label class="vision-check" style="--px:58%;--py:40%"><input class="agenda-check" type="checkbox"><span>floors</span></label>
+<label class="vision-check" style="--px:50%;--py:58%"><input class="agenda-check" type="checkbox"><span>laundry</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-ambition-v5-ascent.jpg'); grid-area: 2 / 3 / 3 / 4 !important;">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">executive</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:8%;--py:16%">
+<img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
+<span>Elevate</span>
+</div>
+<label class="vision-check" style="--px:48%;--py:22%"><input class="agenda-check" type="checkbox"><span>text Dr Betty</span></label>
+<label class="vision-check" style="--px:52%;--py:42%"><input class="agenda-check" type="checkbox"><span>module work</span></label>
+</div>
+</article>
 </div>
 <script>
 (function(){
@@ -18364,6 +16018,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
 <h3 class="vision-tile-title">body</h3>
 <div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div>
+
 <div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
 <img alt="" src="manus-storage/zone-body-gym-wide-dark.jpg?v=dark1">
 <span>reformer pilates · 6:00</span>
@@ -18558,6 +16214,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
 <h3 class="vision-tile-title">body</h3>
 <div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div>
 <div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
 <img alt="" src="manus-storage/zone-body-gym-wide-dark.jpg?v=dark1">
 <span>reformer pilates · 6:00</span>
@@ -18620,20 +16277,16 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero">
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo:url('manus-storage/pursuit-pepperdine.jpg?v=collage1')">
+<div class="vision-hero vision-hero-duo">
+<article class="vision-tile vision-tile-shot vision-tile-gsa" data-focus="gsa" style="--tile-photo: url('manus-storage/handshake-pepperdine-gsa.jpg'); grid-area: 1 / 1 / -1 / 2 !important;">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">Pepperdine</h3>
-<div class="vision-tile-details">
-<div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px:10%;--py:22%">
-<img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg">
-<span>Graduate Student Association · Top Applicant</span>
-</div>
-<div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px:28%;--py:36%">
-<img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig">
-<span>committee check-in</span>
-</div>
-</div>
+<h3 class="vision-tile-title">Graduate Student Association</h3>
+<div class="vision-tile-details"></div>
+</article>
+<article class="vision-tile vision-tile-shot vision-tile-committee" data-focus="committee" style="--tile-photo: url('manus-storage/pepperdine-committee-checkin.jpg?v=orig'); grid-area: 1 / 2 / -1 / 3 !important;">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">Committee check-in</h3>
+<div class="vision-tile-details"></div>
 </article>
 </div>
 </div>
@@ -22820,6 +20473,10 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso >= '2026-08-28' && window.__syncOverviewEraChrome) {
         try { window.__syncOverviewEraChrome(clone); } catch (e) {}
       }
+      if (iso >= '2026-08-26' && window.__ensureHabitsOnBoard) {
+        try { window.__ensureHabitsOnBoard(clone); } catch (e) {}
+      }
+
       // Late-created days miss the DOMContentLoaded collapse wiring — attach now.
       try {
         if (typeof wireDayDots === 'function') wireDayDots({ applyDefaults: false });
@@ -27024,7 +24681,7 @@ function handleMay18No(btn) {
   function makeResize() {
     var r = document.createElement('span');
     r.className = 'canvas-item-resize';
-    r.textContent = '⇲';
+    r.textContent = ''; /* no visible glyph — invisible hit target only */
     r.setAttribute('contenteditable', 'false');
     r.title = 'drag to resize';
     return r;
@@ -28276,7 +25933,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'villains':['start now','phone down','act anyway'],
     'fight back':[],
     'envision':[],
-    'pepperdine':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant']
+    'pepperdine':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant','Psi Chi','Handshake']
   };
   var CARD_SECTION={};
   CANONICAL_SECTIONS.forEach(function(s){
@@ -40320,6 +37977,8 @@ html body .day-block.flow-picking .vision-tile {
     if (block.classList.contains('nodes-linking')) return;
     if (e.target.closest('.tv-panel.tv-nodes') && block.querySelector('.nodes-link-btn.is-on')) return;
     if (!block.classList.contains('flow-picking')) return;
+    /* ⌘/Ctrl+click archives sections — leave pick for plain clicks. */
+    if (e.metaKey || e.ctrlKey) return;
     if (e.target.closest('.card-del, .card-resize, .card-add-task, .add-board-row, .flow-pick-bar, .today-view-toggle, .make-flow-btn, .day-add-zone, .sec-picker, .zone-del, .add-pursuit-slot, .zone-resize, .zone-zoom-out, .nodes-link-btn, .nodes-edit-bar, textarea, button, a, input')) return;
     var task = e.target.closest('.j22-item, .zone-oneoff, .canvas-oneoff, .day-task-item');
     var card = e.target.closest('.sec-card');
@@ -40827,7 +38486,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     function push(raw){
       var name = String(raw || '').replace(/\s+/g, ' ').trim();
       if(!name || looksLikeTask(name)) return;
-      if(pepperdineCardOnlyName(name)) return;
+      // Aug 30+ only: these names are Pepperdine cards, never sections.
+      if((dayKey(blk)||'') >= '2026-08-30' && pepperdineCardOnlyName(name)) return;
       name = name.toLowerCase();
       // lifestyle → curated lifestyle (section name)
       if(name === 'lifestyle') name = 'curated lifestyle';
@@ -40837,7 +38497,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(name === 'power' || name === 'purpose') name = 'power | purpose';
       if(name === 'villain') name = 'villains';
       if(name === 'ambition') name = 'executive';
-      if(pepperdineCardOnlyName(name)) return;
+      if((dayKey(blk)||'') >= '2026-08-30' && pepperdineCardOnlyName(name)) return;
       var low = name.toLowerCase();
       if(already[low] || seen[low]) return;
       seen[low] = 1;
@@ -40880,9 +38540,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       pursuits: ['research proposal', 'Psi Chi', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake'],
       executive: ['momentum', 'UX Design', 'Frequency', 'Elevate', 'research proposal', 'Psi Chi', 'AERA', 'Anthropic'],
       ambition: ['momentum', 'UX Design', 'Frequency', 'Elevate', 'research proposal', 'Psi Chi', 'AERA', 'Anthropic'],
-      pepperdine: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant'],
-      'grad school': ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant'],
-      grad: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant'],
+      pepperdine: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'Psi Chi', 'Handshake'],
+      'grad school': ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'Psi Chi', 'Handshake'],
+      grad: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'Psi Chi', 'Handshake'],
       abundance: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       finances: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       'curated lifestyle': ['returns', 'pickups', 'traveler', 'persons'],
@@ -41259,8 +38919,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(localStorage.getItem(MKEY)) return;
     try {
       var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
-      var APP = 'manus-storage/card-application.jpg?v=v2';
-      var TUI = 'manus-storage/card-tuition.jpg?v=v2';
+      var APP = 'manus-storage/card-application.jpg?v=v3';
+      var TUI = 'manus-storage/card-tuition.jpg?v=v3';
       ['application','scholarship application','scholarship re-application','scholarship reapplication'].forEach(function(k){ m[k] = APP; });
       ['tuition','tuition money'].forEach(function(k){ m[k] = TUI; });
       localStorage.setItem('btm_card_photos_v1', JSON.stringify(m));
@@ -41270,8 +38930,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var sp = pol.querySelector(':scope > span');
       var t = ((sp && sp.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase();
       var src = '';
-      if(t === 'tuition' || t === 'tuition money') src = 'manus-storage/card-tuition.jpg?v=v2';
-      if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') src = 'manus-storage/card-application.jpg?v=v2';
+      if(t === 'tuition' || t === 'tuition money') src = 'manus-storage/card-tuition.jpg?v=v3';
+      if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') src = 'manus-storage/card-application.jpg?v=v3';
       if(!src) return;
       pol.setAttribute('data-shot-src', src);
       var img = pol.querySelector('img');
@@ -41979,6 +39639,45 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(vb) vb.classList.remove('is-zoomed');
     ensureOverviewEditChrome(blk);
   }
+  var ARCHIVED_SECTIONS_KEY = 'btm_archived_sections_v1';
+  function loadArchivedSections(){
+    try {
+      var raw = JSON.parse(localStorage.getItem(ARCHIVED_SECTIONS_KEY) || '[]');
+      return Array.isArray(raw) ? raw : [];
+    } catch(e){ return []; }
+  }
+  function saveArchivedSections(list){
+    try { localStorage.setItem(ARCHIVED_SECTIONS_KEY, JSON.stringify(list || [])); } catch(e){}
+  }
+  function tilePhotoUrl(tile){
+    if(!tile) return '';
+    var st = tile.getAttribute('style') || '';
+    var m = st.match(/--tile-photo:\s*url\(["']?([^"')]+)["']?\)/i);
+    if(m && m[1]) return m[1];
+    return '';
+  }
+  function archiveTile(tile){
+    var blk = tile && tile.closest('.day-block');
+    if(!blkOk(blk) || !tile) return false;
+    var focus = tileFocus(tile);
+    var titleEl = tile.querySelector('.vision-tile-title');
+    var title = ((titleEl && titleEl.textContent) || '').replace(/\s+/g, ' ').trim() || focus;
+    var day = dayKey(blk);
+    var list = loadArchivedSections();
+    list.unshift({
+      title: title,
+      focus: focus,
+      day: day,
+      from: 'everything',
+      photo: tilePhotoUrl(tile),
+      archivedAt: Date.now()
+    });
+    saveArchivedSections(list);
+    deleteTile(tile);
+    return true;
+  }
+  window.__deleteTile = deleteTile;
+  window.__archiveVisionTile = archiveTile;
   function deletePolaroid(pol){
     var tile = pol && pol.closest('.vision-tile');
     var blk = pol && pol.closest('.day-block');
@@ -41994,7 +39693,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function addTile(blk, title){
     title = String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
     if(!title || !blkOk(blk)) return;
-    var asCard = pepperdineCardOnlyName(title);
+    // Aug 30+ only: redirect GSA / committee / top applicant into Pepperdine cards.
+    var asCard = ((dayKey(blk)||'') >= '2026-08-30') ? pepperdineCardOnlyName(title) : '';
     if(asCard){
       var host0 = heroHost(blk);
       if(!host0) return;
@@ -42331,12 +40031,23 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       box.addEventListener('click', function(ev){ ev.stopPropagation(); });
     }
   }
+  function habitBoardOk(blk){
+    if(!blk) return false;
+    var d = dayKey(blk);
+    if(!d || d < '2026-08-26') return false;
+    return blk.classList.contains('vision-collage-day') || blk.classList.contains('overview-era-day') ||
+      !!(window.__isOverviewEra && window.__isOverviewEra(blk));
+  }
+  function inductionPhoto(){
+    return (window.__cardImgFor && window.__cardImgFor('induction')) || 'manus-storage/card-induction.jpg?v=1';
+  }
   function ensureHabitsOnBoard(blk){
-    if(!blkOk(blk)) return false;
+    if(!habitBoardOk(blk)) return false;
     var host = heroHost(blk);
     if(!host) return false;
-    var data = dayData(blk);
+    var data = dayData(blk) || {removedCards:[], addedCards:[]};
     var changed = false;
+    var INDUCTION_SRC = inductionPhoto();
     loadHabits().forEach(function(habit){
       var sec = String(habit.section || 'body').toLowerCase();
       var focus = slug(sec);
@@ -42350,6 +40061,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         }) || null;
       }
       if(!tile){
+        // Only create missing body sections on overview-era boards (addTile is era-gated).
+        if(!blkOk(blk)) return;
         addTile(blk, sec === 'body' ? 'body' : habit.section);
         changed = true;
         tile = host.querySelector('.vision-tile[data-focus="'+focus+'"]');
@@ -42365,17 +40078,61 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         return cardTitle(p).toLowerCase() === title.toLowerCase();
       });
       if(!pol){
-        addCard(tile, title);
+        var det = tile.querySelector('.vision-tile-details');
+        if(!det){
+          det = document.createElement('div');
+          det.className = 'vision-tile-details';
+          tile.appendChild(det);
+        }
+        var count = det.querySelectorAll('.vision-polaroid').length;
+        var col = count % 4;
+        var row = Math.floor(count / 4);
+        var src = (title.toLowerCase() === 'induction')
+          ? INDUCTION_SRC
+          : (cardPhotoFor(title) || DEFAULT_CARD);
+        var rec = {
+          sectionFocus: tileFocus(tile),
+          title: title,
+          src: src,
+          px: (6 + col * 22) + '%',
+          py: (12 + row * 26) + '%',
+          shot: true,
+          habit: true
+        };
+        if(blkOk(blk) && dayData(blk)){
+          dayData(blk).addedCards.push(rec);
+        }
+        pol = makePolaroid({
+          title: title,
+          src: src,
+          px: rec.px,
+          py: rec.py,
+          shot: true,
+          habit: true,
+          habitId: habit.id || habit.name,
+          cadence: habit.cadence || 'daily'
+        });
+        det.appendChild(pol);
+        ensurePolaroidChrome(pol);
         changed = true;
-        pol = [].slice.call(tile.querySelectorAll('.vision-polaroid')).find(function(p){
-          return cardTitle(p).toLowerCase() === title.toLowerCase();
-        });
-        // mark stored rec as habit
-        (dayData(blk).addedCards || []).forEach(function(c){
-          if(c && String(c.title||'').toLowerCase() === title.toLowerCase()) c.habit = true;
-        });
       }
-      if(pol) decorateHabitPolaroid(pol, habit, blk);
+      if(pol){
+        decorateHabitPolaroid(pol, habit, blk);
+        // Keep induction on its own card photo (never body/gym zone).
+        if(String(habit.id || habit.name || '').toLowerCase() === 'induction'){
+          var img = pol.querySelector('img');
+          var cur = (pol.getAttribute('data-shot-src') || (img && (img.getAttribute('src') || img.currentSrc)) || '').replace(/^\//,'');
+          if(!cur || /zone-body|pursuit-vibes|pursuit-pepperdine/i.test(cur)){
+            applyPolaroidSrc(pol, INDUCTION_SRC.split('?')[0] + '?v=1');
+            if(blkOk(blk)){
+              (dayData(blk).addedCards || []).forEach(function(c){
+                if(c && String(c.title||'').toLowerCase() === 'induction') c.src = INDUCTION_SRC;
+              });
+            }
+            changed = true;
+          }
+        }
+      }
     });
     // Also decorate any polaroid whose title matches a known habit
     [].slice.call(blk.querySelectorAll('.vision-polaroid')).forEach(function(pol){
@@ -42384,6 +40141,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     return changed;
   }
+  window.__ensureHabitsOnBoard = ensureHabitsOnBoard;
 
   function seedAug30Board(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
@@ -42446,6 +40204,36 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     put('glow up', 'smile set');
     put('power | purpose', 'certified letters');
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
+    return changed;
+  }
+  function seedPepperdinePsiChiHandshake(blk){
+    if(!blkOk(blk)) return false;
+    var d = dayKey(blk);
+    if(!d || d < '2026-08-30') return false;
+    var MKEY = 'migration-pepperdine-psi-chi-handshake-v1';
+    var done = {};
+    try { done = JSON.parse(localStorage.getItem(MKEY) || '{}') || {}; } catch(e){ done = {}; }
+    if(done[d]) return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    var changed = false;
+    var pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
+    if(!pep){
+      addTile(blk, 'pepperdine');
+      pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
+      changed = true;
+    }
+    function hasCard(tile, title){
+      if(!tile) return true;
+      return [].slice.call(tile.querySelectorAll('.vision-polaroid')).some(function(p){
+        return cardTitle(p).toLowerCase() === String(title).toLowerCase();
+      });
+    }
+    ['Psi Chi', 'Handshake'].forEach(function(n){
+      if(pep && !hasCard(pep, n)){ addCard(pep, n); changed = true; }
+    });
+    done[d] = 1;
+    try { localStorage.setItem(MKEY, JSON.stringify(done)); } catch(e){}
     return changed;
   }
   function seedGodConsciousSabrShukr(blk){
@@ -42548,14 +40336,107 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     return changed;
   }
+  function isPepperdineCardOnlyAlias(name){
+    return !!pepperdineCardOnlyName(name);
+  }
+  function repairPreAug30PepperdineCardDemotion(blk){
+    /* Undo mistaken global demote/seed on days before Aug 30. Keyed separately from
+       migration-pepperdine-cards-not-sections-v1 so a one-shot that already ran still repairs. */
+    if(!blk) return false;
+    var d = dayKey(blk) || '';
+    if(!d || d >= '2026-08-30') return false;
+    var RKEY = 'migration-repair-pre-aug30-pepperdine-card-demotion-v1';
+    var done = {};
+    try { done = JSON.parse(localStorage.getItem(RKEY) || '{}') || {}; } catch(e){ done = {}; }
+    if(done[d]) return false;
+    var changed = false;
+    var data = dayData(blk);
+    if(data){
+      var beforeRem = (data.removedSections || []).length;
+      data.removedSections = (data.removedSections || []).filter(function(f){
+        return !isPepperdineCardOnlyAlias(f);
+      });
+      if(data.removedSections.length !== beforeRem) changed = true;
+      var beforeCards = (data.addedCards || []).length;
+      data.addedCards = (data.addedCards || []).filter(function(c){
+        if(!c) return false;
+        var sf = String(c.sectionFocus || '').toLowerCase();
+        if((sf === 'pepperdine' || sf === 'grad' || sf === 'grad-school') && isPepperdineCardOnlyAlias(c.title)){
+          // Only strip migration-seeded Pepperdine cards when this day is Aug 27
+          // (demotion replaced intentional section tiles). Leave Aug 28+ proof cards alone.
+          return d !== '2026-08-27';
+        }
+        return true;
+      });
+      if((data.addedCards || []).length !== beforeCards) changed = true;
+      if(d === '2026-08-27'){
+        var beforeAdd = (data.addedSections || []).length;
+        data.addedSections = (data.addedSections || []).filter(function(s){
+          if(!s) return false;
+          var f = String(s.focus || '').toLowerCase();
+          var t = String(s.title || '').toLowerCase();
+          if(f === 'pepperdine' || t === 'pepperdine') return false;
+          return true;
+        });
+        if((data.addedSections || []).length !== beforeAdd) changed = true;
+        function ensureRestoredSection(focus, title, photo, extraClass){
+          var has = (data.addedSections || []).some(function(s){
+            return s && (String(s.focus||'').toLowerCase() === focus || String(s.title||'').toLowerCase() === title.toLowerCase());
+          });
+          if(!has){
+            data.addedSections.push({focus:focus, title:title, photo:photo, extraClass:extraClass});
+            changed = true;
+          }
+        }
+        ensureRestoredSection('gsa', 'Graduate Student Association', 'manus-storage/handshake-pepperdine-gsa.jpg', 'vision-tile-shot vision-tile-gsa');
+        ensureRestoredSection('committee', 'Committee check-in', 'manus-storage/pepperdine-committee-checkin.jpg?v=orig', 'vision-tile-shot vision-tile-committee');
+      }
+    }
+    // Clear stale demote one-shot flags for this past day so gating can't be confused.
+    try {
+      var demoteDone = JSON.parse(localStorage.getItem('migration-pepperdine-cards-not-sections-v1') || '{}') || {};
+      if(demoteDone[d]){ delete demoteDone[d]; localStorage.setItem('migration-pepperdine-cards-not-sections-v1', JSON.stringify(demoteDone)); }
+    } catch(e){}
+    var host = heroHost(blk);
+    if(host && d === '2026-08-27'){
+      var hasGsa = !!host.querySelector('.vision-tile[data-focus="gsa"], .vision-tile-gsa');
+      var hasCommittee = !!host.querySelector('.vision-tile[data-focus="committee"], .vision-tile-committee');
+      if(!hasGsa || !hasCommittee){
+        // Replace mistaken Pepperdine-with-cards collage with the original duo sections.
+        [].slice.call(host.querySelectorAll('.vision-tile')).forEach(function(tile){
+          var focus = (tile.getAttribute('data-focus')||'').toLowerCase();
+          var title = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+          if(focus === 'pepperdine' || title === 'pepperdine' || focus === 'grad' || title === 'grad school'){
+            tile.remove();
+            changed = true;
+          }
+        });
+        function appendShotTile(focus, title, photo, extraClass){
+          if(host.querySelector('.vision-tile[data-focus="'+focus+'"]')) return;
+          var tile = makeTile({focus:focus, title:title, photo:photo, extraClass:extraClass});
+          host.appendChild(tile);
+          changed = true;
+        }
+        appendShotTile('gsa', 'Graduate Student Association', 'manus-storage/handshake-pepperdine-gsa.jpg', 'vision-tile-shot vision-tile-gsa');
+        appendShotTile('committee', 'Committee check-in', 'manus-storage/pepperdine-committee-checkin.jpg?v=orig', 'vision-tile-shot vision-tile-committee');
+        host.classList.remove('vision-hero-solo', 'vision-hero-trio', 'vision-hero-quad', 'vision-hero-five', 'vision-hero-six', 'vision-hero-many');
+        host.classList.add('vision-hero-duo');
+      }
+    }
+    done[d] = 1;
+    try { localStorage.setItem(RKEY, JSON.stringify(done)); } catch(e){}
+    return changed;
+  }
   function demotePepperdineCardSections(blk){
     if(!blkOk(blk)) return false;
+    var d = dayKey(blk) || '';
+    // Hard gate: Aug 30 onward only — never demote or seed on past days.
+    if(!d || d < '2026-08-30') return false;
     var host = heroHost(blk);
     if(!host) return false;
     var MKEY = 'migration-pepperdine-cards-not-sections-v1';
     var done = {};
     try { done = JSON.parse(localStorage.getItem(MKEY) || '{}') || {}; } catch(e){ done = {}; }
-    var d = dayKey(blk) || '';
     if(done[d]) return false;
     var changed = false;
     var wantCards = [];
@@ -42568,12 +40449,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       deleteTile(tile);
       changed = true;
     });
-    // Also seed these under Pepperdine on Aug 30+ once (cards, never sections).
-    if(d >= '2026-08-30'){
-      ['committee check-in', 'Graduate Student Association · Top Applicant'].forEach(function(n){
-        if(wantCards.indexOf(n) < 0) wantCards.push(n);
-      });
-    }
+    // Seed these under Pepperdine once (cards, never sections).
+    ['committee check-in', 'Graduate Student Association · Top Applicant'].forEach(function(n){
+      if(wantCards.indexOf(n) < 0) wantCards.push(n);
+    });
     if(!wantCards.length){
       if(d) done[d] = 1;
       try { localStorage.setItem(MKEY, JSON.stringify(done)); } catch(e){}
@@ -42639,22 +40518,41 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function boot(){
     document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
       var mig = migratePepperdineSection(blk);
-      if(!blkOk(blk)){
-        if(mig) return;
+      // Repair past days first (incl. Aug 26–27 collage) before overview-era work.
+      if(repairPreAug30PepperdineCardDemotion(blk)) mig = true;
+      var era = blkOk(blk);
+      var habits = habitBoardOk(blk);
+      if(!era && !habits){
+        if(mig){
+          try { saveMap(loadMap()); syncHeroLayoutClass(blk); scheduleHtmlSave(blk); } catch(e){}
+        }
         return;
       }
-      applyStoredEdits(blk);
-      mig = migratePepperdineSection(blk) || mig;
-      if(seedAug30Board(blk)) mig = true;
-      if(seedAug30SelectedCards(blk)) mig = true;
-      if(seedGodConsciousSabrShukr(blk)) mig = true;
-      if(seedVillainsSection(blk)) mig = true;
-      if(fixScholarshipReApplicationLabel(blk)) mig = true;
-      if(demotePepperdineCardSections(blk)) mig = true;
-      if(renameAmbitionToExecutive(blk)) mig = true;
-      if(ensureHabitsOnBoard(blk)) mig = true;
-      ensureOverviewEditChrome(blk);
-      if(mig) persistDay(blk);
+      if(era){
+        applyStoredEdits(blk);
+        // Re-check after stored edits in case a stale removedSections entry fought the restore.
+        try {
+          var _rk = 'migration-repair-pre-aug30-pepperdine-card-demotion-v1';
+          var _rd = JSON.parse(localStorage.getItem(_rk) || '{}') || {};
+          var _dk = dayKey(blk);
+          if(_dk && _rd[_dk]){ delete _rd[_dk]; localStorage.setItem(_rk, JSON.stringify(_rd)); }
+        } catch(e){}
+        if(repairPreAug30PepperdineCardDemotion(blk)) mig = true;
+        mig = migratePepperdineSection(blk) || mig;
+        if(seedAug30Board(blk)) mig = true;
+        if(seedAug30SelectedCards(blk)) mig = true;
+        if(seedGodConsciousSabrShukr(blk)) mig = true;
+        if(seedVillainsSection(blk)) mig = true;
+        if(fixScholarshipReApplicationLabel(blk)) mig = true;
+        if(demotePepperdineCardSections(blk)) mig = true;
+        if(renameAmbitionToExecutive(blk)) mig = true;
+      }
+      if(habits && ensureHabitsOnBoard(blk)) mig = true;
+      if(era) ensureOverviewEditChrome(blk);
+      if(mig && era) persistDay(blk);
+      else if(mig){
+        try { saveMap(loadMap()); syncHeroLayoutClass(blk); syncDayShell(blk); scheduleHtmlSave(blk); } catch(e){}
+      }
     });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
@@ -42694,22 +40592,26 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-pol-resi
   cursor: nwse-resize !important;
   z-index: 8 !important;
   pointer-events: auto !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  opacity: 1 !important; /* hit target stays; glyph stays off */
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-pol-resize::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  right: 5px !important;
-  bottom: 5px !important;
-  width: 8px !important;
-  height: 8px !important;
-  border-right: 1.6px solid rgba(42,34,24,0.55) !important;
-  border-bottom: 1.6px solid rgba(42,34,24,0.55) !important;
-  opacity: 0.55;
-}
+/* Invisible hit target only — never show a corner glyph/symbol */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-pol-resize::before,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-pol-resize::after,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid:hover > .vision-pol-resize::after,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-resizing > .vision-pol-resize::after {
-  opacity: 0.95;
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 /* Keep parent details from swallowing polaroid events */
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
@@ -42865,7 +40767,7 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   align-content: flex-end !important;
   align-items: flex-end !important;
   gap: 8px !important;
-  padding: 12px 10px 40px !important;
+  padding: 12px 10px 56px !important;
   /* Let empty details space pass clicks through so the section can zoom.
      Polaroids / shot-cards / chrome below re-enable pointer events. */
   pointer-events: none !important;
@@ -43543,7 +41445,12 @@ html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zo
 html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
   top: 18px;
   bottom: auto;
-  font-size: 36px;
+  font-size: clamp(40px, 4.5vw, 56px);
+  font-weight: 600;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 12px rgba(0, 0, 0, 0.7),
+    0 6px 28px rgba(0, 0, 0, 0.55);
 }
 html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
   display: block;
@@ -43631,11 +41538,11 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-t
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 0;
 }
-html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile::after {
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(12, 8, 4, 0.05) 30%, rgba(12, 8, 4, 0.55) 100%);
+  background: linear-gradient(180deg, rgba(12, 8, 4, 0.04) 22%, rgba(12, 8, 4, 0.42) 68%, rgba(12, 8, 4, 0.72) 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -43692,8 +41599,8 @@ html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zo
   bottom: auto;
   left: 18px;
   right: 48px;
-  font-size: clamp(14px, 1.4vw, 20px);
-  max-width: 22em;
+  font-size: clamp(18px, 1.8vw, 26px);
+  max-width: 24em;
 }
 /* Flat-tummy section photo — landscape abs; keep midsection centered under cover (no letterbox). */
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-body .vision-tile-photo,
@@ -43774,7 +41681,12 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-b
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
   top: 18px;
   bottom: auto;
-  font-size: 36px;
+  font-size: clamp(40px, 4.5vw, 56px);
+  font-weight: 600;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 12px rgba(0, 0, 0, 0.7),
+    0 6px 28px rgba(0, 0, 0, 0.55);
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
   display: block;
