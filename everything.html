@@ -12900,7 +12900,12 @@ window.__j22fnApply=run;
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
     'fight back':'manus-storage/zone-fight-back.jpg?v=1',
-    'envision':'manus-storage/zone-envision.jpg?v=1'
+    'envision':'manus-storage/zone-envision.jpg?v=1', 'future self':'champagne', 'phd':'ink', 'ph.d':'ink',
+    'future self':'manus-storage/zone-future-self.jpg?v=path1',
+    'future-self':'manus-storage/zone-future-self.jpg?v=path1',
+    'phd':'manus-storage/zone-phd.jpg?v=desk1',
+    'ph.d':'manus-storage/zone-phd.jpg?v=desk1',
+    'ph-d':'manus-storage/zone-phd.jpg?v=desk1'
   };
   var KEYWORDS = [
     [/translat|arabic|عربي|bilingual|interpret/, 'manus-storage/pursuit-arabic-translation.jpg'],
@@ -12939,7 +12944,9 @@ window.__j22fnApply=run;
     [/god[- ]?conscious|\bdhikr\b|\btasbih\b|\bmisbaha\b|remembrance of god/, 'manus-storage/zone-god-conscious.jpg?v=remembrance1'],
     [/\bvillains?\b|daily enemy|shadow self|nemesis|antagonist/, 'manus-storage/zone-villains.jpg?v=rim13'],
     [/fight\s*back|counterattack|stand\s*up|resist/, 'manus-storage/zone-fight-back.jpg?v=1'],
-    [/\benvision\b|visualize|visioning|foresee/, 'manus-storage/zone-envision.jpg?v=1']
+    [/\benvision\b|visualize|visioning|foresee/, 'manus-storage/zone-envision.jpg?v=1'],
+    [/future\\s*self|\\bfuture-self\\b|becoming/, 'manus-storage/zone-future-self.jpg?v=path1'],
+    [/\\bph\\.?d\\b|\\bphd\\b|doctorate|doctoral/, 'manus-storage/zone-phd.jpg?v=desk1']
   ];
   var THEMES = {
     'persons':'blush','capital blueprint':'amber','body':'blush','glow up':'blush','glow-up':'blush','shopped':'warm','returns':'warm','pickups':'warm',
@@ -17154,7 +17161,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1 };
+        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -18534,6 +18541,8 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="envision" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=1&quot;); grid-area: 5 / 3 / 6 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e140">envision</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="quantum" style="--tile-photo: url(&quot;manus-storage/zone-quantum-v15.jpg?v=observe&quot;); grid-area: 6 / 1 / 7 / 3 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e141">quantum</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="fight-back" style="--tile-photo: url(&quot;manus-storage/zone-fight-back.jpg?v=1&quot;); grid-area: 6 / 3 / 7 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e142">fight back</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="future-self" style="--tile-photo: url(&quot;manus-storage/zone-future-self.jpg?v=path1&quot;);"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">future self</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="phd" style="--tile-photo: url(&quot;manus-storage/zone-phd.jpg?v=desk1&quot;);"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">Ph.D</h3><div class="vision-tile-details"></div></article>
 </div>
 </div>
 </div>
@@ -28180,6 +28189,8 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='body'||nl==='gym') src='manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1';
       else if(nl==='inner fire') src='manus-storage/zone-inner-fire-abstract.jpg?v=lotus1';
       else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=road1';
+      else if(nl==='future self'||nl==='future-self') src='manus-storage/zone-future-self.jpg?v=path1';
+      else if(nl==='phd'||nl==='ph.d'||nl==='ph-d') src='manus-storage/zone-phd.jpg?v=desk1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -28197,7 +28208,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','God-conscious','villains','fight back','envision'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','God-conscious','villains','fight back','envision','future self','Ph.D'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'executive', presence:'quantum'};
@@ -28218,6 +28229,8 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'villains':['start now','phone down','act anyway'],
     'fight back':[],
     'envision':[],
+    'future self':[],
+    'Ph.D':[],
     'pepperdine':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant','Psi Chi','Handshake']
   };
   var CARD_SECTION={};
@@ -41005,7 +41018,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -41032,7 +41045,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','body','Pepperdine','pursuits','inner fire','potential','resonance','God-conscious','fight back','envision'];
+    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','body','Pepperdine','pursuits','inner fire','potential','resonance','God-conscious','fight back','envision','future self','Ph.D'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -41054,7 +41067,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -41087,7 +41100,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'god conscious': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
       quantum: ['entanglement'],
       potential: [],
-      resonance: []
+      resonance: [],
+      'future self': [],
+      'future-self': [],
+      phd: [],
+      'ph.d': [],
+      'Ph.D': []
     };
     var CARD_SEED = CARD_SEED_BY_SECTION[section] || CARD_SEED_BY_SECTION[focus] || [];
     function push(raw){
@@ -41204,6 +41222,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'ambition' || t === 'executive' || f === 'ambition' || f === 'executive'){
       add('ambition'); add('executive');
     }
+    if(t === 'future self' || t === 'future-self' || f === 'future-self' || f === 'future self'){
+      add('future self'); add('future-self');
+    }
+    if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || f === 'phd' || f === 'ph-d' || f === 'ph.d'){
+      add('phd'); add('ph.d'); add('ph-d'); add('Ph.D');
+    }
     return out;
   }
   function normalizeAddedSection(rec){
@@ -41216,14 +41240,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'grad school' || t === 'grad' || t === 'pepperdine'){ rec.title = 'Pepperdine'; rec.focus = 'pepperdine'; }
     else if(t === 'god-conscious' || t === 'god conscious'){ rec.title = 'God-conscious'; rec.focus = 'god-conscious'; }
     else if(t === 'ambition'){ rec.title = 'executive'; rec.focus = 'executive'; }
+    else if(t === 'future self' || t === 'future-self' || t === 'futureself'){ rec.title = 'future self'; rec.focus = 'future-self'; }
+    else if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || t === 'ph d'){ rec.title = 'Ph.D'; rec.focus = 'phd'; }
     else { rec.title = displaySectionTitle(rec.title); }
     if(!rec.focus) rec.focus = slug(rec.title);
     return rec;
   }
-  function displaySectionTitle(name){
+    function displaySectionTitle(name){
     var low = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
     if(low === 'god-conscious' || low === 'god conscious') return 'God-conscious';
     if(low === 'pepperdine') return 'Pepperdine';
+    if(low === 'future self' || low === 'future-self' || low === 'futureself') return 'future self';
+    if(low === 'phd' || low === 'ph.d' || low === 'ph-d' || low === 'ph d') return 'Ph.D';
     return low;
   }
   function purgeConflictingAdds(data){
@@ -41627,7 +41655,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1,'potential':1,'resonance':1,
     'god-conscious':1,'god conscious':1,'villains':1,'villain':1,'house':1,
-    'fight back':1,'envision':1
+    'fight back':1,'envision':1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1
   };
   function loadCardPhotoCache(){
     try { return JSON.parse(localStorage.getItem(CARD_PHOTO_STORE) || '{}') || {}; } catch(e){ return {}; }
@@ -42812,10 +42840,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(title === 'power | purpose' || title === 'power/purpose' || title === 'power-purpose') title = 'power';
     if(title === 'god conscious') title = 'god-conscious';
     if(title === 'ambition') title = 'executive';
+    if(title === 'future-self' || title === 'futureself') title = 'future self';
+    if(title === 'phd' || title === 'ph.d' || title === 'ph-d' || title === 'ph d') title = 'ph.d';
     title = displaySectionTitle(title);
     var host = heroHost(blk);
     if(!host) return;
     var focus = slug(title);
+    if(String(title).toLowerCase() === 'ph.d' || focus === 'ph-d'){ focus = 'phd'; title = 'Ph.D'; }
+    if(String(title).toLowerCase() === 'future self') focus = 'future-self';
     var aliases = sectionAliasSet(focus, title);
     var existing = [].slice.call(host.querySelectorAll('.vision-tile')).find(function(tile){
       var f = (tile.getAttribute('data-focus') || '').toLowerCase();
@@ -43481,6 +43513,31 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     try { localStorage.setItem(MKEY, JSON.stringify(done)); } catch(e){}
     return changed;
   }
+
+  function seedAug30FutureSelfPhd(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
+    var MKEY = 'migration-aug30-future-self-phd-v1';
+    if(localStorage.getItem(MKEY)) return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    var changed = false;
+    [['future self','future-self'],['Ph.D','phd']].forEach(function(pair){
+      var title = pair[0], focus = pair[1];
+      if(host.querySelector('.vision-tile[data-focus="'+focus+'"]')) return;
+      var aliases = sectionAliasSet(focus, title);
+      var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
+        var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+        var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+        return !!aliases[f] || !!aliases[tt];
+      });
+      if(exists) return;
+      addTile(blk, title);
+      changed = true;
+    });
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+    return changed;
+  }
+
   function seedVillainsSection(blk){
     if(!blkOk(blk)) return false;
     var d = dayKey(blk);
