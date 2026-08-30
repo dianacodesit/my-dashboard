@@ -1,0 +1,30 @@
+---
+description: Section titles stay original size; only card/task text may be enlarged
+alwaysApply: true
+---
+
+# Section titles stay small — enlarge cards only
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage / overview-era days.
+
+## Never
+
+- Enlarge **section** titles (`.vision-tile-title`, zone heads, collage section names)
+- “Glance readability” patches that bump **both** section titles and card captions together
+- Shared font-size variables / clamps that apply to `.vision-tile-title` and polaroid/card text
+- Zoom styles that make section titles huge (`clamp(32px…52px)`, `clamp(40px…56px)`, or larger)
+- Re-bumping section titles after Diana already reverted them
+
+## Always
+
+1. **Section titles** stay at the approved small size:
+   - Collage / overview (not zoomed): `clamp(22px, 2.6vw, 34px)`
+   - Zoomed section: `36px`
+2. **Only** enlarge card/task text: `.vision-polaroid span`, `.vision-shot-card span`, `.vision-habit-title`, task labels
+3. When asked to make collage text more glanceable, touch **card** rules only — leave `.vision-tile-title` alone
+4. Keep `everything.html` and `prototype.html` in sync for these sizes
+5. Style block `vision-collage-glance-type-v2` locks section titles small and cards larger — do not revert to v1’s dual bump
+
+## If section titles look huge again
+
+Fix immediately (revert `.vision-tile-title` to the sizes above). Do not ask permission. Do not “improve readability” by enlarging sections.

@@ -21,10 +21,13 @@
   }
   .page-bg {
     position: fixed;
-    inset: 0;
+    inset: -2%;
+    width: 104%;
+    height: 104%;
     z-index: 0;
     /* Full-bleed cover only — never contain / letterbox / pillarbox / blurred side fills.
-       Portrait collage crops top/bottom on wide viewports; that is intentional. */
+       Portrait collage crops top/bottom on wide viewports; that is intentional.
+       Overscan (+ inset -2%) so pep-bg-drift cannot reveal body #0e1620 as sidebars. */
     background:
       linear-gradient(180deg, rgba(8,14,22,0.12) 0%, rgba(8,14,22,0.06) 35%, rgba(6,10,16,0.62) 100%),
       url("manus-storage/pursuit-pepperdine.jpg?v=fullbleed3") center 42%/cover no-repeat;

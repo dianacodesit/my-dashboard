@@ -1,0 +1,32 @@
+---
+description: Nodes filaments attach to node edges, never centers
+alwaysApply: true
+---
+
+# Nodes filaments: edge attach only
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) **nodes** view filaments (`.aug20-edge` / `svg.aug20-zone-web`).
+
+## Required behavior
+
+- Filaments attach to each node’s **rim / perimeter** (nearest side toward the other node) via `rimPoint(nodeBox(...))`.
+- They must **kiss the edge** of the node rectangle — not run through the photo into the geometric center.
+- Style: soft continuous champagne filament (glow + orbs OK). **Never** white `stroke-dasharray` center-to-center stubs.
+
+## Never
+
+- `curve(a.pt, b.pt)` / `curve(A.pt, B.pt)` for filament paths (centers)
+- Falling back to `A.pt` / `B.pt` when `nodeBox` fails — **skip** the edge instead
+- `stroke-dasharray` on `.aug20-edge` (JS or CSS)
+- Fixing only `everything.html` or only `prototype.html` — **both** must stay in sync (Diana often uses prototype; serve.py defaults to everything)
+
+## Always
+
+1. Keep `nodeBox` + `rimPoint` + draw loop that uses rim points only.
+2. Keep `stroke-dasharray: none !important` on `path.aug20-edge`.
+3. After any nodes / web / filament edit, hard-refresh **nodes** and confirm the filament meets the **sides** of two linked nodes (e.g. glow up → ambition), not their centers.
+4. Click filament still removes; connect two nodes still works.
+
+## If you see center attachment or dashed white lines through cards
+
+Fix immediately in **both** `everything.html` and `prototype.html`. Do not wait to be reminded. This has regressed repeatedly from prototype/everything drift.
