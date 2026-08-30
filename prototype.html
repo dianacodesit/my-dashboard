@@ -48934,14 +48934,23 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
   transform: rotate(-1.2deg) !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) img,
-html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) img,
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) img {
+  display: block !important;
+  width: 100% !important;
+  height: var(--photo-h, 108px) !important;
+  min-height: 0 !important;
+  max-height: 110px !important;
+  flex: 0 0 auto !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
+}
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) img,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) img {
   display: block !important;
   width: 100% !important;
   height: var(--photo-h, auto) !important;
   min-height: 0 !important;
-  max-height: var(--photo-h, none) !important;
+  max-height: var(--photo-h, 200px) !important;
   flex: 0 0 auto !important;
   aspect-ratio: auto !important;
   object-fit: cover !important;
