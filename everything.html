@@ -42431,17 +42431,29 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
   top: 96px;
   bottom: auto;
 }
-/* Flat-tummy section photo — landscape abs; keep midsection centered under cover (no letterbox). */
-
-/* Villains "light surrounding darkness" is baked into zone-villains.jpg (edge-only warm rim).
-   No CSS fog overlay — previous radial cream tunnel was rejected. */
+/* Body / tummy: asset is pre-cropped mid-abdomen only (no thighs/shorts).
+   Tile uses cover. Zoomed uses contain + dark gym fill so tall viewports
+   show the full flat-tummy plate instead of a skin-macro side-slice. */
 
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-body .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile[data-focus="body"] .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile[data-focus="gym"] .vision-tile-photo {
-  background-position: center 22% !important;
+  background-position: center center !important;
   background-size: cover !important;
+  background-color: #060504;
 }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile-body.is-zoomed .vision-tile-photo,
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile[data-focus="body"].is-zoomed .vision-tile-photo,
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile[data-focus="gym"].is-zoomed .vision-tile-photo {
+  background-size: contain !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: #060504 !important;
+  transform: scale(1) !important;
+}
+
+/* Villains "light surrounding darkness" is baked into zone-villains.jpg (edge-only warm rim).
+   No CSS fog overlay — previous radial cream tunnel was rejected. */
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini .vision-tile-title {
   left: 12px;
   right: 10px;
