@@ -48840,13 +48840,20 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card {
   overflow: hidden !important;
   box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transform: rotate(-1.2deg) !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img,
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card img {
-  max-height: calc(100% - 2.6em) !important;
-  min-height: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 52px !important;
   flex: 1 1 auto !important;
+  aspect-ratio: 1 / 1 !important;
   object-fit: cover !important;
+  display: block !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid span,
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card span {
@@ -48855,20 +48862,20 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
   right: auto !important;
   bottom: auto !important;
   flex: 0 0 auto !important;
-  font-size: clamp(20px, 2.6vw, 30px) !important;
-  line-height: 1.05 !important;
-  margin-top: 4px !important;
-  padding: 0 2px !important;
-  max-height: 2.3em !important;
+  font-size: clamp(24px, 3vw, 34px) !important;
+  line-height: 1.02 !important;
+  margin-top: 2px !important;
+  padding: 0 2px 2px !important;
+  max-height: 2.2em !important;
   overflow: hidden !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid {
-  width: var(--pw, clamp(56px, 26%, 120px));
-  max-width: 34%;
-  max-height: 52%;
+  width: var(--pw, clamp(64px, 28%, 140px));
+  max-width: 36%;
+  max-height: 56%;
   overflow: hidden;
 }
 </style>
