@@ -42572,8 +42572,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function scrubArchivedSectionsEverywhere(){
     var set = archivedSectionFocusSet();
     if(!Object.keys(set).length) return;
+    // Only current + future days. Past days stay as historical record.
+    var today = '';
+    try {
+      var d = new Date();
+      today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    } catch(e){}
     document.querySelectorAll('.day-block').forEach(function(blk){
       if(!blkOk(blk)) return;
+      var k = dayKey(blk) || '';
+      if(!k || (today && k < today)) return;
       var changed = false;
       [].slice.call(blk.querySelectorAll('.vision-tile')).forEach(function(tile){
         var focus = tileFocus(tile);
