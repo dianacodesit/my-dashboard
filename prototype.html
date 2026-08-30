@@ -19112,13 +19112,13 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="vision-board" aria-label="today's vision board">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero"><article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1'); grid-area: 1 / 1 / 3 / 2 !important;">
+<div class="vision-hero"><article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1'); grid-area: 1 / 1 / 2 / 4 !important;" data-card-weight="2">
 <div class="vision-tile-photo"></div>
-<p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
-<h3 class="vision-tile-title">body</h3>
+<p class="vision-tile-quote" data-cursor-ref="e11705">obsessed is a word the lazy use to describe the dedicated.</p>
+<h3 class="vision-tile-title" data-cursor-ref="e11706">body</h3>
 <div class="vision-tile-details">
-<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div>
-<div class="vision-polaroid vision-class" style="--px:12%;--py:22%" data-shot-src="manus-storage/card-reformer-pilates-6-00.jpg">
+<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 4.0%; --py: 6.0%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div>
+<div class="vision-polaroid vision-class" style="--px: 4.0%; --py: 72.0%;" data-shot-src="manus-storage/card-reformer-pilates-6-00.jpg">
 <img alt="" src="manus-storage/card-reformer-pilates-6-00.jpg">
 <span>reformer pilates · 6:00</span>
 <div class="vision-pol-resize" title="drag to resize"></div></div>
@@ -19126,9 +19126,9 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
 </div>
 </article>
-<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 2 / 2 / 4 !important;">
+<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 4 / 2 / 7 !important;" data-card-weight="1">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">glow up</h3>
+<h3 class="vision-tile-title" data-cursor-ref="e11707">glow up</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg">
@@ -19140,14 +19140,14 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
 </div>
 </article>
-<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url('manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'); grid-area: 2 / 2 / 3 / 3 !important;">
+<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url('manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'); grid-area: 2 / 1 / 3 / 3 !important;" data-card-weight="1">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">Pepperdine</h3>
+<h3 class="vision-tile-title" data-cursor-ref="e11708">Pepperdine</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=board1'); grid-area: 2 / 3 / 3 / 4 !important;">
+<article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=board1'); grid-area: 2 / 3 / 3 / 7 !important;" data-card-weight="1">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">executive</h3>
+<h3 class="vision-tile-title" data-cursor-ref="e11709">executive</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
@@ -42777,6 +42777,59 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
     }
   }
+  /** Lay cards out with gaps — never leave them stacked/overlapping by default. */
+  function packTileCards(tile, opts){
+    opts = opts || {};
+    if(!tile) return false;
+    var det = tile.querySelector('.vision-tile-details');
+    if(!det) return false;
+    var pols = [].slice.call(det.querySelectorAll(':scope > .vision-polaroid'));
+    if(pols.length < 1) return false;
+    var vb = tile.closest('.vision-board');
+    var zoomed = !!(vb && vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed'));
+    var tw = Math.max(1, tile.clientWidth || 1);
+    var th = Math.max(1, tile.clientHeight || 1);
+    var sample = pols[0].getBoundingClientRect();
+    var cw = sample.width || (zoomed ? 220 : Math.min(112, tw * 0.28));
+    var ch = sample.height || (cw * 1.35);
+    var gap = zoomed ? 18 : 12;
+    if(!opts.force && pols.length >= 2){
+      var boxes = pols.map(function(p){ return p.getBoundingClientRect(); });
+      var overlap = false;
+      var pad = gap * 0.35;
+      for(var i = 0; i < boxes.length && !overlap; i++){
+        for(var j = i + 1; j < boxes.length; j++){
+          var a = boxes[i], b = boxes[j];
+          if(!(a.right + pad <= b.left || b.right + pad <= a.left || a.bottom + pad <= b.top || b.bottom + pad <= a.top)){
+            overlap = true;
+            break;
+          }
+        }
+      }
+      if(!overlap) return false;
+    }
+    var stepX = ((cw + gap) / tw) * 100;
+    var stepY = ((ch + gap) / th) * 100;
+    if(!isFinite(stepX) || stepX < 8) stepX = zoomed ? 22 : 24;
+    if(!isFinite(stepY) || stepY < 10) stepY = zoomed ? 34 : 28;
+    var marginX = 4;
+    var marginY = 6;
+    var maxX = Math.max(marginX, 100 - (cw / tw) * 100 - 2);
+    var cols = Math.max(1, Math.floor((maxX - marginX) / stepX) + 1);
+    cols = Math.min(cols, pols.length, 4);
+    if(cols < 1) cols = 1;
+    pols.forEach(function(pol, idx){
+      var col = idx % cols;
+      var row = Math.floor(idx / cols);
+      var px = Math.min(maxX, marginX + col * stepX);
+      var py = Math.min(72, marginY + row * stepY);
+      pol.style.setProperty('--px', px.toFixed(1) + '%');
+      pol.style.setProperty('--py', py.toFixed(1) + '%');
+      try{ syncPolaroidRec(pol); }catch(e){}
+    });
+    return true;
+  }
+  window.__packTileCards = packTileCards;
   function movePolaroidToTile(pol, destTile, clientX, clientY, grabOffsetX, grabOffsetY){
     var srcTile = pol && pol.closest('.vision-tile');
     var blk = pol && pol.closest('.day-block');
@@ -43069,6 +43122,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(emptyAdd) emptyAdd.remove();
     [].slice.call(vb.querySelectorAll('.vision-tile')).forEach(ensureTileChrome);
     [].slice.call(vb.querySelectorAll('.vision-polaroid')).forEach(ensurePolaroidChrome);
+    /* Unstack overlapping cards — default layout always has gaps. */
+    [].slice.call(vb.querySelectorAll('.vision-tile')).forEach(function(tile){
+      try{
+        if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+          if(packTileCards(tile)) photoDirty = true;
+        }
+      }catch(e){}
+    });
+    if(photoDirty) persistDay(blk);
     repairPolaroidPhotos(blk);
     syncZoomAddCard(vb);
     ensureDayMargin(blk);
@@ -43527,21 +43589,20 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     if(already) return;
     var src = cardPhotoFor(title) || DEFAULT_CARD;
-    var count = det.querySelectorAll('.vision-polaroid').length;
-    var col = count % 4;
-    var row = Math.floor(count / 4);
     var rec = {
       sectionFocus: tileFocus(tile),
       title: title,
       src: src,
-      px: (6 + col * 22) + '%',
-      py: (12 + row * 26) + '%',
+      px: '6%',
+      py: '12%',
       shot: true
     };
     dayData(blk).addedCards.push(rec);
     det.appendChild(makePolaroid(rec));
     ensurePolaroidChrome(det.lastElementChild);
     assignCardPhotoAuto(det.lastElementChild, title, rec, blk);
+    /* Place with auto gaps so new cards never land stacked on neighbors. */
+    try{ packTileCards(tile, {force: true}); }catch(e){}
     /* Overview hides cards — flip to details so the new card is visible */
     if(blk.classList.contains('overview-mode-overview')){
       setOverviewDepth(blk, 'details');
@@ -46119,6 +46180,19 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
         host.__tileSortable = null;
       }
     }
+    /* After zoom sizes apply, re-gap cards so 220px polaroids don't stack. */
+    try {
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          try{
+            if(typeof packTileCards === 'function' && packTileCards(tile)){
+              var blk = vb.closest('.day-block');
+              if(blk && typeof persistDay === 'function') persistDay(blk);
+            }
+          }catch(e){}
+        });
+      });
+    } catch(e){}
   }
   function tilePhotoSrc(tile){
     if (!tile) return '';
