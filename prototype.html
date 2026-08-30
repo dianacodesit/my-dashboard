@@ -13008,8 +13008,8 @@ window.__j22fnApply=run;
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
     'fight back':'manus-storage/zone-fight-back.jpg?v=1',
     'envision':'manus-storage/zone-envision.jpg?v=1', 'future self':'champagne', 'workflow':'slate', 'focus':'graphite', 'phd':'ink', 'ph.d':'ink',
-    'future self':'manus-storage/zone-future-self.jpg?v=become1',
-    'future-self':'manus-storage/zone-future-self.jpg?v=become1',
+    'future self':'manus-storage/zone-future-self.jpg?v=day1',
+    'future-self':'manus-storage/zone-future-self.jpg?v=day1',
     'phd':'manus-storage/zone-phd.jpg?v=day1',
     'ph.d':'manus-storage/zone-phd.jpg?v=day1',
     'ph-d':'manus-storage/zone-phd.jpg?v=day1',
@@ -13054,7 +13054,7 @@ window.__j22fnApply=run;
     [/\bvillains?\b|daily enemy|shadow self|nemesis|antagonist/, 'manus-storage/zone-villains.jpg?v=rim13'],
     [/fight\s*back|counterattack|stand\s*up|resist/, 'manus-storage/zone-fight-back.jpg?v=1'],
     [/\benvision\b|visualize|visioning|foresee/, 'manus-storage/zone-envision.jpg?v=1'],
-    [/future\\s*self|\\bfuture-self\\b|becoming/, 'manus-storage/zone-future-self.jpg?v=become1'],
+    [/future\\s*self|\\bfuture-self\\b|becoming/, 'manus-storage/zone-future-self.jpg?v=day1'],
     [/\\bph\\.?d\\b|\\bphd\\b|doctorate|doctoral/, 'manus-storage/zone-phd.jpg?v=day1'],
     [/\\bworkflow\\b|process|systems?|pipeline/, 'manus-storage/zone-workflow.jpg?v=flow2'],
     [/\\bfocus\\b|deep work|attention|concentration/, 'manus-storage/zone-focus.jpg?v=lens1']
@@ -15889,7 +15889,7 @@ window.__j22fnApply=run;
 
   try{
     if(!localStorage.getItem('btm_future_self_photo_become_v1')){
-      var FS='manus-storage/zone-future-self.jpg?v=become1';
+      var FS='manus-storage/zone-future-self.jpg?v=day1';
       document.querySelectorAll('.vision-tile[data-focus="future-self"], .vision-tile[data-focus="future self"], .pursuit-zone[data-zone="future-self"], .pursuit-zone[data-zone="future self"]').forEach(function(el){
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+FS+"')");
         else el.style.setProperty('--zone-photo', "url('"+FS+"')");
@@ -15919,6 +15919,23 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_phd_photo_daylight_v1','1');
     }
   }catch(e){}
+
+  try{
+    if(!localStorage.getItem('btm_future_self_photo_daylight_v1')){
+      var FS='manus-storage/zone-future-self.jpg?v=day1';
+      document.querySelectorAll('.vision-tile[data-focus="future-self"], .vision-tile[data-focus="future self"], .pursuit-zone[data-zone="future-self"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+FS+"')");
+        else el.style.setProperty('--zone-photo', "url('"+FS+"')");
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-future-self')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-future-self\.jpg(\?v=[^"'\s)]+)?/g, FS));
+      });
+      localStorage.setItem('btm_future_self_photo_daylight_v1','1');
+    }
+  }catch(e){}
+
+
 
 
 
@@ -19358,7 +19375,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="envision" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=1&quot;); grid-area: 6 / 1 / 7 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e140">envision</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="quantum" style="--tile-photo: url(&quot;manus-storage/zone-quantum-v15.jpg?v=observe&quot;); grid-area: 6 / 3 / 7 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e141">quantum</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="fight-back" style="--tile-photo: url(&quot;manus-storage/zone-fight-back.jpg?v=1&quot;); grid-area: 6 / 5 / 7 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e142">fight back</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="future-self" style="--tile-photo: url(&quot;manus-storage/zone-future-self.jpg?v=become1&quot;); grid-area: 7 / 1 / 8 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11037">future self</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="future-self" style="--tile-photo: url(&quot;manus-storage/zone-future-self.jpg?v=day1&quot;); grid-area: 7 / 1 / 8 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11037">future self</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="phd" style="--tile-photo: url(&quot;manus-storage/zone-phd.jpg?v=day1&quot;); grid-area: 7 / 3 / 8 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11038">Ph.D</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-research-proposal.jpg" style="--px: 9.7%; --py: 22.3%; width: 71.1917px;" data-freeplace="1"><img alt="" src="manus-storage/card-research-proposal.jpg"><span>research proposal</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="workflow" style="--tile-photo: url(&quot;manus-storage/zone-workflow.jpg?v=flow2&quot;); grid-area: 7 / 5 / 8 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11039">workflow</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="focus" style="--tile-photo: url(&quot;manus-storage/zone-focus.jpg?v=lens1&quot;); grid-area: 8 / 1 / 9 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11040">focus</h3><div class="vision-tile-details"></div></article>
@@ -29018,7 +29035,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='body'||nl==='gym') src='manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1';
       else if(nl==='inner fire') src='manus-storage/zone-inner-fire.jpg?v=spark1';
       else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=road1';
-      else if(nl==='future self'||nl==='future-self') src='manus-storage/zone-future-self.jpg?v=become1';
+      else if(nl==='future self'||nl==='future-self') src='manus-storage/zone-future-self.jpg?v=day1';
       else if(nl==='phd'||nl==='ph.d'||nl==='ph-d') src='manus-storage/zone-phd.jpg?v=day1';
       else if(nl==='workflow') src='manus-storage/zone-workflow.jpg?v=flow2';
       else if(nl==='focus') src='manus-storage/zone-focus.jpg?v=lens1';
