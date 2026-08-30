@@ -12956,8 +12956,8 @@ window.__j22fnApply=run;
     'shukr':'manus-storage/card-shukr.jpg?v=1',
     'god-conscious':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'god conscious':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
-    'villains':'manus-storage/zone-villains.jpg?v=mask1',
-    'villain':'manus-storage/zone-villains.jpg?v=mask1',
+    'villains':'manus-storage/zone-villains.jpg?v=rim1',
+    'villain':'manus-storage/zone-villains.jpg?v=rim1',
     'fight back':'manus-storage/zone-fight-back.jpg?v=1',
     'envision':'manus-storage/zone-envision.jpg?v=1'
   };
@@ -12996,7 +12996,7 @@ window.__j22fnApply=run;
     [/\bsabr\b|patience|steadfast/, 'manus-storage/card-sabr.jpg?v=1'],
     [/\bshukr\b|gratitude|thankful/, 'manus-storage/card-shukr.jpg?v=1'],
     [/god[- ]?conscious|\bdhikr\b|\btasbih\b|\bmisbaha\b|remembrance of god/, 'manus-storage/zone-god-conscious.jpg?v=remembrance1'],
-    [/\bvillains?\b|daily enemy|shadow self|nemesis|antagonist/, 'manus-storage/zone-villains.jpg?v=mask1'],
+    [/\bvillains?\b|daily enemy|shadow self|nemesis|antagonist/, 'manus-storage/zone-villains.jpg?v=rim1'],
     [/fight\s*back|counterattack|stand\s*up|resist/, 'manus-storage/zone-fight-back.jpg?v=1'],
     [/\benvision\b|visualize|visioning|foresee/, 'manus-storage/zone-envision.jpg?v=1']
   ];
@@ -15322,6 +15322,26 @@ window.__j22fnApply=run;
         if(next!==raw) localStorage.setItem(k, next);
       });
       localStorage.setItem('btm_body_tummy_photo_v1','1');
+    }
+  }catch(e){}
+  try{
+    if(!localStorage.getItem('btm_executive_climb_photo_v2')){
+      var EXEC_CLIMB='manus-storage/zone-executive-climb.jpg?v=climb2';
+      document.querySelectorAll('.vision-tile[data-focus="executive"], .vision-tile[data-focus="ambition"], .pursuit-zone[data-zone="ambition"], .vision-tile-executive, .pursuit-zone-ambition').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+EXEC_CLIMB+"')");
+        else el.style.setProperty('--zone-photo', "url('"+EXEC_CLIMB+"')");
+      });
+      document.querySelectorAll('.vision-tile[data-focus="executive"] img, .vision-tile[data-focus="ambition"] img, .pursuit-zone[data-zone="ambition"] img').forEach(function(img){
+        if(/zone-ambition-v5-ascent|zone-executive-climb/i.test(img.getAttribute('src')||'')) img.setAttribute('src', EXEC_CLIMB);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/manus-storage\/zone-ambition-v5-ascent\.jpg(\?v=[^"'\\s)]+)?/g, EXEC_CLIMB)
+          .replace(/manus-storage\/zone-executive-climb\.jpg(\?v=[^"'\\s)]+)?/g, EXEC_CLIMB);
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_executive_climb_photo_v2','1');
     }
   }catch(e){}
   try{
@@ -25959,7 +25979,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=road1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
-      else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=mask1';
+      else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim1';
       else if(nl==='fight back') src='manus-storage/zone-fight-back.jpg?v=1';
       else if(nl==='envision') src='manus-storage/zone-envision.jpg?v=1';
       else if(nl==='pepperdine'||nl==='grad school'||nl==='grad') src='manus-storage/pursuit-pepperdine.jpg?v=collage1';
@@ -39140,7 +39160,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 
 
   (function refreshApplicationTuitionPhotos(){
-    var MKEY = 'migration-card-photos-app-tuition-v2';
+    var MKEY = 'migration-card-photos-app-tuition-v3';
     if(localStorage.getItem(MKEY)) return;
     try {
       var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
@@ -39893,7 +39913,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       title: title,
       focus: focus,
       day: day,
-      from: 'everything',
+      from: ((location.pathname || '').split('/').pop() || 'everything.html'),
       photo: tilePhotoUrl(tile),
       archivedAt: Date.now()
     });
@@ -42030,6 +42050,30 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
   bottom: auto;
 }
 /* Flat-tummy section photo — landscape abs; keep midsection centered under cover (no letterbox). */
+
+/* Villains: light rim on the photo plane (dark center stays). Tile-scoped only —
+   not collage reorder / neighbor forcing. pointer-events none so zoom still works. */
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villains"] .vision-tile-photo,
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villain"] .vision-tile-photo {
+  position: relative;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villains"] .vision-tile-photo::after,
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[data-focus="villain"] .vision-tile-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 48%,
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0.08) 28%,
+    transparent 52%,
+    rgba(236, 228, 214, 0.28) 78%,
+    rgba(242, 236, 224, 0.55) 100%
+  );
+}
+
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-body .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile[data-focus="body"] .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile[data-focus="gym"] .vision-tile-photo {
@@ -42385,6 +42429,8 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
   document.addEventListener('click', function(e){
     if (window.__visionTileJustDragged || window.__visionTileDragging || window.__polJustDragged || window.__polDragging) return;
     if (e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-pol-resize, .overview-add-section, .overview-add-picker, .overview-card-picker, .overview-card-modal')) return;
+    /* Modifier+click archives via overview edits — never zoom. */
+    if (e.metaKey || e.ctrlKey) return;
     var out = e.target.closest('.vision-zoom-out');
     var tile = e.target.closest('.vision-tile');
     var vb = boardEl(e.target);
