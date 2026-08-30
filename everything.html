@@ -43720,6 +43720,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     return changed;
   }
+  var _overviewApplied = {};
   function boot(){
     document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
       var mig = migratePepperdineSection(blk);
@@ -43734,7 +43735,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         return;
       }
       if(era){
-        applyStoredEdits(blk);
+        var _dkApply = dayKey(blk);
+        if(!_overviewApplied[_dkApply]){
+          applyStoredEdits(blk);
+          if(heroHost(blk)) _overviewApplied[_dkApply] = 1;
+        } else {
+          /* Re-boot must not snap cards back to a stale overlay home. */
+          try { syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
+        }
         // Re-check after stored edits in case a stale removedSections entry fought the restore.
         try {
           var _rk = 'migration-repair-pre-aug30-pepperdine-card-demotion-v1';
@@ -46793,6 +46801,25 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-ov
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile.is-pol-drop-target {
   box-shadow: inset 0 0 0 2px rgba(255, 248, 238, 0.92), 0 0 0 1px rgba(40, 28, 16, 0.35) !important;
 }
+/* LAST WINS: card drag must float with the pointer, not stay pinned to --px/--py. */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging {
+  position: fixed !important;
+  left: var(--pol-float-x, 0px) !important;
+  top: var(--pol-float-y, 0px) !important;
+  width: var(--pol-float-w, var(--pw, 176px)) !important;
+  transform: none !important;
+  z-index: 10050 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid {
+  pointer-events: auto !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.is-pol-dragging,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.is-pol-dragging {
+  pointer-events: none !important;
+}
 </style>
 </html>
 ision-collage-day) .vision-tile.is-pol-drop-target {
@@ -46910,6 +46937,25 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-ov
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile.is-pol-drop-target {
   box-shadow: inset 0 0 0 2px rgba(255, 248, 238, 0.92), 0 0 0 1px rgba(40, 28, 16, 0.35) !important;
+}
+/* LAST WINS: card drag must float with the pointer, not stay pinned to --px/--py. */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging {
+  position: fixed !important;
+  left: var(--pol-float-x, 0px) !important;
+  top: var(--pol-float-y, 0px) !important;
+  width: var(--pol-float-w, var(--pw, 176px)) !important;
+  transform: none !important;
+  z-index: 10050 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid {
+  pointer-events: auto !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.is-pol-dragging,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.is-pol-dragging {
+  pointer-events: none !important;
 }
 </style>
 </html>
