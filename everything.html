@@ -42865,7 +42865,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var pwPx = Math.round(Math.min(zoomed ? 220 : 128, Math.max(56, packW)));
     pols.forEach(function(pol){
       pol.style.setProperty('--pw', pwPx + 'px');
-      pol.style.maxHeight = Math.round(packH) + 'px';
+      pol.style.setProperty('max-height', Math.round(packH) + 'px', 'important');
+      pol.style.setProperty('height', Math.round(packH) + 'px', 'important');
+      pol.style.setProperty('overflow', 'hidden', 'important');
     });
     packW = pwPx;
     packH = Math.min(packH, pwPx * 1.42);
@@ -47875,6 +47877,18 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
   display: block !important;
   flex: 1 1 auto !important;
   min-height: 0 !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid,
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card {
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img,
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card img {
+  max-height: calc(100% - 2.6em) !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  object-fit: cover !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid span,
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card span {
