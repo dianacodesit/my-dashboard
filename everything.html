@@ -15375,6 +15375,25 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_purpose_calling_v1','1');
     }
 
+
+    if(!localStorage.getItem('btm_purpose_compass_v1')){
+      var PURPOSE_COMPASS='manus-storage/zone-purpose.jpg?v=compass1';
+      document.querySelectorAll('.vision-tile[data-focus="purpose"]').forEach(function(el){
+        el.style.setProperty('--tile-photo', "url('"+PURPOSE_COMPASS+"')");
+      });
+      document.querySelectorAll('.pursuit-zone').forEach(function(el){
+        var t=((el.querySelector('.pursuit-zone-title')||{}).textContent||'').toLowerCase().trim();
+        if(t==='purpose') el.style.setProperty('--zone-photo', "url('"+PURPOSE_COMPASS+"')");
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        if(raw.indexOf('zone-purpose')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-purpose\.jpg(\?v=[^"'\\s)]+)?/g, PURPOSE_COMPASS));
+      });
+      localStorage.setItem('btm_purpose_compass_v1','1');
+    }
+
+
     if(!localStorage.getItem('btm_power_purpose_split_v1')){
       var POWER_IMG='manus-storage/zone-power.jpg?v=split1';
       var PURPOSE_IMG='manus-storage/zone-purpose.jpg?v=calling1';
