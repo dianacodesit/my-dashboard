@@ -28294,6 +28294,9 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     return CANONICAL_SECTIONS.filter(function(n){
       if(have.indexOf(n.toLowerCase())>=0) return false;
       if(String(n).toLowerCase()==='villains' && (!day || day < '2026-08-30')) return false;
+      try {
+        if(typeof window !== 'undefined' && typeof window.__isGloballyArchivedSection === 'function' && window.__isGloballyArchivedSection(n)) return false;
+      } catch(e){}
       return true;
     });
   }
@@ -28344,6 +28347,9 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function addCard(g,name){
     name=(name||'').trim(); if(!g||!name) return;
+    try {
+      if(typeof isSectionName === 'function' && isSectionName(name) && typeof window !== 'undefined' && typeof window.__isGloballyArchivedSection === 'function' && window.__isGloballyArchivedSection(name)) return;
+    } catch(e){}
     var day=dayOf(g),o=load(); o[day]=o[day]||[];
     if(existing(g).indexOf(name.toLowerCase())>=0) return;
     var idx=existing(g).length;
@@ -42558,9 +42564,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     loadArchivedSections().forEach(function(it){
       if(!it) return;
       var f = String(it.focus || '').toLowerCase().trim();
-      var t = String(it.title || '').toLowerCase().trim();
+      var tit = String(it.title || '').toLowerCase().trim();
       if(f) set[f] = 1;
-      if(t){ set[t] = 1; set[slug(t)] = 1; }
+      if(tit){ set[tit] = 1; set[slug(tit)] = 1; }
+      try {
+        var aliases = sectionAliasSet(f || tit, tit || f);
+        Object.keys(aliases).forEach(function(a){ set[a] = 1; });
+      } catch(e){}
     });
     return set;
   }
@@ -42568,7 +42578,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var k = String(focusOrTitle || '').toLowerCase().trim();
     if(!k) return false;
     var set = archivedSectionFocusSet();
-    return !!(set[k] || set[slug(k)]);
+    if(set[k] || set[slug(k)]) return true;
+    try {
+      var aliases = sectionAliasSet(k, k);
+      return Object.keys(aliases).some(function(a){ return set[a]; });
+    } catch(e){ return false; }
   }
   function scrubArchivedSectionsEverywhere(){
     var set = archivedSectionFocusSet();
