@@ -40837,6 +40837,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     _mapCache = m || {};
     try { localStorage.setItem(STORE, JSON.stringify(_mapCache)); } catch(e){}
   }
+  window.__overviewEditsMap = loadMap;
+  window.__overviewEditsFlush = function(){ saveMap(loadMap()); };
   var _mapCache = null;
 
   function pepperdineCardOnlyName(name){
@@ -40957,11 +40959,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(bootHeroLayouts, 80); });
   else setTimeout(bootHeroLayouts, 80);
   [400,1200].forEach(function(ms){ setTimeout(bootHeroLayouts, ms); });
-    function scheduleHtmlSave(blk){
+    function scheduleHtmlSave(blk, immediate){
     var k = dayKey(blk);
     if(!k) return;
     clearTimeout(_htmlSaveTimers[k]);
-    _htmlSaveTimers[k] = setTimeout(function(){
+    var run = function(){
       syncHeroLayoutClass(blk);
       var html = serializeHeroHtml(blk);
       if(!html) return;
@@ -40977,7 +40979,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           removedSections: data.removedSections || []
         })
       }).catch(function(){});
-    }, 900);
+    };
+    if(immediate){ run(); return; }
+    _htmlSaveTimers[k] = setTimeout(run, 900);
   }
   function existingSectionNames(blk){
     var seen = {};
@@ -41269,16 +41273,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       Object.keys(aliases).forEach(function(a){ have[a] = 1; });
     });
   }
-  function persistDay(blk){
+  function persistDay(blk, immediate){
     var k = dayKey(blk);
     if(!k) return;
-    // Snapshot live tiles into the overlay, then flush.
+    // Snapshot live tiles + card homes into the overlay, then flush.
     syncAddedSectionsFromDom(blk);
+    syncAddedCardsFromDom(blk);
     purgeConflictingAdds(dayData(blk));
     saveMap(loadMap());
     syncHeroLayoutClass(blk);
     syncDayShell(blk);
-    scheduleHtmlSave(blk);
+    scheduleHtmlSave(blk, immediate);
   }
   function slug(s){
     return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,32) || 'focus';
@@ -41289,6 +41294,77 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function cardTitle(pol){
     var s = pol && (pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span'));
     return ((s && s.textContent) || '').replace(/\s+/g,' ').trim();
+  }
+  function tileByFocus(vb, focus){
+    if(!vb || !focus) return null;
+    var want = String(focus).toLowerCase();
+    var direct = vb.querySelector('.vision-tile[data-focus="'+focus+'"]');
+    if(direct) return direct;
+    return [].slice.call(vb.querySelectorAll('.vision-tile')).find(function(tile){
+      var title = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim();
+      var aliases = sectionAliasSet(tileFocus(tile), title);
+      return !!(aliases[want] || aliases[slug(want)]);
+    }) || null;
+  }
+  function findPolaroidByTitle(root, title){
+    var want = String(title||'').toLowerCase();
+    if(!root || !want) return null;
+    return [].slice.call(root.querySelectorAll('.vision-polaroid')).find(function(p){
+      return cardTitle(p).toLowerCase() === want;
+    }) || null;
+  }
+  function syncAddedCardsFromDom(blk){
+    var data = dayData(blk);
+    var host = heroHost(blk);
+    if(!data || !host) return;
+    data.addedCards = data.addedCards || [];
+    data.removedCards = data.removedCards || [];
+    var live = {};
+    [].slice.call(host.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+      var title = cardTitle(pol);
+      var focus = tileFocus(pol.closest('.vision-tile'));
+      if(!title || !focus) return;
+      live[title.toLowerCase()] = { title: title, focus: focus, pol: pol };
+    });
+    var have = {};
+    data.addedCards.forEach(function(c){
+      if(!c || !c.title) return;
+      var key = String(c.title).toLowerCase();
+      var loc = live[key];
+      if(!loc) return;
+      have[key] = 1;
+      var oldFocus = String(c.sectionFocus || '').toLowerCase();
+      if(oldFocus && oldFocus !== String(loc.focus).toLowerCase()){
+        var already = data.removedCards.some(function(r){
+          return r && String(r.title||'').toLowerCase() === key &&
+            String(r.sectionFocus||'').toLowerCase() === oldFocus;
+        });
+        if(!already) data.removedCards.push({sectionFocus: c.sectionFocus, title: c.title});
+      }
+      c.sectionFocus = loc.focus;
+      var px = loc.pol.style.getPropertyValue('--px') || '';
+      var py = loc.pol.style.getPropertyValue('--py') || '';
+      var pw = loc.pol.style.getPropertyValue('--pw') || '';
+      if(px) c.px = px;
+      if(py) c.py = py;
+      if(pw) c.w = pw;
+      c.src = loc.pol.getAttribute('data-shot-src') || c.src;
+    });
+    Object.keys(live).forEach(function(key){
+      if(have[key]) return;
+      var loc = live[key];
+      var pol = loc.pol;
+      data.addedCards.push({
+        sectionFocus: loc.focus,
+        title: loc.title,
+        src: pol.getAttribute('data-shot-src') || DEFAULT_CARD,
+        px: pol.style.getPropertyValue('--px') || '12%',
+        py: pol.style.getPropertyValue('--py') || '24%',
+        w: pol.style.getPropertyValue('--pw') || '',
+        shot: pol.classList.contains('vision-shot-card'),
+        habit: pol.classList.contains('vision-habit-card')
+      });
+    });
   }
   function boardHasCardTitle(blk, title){
     if(!blk || !title) return false;
@@ -41894,7 +41970,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       delay: 0,
       delayOnTouchOnly: true,
       distance: 14,
-      filter: '.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-polaroid, .vision-pol-resize, .overview-add-section, .overview-depth-toggle, .overview-add-picker, .overview-card-picker, .overview-card-modal, input, button, a, textarea, .agenda-check',
+      filter: '.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-polaroid, .is-pol-dragging, .vision-pol-resize, .overview-add-section, .overview-depth-toggle, .overview-add-picker, .overview-card-picker, .overview-card-modal, input, button, a, textarea, .agenda-check',
       preventOnFilter: false,
       ghostClass: 'vision-tile-sort-ghost',
       chosenClass: 'vision-tile-sort-chosen',
@@ -42004,6 +42080,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     pol.style.zIndex = '';
     pol.style.transform = '';
     pol.style.pointerEvents = '';
+    pol.style.removeProperty('--pol-float-x');
+    pol.style.removeProperty('--pol-float-y');
+    pol.style.removeProperty('--pol-float-w');
     pol.setAttribute('data-freeplace', '1');
     if(!same){
       det.appendChild(pol);
@@ -42034,7 +42113,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     } else {
       syncPolaroidRec(pol);
     }
-    try{ persistDay(blk); }catch(e){}
+    try{ persistDay(blk, !same); }catch(e){}
     return !same;
   }
   function ensurePolaroidResizeHandle(pol){
@@ -42097,6 +42176,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       pol.style.zIndex = '10050';
       pol.style.pointerEvents = 'none';
       pol.style.transform = 'none';
+      pol.style.setProperty('--pol-float-x', rect.left + 'px');
+      pol.style.setProperty('--pol-float-y', rect.top + 'px');
+      pol.style.setProperty('--pol-float-w', rect.width + 'px');
       pol.setAttribute('data-freeplace', '1');
       pol.classList.add('is-pol-dragging');
     }
@@ -42131,8 +42213,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         armFloating(pol, ev, state);
       }
       ev.preventDefault();
-      pol.style.left = (ev.clientX - state.grabOffsetX) + 'px';
-      pol.style.top = (ev.clientY - state.grabOffsetY) + 'px';
+      var fx = (ev.clientX - state.grabOffsetX) + 'px';
+      var fy = (ev.clientY - state.grabOffsetY) + 'px';
+      pol.style.left = fx;
+      pol.style.top = fy;
+      pol.style.setProperty('--pol-float-x', fx);
+      pol.style.setProperty('--pol-float-y', fy);
       var dest = tileUnderPoint(state.vb, ev.clientX, ev.clientY, pol);
       clearDropHighlight(state.vb);
       if(dest) dest.classList.add('is-pol-drop-target');
@@ -42519,7 +42605,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     (data.removedCards || []).forEach(function(rec){
       if(!rec || !rec.sectionFocus) return;
-      var tile = vb.querySelector('.vision-tile[data-focus="'+rec.sectionFocus+'"]');
+      var tile = tileByFocus(vb, rec.sectionFocus);
       if(!tile) return;
       [].slice.call(tile.querySelectorAll('.vision-polaroid')).forEach(function(p){
         if(cardTitle(p).toLowerCase() === String(rec.title||'').toLowerCase()) p.remove();
@@ -42538,7 +42624,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     (data.addedCards || []).forEach(function(rec){
       if(!rec || !rec.sectionFocus || !rec.title) return;
-      var tile = vb.querySelector('.vision-tile[data-focus="'+rec.sectionFocus+'"]');
+      var tile = tileByFocus(vb, rec.sectionFocus);
       if(!tile) return;
       var det = tile.querySelector('.vision-tile-details');
       if(!det){
@@ -42546,10 +42632,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         det.className = 'vision-tile-details';
         tile.appendChild(det);
       }
-      var exists = [].slice.call(det.querySelectorAll('.vision-polaroid')).some(function(p){
-        return cardTitle(p).toLowerCase() === String(rec.title).toLowerCase();
-      });
-      if(exists) return;
+      var existing = findPolaroidByTitle(vb, rec.title);
+      if(existing){
+        if(existing.closest('.vision-tile') !== tile){
+          det.appendChild(existing);
+        }
+        return;
+      }
       det.appendChild(makePolaroid(rec));
     });
     ensureOverviewEditChrome(blk);
@@ -43124,8 +43213,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         return c && String(c.title||'').toLowerCase() === title.toLowerCase() &&
           (String(c.sectionFocus||'').toLowerCase() === focus || String(c.sectionFocus||'').toLowerCase() === 'gym' || String(c.sectionFocus||'').toLowerCase() === 'body');
       });
-      /* Induction is a required body habit — never stay deleted. */
-      if(removed && title.toLowerCase() === 'induction'){
+      /* Induction is a required body habit — never stay deleted from the board. */
+      if(removed && title.toLowerCase() === 'induction' && !boardHasCardTitle(blk, title)){
         data.removedCards = (data.removedCards || []).filter(function(c){
           return !(c && String(c.title||'').toLowerCase() === 'induction');
         });
@@ -43135,6 +43224,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var pol = [].slice.call(tile.querySelectorAll('.vision-polaroid')).find(function(p){
         return cardTitle(p).toLowerCase() === title.toLowerCase();
       });
+      /* Already on another section — leave it there. */
+      if(!pol && boardHasCardTitle(blk, title)) return;
       if(!pol){
         var det = tile.querySelector('.vision-tile-details');
         if(!det){
