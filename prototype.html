@@ -42070,14 +42070,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return {r:maxRow + 1, c:1};
     }
 
-    var tallRows = {};
     tiles.forEach(function(tile, idx){
-      var nPols = 0;
-      try { nPols = tile.querySelectorAll('.vision-polaroid').length; } catch(e){}
       var w = tileCardWeight(tile);
       tile.setAttribute('data-card-weight', String(w));
       var spanC = w === 3 ? 4 : (w === 2 ? 3 : 2);
-      var spanR = nPols >= 7 ? 3 : (w === 3 ? 2 : 1);
+      var spanR = w === 3 ? 2 : 1;
       /* Last tile: stretch to fill remaining columns on its row when possible. */
       var spot = findSpot(spanC, spanR);
       if(idx === n - 1){
@@ -42085,9 +42082,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(rem > spanC && free(spot.r, spot.c, rem, spanR)) spanC = rem;
       }
       mark(spot.r, spot.c, spanC, spanR);
-      if(nPols >= 7){
-        for(var tr = spot.r; tr < spot.r + spanR; tr++) tallRows[tr] = 1;
-      }
       tile.style.setProperty('grid-column', spot.c + ' / ' + (spot.c + spanC), 'important');
       tile.style.setProperty('grid-row', spanR > 1 ? (spot.r + ' / ' + (spot.r + spanR)) : (spot.r + ' / ' + (spot.r + 1)), 'important');
     });
@@ -42153,7 +42147,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var cols = [];
     for(var i = 0; i < COLS; i++) cols.push('1fr');
     var rows = [];
-    for(var j = 0; j < maxRow; j++) rows.push(tallRows[j + 1] ? 'minmax(260px, 1.25fr)' : (j === 0 ? 'minmax(210px, 1.15fr)' : 'minmax(170px, 1fr)'));
+    for(var j = 0; j < maxRow; j++) rows.push(j === 0 ? 'minmax(210px, 1.15fr)' : 'minmax(170px, 1fr)');
     host.style.setProperty('grid-template-columns', cols.join(' '), 'important');
     host.style.setProperty('grid-template-rows', rows.join(' '), 'important');
   }
