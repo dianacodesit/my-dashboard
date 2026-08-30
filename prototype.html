@@ -16278,6 +16278,40 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    var FS_IMG='manus-storage/zone-envision.jpg?v=swap1';
+    var ENV_IMG='manus-storage/zone-future-self.jpg?v=swap1';
+    var WF_IMG='manus-storage/zone-plan.jpg?v=swap1';
+    var PL_IMG='manus-storage/zone-workflow.jpg?v=swap1';
+    function applySectionPhotoSwap(){
+      function setPhoto(sel, url){
+        document.querySelectorAll(sel).forEach(function(el){
+          if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+url+"')");
+          else el.style.setProperty('--zone-photo', "url('"+url+"')");
+        });
+      }
+      setPhoto('.vision-tile[data-focus="future-self"], .vision-tile[data-focus="future self"], .pursuit-zone[data-zone="future-self"], .pursuit-zone[data-zone="future self"]', FS_IMG);
+      setPhoto('.vision-tile[data-focus="envision"], .pursuit-zone[data-zone="envision"]', ENV_IMG);
+      setPhoto('.vision-tile[data-focus="workflow"], .pursuit-zone[data-zone="workflow"]', WF_IMG);
+      setPhoto('.vision-tile[data-focus="plan"], .pursuit-zone[data-zone="plan"]', PL_IMG);
+    }
+    applySectionPhotoSwap();
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applySectionPhotoSwap, ms); });
+    if(!localStorage.getItem('btm_swap_fs_env_wf_plan_v1')){
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        raw = raw.replace(/manus-storage\/zone-future-self\.jpg(\?v=[^"'\\s)]+)?/g, '___SWAP_FS___')
+                 .replace(/manus-storage\/zone-envision\.jpg(\?v=[^"'\\s)]+)?/g, ENV_IMG)
+                 .replace(/___SWAP_FS___/g, FS_IMG)
+                 .replace(/manus-storage\/zone-workflow\.jpg(\?v=[^"'\\s)]+)?/g, '___SWAP_WF___')
+                 .replace(/manus-storage\/zone-plan\.jpg(\?v=[^"'\\s)]+)?/g, PL_IMG)
+                 .replace(/___SWAP_WF___/g, WF_IMG);
+        localStorage.setItem(k, raw);
+      });
+      localStorage.setItem('btm_swap_fs_env_wf_plan_v1','1');
+    }
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_fight_back_photo_fire_v1')){
       var FB='manus-storage/zone-fight-back.jpg?v=fb2';
       document.querySelectorAll('.vision-tile[data-focus="fight-back"], .vision-tile[data-focus="fight back"], .pursuit-zone[data-zone="fight-back"]').forEach(function(el){
