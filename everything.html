@@ -42942,16 +42942,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       localStorage.setItem('btm_polaroid_caption_fit_v1','1');
     }
   }catch(e){}
-  try{
-    if(!localStorage.getItem('btm_polaroid_wide_fill_v1')){
-      document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
-        if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
-          try{ packTileCards(tile, {force: true}); }catch(e){}
-        }
-      });
-      localStorage.setItem('btm_polaroid_wide_fill_v1','1');
-    }
-  }catch(e){}
+  function __fillPackAllTiles(){
+    document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+      if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+        try{ packTileCards(tile, {force: true}); }catch(e){}
+      }
+    });
+  }
+  window.__fillPackAllTiles = __fillPackAllTiles;
+  [40, 240, 800].forEach(function(ms){ setTimeout(__fillPackAllTiles, ms); });
+  if(!window.__packFillResizeWired){
+    window.__packFillResizeWired = 1;
+    window.addEventListener('resize', function(){
+      clearTimeout(window.__packFillResizeT);
+      window.__packFillResizeT = setTimeout(__fillPackAllTiles, 100);
+    });
+  }
   function cardsOverlapInTile(tile){
     var pols = tile ? [].slice.call(tile.querySelectorAll('.vision-tile-details > .vision-polaroid')) : [];
     if(pols.length < 2) return false;
@@ -44864,8 +44870,8 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   user-select: none;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid {
-  width: var(--pw, clamp(52px, 32%, 112px));
-  max-width: 40%;
+  width: var(--pc, var(--pw, 23%));
+  max-width: none;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-polaroid {
   width: var(--pw, 220px);
@@ -45242,9 +45248,9 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   position: absolute !important;
   left: var(--px, 10%) !important;
   top: var(--py, 18%) !important;
-  /* Card size tracks the section — never fill a small tile with a fixed 156px polaroid. */
-  width: var(--pw, clamp(52px, 32%, 112px)) !important;
-  max-width: 40% !important;
+  /* Card size tracks the section — percent width fills the column. */
+  width: var(--pc, var(--pw, 23%)) !important;
+  max-width: none !important;
   padding: 6px 6px 26px !important;
   transform: rotate(-2.2deg) !important;
   z-index: 5;
