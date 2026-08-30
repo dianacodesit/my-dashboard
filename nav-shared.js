@@ -52,6 +52,7 @@
     { href: 'transmutation.html', label: 'transmutation', group: 'main', parent: 'quantum-consciousness.html' },
     { href: 'alchemy.html', label: 'alchemy', group: 'main', parent: 'quantum-consciousness.html' },
     { href: 'manifestation.html', label: 'manifestation', group: 'main', parent: 'quantum-consciousness.html' },
+    { href: 'potential.html', label: 'potential', group: 'main', parent: 'quantum-consciousness.html' },
     { href: 'self.html', label: 'Self', group: 'main' },
     { href: 'center.html', label: 'center', group: 'main', parent: 'self.html' },
     { href: 'priming.html', label: 'priming & prompting', group: 'main' },
