@@ -1,25 +1,33 @@
 ---
-description: Page backgrounds must be full-bleed — never letterbox or empty bars
+description: Page backgrounds must be full-bleed — never letterbox, pillarbox, or blurred side fills
 alwaysApply: true
 ---
 
 # Full-bleed backgrounds — no empty bars
 
-Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) branded / capture / hero pages.
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) branded / capture / hero pages — including Pepperdine collage, user-upload collage pages, and any photo hero.
 
 ## Never
 
 - Empty **top/bottom** bars (letterboxing) to “fit” a photo
 - Empty **left/right** bars (pillarboxing / sidebars) to “fit” a photo
+- Blurred “fill” side panels / soft duplicates that *read* as empty chrome around a centered portrait column
+- A portrait collage floating on blurred copies of itself (baked into the asset or via CSS `::before`/`::after`)
 - `object-fit: contain` or `background-size: contain` on page heroes when it leaves bare header/footer/side bands
-- Trading full-viewport photo for a wider crop by adding empty chrome
+- Trading full-viewport photo for showing the *whole* image by adding empty chrome
 
 ## Always
 
 - Page background photos **fill the viewport** (`cover` / full-bleed `inset: 0`)
-- If both edges of important content (e.g. the **D** and **CEO** on Diana Jundi) must stay visible under `cover`, fix it in the **asset** (taller stage, content in the safe center) — not by letterboxing the page
+- You do **NOT** have to show the entire photo — **crop / cover / expand**. Cropping is required over pillarbox or letterbox
+- If both edges of important content (e.g. the **D** and **CEO** on Diana Jundi) must stay visible under `cover`, fix it in the **asset** (taller/wider stage, content in the safe center) — not by letterboxing or pillarboxing the page
 - Prefer cropping cream/atmosphere over introducing empty UI bars
-- Do **not** “fix” crop issues by shrinking the photo into a band of empty cream that *reads* as a header/footer — the **photograph** must fill the viewport under `cover`
+- Do **not** “fix” crop issues by shrinking the photo into empty cream bands or blurred side fills — the **photograph** must fill the viewport under `cover`
+- User screenshots stay unaltered as *content* (no-other-faces rule), but **page presentation** must still be full-bleed cover — crop framing is OK
+
+## When Diana flags sidebars / letterbox
+
+Fix immediately. Do not wait to be reminded.
 
 ## Diana Jundi specifically
 
@@ -27,3 +35,9 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) branded / captur
 - Never crop the **D** in DIANA to favor CEO
 - Never introduce empty header/footer bars (or cream bands that look like them) to show the whole plaque
 - Safe margins belong **inside** the photo asset, while the photo still cover-fills the screen
+
+## Pepperdine / collage heroes
+
+- In scope: Pepperdine page, campus collage heroes, user-upload collage pages
+- Never ship a landscape “stage” that is really a portrait strip + blurred L/R fills
+- Use the sharp collage with `cover` (crop edges) or rebuild a wider stage of real photo — never blurred chrome

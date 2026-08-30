@@ -15215,6 +15215,15 @@ window.__j22fnApply=run;
     }
   }catch(e){}
   try{
+    if(!localStorage.getItem('btm_pursuits_photo_work1')){
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-pursuits')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-pursuits\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/zone-pursuits.jpg?v=work1'));
+      });
+      localStorage.setItem('btm_pursuits_photo_work1','1');
+    }
+  }catch(e){}
+  try{
     if(!localStorage.getItem('btm_inner_fire_photo_core1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-inner-fire')<0) return;
@@ -18825,7 +18834,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 </div>
 </div>
 </article>
-<article class="vision-tile vision-tile-pursuits" data-focus="pursuits" style="--tile-photo:url('manus-storage/zone-pursuits.jpg?v=destiny1')">
+<article class="vision-tile vision-tile-pursuits" data-focus="pursuits" style="--tile-photo:url('manus-storage/zone-pursuits.jpg?v=work1')">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">pursuits</h3>
 <div class="vision-tile-details"></div>

@@ -34,6 +34,7 @@ PHOTO_MAP = ROOT / "manus-storage" / "card-photos.json"
 STORAGE = ROOT / "manus-storage"
 KNOWN_CARD_PHOTOS = {
     "induction": "manus-storage/card-induction.jpg",
+    "cleanse": "manus-storage/card-cleanse.jpg",
     "application": "manus-storage/card-application.jpg",
     "scholarship application": "manus-storage/card-application.jpg",
     "scholarship re-application": "manus-storage/card-application.jpg",
@@ -340,6 +341,56 @@ def _http_bytes(url: str) -> bytes:
         return resp.read()
 
 
+def _photo_bytes_usable(data: bytes | None) -> bool:
+    """Reject empty, tiny, or near-black JPEGs that read as blank thumbnails."""
+    if not data or len(data) < 20000:
+        return False
+    try:
+        from io import BytesIO
+        from PIL import Image
+
+        im = Image.open(BytesIO(data)).convert("RGB")
+        w, h = im.size
+        if w < 64 or h < 64:
+            return False
+        # Sample ~4k pixels for mean luminance
+        step = max(1, (w * h) // 4000)
+        pixels = list(im.getdata())[::step]
+        if not pixels:
+            return False
+        avg = sum(sum(c) for c in pixels) / (len(pixels) * 3.0)
+        dark = sum(1 for c in pixels if (sum(c) / 3.0) < 18) / float(len(pixels))
+        if avg < 22 or dark > 0.92:
+            return False
+        return True
+    except Exception:
+        # Without PIL, still require a reasonably sized blob
+        return len(data) >= 40000
+
+
+def _photo_path_usable(path: Path) -> bool:
+    try:
+        if not path.exists() or not path.is_file():
+            return False
+        return _photo_bytes_usable(path.read_bytes())
+    except Exception:
+        return False
+
+
+def _archive_bad_photo(path: Path) -> None:
+    try:
+        if not path.exists():
+            return
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+        archived = path.with_name(f"{path.stem}-bad-{stamp}{path.suffix}")
+        path.replace(archived)
+    except Exception:
+        try:
+            path.unlink(missing_ok=True)
+        except Exception:
+            pass
+
+
 def _fetch_still_life(name: str) -> bytes | None:
     query = f"{name} still life object"
     try:
@@ -358,7 +409,7 @@ def _fetch_still_life(name: str) -> bytes | None:
             url = hit.get("url") or hit.get("thumbnail")
             if url:
                 data = _http_bytes(str(url))
-                if data and len(data) > 2000:
+                if _photo_bytes_usable(data):
                     return data
     except Exception:
         pass
@@ -388,7 +439,7 @@ def _fetch_still_life(name: str) -> bytes | None:
             url = info.get("thumburl") or info.get("url")
             if url:
                 data = _http_bytes(str(url))
-                if data and len(data) > 2000:
+                if _photo_bytes_usable(data):
                     return data
     except Exception:
         pass
@@ -404,18 +455,36 @@ def photo_for_name(name: str) -> dict:
         cached = stored.get(key) or KNOWN_CARD_PHOTOS.get(key)
         if cached:
             path = ROOT / str(cached).split("?", 1)[0]
-            if path.exists():
+            if path.exists() and _photo_path_usable(path):
                 stored[key] = cached
                 _save_photo_map(stored)
                 return {"ok": True, "src": cached, "cached": True}
+            # Stale map pointing at a missing or blank/black file — drop it
+            if path.exists() and not _photo_path_usable(path):
+                # Don't delete known/preset assets in KNOWN_CARD_PHOTOS unless
+                # they failed usability (e.g. prior bad auto-fetch overwrite).
+                if key not in KNOWN_CARD_PHOTOS or str(cached).split("?", 1)[0] == f"manus-storage/card-{_photo_slug(key)}.jpg":
+                    if key not in KNOWN_CARD_PHOTOS:
+                        _archive_bad_photo(path)
+            stored.pop(key, None)
         dest = STORAGE / f"card-{_photo_slug(key)}.jpg"
         if dest.exists():
-            src = f"manus-storage/{dest.name}"
-            stored[key] = src
-            _save_photo_map(stored)
-            return {"ok": True, "src": src, "cached": True}
+            if _photo_path_usable(dest):
+                src = f"manus-storage/{dest.name}"
+                stored[key] = src
+                _save_photo_map(stored)
+                return {"ok": True, "src": src, "cached": True}
+            _archive_bad_photo(dest)
         blob = _fetch_still_life(key)
         if not blob:
+            # Fall back to a known good preset if we have one on disk
+            known = KNOWN_CARD_PHOTOS.get(key)
+            if known:
+                kpath = ROOT / str(known).split("?", 1)[0]
+                if _photo_path_usable(kpath):
+                    stored[key] = known
+                    _save_photo_map(stored)
+                    return {"ok": True, "src": known, "cached": True}
             return {"ok": False, "error": "no photo"}
         dest.write_bytes(blob)
         src = f"manus-storage/{dest.name}"
