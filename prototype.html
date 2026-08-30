@@ -43381,6 +43381,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
     });
     if(strippedH) opts.force = true;
+    if(pols.some(function(pol){
+      var py = parseFloat(pol.style.getPropertyValue('--py'));
+      return isFinite(py) && py > 70;
+    })) opts.force = true;
     var vb = tile.closest('.vision-board');
     var zoomed = !!(vb && vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed'));
     var tw = tile.clientWidth || 0;
@@ -43543,6 +43547,21 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   window.__packTileCards = packTileCards;
   window.__liftCardsOffSectionTitles = liftCardsOffSectionTitles;
+  try{
+    if(!localStorage.getItem('btm_polaroid_caption_fit_v1')){
+      document.querySelectorAll('.day-block.overview-era-day .vision-polaroid, .day-block.vision-collage-day .vision-polaroid').forEach(function(pol){
+        pol.style.removeProperty('height');
+        pol.style.removeProperty('max-height');
+        pol.style.removeProperty('overflow');
+      });
+      document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+        if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+          try{ packTileCards(tile, {force: true}); }catch(e){}
+        }
+      });
+      localStorage.setItem('btm_polaroid_caption_fit_v1','1');
+    }
+  }catch(e){}
   function movePolaroidToTile(pol, destTile, clientX, clientY, grabOffsetX, grabOffsetY){
     var srcTile = pol && pol.closest('.vision-tile');
     var blk = pol && pol.closest('.day-block');
@@ -48949,6 +48968,10 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:no
   max-height: none;
   height: auto;
   overflow: visible;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid img[src*="handshake-pepperdine-gsa"],
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid[data-shot-src*="handshake-pepperdine-gsa"] img {
+  object-position: left center !important;
 }
 </style>
 
