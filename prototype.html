@@ -43432,29 +43432,58 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var usableH = Math.max(40, th * (1 - (marginY + titleReserve + 2) / 100));
     rows = Math.max(1, Math.ceil(n / cols));
     var cellW = (usableW - (cols - 1) * gap) / cols;
-    var cellH = (usableH - (rows - 1) * gap) / rows;
     var packW = Math.max(64, cellW * 0.92);
-    var packH = Math.max(96, cellH * 0.9);
     var pwPx = Math.round(Math.min(zoomed ? 240 : 168, Math.max(72, packW)));
     packW = pwPx;
+    /* Real polaroid: square photo + caption hugging the text. Never force a short height. */
+    pols.forEach(function(pol){
+      if(pol.classList.contains('vision-habit-card')) return;
+      pol.style.setProperty('--pw', pwPx + 'px');
+      pol.style.setProperty('width', pwPx + 'px', 'important');
+      pol.style.removeProperty('height');
+      pol.style.removeProperty('max-height');
+      pol.style.removeProperty('overflow');
+    });
+    var packH = 0;
+    pols.forEach(function(pol){
+      if(pol.classList.contains('vision-habit-card')) return;
+      var h = pol.offsetHeight || 0;
+      if(h < 8) h = pwPx + 44;
+      packH = Math.max(packH, h);
+    });
+    if(packH < 8) packH = pwPx + 44;
     packH = Math.round(packH);
     var stepX = ((packW + gap + 8) / tw) * 100;
     var stepY = ((packH + gap + 12) / th) * 100;
     var maxStepX = (100 - marginX * 2) / cols;
-    var maxStepY = (100 - titleReserve - marginY - 2) / rows;
     if(!isFinite(stepX) || stepX < 6) stepX = maxStepX;
-    if(!isFinite(stepY) || stepY < 8) stepY = maxStepY;
+    if(!isFinite(stepY) || stepY < 8) stepY = ((packH + 16) / th) * 100;
     stepX = Math.min(stepX, maxStepX);
-    /* Prefer real clearance over maxStepY squash — overlap is worse than a slight title kiss. */
     stepY = Math.max(stepY, ((packH + 16) / th) * 100);
-    if(marginY + (rows - 1) * stepY + (packH / th) * 100 > 96){
-      packH = Math.floor((th * (96 - marginY) / rows) - 16);
-      packH = Math.max(88, packH);
-      pols.forEach(function(pol){
-        pol.style.setProperty('height', packH + 'px', 'important');
-        pol.style.setProperty('max-height', packH + 'px', 'important');
-      });
-      stepY = ((packH + 16) / th) * 100;
+    /* If the grid does not fit, shrink width (photo stays square) — do not crush the photo. */
+    if(marginY + (rows - 1) * stepY + (packH / th) * 100 > 98){
+      var fitH = (th * (98 - marginY) / rows) - 16;
+      if(fitH > 80 && fitH < packH){
+        var scale = fitH / packH;
+        pwPx = Math.max(64, Math.round(pwPx * scale));
+        packW = pwPx;
+        pols.forEach(function(pol){
+          if(pol.classList.contains('vision-habit-card')) return;
+          pol.style.setProperty('--pw', pwPx + 'px');
+          pol.style.setProperty('width', pwPx + 'px', 'important');
+        });
+        packH = 0;
+        pols.forEach(function(pol){
+          if(pol.classList.contains('vision-habit-card')) return;
+          packH = Math.max(packH, pol.offsetHeight || (pwPx + 44));
+        });
+        packH = Math.round(packH);
+        stepX = ((packW + gap + 8) / tw) * 100;
+        stepY = ((packH + gap + 12) / th) * 100;
+        if(!isFinite(stepX) || stepX < 6) stepX = maxStepX;
+        stepX = Math.min(stepX, maxStepX);
+        stepY = Math.max(stepY, ((packH + 16) / th) * 100);
+      }
     }
     pols.forEach(function(pol, idx){
       var col = idx % cols;
@@ -43466,11 +43495,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         var cleared = clampPyClearOfTitle(tile, pol, py);
         if(cleared > py) py = cleared;
       }
-      pol.style.setProperty('--pw', pwPx + 'px');
-      pol.style.setProperty('width', pwPx + 'px', 'important');
-      pol.style.setProperty('height', packH + 'px', 'important');
-      pol.style.setProperty('max-height', packH + 'px', 'important');
-      pol.style.setProperty('overflow', 'hidden', 'important');
+      if(!pol.classList.contains('vision-habit-card')){
+        pol.style.setProperty('--pw', pwPx + 'px');
+        pol.style.setProperty('width', pwPx + 'px', 'important');
+        pol.style.removeProperty('height');
+        pol.style.removeProperty('max-height');
+        pol.style.removeProperty('overflow');
+      }
       pol.style.setProperty('--px', px.toFixed(1) + '%');
       pol.style.setProperty('--py', py.toFixed(1) + '%');
       try{ syncPolaroidRec(pol); }catch(e){}
