@@ -16372,7 +16372,7 @@ window.__j22fnApply=run;
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero vision-hero-duo">
-<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/pursuit-pepperdine.jpg?v=collage1&quot;); grid-area: 1 / 1 / 3 / 2 !important;">
+<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/pursuit-pepperdine.jpg?v=collage2&quot;); grid-area: 1 / 1 / 3 / 2 !important;">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">Pepperdine</h3>
 <div class="vision-tile-details">
@@ -16386,7 +16386,7 @@ window.__j22fnApply=run;
 <div class="vision-pol-resize" title="drag to resize"></div></div>
 </div>
 </article>
-<article class="vision-tile vision-tile-pursuits" data-focus="pursuits" style="--tile-photo: url('manus-storage/zone-pursuits.jpg?v=work1'); grid-area: 1 / 2 / 2 / 4 !important;">
+<article class="vision-tile vision-tile-pursuits" data-focus="pursuits" style="--tile-photo: url(&quot;manus-storage/zone-pursuits.jpg?v=work1&quot;); grid-area: 1 / 2 / 2 / 4 !important;">
 <div class="vision-tile-photo"></div>
 <p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title">pursuits</h3>
 <div class="vision-tile-details"></div>
@@ -39266,23 +39266,52 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(!pol || !src) return;
     pol.setAttribute('data-shot-src', src);
     var img = pol.querySelector('img');
-    if(img) img.src = src;
+    if(img){
+      img.src = src;
+      img.onerror = function(){
+        img.onerror = null;
+        try{
+          var m = loadCardPhotoCache();
+          var t = cardTitle(pol);
+          var low = String(t||'').toLowerCase();
+          if(low && m[low]){ delete m[low]; localStorage.setItem(CARD_PHOTO_STORE, JSON.stringify(m)); }
+        }catch(e){}
+        var blk = pol.closest('.day-block');
+        assignCardPhotoAuto(pol, cardTitle(pol), rec, blk);
+      };
+    }
     if(rec) rec.src = src;
+  }
+  function isBlankOrBrokenCardSrc(src, img){
+    src = String(src || '').replace(/^\//,'').trim();
+    if(!src) return true;
+    if(/card-cleanse-black|card-cleanse-bad/i.test(src)) return true;
+    // Un-busted cleanse path may still be a cached black jpeg in the browser
+    if(/manus-storage\/card-cleanse\.jpg$/i.test(src.split('?')[0]) && !/[?&]v=cleanse2\b/i.test(src)) return true;
+    if(img && img.complete && img.naturalWidth === 0 && (img.getAttribute('src')||'')) return true;
+    return false;
   }
   function assignCardPhotoAuto(pol, title, rec, blk){
     var have = cardPhotoFor(title);
-    if(have){
+    if(have && !isBlankOrBrokenCardSrc(have)){
       applyPolaroidSrc(pol, have, rec);
       return;
     }
+    if(have && isBlankOrBrokenCardSrc(have)){
+      try{
+        var m = loadCardPhotoCache();
+        delete m[String(title||'').replace(/\s+/g,' ').trim().toLowerCase()];
+        localStorage.setItem(CARD_PHOTO_STORE, JSON.stringify(m));
+      }catch(e){}
+    }
     function done(src){
-      if(!src) return;
+      if(!src || isBlankOrBrokenCardSrc(src)) return;
       rememberCardPhoto(title, src);
       applyPolaroidSrc(pol, src, rec);
       if(blk) persistDay(blk);
     }
     fetch('/photo-for?name='+encodeURIComponent(title)).then(function(r){ return r.json(); }).then(function(j){
-      if(j && j.ok && j.src){ done(j.src); return; }
+      if(j && j.ok && j.src && !isBlankOrBrokenCardSrc(j.src)){ done(j.src); return; }
       return fetch('https://api.openverse.org/v1/images/?'+new URLSearchParams({q: title+' still life object', page_size:'6'})).then(function(r){ return r.json(); }).then(function(ov){
         var hits = (ov && ov.results) || [];
         for(var i=0;i<hits.length;i++){
@@ -39290,8 +39319,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           if(/\b(person|people|portrait|face|woman|man|girl|boy|child|selfie)\b/i.test(t)) continue;
           if(hits[i].url){ done(hits[i].url); return; }
         }
+        // Last resort: never leave a black/empty polaroid — use vibes still-life
+        if(window.__cardImgFor){
+          var mapped = window.__cardImgFor(title);
+          if(mapped){ done(mapped); return; }
+        }
+        done(DEFAULT_CARD);
       });
-    }).catch(function(){});
+    }).catch(function(){
+      var mapped = window.__cardImgFor && window.__cardImgFor(title);
+      done(mapped || DEFAULT_CARD);
+    });
   }
   function repairPolaroidPhotos(blk){
     if(!blk) return;
@@ -39309,13 +39347,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         var m = st.match(/--tile-photo:\s*url\(['"]?([^'")]+)['"]?\)/i);
         if(m) tileSrc = m[1];
       }
-      var inherited = !cur || /pursuit-pepperdine|pursuit-vibes/i.test(cur) || (tileSrc && cur.split('?')[0] === tileSrc.split('?')[0]);
+      var blank = isBlankOrBrokenCardSrc(cur, img);
+      var inherited = blank || !cur || /pursuit-pepperdine|pursuit-vibes/i.test(cur) || (tileSrc && cur.split('?')[0] === tileSrc.split('?')[0]);
+      // DEFAULT_CARD (vibes) on a non-vibes title means auto-assign never finished — re-run
+      if(!blank && cur && /pursuit-vibes/i.test(cur) && low !== 'vibes') inherited = true;
       if(!inherited){
         rememberCardPhoto(title, cur);
         return;
       }
       var want = cardPhotoFor(title);
-      if(want){
+      if(want && !isBlankOrBrokenCardSrc(want)){
         applyPolaroidSrc(pol, want);
         var data = dayData(blk);
         (data.addedCards||[]).forEach(function(rec){
