@@ -43396,6 +43396,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var cw = measured ? sample.width : (zoomed ? 220 : Math.min(120, tw * (n >= 7 ? 0.20 : 0.26)));
     var ch = measured ? sample.height : (cw * 1.38);
     var gap = zoomed ? 18 : 14;
+    try {
+      var tr0 = tile.getBoundingClientRect();
+      if(pols.some(function(pol){
+        var b = pol.getBoundingClientRect();
+        return b.height > 4 && (b.bottom > tr0.bottom + 4 || b.right > tr0.right + 4);
+      })) opts.force = true;
+    } catch(e){}
+    if(n >= 6) opts.force = true;
     var titleReserve = titleBandReservePct(zoomed);
     var needsLift = false;
     pols.forEach(function(pol){
