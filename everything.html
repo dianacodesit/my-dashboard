@@ -9266,6 +9266,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
     }
     var n = items.length;
     var zoneMini = !!(card.closest('.pursuit-zone-grid') || card.classList.contains('loose-card'));
+    var onAug26 = !!(card.closest('.day-block[data-date="2026-08-26"], .day-block.vision-collage-day'));
     if(!zoneMini && !onAug26){
       var px = sizeForCount(n);
       if(card.classList.contains('card-sized') && !card.classList.contains('resizing')){
@@ -12913,7 +12914,7 @@ window.__j22fnApply=run;
     'glow up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'glow-up':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'glow':'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
-    'body':'manus-storage/zone-body-gym-wide-dark.jpg?v=dark1',
+    'body':'manus-storage/zone-body-abs.jpg?v=tummy1',
     'induction':'manus-storage/zone-body-gym-wide-dark.jpg?v=dark1',
     'gym':'manus-storage/zone-body-gym-wide-dark.jpg?v=dark1',
     'executive':'manus-storage/zone-ambition-v5-ascent.jpg',
@@ -12947,12 +12948,12 @@ window.__j22fnApply=run;
     'grad':'manus-storage/pursuit-pepperdine.jpg?v=plaza2',
     'pursuits':'manus-storage/zone-pursuits.jpg?v=destiny1',
     'inner fire':'manus-storage/zone-inner-fire.jpg?v=ember1',
-    'potential':'manus-storage/zone-potential.jpg?v=hers1',
+    'potential':'manus-storage/zone-potential.jpg?v=road1',
     'resonance':'manus-storage/zone-resonance.jpg?v=res1',
-    'sabr':'manus-storage/zone-god-conscious.jpg?v=awe1',
-    'shukr':'manus-storage/zone-god-conscious.jpg?v=awe1',
-    'god-conscious':'manus-storage/zone-god-conscious.jpg?v=awe1',
-    'god conscious':'manus-storage/zone-god-conscious.jpg?v=awe1',
+    'sabr':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
+    'shukr':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
+    'god-conscious':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
+    'god conscious':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=mask1',
     'villain':'manus-storage/zone-villains.jpg?v=mask1',
     'fight back':'manus-storage/zone-fight-back.jpg?v=1',
@@ -12988,9 +12989,9 @@ window.__j22fnApply=run;
     [/pepperdine|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/pursuit-pepperdine.jpg?v=plaza2'],
     [/\bpursuits?\b/, 'manus-storage/zone-pursuits.jpg?v=destiny1'],
     [/inner\s*fire|\bember\b|\bforge\b|molten core/, 'manus-storage/zone-inner-fire.jpg?v=ember1'],
-    [/\bpotential\b|unlimited potential|inner light|boundless/, 'manus-storage/zone-potential.jpg?v=hers1'],
+    [/\bpotential\b|unlimited potential|inner light|boundless/, 'manus-storage/zone-potential.jpg?v=road1'],
     [/\bresonan|sympath|attun|entrain|awakening field/, 'manus-storage/zone-resonance.jpg?v=res1'],
-    [/god[- ]?conscious|\bdhikr\b|\btasbih\b|\bmisbaha\b|remembrance of god|\bsabr\b|\bshukr\b/, 'manus-storage/zone-god-conscious.jpg?v=awe1'],
+    [/god[- ]?conscious|\bdhikr\b|\btasbih\b|\bmisbaha\b|remembrance of god|\bsabr\b|\bshukr\b/, 'manus-storage/zone-god-conscious.jpg?v=remembrance1'],
     [/\bvillains?\b|daily enemy|shadow self|nemesis|antagonist/, 'manus-storage/zone-villains.jpg?v=mask1'],
     [/fight\s*back|counterattack|stand\s*up|resist/, 'manus-storage/zone-fight-back.jpg?v=1'],
     [/\benvision\b|visualize|visioning|foresee/, 'manus-storage/zone-envision.jpg?v=1']
@@ -15189,6 +15190,23 @@ window.__j22fnApply=run;
         localStorage.setItem(k, raw.replace(/manus-storage\/zone-potential\.jpg(\?v=[^"'\\s)]+)?/g, POT_HERS));
       });
       localStorage.setItem('btm_potential_photo_hers1','1');
+    }
+  }catch(e){}
+  try{
+    if(!localStorage.getItem('btm_potential_photo_road1')){
+      var POT_ROAD='manus-storage/zone-potential.jpg?v=road1';
+      document.querySelectorAll('.vision-tile[data-focus="potential"], .pursuit-zone[data-zone="potential"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+POT_ROAD+"')");
+        else el.style.setProperty('--zone-photo', "url('"+POT_ROAD+"')");
+      });
+      document.querySelectorAll('.vision-tile[data-focus="potential"] img, .pursuit-zone[data-zone="potential"] img').forEach(function(img){
+        if(/zone-potential/i.test(img.getAttribute('src')||'')) img.setAttribute('src', POT_ROAD);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-potential')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-potential\.jpg(\?v=[^"'\\s)]+)?/g, POT_ROAD));
+      });
+      localStorage.setItem('btm_potential_photo_road1','1');
     }
   }catch(e){}
   try{
@@ -18614,8 +18632,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title">pursuits</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-gym-wide-dark.jpg?v=dark1&quot;); grid-area: 2 / 2 / 3 / 3 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
-<article class="vision-tile" data-focus="god-conscious" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=awe1&quot;); grid-area: 2 / 3 / 3 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">God-conscious</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-sabr.jpg"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg" style="--px: 28%; --py: 12%;"><img alt="" src="manus-storage/card-shukr.jpg"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-abs.jpg?v=tummy1&quot;); grid-area: 2 / 2 / 3 / 3 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="god-conscious" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 2 / 3 / 3 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">God-conscious</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-sabr.jpg"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg" style="--px: 28%; --py: 12%;"><img alt="" src="manus-storage/card-shukr.jpg"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 </div>
 </div>
 </div>
@@ -22377,14 +22395,18 @@ function wireDayDots(opts) {
     }, true); // capture phase
   }
   
-  // Wire entire day-card-header to toggle collapse on click
+  // Wire day-card-header collapse via document delegation so late-created
+  // days (e.g. Aug 29 shells) always open/close — per-header dataset.wired
+  // was easy to miss or lose after shell reinjection.
   document.querySelectorAll('.day-card-header').forEach(header => {
-    if (header.dataset.wired) return;
-    header.dataset.wired = '1';
     header.style.cursor = 'pointer';
-    header.addEventListener('click', (e) => {
-      // Don't trigger when clicking on interactive elements inside header
-      if (e.target.closest('input, button, .agenda-check, .agenda-subcheck, .day-dot')) return;
+  });
+  if (!document.body.dataset.dayHeaderCollapseWired) {
+    document.body.dataset.dayHeaderCollapseWired = '1';
+    document.body.addEventListener('click', (e) => {
+      if (e.target.closest('input, button, .agenda-check, .agenda-subcheck, .day-dot, .overview-depth-opt, .overview-add-section, .tv-pill, .make-flow-btn, .day-pop-x')) return;
+      const header = e.target.closest('.day-card-header');
+      if (!header) return;
       const block = header.closest('.day-block');
       if (!block) return;
       block.classList.toggle('collapsed');
@@ -22400,7 +22422,7 @@ function wireDayDots(opts) {
         localStorage.setItem('collapsed-days', JSON.stringify([...collapsedSet]));
       } catch(err) {}
     });
-  });
+  }
   
   // Auto-collapse: on initial page load, every non-today card collapses by default.
   // Today's card always opens. Skip when re-wiring late-created day cards.
@@ -22639,6 +22661,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     const saveShell = (iso, el) => {
       if (!iso || !el) return;
       try {
+        // Never persist click-wiring flags — they survive outerHTML but listeners don't,
+        // which left late-created days (Aug 29+) unable to expand after reload.
+        el.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
         const o = loadShells();
         o[iso] = el.outerHTML;
         localStorage.setItem(SHELL_KEY, JSON.stringify(o));
@@ -22687,6 +22712,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         const wrap = document.createElement('div');
         wrap.innerHTML = saved.trim();
         clone = wrap.firstElementChild;
+        if (clone) clone.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
       }
       if (!clone) {
         // NEVER auto-copy another day's cards/sections without explicit user action
@@ -28158,9 +28184,9 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='power'||nl==='power | purpose'||nl==='purpose') src='manus-storage/zone-power-purpose.jpg?v=seal1';
       else if(nl==='body'||nl==='gym') src='manus-storage/zone-body-gym-wide-dark.jpg?v=dark1';
       else if(nl==='inner fire') src='manus-storage/zone-inner-fire.jpg?v=ember1';
-      else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=hers1';
+      else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=road1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
-      else if(nl==='god-conscious'||nl==='god conscious') src='manus-storage/zone-god-conscious.jpg?v=awe1';
+      else if(nl==='god-conscious'||nl==='god conscious') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=mask1';
       else if(nl==='fight back') src='manus-storage/zone-fight-back.jpg?v=1';
       else if(nl==='envision') src='manus-storage/zone-envision.jpg?v=1';
@@ -41405,12 +41431,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         window.__visionTileDragging = true;
         window.__visionTileJustDragged = false;
       },
-      onEnd: function(){
+      onEnd: function(evt){
         window.__visionTileDragging = false;
-        window.__visionTileJustDragged = true;
-        setTimeout(function(){ window.__visionTileJustDragged = false; }, 80);
-        try{ syncHeroLayoutClass(blk); }catch(e){}
-        try{ persistDay(blk); }catch(e){}
+        /* Only swallow the following click if the tile actually moved.
+           Sortable can fire onEnd on a plain click; that was killing section zoom. */
+        var moved = !!(evt && evt.oldIndex != null && evt.newIndex != null && evt.oldIndex !== evt.newIndex);
+        if(moved){
+          window.__visionTileJustDragged = true;
+          setTimeout(function(){ window.__visionTileJustDragged = false; }, 80);
+          try{ syncHeroLayoutClass(blk); }catch(e){}
+          try{ persistDay(blk); }catch(e){}
+        }
       }
     });
   }
@@ -42730,8 +42761,18 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   align-items: flex-end !important;
   gap: 8px !important;
   padding: 12px 10px 40px !important;
-  pointer-events: auto !important;
+  /* Let empty details space pass clicks through so the section can zoom.
+     Polaroids / shot-cards / chrome below re-enable pointer events. */
+  pointer-events: none !important;
   overflow: visible !important;
+}
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-card-del,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-pol-resize,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-habit-check,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .habit-check {
+  pointer-events: auto !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid {
   position: relative !important;
@@ -42740,7 +42781,6 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   width: 118px !important;
   padding: 7px 7px 24px !important;
   transform: rotate(-2.2deg) !important;
-  pointer-events: auto !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img {
   height: 86px !important;
@@ -43876,19 +43916,11 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
       return;
     }
     if (!vb || !tile || !vb.contains(tile)) return;
-    var shotCard = e.target.closest('.vision-shot-card');
+    var shotCard = e.target.closest('.vision-shot-card, .vision-polaroid.vision-shot-card');
     if (shotCard && vb.contains(shotCard)) {
       e.preventDefault();
       e.stopPropagation();
       openFullShot(shotCard.getAttribute('data-shot-src') || (shotCard.querySelector('img') && shotCard.querySelector('img').src) || '');
-      return;
-    }
-    if (e.target.closest('.vision-tile-details') && !e.target.closest('.vision-shot-card, .vision-polaroid')) return;
-    var shotPolaroid = e.target.closest('.vision-polaroid.vision-shot-card, .vision-shot-card');
-    if (shotPolaroid && vb.contains(shotPolaroid)) {
-      e.preventDefault();
-      e.stopPropagation();
-      openFullShot(shotPolaroid.getAttribute('data-shot-src') || (shotPolaroid.querySelector('img') && shotPolaroid.querySelector('img').src) || '');
       return;
     }
     /* Screenshot sections: collage may crop; click opens the full uncropped image */
@@ -43900,6 +43932,7 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     }
     if (vb.classList.contains('is-zoomed')) {
       if (tile.classList.contains('is-zoomed')) closeBoard(vb);
+      else openTile(vb, tile); /* switch to the newly clicked section */
       return;
     }
     openTile(vb, tile);
