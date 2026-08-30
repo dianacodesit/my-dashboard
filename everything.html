@@ -12951,7 +12951,7 @@ window.__j22fnApply=run;
     'pepperdine':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
     'grad school':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
     'grad':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
-    'pursuits':'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase2',
+    'pursuits':'manus-storage/zone-pursuits-research-desk.jpg?v=desk2',
     'inner fire':'manus-storage/zone-inner-fire-abstract.jpg?v=sacred1',
     'potential':'manus-storage/zone-potential.jpg?v=road1',
     'resonance':'manus-storage/zone-resonance.jpg?v=res1',
@@ -15158,23 +15158,6 @@ window.__j22fnApply=run;
     }
   }catch(e){}
 
-
-  try{
-    if(!localStorage.getItem('btm_pursuits_photo_chase2')){
-      var PURSUIT_LIVE='manus-storage/zone-pursuits-chase-threshold.jpg?v=chase2';
-      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
-        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-pursuits')<0) return;
-        raw=raw.replace(/manus-storage\/zone-pursuits(?:-[a-z0-9-]+)?\.jpg(\?v=[^"'\\s)]+)?/g, PURSUIT_LIVE);
-        raw=raw.replace(/manus-storage\/zone-pursuits\.jpg(\?v=[^"'\\s)]+)?/g, PURSUIT_LIVE);
-        localStorage.setItem(k, raw);
-      });
-      document.querySelectorAll('.vision-tile[data-focus="pursuits"]').forEach(function(t){
-        t.style.setProperty('--tile-photo', "url('"+PURSUIT_LIVE+"')");
-      });
-      localStorage.setItem('btm_pursuits_photo_chase2','1');
-    }
-  }catch(e){}
-
   try{
     if(!localStorage.getItem('btm_inner_fire_photo_core1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -15429,38 +15412,47 @@ window.__j22fnApply=run;
         var next=raw
           .replace(/data-focus="power-purpose"/g,'data-focus="power"')
           .replace(/<h3 class="vision-tile-title">
-<article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym6'); grid-area: 1 / 1 / 3 / 2 !important;">
-<div class="vision-tile-photo"></div>
-<p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
-<h3 class="vision-tile-title">body</h3>
-<div class="vision-tile-details">
-<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div>
-<div class="vision-polaroid vision-class" style="--px:12%;--py:22%" data-shot-src="manus-storage/card-reformer-pilates-6-00.jpg">
-<img alt="" src="manus-storage/card-reformer-pilates-6-00.jpg">
-<span>reformer pilates · 6:00</span>
-<div class="vision-pol-resize" title="drag to resize"></div></div>
-<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox" style=""><span>pack gym bag</span></label>
-<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox" style=""><span>water + mat</span></label>
-</div>
-</article>
-<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 2 / 2 / 4 !important;">
+<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 1 / 3 / 2 !important;">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">glow up</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg">
 <span>vanity</span>
-<div class="vision-pol-resize" title="drag to resize"></div></div>
-<label class="vision-check" style="--px:46%;--py:18%"><input class="agenda-check" type="checkbox" style=""><span>cleanse</span></label>
-<label class="vision-check" style="--px:62%;--py:34%"><input class="agenda-check" type="checkbox" style=""><span>serum</span></label>
-<label class="vision-check" style="--px:48%;--py:50%"><input class="agenda-check" type="checkbox" style=""><span>SPF</span></label>
-<label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox" style=""><span>lip mask</span></label>
+</div>
+<label class="vision-check" style="--px:46%;--py:18%"><input class="agenda-check" type="checkbox"><span>cleanse</span></label>
+<label class="vision-check" style="--px:62%;--py:34%"><input class="agenda-check" type="checkbox"><span>serum</span></label>
+<label class="vision-check" style="--px:48%;--py:50%"><input class="agenda-check" type="checkbox"><span>SPF</span></label>
+<label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
 </div>
 </article>
-<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url('manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'); grid-area: 2 / 2 / 3 / 3 !important;">
+<article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym6'); grid-area: 1 / 2 / 2 / 4 !important;">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">Pepperdine</h3>
-<div class="vision-tile-details"></div>
+<p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
+<h3 class="vision-tile-title">body</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div>
+
+<div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
+<img alt="" src="manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym6">
+<span>reformer pilates · 6:00</span>
+</div>
+<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox"><span>pack gym bag</span></label>
+<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-house" data-focus="house" style="--tile-photo: url('manus-storage/pursuit-curated-lifestyle.jpg?v=2'); grid-area: 2 / 2 / 3 / 3 !important;">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">house</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2">
+<span>reset the rooms</span>
+</div>
+<label class="vision-check" style="--px:52%;--py:22%"><input class="agenda-check" type="checkbox"><span>kitchen</span></label>
+<label class="vision-check" style="--px:58%;--py:40%"><input class="agenda-check" type="checkbox"><span>floors</span></label>
+<label class="vision-check" style="--px:50%;--py:58%"><input class="agenda-check" type="checkbox"><span>laundry</span></label>
+</div>
 </article>
 <article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=board1'); grid-area: 2 / 3 / 3 / 4 !important;">
 <div class="vision-tile-photo"></div>
@@ -15469,9 +15461,9 @@ window.__j22fnApply=run;
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
 <span>Elevate</span>
-<div class="vision-pol-resize" title="drag to resize"></div></div>
-<label class="vision-check" style="--px:48%;--py:22%"><input class="agenda-check" type="checkbox" style=""><span>text Dr Betty</span></label>
-<label class="vision-check" style="--px:52%;--py:42%"><input class="agenda-check" type="checkbox" style=""><span>module work</span></label>
+</div>
+<label class="vision-check" style="--px:48%;--py:22%"><input class="agenda-check" type="checkbox"><span>text Dr Betty</span></label>
+<label class="vision-check" style="--px:52%;--py:42%"><input class="agenda-check" type="checkbox"><span>module work</span></label>
 </div>
 </article>
 </div>
@@ -16349,7 +16341,7 @@ window.__j22fnApply=run;
 <h3 class="vision-tile-title">committee check-in</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym5&quot;); grid-area: 2 / 2 / 3 / 4 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
+<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym6&quot;); grid-area: 2 / 2 / 3 / 4 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
 </div>
 </div>
 </div>
@@ -41689,7 +41681,9 @@ html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .visio
   display: none !important;
 }
 
-/* Overview depth: section photos + glance cards (draggable across sections). */
+/* Overview depth: CLEAN SECTIONS ONLY.
+   Glance polaroids must stay hidden — they sit on top of tiles, match Sortable's
+   .vision-polaroid filter, and block section reorder. Cards live in details / zoom. */
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-tile-details {
   display: block !important;
   visibility: visible !important;
@@ -41700,37 +41694,18 @@ html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .visio
   z-index: 4 !important;
 }
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid,
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-shot-card {
-  display: block !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  position: absolute !important;
-  left: var(--px, 10%) !important;
-  top: var(--py, 18%) !important;
-  width: min(34%, 92px) !important;
-  padding: 5px 5px 18px !important;
-  z-index: 5;
-  cursor: grab;
-  touch-action: none;
-}
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid img,
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-shot-card img {
-  height: 58px !important;
-}
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid span,
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-shot-card span {
-  font-size: 14px !important;
-  line-height: 1.02 !important;
-  color: #1a140e !important;
-}
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-shot-card,
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card,
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-card-del,
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-pol-resize,
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-habit-check,
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .habit-check {
-  pointer-events: auto !important;
-}
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .habit-check,
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-habit-badge,
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-habit-status,
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-add-card {
   display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* Do NOT min-height tiles in details — it blows past grid tracks and overlaps neighbors. */
