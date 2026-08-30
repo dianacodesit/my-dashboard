@@ -43446,36 +43446,48 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     } else if(!opts.force && !needsLift && pols.length < 2){
       return liftCardsOffSectionTitles(tile);
     }
-    /* Fill the section: % width/height so cards grow with the tile. Never leave empty gutters. */
+    /* Wide columns, tight polaroid (photo + caption). Never stretch a beige footnote. */
     var cols = n <= 2 ? n : (n <= 4 ? 2 : (n <= 6 ? 3 : 4));
     if(tw > th * 1.2 && n >= 6) cols = Math.min(4, n);
     if(zoomed && n >= 5) cols = Math.min(4, Math.max(cols, 3));
     cols = Math.min(cols, 4, n);
     var rows = Math.max(1, Math.ceil(n / cols));
-    var marginX = 1.1;
-    var marginY = 1.8;
-    var titleReserve = zoomed ? 8 : 6.5;
-    var gutterX = n >= 6 ? 0.65 : 0.9;
-    var gutterY = 0.9;
-    var pwPct = (100 - marginX * 2 - (cols - 1) * gutterX) / cols;
-    var phPct = (100 - marginY - titleReserve - (rows - 1) * gutterY) / rows;
+    var marginX = zoomed ? 2.0 : 1.2;
+    var marginY = zoomed ? 3.2 : 2.0;
+    var titleReserve = zoomed ? 9 : 7;
+    var gutterX = zoomed ? 14 : 8;
+    var gutterY = zoomed ? 16 : 8;
+    var captionPx = 56;
+    var chromePx = 10;
+    var usableW = Math.max(80, tw * (1 - (marginX * 2) / 100));
+    var usableH = Math.max(80, th * (1 - (marginY + titleReserve) / 100));
+    var cellW = (usableW - (cols - 1) * gutterX) / cols;
+    var cellH = (usableH - (rows - 1) * gutterY) / rows;
+    var pwPct = (cellW / tw) * 100;
     if(!isFinite(pwPct) || pwPct < 10) pwPct = 23;
-    if(!isFinite(phPct) || phPct < 14) phPct = 42;
-    var pwPx = Math.round(tw * pwPct / 100);
-    var packH = Math.round(th * phPct / 100);
+    var photoBudget = Math.max(zoomed ? 130 : 52, cellH - captionPx - chromePx);
+    var photoH = Math.round(Math.min(photoBudget, cellW * (zoomed ? 1.02 : 1.08)));
+    photoH = Math.max(zoomed ? 130 : 52, photoH);
+    var cardH = photoH + captionPx + chromePx;
+    var stepX = ((cellW + gutterX) / tw) * 100;
+    var stepY = ((cardH + gutterY) / th) * 100;
+    var pwPx = Math.round(cellW);
     pols.forEach(function(pol, idx){
       var col = idx % cols;
       var row = Math.floor(idx / cols);
-      var px = Math.max(0, Math.min(86, marginX + col * (pwPct + gutterX)));
-      var py = Math.max(0, Math.min(86, marginY + row * (phPct + gutterY)));
+      var px = Math.max(0, Math.min(86, marginX + col * stepX));
+      var py = Math.max(0, Math.min(86, marginY + row * stepY));
       if(!pol.classList.contains('vision-habit-card')){
+        pol.style.removeProperty('height');
+        pol.style.removeProperty('max-height');
+        pol.style.removeProperty('--ph');
         pol.style.setProperty('--pw', pwPx + 'px');
         pol.style.setProperty('--pc', pwPct.toFixed(2) + '%');
-        pol.style.setProperty('--ph', phPct.toFixed(2) + '%');
+        pol.style.setProperty('--photo-h', photoH + 'px');
         pol.style.setProperty('width', pwPct.toFixed(2) + '%', 'important');
-        pol.style.setProperty('height', phPct.toFixed(2) + '%', 'important');
+        pol.style.setProperty('height', 'auto', 'important');
         pol.style.setProperty('max-width', 'none', 'important');
-        pol.style.setProperty('max-height', phPct.toFixed(2) + '%', 'important');
+        pol.style.setProperty('max-height', 'none', 'important');
       }
       pol.style.setProperty('--px', px.toFixed(1) + '%');
       pol.style.setProperty('--py', py.toFixed(1) + '%');
