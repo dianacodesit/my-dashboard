@@ -40159,6 +40159,19 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       deletePolaroid(e.target.closest('.vision-card-del').closest('.vision-polaroid'));
       return;
     }
+    /* ⌘/Ctrl+click a section archives it (not polaroids / habit / chrome). */
+    if((e.metaKey || e.ctrlKey) && e.target.closest('.vision-tile') && e.target.closest('.vision-board')){
+      if(!e.target.closest('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-pol-resize, .vision-polaroid, .vision-shot-card, .overview-add-section, .overview-add-picker, .overview-card-picker, .overview-card-modal')){
+        var archTile = e.target.closest('.vision-tile');
+        if(archTile){
+          e.preventDefault();
+          e.stopPropagation();
+          if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+          archiveTile(archTile);
+          return;
+        }
+      }
+    }
     if(!e.target.closest('.overview-add-picker, .overview-card-modal, .overview-card-picker')){
       document.querySelectorAll('.overview-add-picker, .overview-card-modal').forEach(closePicker);
     }
@@ -41850,7 +41863,12 @@ html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zo
 html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
   top: 18px;
   bottom: auto;
-  font-size: 36px;
+  font-size: clamp(40px, 4.5vw, 56px);
+  font-weight: 600;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 12px rgba(0, 0, 0, 0.7),
+    0 6px 28px rgba(0, 0, 0, 0.55);
 }
 html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
   display: block;
@@ -41957,12 +41975,15 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
   margin: 0;
   z-index: 2;
   font-family: "Newsreader", Georgia, serif;
-  font-size: clamp(26px, 3vw, 42px);
-  font-weight: 400;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 600;
   font-style: italic;
   letter-spacing: 0.01em;
   color: #fff8ee;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 12px rgba(0, 0, 0, 0.7),
+    0 6px 28px rgba(0, 0, 0, 0.55);
   pointer-events: none;
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-quote {
