@@ -43739,6 +43739,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(!_overviewApplied[_dkApply]){
           applyStoredEdits(blk);
           if(heroHost(blk)) _overviewApplied[_dkApply] = 1;
+          try { syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
         } else {
           /* Re-boot must not snap cards back to a stale overlay home. */
           try { syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
@@ -46802,7 +46803,10 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile.is-
   box-shadow: inset 0 0 0 2px rgba(255, 248, 238, 0.92), 0 0 0 1px rgba(40, 28, 16, 0.35) !important;
 }
 /* LAST WINS: card drag must float with the pointer, not stay pinned to --px/--py. */
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging {
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.is-pol-dragging,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card.is-pol-dragging,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.is-pol-dragging {
   position: fixed !important;
   left: var(--pol-float-x, 0px) !important;
   top: var(--pol-float-y, 0px) !important;
@@ -46939,7 +46943,10 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile.is-
   box-shadow: inset 0 0 0 2px rgba(255, 248, 238, 0.92), 0 0 0 1px rgba(40, 28, 16, 0.35) !important;
 }
 /* LAST WINS: card drag must float with the pointer, not stay pinned to --px/--py. */
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging {
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.is-pol-dragging,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card.is-pol-dragging,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.is-pol-dragging {
   position: fixed !important;
   left: var(--pol-float-x, 0px) !important;
   top: var(--pol-float-y, 0px) !important;
@@ -47021,9 +47028,16 @@ html body .vision-polaroid.vision-habit-card .vision-pol-resize::after { content
     });
   }
   function restoreHabit(){
-    try{ ['btm_overview_edits_v1','btm_day_data_v1','btm_overview_day_data_v1'].forEach(function(k){
-      var raw=localStorage.getItem(k); if(!raw) return; var data=JSON.parse(raw); scrub(data); localStorage.setItem(k, JSON.stringify(data));
-    }); }catch(e){}
+    try{
+      if(typeof window.__overviewEditsMap === 'function'){
+        scrub(window.__overviewEditsMap());
+        if(typeof window.__overviewEditsFlush === 'function') window.__overviewEditsFlush();
+      } else {
+        ['btm_overview_edits_v1','btm_day_data_v1','btm_overview_day_data_v1'].forEach(function(k){
+          var raw=localStorage.getItem(k); if(!raw) return; var data=JSON.parse(raw); scrub(data); localStorage.setItem(k, JSON.stringify(data));
+        });
+      }
+    }catch(e){}
     try{ var photos=JSON.parse(localStorage.getItem('btm_card_photos_v1')||'{}')||{}; photos.induction=IND; localStorage.setItem('btm_card_photos_v1', JSON.stringify(photos)); }catch(e){}
     document.querySelectorAll('.day-block.vision-collage-day, .day-block.overview-era-day').forEach(function(blk){
       if(window.__ensureHabitsOnBoard){ try{ window.__ensureHabitsOnBoard(blk); }catch(e){} }
