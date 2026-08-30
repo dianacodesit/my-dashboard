@@ -19,19 +19,30 @@
     background: #f3e6d0;
     box-shadow: none;
   }
+  /* Same photo, full-bleed cover — framing only (D/O edge clip baseline + 10px right). */
   .page-bg {
     position: fixed;
     inset: 0;
     z-index: 0;
-    background:
-      linear-gradient(180deg, rgba(12,8,4,0.22) 0%, rgba(12,8,4,0.08) 42%, rgba(8,5,3,0.55) 100%),
-      url("manus-storage/business-diana-jundi-ceo-letterhead.jpg") 72% 30%/cover no-repeat;
-    transform: scale(1.01);
-    animation: dj-bg-drift 18s ease-in-out infinite alternate;
+    overflow: hidden;
+    background: #14100c;
   }
-  @keyframes dj-bg-drift {
-    from { transform: scale(1.01) translate3d(0, 0, 0); }
-    to { transform: scale(1.035) translate3d(0, -1.2%, 0); }
+  .page-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* Baseline: left -4% / width 108% / 72% 34%. +10px right, then 5px back left. */
+    left: calc(-4% + 5px);
+    width: 108%;
+    background: url("manus-storage/business-diana-jundi-ceo-letterhead.jpg?v=baseright5") 72% 34% / cover no-repeat;
+  }
+  .page-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12,8,4,0.22) 0%, rgba(12,8,4,0.08) 42%, rgba(8,5,3,0.55) 100%);
+    pointer-events: none;
   }
   .page-shell {
     position: relative;
@@ -98,7 +109,7 @@
   }
   .cta:hover span { transform: translateX(3px); }
   @media (prefers-reduced-motion: reduce) {
-    .page-bg, .hero, .cta { animation: none; }
+    .hero, .cta { animation: none; }
   }
 </style>
 </head>
@@ -111,6 +122,6 @@
     <a class="cta" href="curriculum-vitae.html">Curriculum Vitae <span aria-hidden="true">→</span></a>
   </section>
 </main>
-<script src="nav-shared.js?v=navdj1"></script>
+<script src="nav-shared.js?v=navnest1"></script>
 </body>
 </html>

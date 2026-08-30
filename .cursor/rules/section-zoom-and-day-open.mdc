@@ -1,0 +1,45 @@
+---
+description: Section zoom + day expand must never regress on Everything
+alwaysApply: true
+---
+
+# Section zoom + day open (Everything)
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage / overview-era days.
+
+## Section zoom — always works in overview AND details
+
+Clicking a **section** (`.vision-tile`) must open full-size zoom in **both** modes.
+
+### Never
+
+- Early-return that skips zoom when the click is on `.vision-tile-details` empty space
+- `pointer-events: auto` on the full-bleed `.vision-tile-details` overlay in details mode (it swallows section clicks)
+- While `is-zoomed`, ignoring clicks on a *different* tile (must **switch** zoom target, not no-op)
+- Setting `__visionTileJustDragged = true` on every Sortable `onEnd` — only set it when `oldIndex !== newIndex`
+- Opening the polaroid **lightbox** from the collage before the section is zoomed (in details, cards cover the tile and steal zoom)
+- Leaving packing `grid-area` / `grid-column` / `grid-row` `!important` inline styles on the tile while zoomed (blocks full-bleed fill)
+
+### Always
+
+- Details overlay: `pointer-events: none` on `.vision-tile-details`; `pointer-events: auto` only on polaroids / shot-cards / delete / resize / habit chrome
+- **Collage click → zoom section first** (photo, title, or polaroid). Lightbox only when the board is already `is-zoomed`
+- `openTile` clears `grid-area` / `grid-column` / `grid-row` on tiles; `clearVisionPack` clears `grid-area` too; `closeBoard` re-packs via `__syncHeroLayoutClass`
+- After any collage / Sortable / overview-chrome change, verify: details zoom (click a polaroid), overview zoom → close → zoom a second section
+
+## Day expand — late-created days (Aug 29+ shells)
+
+### Never
+
+- Rely only on per-header `dataset.wired` listeners — shell `outerHTML` saves `data-wired` but **not** listeners, so reload skips re-wiring and the day won’t open
+- Persist `data-wired` (or any wiring flag) into `btm_day_shells_v1`
+
+### Always
+
+- Document-level delegation for `.day-card-header` collapse toggle (`dayHeaderCollapseWired`)
+- Strip `[data-wired]` when saving and when hydrating shells in `ensureDayCard`
+- After shell / day-creation changes, verify Aug 29 (or any shell-only day) expands on click
+
+## If either ability breaks
+
+Fix immediately — do not wait to be reminded. These are interaction regressions, not polish.

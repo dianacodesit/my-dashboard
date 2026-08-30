@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>archived pages · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navveil5"/>
+<link rel="stylesheet" href="capture-page.css?v=nocream"/>
+<style>
+  .page-bg {
+    background:
+      linear-gradient(180deg, rgba(18,14,12,0.62) 0%, rgba(18,14,12,0.28) 44%, rgba(10,8,6,0.7) 100%),
+      url("manus-storage/dashboard-hq-bg.jpg") center 48%/cover no-repeat;
+    filter: saturate(0.75) brightness(0.72);
+  }
+  body.capture-page #hamburger-menu span { background: #f3e6d0; }
+  .archive-empty {
+    margin-top: 18px;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(247,239,228,0.72);
+    text-align: center;
+  }
+  .archive-list {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .archive-list a {
+    display: block;
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 18px;
+    color: #f7efe4;
+    text-decoration: none;
+    padding: 10px 14px;
+    border: 1px solid rgba(247,239,228,0.18);
+    background: rgba(20,12,8,0.28);
+  }
+  .archive-list a:hover { border-color: rgba(247,239,228,0.4); }
+</style>
+</head>
+<body class="capture-page">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">archived · pages</p>
+    <h1>pages</h1>
+    <p class="sub">board pages you’ve set aside</p>
+  </header>
+  <section class="panel">
+    <ul class="archive-list" id="list"></ul>
+    <p class="archive-empty" id="empty">nothing archived yet</p>
+    <p class="status" id="status">saved here</p>
+  </section>
+</main>
+<script src="nav-shared.js?v=navarchive2"></script>
+<script>
+(function(){
+  var KEY = 'btm_archived_pages_v1';
+  function load(){
+    try {
+      var raw = JSON.parse(localStorage.getItem(KEY) || '[]');
+      return Array.isArray(raw) ? raw : [];
+    } catch (e) { return []; }
+  }
+  function render(){
+    var items = load();
+    var list = document.getElementById('list');
+    var empty = document.getElementById('empty');
+    list.innerHTML = '';
+    items.forEach(function(it){
+      if (!it || !it.href) return;
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = it.href;
+      a.textContent = it.label || it.href;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    empty.hidden = items.length > 0;
+  }
+  render();
+})();
+</script>
+</body>
+</html>

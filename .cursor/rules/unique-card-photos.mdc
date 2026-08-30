@@ -1,0 +1,39 @@
+---
+description: Vision collage cards get unique name-based photos — never reuse the parent section tile
+alwaysApply: true
+---
+
+# Unique card photos
+
+Hard rule for **cards** (vision polaroids / shot-cards) on diana’s dashboard (`/Users/diana/my-dashboard`).
+
+## Cards ≠ sections
+
+- A **section** tile may use a shared zone photo (e.g. Pepperdine plaza for the Pepperdine section).
+- Every **card** under a section needs its **own** photo that fits the **card name**, not a copy of the parent section image.
+
+## Required when adding or fixing a card
+
+1. Give the card a unique asset under `manus-storage/` (or a known mapped file), named for the card when practical (`card-tuition.jpg`, `card-application.jpg`, …).
+2. Register it in both:
+   - the exact-name `IMG` / `__cardImgFor` map in `everything.html` / `prototype.html`
+   - `KNOWN_CARD_PHOTOS` in `serve.py` (`/photo-for`) so auto-assign stays consistent
+3. Cache via `btm_card_photos_v1` / `assignCardPhotoAuto` is fine — but never leave a card on the section’s plaza/tile image.
+
+## Hard bans
+
+- Do **not** use `pursuit-pepperdine.jpg` (plaza) for cards such as **tuition**, **scholarship application** / **scholarship re-application**, or any other Pepperdine *card*.
+- Do **not** reuse any parent `--tile-photo` / zone banner as the card photo when the card means something different from the section.
+- Still follow **no-other-faces-or-names** for generated/found images. User-sent screenshots stay unaltered.
+- Do **not** use vague desk still-lifes (pen + blank forms, ledger + wax-seal envelope) when the card name is a specific document genre — the photo must read as that thing.
+
+## Good examples
+
+- Pepperdine **section** → plaza / campus tile photo
+- **tuition** card → `manus-storage/card-tuition.jpg` (tuition bill / student account statement / invoice — not plaza, not a wax-seal fantasy)
+- **scholarship re-application** card → `manus-storage/card-application.jpg` (actual scholarship application form / packet — not plaza, not a generic desk + pen still-life)
+- **committee check-in** / **top applicant** → their own proof screenshots when Diana provided them
+
+## If a card is already wrong
+
+Swap it off the section photo immediately; do not wait to be reminded.

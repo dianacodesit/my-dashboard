@@ -1,0 +1,29 @@
+---
+description: Polaroid/card resize stays usable; the L-corner glyph must stay invisible
+alwaysApply: true
+---
+
+# No visible resize-handle symbol
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision polaroids and other resizable cards.
+
+## Ability stays; glyph never shows
+
+- Keep the resize **hit target** (`.vision-pol-resize`, `.card-resize`, `.zone-resize`, `.oneoff-resize`, `.canvas-item-resize`) so drag-to-resize still works.
+- Never show an L-corner, ⇲, grip lines, or any other **visible** resize symbol on polaroids / cards.
+
+## Always
+
+1. Keep `#no-resize-glyph` (and the overview-era `.vision-pol-resize` rules) killing `::before` / `::after` and any border/box-shadow/color that draws a corner mark.
+2. When touching polaroid chrome or resize CSS, verify glyphs stay invisible in details + zoomed section views.
+3. Prefer invisible hit targets (`background: none`, `border: 0`, `color: transparent`, `font-size: 0`) over decorative handles.
+
+## Never
+
+- Reintroduce a visible L in the polaroid white border
+- Rely on “only hide on hover” — the glyph must be off in the resting state too
+- Strip the resize node entirely just to hide the symbol (ability must remain)
+
+## If a glyph is visible in a screenshot
+
+Fix the CSS immediately (sync `everything.html` `#no-resize-glyph` with the permanent ban that includes `.vision-pol-resize`). Do not wait to be reminded.

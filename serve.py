@@ -33,6 +33,7 @@ PHOTO_LOCK = threading.Lock()
 PHOTO_MAP = ROOT / "manus-storage" / "card-photos.json"
 STORAGE = ROOT / "manus-storage"
 KNOWN_CARD_PHOTOS = {
+    "induction": "manus-storage/card-induction.jpg",
     "application": "manus-storage/card-application.jpg",
     "scholarship application": "manus-storage/card-application.jpg",
     "scholarship re-application": "manus-storage/card-application.jpg",
@@ -41,6 +42,22 @@ KNOWN_CARD_PHOTOS = {
     "tuition money": "manus-storage/card-tuition.jpg",
     "committee check-in": "manus-storage/pepperdine-committee-checkin.jpg",
     "gsa": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "pepperdine gsa": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "graduate student association": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "pepperdine graduate student association": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "top applicant": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "pepperdine gsa · top applicant": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "graduate student association · top applicant": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "pepperdine graduate student association · top applicant": "manus-storage/handshake-pepperdine-gsa.jpg",
+    "psi chi": "manus-storage/card-psi-chi.jpg",
+    "ps chi": "manus-storage/card-psi-chi.jpg",
+    "handshake": "manus-storage/card-handshake.jpg",
+    "sabr": "manus-storage/card-sabr.jpg",
+    "shukr": "manus-storage/card-shukr.jpg",
+    # Pepperdine section / zone only — not tuition/application cards
+    "pepperdine": "manus-storage/pursuit-pepperdine.jpg",
+    "grad school": "manus-storage/pursuit-pepperdine.jpg",
+    "grad": "manus-storage/pursuit-pepperdine.jpg",
 }
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",

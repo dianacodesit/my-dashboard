@@ -12948,7 +12948,7 @@ window.__j22fnApply=run;
     'pepperdine':'manus-storage/pursuit-pepperdine.jpg?v=collage2',
     'grad school':'manus-storage/pursuit-pepperdine.jpg?v=collage2',
     'grad':'manus-storage/pursuit-pepperdine.jpg?v=collage2',
-    'pursuits':'manus-storage/zone-pursuits.jpg?v=destiny1',
+    'pursuits':'manus-storage/zone-pursuits.jpg?v=work1',
     'inner fire':'manus-storage/zone-inner-fire.jpg?v=navel2',
     'potential':'manus-storage/zone-potential.jpg?v=road1',
     'resonance':'manus-storage/zone-resonance.jpg?v=res1',
@@ -13038,6 +13038,7 @@ window.__j22fnApply=run;
   window.__secThemeFor = resolveTheme;
   var CARD_IMG = {
     'induction':'manus-storage/card-induction.jpg?v=rl2',
+    'cleanse':'manus-storage/card-cleanse.jpg?v=cleanse2',
     'application':'manus-storage/card-application.jpg?v=v3',
     'scholarship application':'manus-storage/card-application.jpg?v=v3',
     'scholarship re-application':'manus-storage/card-application.jpg?v=v3',
@@ -20502,6 +20503,31 @@ document.addEventListener('DOMContentLoaded',()=>{
         rail.insertBefore(clone, offRail);
       }
     };
+    // Move any dated days that landed after doha/archive back before those markers.
+    const placeDatedBeforeOffRail = () => {
+      const rail = document.querySelector('#agendaBody > .timeline') || document.querySelector('.agenda-body > .timeline');
+      if (!rail) return;
+      unnestSwallowedDays();
+      const offRail = offRailMarker(rail);
+      if (!offRail) return;
+      const misplaced = Array.from(rail.querySelectorAll(':scope > .day-block[data-date]')).filter(function(b){
+        const d = b.getAttribute('data-date') || '';
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return false;
+        return !!(offRail.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+      });
+      misplaced.sort(function(a, b){
+        return (a.getAttribute('data-date') || '').localeCompare(b.getAttribute('data-date') || '');
+      });
+      misplaced.forEach(function(b){
+        const iso = b.getAttribute('data-date') || '';
+        const prior = Array.from(rail.querySelectorAll(':scope > .day-block[data-date]')).filter(function(x){
+          const d = x.getAttribute('data-date') || '';
+          return /^\d{4}-\d{2}-\d{2}$/.test(d) && d < iso && x !== b
+            && !!(x.compareDocumentPosition(offRail) & Node.DOCUMENT_POSITION_FOLLOWING);
+        }).pop();
+        rail.insertBefore(b, prior ? prior.nextSibling : offRail);
+      });
+    };
     const ensureDayCard = iso => {
       if (!iso || document.querySelector(`.day-block[data-date="${iso}"]`)) return;
       let clone = null;
@@ -20579,6 +20605,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       } catch (e) {}
     };
     const ensureTodayCard = () => {
+      placeDatedBeforeOffRail();
       const iso = todayStr();
       const dated = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'))
         .map(b => b.getAttribute('data-date') || '')
@@ -20594,6 +20621,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       } else {
         ensureDayCard(iso);
       }
+      placeDatedBeforeOffRail();
       try { if (typeof wireDayDots === 'function') wireDayDots({ applyDefaults: false }); } catch (e) {}
       persistOpenDays();
     };
