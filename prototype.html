@@ -48742,13 +48742,13 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
   color: #1a140e !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) {
-  width: var(--pw, clamp(64px, 28%, 128px)) !important;
-  max-width: 36% !important;
-  padding: 5px 5px 6px !important;
+  width: var(--pc, var(--pw, 23%)) !important;
+  max-width: none !important;
+  padding: 4px 4px 4px !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img {
   height: auto !important;
-  aspect-ratio: 1 / 1.02;
+  aspect-ratio: auto !important;
   width: 100% !important;
   object-fit: cover !important;
 }
@@ -48876,16 +48876,16 @@ html body .vision-polaroid.vision-habit-card .vision-pol-resize::after { content
 <!-- vision-card-scale-relative-v1 -->
 
 <style id="vision-card-scale-relative-v1">
-/* Polaroid = square photo + tight caption. Never reserve a huge empty footer. */
+/* Polaroid fills its pack cell: wide photo + tight 2-line caption. No skinny strips. */
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card),
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) {
-  width: var(--pw, clamp(64px, 22%, 148px)) !important;
-  max-width: 34% !important;
-  max-height: none !important;
-  height: auto !important;
-  padding: 5px 5px 6px !important;
+  width: var(--pc, var(--pw, 23%)) !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: var(--ph, auto) !important;
+  padding: 4px 4px 4px !important;
   box-sizing: border-box !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
   transform: rotate(-1.2deg) !important;
@@ -48895,10 +48895,10 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
   display: block !important;
   width: 100% !important;
   height: auto !important;
-  min-height: 64px !important;
+  min-height: 40px !important;
   max-height: none !important;
-  flex: 0 0 auto !important;
-  aspect-ratio: 1 / 1 !important;
+  flex: 1 1 auto !important;
+  aspect-ratio: auto !important;
   object-fit: cover !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) span,
@@ -48909,21 +48909,17 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
   bottom: auto !important;
   flex: 0 0 auto !important;
   font-size: 28px !important;
-  line-height: 1.12 !important;
-  margin: 4px 0 0 !important;
+  line-height: 1.1 !important;
+  margin: 2px 0 0 !important;
   padding: 0 2px 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
+  max-height: 62px !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
   white-space: normal !important;
-  overflow-wrap: anywhere !important;
-  display: block !important;
-}
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) {
-  width: var(--pw, clamp(64px, 22%, 148px));
-  max-width: 34%;
-  max-height: none;
-  height: auto;
-  overflow: visible;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid img[src*="handshake-pepperdine-gsa"],
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid[data-shot-src*="handshake-pepperdine-gsa"] img {
