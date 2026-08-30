@@ -42655,8 +42655,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     var stepX = ((cw + gap) / tw) * 100;
     var stepY = ((ch + gap) / th) * 100;
-    if(!isFinite(stepX) || stepX < 8) stepX = zoomed ? 22 : 24;
-    if(!isFinite(stepY) || stepY < 10) stepY = zoomed ? 34 : 28;
+    if(!isFinite(stepX) || stepX < 8 || stepX > 40 || tw < 40) stepX = zoomed ? 22 : 24;
+    if(!isFinite(stepY) || stepY < 10 || stepY > 50 || th < 40) stepY = zoomed ? 34 : 30;
     var marginX = 4;
     var marginY = 6;
     var maxX = Math.max(marginX, 100 - (cw / tw) * 100 - 2);
@@ -43009,11 +43009,24 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       try{
         var n = tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length;
         if(n >= 2){
-          if(packTileCards(tile)) photoDirty = true;
+          /* Always attempt pack — CSS-stack detection works even while overview-hidden. */
+          if(packTileCards(tile, {force: false})) photoDirty = true;
         } else if(n === 1){
           if(liftCardsOffSectionTitles(tile)) photoDirty = true;
         }
       }catch(e){}
+    });
+    /* After first paint (tiles have size), force-unstack any remaining piles. */
+    requestAnimationFrame(function(){
+      var dirty = false;
+      [].slice.call(vb.querySelectorAll('.vision-tile')).forEach(function(tile){
+        try{
+          if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+            if(packTileCards(tile)) dirty = true;
+          }
+        }catch(e){}
+      });
+      if(dirty){ try{ persistDay(blk); }catch(e2){} }
     });
     if(photoDirty) persistDay(blk);
     repairPolaroidPhotos(blk);
