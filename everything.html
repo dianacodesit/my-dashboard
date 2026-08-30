@@ -42841,26 +42841,20 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var cols = n <= 2 ? n : (n <= 4 ? 2 : (n <= 6 ? 3 : 4));
     if(tw > th * 1.2 && n >= 6) cols = Math.min(4, n);
     if(zoomed && n >= 5) cols = Math.min(4, Math.max(cols, 3));
+    /* Never grow past 4 cols in collage — 5+ crowds and leaves a ragged last row. */
+    cols = Math.min(cols, 4, n);
     var rows = Math.max(1, Math.ceil(n / cols));
-    var marginX = 3;
+    var marginX = 2.5;
     var marginY = 3;
-    var titleReserve = Math.max(titleReserve || 0, zoomed ? 8 : 12);
+    var titleReserve = Math.max(titleReserve || 0, zoomed ? 8 : 11);
     var usableW = Math.max(40, tw * (1 - (marginX * 2) / 100));
     var usableH = Math.max(40, th * (1 - (marginY + titleReserve + 2) / 100));
-    var guard = 0;
-    while(guard++ < 6){
-      rows = Math.max(1, Math.ceil(n / cols));
-      var minCardH = zoomed ? 150 : 120;
-      var needH = rows * minCardH + (rows - 1) * gap;
-      if(needH <= usableH || cols >= Math.min(n, 5)) break;
-      cols += 1;
-    }
     rows = Math.max(1, Math.ceil(n / cols));
     var cellW = (usableW - (cols - 1) * gap) / cols;
     var cellH = (usableH - (rows - 1) * gap) / rows;
-    var packW = Math.max(56, cellW * 0.9);
-    var packH = Math.max(88, cellH * 0.9);
-    var pwPx = Math.round(Math.min(zoomed ? 240 : 160, Math.max(64, packW)));
+    var packW = Math.max(64, cellW * 0.92);
+    var packH = Math.max(96, cellH * 0.9);
+    var pwPx = Math.round(Math.min(zoomed ? 240 : 168, Math.max(72, packW)));
     packW = pwPx;
     packH = Math.round(packH);
     var stepX = ((packW + gap) / tw) * 100;
