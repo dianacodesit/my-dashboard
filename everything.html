@@ -40626,7 +40626,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         mig = migratePepperdineSection(blk) || mig;
         if(seedAug30Board(blk)) mig = true;
         if(seedAug30SelectedCards(blk)) mig = true;
-        if(seedPepperdinePsiChiHandshake(blk)) mig = true;
         if(seedGodConsciousSabrShukr(blk)) mig = true;
         if(seedVillainsSection(blk)) mig = true;
         if(fixScholarshipReApplicationLabel(blk)) mig = true;
@@ -41825,14 +41824,23 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile:has(> .vision-tile-quote) .vision-tile-title {
   bottom: 14px;
 }
-html body .day-block.overview-era-day .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-quote {
-  display: block;
-  top: 62px;
+/* Zoomed section quotes stay visible ABOVE the title (collage order).
+   Old top:62px sat under the large top:18px title and looked “missing”. */
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-quote {
+  display: block !important;
+  visibility: visible;
+  opacity: 1;
+  top: 52px;
   bottom: auto;
   left: 18px;
   right: 48px;
-  font-size: clamp(18px, 1.8vw, 26px);
-  max-width: 24em;
+  z-index: 5;
+  font-size: clamp(20px, 2.2vw, 30px);
+  max-width: 28em;
+}
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
+  top: 96px;
+  bottom: auto;
 }
 /* Flat-tummy section photo — landscape abs; keep midsection centered under cover (no letterbox). */
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-body .vision-tile-photo,
