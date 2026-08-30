@@ -12952,7 +12952,7 @@ window.__j22fnApply=run;
     'grad school':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
     'grad':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
     'pursuits':'manus-storage/zone-pursuits-research-desk.jpg?v=desk2',
-    'inner fire':'manus-storage/zone-inner-fire-abstract.jpg?v=fem1',
+    'inner fire':'manus-storage/zone-inner-fire-abstract.jpg?v=sacred1',
     'potential':'manus-storage/zone-potential.jpg?v=road1',
     'resonance':'manus-storage/zone-resonance.jpg?v=res1',
     'sabr':'manus-storage/card-sabr.jpg?v=1',
@@ -12993,7 +12993,7 @@ window.__j22fnApply=run;
     [/curat/, 'manus-storage/pursuit-curated-lifestyle.jpg?v=2'],
     [/pepperdine|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'],
     [/pursuits?/, 'manus-storage/zone-pursuits-research-desk.jpg?v=desk2'],
-    [/inner\s*fire|\bember\b|\bforge\b|molten core/, 'manus-storage/zone-inner-fire-abstract.jpg?v=fem1'],
+    [/inner\s*fire|\bember\b|\bforge\b|molten core/, 'manus-storage/zone-inner-fire-abstract.jpg?v=sacred1'],
     [/\bpotential\b|unlimited potential|inner light|boundless/, 'manus-storage/zone-potential.jpg?v=road1'],
     [/\bresonan|sympath|attun|entrain|awakening field/, 'manus-storage/zone-resonance.jpg?v=res1'],
     [/\bsabr\b|patience|steadfast/, 'manus-storage/card-sabr.jpg?v=1'],
@@ -15162,7 +15162,7 @@ window.__j22fnApply=run;
     if(!localStorage.getItem('btm_inner_fire_photo_core1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-inner-fire')<0) return;
-        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/zone-inner-fire-abstract.jpg?v=fem1'));
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/zone-inner-fire-abstract.jpg?v=sacred1'));
       });
       localStorage.setItem('btm_inner_fire_photo_core1','1');
     }
@@ -15171,14 +15171,14 @@ window.__j22fnApply=run;
     if(!localStorage.getItem('btm_inner_fire_photo_ember1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-inner-fire')<0) return;
-        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/zone-inner-fire-abstract.jpg?v=fem1'));
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/zone-inner-fire-abstract.jpg?v=sacred1'));
       });
       localStorage.setItem('btm_inner_fire_photo_ember1','1');
     }
   }catch(e){}
   try{
     if(!localStorage.getItem('btm_inner_fire_photo_navel1')){
-      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=fem1';
+      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=sacred1';
       document.querySelectorAll('.vision-tile').forEach(function(el){
         var title=((el.querySelector('.vision-tile-title')||{}).textContent||'').toLowerCase();
         var focus=(el.getAttribute('data-focus')||'').toLowerCase();
@@ -15195,7 +15195,7 @@ window.__j22fnApply=run;
   }catch(e){}
   try{
     if(!localStorage.getItem('btm_inner_fire_photo_navel2')){
-      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=fem1';
+      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=sacred1';
       document.querySelectorAll('.vision-tile').forEach(function(el){
         var title=((el.querySelector('.vision-tile-title')||{}).textContent||'').toLowerCase();
         var focus=(el.getAttribute('data-focus')||'').toLowerCase();
@@ -15212,7 +15212,7 @@ window.__j22fnApply=run;
   }catch(e){}
   try{
     if(!localStorage.getItem('btm_inner_fire_photo_abstract1')){
-      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=fem1';
+      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=sacred1';
       document.querySelectorAll('.vision-tile').forEach(function(el){
         var title=((el.querySelector('.vision-tile-title')||{}).textContent||'').toLowerCase();
         var focus=(el.getAttribute('data-focus')||'').toLowerCase();
@@ -15230,7 +15230,7 @@ window.__j22fnApply=run;
 
   try{
     if(!localStorage.getItem('btm_inner_fire_photo_fem1')){
-      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=fem1';
+      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=sacred1';
       document.querySelectorAll('.vision-tile').forEach(function(el){
         var title=((el.querySelector('.vision-tile-title')||{}).textContent||'').toLowerCase();
         var focus=(el.getAttribute('data-focus')||'').toLowerCase();
@@ -15245,6 +15245,26 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_inner_fire_photo_fem1','1');
     }
   }catch(e){}
+
+
+  try{
+    if(!localStorage.getItem('btm_inner_fire_photo_sacred1')){
+      var INNER='manus-storage/zone-inner-fire-abstract.jpg?v=sacred1';
+      document.querySelectorAll('.vision-tile').forEach(function(el){
+        var title=((el.querySelector('.vision-tile-title')||{}).textContent||'').toLowerCase();
+        var focus=(el.getAttribute('data-focus')||'').toLowerCase();
+        if(/inner\s*fire/.test(title) || focus==='inner-fire' || focus==='inner'){
+          el.style.setProperty('--tile-photo', "url('"+INNER+"')");
+        }
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-inner-fire')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire(-abstract)?\.jpg(\?v=[^"'\s)]+)?/g, INNER));
+      });
+      localStorage.setItem('btm_inner_fire_photo_sacred1','1');
+    }
+  }catch(e){}
+
 
 
   try{
@@ -26071,7 +26091,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='power'||nl==='power | purpose') src='manus-storage/zone-power.jpg?v=split1';
       else if(nl==='purpose') src='manus-storage/zone-purpose.jpg?v=split2';
       else if(nl==='body'||nl==='gym') src='manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym6';
-      else if(nl==='inner fire') src='manus-storage/zone-inner-fire-abstract.jpg?v=fem1';
+      else if(nl==='inner fire') src='manus-storage/zone-inner-fire-abstract.jpg?v=sacred1';
       else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=road1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
