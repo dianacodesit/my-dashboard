@@ -12967,8 +12967,8 @@ window.__j22fnApply=run;
     'body':'manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1',
     'induction':'manus-storage/card-induction.jpg?v=rl2',
     'gym':'manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1',
-    'executive':'manus-storage/zone-executive-command.jpg?v=board1',
-    'ambition':'manus-storage/zone-executive-command.jpg?v=board1',
+    'executive':'manus-storage/zone-executive-command.jpg?v=climb2',
+    'ambition':'manus-storage/zone-executive-command.jpg?v=climb2',
     'finances':'manus-storage/zone-finances-v2.jpg?v=2',
     'abundance':'manus-storage/zone-finances-v2.jpg?v=2',
     'house':'manus-storage/pursuit-curated-lifestyle.jpg?v=2',
@@ -13034,7 +13034,7 @@ window.__j22fnApply=run;
     [/work|flow|process|system/, 'manus-storage/pursuit-workflow-v6_6f889c15.jpg'],
     [/momentum|progress|forward/, 'manus-storage/pursuit-momentum-v13.jpg?v=work'],
     [/frequency/, 'manus-storage/pursuit-momentum-v5_f7c3e8ce.jpg'],
-    [/executive|ambition|ambitions/, 'manus-storage/zone-executive-command.jpg?v=board1'],
+    [/executive|ambition|ambitions/, 'manus-storage/zone-executive-command.jpg?v=climb2'],
     [/glow\s*up|\bglow\b/, 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'],
     [/\bbody\b|\bgym\b/, 'manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1'],
     [/finance|finances|abundance/, 'manus-storage/zone-finances-v2.jpg?v=2'],
@@ -13175,7 +13175,7 @@ window.__j22fnApply=run;
     {id:'life', title:'curated lifestyle', subs:'returns, postal, traveler, persons, social, vibes', img:'manus-storage/pursuit-lifestyle_577937e8.jpg', keys:/lifestyle|shopped|\bshop\b|sephora|amazon|nordstrom|target|return|postal|\bmail\b|travel|luggage|flight|person|social|vibe|pickup|adhkar|quran/},
     {id:'finances', title:'abundance', subs:'capital blueprint', img:'manus-storage/zone-finances-v2.jpg?v=2', keys:/capital|money|finance|fund|bank|tuition|rent|\bbill\b|vault|ledger/},
     {id:'leverage', title:'power', subs:'litigation wins, leverage, workflow', img:'manus-storage/zone-power.jpg?v=lightning1', keys:/litigat|legal|lawyer|court|letter|power|added|workflow|leverage|influence/},
-    {id:'ambition', title:'ambition', subs:'momentum, UX design, frequency', img:'manus-storage/zone-executive-command.jpg?v=board1', keys:/momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude/},
+    {id:'ambition', title:'ambition', subs:'momentum, UX design, frequency', img:'manus-storage/zone-executive-command.jpg?v=climb2', keys:/momentum|ux|design|frequency|betty|elevate|aera|research|translat|arabic|scholarship|musly|speech|handshake|proposal|career|anthropic|claude/},
     {id:'presence', title:'quantum', subs:'entanglement', img:'manus-storage/zone-quantum-v15.jpg?v=observe', keys:/quantum|superposition|entangle|particle|atom/}
   ];
   window.ZONE_BANNERS = {};
@@ -13569,7 +13569,7 @@ window.__j22fnApply=run;
     if(src) return src;
     if(window.ZONE_BANNERS && window.ZONE_BANNERS[zid]) return window.ZONE_BANNERS[zid];
     var z=ZONES.filter(function(x){ return x.id===zid; })[0];
-    return (z&&z.img)||'manus-storage/zone-executive-command.jpg?v=board1';
+    return (z&&z.img)||'manus-storage/zone-executive-command.jpg?v=climb2';
   }
   function makeMini(hdr, zid){
     var el=document.createElement('div');
@@ -15628,12 +15628,12 @@ window.__j22fnApply=run;
 
   try{
     if(!localStorage.getItem('btm_executive_command_photo_v5')){
-      var EXEC_CLIMB='manus-storage/zone-executive-command.jpg?v=board1';
-      document.querySelectorAll('.vision-tile[data-focus="executive"], .vision-tile[data-focus="ambition"], .pursuit-zone[data-zone="ambition"], .vision-tile-executive, .pursuit-zone-ambition').forEach(function(el){
+      var EXEC_CLIMB='manus-storage/zone-executive-command.jpg?v=climb2';
+      document.querySelectorAll('.vision-tile[data-focus="ambition"], .vision-tile[data-focus="ambition"], .pursuit-zone[data-zone="ambition"], .vision-tile-ambition, .pursuit-zone-ambition').forEach(function(el){
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+EXEC_CLIMB+"')");
         else el.style.setProperty('--zone-photo', "url('"+EXEC_CLIMB+"')");
       });
-      document.querySelectorAll('.vision-tile[data-focus="executive"] img, .vision-tile[data-focus="ambition"] img, .pursuit-zone[data-zone="ambition"] img').forEach(function(img){
+      document.querySelectorAll('.vision-tile[data-focus="ambition"] img, .vision-tile[data-focus="ambition"] img, .pursuit-zone[data-zone="ambition"] img').forEach(function(img){
         if(/zone-ambition-v5-ascent|zone-executive-climb|zone-executive-command/i.test(img.getAttribute('src')||'')) img.setAttribute('src', EXEC_CLIMB);
       });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -15647,6 +15647,48 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_executive_command_photo_v5','1');
     }
   }catch(e){}
+
+  try{
+    if(!localStorage.getItem('btm_ambition_climb_revert_v1')){
+      var AMB='manus-storage/zone-executive-command.jpg?v=climb2';
+      document.querySelectorAll('.vision-tile[data-focus="executive"], .vision-tile[data-focus="ambition"], .pursuit-zone[data-zone="ambition"], .pursuit-zone[data-zone="executive"], .vision-tile-executive, .pursuit-zone-ambition').forEach(function(el){
+        if(el.classList.contains('vision-tile')){
+          el.setAttribute('data-focus','ambition');
+          el.classList.remove('vision-tile-executive');
+          el.classList.add('vision-tile-ambition');
+          el.style.setProperty('--tile-photo', "url('"+AMB+"')");
+          var t=el.querySelector('.vision-tile-title');
+          if(t){
+            var tl=String(t.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+            if(tl==='executive'||tl==='ambition') t.textContent='ambition';
+          }
+        } else {
+          el.setAttribute('data-zone','ambition');
+          el.style.setProperty('--zone-photo', "url('"+AMB+"')");
+          var ht=el.querySelector('.pursuit-zone-title');
+          if(ht){
+            var hl=String(ht.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+            if(hl==='executive'||hl==='ambition') ht.textContent='ambition';
+          }
+        }
+      });
+      document.querySelectorAll('.vision-tile[data-focus="ambition"] img, .pursuit-zone[data-zone="ambition"] img').forEach(function(img){
+        if(/zone-ambition-v5-ascent|zone-executive-climb|zone-executive-command/i.test(img.getAttribute('src')||'')) img.setAttribute('src', AMB);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/manus-storage\/zone-executive-command\.jpg(\?v=[^"'\\s)]+)?/g, AMB)
+          .replace(/"focus"\s*:\s*"executive"/g, '"focus":"ambition"')
+          .replace(/"title"\s*:\s*"executive"/g, '"title":"ambition"')
+          .replace(/data-focus="executive"/g, 'data-focus="ambition"')
+          .replace(/>executive</g, '>ambition<');
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_ambition_climb_revert_v1','1');
+    }
+  }catch(e){}
+
 
 
   try{
@@ -18992,9 +19034,9 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <label class="vision-check" style="--px:50%;--py:58%" data-cursor-ref="e10355"><input class="agenda-check" type="checkbox"><span>laundry</span></label>
 </div>
 </article>
-<article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=board1'); grid-area: 2 / 3 / 3 / 7 !important;" data-card-weight="1">
+<article class="vision-tile vision-tile-ambition" data-focus="ambition" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=climb2'); grid-area: 2 / 3 / 3 / 7 !important;" data-card-weight="1">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title" data-cursor-ref="e10356">executive</h3>
+<h3 class="vision-tile-title" data-cursor-ref="e10356">ambition</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
@@ -19070,7 +19112,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="pursuit-zone pursuit-zone-life" data-zone="life" style="left:432px;top:50px;width:340px;height:320px;--ff-x:432px;--ff-y:50px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/pursuit-lifestyle_577937e8.jpg')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">curated lifestyle</p></div><div class="pursuit-zone-grid" data-zone="life"></div><button type="button" class="add-pursuit-slot" data-zone="life" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-finances zone-collapsed" data-zone="finances" style="left:836px;top:22px;width:340px;height:320px;--ff-x:836px;--ff-y:22px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-finances-v2.jpg?v=2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">abundance</p></div><div class="pursuit-zone-grid" data-zone="finances"></div><button type="button" class="add-pursuit-slot" data-zone="finances" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-leverage zone-collapsed" data-zone="leverage" style="left:40px;top:420px;width:340px;height:320px;--ff-x:40px;--ff-y:420px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-power.jpg?v=lightning1')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">power</p></div><div class="pursuit-zone-grid" data-zone="leverage"><div class="j22-section card sec-card is-empty" data-user-added="1" data-theme="warm" style="--ff-x:12px;--ff-y:28px;--card-w:128px;--card-h:128px"><div class="card-visual theme-warm"><img alt="leverage" src="manus-storage/pursuit-leverage-v4.jpg?v=key"><p class="j22-group" spellcheck="false" data-newhdr="leverage">leverage</p></div><div class="card-body"><div class="j22-section-items"></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="leverage" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
-<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-executive-command.jpg?v=board1')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">ambition</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
+<div class="pursuit-zone pursuit-zone-ambition" data-zone="ambition" style="left:432px;top:420px;width:340px;height:380px;--ff-x:432px;--ff-y:420px;--zone-w:340px;--zone-h:380px;--zone-photo:url('manus-storage/zone-executive-command.jpg?v=climb2')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">ambition</p></div><div class="pursuit-zone-grid" data-zone="ambition"><div class="j22-section card sec-card has-tasks card-sized" data-user-added="1" data-theme="coral" style="--ff-x:12px;--ff-y:28px;--card-w:148px;--card-h:148px"><div class="card-visual theme-coral"><img alt="Elevate" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><p class="j22-group" spellcheck="false" data-newhdr="Elevate">Elevate</p></div><div class="card-body"><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t" contenteditable="true" spellcheck="false">text Dr Betty</span></label></div></div><button type="button" class="card-del" aria-label="delete card">×</button><div class="card-resize"></div></div></div><div class="zone-oneoffs"><div class="zone-oneoff need-halo" data-i="0" style="--ff-x:12px;--ff-y:236px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-arabic-translation.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">document translation into arabic</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div></div><button type="button" class="add-pursuit-slot" data-zone="ambition" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="pursuit-zone pursuit-zone-presence zone-collapsed" data-zone="presence" style="left:836px;top:210px;width:340px;height:320px;--ff-x:836px;--ff-y:210px;--zone-w:340px;--zone-h:320px;--zone-photo:url('manus-storage/zone-quantum-v15.jpg?v=observe')"><div class="pursuit-zone-head"><p class="pursuit-zone-title">quantum</p></div><div class="pursuit-zone-grid" data-zone="presence"></div><button type="button" class="add-pursuit-slot" data-zone="presence" aria-label="add pursuit card"><span>+</span></button><div class="zone-resize"></div></div>
 <div class="zone-oneoff canvas-oneoff" data-i="mom" style="--ff-x:620px;--ff-y:392px;--card-w:252px;--card-h:76px"><img class="zone-oneoff-img" alt="" src="manus-storage/pursuit-persons_be56f167.jpg"><span class="zone-oneoff-kicker">task</span><div class="zone-oneoff-bar"><label class="zone-oneoff-check"><input class="agenda-check" type="checkbox"></label><span class="zone-oneoff-t">text mom back</span></div><button type="button" class="zone-oneoff-del" aria-label="delete task">×</button><div class="oneoff-resize"></div></div>
 
@@ -19199,9 +19241,9 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <h3 class="vision-tile-title" data-cursor-ref="e11708">Pepperdine</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=board1'); grid-area: 2 / 3 / 3 / 7 !important;" data-card-weight="1">
+<article class="vision-tile vision-tile-ambition" data-focus="ambition" style="--tile-photo: url('manus-storage/zone-executive-command.jpg?v=climb2'); grid-area: 2 / 3 / 3 / 7 !important;" data-card-weight="1">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title" data-cursor-ref="e11709">executive</h3>
+<h3 class="vision-tile-title" data-cursor-ref="e11709">ambition</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
@@ -19370,7 +19412,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="curated-lifestyle" style="--tile-photo: url(&quot;manus-storage/pursuit-curated-lifestyle.jpg?v=2&quot;); grid-area: 4 / 3 / 5 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e135">curated lifestyle</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="abundance" style="--tile-photo: url(&quot;manus-storage/zone-finances-v2.jpg?v=2&quot;); grid-area: 4 / 5 / 5 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e136">abundance</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-certified-letters.jpg" style="--px: 43.5%; --py: 22.3%;"><img alt="" src="manus-storage/card-certified-letters.jpg"><span>certified letters</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="inner-fire" style="--tile-photo: url(&quot;manus-storage/zone-inner-fire.jpg?v=spark1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e137">inner fire</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="executive" style="--tile-photo: url(&quot;manus-storage/zone-executive-command.jpg?v=board1&quot;); grid-area: 5 / 3 / 6 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e138">executive</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="ambition" style="--tile-photo: url(&quot;manus-storage/zone-executive-command.jpg?v=climb2&quot;); grid-area: 5 / 3 / 6 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e138">ambition</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="resonance" style="--tile-photo: url(&quot;manus-storage/zone-resonance.jpg?v=res1&quot;); grid-area: 5 / 5 / 6 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e139">resonance</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="envision" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=1&quot;); grid-area: 6 / 1 / 7 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e140">envision</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="quantum" style="--tile-photo: url(&quot;manus-storage/zone-quantum-v15.jpg?v=observe&quot;); grid-area: 6 / 3 / 7 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e141">quantum</h3><div class="vision-tile-details"></div></article>
@@ -29028,7 +29070,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     var src=(window.__secImgFor&&window.__secImgFor(name))||'';
     if(!src){
       var nl=name.toLowerCase();
-      if(nl==='executive'||nl==='ambition') src='manus-storage/zone-executive-command.jpg?v=board1';
+      if(nl==='executive'||nl==='ambition') src='manus-storage/zone-executive-command.jpg?v=climb2';
       else if(nl==='finances'||nl==='abundance') src='manus-storage/zone-finances-v2.jpg?v=2';
       else if(nl==='power'||nl==='power | purpose') src='manus-storage/zone-power.jpg?v=lightning1';
       else if(nl==='purpose') src='manus-storage/zone-purpose.jpg?v=compass1';
@@ -29058,7 +29100,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','God-conscious','villains','fight back','envision','future self','Ph.D','workflow','focus'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
-  var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'executive', presence:'quantum'};
+  var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'ambition', presence:'quantum'};
   var SEEDED_CARDS={
     'body':['induction','pack gym bag','reformer pilates'],
     'glow up':['cleanse','serum','SPF','lip mask','smile set','halo'],
@@ -41784,7 +41826,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(name === 'finances') name = 'abundance';
       if(name === 'power | purpose' || name === 'power/purpose' || name === 'power-purpose') name = 'power';
       if(name === 'villain') name = 'villains';
-      if(name === 'ambition') name = 'executive';
+      if(name === 'executive') name = 'ambition';
       if((dayKey(blk)||'') >= '2026-08-30' && pepperdineCardOnlyName(name)) return;
       // Archived sections stay out of + forever (not just scrubbed from the collage).
       try {
@@ -41994,7 +42036,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'lifestyle'){ rec.title = 'curated lifestyle'; rec.focus = 'curated-lifestyle'; }
     else if(t === 'grad school' || t === 'grad'){ rec.title = 'pepperdine'; rec.focus = 'pepperdine'; }
     else if(t === 'god-conscious' || t === 'god conscious'){ rec.title = 'God-conscious'; rec.focus = 'god-conscious'; }
-    else if(t === 'ambition'){ rec.title = 'executive'; rec.focus = 'executive'; }
+    else if(t === 'executive'){ rec.title = 'ambition'; rec.focus = 'ambition'; }
     else if(t === 'future self' || t === 'future-self' || t === 'futureself'){ rec.title = 'future self'; rec.focus = 'future-self'; }
     else if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || t === 'ph d'){ rec.title = 'Ph.D'; rec.focus = 'phd'; }
     else { rec.title = displaySectionTitle(rec.title); }
@@ -42003,6 +42045,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
     function displaySectionTitle(name){
     var low = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if(low === 'executive') return 'ambition';
     if(low === 'god-conscious' || low === 'god conscious') return 'God-conscious';
     if(low === 'pepperdine') return 'Pepperdine';
     if(low === 'future self' || low === 'future-self' || low === 'futureself') return 'future self';
@@ -43636,7 +43679,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(title === 'lifestyle') title = 'curated lifestyle';
     if(title === 'power | purpose' || title === 'power/purpose' || title === 'power-purpose') title = 'power';
     if(title === 'god conscious') title = 'god-conscious';
-    if(title === 'ambition') title = 'executive';
+    if(title === 'executive') title = 'ambition';
     if(title === 'future-self' || title === 'futureself') title = 'future self';
     if(title === 'phd' || title === 'ph.d' || title === 'ph-d' || title === 'ph d') title = 'ph.d';
     title = displaySectionTitle(title);
@@ -44584,7 +44627,7 @@ function seedAug30SelectedCards(blk){
       if(focus !== 'ambition' && title !== 'ambition') return;
       tile.setAttribute('data-focus', 'executive');
       tile.classList.remove('vision-tile-ambition');
-      tile.classList.add('vision-tile-executive');
+      tile.classList.add('vision-tile-ambition');
       if(titleEl) titleEl.textContent = 'executive';
       changed = true;
     });
@@ -45684,7 +45727,7 @@ html body .day-block.overview-era-day .vision-tile-glow,
 html body .day-block.overview-era-day .vision-tile-gym,
 html body .day-block.overview-era-day .vision-tile-body,
 html body .day-block.overview-era-day .vision-tile-house,
-html body .day-block.overview-era-day .vision-tile-executive {
+html body .day-block.overview-era-day .vision-tile-ambition {
   grid-column: unset;
   grid-row: unset;
 }
@@ -45829,7 +45872,7 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-gym { grid-column: 2 / 4; grid-row: 1; }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-house { grid-column: 2; grid-row: 2; }
-html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-executive { grid-column: 3; grid-row: 2; }
+html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-ambition { grid-column: 3; grid-row: 2; }
 html body .day-block[data-date="2026-08-26"] .vision-tile-gym,
 html body .day-block[data-date="2026-08-26"] .vision-tile-body { grid-column: 1; grid-row: 1 / 3; }
 html body .day-block[data-date="2026-08-26"] .vision-tile-glow { grid-column: 2 / 4; grid-row: 1; }
@@ -45838,7 +45881,7 @@ html body .day-block[data-date="2026-08-26"] .vision-tile-house .vision-tile-pho
   background-position: 42% 58%;
   background-size: cover;
 }
-html body .day-block[data-date="2026-08-26"] .vision-tile-executive { grid-column: 3; grid-row: 2; }
+html body .day-block[data-date="2026-08-26"] .vision-tile-ambition { grid-column: 3; grid-row: 2; }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile {
   position: relative;
   overflow: hidden;
@@ -46161,12 +46204,12 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day).collapsed
   html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-glow { grid-column: 1 / 3; grid-row: 1; }
   html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-gym { grid-column: 1 / 3; grid-row: 2; }
   html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-house { grid-column: 1; grid-row: 3; }
-  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-executive { grid-column: 2; grid-row: 3; }
+  html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-ambition { grid-column: 2; grid-row: 3; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-gym,
   html body .day-block[data-date="2026-08-26"] .vision-tile-body { grid-column: 1 / 3; grid-row: 1; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-glow { grid-column: 1 / 3; grid-row: 2; }
   html body .day-block[data-date="2026-08-26"] .vision-tile-house { grid-column: 1; grid-row: 3; }
-  html body .day-block[data-date="2026-08-26"] .vision-tile-executive { grid-column: 2; grid-row: 3; }
+  html body .day-block[data-date="2026-08-26"] .vision-tile-ambition { grid-column: 2; grid-row: 3; }
 }
 html body .day-block[data-date="2026-08-26"] .vision-more { display: none; }
 html body .day-block.vision-collage-day[data-date="2026-08-27"] .vision-hero-duo {
