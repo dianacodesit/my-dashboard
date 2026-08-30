@@ -16312,6 +16312,18 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    var DIP='manus-storage/zone-pepperdine-diploma.jpg?v=dip1';
+    function applyPepperDiploma(){
+      document.querySelectorAll('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="grad"], .vision-tile[data-focus="grad-school"], .pursuit-zone[data-zone="pepperdine"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+DIP+"')");
+        else el.style.setProperty('--zone-photo', "url('"+DIP+"')");
+      });
+    }
+    applyPepperDiploma();
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applyPepperDiploma, ms); });
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_fight_back_photo_fire_v1')){
       var FB='manus-storage/zone-fight-back.jpg?v=fb2';
       document.querySelectorAll('.vision-tile[data-focus="fight-back"], .vision-tile[data-focus="fight back"], .pursuit-zone[data-zone="fight-back"]').forEach(function(el){
