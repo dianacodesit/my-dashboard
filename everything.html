@@ -15396,6 +15396,25 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    /* Villains: drop foggy CSS tunnel; force baked edge-only light rim asset */
+    if(!localStorage.getItem('btm_villains_photo_rim3')){
+      var VIL_RIM='manus-storage/zone-villains.jpg?v=rim3';
+      document.querySelectorAll('.vision-tile[data-focus="villains"], .vision-tile[data-focus="villain"], .pursuit-zone[data-zone="villains"], .pursuit-zone[data-zone="villain"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+VIL_RIM+"')");
+        else el.style.setProperty('--zone-photo', "url('"+VIL_RIM+"')");
+      });
+      document.querySelectorAll('.vision-tile[data-focus="villains"] img, .vision-tile[data-focus="villain"] img, .pursuit-zone[data-zone="villains"] img, .pursuit-zone[data-zone="villain"] img').forEach(function(img){
+        if(/zone-villains/i.test(img.getAttribute('src')||'')) img.setAttribute('src', VIL_RIM);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-villains')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-villains\.jpg(\?v=[^"'\\s)]+)?/g, VIL_RIM));
+      });
+      localStorage.setItem('btm_villains_photo_rim3','1');
+    }
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_finances_to_abundance_v1')){
       document.querySelectorAll('.pursuit-zone-title, .vision-tile-title').forEach(function(el){
         if(String(el.textContent||'').trim().toLowerCase()==='finances') el.textContent='abundance';
@@ -16391,7 +16410,7 @@ window.__j22fnApply=run;
 <p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title">pursuits</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym4&quot;); grid-area: 2 / 2 / 3 / 4 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
+<article class="vision-tile" data-focus="god-conscious" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 2 / 2 / 3 / 3 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">God-conscious</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-sabr.jpg"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg" style="--px: 28%; --py: 12%;"><img alt="" src="manus-storage/card-shukr.jpg"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article><article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym4&quot;); grid-area: 2 / 3 / 3 / 4 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
 </div>
 </div>
 </div>
@@ -39570,7 +39589,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
   }
 
-  /* —— Vision polaroid drag + resize within section tiles —— */
+  /* —— Vision polaroid drag + resize (within + across section tiles) —— */
   function syncPolaroidRec(pol){
     var blk = pol && pol.closest('.day-block');
     if(!blkOk(blk) || !pol) return;
@@ -39584,10 +39603,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return c && String(c.title||'').toLowerCase() === title.toLowerCase() &&
         String(c.sectionFocus||'').toLowerCase() === String(focus||'').toLowerCase();
     });
+    if(!hit){
+      // Title may have moved sections — prefer any same-title entry and retarget it.
+      hit = (data.addedCards || []).find(function(c){
+        return c && String(c.title||'').toLowerCase() === title.toLowerCase();
+      });
+      if(hit) hit.sectionFocus = focus;
+    }
     if(hit){
       if(px) hit.px = px;
       if(py) hit.py = py;
       if(pw) hit.w = pw;
+      hit.sectionFocus = focus;
       hit.src = pol.getAttribute('data-shot-src') || hit.src;
     } else if(title){
       data.addedCards = data.addedCards || [];
@@ -39603,6 +39630,68 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
     }
   }
+  function movePolaroidToTile(pol, destTile, clientX, clientY, grabOffsetX, grabOffsetY){
+    var srcTile = pol && pol.closest('.vision-tile');
+    var blk = pol && pol.closest('.day-block');
+    if(!blkOk(blk) || !pol || !destTile) return false;
+    var title = cardTitle(pol);
+    if(!title) return false;
+    var fromFocus = tileFocus(srcTile);
+    var toFocus = tileFocus(destTile);
+    var same = !!(srcTile && srcTile === destTile);
+    var det = destTile.querySelector('.vision-tile-details');
+    if(!det){
+      det = document.createElement('div');
+      det.className = 'vision-tile-details';
+      destTile.appendChild(det);
+    }
+    function pct(n){ return (Math.round(Math.max(0, Math.min(92, n)) * 10) / 10) + '%'; }
+    var rect = destTile.getBoundingClientRect();
+    var left = (clientX != null && grabOffsetX != null) ? (clientX - grabOffsetX) : (rect.left + rect.width * 0.12);
+    var top = (clientY != null && grabOffsetY != null) ? (clientY - grabOffsetY) : (rect.top + rect.height * 0.18);
+    var nx = rect.width > 0 ? ((left - rect.left) / rect.width * 100) : 12;
+    var ny = rect.height > 0 ? ((top - rect.top) / rect.height * 100) : 18;
+    pol.style.setProperty('--px', pct(nx));
+    pol.style.setProperty('--py', pct(ny));
+    pol.style.left = '';
+    pol.style.top = '';
+    pol.style.position = '';
+    pol.style.zIndex = '';
+    pol.style.transform = '';
+    pol.style.pointerEvents = '';
+    pol.setAttribute('data-freeplace', '1');
+    if(!same){
+      det.appendChild(pol);
+      var data = dayData(blk);
+      data.removedCards = data.removedCards || [];
+      data.addedCards = data.addedCards || [];
+      var alreadyRemoved = data.removedCards.some(function(r){
+        return r && String(r.title||'').toLowerCase() === title.toLowerCase() &&
+          String(r.sectionFocus||'').toLowerCase() === String(fromFocus||'').toLowerCase();
+      });
+      if(fromFocus && !alreadyRemoved){
+        data.removedCards.push({sectionFocus: fromFocus, title: title});
+      }
+      // Drop any stale addedCards rows for this title (old or new section); re-add under dest.
+      data.addedCards = data.addedCards.filter(function(c){
+        return !(c && String(c.title||'').toLowerCase() === title.toLowerCase());
+      });
+      data.addedCards.push({
+        sectionFocus: toFocus,
+        title: title,
+        src: pol.getAttribute('data-shot-src') || DEFAULT_CARD,
+        px: pol.style.getPropertyValue('--px') || '12%',
+        py: pol.style.getPropertyValue('--py') || '24%',
+        w: pol.style.getPropertyValue('--pw') || '',
+        shot: pol.classList.contains('vision-shot-card'),
+        habit: pol.classList.contains('vision-habit-card')
+      });
+    } else {
+      syncPolaroidRec(pol);
+    }
+    try{ persistDay(blk); }catch(e){}
+    return !same;
+  }
   function ensurePolaroidResizeHandle(pol){
     if(!pol || pol.querySelector(':scope > .vision-pol-resize')) return;
     var h = document.createElement('div');
@@ -39614,23 +39703,47 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(window.__visionPolInteractWired) return;
     window.__visionPolInteractWired = 1;
     var state = null;
+    var DRAG_THRESH = 8;
     function pct(n){ return (Math.round(Math.max(0, Math.min(92, n)) * 10) / 10) + '%'; }
+    function clearDropHighlight(vb){
+      if(!vb) return;
+      [].slice.call(vb.querySelectorAll('.vision-tile.is-pol-drop-target')).forEach(function(t){
+        t.classList.remove('is-pol-drop-target');
+      });
+    }
+    function tileUnderPoint(vb, x, y, pol){
+      if(!vb) return null;
+      var prev = pol ? pol.style.pointerEvents : '';
+      if(pol) pol.style.pointerEvents = 'none';
+      var el = document.elementFromPoint(x, y);
+      if(pol) pol.style.pointerEvents = prev;
+      var tile = el && el.closest ? el.closest('.vision-tile') : null;
+      if(tile && vb.contains(tile)) return tile;
+      return null;
+    }
+    function armFloating(pol, ev, st){
+      var rect = pol.getBoundingClientRect();
+      st.grabOffsetX = ev.clientX - rect.left;
+      st.grabOffsetY = ev.clientY - rect.top;
+      st.floatW = rect.width;
+      pol.style.position = 'fixed';
+      pol.style.left = rect.left + 'px';
+      pol.style.top = rect.top + 'px';
+      pol.style.width = rect.width + 'px';
+      pol.style.zIndex = '10050';
+      pol.style.pointerEvents = 'none';
+      pol.style.transform = 'none';
+      pol.setAttribute('data-freeplace', '1');
+      pol.classList.add('is-pol-dragging');
+    }
     function onMove(ev){
       if(!state) return;
-      ev.preventDefault();
-      var tile = state.tile;
       var pol = state.pol;
-      var rect = tile.getBoundingClientRect();
-      if(rect.width < 8 || rect.height < 8) return;
-      if(state.mode === 'move'){
-        var nx = state.originPx + (ev.clientX - state.x) / rect.width * 100;
-        var ny = state.originPy + (ev.clientY - state.y) / rect.height * 100;
-        pol.style.setProperty('--px', pct(nx));
-        pol.style.setProperty('--py', pct(ny));
-        pol.style.left = '';
-        pol.style.top = '';
-        state.moved = Math.abs(ev.clientX - state.x) > 4 || Math.abs(ev.clientY - state.y) > 4;
-      } else if(state.mode === 'resize'){
+      if(state.mode === 'resize'){
+        ev.preventDefault();
+        var tile = state.tile;
+        var rect = tile.getBoundingClientRect();
+        if(rect.width < 8) return;
         var dx = ev.clientX - state.x;
         var w = Math.max(88, Math.min(rect.width * 0.72, state.originW + dx));
         pol.style.setProperty('--pw', Math.round(w) + 'px');
@@ -39641,24 +39754,60 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           img.style.height = h + 'px';
         }
         state.moved = Math.abs(dx) > 3;
+        state.active = state.moved || state.active;
+        if(state.active) window.__polDragging = true;
+        return;
       }
+      var dist = Math.max(Math.abs(ev.clientX - state.x), Math.abs(ev.clientY - state.y));
+      if(!state.active){
+        if(dist < DRAG_THRESH) return;
+        state.active = true;
+        state.moved = true;
+        window.__polDragging = true;
+        armFloating(pol, ev, state);
+      }
+      ev.preventDefault();
+      pol.style.left = (ev.clientX - state.grabOffsetX) + 'px';
+      pol.style.top = (ev.clientY - state.grabOffsetY) + 'px';
+      var dest = tileUnderPoint(state.vb, ev.clientX, ev.clientY, pol);
+      clearDropHighlight(state.vb);
+      if(dest) dest.classList.add('is-pol-drop-target');
     }
-    function onUp(){
+    function onUp(ev){
       if(!state) return;
       var pol = state.pol;
       var blk = state.blk;
-      var moved = state.moved;
+      var srcTile = state.tile;
+      var mode = state.mode;
+      var wasActive = !!state.active;
+      var grabX = state.grabOffsetX;
+      var grabY = state.grabOffsetY;
+      var vb = state.vb;
       document.removeEventListener('pointermove', onMove, true);
       document.removeEventListener('pointerup', onUp, true);
       document.removeEventListener('pointercancel', onUp, true);
+      clearDropHighlight(vb);
       pol.classList.remove('is-pol-dragging', 'is-pol-resizing');
       window.__polDragging = false;
-      if(moved){
-        window.__polJustDragged = true;
-        setTimeout(function(){ window.__polJustDragged = false; }, 120);
+      if(!wasActive){
+        // Plain click — leave flags clear so section zoom still fires.
+        pol.style.pointerEvents = '';
+        state = null;
+        return;
+      }
+      window.__polJustDragged = true;
+      setTimeout(function(){ window.__polJustDragged = false; }, 140);
+      if(mode === 'resize'){
         syncPolaroidRec(pol);
         try{ persistDay(blk); }catch(e){}
+        state = null;
+        return;
       }
+      var dest = tileUnderPoint(vb, ev.clientX, ev.clientY, pol) || srcTile;
+      movePolaroidToTile(pol, dest, ev.clientX, ev.clientY, grabX, grabY);
+      // Restore overview/details sizing after fixed-width float.
+      if(!pol.style.getPropertyValue('--pw')) pol.style.width = '';
+      try{ if(typeof ensurePolaroidChrome === 'function') ensurePolaroidChrome(pol); }catch(e){}
       state = null;
     }
     document.addEventListener('pointerdown', function(e){
@@ -39671,33 +39820,28 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var blk = pol.closest('.day-block');
       if(!tile || !vb || !blkOk(blk)) return;
       if(e.target.closest('.vision-card-del, .vision-habit-check, .habit-check, input, button, a')) return;
-      /* Zoomed section, details freeplace collage, or already-absolute cards */
-      var zoomed = vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed');
-      var detailsFree = blk.classList.contains('overview-mode-details');
-      var abs = zoomed || detailsFree || getComputedStyle(pol).position === 'absolute';
-      if(!abs && !resize) return;
+      /* Overview + details + zoomed: cards are draggable. Threshold keeps click→zoom. */
       if(resize){
         e.preventDefault();
         e.stopPropagation();
         var originW = pol.getBoundingClientRect().width;
-        state = { mode:'resize', pol:pol, tile:tile, blk:blk, x:e.clientX, y:e.clientY, originW:originW, moved:false };
+        state = { mode:'resize', pol:pol, tile:tile, blk:blk, vb:vb, x:e.clientX, y:e.clientY, originW:originW, moved:false, active:false };
         pol.classList.add('is-pol-resizing');
+        window.__polDragging = true;
       } else {
-        e.preventDefault();
-        e.stopPropagation();
-        var px = parseFloat(pol.style.getPropertyValue('--px')) || ((parseFloat(pol.style.left) || 0) / Math.max(1, tile.getBoundingClientRect().width) * 100) || 12;
-        var py = parseFloat(pol.style.getPropertyValue('--py')) || ((parseFloat(pol.style.top) || 0) / Math.max(1, tile.getBoundingClientRect().height) * 100) || 18;
-        /* If relative details layout, switch to absolute freeplace for this drag */
-        pol.style.position = 'absolute';
-        pol.style.setProperty('--px', (isFinite(px)?px:12) + '%');
-        pol.style.setProperty('--py', (isFinite(py)?py:18) + '%');
-        pol.style.left = '';
-        pol.style.top = '';
-        state = { mode:'move', pol:pol, tile:tile, blk:blk, x:e.clientX, y:e.clientY, originPx:isFinite(px)?px:12, originPy:isFinite(py)?py:18, moved:false };
-        pol.setAttribute('data-freeplace','1');
-        pol.classList.add('is-pol-dragging');
+        /* Do not preventDefault yet — a click with no drag must still zoom the section. */
+        var px = parseFloat(pol.style.getPropertyValue('--px'));
+        var py = parseFloat(pol.style.getPropertyValue('--py'));
+        if(!isFinite(px)) px = 12;
+        if(!isFinite(py)) py = 18;
+        state = {
+          mode:'move', pol:pol, tile:tile, blk:blk, vb:vb,
+          x:e.clientX, y:e.clientY,
+          originPx:px, originPy:py,
+          grabOffsetX:0, grabOffsetY:0,
+          moved:false, active:false
+        };
       }
-      window.__polDragging = true;
       document.addEventListener('pointermove', onMove, true);
       document.addEventListener('pointerup', onUp, true);
       document.addEventListener('pointercancel', onUp, true);
@@ -41307,10 +41451,42 @@ html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .visio
   display: none !important;
 }
 
-/* Overview depth: collage shows section photos + titles only — no cards */
-html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid,
+/* Overview depth: section photos + titles + glance cards (draggable across sections) */
 html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-tile-details {
-  display: none !important;
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: visible !important;
+  z-index: 4 !important;
+}
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  position: absolute !important;
+  left: var(--px, 10%) !important;
+  top: var(--py, 18%) !important;
+  width: min(34%, 92px) !important;
+  padding: 5px 5px 18px !important;
+  z-index: 5;
+  cursor: grab;
+  touch-action: none;
+}
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid img {
+  height: 58px !important;
+}
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid span {
+  font-size: 14px !important;
+  line-height: 1.02 !important;
+  color: #1a140e !important;
+}
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-card-del,
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-pol-resize,
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .vision-habit-check,
+html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .habit-check {
+  pointer-events: auto !important;
 }
 
 /* Do NOT min-height tiles in details — it blows past grid tracks and overlaps neighbors. */
@@ -41364,14 +41540,23 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   color: #1a140e !important;
 }
 
-/* Overview = section photos + titles only (never cards). Details / zoomed unchanged. */
-html body .day-block.overview-era-day.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid,
-html body .day-block.vision-collage-day.overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid,
-html body .day-block.overview-era-day.overview-mode-overview .vision-board:not(.is-zoomed) .vision-tile-details,
-html body .day-block.vision-collage-day.overview-mode-overview .vision-board:not(.is-zoomed) .vision-tile-details {
-  display: none !important;
-  visibility: hidden !important;
+/* Overview glance cards stay visible (era + collage). Drop-target ring while dragging. */
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-overview .vision-board:not(.is-zoomed) .vision-polaroid {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-overview .vision-board:not(.is-zoomed) .vision-tile-details {
+  display: block !important;
+  visibility: visible !important;
   pointer-events: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile.is-pol-drop-target {
+  box-shadow: inset 0 0 0 2px rgba(255, 248, 238, 0.92), 0 0 0 1px rgba(40, 28, 16, 0.35) !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.is-pol-dragging {
+  box-shadow: 0 18px 40px rgba(12, 8, 4, 0.45) !important;
+  opacity: 0.96;
 }
 
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-check {
