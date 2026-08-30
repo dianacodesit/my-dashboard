@@ -10055,6 +10055,7 @@ document.addEventListener('focusout', function(e){ if(e.target.getAttribute && e
 <a class="nav-sub nav-sub-2" href="shukr.html">shukr</a>
 <a class="nav-sub" href="duaa.html">Dua'a</a>
 <a class="nav-sub" href="tauba.html">Tauba</a>
+<a class="nav-sub" href="surrender.html">Surrender</a>
 <a class="nav-sub" href="al-ghayb.html">al-Ghayb</a>
 <a class="nav-sub" href="qudra.html">Qudra</a>
 <a class="nav-sub nav-sub-2" href="lataif-al-sitta.html">Lataif-al Sitta</a>
@@ -38347,181 +38348,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 (function(){
   if(window.__overviewEditWired) return;
   window.__overviewEditWired = 1;
-  function isOverviewEra(blk){
-    var d=blk && blk.getAttribute('data-date');
-    return !!(d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= '2026-08-28');
-  }
-  function overviewTasksForDay(blk){
-    if(!blk) return [];
-    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
-    var seen={};
-    var out=[];
-    function push(raw){
-      var name=String(raw||'').replace(/\s+/g,' ').trim();
-      if(!name) return;
-      var low=name.toLowerCase();
-      if(seen[low]) return;
-      seen[low]=1;
-      out.push(name);
-    }
-    [].slice.call(panel.querySelectorAll('.vision-tile-title')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.vision-check span')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.vision-polaroid > span')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.j22-item .j22-t, .j22-t')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.day-task-text')).forEach(function(el){ push(el.textContent); });
-    [].slice.call(panel.querySelectorAll('.zone-oneoff-t')).forEach(function(el){ push(el.textContent); });
-    return out;
-  }
-  function overviewPhotoFromUrl(raw){
-    if(!raw) return '';
-    raw=String(raw).trim();
-    var m=raw.match(/url\(['"]?([^'")]+)/i);
-    return (m ? m[1] : raw).replace(/^['"]|['"]$/g,'');
-  }
-  function overviewPhotoForName(blk, title){
-    if(!title) return '';
-    var want=String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
-    if(!want) return '';
-    if(window.__cardImgFor){
-      var cardMapped=window.__cardImgFor(title);
-      if(cardMapped) return cardMapped;
-    }
-    // Hardwired name → photo first (section photos stay bound to their names).
-    if(window.__secImgFor){
-      var mapped=window.__secImgFor(title);
-      if(mapped) return mapped;
-    }
-    if(!blk) return '';
-    var panel=blk.querySelector('.tv-panel.tv-pursuits')||blk;
-    function normSrc(src){
-      if(!src) return '';
-      return String(src).replace(/^\//,'');
-    }
-    function polaroidSrc(p){
-      var src=p.getAttribute('data-shot-src')||'';
-      if(!src){
-        var img=p.querySelector('img');
-        if(img) src=img.getAttribute('src')||img.currentSrc||'';
-      }
-      return normSrc(src);
-    }
-    var tiles=[].slice.call(panel.querySelectorAll('.vision-tile'));
-    for(var ti=0;ti<tiles.length;ti++){
-      var tile=tiles[ti];
-      var tEl=tile.querySelector('.vision-tile-title');
-      var tName=((tEl&&tEl.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase();
-      if(tName===want){
-        var ph=overviewPhotoFromUrl(tile.style.getPropertyValue('--tile-photo')||'');
-        if(!ph){
-          try{ ph=overviewPhotoFromUrl(getComputedStyle(tile).getPropertyValue('--tile-photo')||''); }catch(e){}
-        }
-        if(ph) return ph;
-      }
-      var pol=[].slice.call(tile.querySelectorAll('.vision-polaroid'));
-      for(var pi=0;pi<pol.length;pi++){
-        var s=pol[pi].querySelector(':scope > span');
-        var n=((s&&s.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase();
-        if(n!==want) continue;
-        var src=polaroidSrc(pol[pi]);
-        if(src) return src;
-      }
-    }
-    var found='';
-    [].slice.call(panel.querySelectorAll('.vision-polaroid')).some(function(p){
-      var s=p.querySelector(':scope > span');
-      var n=((s&&s.textContent)||'').replace(/\s+/g,' ').trim().toLowerCase();
-      if(n!==want) return false;
-      found=polaroidSrc(p);
-      return !!found;
-    });
-    if(found) return found;
-    if(window.__cardImgFor){
-      var cardHit=window.__cardImgFor(title);
-      if(cardHit) return cardHit;
-    }
-    return found;
-  }
-  function syncOverviewNodePhotos(blk){
-    if(!blk || !isOverviewEra(blk)) return;
-    var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas');
-    if(!grid) return;
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone[data-custom-zone="1"]')).forEach(function(zone){
-      var titleEl=zone.querySelector('.pursuit-zone-title');
-      var title=titleEl && titleEl.textContent;
-      var img=overviewPhotoForName(blk, title);
-      if(!img) return;
-      zone.style.setProperty('--zone-photo', 'url("'+img+'")');
-    });
-  }
-  function syncOverviewEraChrome(blk){
-    if(!blk || !isOverviewEra(blk)) return;
-    blk.classList.add('overview-era-day');
-    var pill=blk.querySelector('.tv-pill[data-view="pursuits"]');
-    if(pill) pill.textContent='overview';
-    if(blk.classList.contains('today-block')){
-      var hdr=blk.querySelector('.day-card-header');
-      if(hdr && !hdr.querySelector('.overview-pursuits-label')){
-        var lab=document.createElement('span');
-        lab.className='day-title overview-pursuits-label';
-        lab.textContent='Pursuits';
-        hdr.appendChild(lab);
-      }
-    }
-    var active=blk.querySelector('.tv-pill.active[data-view]');
-    var view=active && active.getAttribute('data-view');
-    blk.classList.toggle('view-nodes', view === 'nodes');
-    blk.classList.toggle('view-flow', view === 'flow');
-    blk.classList.toggle('view-impulses', view === 'impulses');
-    blk.classList.toggle('view-overview', view === 'pursuits');
-    var panel=blk.querySelector('.tv-panel.tv-nodes');
-    if(panel){
-      var grid=panel.querySelector('.sec-grid.pursuit-canvas') || panel.querySelector('.sec-grid');
-      var empty=!grid || !grid.querySelector(':scope > .pursuit-zone, :scope > .sec-card, :scope > .zone-oneoff, :scope > .canvas-oneoff');
-      panel.classList.toggle('nodes-panel-empty', empty);
-      blk.classList.toggle('nodes-empty', empty);
-      if(view === 'nodes'){
-        ensureOverviewNodesGrid(blk);
-        syncOverviewNodePhotos(blk);
-        // Recompute after restore — nested empty .sec-grid must not win.
-        grid=panel.querySelector('.sec-grid.pursuit-canvas') || panel.querySelector('.sec-grid');
-        empty=!grid || !grid.querySelector(':scope > .pursuit-zone, :scope > .sec-card, :scope > .zone-oneoff, :scope > .canvas-oneoff');
-        panel.classList.toggle('nodes-panel-empty', empty);
-        blk.classList.toggle('nodes-empty', empty);
-        if(empty && grid && window.__expandPursuitCanvas) window.__expandPursuitCanvas(grid);
-      }
-    }
-    var pursuits=blk.querySelector('.tv-panel.tv-pursuits');
-    if(pursuits){
-      var hasTiles=!!pursuits.querySelector('.vision-tile');
-      pursuits.classList.toggle('overview-panel-empty', !hasTiles);
-      blk.classList.toggle('overview-empty', !hasTiles);
-    }
-    if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
-  }
-  function ensureOverviewNodesGrid(blk){
-    if(!blk || !isOverviewEra(blk)) return;
-    var panel=blk.querySelector('.tv-panel.tv-nodes');
-    if(panel){
-      [].slice.call(panel.children).forEach(function(el){
-        if(el.classList && el.classList.contains('sec-grid') && !el.classList.contains('pursuit-canvas')){
-          try{ el.remove(); }catch(e){}
-        }
-      });
-    }
-    var grid=blk.querySelector('.tv-panel.tv-nodes .sec-grid.pursuit-canvas');
-    if(!grid) return;
-    try{ if(typeof applyAug20ZoneEdits==='function') applyAug20ZoneEdits(grid); }catch(e){}
-    try{ if(typeof ensureAug20EditChrome==='function') ensureAug20EditChrome(grid); }catch(e){}
-    try{ if(typeof wireZoneDrag==='function') wireZoneDrag(grid); }catch(e){}
-    try{ if(typeof expandCanvas==='function') expandCanvas(grid); }catch(e){}
-    if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
-  }
-  window.__ensureOverviewNodesGrid=ensureOverviewNodesGrid;
-  window.__isOverviewEra=isOverviewEra;
-  window.__overviewTasksForDay=overviewTasksForDay;
-  window.__overviewPhotoForName=overviewPhotoForName;
-  window.__syncOverviewEraChrome=syncOverviewEraChrome;
-
   var STORE = 'btm_overview_edits_v1';
   var DEFAULT_TILE = 'manus-storage/pursuit-vibes_e645a2da.jpg';
   var DEFAULT_CARD = 'manus-storage/pursuit-vibes_e645a2da.jpg';
@@ -40320,20 +40146,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         }) || null;
       }
       if(!tile){
-        // Prefer addTile on overview-era; otherwise append a body tile directly so habits still seed.
-        if(blkOk(blk)){
-          addTile(blk, sec === 'body' ? 'body' : habit.section);
-        } else if(sec === 'body' || focus === 'body'){
-          var bodyPhoto = (window.__secImgFor && window.__secImgFor('body')) || 'manus-storage/zone-body-abs.jpg?v=tummy1';
-          tile = makeTile({ focus:'body', title:'body', photo: bodyPhoto, extraClass:'vision-tile-body' });
-          host.appendChild(tile);
-          try{ if(typeof ensureSectionTileQuote==='function') ensureSectionTileQuote(tile); }catch(e){}
-          try{ if(typeof syncHeroLayoutClass==='function') syncHeroLayoutClass(blk); }catch(e){}
-        } else {
-          return;
-        }
+        // Only create missing body sections on overview-era boards (addTile is era-gated).
+        if(!blkOk(blk)) return;
+        addTile(blk, sec === 'body' ? 'body' : habit.section);
         changed = true;
-        tile = host.querySelector('.vision-tile[data-focus="'+focus+'"]') || tile;
+        tile = host.querySelector('.vision-tile[data-focus="'+focus+'"]');
       }
       if(!tile) return;
       var title = String(habit.name || habit.id || '').trim();
