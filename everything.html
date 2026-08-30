@@ -38718,7 +38718,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var already = existingCardNames(tile);
     var seen = {}, out = [];
     var SECTION_NAMES = {
-      'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1,
+      'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
       executive:1, ambition:1, quantum:1, gym:1, body:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
@@ -39926,6 +39926,50 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         });
       }
     }
+
+    // Ensure purpose exists alongside power after the split (cards stay on power).
+    var host = (typeof heroHost === 'function') ? heroHost(blk) : null;
+    if(!host){
+      var vb = blk.querySelector('.tv-panel.tv-pursuits .vision-board');
+      host = vb && (vb.querySelector('.vision-hero') || vb.querySelector('.vision-more') || vb);
+    }
+    if(host){
+      var hasPower = !!host.querySelector('.vision-tile[data-focus="power"]');
+      var hasPurpose = !!host.querySelector('.vision-tile[data-focus="purpose"]');
+      if(hasPower && !hasPurpose){
+        var purpose = document.createElement('article');
+        purpose.className = 'vision-tile vision-tile-mini';
+        purpose.setAttribute('data-focus', 'purpose');
+        purpose.style.setProperty('--tile-photo', "url('manus-storage/zone-purpose.jpg?v=split1')");
+        purpose.innerHTML = '<div class="vision-tile-photo"></div><h3 class="vision-tile-title">purpose</h3><div class="vision-tile-details"></div>';
+        var powerTile = host.querySelector('.vision-tile[data-focus="power"]');
+        if(powerTile && powerTile.parentNode){
+          if(powerTile.nextSibling) powerTile.parentNode.insertBefore(purpose, powerTile.nextSibling);
+          else powerTile.parentNode.appendChild(purpose);
+        } else host.appendChild(purpose);
+        changed = true;
+        if(blkOk(blk)){
+          var pdata = dayData(blk);
+          var hasPAdd = (pdata.addedSections || []).some(function(s){
+            return String((s && s.title) || '').toLowerCase() === 'purpose' || String((s && s.focus) || '') === 'purpose';
+          });
+          if(!hasPAdd){
+            pdata.addedSections = pdata.addedSections || [];
+            pdata.addedSections.push({focus:'purpose', title:'purpose', photo:'manus-storage/zone-purpose.jpg?v=split1'});
+          }
+          (pdata.addedCards || []).forEach(function(c){
+            if(c && String(c.sectionFocus || '').toLowerCase() === 'power-purpose') c.sectionFocus = 'power';
+          });
+          (pdata.addedSections || []).forEach(function(s){
+            if(!s) return;
+            var st = String(s.title || '').toLowerCase();
+            var sf = String(s.focus || '').toLowerCase();
+            if(st === 'power | purpose' || sf === 'power-purpose'){ s.title = 'power'; s.focus = 'power'; s.photo = 'manus-storage/zone-power.jpg?v=split1'; }
+          });
+        }
+      }
+    }
+
     [].slice.call(blk.querySelectorAll('.pursuit-zone-title')).forEach(function(el){
       var t = (el.textContent || '').replace(/\s+/g,' ').trim().toLowerCase();
       if(t === 'grad school' || t === 'grad' || t === 'pepperdine'){

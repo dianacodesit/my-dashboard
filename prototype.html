@@ -10175,6 +10175,7 @@ html body.prototypes-page .proto-page-label {
 <a class="nav-sub" href="alchemy.html">alchemy</a>
 <a class="nav-sub" href="manifestation.html">manifestation</a>
 <a class="nav-sub" href="potential.html">potential</a>
+<a class="nav-sub" href="potential.html">potential</a>
 <a href="self.html">Self</a>
 <a class="nav-sub" href="center.html">center</a>
 <a href="priming.html">priming & prompting</a>
@@ -15826,13 +15827,14 @@ window.__j22fnApply=run;
         if(rec.title !== low){ rec.title=low; dirty=true; }
       }
       var img=String(rec.img||'');
-      if(/mock-power-glam\.jpg/i.test(img) || (/power/i.test(rec.title||rec.id||'') && /chess|king/i.test(img))){
-        rec.img='manus-storage/zone-power-purpose.jpg?v=her2';
+      if(/mock-power-glam\.jpg/i.test(img) || (/power/i.test(rec.title||rec.id||'') && /chess|king/i.test(img)) || /zone-power-purpose\.jpg/i.test(img)){
+        var tl=String(rec.title||rec.id||'').toLowerCase();
+        rec.img = /purpose/.test(tl) && !/power/.test(tl) ? 'manus-storage/zone-purpose.jpg?v=split1' : 'manus-storage/zone-power.jpg?v=split1';
         dirty=true;
       }
       var tlow=String(rec.title||'').replace(/\s+/g,' ').trim().toLowerCase();
       if(tlow==='grad school' || tlow==='grad'){ rec.title='pepperdine'; dirty=true; tlow='pepperdine'; }
-      if(tlow==='power'){ rec.title='power | purpose'; dirty=true; }
+      if(tlow==='power | purpose' || tlow==='power/purpose' || tlow==='power-purpose'){ rec.title='power'; dirty=true; }
       if(tlow==='gym'){ rec.title='body'; dirty=true; }
     });
     if(dirty) saveOverviewNodesMap(m);
@@ -17002,7 +17004,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1 };
+        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -41105,7 +41107,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var already = existingCardNames(tile);
     var seen = {}, out = [];
     var SECTION_NAMES = {
-      'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1,
+      'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
       executive:1, ambition:1, quantum:1, gym:1, body:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, villains:1, villain:1, 'fight back':1, envision:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
