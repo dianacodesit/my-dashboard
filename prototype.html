@@ -15172,7 +15172,7 @@ window.__j22fnApply=run;
     life:['curated lifestyle','returns','postal','traveler','persons','social media','vibes','pickups'],
     finances:['capital blueprint'],
     leverage:['leverage','litigation wins','workflow'],
-    ambition:['momentum','UX Design','frequency','Elevate'],
+    ambition:['momentum','UX Design','frequency'],
     presence:['quantum']
   };
   var LIVEKEY='btm_live_minicards_v1';
@@ -16144,6 +16144,25 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_quantum_photo_spectacular_v1','1');
     }
   }catch(e){}
+
+  try{
+    if(!localStorage.getItem('btm_pep_card_presets_only_v1')){
+      var pickKey='btm_zone_card_picks_v1';
+      try{
+        var picks=JSON.parse(localStorage.getItem(pickKey)||'{}')||{};
+        Object.keys(picks).forEach(function(zid){
+          if(zid==='pepperdine'||zid==='grad') return;
+          if(!Array.isArray(picks[zid])) return;
+          picks[zid]=picks[zid].filter(function(n){
+            return !(typeof pepperdineCardOnlyName==='function' && pepperdineCardOnlyName(n));
+          });
+        });
+        localStorage.setItem(pickKey, JSON.stringify(picks));
+      }catch(e1){}
+      localStorage.setItem('btm_pep_card_presets_only_v1','1');
+    }
+  }catch(e){}
+
 
 
 
@@ -29371,6 +29390,15 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     if(!k) return '';
     if(k==='committee check-in'||k==='committee checkin'||k==='committee'||k==='committee-check-in') return 'committee check-in';
     if(k==='top applicant'||k==='gsa'||k==='pepperdine gsa'||k==='graduate student association'||k==='pepperdine graduate student association'||k==='graduate student association · top applicant'||k==='pepperdine graduate student association · top applicant'||k==='pepperdine gsa · top applicant'||k.indexOf('top applicant')>=0||k.indexOf('graduate student association')>=0) return 'Graduate Student Association · Top Applicant';
+    if(k==='aera') return 'AERA';
+    if(k==='anthropic') return 'Anthropic';
+    if(k==='elevate') return 'Elevate';
+    if(k==="dr betty's ea"||k==='dr betty ea'||k==='dr betty'||k.indexOf("dr betty")===0) return "Dr Betty's EA";
+    if(k==='handshake') return 'Handshake';
+    if(k==='psi chi'||k==='psichi') return 'Psi Chi';
+    if(k==='research proposal'||k==='research proposals') return 'research proposal';
+    if(k==='scholarship re-application'||k==='scholarship application'||k==='scholarship reapplication') return 'scholarship re-application';
+    if(k==='tuition') return 'tuition';
     return '';
   }
   window.__pepperdineCardOnlyName = pepperdineCardOnlyName;
