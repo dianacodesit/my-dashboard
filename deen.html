@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>deen · diana's board</title>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,400;6..72,600;1,400&family=DM+Mono:wght@400&family=DM+Sans:wght@400;500&family=Italiana&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@6..72,400;6..72,600;1,400&family=DM+Mono:wght@400&family=DM+Sans:wght@400;500&family=Italiana&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="nav-shared.css"/>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,12 +42,25 @@
   }
   .prayer-header { text-align: center; padding: 14px 12px 4px; position: relative; z-index: 2; }
   .prayer-header-ornament { display: block; margin: 0 auto 8px; font-size: 1.4rem; color: #b09060; opacity: 0.8; }
+  .prayer-header-arabic {
+    font-family: 'Amiri', 'Traditional Arabic', 'Noto Naskh Arabic', serif;
+    font-size: clamp(1.55rem, 4.5vw, 2.05rem);
+    font-weight: 700;
+    line-height: 1.55;
+    color: #2c2418;
+    letter-spacing: 0;
+    direction: rtl;
+    unicode-bidi: isolate;
+    text-shadow: 0 1px 0 rgba(255,252,248,0.55);
+    margin: 2px 8px 6px;
+  }
   .prayer-header-title {
     font-family: 'Newsreader', serif;
-    font-size: 1.6rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    color: #3d3225;
-    letter-spacing: 0.5px;
+    color: #6b5a3e;
+    letter-spacing: 0.12em;
+    text-transform: lowercase;
   }
   .prayer-header-location {
     font-family: 'DM Sans', sans-serif;
@@ -224,8 +237,9 @@
   }
   .deen-subpages {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     padding: 4px 12px 10px;
     position: relative;
     z-index: 2;
@@ -253,12 +267,16 @@
   <div class="prayer-cards-container" data-date="">
     <div class="prayer-header">
       <span class="prayer-header-ornament">✦</span>
+      <h1 class="prayer-header-arabic" lang="ar" dir="rtl">أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ</h1>
       <div class="prayer-header-title">deen</div>
       <div class="prayer-header-location">◉ Los Angeles, CA</div>
     </div>
     <div class="deen-subpages">
       <a href="quran.html">Quran</a>
       <a href="duaa.html">Dua'a</a>
+      <a href="tauba.html">Tauba</a>
+      <a href="al-ghayb.html">al-Ghayb</a>
+      <a href="qudra.html">Qudra</a>
     </div>
     <div class="prayer-quote">
       <span class="prayer-quote-mark">"</span>so remember Me; I will remember you
@@ -298,7 +316,7 @@
     <div class="prayer-footer">May Allah accept your prayers ♡</div>
   </div>
 </main>
-<script src="nav-shared.js?v=navdeen2"></script>
+<script src="nav-shared.js?v=navqc3"></script>
 <script>
 (function(){
   var CITY_KEY = 'btm_prayer_city_v1';

@@ -30,6 +30,30 @@
     opacity: 0.96;
   }
   body.capture-page #hamburger-menu span { background: #f3e6d0; }
+  .qc-subpages {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 18px;
+  }
+  .qc-subpages a {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: lowercase;
+    color: rgba(247,239,228,0.88);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(247,239,228,0.28);
+    background: rgba(20,12,8,0.28);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  }
+  .qc-subpages a:hover {
+    border-color: rgba(247,239,228,0.55);
+    color: #fff8ee;
+  }
 </style>
 </head>
 <body class="capture-page" data-store="page_quantum_v1" data-empty="nothing observed yet">
@@ -40,6 +64,14 @@
     <h1>quantum consciousness</h1>
     <p class="sub">the unseen layer</p>
   </header>
+  <nav class="qc-subpages" aria-label="quantum pages">
+    <a href="delusion.html">delusion</a>
+    <a href="attraction.html">attraction</a>
+    <a href="failures.html">failures</a>
+    <a href="transmutation.html">transmutation</a>
+    <a href="alchemy.html">alchemy</a>
+    <a href="manifestation.html">manifestation</a>
+  </nav>
   <section class="panel">
     <div class="add-row">
       <input id="new-item" type="text" placeholder="a note from the field" autocomplete="off"/>
@@ -50,7 +82,7 @@
     <img class="constellation-phrase" src="manus-storage/quantum-constellation-phrase.png?v=1" alt="HOW YOU LOOK CHANGES WHAT YOU FIND" width="920" height="76"/>
   </section>
 </main>
-<script src="nav-shared.js?v=navdragfix1"></script>
+<script src="nav-shared.js?v=navqc3"></script>
 <script src="capture-page.js?v=1"></script>
 </body>
 </html>

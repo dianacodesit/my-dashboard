@@ -20,7 +20,8 @@ import threading
 from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, unquote, urlencode, urlparse
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
 DASHBOARD = ROOT / "everything.html"
@@ -28,6 +29,23 @@ BRAIN = ROOT / "brain-dump.html"
 DUMP = ROOT / "localStorage_dump.json"
 PORT = int(os.environ.get("PORT", "8080"))
 GIT_LOCK = threading.Lock()
+PHOTO_LOCK = threading.Lock()
+PHOTO_MAP = ROOT / "manus-storage" / "card-photos.json"
+STORAGE = ROOT / "manus-storage"
+KNOWN_CARD_PHOTOS = {
+    "application": "manus-storage/card-application.jpg",
+    "scholarship application": "manus-storage/card-application.jpg",
+    "scholarship re-application": "manus-storage/card-application.jpg",
+    "scholarship reapplication": "manus-storage/card-application.jpg",
+    "tuition": "manus-storage/card-tuition.jpg",
+    "tuition money": "manus-storage/card-tuition.jpg",
+    "committee check-in": "manus-storage/pepperdine-committee-checkin.jpg",
+    "gsa": "manus-storage/handshake-pepperdine-gsa.jpg",
+}
+PHOTO_SKIP = re.compile(
+    r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
+    re.I,
+)
 
 BAKE_START = "<script>/*baked-data*/(function(){try{var D="
 BAKE_END = ';for(var k in D){if(localStorage.getItem(k)===null){localStorage.setItem(k,D[k]);}}}catch(e){}})();</script>'
@@ -275,6 +293,120 @@ def save_brain_dump(entries) -> dict:
     return {"ok": True, "count": len(clean)}
 
 
+def _photo_slug(name: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")[:48]
+    return slug or "card"
+
+
+def _load_photo_map() -> dict:
+    try:
+        raw = json.loads(PHOTO_MAP.read_text(encoding="utf-8"))
+        return raw if isinstance(raw, dict) else {}
+    except Exception:
+        return {}
+
+
+def _save_photo_map(data: dict) -> None:
+    STORAGE.mkdir(parents=True, exist_ok=True)
+    PHOTO_MAP.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _http_json(url: str) -> dict:
+    req = Request(url, headers={"User-Agent": "diana-dashboard/1.0 (photo-for)"})
+    with urlopen(req, timeout=12) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def _http_bytes(url: str) -> bytes:
+    req = Request(url, headers={"User-Agent": "diana-dashboard/1.0 (photo-for)"})
+    with urlopen(req, timeout=18) as resp:
+        return resp.read()
+
+
+def _fetch_still_life(name: str) -> bytes | None:
+    query = f"{name} still life object"
+    try:
+        ov = _http_json(
+            "https://api.openverse.org/v1/images/?"
+            + urlencode({"q": query, "page_size": "8", "license_type": "commercial"})
+        )
+        for hit in ov.get("results") or []:
+            title = str(hit.get("title") or "")
+            tags = " ".join(
+                t.get("name", "") if isinstance(t, dict) else str(t)
+                for t in (hit.get("tags") or [])
+            )
+            if PHOTO_SKIP.search(title) or PHOTO_SKIP.search(tags):
+                continue
+            url = hit.get("url") or hit.get("thumbnail")
+            if url:
+                data = _http_bytes(str(url))
+                if data and len(data) > 2000:
+                    return data
+    except Exception:
+        pass
+    try:
+        wm = _http_json(
+            "https://commons.wikimedia.org/w/api.php?"
+            + urlencode(
+                {
+                    "action": "query",
+                    "generator": "search",
+                    "gsrsearch": query,
+                    "gsrnamespace": "6",
+                    "gsrlimit": "8",
+                    "prop": "imageinfo",
+                    "iiprop": "url",
+                    "iiurlwidth": "900",
+                    "format": "json",
+                }
+            )
+        )
+        pages = ((wm.get("query") or {}).get("pages") or {})
+        for page in pages.values():
+            title = str(page.get("title") or "")
+            if PHOTO_SKIP.search(title):
+                continue
+            info = (page.get("imageinfo") or [{}])[0]
+            url = info.get("thumburl") or info.get("url")
+            if url:
+                data = _http_bytes(str(url))
+                if data and len(data) > 2000:
+                    return data
+    except Exception:
+        pass
+    return None
+
+
+def photo_for_name(name: str) -> dict:
+    key = " ".join(str(name or "").replace("\u2011", "-").split()).strip().lower()
+    if not key:
+        return {"ok": False, "error": "empty"}
+    with PHOTO_LOCK:
+        stored = _load_photo_map()
+        cached = stored.get(key) or KNOWN_CARD_PHOTOS.get(key)
+        if cached:
+            path = ROOT / str(cached).split("?", 1)[0]
+            if path.exists():
+                stored[key] = cached
+                _save_photo_map(stored)
+                return {"ok": True, "src": cached, "cached": True}
+        dest = STORAGE / f"card-{_photo_slug(key)}.jpg"
+        if dest.exists():
+            src = f"manus-storage/{dest.name}"
+            stored[key] = src
+            _save_photo_map(stored)
+            return {"ok": True, "src": src, "cached": True}
+        blob = _fetch_still_life(key)
+        if not blob:
+            return {"ok": False, "error": "no photo"}
+        dest.write_bytes(blob)
+        src = f"manus-storage/{dest.name}"
+        stored[key] = src
+        _save_photo_map(stored)
+        return {"ok": True, "src": src, "cached": False}
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
@@ -293,9 +425,23 @@ class Handler(SimpleHTTPRequestHandler):
         raw = self.rfile.read(length) if length else b"{}"
         return json.loads(raw.decode("utf-8") or "{}")
 
+    def do_GET(self):  # noqa: N802
+        parsed = urlparse(self.path)
+        if parsed.path == "/photo-for":
+            name = unquote((parse_qs(parsed.query).get("name") or [""])[0])
+            try:
+                return self._json(200, photo_for_name(name))
+            except Exception as e:  # noqa: BLE001
+                return self._json(500, {"ok": False, "error": str(e)})
+        return super().do_GET()
+
     def do_POST(self):  # noqa: N802
         path = urlparse(self.path).path
         try:
+            if path == "/photo-for":
+                body = self._read_json()
+                name = body.get("name") if isinstance(body, dict) else ""
+                return self._json(200, photo_for_name(str(name or "")))
             if path == "/bake":
                 body = self._read_json()
                 data = body.get("data") if isinstance(body, dict) else None

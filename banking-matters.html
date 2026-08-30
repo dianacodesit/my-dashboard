@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>prosperity · diana's board</title>
+<title>banking matters · diana's board</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="nav-shared.css?v=navveil5"/>
 <link rel="stylesheet" href="capture-page.css?v=nocream"/>
 <style>
-  /* Same gold photo — halfway quieter (between raw neon and full mute) */
+  /* Match prosperity gold atmosphere */
   .page-bg {
     background: #1a120c;
     overflow: hidden;
@@ -31,46 +31,32 @@
     pointer-events: none;
   }
   body.capture-page #hamburger-menu span { background: #f3e6d0; }
-  .prosperity-subpages {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin: 0 0 18px;
-  }
-  .prosperity-subpages a {
+  .hero .parent-link {
+    display: inline-block;
+    margin-bottom: 10px;
     font-family: "DM Mono", monospace;
     font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: lowercase;
-    color: rgba(247,239,228,0.88);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.78);
     text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 999px;
-    border: 1px solid rgba(247,239,228,0.28);
-    background: rgba(20,12,8,0.28);
     text-shadow: 0 1px 8px rgba(0,0,0,0.45);
   }
-  .prosperity-subpages a:hover {
-    border-color: rgba(247,239,228,0.55);
-    color: #fff8ee;
-  }
+  .hero .parent-link:hover { color: #fff8ee; }
 </style>
 </head>
-<body class="capture-page" data-store="page_abundance_v1" data-empty="nothing flowing yet">
+<body class="capture-page" data-store="page_banking_matters_v1" data-empty="nothing banking yet">
 <div class="page-bg" aria-hidden="true"></div>
 <main class="page-shell">
   <header class="hero">
-    <p class="eyebrow">overflow · receive · flow</p>
-    <h1>prosperity</h1>
-    <p class="sub">economics of enough</p>
+    <a class="parent-link" href="prosperity.html">← prosperity</a>
+    <p class="eyebrow">accounts · footing · flow</p>
+    <h1>banking matters</h1>
+    <p class="sub">the practical side of overflow</p>
   </header>
-  <nav class="prosperity-subpages" aria-label="prosperity pages">
-    <a href="banking-matters.html">banking matters</a>
-  </nav>
   <section class="panel">
     <div class="add-row">
-      <input id="new-item" type="text" placeholder="a thought about overflow" autocomplete="off"/>
+      <input id="new-item" type="text" placeholder="a banking note" autocomplete="off"/>
       <button id="add-btn" type="button">keep</button>
     </div>
     <div id="list"></div>

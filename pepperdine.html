@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pepperdine · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navpep1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body.pep-page {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    background: #0e1620;
+    overflow-x: hidden;
+  }
+  body.pep-page #hamburger-menu span {
+    background: #f3e6d0;
+    box-shadow: none;
+  }
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(180deg, rgba(8,14,22,0.12) 0%, rgba(8,14,22,0.06) 35%, rgba(6,10,16,0.62) 100%),
+      url("manus-storage/pursuit-pepperdine.jpg?v=plaza2") center 78%/cover no-repeat;
+    transform: scale(1.02);
+    animation: pep-bg-drift 20s ease-in-out infinite alternate;
+  }
+  @keyframes pep-bg-drift {
+    from { transform: scale(1.02) translate3d(0, 0, 0); }
+    to { transform: scale(1.055) translate3d(0.4%, 0, 0); }
+  }
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0 24px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hero {
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 8px;
+    animation: pep-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes pep-rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .brand {
+    font-family: "Italiana", serif;
+    font-size: clamp(42px, 9vw, 72px);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+    color: #fff8ee;
+    text-shadow: 0 2px 28px rgba(4,8,14,0.55);
+  }
+  .line {
+    margin-top: 14px;
+    max-width: 28rem;
+    font-size: clamp(17px, 2.4vw, 20px);
+    font-style: italic;
+    line-height: 1.45;
+    color: rgba(255, 248, 238, 0.88);
+    text-shadow: 0 1px 12px rgba(4,8,14,0.5);
+  }
+  .cta {
+    margin-top: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff8ee;
+    text-decoration: none;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,248,238,0.45);
+    padding-bottom: 6px;
+    transition: border-color 0.25s ease, letter-spacing 0.25s ease;
+    animation: pep-rise 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+  .cta:hover {
+    border-color: #fff8ee;
+    letter-spacing: 0.22em;
+  }
+  .cta span {
+    font-size: 14px;
+    transition: transform 0.25s ease;
+  }
+  .cta:hover span { transform: translateX(3px); }
+  @media (prefers-reduced-motion: reduce) {
+    .page-bg, .hero, .cta { animation: none; }
+  }
+</style>
+</head>
+<body class="pep-page">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <section class="hero">
+    <h1 class="brand">Pepperdine</h1>
+    <p class="line">Grad school · the work that proves the claim.</p>
+    <a class="cta" href="research-proposals.html">research proposals <span aria-hidden="true">→</span></a>
+  </section>
+</main>
+<script src="nav-shared.js?v=navpep1"></script>
+</body>
+</html>
