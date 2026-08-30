@@ -12886,9 +12886,9 @@ window.__j22fnApply=run;
     'traveler':'manus-storage/pursuit-travel.jpg',
     'travel':'manus-storage/pursuit-travel.jpg',
     'document translation into arabic':'manus-storage/pursuit-arabic-translation.jpg',
-    'pepperdine':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
-    'grad school':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
-    'grad':'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
+    'pepperdine':'manus-storage/zone-pepperdine-diploma.jpg?v=dip1',
+    'grad school':'manus-storage/zone-pepperdine-diploma.jpg?v=dip1',
+    'grad':'manus-storage/zone-pepperdine-diploma.jpg?v=dip1',
     'pursuits':'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3',
     'inner fire':'manus-storage/zone-inner-fire.jpg?v=spark1',
     'potential':'manus-storage/zone-potential.jpg?v=road1',
@@ -12939,7 +12939,7 @@ window.__j22fnApply=run;
     [/pickup|pickups|curbside|bopis/, 'manus-storage/pursuit-pickups.jpg'],
     [/shop|lifestyle|order|buy/, 'manus-storage/pursuit-lifestyle_577937e8.jpg'],
     [/curat/, 'manus-storage/pursuit-curated-lifestyle.jpg?v=2'],
-    [/pepperdine|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'],
+    [/pepperdine|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/zone-pepperdine-diploma.jpg?v=dip1'],
     [/\bpursuits?\b/, 'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3'],
     [/inner\s*fire|\bember\b|\bforge\b|molten core/, 'manus-storage/zone-inner-fire.jpg?v=spark1'],
     [/\bpotential\b|unlimited potential|inner light|boundless/, 'manus-storage/zone-potential.jpg?v=road1'],
@@ -16203,6 +16203,18 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    var DIP='manus-storage/zone-pepperdine-diploma.jpg?v=dip1';
+    function applyPepperDiploma(){
+      document.querySelectorAll('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="grad"], .vision-tile[data-focus="grad-school"], .pursuit-zone[data-zone="pepperdine"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+DIP+"')");
+        else el.style.setProperty('--zone-photo', "url('"+DIP+"')");
+      });
+    }
+    applyPepperDiploma();
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applyPepperDiploma, ms); });
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_fight_back_photo_fire_v1')){
       var FB='manus-storage/zone-fight-back.jpg?v=fb2';
       document.querySelectorAll('.vision-tile[data-focus="fight-back"], .vision-tile[data-focus="fight back"], .pursuit-zone[data-zone="fight-back"]').forEach(function(el){
@@ -18901,7 +18913,7 @@ window.__j22fnApply=run;
 <label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
 </div>
 </article>
-<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url('manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'); grid-area: 2 / 1 / 4 / 5 !important;" data-card-weight="3">
+<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-diploma.jpg?v=dip1'); grid-area: 2 / 1 / 4 / 5 !important;" data-card-weight="3">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title" data-cursor-ref="e11708">Pepperdine</h3>
 <div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 3.5%; --py: 5.0%; --pw: 56px;">
@@ -18995,7 +19007,7 @@ window.__j22fnApply=run;
 <div class="vision-tile-details"></div>
 </article>
 <article class="vision-tile" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1'); grid-area: 1 / 3 / 2 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote" data-cursor-ref="e11717">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title" data-cursor-ref="e11718">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
-<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/pursuit-pepperdine.jpg?v=fullbleed3&quot;); grid-area: 2 / 1 / 3 / 7 !important;" data-card-weight="2">
+<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/zone-pepperdine-diploma.jpg?v=dip1&quot;); grid-area: 2 / 1 / 3 / 7 !important;" data-card-weight="2">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title" data-cursor-ref="e11714">Pepperdine</h3>
 <div class="vision-tile-details">
@@ -19084,7 +19096,7 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="quantum" style="--tile-photo: url(&quot;manus-storage/zone-quantum-v15.jpg?v=spectacular1&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e141">quantum</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="future-self" style="--tile-photo: url(&quot;manus-storage/zone-future-self.jpg?v=dawn1&quot;);" data-card-weight="2"><div class="vision-tile-photo"></div><p class="vision-tile-quote" data-cursor-ref="e17237">I can do this.</p><h3 class="vision-tile-title" data-cursor-ref="e11037">future self</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-research-proposal.jpg" style="--px: 25.3%; --py: 2.0%; --pw: 126px; --pc: 23.95%; --photo-h: 108px; width: 23.95% !important; max-width: none !important;" data-freeplace="1"><img alt="" src="manus-storage/card-research-proposal.jpg"><span>research proposal</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-anthropic.jpg" style="--px: 50.8%; --py: 2.0%; --pw: 126px; --pc: 23.95%; --photo-h: 108px; width: 23.95% !important; max-width: none !important;" data-freeplace="1"><img alt="" src="manus-storage/card-anthropic.jpg"><span>Anthropic</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="workflow" style="--tile-photo: url(&quot;manus-storage/zone-workflow.jpg?v=flow2&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11039">workflow</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/pursuit-pepperdine.jpg?v=fullbleed3&quot;);" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e130">Pepperdine</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 1.2%; --py: 2.0%; --pw: 166px; --pc: 23.55%; --photo-h: 108px; width: 23.55% !important; max-width: none !important;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship re-application</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px: 25.9%; --py: 2.0%; --pw: 166px; --pc: 23.55%; --photo-h: 108px; width: 23.55% !important; max-width: none !important;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 50.6%; --py: 2.0%; --pw: 166px; --pc: 23.55%; --photo-h: 108px; width: 23.55% !important; max-width: none !important;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-dr-betty-s-ea.jpg" style="--px: 75.2%; --py: 2.0%; --pw: 166px; width: 23.55% !important; --pc: 23.55%; --photo-h: 108px; max-width: none !important;"><img alt="" src="manus-storage/card-dr-betty-s-ea.jpg"><span>Dr Betty's EA</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/zone-pepperdine-diploma.jpg?v=dip1&quot;);" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e130">Pepperdine</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 1.2%; --py: 2.0%; --pw: 166px; --pc: 23.55%; --photo-h: 108px; width: 23.55% !important; max-width: none !important;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship re-application</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px: 25.9%; --py: 2.0%; --pw: 166px; --pc: 23.55%; --photo-h: 108px; width: 23.55% !important; max-width: none !important;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 50.6%; --py: 2.0%; --pw: 166px; --pc: 23.55%; --photo-h: 108px; width: 23.55% !important; max-width: none !important;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-dr-betty-s-ea.jpg" style="--px: 75.2%; --py: 2.0%; --pw: 166px; width: 23.55% !important; --pc: 23.55%; --photo-h: 108px; max-width: none !important;"><img alt="" src="manus-storage/card-dr-betty-s-ea.jpg"><span>Dr Betty's EA</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="alignment" style="--tile-photo: url(&quot;manus-storage/zone-alignment.jpg?v=align1&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e14602">alignment</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="plan" style="--tile-photo: url(&quot;manus-storage/zone-plan.jpg?v=plan2&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e15132">plan</h3><div class="vision-tile-details"></div></article>
 </div>
@@ -23073,7 +23085,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     const nextIso = iso => { const t = parseIso(iso); t.setDate(t.getDate()+1); return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`; };
     const labelFor = iso => { const t = parseIso(iso); return months[t.getMonth()] + ' ' + t.getDate() + ' · ' + wd[t.getDay()]; };
     const SHELL_KEY = 'btm_day_shells_v1';
-    const PEPPER_SHELL_IMG = 'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3';
+    const PEPPER_SHELL_IMG = 'manus-storage/zone-pepperdine-diploma.jpg?v=dip1';
     const migratePepperdineShellHtml = (html) => {
       if (!html) return html;
       var s = String(html);
@@ -28746,7 +28758,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
       else if(nl==='fight back') src='manus-storage/zone-fight-back.jpg?v=fb2';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
-      else if(nl==='pepperdine'||nl==='grad school'||nl==='grad') src='manus-storage/pursuit-pepperdine.jpg?v=fullbleed3';
+      else if(nl==='pepperdine'||nl==='grad school'||nl==='grad') src='manus-storage/zone-pepperdine-diploma.jpg?v=dip1';
     }
     var sec=document.createElement('div');
     sec.className='j22-section card sec-card is-empty';
@@ -43377,7 +43389,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     window.__visionTileSortMo.observe(document.body, {childList:true, subtree:true});
   }
 
-  var PEPPER_IMG = 'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3';
+  var PEPPER_IMG = 'manus-storage/zone-pepperdine-diploma.jpg?v=dip1';
   function migratePepperdineSection(blk){
     if(!blk) return false;
     var changed = false;
