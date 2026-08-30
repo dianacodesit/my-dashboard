@@ -42681,6 +42681,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       chosenClass: 'vision-tile-sort-chosen',
       dragClass: 'vision-tile-sort-drag',
       onStart: function(evt){
+        var oe = evt && evt.originalEvent;
+        if(oe && (oe.metaKey || oe.ctrlKey)){
+          window.__visionTileDragging = false;
+          return false;
+        }
         var board = (evt && evt.from && evt.from.closest) ? evt.from.closest('.vision-board') : null;
         if(board && board.classList.contains('is-zoomed')){
           try{ this.sortable && this.sortable.options && (window.__visionTileDragging = false); }catch(e){}
