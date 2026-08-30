@@ -18595,9 +18595,9 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero vision-hero-duo">
-<article class="vision-tile vision-tile-house" data-focus="grad" style="--tile-photo: url('manus-storage/pursuit-grad-school-malibu-close.jpg?v=aerial'); grid-area: 1 / 1 / 3 / 2 !important;">
+<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/pursuit-pepperdine.jpg?v=plaza2&quot;); grid-area: 1 / 1 / 3 / 2 !important;">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">grad school</h3>
+<h3 class="vision-tile-title">Pepperdine</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px:10%;--py:22%">
 <img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg">
@@ -18614,7 +18614,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title">pursuits</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-gym-wide-dark.jpg?v=dark1&quot;); grid-area: 2 / 2 / 3 / 4 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-gym-wide-dark.jpg?v=dark1&quot;); grid-area: 2 / 2 / 3 / 3 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="god-conscious" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=awe1&quot;); grid-area: 2 / 3 / 3 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">God-conscious</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-sabr.jpg"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg" style="--px: 28%; --py: 12%;"><img alt="" src="manus-storage/card-shukr.jpg"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 </div>
 </div>
 </div>
@@ -42718,8 +42719,9 @@ html body .day-block.overview-mode-overview .vision-board:not(.is-zoomed) .visio
   display: none !important;
 }
 
+/* Do NOT min-height tiles in details — it blows past grid tracks and overlaps neighbors. */
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-tile {
-  min-height: 220px !important;
+  min-height: 0 !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-tile-details {
   display: flex !important;
