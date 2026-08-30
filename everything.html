@@ -15140,6 +15140,15 @@ window.__j22fnApply=run;
     }
   }catch(e){}
   try{
+    if(!localStorage.getItem('btm_pursuits_photo_desk1')){
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-pursuits')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-pursuits\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/zone-pursuits.jpg?v=desk1'));
+      });
+      localStorage.setItem('btm_pursuits_photo_desk1','1');
+    }
+  }catch(e){}
+  try{
     if(!localStorage.getItem('btm_inner_fire_photo_core1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-inner-fire')<0) return;
@@ -15339,38 +15348,47 @@ window.__j22fnApply=run;
         var next=raw
           .replace(/data-focus="power-purpose"/g,'data-focus="power"')
           .replace(/<h3 class="vision-tile-title">
-<article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym5'); grid-area: 1 / 1 / 3 / 2 !important;">
-<div class="vision-tile-photo"></div>
-<p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
-<h3 class="vision-tile-title">body</h3>
-<div class="vision-tile-details">
-<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div>
-<div class="vision-polaroid vision-class" style="--px:12%;--py:22%" data-shot-src="manus-storage/card-reformer-pilates-6-00.jpg">
-<img alt="" src="manus-storage/card-reformer-pilates-6-00.jpg">
-<span>reformer pilates · 6:00</span>
-<div class="vision-pol-resize" title="drag to resize"></div></div>
-<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox"><span>pack gym bag</span></label>
-<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
-</div>
-</article>
-<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 2 / 2 / 4 !important;">
+<article class="vision-tile vision-tile-glow" data-focus="glow" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 1 / 1 / 3 / 2 !important;">
 <div class="vision-tile-photo"></div>
 <h3 class="vision-tile-title">glow up</h3>
 <div class="vision-tile-details">
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg">
 <span>vanity</span>
-<div class="vision-pol-resize" title="drag to resize"></div></div>
+</div>
 <label class="vision-check" style="--px:46%;--py:18%"><input class="agenda-check" type="checkbox"><span>cleanse</span></label>
 <label class="vision-check" style="--px:62%;--py:34%"><input class="agenda-check" type="checkbox"><span>serum</span></label>
 <label class="vision-check" style="--px:48%;--py:50%"><input class="agenda-check" type="checkbox"><span>SPF</span></label>
 <label class="vision-check" style="--px:68%;--py:64%"><input class="agenda-check" type="checkbox"><span>lip mask</span></label>
 </div>
 </article>
-<article class="vision-tile vision-tile-house" data-focus="pepperdine" style="--tile-photo: url('manus-storage/pursuit-pepperdine.jpg?v=fullbleed3'); grid-area: 2 / 2 / 3 / 3 !important;">
+<article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym5'); grid-area: 1 / 2 / 2 / 4 !important;">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">Pepperdine</h3>
-<div class="vision-tile-details"></div>
+<p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p>
+<h3 class="vision-tile-title">body</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 6%; --py: 12%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span>induction</span><div class="vision-pol-resize" title="drag to resize"></div></div>
+
+<div class="vision-polaroid vision-class" style="--px:12%;--py:22%">
+<img alt="" src="manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym5">
+<span>reformer pilates · 6:00</span>
+</div>
+<label class="vision-check" style="--px:54%;--py:28%"><input class="agenda-check" type="checkbox"><span>pack gym bag</span></label>
+<label class="vision-check" style="--px:58%;--py:48%"><input class="agenda-check" type="checkbox"><span>water + mat</span></label>
+</div>
+</article>
+<article class="vision-tile vision-tile-house" data-focus="house" style="--tile-photo: url('manus-storage/pursuit-curated-lifestyle.jpg?v=2'); grid-area: 2 / 2 / 3 / 3 !important;">
+<div class="vision-tile-photo"></div>
+<h3 class="vision-tile-title">house</h3>
+<div class="vision-tile-details">
+<div class="vision-polaroid" style="--px:10%;--py:18%">
+<img alt="" src="manus-storage/pursuit-curated-lifestyle.jpg?v=2">
+<span>reset the rooms</span>
+</div>
+<label class="vision-check" style="--px:52%;--py:22%"><input class="agenda-check" type="checkbox"><span>kitchen</span></label>
+<label class="vision-check" style="--px:58%;--py:40%"><input class="agenda-check" type="checkbox"><span>floors</span></label>
+<label class="vision-check" style="--px:50%;--py:58%"><input class="agenda-check" type="checkbox"><span>laundry</span></label>
+</div>
 </article>
 <article class="vision-tile vision-tile-executive" data-focus="executive" style="--tile-photo: url('manus-storage/zone-executive-climb.jpg?v=command1'); grid-area: 2 / 3 / 3 / 4 !important;">
 <div class="vision-tile-photo"></div>
@@ -15379,7 +15397,7 @@ window.__j22fnApply=run;
 <div class="vision-polaroid" style="--px:8%;--py:16%">
 <img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1">
 <span>Elevate</span>
-<div class="vision-pol-resize" title="drag to resize"></div></div>
+</div>
 <label class="vision-check" style="--px:48%;--py:22%"><input class="agenda-check" type="checkbox"><span>text Dr Betty</span></label>
 <label class="vision-check" style="--px:52%;--py:42%"><input class="agenda-check" type="checkbox"><span>module work</span></label>
 </div>
@@ -16251,12 +16269,12 @@ window.__j22fnApply=run;
 <div class="vision-hero vision-hero-duo">
 <article class="vision-tile vision-tile-shot vision-tile-gsa" data-focus="gsa" style="--tile-photo: url('manus-storage/handshake-pepperdine-gsa.jpg'); grid-area: 1 / 1 / 3 / 2 !important;">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">Graduate Student Association</h3>
+<h3 class="vision-tile-title">graduate student association</h3>
 <div class="vision-tile-details"></div>
 </article>
 <article class="vision-tile vision-tile-shot vision-tile-committee" data-focus="committee" style="--tile-photo: url('manus-storage/pepperdine-committee-checkin.jpg?v=orig'); grid-area: 1 / 2 / 2 / 4 !important;">
 <div class="vision-tile-photo"></div>
-<h3 class="vision-tile-title">Committee check-in</h3>
+<h3 class="vision-tile-title">committee check-in</h3>
 <div class="vision-tile-details"></div>
 </article>
 <article class="vision-tile vision-tile-body" data-focus="body" style="--tile-photo: url(&quot;manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym5&quot;); grid-area: 2 / 2 / 3 / 4 !important;"><div class="vision-tile-photo"></div><p class="vision-tile-quote">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
@@ -40835,6 +40853,37 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
     return changed;
   }
+  function seedAug30CleanseCard(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
+    var MKEY = 'migration-aug30-cleanse-card-v2';
+    if(localStorage.getItem(MKEY)) return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    var changed = false;
+    var tile = host.querySelector('.vision-tile[data-focus="glow-up"], .vision-tile[data-focus="glow"]') ||
+      [].slice.call(host.querySelectorAll('.vision-tile')).find(function(t){
+        return /glow/i.test(((t.querySelector('.vision-tile-title')||{}).textContent||''));
+      });
+    if(!tile){ addTile(blk, 'glow up'); changed = true; tile = host.querySelector('.vision-tile[data-focus="glow-up"], .vision-tile[data-focus="glow"]'); }
+    var CLEANSE = (window.__cardImgFor && window.__cardImgFor('cleanse')) || 'manus-storage/card-cleanse.jpg?v=cleanse2';
+    if(tile){
+      var have = [].slice.call(tile.querySelectorAll('.vision-polaroid')).some(function(p){
+        return cardTitle(p).toLowerCase() === 'cleanse';
+      });
+      if(!have){ addCard(tile, 'cleanse'); changed = true; }
+      [].slice.call(tile.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        if(cardTitle(pol).toLowerCase() !== 'cleanse') return;
+        applyPolaroidSrc(pol, CLEANSE);
+      });
+      rememberCardPhoto('cleanse', CLEANSE);
+      var data = dayData(blk);
+      (data.addedCards||[]).forEach(function(rec){
+        if(rec && String(rec.title||'').toLowerCase()==='cleanse') rec.src = CLEANSE;
+      });
+    }
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+    return changed;
+  }
   function seedPepperdinePsiChiHandshake(blk){
     if(!blkOk(blk)) return false;
     var d = dayKey(blk);
@@ -42464,11 +42513,14 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
   background-size: cover !important;
   background-color: #060504;
 }
+/* Zoomed: show the full mid-tummy plate (legs not in asset). Dark fill matches gym blacks — not cream letterbox. */
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile-body.is-zoomed .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile[data-focus="body"].is-zoomed .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile[data-focus="gym"].is-zoomed .vision-tile-photo {
+  background-size: contain !important;
   background-position: center center !important;
-  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-color: #060504 !important;
   transform: scale(1) !important;
 }
 
@@ -42489,7 +42541,7 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-t
   pointer-events: none;
   overflow: visible;
 }
-/* Collage not zoomed (details / legacy): smaller cards on tiles. Overview depth hides them entirely. */
+/* Collage not zoomed: smaller glance cards on tiles (overview + details). */
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid {
   width: min(34%, 92px);
   padding: 5px 5px 18px;
