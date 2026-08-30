@@ -42778,6 +42778,41 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
     }
   }
+  /** Bottom of each section is reserved for the title — cards must stay clear. */
+  function titleBandReservePct(zoomed){
+    return zoomed ? 15 : 28;
+  }
+  function clampPyClearOfTitle(tile, pol, py){
+    if(!tile) return py;
+    var th = Math.max(1, tile.clientHeight || 1);
+    var vb = tile.closest('.vision-board');
+    var zoomed = !!(vb && vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed'));
+    var ch = 0;
+    try { ch = pol.getBoundingClientRect().height; } catch(e){}
+    if(!(ch > 0)) ch = zoomed ? 240 : Math.min(120, th * 0.48);
+    var chPct = (ch / th) * 100;
+    var reserve = titleBandReservePct(zoomed);
+    var maxPy = Math.max(2, 100 - chPct - reserve);
+    if(!isFinite(py)) py = 12;
+    return Math.min(py, maxPy);
+  }
+  function liftCardsOffSectionTitles(tile){
+    if(!tile) return false;
+    var pols = [].slice.call(tile.querySelectorAll('.vision-tile-details > .vision-polaroid'));
+    if(!pols.length) return false;
+    var changed = false;
+    pols.forEach(function(pol){
+      var py = parseFloat(pol.style.getPropertyValue('--py'));
+      if(!isFinite(py)) py = 18;
+      var next = clampPyClearOfTitle(tile, pol, py);
+      if(Math.abs(next - py) > 0.4){
+        pol.style.setProperty('--py', next.toFixed(1) + '%');
+        try{ syncPolaroidRec(pol); }catch(e){}
+        changed = true;
+      }
+    });
+    return changed;
+  }
   /** Lay cards out with gaps — never leave them stacked/overlapping by default. */
   function packTileCards(tile, opts){
     opts = opts || {};
@@ -42794,6 +42829,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var cw = sample.width || (zoomed ? 220 : Math.min(112, tw * 0.28));
     var ch = sample.height || (cw * 1.35);
     var gap = zoomed ? 18 : 12;
+    var titleReserve = titleBandReservePct(zoomed);
+    var needsLift = false;
+    pols.forEach(function(pol){
+      var py = parseFloat(pol.style.getPropertyValue('--py'));
+      if(isFinite(py) && py > clampPyClearOfTitle(tile, pol, py) + 0.5) needsLift = true;
+    });
     if(!opts.force && pols.length >= 2){
       var boxes = pols.map(function(p){ return p.getBoundingClientRect(); });
       var overlap = false;
@@ -42807,7 +42848,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           }
         }
       }
-      if(!overlap) return false;
+      if(!overlap && !needsLift) return false;
+    } else if(!opts.force && !needsLift && pols.length < 2){
+      return liftCardsOffSectionTitles(tile);
     }
     var stepX = ((cw + gap) / tw) * 100;
     var stepY = ((ch + gap) / th) * 100;
@@ -42816,6 +42859,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var marginX = 4;
     var marginY = 6;
     var maxX = Math.max(marginX, 100 - (cw / tw) * 100 - 2);
+    var maxPy = Math.max(marginY, 100 - (ch / th) * 100 - titleReserve);
     var cols = Math.max(1, Math.floor((maxX - marginX) / stepX) + 1);
     cols = Math.min(cols, pols.length, 4);
     if(cols < 1) cols = 1;
@@ -42823,7 +42867,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var col = idx % cols;
       var row = Math.floor(idx / cols);
       var px = Math.min(maxX, marginX + col * stepX);
-      var py = Math.min(72, marginY + row * stepY);
+      var py = Math.min(maxPy, marginY + row * stepY);
+      py = clampPyClearOfTitle(tile, pol, py);
       pol.style.setProperty('--px', px.toFixed(1) + '%');
       pol.style.setProperty('--py', py.toFixed(1) + '%');
       try{ syncPolaroidRec(pol); }catch(e){}
@@ -42831,6 +42876,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return true;
   }
   window.__packTileCards = packTileCards;
+  window.__liftCardsOffSectionTitles = liftCardsOffSectionTitles;
   function movePolaroidToTile(pol, destTile, clientX, clientY, grabOffsetX, grabOffsetY){
     var srcTile = pol && pol.closest('.vision-tile');
     var blk = pol && pol.closest('.day-block');
@@ -42852,6 +42898,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var top = (clientY != null && grabOffsetY != null) ? (clientY - grabOffsetY) : (rect.top + rect.height * 0.18);
     var nx = rect.width > 0 ? ((left - rect.left) / rect.width * 100) : 12;
     var ny = rect.height > 0 ? ((top - rect.top) / rect.height * 100) : 18;
+    ny = clampPyClearOfTitle(destTile, pol, ny);
     pol.style.setProperty('--px', pct(nx));
     pol.style.setProperty('--py', pct(ny));
     pol.style.left = '';
