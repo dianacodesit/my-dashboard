@@ -42915,6 +42915,11 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
 })();
 </script>
 <style id="no-resize-glyph">
+/* Permanent ban: resize ability OK, visible corner glyph NEVER */
+html body .vision-pol-resize::before,
+html body .vision-pol-resize::after,
+html body .vision-polaroid:hover > .vision-pol-resize::after,
+html body .vision-polaroid.is-pol-resizing > .vision-pol-resize::after,
 html body .card-resize::before,
 html body .card-resize::after,
 html body .oneoff-resize::before,
@@ -42936,6 +42941,7 @@ html body .day-block .pursuit-zone:hover .zone-resize::after {
   width: 0 !important;
   height: 0 !important;
 }
+html body .vision-pol-resize,
 html body .card-resize,
 html body .oneoff-resize,
 html body .zone-resize {
@@ -42943,10 +42949,12 @@ html body .zone-resize {
   box-shadow: none !important;
   border: 0 !important;
   color: transparent !important;
+  font-size: 0 !important;
 }
 html body .canvas-item-resize {
   color: transparent !important;
   font-size: 0 !important;
+  background: transparent !important;
 }
 </style>
 <style id="aug26-freeplace-css">
