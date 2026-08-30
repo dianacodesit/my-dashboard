@@ -43446,36 +43446,35 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     } else if(!opts.force && !needsLift && pols.length < 2){
       return liftCardsOffSectionTitles(tile);
     }
-    /* Wide columns, tight polaroid (photo + caption). Never stretch a beige footnote. */
-    var cols = n <= 2 ? n : (n <= 4 ? 2 : (n <= 6 ? 3 : 4));
-    if(tw > th * 1.2 && n >= 6) cols = Math.min(4, n);
-    if(zoomed && n >= 5) cols = Math.min(4, Math.max(cols, 3));
+    /* Polaroids sit ON the photo. 4+ cards use 4 columns. Never 2x2 wallpaper. */
+    var cols = n <= 3 ? n : 4;
+    if(zoomed && n >= 5) cols = Math.min(4, n);
     cols = Math.min(cols, 4, n);
     var rows = Math.max(1, Math.ceil(n / cols));
     var marginX = zoomed ? 2.0 : 1.2;
     var marginY = zoomed ? 3.2 : 2.0;
-    var titleReserve = zoomed ? 9 : 7;
-    var gutterX = zoomed ? 14 : 8;
-    var gutterY = zoomed ? 16 : 8;
+    var gutterX = zoomed ? 12 : 8;
+    var gutterY = zoomed ? 14 : 8;
     var captionPx = 56;
     var chromePx = 10;
     var usableW = Math.max(80, tw * (1 - (marginX * 2) / 100));
-    var usableH = Math.max(80, th * (1 - (marginY + titleReserve) / 100));
-    var cellW = (usableW - (cols - 1) * gutterX) / cols;
-    var cellH = (usableH - (rows - 1) * gutterY) / rows;
-    var pwPct = (cellW / tw) * 100;
-    if(!isFinite(pwPct) || pwPct < 10) pwPct = 23;
-    var photoBudget = Math.max(zoomed ? 130 : 52, cellH - captionPx - chromePx);
-    var photoH = Math.round(Math.min(photoBudget, cellW * (zoomed ? 1.02 : 1.08)));
-    photoH = Math.max(zoomed ? 130 : 52, photoH);
+    var fillW = (usableW - (cols - 1) * gutterX) / cols;
+    var maxW = zoomed ? Math.min(260, tw * 0.22) : Math.min(200, tw * 0.24);
+    var minW = zoomed ? 140 : 88;
+    var pwPx = Math.round(Math.max(minW, Math.min(fillW, maxW)));
+    var pwPct = (pwPx / tw) * 100;
+    if(!isFinite(pwPct) || pwPct < 8) pwPct = 22;
+    var photoH = Math.round(Math.min(pwPx * 0.92, zoomed ? 200 : 108));
+    photoH = Math.max(zoomed ? 120 : 52, photoH);
     var cardH = photoH + captionPx + chromePx;
-    var stepX = ((cellW + gutterX) / tw) * 100;
+    var stepX = ((pwPx + gutterX) / tw) * 100;
     var stepY = ((cardH + gutterY) / th) * 100;
-    var pwPx = Math.round(cellW);
+    var gridW = cols * pwPx + (cols - 1) * gutterX;
+    var originX = Math.max(marginX, ((tw - gridW) / 2 / tw) * 100);
     pols.forEach(function(pol, idx){
       var col = idx % cols;
       var row = Math.floor(idx / cols);
-      var px = Math.max(0, Math.min(86, marginX + col * stepX));
+      var px = Math.max(0, Math.min(86, originX + col * stepX));
       var py = Math.max(0, Math.min(86, marginY + row * stepY));
       if(!pol.classList.contains('vision-habit-card')){
         pol.style.removeProperty('height');
@@ -48907,11 +48906,23 @@ html body .vision-polaroid.vision-habit-card .vision-pol-resize::after { content
 <style id="vision-card-scale-relative-v1">
 /* Polaroid = photo + tight caption. Width fills the column. Never a beige footnote slab. */
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card),
-html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card),
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) {
+  width: var(--pc, var(--pw, 22%)) !important;
+  max-width: 24% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 4px 4px 3px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transform: rotate(-1.2deg) !important;
+}
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card),
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) {
-  width: var(--pc, var(--pw, 23%)) !important;
-  max-width: none !important;
+  width: var(--pc, var(--pw, 20%)) !important;
+  max-width: 22% !important;
   min-width: 0 !important;
   height: auto !important;
   max-height: none !important;
