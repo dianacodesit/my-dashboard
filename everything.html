@@ -42755,9 +42755,12 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card > .vision-pol-resize {
   z-index: 8;
 }
-/* Details collage: habit cards keep ritual frame + readable type */
+/* Details collage: habit cards keep ritual frame + readable type + freeplace */
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card {
-  width: 168px !important;
+  position: absolute !important;
+  left: var(--px, 6%) !important;
+  top: var(--py, 12%) !important;
+  width: var(--pw, 168px) !important;
   padding: 0 !important;
   transform: rotate(-1.8deg) !important;
 }
