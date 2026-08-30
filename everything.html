@@ -16152,6 +16152,19 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    if(!localStorage.getItem('btm_unstack_polaroids_v5')){
+      document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+        try{
+          if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2 && window.__packTileCards){
+            window.__packTileCards(tile, {force: true});
+          }
+        }catch(e){}
+      });
+      localStorage.setItem('btm_unstack_polaroids_v5','1');
+    }
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_unstack_polaroids_v4')){
       document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
         try{
@@ -42830,39 +42843,53 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(zoomed && n >= 5) cols = Math.min(4, Math.max(cols, 3));
     var rows = Math.max(1, Math.ceil(n / cols));
     var marginX = 3.5;
-    var marginY = 5;
+    var marginY = 4;
+    var titleReserve = Math.max(titleReserve, zoomed ? 10 : 14);
     var usableW = Math.max(40, tw * (1 - (marginX * 2) / 100));
-    var usableH = Math.max(40, th * (1 - (marginY + titleReserve + 4) / 100));
+    var usableH = Math.max(40, th * (1 - (marginY + titleReserve + 2) / 100));
+    /* Grow columns until rows fit a minimum card height. */
+    var minCardH = zoomed ? 140 : 108;
+    var guard = 0;
+    while(guard++ < 6){
+      rows = Math.max(1, Math.ceil(n / cols));
+      var needH = rows * minCardH + (rows - 1) * gap;
+      if(needH <= usableH || cols >= Math.min(n, 5)) break;
+      cols += 1;
+    }
+    rows = Math.max(1, Math.ceil(n / cols));
     var cellW = (usableW - (cols - 1) * gap) / cols;
     var cellH = (usableH - (rows - 1) * gap) / rows;
-    var packW = Math.min(cw, cellW * 0.92);
-    var packH = Math.min(ch, cellH * 0.92);
-    if(n >= 6 && !zoomed){
-      packW = Math.min(packW, tw * 0.22, cellW * 0.9);
-      packH = Math.min(packH, th * 0.36, cellH * 0.9);
-      var pwPx = Math.max(56, Math.min(128, Math.round(packW)));
-      pols.forEach(function(pol){ pol.style.setProperty('--pw', pwPx + 'px'); });
-      packW = pwPx;
-      packH = Math.min(packH, pwPx * 1.38);
-    }
+    /* Size cards TO the cell — never keep a measured height that overflows the row. */
+    var packW = Math.max(52, cellW * 0.88);
+    var packH = Math.max(72, cellH * 0.88);
+    var pwPx = Math.round(Math.min(zoomed ? 220 : 128, Math.max(56, packW)));
+    pols.forEach(function(pol){
+      pol.style.setProperty('--pw', pwPx + 'px');
+      pol.style.maxHeight = Math.round(packH) + 'px';
+    });
+    packW = pwPx;
+    packH = Math.min(packH, pwPx * 1.42);
     var stepX = ((packW + gap) / tw) * 100;
     var stepY = ((packH + gap) / th) * 100;
     /* Hard caps — never place past the tile or use runaway steps. */
-    if(!isFinite(stepX) || stepX < 6) stepX = (100 - marginX * 2) / cols;
-    if(!isFinite(stepY) || stepY < 8) stepY = Math.max(22, (100 - titleReserve - marginY - 4) / rows);
-    stepX = Math.min(stepX, (100 - marginX * 2) / cols);
-    stepY = Math.min(stepY, (100 - titleReserve - marginY - 4) / rows);
-    var maxX = Math.max(marginX, 100 - (packW / tw) * 100 - 2);
-    var maxPy = Math.max(marginY, 100 - (packH / th) * 100 - titleReserve);
-    maxX = Math.min(92, maxX);
-    maxPy = Math.min(92, maxPy);
+    var maxStepX = (100 - marginX * 2) / cols;
+    var maxStepY = (100 - titleReserve - marginY - 2) / rows;
+    if(!isFinite(stepX) || stepX < 6) stepX = maxStepX;
+    if(!isFinite(stepY) || stepY < 8) stepY = maxStepY;
+    stepX = Math.min(stepX, maxStepX);
+    stepY = Math.min(Math.max(stepY, maxStepY * 0.92), maxStepY);
+    var maxX = Math.min(92, Math.max(marginX, 100 - (packW / tw) * 100 - 2));
+    var maxPy = Math.min(92, Math.max(marginY, 100 - (packH / th) * 100 - titleReserve));
     pols.forEach(function(pol, idx){
       var col = idx % cols;
       var row = Math.floor(idx / cols);
       var px = Math.min(maxX, marginX + col * stepX);
       var py = Math.min(maxPy, marginY + row * stepY);
       px = Math.max(0, Math.min(92, px));
-      py = clampPyClearOfTitle(tile, pol, Math.max(0, Math.min(92, py)));
+      py = Math.max(0, Math.min(92, py));
+      /* Keep grid — only nudge if sitting under the title band. */
+      var cleared = clampPyClearOfTitle(tile, pol, py);
+      if(cleared < py) py = cleared;
       pol.style.setProperty('--px', px.toFixed(1) + '%');
       pol.style.setProperty('--py', py.toFixed(1) + '%');
       try{ syncPolaroidRec(pol); }catch(e){}
@@ -47860,11 +47887,17 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
   line-height: 1.05 !important;
   margin-top: 4px !important;
   padding: 0 2px !important;
+  max-height: 2.3em !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid {
   width: var(--pw, clamp(56px, 26%, 120px));
   max-width: 34%;
   max-height: 52%;
+  overflow: hidden;
 }
 </style>
 
