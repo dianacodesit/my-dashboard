@@ -15141,9 +15141,17 @@ window.__j22fnApply=run;
   }catch(e){}
   try{
     if(!localStorage.getItem('btm_inner_fire_photo_navel1')){
+      var INNER='manus-storage/zone-inner-fire.jpg?v=navel1';
+      document.querySelectorAll('.vision-tile').forEach(function(el){
+        var title=((el.querySelector('.vision-tile-title')||{}).textContent||'').toLowerCase();
+        var focus=(el.getAttribute('data-focus')||'').toLowerCase();
+        if(/inner\s*fire/.test(title) || focus==='inner-fire' || focus==='inner'){
+          el.style.setProperty('--tile-photo', "url('"+INNER+"')");
+        }
+      });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-inner-fire')<0) return;
-        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire\.jpg(\?v=[^"'\s)]+)?/g, 'manus-storage/zone-inner-fire.jpg?v=navel1'));
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-inner-fire\.jpg(\?v=[^"'\s)]+)?/g, INNER));
       });
       localStorage.setItem('btm_inner_fire_photo_navel1','1');
     }
