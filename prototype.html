@@ -16145,6 +16145,20 @@ window.__j22fnApply=run;
     }
   }catch(e){}
 
+  try{
+    if(!localStorage.getItem('btm_unstack_polaroids_v2')){
+      document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+        try{
+          if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2 && window.__packTileCards){
+            window.__packTileCards(tile, {force: true});
+          }
+        }catch(e){}
+      });
+      localStorage.setItem('btm_unstack_polaroids_v2','1');
+    }
+  }catch(e){}
+
+
 
 
 
@@ -42533,6 +42547,19 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       saveDepthMap(m);
     }
     applyOverviewDepth(blk);
+    /* Cards were often packed while hidden (0×0) — re-pack when entering details. */
+    if(mode === 'details'){
+      requestAnimationFrame(function(){
+        [].slice.call(blk.querySelectorAll('.vision-tile')).forEach(function(tile){
+          try{
+            if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+              packTileCards(tile, {force: true});
+            }
+          }catch(e){}
+        });
+        try{ persistDay(blk); }catch(e2){}
+      });
+    }
   }
   function ensureToggleRow(blk){
     var card = blk.querySelector('.day-card');
@@ -43159,12 +43186,30 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var boxes = pols.map(function(p){ return p.getBoundingClientRect(); });
       var overlap = false;
       var pad = gap * 0.35;
-      for(var i = 0; i < boxes.length && !overlap; i++){
-        for(var j = i + 1; j < boxes.length; j++){
-          var a = boxes[i], b = boxes[j];
-          if(!(a.right + pad <= b.left || b.right + pad <= a.left || a.bottom + pad <= b.top || b.bottom + pad <= a.top)){
-            overlap = true;
-            break;
+      var degenerate = boxes.some(function(b){ return !b || b.width < 2 || b.height < 2; });
+      if(degenerate){
+        /* Hidden (overview) cards report 0×0 rects — detect stack via --px/--py instead. */
+        for(var ci = 0; ci < pols.length && !overlap; ci++){
+          var pa = parseFloat(pols[ci].style.getPropertyValue('--px'));
+          var qa = parseFloat(pols[ci].style.getPropertyValue('--py'));
+          if(!isFinite(pa)) pa = 12;
+          if(!isFinite(qa)) qa = 24;
+          for(var cj = ci + 1; cj < pols.length; cj++){
+            var pb = parseFloat(pols[cj].style.getPropertyValue('--px'));
+            var qb = parseFloat(pols[cj].style.getPropertyValue('--py'));
+            if(!isFinite(pb)) pb = 12;
+            if(!isFinite(qb)) qb = 24;
+            if(Math.abs(pa - pb) < 8 && Math.abs(qa - qb) < 12){ overlap = true; break; }
+          }
+        }
+      } else {
+        for(var i = 0; i < boxes.length && !overlap; i++){
+          for(var j = i + 1; j < boxes.length; j++){
+            var a = boxes[i], b = boxes[j];
+            if(!(a.right + pad <= b.left || b.right + pad <= a.left || a.bottom + pad <= b.top || b.bottom + pad <= a.top)){
+              overlap = true;
+              break;
+            }
           }
         }
       }
