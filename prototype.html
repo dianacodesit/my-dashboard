@@ -10175,7 +10175,6 @@ html body.prototypes-page .proto-page-label {
 <a class="nav-sub" href="alchemy.html">alchemy</a>
 <a class="nav-sub" href="manifestation.html">manifestation</a>
 <a class="nav-sub" href="potential.html">potential</a>
-<a class="nav-sub" href="potential.html">potential</a>
 <a href="self.html">Self</a>
 <a class="nav-sub" href="center.html">center</a>
 <a href="priming.html">priming & prompting</a>
@@ -15580,6 +15579,25 @@ window.__j22fnApply=run;
         localStorage.setItem(k, raw.replace(/manus-storage\/zone-potential\.jpg(\?v=[^"'\\s)]+)?/g, POT_ROAD));
       });
       localStorage.setItem('btm_potential_photo_road1','1');
+    }
+  }catch(e){}
+
+  try{
+    /* Villains: drop foggy CSS tunnel; force baked edge-only light rim asset */
+    if(!localStorage.getItem('btm_villains_photo_rim5')){
+      var VIL_RIM='manus-storage/zone-villains.jpg?v=rim5';
+      document.querySelectorAll('.vision-tile[data-focus="villains"], .vision-tile[data-focus="villain"], .pursuit-zone[data-zone="villains"], .pursuit-zone[data-zone="villain"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+VIL_RIM+"')");
+        else el.style.setProperty('--zone-photo', "url('"+VIL_RIM+"')");
+      });
+      document.querySelectorAll('.vision-tile[data-focus="villains"] img, .vision-tile[data-focus="villain"] img, .pursuit-zone[data-zone="villains"] img, .pursuit-zone[data-zone="villain"] img').forEach(function(img){
+        if(/zone-villains/i.test(img.getAttribute('src')||'')) img.setAttribute('src', VIL_RIM);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-villains')<0) return;
+        localStorage.setItem(k, raw.replace(/manus-storage\/zone-villains\.jpg(\?v=[^"'\\s)]+)?/g, VIL_RIM));
+      });
+      localStorage.setItem('btm_villains_photo_rim5','1');
     }
   }catch(e){}
 
