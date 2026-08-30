@@ -15730,6 +15730,31 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    if(!localStorage.getItem('btm_body_aesthetic1_v1')){
+      var BODY_AE='manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=aesthetic1';
+      document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"], .vision-tile-body, .pursuit-zone[data-zone="body"], .pursuit-zone[data-zone="gym"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')||el.classList.contains('vision-tile-body')) el.style.setProperty('--tile-photo',"url('"+BODY_AE+"')");
+        else el.style.setProperty('--zone-photo',"url('"+BODY_AE+"')");
+      });
+      document.querySelectorAll('img').forEach(function(img){
+        if(/zone-body/i.test(img.getAttribute('src')||'')) img.setAttribute('src', BODY_AE);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw||raw.indexOf('zone-body')<0) return;
+        localStorage.setItem(k, raw
+          .replace(/manus-storage\/zone-body-tummy-gym-dark-abs\.jpg(\?v=[^"'\\s)]+)?/g, BODY_AE)
+          .replace(/manus-storage\/zone-body-tummy-gym-dark\.jpg(\?v=[^"'\\s)]+)?/g, BODY_AE)
+          .replace(/manus-storage\/zone-body-gym-wide-dark\.jpg(\?v=[^"'\\s)]+)?/g, BODY_AE)
+          .replace(/manus-storage\/zone-body-gym-abs\.jpg(\?v=[^"'\\s)]+)?/g, BODY_AE)
+          .replace(/manus-storage\/zone-body-abs\.jpg(\?v=[^"'\\s)]+)?/g, BODY_AE)
+          .replace(/manus-storage\/zone-body\.jpg(\?v=[^"'\\s)]+)?/g, BODY_AE));
+      });
+      localStorage.setItem('btm_body_aesthetic1_v1','1');
+    }
+  }catch(e){}
+
+
+  try{
     /* Pepperdine section: ocean patio (user-attached) — section tile only, not cards */
     if(!localStorage.getItem('btm_pepper_patio1_v1')){
       var PEPPER_PATIO='manus-storage/pursuit-pepperdine.jpg?v=patio1';
