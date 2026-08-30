@@ -42206,16 +42206,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var low = name.toLowerCase();
       if(already[low] || seen[low] || SECTION_NAMES[low]) return;
       if(name.length > 48) return;
+      var isPepSection = (section === 'pepperdine' || section === 'grad school' || section === 'grad' || focus === 'pepperdine' || focus === 'grad' || focus === 'grad-school' || focus === 'grad school');
+      var pepOnly = (typeof pepperdineCardOnlyName === 'function') ? pepperdineCardOnlyName(name) : '';
+      if(pepOnly && !isPepSection) return;
+      if(pepOnly) name = pepOnly;
       seen[low] = 1;
+      seen[String(name).toLowerCase()] = 1;
       out.push(name);
     }
     CARD_SEED.forEach(push);
-    // Only polaroids already on THIS section tile (not every day on the board).
-    if(tile){
-      [].slice.call(tile.querySelectorAll('.vision-polaroid > span')).forEach(function(el){
-      push(el.textContent);
-    });
-    }
     return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
   }
   function appendPresetPicker(box, label, picks, onPick){
