@@ -16152,6 +16152,19 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    if(!localStorage.getItem('btm_unstack_polaroids_v3')){
+      document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+        try{
+          if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2 && window.__packTileCards){
+            window.__packTileCards(tile, {force: true});
+          }
+        }catch(e){}
+      });
+      localStorage.setItem('btm_unstack_polaroids_v3','1');
+    }
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_unstack_polaroids_v2')){
       document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
         try{
@@ -18935,7 +18948,7 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero vision-hero-duo"><article class="vision-tile" data-focus="god-conscious" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 1 / 2 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e9706">God-conscious</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg" style="--px: 4.0%; --py: 6.0%;"><img alt="" src="manus-storage/card-sabr.jpg"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg" style="--px: 4.0%; --py: 24.0%;"><img alt="" src="manus-storage/card-shukr.jpg"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<div class="vision-hero vision-hero-duo"><article class="vision-tile" data-focus="god-conscious" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 1 / 2 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e9706">God-conscious</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="body" style="--tile-photo: url('manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1'); grid-area: 1 / 4 / 2 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote" data-cursor-ref="e11719">obsessed is a word the lazy use to describe the dedicated.</p><h3 class="vision-tile-title" data-cursor-ref="e11720">body</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" style="--px: 8%; --py: 18%;" data-habit-id="induction" data-habit-cadence="daily"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
 </div>
 </div>
@@ -42732,37 +42745,33 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var zoomed = !!(vb && vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed'));
     var tw = Math.max(1, tile.clientWidth || 1);
     var th = Math.max(1, tile.clientHeight || 1);
+    var n = pols.length;
     var sample = pols[0].getBoundingClientRect();
-    var cw = sample.width || (zoomed ? 220 : Math.min(112, tw * 0.28));
-    var ch = sample.height || (cw * 1.35);
-    var gap = zoomed ? 18 : 12;
+    var measured = sample && sample.width >= 2 && sample.height >= 2;
+    var cw = measured ? sample.width : (zoomed ? 220 : Math.min(120, tw * (n >= 7 ? 0.20 : 0.26)));
+    var ch = measured ? sample.height : (cw * 1.38);
+    var gap = zoomed ? 18 : 14;
     var titleReserve = titleBandReservePct(zoomed);
     var needsLift = false;
     pols.forEach(function(pol){
       var py = parseFloat(pol.style.getPropertyValue('--py'));
       if(isFinite(py) && py > clampPyClearOfTitle(tile, pol, py) + 0.5) needsLift = true;
     });
+    function pctBox(pol){
+      var px = parseFloat(pol.style.getPropertyValue('--px'));
+      var py = parseFloat(pol.style.getPropertyValue('--py'));
+      if(!isFinite(px)) px = 12;
+      if(!isFinite(py)) py = 24;
+      var wPct = (cw / tw) * 100;
+      var hPct = (ch / th) * 100;
+      return { l: px, r: px + wPct, t: py, b: py + hPct };
+    }
     if(!opts.force && pols.length >= 2){
-      var boxes = pols.map(function(p){ return p.getBoundingClientRect(); });
       var overlap = false;
       var pad = gap * 0.35;
+      var boxes = pols.map(function(p){ return p.getBoundingClientRect(); });
       var degenerate = boxes.some(function(b){ return !b || b.width < 2 || b.height < 2; });
-      if(degenerate){
-        /* Hidden (overview) cards report 0×0 rects — detect stack via --px/--py instead. */
-        for(var ci = 0; ci < pols.length && !overlap; ci++){
-          var pa = parseFloat(pols[ci].style.getPropertyValue('--px'));
-          var qa = parseFloat(pols[ci].style.getPropertyValue('--py'));
-          if(!isFinite(pa)) pa = 12;
-          if(!isFinite(qa)) qa = 24;
-          for(var cj = ci + 1; cj < pols.length; cj++){
-            var pb = parseFloat(pols[cj].style.getPropertyValue('--px'));
-            var qb = parseFloat(pols[cj].style.getPropertyValue('--py'));
-            if(!isFinite(pb)) pb = 12;
-            if(!isFinite(qb)) qb = 24;
-            if(Math.abs(pa - pb) < 8 && Math.abs(qa - qb) < 12){ overlap = true; break; }
-          }
-        }
-      } else {
+      if(!degenerate){
         for(var i = 0; i < boxes.length && !overlap; i++){
           for(var j = i + 1; j < boxes.length; j++){
             var a = boxes[i], b = boxes[j];
@@ -42773,21 +42782,50 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           }
         }
       }
+      /* Always also check % boxes — catches too-tight row gaps that still “look” placed. */
+      if(!overlap){
+        var softPad = 1.2;
+        for(var ci = 0; ci < pols.length && !overlap; ci++){
+          var A = pctBox(pols[ci]);
+          for(var cj = ci + 1; cj < pols.length; cj++){
+            var B = pctBox(pols[cj]);
+            if(!(A.r + softPad <= B.l || B.r + softPad <= A.l || A.b + softPad <= B.t || B.b + softPad <= A.t)){
+              overlap = true;
+              break;
+            }
+          }
+        }
+      }
       if(!overlap && !needsLift) return false;
     } else if(!opts.force && !needsLift && pols.length < 2){
       return liftCardsOffSectionTitles(tile);
     }
-    var stepX = ((cw + gap) / tw) * 100;
-    var stepY = ((ch + gap) / th) * 100;
-    if(!isFinite(stepX) || stepX < 8 || stepX > 40 || tw < 40) stepX = zoomed ? 22 : 24;
-    if(!isFinite(stepY) || stepY < 10 || stepY > 50 || th < 40) stepY = zoomed ? 34 : 30;
-    var marginX = 4;
-    var marginY = 6;
-    var maxX = Math.max(marginX, 100 - (cw / tw) * 100 - 2);
-    var maxPy = Math.max(marginY, 100 - (ch / th) * 100 - titleReserve);
-    var cols = Math.max(1, Math.floor((maxX - marginX) / stepX) + 1);
-    cols = Math.min(cols, pols.length, 4);
-    if(cols < 1) cols = 1;
+    /* Fit a grid into the tile so stepX/stepY always clear card size. */
+    var cols = n <= 2 ? n : (n <= 4 ? 2 : (n <= 6 ? 3 : 4));
+    if(tw > th * 1.35 && n >= 6) cols = Math.min(4, n);
+    if(zoomed && n >= 5) cols = Math.min(4, Math.max(cols, 3));
+    var rows = Math.max(1, Math.ceil(n / cols));
+    var marginX = 3.5;
+    var marginY = 5;
+    var usableW = Math.max(40, tw * (1 - (marginX * 2) / 100));
+    var usableH = Math.max(40, th * (1 - (marginY + titleReserve + 4) / 100));
+    var cellW = (usableW - (cols - 1) * gap) / cols;
+    var cellH = (usableH - (rows - 1) * gap) / rows;
+    var packW = Math.min(cw, cellW * 0.92);
+    var packH = Math.min(ch, cellH * 0.92);
+    if(n >= 6 && !zoomed){
+      packW = Math.min(packW, tw * 0.22);
+      packH = Math.min(packH, th * 0.36);
+      pols.forEach(function(pol){
+        pol.style.setProperty('--pw', Math.max(56, Math.round(packW)) + 'px');
+      });
+    }
+    var stepX = ((packW + gap) / tw) * 100;
+    var stepY = ((packH + gap) / th) * 100;
+    if(!isFinite(stepX) || stepX < 6) stepX = 100 / cols;
+    if(!isFinite(stepY) || stepY < 8) stepY = Math.max(28, (100 - titleReserve - marginY) / rows);
+    var maxX = Math.max(marginX, 100 - (packW / tw) * 100 - 2);
+    var maxPy = Math.max(marginY, 100 - (packH / th) * 100 - titleReserve);
     pols.forEach(function(pol, idx){
       var col = idx % cols;
       var row = Math.floor(idx / cols);
@@ -47663,14 +47701,14 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
 }
 html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-polaroid span,
 html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-shot-card span {
-  font-size: 18px !important;
-  line-height: 1.02 !important;
+  font-size: clamp(20px, 2.5vw, 28px) !important;
+  line-height: 1.05 !important;
   color: #1a140e !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid {
-  width: var(--pw, clamp(52px, 32%, 112px)) !important;
-  max-width: 40% !important;
-  padding: 6px 6px 26px !important;
+  width: var(--pw, clamp(64px, 28%, 128px)) !important;
+  max-width: 36% !important;
+  padding: 6px 6px 30px !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img {
   height: auto !important;
@@ -47680,7 +47718,7 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid span,
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card span {
-  font-size: 20px !important;
+  font-size: clamp(22px, 2.8vw, 30px) !important;
   line-height: 1.05 !important;
   color: #1a140e !important;
 }
@@ -48518,14 +48556,14 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
 }
 html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-polaroid span,
 html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-shot-card span {
-  font-size: 18px !important;
-  line-height: 1.02 !important;
+  font-size: clamp(20px, 2.5vw, 28px) !important;
+  line-height: 1.05 !important;
   color: #1a140e !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid {
-  width: var(--pw, clamp(52px, 32%, 112px)) !important;
-  max-width: 40% !important;
-  padding: 6px 6px 26px !important;
+  width: var(--pw, clamp(64px, 28%, 128px)) !important;
+  max-width: 36% !important;
+  padding: 6px 6px 30px !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img {
   height: auto !important;
@@ -48535,7 +48573,7 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid span,
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card span {
-  font-size: 20px !important;
+  font-size: clamp(22px, 2.8vw, 30px) !important;
   line-height: 1.05 !important;
   color: #1a140e !important;
 }
