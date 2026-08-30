@@ -41519,6 +41519,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(rem > spanC && free(spot.r, spot.c, rem, spanR)) spanC = rem;
       }
       mark(spot.r, spot.c, spanC, spanR);
+      if(nPols >= 7){
+        for(var tr = spot.r; tr < spot.r + spanR; tr++) tallRows[tr] = 1;
+      }
       tile.style.setProperty('grid-column', spot.c + ' / ' + (spot.c + spanC), 'important');
       tile.style.setProperty('grid-row', spanR > 1 ? (spot.r + ' / ' + (spot.r + spanR)) : (spot.r + ' / ' + (spot.r + 1)), 'important');
     });
@@ -41584,7 +41587,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var cols = [];
     for(var i = 0; i < COLS; i++) cols.push('1fr');
     var rows = [];
-    for(var j = 0; j < maxRow; j++) rows.push(j === 0 ? 'minmax(210px, 1.15fr)' : 'minmax(170px, 1fr)');
+    for(var j = 0; j < maxRow; j++) rows.push(tallRows[j + 1] ? 'minmax(260px, 1.25fr)' : (j === 0 ? 'minmax(210px, 1.15fr)' : 'minmax(170px, 1fr)'));
     host.style.setProperty('grid-template-columns', cols.join(' '), 'important');
     host.style.setProperty('grid-template-rows', rows.join(' '), 'important');
   }
@@ -42802,6 +42805,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(!det) return false;
     var pols = [].slice.call(det.querySelectorAll(':scope > .vision-polaroid'));
     if(pols.length < 1) return false;
+    var strippedH = false;
+    pols.forEach(function(pol){
+      if(pol.classList.contains('vision-habit-card')) return;
+      if(pol.style.getPropertyValue('height') || pol.style.getPropertyValue('max-height') || pol.style.height || pol.style.maxHeight){
+        pol.style.removeProperty('height');
+        pol.style.removeProperty('max-height');
+        pol.style.removeProperty('min-height');
+        pol.style.removeProperty('overflow');
+        strippedH = true;
+      }
+    });
+    if(strippedH) opts.force = true;
     var vb = tile.closest('.vision-board');
     var zoomed = !!(vb && vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed'));
     var tw = tile.clientWidth || 0;
