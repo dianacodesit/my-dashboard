@@ -1,0 +1,37 @@
+---
+description: Archived pages/sections must disappear from all live surfaces
+alwaysApply: true
+---
+
+# Archive = removed elsewhere
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`).
+
+## Meaning
+
+When a **page** or **section** is archived, it must leave **every live surface** — not merely be listed on an archive index while still showing in nav, collages, pickers, or other days.
+
+## Pages
+
+- Archiving a page (`archiveNavPage` / `btm_archived_pages_v1`) removes it from the live nav layout and keeps it out of `resolvedLinks`.
+- Rebuild the nav after archive.
+- Do not leave the page as a live main/WIP link “elsewhere.”
+
+## Sections
+
+- Archiving a vision section (`archiveTile` / `btm_archived_sections_v1`) removes it from the **current day and future days only** (`scrubArchivedSectionsEverywhere`). **Past days are not affected** — leave history alone.
+- `addTile` must refuse globally archived focuses/titles.
+- `+` section pickers (`sectionPresets` / `collectSectionPresets` / sec-picker) must **omit** archived sections so they cannot be re-added from presets.
+- Archive index pages (`archived-sections.html`, `archived-pages.html`) are the only place they should remain reachable as archived.
+
+## Never
+
+- Archive on one day but leave the same section sitting on **current/future** days
+- Scrub **past** days when archiving (never rewrite history)
+- Keep an archived page in the hamburger main list
+- Re-seed / auto-add an archived section back onto a collage
+- Leave an archived section as a choice in the `+` section picker
+
+## If something archived is still visible live
+
+Scrub it immediately (nav rebuild + `scrubArchivedSectionsEverywhere`). Do not wait to be reminded.

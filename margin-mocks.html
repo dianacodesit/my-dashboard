@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>margin mocks · uses + markup</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Reenie+Beanie&amp;family=Cormorant+Garamond:ital,wght@0,400;1,400&amp;family=IBM+Plex+Mono:wght@300;400&amp;family=Playfair+Display:ital,wght@1,400&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navveil5"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #0c0c0e;
+    color: #f2f0ea;
+    min-height: 100vh;
+    padding: 56px 16px 100px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(242,240,234,0.55);
+  }
+  .note {
+    max-width: 640px;
+    margin: 0 auto 36px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(242,240,234,0.5);
+    font-size: 1.02rem;
+    line-height: 1.45;
+  }
+  .section-label {
+    max-width: 1040px;
+    margin: 0 auto 14px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(196,168,130,0.9);
+  }
+  .section-blurb {
+    max-width: 1040px;
+    margin: -6px auto 22px;
+    font-style: italic;
+    color: rgba(242,240,234,0.48);
+    font-size: 0.98rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    max-width: 1040px;
+    margin: 0 auto 48px;
+  }
+  @media (min-width: 900px) {
+    .grid.two { grid-template-columns: 1fr 1fr; }
+  }
+  article, figure {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+  }
+  article header, figcaption {
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  article header .num, figcaption .num {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c4a882;
+    margin-bottom: 4px;
+  }
+  article header h2, figcaption h2 {
+    font-family: "Italiana", serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+  }
+  article header p, figcaption p {
+    margin-top: 6px;
+    font-style: italic;
+    color: rgba(242,240,234,0.55);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .body { padding: 14px 16px 16px; }
+  .use-row {
+    display: grid;
+    gap: 12px;
+  }
+  @media (min-width: 720px) {
+    .use-row { grid-template-columns: 1.1fr 1fr; align-items: start; }
+  }
+  .demo {
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 160px;
+  }
+  .markup {
+    background: #08080c;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 12px 10px;
+    overflow: auto;
+  }
+  .markup pre {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    line-height: 1.45;
+    color: #b8e0c8;
+    white-space: pre;
+  }
+  .markup .tag { color: #7ec8ff; }
+  .markup .attr { color: #e8c48a; }
+  .markup .str { color: #f0a8c8; }
+  .how {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: rgba(242,240,234,0.7);
+  }
+  .how strong { color: #fff8ee; font-weight: 400; font-style: italic; }
+
+  /* mini collage helper */
+  .mini-board {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-rows: 1fr 0.85fr;
+    gap: 4px;
+    height: 120px;
+  }
+  .mini-board .t {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  .mini-board .t span {
+    position: absolute; left: 6px; bottom: 4px;
+    font-style: italic; font-size: 11px; color: #fff;
+    text-shadow: 0 1px 6px #000;
+  }
+  .tb { grid-row: 1/3; background-image: url("manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=nolegs3"); }
+  .tp { background-image: url("manus-storage/pursuit-pepperdine.jpg?v=fullbleed3"); }
+  .tw { background-image: url("manus-storage/zone-power.jpg?v=agency1"); background:#111; }
+
+  /* USE A — logistics under vision */
+  .use-a .demo {
+    background: #14100e;
+    padding: 12px;
+  }
+  .use-a .margin-a {
+    margin-top: 8px;
+    border-top: 1px solid rgba(255,248,238,0.2);
+    padding-top: 8px;
+  }
+  .use-a .margin-a i {
+    display: block;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(255,252,245,0.9);
+    margin-bottom: 4px;
+    text-shadow: 0 0 10px rgba(255,236,210,0.25);
+  }
+  .use-a .kicker {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,248,238,0.35);
+    margin-bottom: 6px;
+  }
+
+  /* USE B — promote path */
+  .use-b .demo {
+    background: #1a1418;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .use-b .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,248,238,0.08);
+    border: 1px dashed rgba(255,248,238,0.35);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-style: italic;
+    font-size: 14px;
+  }
+  .use-b .chip em {
+    font-family: "DM Mono", monospace;
+    font-style: normal;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c4a882;
+  }
+  .use-b .arrow {
+    text-align: center;
+    font-size: 18px;
+    color: rgba(255,248,238,0.4);
+  }
+  .use-b .cardish {
+    background: #f5efe4;
+    color: #2a2218;
+    padding: 10px;
+    border-radius: 4px;
+    width: 42%;
+    font-family: "Reenie Beanie", cursive;
+    font-size: 18px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+  }
+
+  /* USE C — journal whisper */
+  .use-c .demo {
+    background: #efe8dc;
+    color: #2a241c;
+    padding: 14px;
+  }
+  .use-c .mini-board { filter: saturate(0.8); margin-bottom: 12px; }
+  .use-c .line {
+    border-bottom: 1px solid #c4a882;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 16px;
+    padding: 4px 0 8px;
+    color: #3a3228;
+  }
+  .use-c .line.ghost { color: rgba(58,50,40,0.35); }
+
+  /* USE D — side annotation */
+  .use-d .demo {
+    background: #f7f7f2;
+    color: #111;
+    padding: 10px;
+    display: flex;
+  }
+  .use-d .mini-board {
+    flex: 1;
+    height: 140px;
+    border: 2px solid #111;
+    border-radius: 0;
+  }
+  .use-d .side {
+    width: 100px;
+    border: 2px solid #111;
+    border-left: 0;
+    padding: 6px 8px;
+    background-image: repeating-linear-gradient(
+      transparent, transparent 20px,
+      rgba(0,90,60,0.2) 20px, rgba(0,90,60,0.2) 21px
+    );
+    font-family: "Reenie Beanie", cursive;
+    font-size: 17px;
+    color: #003d2a;
+    line-height: 21px;
+  }
+
+  /* USE E — capture void */
+  .use-e .demo {
+    background: #05050a;
+    padding: 12px;
+  }
+  .use-e .glass {
+    margin-top: 10px;
+    border: 1px solid rgba(80,255,140,0.2);
+    padding: 12px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: #7CFFB2;
+    text-shadow: 0 0 12px rgba(80,255,140,0.7);
+    min-height: 44px;
+  }
+  .use-e .ghost {
+    color: rgba(120,255,160,0.2);
+    text-shadow: none;
+  }
+
+  /* USE F — two lanes labeled */
+  .use-f .demo {
+    background: #121018;
+    padding: 12px;
+  }
+  .use-f .lane {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .use-f .lane.vision { color: #e8a0c8; }
+  .use-f .lane.ops { color: #9fe8ff; margin-top: 10px; }
+  .use-f .ops-list {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: #9fe8ff;
+    line-height: 1.6;
+    border-top: 1px solid #3ec8e8;
+    padding-top: 8px;
+  }
+
+  /* visual worlds compact strip */
+  .worlds {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  @media (min-width: 700px) {
+    .worlds { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .world {
+    min-height: 110px;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .world b {
+    font-family: "Italiana", serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+  }
+  .world span {
+    font-style: italic;
+    font-size: 0.88rem;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .w1 { background: #efe8dc; color: #2a241c; }
+  .w2 { background: linear-gradient(160deg,#5a2a55,#1a0e22); color: #ffe8f2; }
+  .w3 { background: #070b10; color: #9fe8ff; border-color: #1a4050; }
+  .w4 { background: url("manus-storage/zone-pursuits-quantum-cosmos.jpg?v=cosmos1") center/cover; color: #fff; text-shadow: 0 1px 8px #000; }
+  .w5 { background: #fff; color: #003d2a; border-color: #111; border-width: 2px; }
+  .w6 { background: #05050a; color: #7CFFB2; border-color: #1a3a1a; }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <h1>margins</h1>
+    <p>how to use them · markup · visual worlds</p>
+  </header>
+  <p class="note">Collage = the life you’re building. Margin = the loose threads that don’t deserve a whole section — written beside the work, not inside it.</p>
+
+  <!-- ========== CREATIVE USES ========== -->
+  <div class="section-label">Creative uses</div>
+  <p class="section-blurb">Same feature, six different jobs. Pick the job first — then the look.</p>
+
+  <div class="grid">
+    <article class="use-a">
+      <header>
+        <div class="num">use A</div>
+        <h2>Logistics under vision</h2>
+        <p>Collage stays sacred. Errands live underneath as glowing whispers.</p>
+      </header>
+      <div class="body use-row">
+        <div class="demo">
+          <div class="mini-board">
+            <div class="t tb"><span>body</span></div>
+            <div class="t tp"><span>Pepperdine</span></div>
+            <div class="t tw"><span>power</span></div>
+          </div>
+          <div class="margin-a">
+            <div class="kicker">today’s loose threads</div>
+            <i>amazon return QR codes</i>
+            <i>Neighbor payment</i>
+            <i>re: Manus restoration</i>
+          </div>
+        </div>
+        <div>
+          <div class="markup"><pre><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"day-margin"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="str">"day-margin-list"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;li</span> <span class="attr">class</span>=<span class="str">"day-margin-item"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"day-margin-t"</span>
+            <span class="attr">contenteditable</span><span class="tag">&gt;</span>amazon return…<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">class</span>=<span class="str">"day-margin-whisper"</span>
+         <span class="attr">placeholder</span>=<span class="str">"write in the margin…"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+          <p class="how"><strong>How:</strong> + → “write in the margin” → type → Enter. Never lands in a vision tile.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="use-b">
+      <header>
+        <div class="num">use B</div>
+        <h2>Inbox → promote later</h2>
+        <p>Dump fast in the margin. When it’s real, drag / promote into a section as a card.</p>
+      </header>
+      <div class="body use-row">
+        <div class="demo">
+          <div class="chip"><em>margin</em> research proposal draft?</div>
+          <div class="arrow">↓ promote</div>
+          <div class="cardish">research proposal</div>
+        </div>
+        <div>
+          <div class="markup"><pre><span class="tag">&lt;!--</span> capture (margin) <span class="tag">--&gt;</span>
+<span class="tag">&lt;li</span> <span class="attr">class</span>=<span class="str">"day-margin-item"</span>
+    <span class="attr">data-promote</span>=<span class="str">"section"</span><span class="tag">&gt;</span>
+  research proposal draft?
+<span class="tag">&lt;/li&gt;</span>
+
+<span class="tag">&lt;!--</span> after promote (collage card) <span class="tag">--&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"vision-polaroid"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span&gt;</span>research proposal<span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+          <p class="how"><strong>How:</strong> Margin = staging. Collage = committed pursuit. (Promote can be a later power.)</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="use-c">
+      <header>
+        <div class="num">use C</div>
+        <h2>One journal line</h2>
+        <p>Not a task list — a single ruled whisper under the day, like a diary caption.</p>
+      </header>
+      <div class="body use-row">
+        <div class="demo">
+          <div class="mini-board">
+            <div class="t tb"></div>
+            <div class="t tp"></div>
+            <div class="t tw"></div>
+          </div>
+          <div class="line">kept the induction. soft day.</div>
+          <div class="line ghost">write the day’s line…</div>
+        </div>
+        <div>
+          <div class="markup"><pre><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"day-margin day-margin--journal"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"day-margin-line"</span>
+     <span class="attr">contenteditable</span><span class="tag">&gt;</span>
+    kept the induction. soft day.
+  <span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+          <p class="how"><strong>How:</strong> Cap at 1–2 lines. Feels like captioning the collage, not managing todos.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="use-d">
+      <header>
+        <div class="num">use D</div>
+        <h2>Side annotation</h2>
+        <p>Notes in the folio gutter while you look at the spread — book energy.</p>
+      </header>
+      <div class="body use-row">
+        <div class="demo">
+          <div class="mini-board">
+            <div class="t tb"></div>
+            <div class="t tp"></div>
+            <div class="t tw"></div>
+          </div>
+          <div class="side">call Betty<br>QR codes<br>sync later</div>
+        </div>
+        <div>
+          <div class="markup"><pre><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"day-spread"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"vision-board"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;aside</span> <span class="attr">class</span>=<span class="str">"day-margin day-margin--gutter"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="str">"day-margin-list"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/aside&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+          <p class="how"><strong>How:</strong> Desktop = beside. Mobile = stacks under. Same data, different layout.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="use-e">
+      <header>
+        <div class="num">use E</div>
+        <h2>Capture void</h2>
+        <p>Almost invisible until you type — empty margin is intentional quiet.</p>
+      </header>
+      <div class="body use-row">
+        <div class="demo">
+          <div class="mini-board" style="opacity:.75">
+            <div class="t tb"></div>
+            <div class="t tp"></div>
+            <div class="t tw"></div>
+          </div>
+          <div class="glass">amazon return QR codes</div>
+          <div class="glass ghost">write in the margin…</div>
+        </div>
+        <div>
+          <div class="markup"><pre><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"day-margin day-margin--glass"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">class</span>=<span class="str">"day-margin-whisper"</span>
+         <span class="attr">placeholder</span>=<span class="str">""</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;!--</span> list only renders when has-tasks <span class="tag">--&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+          <p class="how"><strong>How:</strong> Hide the list chrome when empty. Focus field on + / shortcut. Type glows.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="use-f">
+      <header>
+        <div class="num">use F</div>
+        <h2>Two lanes</h2>
+        <p>Explicit split: vision above, ops below — labeled so the brain doesn’t mix them.</p>
+      </header>
+      <div class="body use-row">
+        <div class="demo">
+          <div class="lane vision">lane · vision</div>
+          <div class="mini-board">
+            <div class="t tb"></div>
+            <div class="t tp"></div>
+            <div class="t tw"></div>
+          </div>
+          <div class="lane ops">lane · ops</div>
+          <div class="ops-list">
+            amazon return QR codes<br>
+            Neighbor payment<br>
+            re: Manus restoration
+          </div>
+        </div>
+        <div>
+          <div class="markup"><pre><span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"day-lane day-lane--vision"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"vision-board"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/section&gt;</span>
+<span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"day-lane day-lane--ops"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"day-margin"</span><span class="tag">&gt;</span>…<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/section&gt;</span></pre></div>
+          <p class="how"><strong>How:</strong> Mentally: sections = aspire. Margin = administer. Labels make that split glanceable.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- ========== LIVE MARKUP ========== -->
+  <div class="section-label">What you already have (live)</div>
+  <p class="section-blurb">Current Everything / prototype markup — under the collage, never inside <code style="font-family:IBM Plex Mono,monospace;font-size:0.85em;color:#c4a882">vision-hero</code>.</p>
+  <div class="grid" style="margin-bottom:48px">
+    <article>
+      <header>
+        <div class="num">live structure</div>
+        <h2>day-margin</h2>
+        <p>Wired via ensureDayMargin · + picker fork “write in the margin”.</p>
+      </header>
+      <div class="body">
+        <div class="markup"><pre><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"tv-panel tv-pursuits"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"vision-board"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"vision-hero"</span><span class="tag">&gt;</span>…tiles…<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"day-margin"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="str">"day-margin-list"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;li</span> <span class="attr">class</span>=<span class="str">"day-margin-item"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"day-margin-t"</span> <span class="attr">contenteditable</span><span class="tag">&gt;</span>…<span class="tag">&lt;/span&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"day-margin-del"</span><span class="tag">&gt;</span>×<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">class</span>=<span class="str">"day-margin-whisper"</span>
+           <span class="attr">placeholder</span>=<span class="str">"write in the margin…"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+        <p class="how"><strong>Rules already in:</strong> no checkboxes · glowing italic type · outside the collage · Enter to commit.</p>
+      </div>
+    </article>
+  </div>
+
+  <!-- ========== VISUAL WORLDS ========== -->
+  <div class="section-label">Visual worlds (skins)</div>
+  <p class="section-blurb">Different materials — not tweaks of the same brown. Say a number + a use letter to ship.</p>
+  <div class="worlds">
+    <div class="world w1"><b>01 Ivory folio</b><span>manuscript gutter</span></div>
+    <div class="world w2"><b>02 Scrapbook</b><span>magenta + candy slips</span></div>
+    <div class="world w3"><b>03 Noir cyan</b><span>electric caption rail</span></div>
+    <div class="world w4"><b>04 Cosmos bleed</b><span>type in the photo</span></div>
+    <div class="world w5"><b>05 Legal pad</b><span>green ruled ink</span></div>
+    <div class="world w6"><b>06 Neon HUD</b><span>phosphor on void</span></div>
+  </div>
+
+<script src="nav-shared.js?v=navdragfix1"></script>
+</body>
+</html>

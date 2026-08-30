@@ -106,12 +106,24 @@
 }
 #nav-sidebar nav a.nav-sub {
   padding-left: 38px;
-  font-size: 15px;
-  font-style: italic;
-  opacity: 0.92;
+  font-size: 17px;
+  font-style: normal;
+  opacity: 1;
   cursor: pointer;
 }
 #nav-sidebar nav a.nav-sub:hover { opacity: 1; }
+#nav-sidebar nav a.nav-sub-2 {
+  padding-left: 54px;
+  font-size: 17px;
+  font-style: normal;
+  opacity: 1;
+}
+#nav-sidebar nav a.nav-sub-3 {
+  padding-left: 70px;
+  font-size: 17px;
+  font-style: normal;
+  opacity: 1;
+}
 #nav-sidebar details.nav-group > summary.nav-section {
   cursor: pointer;
   list-style: none;
@@ -129,3 +141,41 @@
 #nav-sidebar details.nav-group[open] > summary.nav-section::after { transform: rotate(90deg); }
 #nav-sidebar .nav-bucket nav { min-height: 28px; }
 #nav-sidebar nav a { cursor: grab; }
+
+/* Main parents: chevron sits in the 24px gutter; labels share one left edge with plain links. */
+#nav-sidebar details.nav-parent { display: block; }
+#nav-sidebar details.nav-parent > summary.nav-parent-sum {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+#nav-sidebar details.nav-parent > summary.nav-parent-sum::-webkit-details-marker { display: none; }
+#nav-sidebar details.nav-parent > summary.nav-parent-sum::before {
+  content: '\25B8';
+  flex: 0 0 24px;
+  width: 24px;
+  margin: 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1;
+  opacity: 0.55;
+  transition: transform 0.2s ease;
+  color: #f3e6d0;
+}
+#nav-sidebar details.nav-parent[open] > summary.nav-parent-sum::before { transform: rotate(90deg); }
+#nav-sidebar details.nav-parent > summary.nav-parent-sum > a {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 0 !important;
+}
+#nav-sidebar details.nav-parent[data-depth="1"] > summary.nav-parent-sum::before {
+  flex-basis: 38px;
+  width: 38px;
+}
+#nav-sidebar details.nav-parent[data-depth="2"] > summary.nav-parent-sum::before {
+  flex-basis: 54px;
+  width: 54px;
+}

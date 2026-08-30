@@ -25,28 +25,82 @@
   }
   .archive-list {
     list-style: none;
-    margin: 18px 0 0;
+    margin: 22px 0 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
   }
-  .archive-list li {
+  .archive-card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    min-height: 240px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(247,239,228,0.22);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    background: #1a1410 center/cover no-repeat;
+  }
+  .archive-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,8,6,0.15) 0%, rgba(10,8,6,0.18) 45%, rgba(8,6,4,0.78) 100%);
+    pointer-events: none;
+  }
+  .archive-card .title {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 28px;
+    z-index: 1;
+    margin: 0;
     font-family: "Newsreader", Georgia, serif;
-    font-size: 18px;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 3.2vw, 30px);
     color: #f7efe4;
-    padding: 10px 14px;
-    border: 1px solid rgba(247,239,228,0.18);
-    background: rgba(20,12,8,0.28);
+    text-shadow: 0 1px 10px rgba(0,0,0,0.55);
   }
-  .archive-list .meta {
-    display: block;
-    margin-top: 4px;
+  .archive-card .meta {
+    position: absolute;
+    left: 14px;
+    right: 52px;
+    bottom: 10px;
+    z-index: 1;
+    margin: 0;
     font-family: "DM Mono", monospace;
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(247,239,228,0.55);
+    color: rgba(247,239,228,0.7);
+  }
+  .archive-card .unarchive-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    margin: 0;
+    padding: 7px 10px;
+    border: 1px solid rgba(247,239,228,0.35);
+    border-radius: 999px;
+    background: rgba(12,9,7,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f7efe4;
+    cursor: pointer;
+  }
+  .archive-card .unarchive-btn:hover {
+    border-color: rgba(247,239,228,0.7);
+    background: rgba(20,14,10,0.72);
+  }
+  .archive-card.no-photo {
+    background:
+      linear-gradient(160deg, rgba(60,42,28,0.95), rgba(20,14,10,0.98));
   }
 </style>
 </head>
@@ -56,7 +110,7 @@
   <header class="hero">
     <p class="eyebrow">archived · sections</p>
     <h1>sections</h1>
-    <p class="sub">vision sections you’ve set aside</p>
+    <p class="sub">set aside — unarchive to put one back in +</p>
   </header>
   <section class="panel">
     <ul class="archive-list" id="list"></ul>
@@ -68,11 +122,117 @@
 <script>
 (function(){
   var KEY = 'btm_archived_sections_v1';
+  var EDITS_KEY = 'btm_overview_edits_v1';
+  /* Fallback when an older archive entry was saved without photo */
+  var FOCUS_PHOTO = {
+    potential: 'manus-storage/zone-potential.jpg?v=hers1',
+    power: 'manus-storage/zone-power.jpg?v=lightning1',
+    purpose: 'manus-storage/zone-purpose.jpg?v=compass1',
+    villains: 'manus-storage/zone-villains.jpg?v=rim13',
+    body: 'manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1',
+    'inner fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    'inner-fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    executive: 'manus-storage/zone-executive-command.jpg?v=board1',
+    pursuits: 'manus-storage/zone-pursuits.jpg?v=chase3',
+    pepperdine: 'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
+    'glow up': 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
+    'glow-up': 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
+    'god-conscious': 'manus-storage/zone-god-conscious.jpg',
+    manifestation: 'manus-storage/zone-manifestation.jpg',
+    delusion: 'manus-storage/zone-delusion.jpg',
+    workflow: 'manus-storage/zone-workflow.jpg?v=flow1',
+    focus: 'manus-storage/zone-focus.jpg?v=lens1',
+    'future self': 'manus-storage/zone-future-self.jpg?v=path1',
+    'future-self': 'manus-storage/zone-future-self.jpg?v=path1',
+    phd: 'manus-storage/zone-phd.jpg?v=desk1',
+    'ph.d': 'manus-storage/zone-phd.jpg?v=desk1'
+  };
   function load(){
     try {
       var raw = JSON.parse(localStorage.getItem(KEY) || '[]');
       return Array.isArray(raw) ? raw : [];
     } catch (e) { return []; }
+  }
+  function save(list){
+    try { localStorage.setItem(KEY, JSON.stringify(list || [])); } catch (e) {}
+  }
+  function slug(s){
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  function aliasKeys(focus, title){
+    var set = {};
+    function add(v){
+      var k = String(v || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      if(!k) return;
+      set[k] = 1;
+      set[slug(k)] = 1;
+    }
+    add(focus);
+    add(title);
+    add(String(focus || '').replace(/-/g, ' '));
+    add(String(title || '').replace(/-/g, ' '));
+    // Common section aliases
+    if(set.villain || set.villains){ set.villain = 1; set.villains = 1; }
+    if(set['god conscious'] || set['god-conscious']){ set['god conscious'] = 1; set['god-conscious'] = 1; }
+    if(set['inner fire'] || set['inner-fire']){ set['inner fire'] = 1; set['inner-fire'] = 1; }
+    if(set['future self'] || set['future-self']){ set['future self'] = 1; set['future-self'] = 1; }
+    if(set.phd || set['ph.d'] || set['ph-d']){ set.phd = 1; set['ph.d'] = 1; set['ph-d'] = 1; }
+    return set;
+  }
+  function todayKey(){
+    try {
+      var d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    } catch (e) { return ''; }
+  }
+  /** Clear day-edit tombstones so + can re-add on current/future days. Past days stay untouched. */
+  function clearRemovedSectionMarkers(focus, title){
+    var aliases = aliasKeys(focus, title);
+    var today = todayKey();
+    try {
+      var edits = JSON.parse(localStorage.getItem(EDITS_KEY) || '{}') || {};
+      var changed = false;
+      Object.keys(edits).forEach(function(day){
+        if(today && day < today) return;
+        var data = edits[day];
+        if(!data || !Array.isArray(data.removedSections)) return;
+        var before = data.removedSections.length;
+        data.removedSections = data.removedSections.filter(function(f){
+          var k = String(f || '').toLowerCase().trim();
+          return !(aliases[k] || aliases[slug(k)]);
+        });
+        if(data.removedSections.length !== before) changed = true;
+      });
+      if(changed) localStorage.setItem(EDITS_KEY, JSON.stringify(edits));
+    } catch (e) {}
+  }
+  function photoFor(it){
+    var p = (it && it.photo) ? String(it.photo).trim() : '';
+    if (p) return p.replace(/^['"]|['"]$/g, '');
+    var key = String((it && (it.focus || it.title)) || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    return FOCUS_PHOTO[key] || FOCUS_PHOTO[key.replace(/\s+/g, '-')] || '';
+  }
+  function setStatus(msg){
+    var el = document.getElementById('status');
+    if(el) el.textContent = msg || 'saved here';
+  }
+  function unarchive(it){
+    if(!it) return;
+    var focus = String(it.focus || '').toLowerCase().trim();
+    var title = String(it.title || '').toLowerCase().trim();
+    var next = load().filter(function(row){
+      if(!row) return false;
+      var f = String(row.focus || '').toLowerCase().trim();
+      var t = String(row.title || '').toLowerCase().trim();
+      // Drop this entry (and any alias twin)
+      if(focus && (f === focus || t === focus)) return false;
+      if(title && (f === title || t === title)) return false;
+      return true;
+    });
+    save(next);
+    clearRemovedSectionMarkers(it.focus || it.title, it.title || it.focus);
+    setStatus((it.title || it.focus || 'section') + ' · back in +');
+    render();
   }
   function render(){
     var items = load();
@@ -82,13 +242,32 @@
     items.forEach(function(it){
       if (!it || !it.title) return;
       var li = document.createElement('li');
-      li.appendChild(document.createTextNode(it.title));
-      if (it.day || it.from) {
-        var meta = document.createElement('span');
-        meta.className = 'meta';
-        meta.textContent = [it.day, it.from].filter(Boolean).join(' · ');
-        li.appendChild(meta);
+      li.className = 'archive-card';
+      var photo = photoFor(it);
+      if (photo) {
+        li.style.backgroundImage = 'url("' + photo.replace(/"/g, '\\"') + '")';
+      } else {
+        li.classList.add('no-photo');
       }
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'unarchive-btn';
+      btn.textContent = 'unarchive';
+      btn.setAttribute('aria-label', 'unarchive ' + it.title);
+      btn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        unarchive(it);
+      });
+      li.appendChild(btn);
+      var title = document.createElement('p');
+      title.className = 'title';
+      title.textContent = it.title;
+      li.appendChild(title);
+      var meta = document.createElement('p');
+      meta.className = 'meta';
+      meta.textContent = [it.day, it.from].filter(Boolean).join(' · ') || 'archived section';
+      li.appendChild(meta);
       list.appendChild(li);
     });
     empty.hidden = items.length > 0;

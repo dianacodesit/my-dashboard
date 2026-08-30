@@ -283,10 +283,7 @@
     return html;
   }
   function ensureStyles(){
-    if (document.getElementById('nav-drag-css')) return;
-    var s = document.createElement('style');
-    s.id = 'nav-drag-css';
-    s.textContent =
+    var css =
       '#nav-sidebar .nav-bucket nav { min-height: 28px; }' +
       '#nav-sidebar .nav-bucket nav:empty::after { content: "drop a page here"; display: block; padding: 8px 24px 12px; font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 14px; color: rgba(243,230,208,0.7); }' +
       '#nav-sidebar .nav-bucket.is-drop { background: rgba(138,158,133,0.12); }' +
@@ -294,17 +291,19 @@
       '#nav-sidebar details.nav-parent { display: block; }' +
       '#nav-sidebar details.nav-parent > summary.nav-parent-sum { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 0; }' +
       '#nav-sidebar details.nav-parent > summary.nav-parent-sum::-webkit-details-marker { display: none; }' +
-      '#nav-sidebar details.nav-parent > summary.nav-parent-sum::before { content: "\\25B8"; flex: 0 0 auto; width: 14px; margin: 0 2px 0 10px; font-size: 9px; opacity: 0.55; transition: transform 0.2s ease; color: #f3e6d0; }' +
+      '#nav-sidebar details.nav-parent > summary.nav-parent-sum::before { content: "\\25B8"; flex: 0 0 24px; width: 24px; margin: 0; box-sizing: border-box; text-align: center; font-size: 9px; line-height: 1; opacity: 0.55; transition: transform 0.2s ease; color: #f3e6d0; pointer-events: auto; }' +
       '#nav-sidebar details.nav-parent[open] > summary.nav-parent-sum::before { transform: rotate(90deg); }' +
-      '#nav-sidebar details.nav-parent > summary.nav-parent-sum > a { flex: 1 1 auto; padding-left: 8px !important; }' +
-      '#nav-sidebar details.nav-parent[data-depth="1"] > summary.nav-parent-sum::before { margin-left: 28px; }' +
-      '#nav-sidebar details.nav-parent[data-depth="1"] > summary.nav-parent-sum > a { padding-left: 8px !important; }' +
+      '#nav-sidebar details.nav-parent > summary.nav-parent-sum > a { flex: 1 1 auto; min-width: 0; padding-left: 0 !important; }' +
+      '#nav-sidebar details.nav-parent[data-depth="1"] > summary.nav-parent-sum::before { flex-basis: 38px; width: 38px; }' +
+      '#nav-sidebar details.nav-parent[data-depth="1"] > summary.nav-parent-sum > a { padding-left: 0 !important; }' +
+      '#nav-sidebar details.nav-parent[data-depth="2"] > summary.nav-parent-sum::before { flex-basis: 54px; width: 54px; }' +
+      '#nav-sidebar details.nav-parent[data-depth="2"] > summary.nav-parent-sum > a { padding-left: 0 !important; }' +
       '#nav-sidebar .nav-kids { display: flex; flex-direction: column; }' +
-      '#nav-sidebar nav a.nav-sub { cursor: grab; padding-left: 38px !important; font-size: 15px !important; font-style: italic; opacity: 0.92; }' +
+      '#nav-sidebar nav a.nav-sub { cursor: grab; padding-left: 38px !important; font-size: 17px !important; font-style: normal !important; opacity: 1; }' +
       '#nav-sidebar nav a.nav-sub:hover { opacity: 1; }' +
-      '#nav-sidebar nav a.nav-sub-2 { padding-left: 54px !important; font-size: 14px !important; opacity: 0.88; }' +
+      '#nav-sidebar nav a.nav-sub-2 { padding-left: 54px !important; font-size: 17px !important; font-style: normal !important; opacity: 1; }' +
       '#nav-sidebar nav a.nav-sub-2:hover { opacity: 1; }' +
-      '#nav-sidebar nav a.nav-sub-3 { padding-left: 70px !important; font-size: 13px !important; opacity: 0.84; }' +
+      '#nav-sidebar nav a.nav-sub-3 { padding-left: 70px !important; font-size: 17px !important; font-style: normal !important; opacity: 1; }' +
       '#nav-sidebar nav a.is-dragging { opacity: 0.35; }' +
       '#nav-sidebar nav a.is-insert { box-shadow: inset 0 2px 0 #8a9e85; }' +
       '#nav-sidebar nav a.is-nest-target, #nav-sidebar details.nav-parent.is-nest-target > summary a { outline: 1px solid rgba(196,168,130,0.85); background: rgba(138,158,133,0.22) !important; box-shadow: inset 0 0 0 1px rgba(243,230,208,0.25); }' +
@@ -314,7 +313,13 @@
       'html body #nav-sidebar nav a, html body.enh-dark #nav-sidebar nav a { color: #f3e6d0 !important; text-shadow: 0 1px 2px rgba(20,12,6,0.5), 0 2px 8px rgba(20,12,6,0.3); }' +
       'html body #nav-sidebar h2 { display: none !important; }' +
       '.nav-drag-ghost { position: fixed; z-index: 200040; pointer-events: none; padding: 8px 16px; background: #F5F0E8; border: 1px solid rgba(196,168,130,0.55); box-shadow: 0 10px 24px rgba(20,12,6,0.18); font-family: "Newsreader", Georgia, serif; font-size: 17px; color: #3a3530; white-space: nowrap; }';
-    document.head.appendChild(s);
+    var s = document.getElementById('nav-drag-css');
+    if (!s) {
+      s = document.createElement('style');
+      s.id = 'nav-drag-css';
+      document.head.appendChild(s);
+    }
+    s.textContent = css;
   }
   function ensureDom(){
     ensureStyles();
@@ -334,11 +339,20 @@
     var wasOpen = sidebar.classList.contains('open');
     sidebar.innerHTML = sidebarInner(cur);
     if (wasOpen) sidebar.classList.add('open');
-    // Clicking the page link inside summary should navigate, not only toggle.
+    // Link click → navigate (don't fight the details toggle).
+    // Chevron / summary gutter click → toggle open/closed.
     sidebar.querySelectorAll('details.nav-parent > summary a').forEach(function(a){
       a.addEventListener('click', function(e){
-        // Allow toggle via caret area; link itself navigates.
         e.stopPropagation();
+      });
+    });
+    sidebar.querySelectorAll('details.nav-parent > summary.nav-parent-sum').forEach(function(sum){
+      sum.addEventListener('click', function(e){
+        if (e.target && e.target.closest && e.target.closest('a')) return;
+        var det = sum.parentElement;
+        if (!det || det.tagName !== 'DETAILS') return;
+        e.preventDefault();
+        det.open = !det.open;
       });
     });
   }
