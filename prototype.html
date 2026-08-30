@@ -45725,9 +45725,9 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   position: absolute !important;
   left: var(--px, 10%) !important;
   top: var(--py, 18%) !important;
-  /* Card size tracks the section — never fill a small tile with a fixed 156px polaroid. */
-  width: var(--pw, clamp(52px, 32%, 112px)) !important;
-  max-width: 40% !important;
+  /* Card size tracks the section — percent width fills the column. */
+  width: var(--pc, var(--pw, 23%)) !important;
+  max-width: none !important;
   padding: 6px 6px 26px !important;
   transform: rotate(-2.2deg) !important;
   z-index: 5;
