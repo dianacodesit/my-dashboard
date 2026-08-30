@@ -38595,7 +38595,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   var DEFAULT_TILE = 'manus-storage/pursuit-vibes_e645a2da.jpg';
   var DEFAULT_CARD = 'manus-storage/pursuit-vibes_e645a2da.jpg';
   function blkOk(blk){
-    return !!(blk && window.__isOverviewEra && window.__isOverviewEra(blk));
+    if(!blk) return false;
+    if(blk.classList && (blk.classList.contains('vision-collage-day') || blk.classList.contains('overview-era-day'))) return true;
+    return !!(window.__isOverviewEra && window.__isOverviewEra(blk));
   }
   function dayKey(blk){
     return (blk && blk.getAttribute('data-date')) || '';
@@ -39849,8 +39851,27 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       document.addEventListener('pointermove', onMove, true);
       document.addEventListener('pointerup', onUp, true);
       document.addEventListener('pointercancel', onUp, true);
+      document.addEventListener('mousemove', onMove, true);
+      document.addEventListener('mouseup', onUp, true);
+    }, true);
+    /* Mouse fallback — some automation / older paths fire mouse without pointer. */
+    document.addEventListener('mousedown', function(e){
+      if(e.pointerType) return; /* real pointer path already handled */
+      if(window.__polDragging || state) return;
+      /* Re-dispatch as pointerdown so one code path owns drag. */
+      try {
+        var pe = new PointerEvent('pointerdown', {
+          bubbles: true, cancelable: true, composed: true,
+          clientX: e.clientX, clientY: e.clientY, button: e.button,
+          buttons: e.buttons, pointerId: 1, pointerType: 'mouse', isPrimary: true
+        });
+        (e.target || document).dispatchEvent(pe);
+      } catch (err) {
+        /* PointerEvent ctor missing — ignore; pointer listeners cover modern browsers. */
+      }
     }, true);
   }
+  window.__movePolaroidToTile = movePolaroidToTile;
   wirePolaroidInteract();
 
   function ensureOverviewEditChrome(blk){
@@ -42445,10 +42466,8 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile-body.is-zoomed .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile[data-focus="body"].is-zoomed .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile[data-focus="gym"].is-zoomed .vision-tile-photo {
-  background-size: contain !important;
   background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-color: #060504 !important;
+  background-size: cover !important;
   transform: scale(1) !important;
 }
 
