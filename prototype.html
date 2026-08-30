@@ -44226,6 +44226,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       archivedAt: Date.now()
     });
     saveArchivedSections(list);
+    /* Always remove from the day she clicked — otherwise ⌘+click on a past
+       day looks like a no-op (scrub only touches today + future). */
+    deleteTile(tile);
     scrubArchivedSectionsEverywhere();
     return true;
   }
