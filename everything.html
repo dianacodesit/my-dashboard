@@ -47935,8 +47935,10 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
 /* Polaroid fills its pack cell: wide photo + tight 2-line caption. No skinny strips. */
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card),
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) {
-  width: var(--pw, clamp(88px, 23%, 176px)) !important;
+  width: var(--pc, var(--pw, 23%)) !important;
   max-width: none !important;
+  min-width: 0 !important;
+  height: var(--ph, auto) !important;
   padding: 4px 4px 4px !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
