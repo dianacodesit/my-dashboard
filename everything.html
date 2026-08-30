@@ -41220,9 +41220,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var blk = pol.closest('.day-block');
       if(!tile || !vb || !blkOk(blk)) return;
       if(e.target.closest('.vision-card-del, .vision-habit-check, .habit-check, input, button, a')) return;
-      /* Prefer zoomed section; also allow when polaroid is free-placed on the tile */
+      /* Zoomed section, details freeplace collage, or already-absolute cards */
       var zoomed = vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed');
-      var abs = zoomed || getComputedStyle(pol).position === 'absolute';
+      var detailsFree = blk.classList.contains('overview-mode-details');
+      var abs = zoomed || detailsFree || getComputedStyle(pol).position === 'absolute';
       if(!abs && !resize) return;
       if(resize){
         e.preventDefault();
@@ -42863,13 +42864,11 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
   min-height: 0 !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-tile-details {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  align-content: flex-end !important;
-  align-items: flex-end !important;
-  gap: 8px !important;
-  padding: 12px 10px 56px !important;
-  /* Let empty details space pass clicks through so the section can zoom.
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  padding: 0 !important;
+  /* Empty details space passes clicks so the section can zoom.
      Polaroids / shot-cards / chrome below re-enable pointer events. */
   pointer-events: none !important;
   overflow: visible !important;
@@ -42882,13 +42881,22 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .habit-check {
   pointer-events: auto !important;
 }
+/* Freeplace --px/--py inside the section (drag-to-move). Never force relative/flex packing. */
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid {
-  position: relative !important;
-  left: auto !important;
-  top: auto !important;
-  width: 156px !important;
+  position: absolute !important;
+  left: var(--px, 10%) !important;
+  top: var(--py, 18%) !important;
+  width: var(--pw, 156px) !important;
   padding: 8px 8px 34px !important;
   transform: rotate(-2.2deg) !important;
+  z-index: 5;
+  cursor: grab;
+  touch-action: none;
+}
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.is-pol-dragging,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.is-pol-resizing {
+  cursor: grabbing;
+  z-index: 20 !important;
 }
 html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid img {
   height: 102px !important;
@@ -43743,7 +43751,7 @@ html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile[dat
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile-body .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile[data-focus="body"] .vision-tile-photo,
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day, .overview-era-day) .vision-tile[data-focus="gym"] .vision-tile-photo {
-  background-position: center 40% !important;
+  background-position: center 22% !important;
   background-size: cover !important;
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-tile-mini .vision-tile-title {
