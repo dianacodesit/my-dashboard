@@ -39213,6 +39213,7 @@ html body .day-block.overview-era-day .day-margin-item {
   align-items: baseline !important;
   gap: 8px !important;
   padding: 2px 2px 2px 0 !important;
+  position: relative !important;
 }
 html body .day-block.overview-era-day .day-margin-check,
 html body .day-block.overview-era-day .day-margin-box {
@@ -39234,18 +39235,65 @@ html body .day-block.overview-era-day .day-margin-t {
   outline: none !important;
   word-break: break-word !important;
 }
-html body .day-block.overview-era-day .day-margin-del {
+html body .day-block.overview-era-day .day-margin-del,
+html body .day-block.overview-era-day .day-margin-promote {
   flex: 0 0 auto !important;
   border: none !important;
   background: transparent !important;
   color: rgba(255, 248, 238, 0.38) !important;
-  font-size: 1rem !important;
+  font-size: 0.85rem !important;
   line-height: 1 !important;
   cursor: pointer !important;
   padding: 2px 4px !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
 }
-html body .day-block.overview-era-day .day-margin-del:hover {
-  color: rgba(255, 248, 238, 0.85) !important;
+html body .day-block.overview-era-day .day-margin-del:hover,
+html body .day-block.overview-era-day .day-margin-promote:hover {
+  color: rgba(255, 252, 245, 0.95) !important;
+  text-shadow: 0 0 10px rgba(255, 236, 210, 0.45) !important;
+}
+html body .day-block.overview-era-day .day-margin-promote {
+  letter-spacing: 0.02em !important;
+  opacity: 0.85 !important;
+}
+html body .day-margin-promote-pick {
+  position: absolute !important;
+  z-index: 80 !important;
+  min-width: 160px !important;
+  max-width: 220px !important;
+  padding: 8px !important;
+  border-radius: 10px !important;
+  background: rgba(18, 12, 10, 0.92) !important;
+  border: 1px solid rgba(255, 248, 238, 0.22) !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+html body .day-margin-promote-pick .dmp-label {
+  font-family: "DM Mono", monospace !important;
+  font-size: 8px !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 248, 238, 0.45) !important;
+  padding: 2px 6px 6px !important;
+}
+html body .day-margin-promote-pick button {
+  border: none !important;
+  background: transparent !important;
+  text-align: left !important;
+  padding: 7px 8px !important;
+  border-radius: 6px !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 0.95rem !important;
+  color: rgba(255, 252, 245, 0.92) !important;
+  cursor: pointer !important;
+}
+html body .day-margin-promote-pick button:hover {
+  background: rgba(255, 248, 238, 0.1) !important;
 }
 html body .day-block.overview-era-day .day-margin-whisper {
   width: 100% !important;
@@ -41662,7 +41710,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       item = item || {};
       var li = document.createElement('li');
       li.className = 'day-margin-item';
-      li.innerHTML = '<span class="day-margin-t" contenteditable="true" spellcheck="false"></span><button type="button" class="day-margin-del" aria-label="delete task">×</button>';
+      li.style.position = 'relative';
+      li.innerHTML = '<span class="day-margin-t" contenteditable="true" spellcheck="false"></span><button type="button" class="day-margin-promote" aria-label="promote to card" title="promote to a section card">↑ card</button><button type="button" class="day-margin-del" aria-label="delete task">×</button>';
       var tEl = li.querySelector('.day-margin-t');
       tEl.textContent = item.name || '';
       tEl.addEventListener('blur', function(){
@@ -41680,6 +41729,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       tEl.addEventListener('keydown', function(ev){
         if(ev.key === 'Enter'){ ev.preventDefault(); tEl.blur(); }
       });
+      li.querySelector('.day-margin-promote').addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        openMarginPromotePicker(blk, i, li);
+      });
       li.querySelector('.day-margin-del').addEventListener('click', function(ev){
         ev.preventDefault();
         ev.stopPropagation();
@@ -41693,8 +41747,70 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     margin.classList.toggle('has-tasks', arr.length > 0);
     blk.classList.toggle('has-day-margin', arr.length > 0);
   }
+  function closeMarginPromotePickers(){
+    document.querySelectorAll('.day-margin-promote-pick').forEach(function(el){
+      if(el && el.parentNode) el.parentNode.removeChild(el);
+    });
+  }
+  function finishMarginPromote(blk, index, tile){
+    if(!blkOk(blk) || !tile) return;
+    var cur = marginTasksFor(blk).slice();
+    var item = cur[index];
+    var name = item && String(item.name || '').replace(/\s+/g, ' ').trim();
+    if(!name) return;
+    addCard(tile, name);
+    cur.splice(index, 1);
+    setMarginTasks(blk, cur);
+    closeMarginPromotePickers();
+    renderDayMargin(blk);
+  }
+  function openMarginPromotePicker(blk, index, anchorLi){
+    closeMarginPromotePickers();
+    if(!blkOk(blk)) return;
+    var tiles = [].slice.call(blk.querySelectorAll('.vision-tile'));
+    if(!tiles.length) return;
+    var cur = marginTasksFor(blk);
+    var name = cur[index] && cur[index].name;
+    if(!name) return;
+    if(tiles.length === 1){
+      finishMarginPromote(blk, index, tiles[0]);
+      return;
+    }
+    var pick = document.createElement('div');
+    pick.className = 'day-margin-promote-pick';
+    pick.innerHTML = '<div class="dmp-label">promote to</div>';
+    tiles.forEach(function(tile){
+      var label = (tile.querySelector('.vision-tile-title') || {}).textContent || tile.getAttribute('data-focus') || 'section';
+      label = String(label).replace(/\s+/g, ' ').trim();
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = label;
+      btn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        finishMarginPromote(blk, index, tile);
+      });
+      pick.appendChild(btn);
+    });
+    (anchorLi || blk).appendChild(pick);
+    // position near the row
+    try {
+      pick.style.right = '8px';
+      pick.style.top = '100%';
+      pick.style.marginTop = '4px';
+    } catch(e){}
+    setTimeout(function(){
+      function onDoc(ev){
+        if(pick.contains(ev.target)) return;
+        closeMarginPromotePickers();
+        document.removeEventListener('pointerdown', onDoc, true);
+      }
+      document.addEventListener('pointerdown', onDoc, true);
+    }, 0);
+  }
   window.__ensureDayMargin = ensureDayMargin;
   window.__addMarginTask = addMarginTask;
+  window.__promoteMarginToCard = finishMarginPromote;
   function cssUrlSrc(raw){
     if(!raw) return '';
     raw = String(raw).trim();
