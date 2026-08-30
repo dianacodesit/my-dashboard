@@ -41234,6 +41234,35 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
     }
 
+    /* Fill leftover holes by growing a single-row tile ABOVE downward (safe; does not widen tall tiles). */
+    for(var r2f = 1; r2f <= maxRow; r2f++){
+      for(var c2f = 1; c2f <= COLS; c2f++){
+        if(occupied[key(r2f, c2f)]) continue;
+        var above = tiles.find(function(t){
+          var cs = (t.style.getPropertyValue('grid-column') || '').split('/');
+          var rs = (t.style.getPropertyValue('grid-row') || '').split('/');
+          if(cs.length < 2 || rs.length < 2) return false;
+          var c1 = parseInt(cs[0], 10), c2 = parseInt(cs[1], 10);
+          var r1 = parseInt(rs[0], 10), r2 = parseInt(rs[1], 10);
+          if(r2 - r1 !== 1) return false;
+          return r2 === r2f && c2f >= c1 && c2f < c2;
+        });
+        if(!above) continue;
+        var rsA = above.style.getPropertyValue('grid-row').split('/');
+        var r1a = parseInt(rsA[0], 10);
+        var csA = above.style.getPropertyValue('grid-column').split('/');
+        var c1a = parseInt(csA[0], 10), c2a = parseInt(csA[1], 10);
+        var sc = c2a - c1a;
+        if(!free(r2f, c1a, sc, 1)) continue;
+        /* only extend if every column of this tile is empty on r2f */
+        var ok = true;
+        for(var cx = c1a; cx < c2a; cx++){ if(occupied[key(r2f, cx)]){ ok = false; break; } }
+        if(!ok) continue;
+        mark(r2f, c1a, sc, 1);
+        above.style.setProperty('grid-row', r1a + ' / ' + (r2f + 1), 'important');
+      }
+    }
+
     var cols = [];
     for(var i = 0; i < COLS; i++) cols.push('1fr');
     var rows = [];

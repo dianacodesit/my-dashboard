@@ -41771,7 +41771,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       tile.style.setProperty('grid-row', spanR > 1 ? (spot.r + ' / ' + (spot.r + spanR)) : (spot.r + ' / ' + (spot.r + 1)), 'important');
     });
 
-    /* Fill orphan empty cells: extend the tile to the left on each row. */
+    /* Fill orphan empty cells: extend the tile to the left on each row.
+       Never widen a multi-row tile — that expands every row of its span and
+       overlaps neighbors that only share one of those rows (e.g. Pepperdine + alignment). */
     for(var r = 1; r <= maxRow; r++){
       for(var c = 1; c <= COLS; c++){
         if(occupied[key(r, c)]) continue;
@@ -41786,6 +41788,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           if(cs.length < 2 || rs.length < 2) return false;
           var c1 = parseInt(cs[0], 10), c2 = parseInt(cs[1], 10);
           var r1 = parseInt(rs[0], 10), r2 = parseInt(rs[1], 10);
+          if(r2 - r1 !== 1) return false; /* single-row donors only */
           return c2 - 1 === left && r >= r1 && r < r2;
         });
         if(!donor) continue;
