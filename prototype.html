@@ -16261,6 +16261,19 @@ window.__j22fnApply=run;
   }catch(e){}
 
   try{
+    if(!localStorage.getItem('btm_unstack_polaroids_v4')){
+      document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
+        try{
+          if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2 && window.__packTileCards){
+            window.__packTileCards(tile, {force: true});
+          }
+        }catch(e){}
+      });
+      localStorage.setItem('btm_unstack_polaroids_v4','1');
+    }
+  }catch(e){}
+
+  try{
     if(!localStorage.getItem('btm_unstack_polaroids_v3')){
       document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
         try{
@@ -43307,9 +43320,20 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(pols.length < 1) return false;
     var vb = tile.closest('.vision-board');
     var zoomed = !!(vb && vb.classList.contains('is-zoomed') && tile.classList.contains('is-zoomed'));
-    var tw = Math.max(1, tile.clientWidth || 1);
-    var th = Math.max(1, tile.clientHeight || 1);
+    var tw = tile.clientWidth || 0;
+    var th = tile.clientHeight || 0;
     var n = pols.length;
+    /* Collapsed / not laid out yet — never write bogus % positions. Retry next frame. */
+    if(tw < 80 || th < 80){
+      if(!tile.__packRetry && typeof requestAnimationFrame === 'function'){
+        tile.__packRetry = 1;
+        requestAnimationFrame(function(){
+          tile.__packRetry = 0;
+          try{ packTileCards(tile, opts); }catch(e){}
+        });
+      }
+      return false;
+    }
     var sample = pols[0].getBoundingClientRect();
     var measured = sample && sample.width >= 2 && sample.height >= 2;
     var cw = measured ? sample.width : (zoomed ? 220 : Math.min(120, tw * (n >= 7 ? 0.20 : 0.26)));
@@ -43378,24 +43402,31 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var packW = Math.min(cw, cellW * 0.92);
     var packH = Math.min(ch, cellH * 0.92);
     if(n >= 6 && !zoomed){
-      packW = Math.min(packW, tw * 0.22);
-      packH = Math.min(packH, th * 0.36);
-      pols.forEach(function(pol){
-        pol.style.setProperty('--pw', Math.max(56, Math.round(packW)) + 'px');
-      });
+      packW = Math.min(packW, tw * 0.22, cellW * 0.9);
+      packH = Math.min(packH, th * 0.36, cellH * 0.9);
+      var pwPx = Math.max(56, Math.min(128, Math.round(packW)));
+      pols.forEach(function(pol){ pol.style.setProperty('--pw', pwPx + 'px'); });
+      packW = pwPx;
+      packH = Math.min(packH, pwPx * 1.38);
     }
     var stepX = ((packW + gap) / tw) * 100;
     var stepY = ((packH + gap) / th) * 100;
-    if(!isFinite(stepX) || stepX < 6) stepX = 100 / cols;
-    if(!isFinite(stepY) || stepY < 8) stepY = Math.max(28, (100 - titleReserve - marginY) / rows);
+    /* Hard caps — never place past the tile or use runaway steps. */
+    if(!isFinite(stepX) || stepX < 6) stepX = (100 - marginX * 2) / cols;
+    if(!isFinite(stepY) || stepY < 8) stepY = Math.max(22, (100 - titleReserve - marginY - 4) / rows);
+    stepX = Math.min(stepX, (100 - marginX * 2) / cols);
+    stepY = Math.min(stepY, (100 - titleReserve - marginY - 4) / rows);
     var maxX = Math.max(marginX, 100 - (packW / tw) * 100 - 2);
     var maxPy = Math.max(marginY, 100 - (packH / th) * 100 - titleReserve);
+    maxX = Math.min(92, maxX);
+    maxPy = Math.min(92, maxPy);
     pols.forEach(function(pol, idx){
       var col = idx % cols;
       var row = Math.floor(idx / cols);
       var px = Math.min(maxX, marginX + col * stepX);
       var py = Math.min(maxPy, marginY + row * stepY);
-      py = clampPyClearOfTitle(tile, pol, py);
+      px = Math.max(0, Math.min(92, px));
+      py = clampPyClearOfTitle(tile, pol, Math.max(0, Math.min(92, py)));
       pol.style.setProperty('--px', px.toFixed(1) + '%');
       pol.style.setProperty('--py', py.toFixed(1) + '%');
       try{ syncPolaroidRec(pol); }catch(e){}
