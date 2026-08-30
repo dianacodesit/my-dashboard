@@ -15273,6 +15273,42 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_executive_climb_photo_v4','1');
     }
   }catch(e){}
+  try{
+    /* Mid-tummy only crop (no thighs/shorts) — happy medium framing */
+    if(!localStorage.getItem('btm_body_tummy_gym_v5')){
+      var BODY_TG='manus-storage/zone-body-tummy-gym-dark.jpg?v=tummygym5';
+      var BODY_QUOTE='obsessed is a word the lazy use to describe the dedicated.';
+      document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"], .pursuit-zone[data-zone="body"], .pursuit-zone[data-zone="gym"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+BODY_TG+"')");
+        else el.style.setProperty('--zone-photo', "url('"+BODY_TG+"')");
+      });
+      document.querySelectorAll('.vision-tile[data-focus="body"] img, .vision-tile[data-focus="gym"] img, .pursuit-zone[data-zone="body"] img, .pursuit-zone[data-zone="gym"] img').forEach(function(img){
+        if(/zone-body/i.test(img.getAttribute('src')||'')) img.setAttribute('src', BODY_TG);
+      });
+      document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
+        var q = tile.querySelector(':scope > .vision-tile-quote');
+        if(!q){
+          q = document.createElement('p');
+          q.className = 'vision-tile-quote';
+          var titleEl = tile.querySelector('.vision-tile-title');
+          if(titleEl) tile.insertBefore(q, titleEl);
+          else tile.appendChild(q);
+        }
+        q.textContent = BODY_QUOTE;
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/manus-storage\/zone-body-gym-wide-dark\.jpg(\?v=[^"'\\s)]+)?/g, BODY_TG)
+          .replace(/manus-storage\/zone-body-gym-abs\.jpg(\?v=[^"'\\s)]+)?/g, BODY_TG)
+          .replace(/manus-storage\/zone-body-abs\.jpg(\?v=[^"'\\s)]+)?/g, BODY_TG)
+          .replace(/manus-storage\/zone-body\.jpg(\?v=[^"'\\s)]+)?/g, BODY_TG)
+          .replace(/manus-storage\/zone-body-tummy-gym-dark\.jpg(\?v=[^"'\\s)]+)?/g, BODY_TG);
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_body_tummy_gym_v5','1');
+    }
+  }catch(e){}
 
   try{
     if(!localStorage.getItem('btm_power_purpose_split_v1')){
