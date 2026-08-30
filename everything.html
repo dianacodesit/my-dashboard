@@ -41144,6 +41144,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(name === 'villain') name = 'villains';
       if(name === 'ambition') name = 'executive';
       if((dayKey(blk)||'') >= '2026-08-30' && pepperdineCardOnlyName(name)) return;
+      // Archived sections stay out of + forever (not just scrubbed from the collage).
+      try {
+        if(typeof isGloballyArchivedSection === 'function' && isGloballyArchivedSection(name)) return;
+        if(typeof window !== 'undefined' && typeof window.__isGloballyArchivedSection === 'function' && window.__isGloballyArchivedSection(name)) return;
+      } catch(e){}
       var low = name.toLowerCase();
       if(already[low] || seen[low]) return;
       seen[low] = 1;
