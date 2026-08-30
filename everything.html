@@ -47944,14 +47944,17 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
 <!-- vision-card-scale-relative-v1 -->
 
 <style id="vision-card-scale-relative-v1">
-/* Polaroid fills its pack cell: wide photo + tight 2-line caption. No skinny strips. */
+/* Polaroid = photo + tight caption. Width fills the column. Never a beige footnote slab. */
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card),
-html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) {
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card),
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card),
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) {
   width: var(--pc, var(--pw, 23%)) !important;
   max-width: none !important;
   min-width: 0 !important;
-  height: var(--ph, auto) !important;
-  padding: 4px 4px 4px !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 4px 4px 3px !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
   display: flex !important;
@@ -47959,18 +47962,22 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-de
   transform: rotate(-1.2deg) !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) img,
-html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) img {
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) img,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) img,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) img {
   display: block !important;
   width: 100% !important;
-  height: auto !important;
-  min-height: 40px !important;
-  max-height: none !important;
-  flex: 1 1 auto !important;
+  height: var(--photo-h, auto) !important;
+  min-height: 0 !important;
+  max-height: var(--photo-h, none) !important;
+  flex: 0 0 auto !important;
   aspect-ratio: auto !important;
   object-fit: cover !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) span,
-html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) span {
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) span,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) span,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) span {
   position: relative !important;
   left: auto !important;
   right: auto !important;
