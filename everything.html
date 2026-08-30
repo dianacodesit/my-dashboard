@@ -39597,6 +39597,25 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     function tileUnderPoint(vb, x, y, pol){
       if(!vb) return null;
+      /* Prefer geometry over elementFromPoint — overview overlays / floating pol
+         can steal hits; section tiles are axis-aligned rectangles. */
+      var tiles = [].slice.call(vb.querySelectorAll('.vision-tile'));
+      var best = null;
+      var bestArea = Infinity;
+      for(var i=0;i<tiles.length;i++){
+        var t = tiles[i];
+        if(pol && t.contains(pol) && pol.classList.contains('is-pol-dragging')){
+          /* still allow returning the origin tile if pointer is over it */
+        }
+        var r = t.getBoundingClientRect();
+        if(x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+        var area = r.width * r.height;
+        if(area < bestArea){
+          bestArea = area;
+          best = t;
+        }
+      }
+      if(best) return best;
       var prev = pol ? pol.style.pointerEvents : '';
       if(pol) pol.style.pointerEvents = 'none';
       var el = document.elementFromPoint(x, y);
@@ -42856,6 +42875,10 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
   stroke-width: 2 !important;
   filter: drop-shadow(0 0 4px rgba(255, 220, 170, 0.75));
 }
+/* HARD: filaments never dashed — center-to-center dash look is banned */
+html body .day-block svg.aug20-zone-web path.aug20-edge {
+  stroke-dasharray: none !important;
+}
 </style>
 <script id="aug20-zone-web-js">
 (function(){
@@ -43260,8 +43283,10 @@ html body .day-block.vision-collage-day svg.aug20-zone-web path.aug20-edge.is-ho
       if(!A || !B) return;
       var boxA = nodeBox(A.el, grid, w, h);
       var boxB = nodeBox(B.el, grid, w, h);
-      var a = (boxA && boxB) ? rimPoint(boxA, {x: boxB.x + boxB.w/2, y: boxB.y + boxB.h/2}) : A.pt;
-      var b = (boxA && boxB) ? rimPoint(boxB, {x: boxA.x + boxA.w/2, y: boxA.y + boxA.h/2}) : B.pt;
+      // HARD RULE: filaments attach at node rims only — never centers (A.pt/B.pt banned)
+      if(!boxA || !boxB) return;
+      var a = rimPoint(boxA, {x: boxB.x + boxB.w/2, y: boxB.y + boxB.h/2});
+      var b = rimPoint(boxB, {x: boxA.x + boxA.w/2, y: boxA.y + boxA.h/2});
       if(!a || !b) return;
       var gid = 'aug20Filament-' + (edgeIx++);
       var defs = svg.querySelector('defs.aug20-edge-defs');
