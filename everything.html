@@ -44203,6 +44203,62 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function inductionPhoto(){
     return (window.__cardImgFor && window.__cardImgFor('induction')) || 'manus-storage/card-induction.jpg?v=rl2';
   }
+  function sectionWasRemovedOrArchived(blk, focus, title){
+    var f = String(focus || '').toLowerCase();
+    var t = String(title || focus || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if(typeof isGloballyArchivedSection === 'function'){
+      if(isGloballyArchivedSection(f) || isGloballyArchivedSection(t)) return true;
+      try {
+        var archivedAliases = sectionAliasSet(f || t, t || f);
+        for(var ak in archivedAliases){ if(isGloballyArchivedSection(ak)) return true; }
+      } catch(e){}
+    }
+    var data = typeof dayData === 'function' ? dayData(blk) : null;
+    if(!data) return false;
+    var rem = {};
+    (data.removedSections || []).forEach(function(x){
+      var sx = String(x || '').toLowerCase();
+      rem[sx] = 1;
+      try {
+        var al = sectionAliasSet(sx, sx);
+        for(var k in al) rem[k] = 1;
+      } catch(e2){}
+    });
+    var aliases = sectionAliasSet(f || t, t || f);
+    for(var k in aliases){ if(rem[k]) return true; }
+    return !!(rem[f] || rem[t]);
+  }
+  function honorDeletedBodyOnAug31(blk){
+    if(!blk || dayKey(blk) !== '2026-08-31') return false;
+    var FLAG = 'btm_honor_body_delete_2026-08-31_v1';
+    try { if(localStorage.getItem(FLAG) === '1') return false; } catch(e){}
+    var data = dayData(blk);
+    if(!data) return false;
+    data.removedSections = data.removedSections || [];
+    var aliases = sectionAliasSet('body', 'body');
+    Object.keys(aliases).forEach(function(a){
+      if(data.removedSections.indexOf(a) < 0) data.removedSections.push(a);
+    });
+    data.addedSections = (data.addedSections || []).filter(function(s){
+      if(!s) return false;
+      var sf = String((s.focus || slug(s.title)) || '').toLowerCase();
+      var st = String(s.title || '').toLowerCase();
+      return !aliases[sf] && !aliases[st] && !aliases[slug(st)];
+    });
+    var host = heroHost(blk);
+    if(host){
+      [].slice.call(host.querySelectorAll('.vision-tile')).forEach(function(tile){
+        var title = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim();
+        var al = sectionAliasSet(tileFocus(tile), title);
+        for(var k in al){
+          if(aliases[k]){ tile.remove(); return; }
+        }
+      });
+    }
+    try { persistDay(blk); } catch(e){}
+    try { localStorage.setItem(FLAG, '1'); } catch(e){}
+    return true;
+  }
   function ensureHabitsOnBoard(blk){
     if(!habitBoardOk(blk)) return false;
     var host = heroHost(blk);
@@ -44223,9 +44279,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         }) || null;
       }
       if(!tile){
-        // Only create missing body sections on overview-era boards (addTile is era-gated).
+        // Never resurrect a section the user deleted or archived just to house a habit.
+        var wantSec = sec === 'body' ? 'body' : habit.section;
+        if(sectionWasRemovedOrArchived(blk, focus, wantSec)) return;
         if(!blkOk(blk)) return;
-        addTile(blk, sec === 'body' ? 'body' : habit.section);
+        addTile(blk, wantSec);
         changed = true;
         tile = host.querySelector('.vision-tile[data-focus="'+focus+'"]');
       }
@@ -44893,6 +44951,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(demotePepperdineCardSections(blk)) mig = true;
         if(renameExecutiveToAmbition(blk)) mig = true;
       }
+      if(honorDeletedBodyOnAug31(blk)) mig = true;
       if(habits && ensureHabitsOnBoard(blk)) mig = true;
       if(era) ensureOverviewEditChrome(blk);
       if(mig && era) persistDay(blk);
