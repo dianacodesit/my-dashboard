@@ -45392,7 +45392,7 @@ function seedAug30SelectedCards(blk){
     return changed;
   }
     var _overviewApplied = {};
-    function boot(){
+  function boot(){
     document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
       var mig = migratePepperdineSection(blk);
       var era = blkOk(blk);
@@ -45404,7 +45404,7 @@ function seedAug30SelectedCards(blk){
       if(era){
         var _dkApply = dayKey(blk);
         if(!_overviewApplied[_dkApply]){
-          applyStoredEdits(blk);
+      applyStoredEdits(blk);
           if(heroHost(blk)) _overviewApplied[_dkApply] = 1;
           try { syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
         } else {
