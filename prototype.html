@@ -16378,13 +16378,15 @@ window.__j22fnApply=run;
     }
     applyCuratedLifestylePhoto();
     [80, 400, 1200].forEach(function(ms){ setTimeout(applyCuratedLifestylePhoto, ms); });
-    if(!localStorage.getItem('btm_curated_lifestyle_photo_tg1')){
+    if(!localStorage.getItem('btm_curated_lifestyle_photo_tg2')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
-        var next=raw.replace(/manus-storage\/pursuit-curated-lifestyle\.jpg(\?v=[^"'\\s)]+)?/g, LIFE_TG);
+        var next=raw
+          .replace(/manus-storage\/pursuit-curated-lifestyle\.jpg(\?v=[^"'\\s)]+)?/g, LIFE_TG)
+          .replace(/manus-storage\/zone-curated-lifestyle\.jpg\?v=tg1/g, LIFE_TG);
         if(next!==raw) localStorage.setItem(k, next);
       });
-      localStorage.setItem('btm_curated_lifestyle_photo_tg1','1');
+      localStorage.setItem('btm_curated_lifestyle_photo_tg2','1');
     }
   }catch(e){}
 
