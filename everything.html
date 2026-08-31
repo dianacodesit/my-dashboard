@@ -12919,7 +12919,9 @@ window.__j22fnApply=run;
     'spirit':'manus-storage/zone-spirit.jpg?v=sp1',
     'art | science':'manus-storage/zone-art-science.jpg?v=as1',
     'art-science':'manus-storage/zone-art-science.jpg?v=as1',
-    'art/science':'manus-storage/zone-art-science.jpg?v=as1'
+    'art/science':'manus-storage/zone-art-science.jpg?v=as1',
+    'self-esteem':'manus-storage/zone-self-esteem.jpg?v=se1',
+    'self esteem':'manus-storage/zone-self-esteem.jpg?v=se1'
   };
   var KEYWORDS = [
     [/translat|arabic|عربي|bilingual|interpret/, 'manus-storage/pursuit-arabic-translation.jpg'],
@@ -12967,7 +12969,8 @@ window.__j22fnApply=run;
     [/\bstrengths?\b|strong|capability|soul.?fire/, 'manus-storage/zone-strengths.jpg?v=soul1'],
     [/\bplan\b|planning|blueprint|roadmap|strategy/, 'manus-storage/zone-workflow.jpg?v=swap1'],
     [/\bspirit\b|\bruh\b/, 'manus-storage/zone-spirit.jpg?v=sp1'],
-    [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1']
+    [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1'],
+    [/self[- ]?esteem|selfworth|self-worth/, 'manus-storage/zone-self-esteem.jpg?v=se1']
   ];
   var THEMES = {
     'persons':'blush','capital blueprint':'amber','body':'blush','toned body':'blush','toned-body':'blush','glow up':'blush','glow-up':'blush','shopped':'warm','returns':'warm','pickups':'warm',
@@ -12988,7 +12991,9 @@ window.__j22fnApply=run;
     'villain':'coral',
     'fight back':'coral',
     'envision':'lavender',
-    'spirit':'champagne'
+    'spirit':'champagne',
+    'self-esteem':'champagne',
+    'self esteem':'champagne'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -16240,6 +16245,18 @@ window.__j22fnApply=run;
     [80, 400, 1200].forEach(function(ms){ setTimeout(applyArtSciencePhoto, ms); });
   }catch(e){}
 
+  try{
+    var SE_EST='manus-storage/zone-self-esteem.jpg?v=se1';
+    function applySelfEsteemPhoto(){
+      document.querySelectorAll('.vision-tile[data-focus="self-esteem"], .vision-tile[data-focus="selfesteem"]').forEach(function(el){
+        el.style.setProperty('--tile-photo', "url('"+SE_EST+"')");
+      });
+    }
+    applySelfEsteemPhoto();
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applySelfEsteemPhoto, ms); });
+  }catch(e){}
+
+
 
   try{
     var LIFE_TG='manus-storage/zone-curated-lifestyle.jpg?v=tg1';
@@ -17822,7 +17839,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1 };
+        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -19210,6 +19227,8 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="awliya-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 6 / 3 / 7 / 5 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17362">awliya allah</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="art-science" style="--tile-photo: url('manus-storage/zone-art-science.jpg?v=as1'); grid-area: 6 / 5 / 7 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17363">art | science</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="strengths" data-card-weight="1" style="--tile-photo: url('manus-storage/zone-strengths.jpg?v=soul1'); grid-area: 7 / 1 / 8 / 7 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e18776">strengths</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="self-esteem" style="--tile-photo: url('manus-storage/zone-self-esteem.jpg?v=se1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">self-esteem</h3><div class="vision-tile-details"></div></article>
+
 </div>
 </div>
 </div>
@@ -28864,6 +28883,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='focus') src='manus-storage/zone-focus.jpg?v=lens1';
       else if(nl==='alignment') src='manus-storage/zone-alignment.jpg?v=align1';
       else if(nl==='strengths') src='manus-storage/zone-strengths.jpg?v=soul1';
+      else if(nl==='self-esteem'||nl==='self esteem') src='manus-storage/zone-self-esteem.jpg?v=se1';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='spirit') src='manus-storage/zone-spirit.jpg?v=sp1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
@@ -28883,7 +28903,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','God-conscious','villains','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','spirit','art | science'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','God-conscious','villains','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','spirit','art | science','self-esteem'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -28911,6 +28931,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'alignment':[],
     'strengths':[],
     'plan':[],
+    'self-esteem':[],
     'pepperdine':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal']
   };
   var CARD_SECTION={};
@@ -41866,7 +41887,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -41898,7 +41919,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','toned body','Pepperdine','pursuits','inner fire','potential','resonance','God-conscious','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','spirit','art | science'];
+    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','toned body','Pepperdine','pursuits','inner fire','potential','resonance','God-conscious','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','spirit','art | science','self-esteem'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -41920,7 +41941,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -42090,6 +42111,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'art | science' || t === 'art-science' || t === 'art/science' || t === 'art science' || f === 'art-science' || f === 'art-science'){
       add('art | science'); add('art-science'); add('art/science'); add('art science');
     }
+    if(t === 'self-esteem' || t === 'self esteem' || t === 'selfesteem' || f === 'self-esteem' || f === 'selfesteem'){
+      add('self-esteem'); add('self esteem'); add('selfesteem');
+    }
     return out;
   }
   function normalizeAddedSection(rec){
@@ -42105,6 +42129,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'future self' || t === 'future-self' || t === 'futureself'){ rec.title = 'future self'; rec.focus = 'future-self'; }
     else if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || t === 'ph d'){ rec.title = 'Ph.D'; rec.focus = 'phd'; }
     else if(t === 'art-science' || t === 'art/science' || t === 'art science' || t === 'artscience' || t === 'art | science'){ rec.title = 'art | science'; rec.focus = 'art-science'; }
+    else if(t === 'self-esteem' || t === 'self esteem' || t === 'selfesteem'){ rec.title = 'self-esteem'; rec.focus = 'self-esteem'; }
     else { rec.title = displaySectionTitle(rec.title); }
     if(!rec.focus) rec.focus = slug(rec.title);
     return rec;
@@ -42118,6 +42143,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(low === 'future self' || low === 'future-self' || low === 'futureself') return 'future self';
     if(low === 'phd' || low === 'ph.d' || low === 'ph-d' || low === 'ph d') return 'Ph.D';
     if(low === 'art-science' || low === 'art/science' || low === 'art science' || low === 'artscience' || low === 'art | science') return 'art | science';
+    if(low === 'self-esteem' || low === 'self esteem' || low === 'selfesteem') return 'self-esteem';
     return low;
   }
   function purgeConflictingAdds(data){
@@ -42537,7 +42563,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1,'potential':1,'resonance':1,
     'god-conscious':1,'god conscious':1,'villains':1,'villain':1,'house':1,
-    'fight back':1,'envision':1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1
+    'fight back':1,'envision':1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1
   };
   function loadCardPhotoCache(){
     try { return JSON.parse(localStorage.getItem(CARD_PHOTO_STORE) || '{}') || {}; } catch(e){ return {}; }
@@ -42860,21 +42886,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(pick.contains(ev.target)) return;
       closeMarginPromotePickers();
     }
-    function onScroll(ev){
-      if(pick.contains(ev.target)) return;
-      closeMarginPromotePickers();
-    }
     function onResize(){
       placeMarginPromotePick(pick, anchorLi);
     }
     pick.__dmpOff = function(){
       document.removeEventListener('pointerdown', onDoc, true);
-      window.removeEventListener('scroll', onScroll, true);
       window.removeEventListener('resize', onResize, true);
     };
     setTimeout(function(){
       document.addEventListener('pointerdown', onDoc, true);
-      window.addEventListener('scroll', onScroll, true);
       window.addEventListener('resize', onResize, true);
     }, 0);
   }
@@ -44026,6 +44046,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(title === 'future-self' || title === 'futureself') title = 'future self';
     if(title === 'phd' || title === 'ph.d' || title === 'ph-d' || title === 'ph d') title = 'ph.d';
     if(title === 'art-science' || title === 'art/science' || title === 'art science' || title === 'artscience') title = 'art | science';
+    if(title === 'self esteem' || title === 'selfesteem') title = 'self-esteem';
     title = displaySectionTitle(title);
     var host = heroHost(blk);
     if(!host) return;
@@ -44034,6 +44055,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase() === 'future self') focus = 'future-self';
     if(String(title).toLowerCase() === 'toned body' || String(title).toLowerCase() === 'body') focus = 'body';
     if(String(title).toLowerCase() === 'art | science' || focus === 'art-science'){ focus = 'art-science'; title = 'art | science'; }
+    if(String(title).toLowerCase() === 'self-esteem' || focus === 'selfesteem'){ focus = 'self-esteem'; title = 'self-esteem'; }
     var aliases = sectionAliasSet(focus, title);
     var existing = [].slice.call(host.querySelectorAll('.vision-tile')).find(function(tile){
       var f = (tile.getAttribute('data-focus') || '').toLowerCase();
@@ -44860,6 +44882,23 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
 
 
+
+  function seedAug30SelfEsteem(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    if(host.querySelector('.vision-tile[data-focus="self-esteem"]')) return false;
+    if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, 'self-esteem', 'self-esteem')) return false;
+    var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
+      var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return tt === 'self-esteem' || tt === 'self esteem' || f === 'self-esteem' || f === 'selfesteem';
+    });
+    if(exists) return false;
+    addTile(blk, 'self-esteem');
+    return true;
+  }
+
   function seedAug30ArtScience(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
     var host = heroHost(blk);
@@ -45218,6 +45257,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(seedAug30Alignment(blk)) mig = true;
         if(seedAug30Spirit(blk)) mig = true;
         if(seedAug30ArtScience(blk)) mig = true;
+        if(seedAug30SelfEsteem(blk)) mig = true;
         if(seedAug30StrengthsPlan(blk)) mig = true;
         if(fixScholarshipReApplicationLabel(blk)) mig = true;
         if(demotePepperdineCardSections(blk)) mig = true;
