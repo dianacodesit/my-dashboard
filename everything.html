@@ -13041,7 +13041,8 @@ window.__j22fnApply=run;
     'top applicant':'manus-storage/handshake-pepperdine-gsa.jpg',
     'psi chi':'manus-storage/card-psi-chi.jpg?v=v2',
     'ps chi':'manus-storage/card-psi-chi.jpg?v=v2',
-    'handshake':'manus-storage/card-handshake.jpg'
+    'handshake':'manus-storage/card-handshake.jpg',
+    'calisthenics':'manus-storage/card-calisthenics.jpg?v=cal1'
   };
   function resolveCardImg(name){
     var n=(name||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -28963,7 +28964,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'ambition', presence:'quantum'};
   var SEEDED_CARDS={
-    'body':['induction','pack gym bag','reformer pilates'],
+    'body':['induction','pack gym bag','reformer pilates','calisthenics'],
     'glow up':['cleanse','serum','SPF','lip mask','smile set','halo'],
     'curated lifestyle':['returns','pickups','traveler','persons'],
     'abundance':['capital blueprint','tuition money','chargebacks','refunds'],
@@ -42018,8 +42019,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       finances: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       'curated lifestyle': ['returns', 'pickups', 'traveler', 'persons'],
       lifestyle: ['returns', 'pickups', 'traveler', 'persons'],
-      body: ['induction', 'pack gym bag', 'reformer pilates'],
-      gym: ['induction', 'pack gym bag', 'reformer pilates'],
+      body: ['induction', 'pack gym bag', 'reformer pilates', 'calisthenics'],
+      gym: ['induction', 'pack gym bag', 'reformer pilates', 'calisthenics'],
+      athletic: ['induction', 'pack gym bag', 'reformer pilates', 'calisthenics'],
+      'toned body': ['induction', 'pack gym bag', 'reformer pilates', 'calisthenics'],
+      'toned-body': ['induction', 'pack gym bag', 'reformer pilates', 'calisthenics'],
       'inner fire': ['deep work block', 'morning adhkar'],
       'inner-fire': ['deep work block', 'morning adhkar'],
       villains: ['start now', 'phone down', 'act anyway'],
@@ -44857,6 +44861,32 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return changed;
   }
 
+  function seedCalisthenicsOnAthletic(blk){
+    if(!blkOk(blk)) return false;
+    var d = dayKey(blk);
+    if(!d || d < '2026-08-30' || d === '2026-08-31') return false;
+    var MKEY = 'migration-calisthenics-on-athletic-v1';
+    var done = {};
+    try { done = JSON.parse(localStorage.getItem(MKEY) || '{}') || {}; } catch(e){ done = {}; }
+    if(done[d]) return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    var tile = host.querySelector('.vision-tile[data-focus="body"]') ||
+      host.querySelector('.vision-tile[data-focus="gym"]') ||
+      [].slice.call(host.querySelectorAll('.vision-tile')).find(function(t){
+        var title = ((t.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+        return title === 'athletic' || title === 'body' || title === 'gym' || title === 'toned body' || title === 'toned-body';
+      });
+    if(!tile) return false;
+    var changed = false;
+    if(shouldSeedCard(blk, tileFocus(tile) || 'body', 'calisthenics')){
+      addCard(tile, 'calisthenics');
+      changed = true;
+    }
+    done[d] = 1;
+    try { localStorage.setItem(MKEY, JSON.stringify(done)); } catch(e){}
+    return changed;
+  }
 
   function seedAug30WorkflowFocus(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
@@ -45391,6 +45421,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(renameExecutiveToAmbition(blk)) mig = true;
         if(renameBodyToTonedBody(blk)) mig = true;
         if(renameGodConsciousToAwliyaAllahSwt(blk)) mig = true;
+        if(seedCalisthenicsOnAthletic(blk)) mig = true;
       }
       if(honorDeletedBodyOnAug31(blk)) mig = true;
       if(habits && ensureHabitsOnBoard(blk)) mig = true;
