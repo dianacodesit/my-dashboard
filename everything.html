@@ -16268,16 +16268,55 @@ window.__j22fnApply=run;
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+ST_SOUL+"')");
         else el.style.setProperty('--zone-photo', "url('"+ST_SOUL+"')");
       });
+      try{
+        var araw=localStorage.getItem('btm_archived_sections_v1');
+        if(araw && araw.indexOf('zone-strengths')>=0){
+          var anext=araw.replace(/manus-storage\/zone-strengths\.jpg(\?v=[^"'\\s)]+)?/g, ST_SOUL);
+          if(anext!==araw) localStorage.setItem('btm_archived_sections_v1', anext);
+        }
+      }catch(e0){}
+    }
+    function restoreAug30StrengthsSoul(){
+      var blk=document.querySelector('.day-block[data-date="2026-08-30"]');
+      if(!blk) return;
+      var host=blk.querySelector('.vision-hero');
+      if(!host) return;
+      try{
+        if(typeof dayData==='function'){
+          var data=dayData(blk);
+          if(data && data.removedSections){
+            data.removedSections=data.removedSections.filter(function(f){
+              var x=String(f||'').toLowerCase();
+              return x!=='strengths' && x!=='strength';
+            });
+          }
+        }
+      }catch(e1){}
+      if(!host.querySelector('.vision-tile[data-focus="strengths"]')){
+        if(typeof makeTile==='function'){
+          host.appendChild(makeTile({focus:'strengths', title:'strengths', photo:ST_SOUL}));
+        } else {
+          var art=document.createElement('article');
+          art.className='vision-tile';
+          art.setAttribute('data-focus','strengths');
+          art.setAttribute('data-card-weight','1');
+          art.style.setProperty('--tile-photo', "url('"+ST_SOUL+"')");
+          art.innerHTML='<div class="vision-tile-photo"></div><h3 class="vision-tile-title">strengths</h3><div class="vision-tile-details"></div>';
+          host.appendChild(art);
+        }
+        try{ if(typeof syncHeroLayoutClass==='function') syncHeroLayoutClass(blk); }catch(e2){}
+      }
+      applyStrengthsSoulFire();
     }
     applyStrengthsSoulFire();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyStrengthsSoulFire, ms); });
-    if(!localStorage.getItem('btm_strengths_photo_soul1')){
-      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+    [80, 400, 1200, 2000].forEach(function(ms){ setTimeout(function(){ applyStrengthsSoulFire(); restoreAug30StrengthsSoul(); }, ms); });
+    if(!localStorage.getItem('btm_strengths_photo_soul1b')){
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1','btm_archived_sections_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
         var next=raw.replace(/manus-storage\/zone-strengths\.jpg(\?v=[^"'\\s)]+)?/g, ST_SOUL);
         if(next!==raw) localStorage.setItem(k, next);
       });
-      localStorage.setItem('btm_strengths_photo_soul1','1');
+      localStorage.setItem('btm_strengths_photo_soul1b','1');
     }
   }catch(e){}
 
@@ -19170,6 +19209,7 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="spirit" style="--tile-photo: url('manus-storage/zone-spirit.jpg?v=sp1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17361">spirit</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="awliya-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17362">awliya allah</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="art-science" style="--tile-photo: url('manus-storage/zone-art-science.jpg?v=as1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17363">art | science</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="strengths" style="--tile-photo: url('manus-storage/zone-strengths.jpg?v=soul1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">strengths</h3><div class="vision-tile-details"></div></article>
 </div>
 </div>
 </div>
