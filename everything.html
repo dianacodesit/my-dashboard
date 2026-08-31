@@ -12914,7 +12914,7 @@ window.__j22fnApply=run;
     'workflow':'manus-storage/zone-plan.jpg?v=swap1',
     'focus':'manus-storage/zone-focus.jpg?v=lens1',
     'alignment':'manus-storage/zone-alignment.jpg?v=align1',
-    'strengths':'manus-storage/zone-strengths.jpg?v=str9',
+    'strengths':'manus-storage/zone-strengths.jpg?v=soul1',
     'plan':'manus-storage/zone-workflow.jpg?v=swap1',
     'spirit':'manus-storage/zone-spirit.jpg?v=sp1',
     'art | science':'manus-storage/zone-art-science.jpg?v=as1',
@@ -12964,7 +12964,7 @@ window.__j22fnApply=run;
     [/\\bworkflow\\b|process|systems?|pipeline/, 'manus-storage/zone-plan.jpg?v=swap1'],
     [/\\bfocus\\b|deep work|attention|concentration/, 'manus-storage/zone-focus.jpg?v=lens1'],
     [/\balignment\b|aligned|true north|compass|coherence/, 'manus-storage/zone-alignment.jpg?v=align1'],
-    [/\bstrengths?\b|strong|capability|forged/, 'manus-storage/zone-strengths.jpg?v=str9'],
+    [/\bstrengths?\b|strong|capability|soul.?fire/, 'manus-storage/zone-strengths.jpg?v=soul1'],
     [/\bplan\b|planning|blueprint|roadmap|strategy/, 'manus-storage/zone-workflow.jpg?v=swap1'],
     [/\bspirit\b|\bruh\b/, 'manus-storage/zone-spirit.jpg?v=sp1'],
     [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1']
@@ -16258,6 +16258,26 @@ window.__j22fnApply=run;
         if(next!==raw) localStorage.setItem(k, next);
       });
       localStorage.setItem('btm_curated_lifestyle_photo_tg1','1');
+    }
+  }catch(e){}
+
+  try{
+    var ST_SOUL='manus-storage/zone-strengths.jpg?v=soul1';
+    function applyStrengthsSoulFire(){
+      document.querySelectorAll('.vision-tile[data-focus="strengths"], .pursuit-zone[data-zone="strengths"]').forEach(function(el){
+        if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+ST_SOUL+"')");
+        else el.style.setProperty('--zone-photo', "url('"+ST_SOUL+"')");
+      });
+    }
+    applyStrengthsSoulFire();
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applyStrengthsSoulFire, ms); });
+    if(!localStorage.getItem('btm_strengths_photo_soul1')){
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw.replace(/manus-storage\/zone-strengths\.jpg(\?v=[^"'\\s)]+)?/g, ST_SOUL);
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_strengths_photo_soul1','1');
     }
   }catch(e){}
 
@@ -28803,7 +28823,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='workflow') src='manus-storage/zone-plan.jpg?v=swap1';
       else if(nl==='focus') src='manus-storage/zone-focus.jpg?v=lens1';
       else if(nl==='alignment') src='manus-storage/zone-alignment.jpg?v=align1';
-      else if(nl==='strengths') src='manus-storage/zone-strengths.jpg?v=str9';
+      else if(nl==='strengths') src='manus-storage/zone-strengths.jpg?v=soul1';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='spirit') src='manus-storage/zone-spirit.jpg?v=sp1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
