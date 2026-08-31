@@ -39977,11 +39977,12 @@ html body .day-block.overview-era-day .day-margin-promote {
   opacity: 0.85 !important;
 }
 html body .day-margin-promote-pick {
-  position: absolute !important;
-  z-index: 80 !important;
-  min-width: 160px !important;
-  max-width: 220px !important;
-  padding: 8px !important;
+  position: fixed !important;
+  z-index: 400 !important;
+  min-width: 180px !important;
+  max-width: 260px !important;
+  max-height: min(72vh, 480px) !important;
+  padding: 8px 6px 8px 8px !important;
   border-radius: 10px !important;
   background: rgba(18, 12, 10, 0.92) !important;
   border: 1px solid rgba(255, 248, 238, 0.22) !important;
@@ -39990,8 +39991,10 @@ html body .day-margin-promote-pick {
   display: flex !important;
   flex-direction: column !important;
   gap: 4px !important;
+  overflow: hidden !important;
 }
 html body .day-margin-promote-pick .dmp-label {
+  flex: 0 0 auto !important;
   font-family: "DM Mono", monospace !important;
   font-size: 8px !important;
   letter-spacing: 0.14em !important;
@@ -39999,7 +40002,27 @@ html body .day-margin-promote-pick .dmp-label {
   color: rgba(255, 248, 238, 0.45) !important;
   padding: 2px 6px 6px !important;
 }
+html body .day-margin-promote-pick .dmp-list {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  padding-right: 4px !important;
+}
+html body .day-margin-promote-pick .dmp-list::-webkit-scrollbar {
+  width: 8px !important;
+}
+html body .day-margin-promote-pick .dmp-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 248, 238, 0.32) !important;
+  border-radius: 8px !important;
+}
 html body .day-margin-promote-pick button {
+  flex: 0 0 auto !important;
   border: none !important;
   background: transparent !important;
   text-align: left !important;
@@ -42759,8 +42782,36 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function closeMarginPromotePickers(){
     document.querySelectorAll('.day-margin-promote-pick').forEach(function(el){
+      try{ if(el.__dmpOff) el.__dmpOff(); }catch(e){}
       if(el && el.parentNode) el.parentNode.removeChild(el);
     });
+  }
+  function placeMarginPromotePick(pick, anchorLi){
+    var btn = (anchorLi && anchorLi.querySelector('.day-margin-promote')) || anchorLi;
+    if(!pick || !btn || !btn.getBoundingClientRect) return;
+    var r = btn.getBoundingClientRect();
+    var pad = 10;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var pw = Math.max(pick.offsetWidth || 180, 180);
+    var left = Math.min(Math.max(pad, r.right - pw), vw - pw - pad);
+    if(left < pad) left = pad;
+    pick.style.left = left + 'px';
+    pick.style.right = 'auto';
+    pick.style.marginTop = '0';
+    var spaceBelow = vh - r.bottom - pad;
+    var spaceAbove = r.top - pad;
+    var preferBelow = spaceBelow >= 200 || spaceBelow >= spaceAbove;
+    var avail = preferBelow ? spaceBelow : spaceAbove;
+    var maxH = Math.max(160, Math.min(avail, Math.floor(vh * 0.72), 480));
+    pick.style.maxHeight = maxH + 'px';
+    if(preferBelow){
+      pick.style.top = (r.bottom + 4) + 'px';
+      pick.style.bottom = 'auto';
+    } else {
+      pick.style.top = 'auto';
+      pick.style.bottom = (vh - r.top + 4) + 'px';
+    }
   }
   function finishMarginPromote(blk, index, tile){
     if(!blkOk(blk) || !tile) return;
@@ -42788,7 +42839,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     var pick = document.createElement('div');
     pick.className = 'day-margin-promote-pick';
-    pick.innerHTML = '<div class="dmp-label">promote to</div>';
+    pick.innerHTML = '<div class="dmp-label">promote to</div><div class="dmp-list"></div>';
+    var listEl = pick.querySelector('.dmp-list');
     tiles.forEach(function(tile){
       var label = (tile.querySelector('.vision-tile-title') || {}).textContent || tile.getAttribute('data-focus') || 'section';
       label = String(label).replace(/\s+/g, ' ').trim();
@@ -42800,22 +42852,30 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         ev.stopPropagation();
         finishMarginPromote(blk, index, tile);
       });
-      pick.appendChild(btn);
+      listEl.appendChild(btn);
     });
-    (anchorLi || blk).appendChild(pick);
-    // position near the row
-    try {
-      pick.style.right = '8px';
-      pick.style.top = '100%';
-      pick.style.marginTop = '4px';
-    } catch(e){}
+    document.body.appendChild(pick);
+    placeMarginPromotePick(pick, anchorLi);
+    function onDoc(ev){
+      if(pick.contains(ev.target)) return;
+      closeMarginPromotePickers();
+    }
+    function onScroll(ev){
+      if(pick.contains(ev.target)) return;
+      closeMarginPromotePickers();
+    }
+    function onResize(){
+      placeMarginPromotePick(pick, anchorLi);
+    }
+    pick.__dmpOff = function(){
+      document.removeEventListener('pointerdown', onDoc, true);
+      window.removeEventListener('scroll', onScroll, true);
+      window.removeEventListener('resize', onResize, true);
+    };
     setTimeout(function(){
-      function onDoc(ev){
-        if(pick.contains(ev.target)) return;
-        closeMarginPromotePickers();
-        document.removeEventListener('pointerdown', onDoc, true);
-      }
       document.addEventListener('pointerdown', onDoc, true);
+      window.addEventListener('scroll', onScroll, true);
+      window.addEventListener('resize', onResize, true);
     }, 0);
   }
   window.__ensureDayMargin = ensureDayMargin;
