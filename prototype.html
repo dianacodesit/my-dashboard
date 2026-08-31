@@ -42178,6 +42178,33 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
     }
 
+    /* Grow any tile rightward (including Pepperdine’s 2-row span) when the next
+       column is empty on every row of that tile. Safe: will not steal a cell a
+       neighbor already occupies on any of those rows. */
+    function tileBox(t){
+      var cs = (t.style.getPropertyValue('grid-column') || '').split('/');
+      var rs = (t.style.getPropertyValue('grid-row') || '').split('/');
+      if(cs.length < 2 || rs.length < 2) return null;
+      var c1 = parseInt(cs[0], 10), c2 = parseInt(cs[1], 10);
+      var r1 = parseInt(rs[0], 10), r2 = parseInt(rs[1], 10);
+      if(!c1 || !c2 || !r1 || !r2) return null;
+      return {c1:c1, c2:c2, r1:r1, r2:r2};
+    }
+    var grew = true;
+    while(grew){
+      grew = false;
+      tiles.forEach(function(t){
+        var b = tileBox(t);
+        if(!b || b.c2 > COLS) return;
+        var sr = b.r2 - b.r1;
+        if(sr < 1) return;
+        if(!free(b.r1, b.c2, 1, sr)) return;
+        mark(b.r1, b.c2, 1, sr);
+        t.style.setProperty('grid-column', b.c1 + ' / ' + (b.c2 + 1), 'important');
+        grew = true;
+      });
+    }
+
     var cols = [];
     for(var i = 0; i < COLS; i++) cols.push('1fr');
     var rows = [];
