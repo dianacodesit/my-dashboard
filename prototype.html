@@ -13017,6 +13017,8 @@ window.__j22fnApply=run;
     'awliya-allah-swt':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'fear allah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'fear-allah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
+    'itaq-allah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
+    'itaqallah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
@@ -13032,6 +13034,8 @@ window.__j22fnApply=run;
     'alignment':'manus-storage/zone-alignment.jpg?v=align1',
     'strengths':'manus-storage/zone-strengths.jpg?v=soul1',
     'plan':'manus-storage/zone-workflow.jpg?v=swap1',
+    'spirit':'manus-storage/zone-spirit.jpg?v=sp1',
+    'soul':'manus-storage/zone-soul.jpg?v=s1',
     'art | science':'manus-storage/zone-art-science.jpg?v=as1',
     'art-science':'manus-storage/zone-art-science.jpg?v=as1',
     'art/science':'manus-storage/zone-art-science.jpg?v=as1',
@@ -13058,7 +13062,8 @@ window.__j22fnApply=run;
     [/money|capital|fund|finance|bank/, 'manus-storage/pursuit-money_57ff14e0.jpg'],
     [/quantum|particle|atom|physics|superposition|entangle|interference/, 'manus-storage/zone-quantum-v15.jpg?v=spectacular1'],
     [/social|instagram|media/, 'manus-storage/pursuit-social-media-v7_c5f03b96.jpg'],
-    [/person|people|friend|buddy|doctor|\bdr\.?\b|soul|\bmom\b|\bdad\b|mother|father|family|\btext\b|message|sms|whatsapp|\bcall\b|phone|aunt|uncle|sister|brother/, 'manus-storage/pursuit-persons_be56f167.jpg'],
+    [/\bsoul\b|inner stillness|healing spirit|silence the mind/, 'manus-storage/zone-soul.jpg?v=s1'],
+    [/person|people|friend|buddy|doctor|\bdr\.?\b|\bmom\b|\bdad\b|mother|father|family|\btext\b|message|sms|whatsapp|\bcall\b|phone|aunt|uncle|sister|brother/, 'manus-storage/pursuit-persons_be56f167.jpg'],
     [/ux|design|ui|figma/, 'manus-storage/pursuit-ux-design-v12_f2f2c818.jpg'],
     [/leverage|influence|advantage/, 'manus-storage/pursuit-leverage-v4.jpg?v=key'],
     [/work|flow|process|system/, 'manus-storage/pursuit-workflow-v6_6f889c15.jpg'],
@@ -13115,6 +13120,8 @@ window.__j22fnApply=run;
     'awliya-allah-swt':'warm',
     'fear allah':'warm',
     'fear-allah':'warm',
+    'itaq-allah':'warm',
+    'itaqallah':'warm',
     'fear allah ﷻ':'warm',
     'villains':'coral',
     'villain':'coral',
@@ -13174,7 +13181,9 @@ window.__j22fnApply=run;
     'ps chi':'manus-storage/card-psi-chi.jpg?v=v2',
     'handshake':'manus-storage/card-handshake.jpg',
     'sabr':'manus-storage/card-sabr.jpg?v=2',
-    'shukr':'manus-storage/card-shukr.jpg?v=2'
+    'shukr':'manus-storage/card-shukr.jpg?v=2',
+    'calisthenics':'manus-storage/card-calisthenics.jpg?v=cal1',
+    'inversions':'manus-storage/card-inversions.jpg?v=inv1'
   };
   function resolveCardImg(name){
     var n=(name||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -16619,6 +16628,30 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_awliya_to_fear_allah_v1','1');
     }
   }catch(e){}
+  try{
+    if(!localStorage.getItem('btm_fear_allah_to_itaqallah_v1')){
+      document.querySelectorAll('.pursuit-zone-title, .vision-tile-title').forEach(function(el){
+        var t=String(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase().replace(/\uFDFB/g,'').trim();
+        if(t==='fear allah') el.textContent='itaqAllah';
+      });
+      document.querySelectorAll('.vision-tile[data-focus="fear-allah"]').forEach(function(el){ el.setAttribute('data-focus','itaq-allah'); });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/>fear Allah ﷻ</g, '>itaqAllah<')
+          .replace(/>fear allah</g, '>itaqAllah<')
+          .replace(/data-focus=\"fear-allah\"/g, 'data-focus=\"itaq-allah\"')
+          .replace(/\"title\":\"fear Allah ﷻ\"/g, '\"title\":\"itaqAllah\"')
+          .replace(/\"title\":\"fear allah\"/g, '\"title\":\"itaqAllah\"')
+          .replace(/\"focus\":\"fear-allah\"/g, '\"focus\":\"itaq-allah\"')
+          .replace(/\"sectionFocus\":\"fear-allah\"/g, '\"sectionFocus\":\"itaq-allah\"');
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_fear_allah_to_itaqallah_v1','1');
+    }
+  }catch(e){}
+
+
 
 
   try{
@@ -18084,7 +18117,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1 };
+        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -20029,7 +20062,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero vision-hero-duo"><article class="vision-tile" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 2 / 7 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11720">fitness training</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article>
 <article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;);" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e22579">itaqAllah</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 8%; --py: 18%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
-<article class="vision-tile" data-focus="fear-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 1 / 3 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e9706">itaqallah</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 1 / 3 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e9706">itaqAllah</h3><div class="vision-tile-details"></div></article>
 </div><div class="day-block fmt22 vision-collage-day make-flow-day today-block" data-date="2026-08-30">
 <div class="day-dot"></div>
 <div class="day-card">
@@ -20045,7 +20078,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2');" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e127">fitness training</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title" data-cursor-ref="e21729">calisthenics</h4></article>
+<div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2');" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e127">fitness training</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title" data-cursor-ref="e21729">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions.jpg?v=inv1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/mock-glow-up-skin-v3.jpg?v=cheek&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e131">glow up</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card is-done" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 35.3%; --py: 2.0%; --pw: 172px; width: 172px;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge is-done">daily</em><div class="vision-habit-status is-done">done today</div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-smile-set.jpg?v=aligners1" style="--px: 45.3%; --py: 2.0%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-smile-set.jpg?v=aligners1"><span>smile set</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-calisthenics.jpg?v=cal1" style="--px: 55.3%; --py: 2.0%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-calisthenics.jpg?v=cal1"><span>calisthenics</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-inversions.jpg?v=inv1" style="--px: 75.3%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-inversions.jpg?v=inv1"><span>inversions</span><div class="vision-pol-resize" title="drag to resize"></div></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-cleanse.jpg?v=cleanse2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-cleanse.jpg?v=cleanse2"><span>cleanse</span><div class="vision-pol-resize" title="drag to resize"></div></div></article>
 <article class="vision-tile" data-focus="spirit" style="--tile-photo: url(&quot;manus-storage/zone-spirit.jpg?v=sp1&quot;);"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">spirit</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="art-science" style="--tile-photo: url('manus-storage/zone-art-science.jpg?v=as1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">art | science</h3><div class="vision-tile-details"></div></article>
@@ -20060,7 +20093,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="workflow" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); grid-area: 4 / 5 / 5 / 7 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11039">workflow</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 5 / 4 / 6 / 7 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e130">Pepperdine</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 12.5%; --py: 2.0%; --pw: 126px; --pc: 24.00%; --photo-h: 108px; width: 24% !important; max-width: none !important;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship re-application</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px: 38.0%; --py: 2.0%; --pw: 126px; --pc: 24.00%; --photo-h: 108px; width: 24% !important; max-width: none !important;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 63.5%; --py: 2.0%; --pw: 126px; --pc: 24.00%; --photo-h: 108px; width: 24% !important; max-width: none !important;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="alignment" style="--tile-photo: url(&quot;manus-storage/zone-alignment.jpg?v=align1&quot;); grid-area: 6 / 1 / 7 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e14602">alignment</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="fear-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;);"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">itaqAllah</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;);"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">itaqAllah</h3><div class="vision-tile-details"></div></article>
 </div>
 <div class="day-block" data-date="doha">
 <div class="day-dot"></div>
@@ -29715,9 +29748,10 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='focus') src='manus-storage/zone-focus.jpg?v=lens1';
       else if(nl==='alignment') src='manus-storage/zone-alignment.jpg?v=align1';
       else if(nl==='strengths') src='manus-storage/zone-strengths.jpg?v=soul1';
+      else if(nl==='soul') src='manus-storage/zone-soul.jpg?v=s1';
       else if(nl==='self-esteem'||nl==='self esteem') src='manus-storage/zone-self-esteem.jpg?v=se1';
       else if(nl==='audacity') src='manus-storage/zone-audacity.jpg?v=aud1';
-      else if(nl==='politics') src='manus-storage/zone-politics.jpg?v=sec1';
+      else if(nl==='politics') src='manus-storage/zone-politics.jpg?v=podium1';
       else if(nl==='wins') src='manus-storage/zone-wins.jpg?v=sec1';
       else if(nl==='repetitions') src='manus-storage/zone-repetitions.jpg?v=sec1';
       else if(nl==='intentions') src='manus-storage/zone-intentions.jpg?v=sec1';
@@ -29725,7 +29759,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='darkness') src='manus-storage/zone-darkness.jpg?v=sec1';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
-      else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
+      else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah'||nl==='itaqallah'||nl==='itaq-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
       else if(nl==='fight back') src='manus-storage/zone-fight-back.jpg?v=fb2';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
@@ -29740,7 +29774,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','fear Allah ﷻ','villains','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity', 'politics', 'wins', 'repetitions', 'intentions', 'attention', 'darkness'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','itaqAllah','villains','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity', 'politics', 'wins', 'repetitions', 'intentions', 'attention', 'darkness'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -29757,7 +29791,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'inner fire':['deep work block','morning adhkar'],
     'potential':[],
     'resonance':[],
-    'fear Allah ﷻ':['dhikr','quran recitation','sabr','shukr'],
+    'itaqAllah':['dhikr','quran recitation','sabr','shukr'],
     'villains':['start now','phone down','act anyway'],
     'fight back':[],
     'envision':[],
@@ -42761,7 +42795,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -42793,7 +42827,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','fitness training','calisthenics','pepperdine','pursuits','inner fire','potential','resonance','fear Allah ﷻ','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity', 'politics', 'wins', 'repetitions', 'intentions', 'attention', 'darkness'];
+    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','fitness training','calisthenics','pepperdine','pursuits','inner fire','potential','resonance','itaqAllah','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity', 'politics', 'wins', 'repetitions', 'intentions', 'attention', 'darkness'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -42815,7 +42849,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -42855,6 +42889,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'awliya-allah': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
       'awliya allah swt': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
       'fear Allah ﷻ': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
+      'itaqAllah': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
+      'itaq-allah': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
+      'itaqallah': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
       'fear-allah': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
       'fear allah': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
       'fear Allah ﷻ': ['dhikr', 'quran recitation', 'sabr', 'shukr'],
@@ -42971,8 +43008,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'grad school' || t === 'grad' || t === 'pepperdine' || f === 'grad' || f === 'grad-school' || f === 'pepperdine'){
       add('grad'); add('grad school'); add('grad-school'); add('pepperdine');
     }
-    if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || f === 'god-conscious' || f === 'awliya-allah' || f === 'awliya-allah-swt' || f === 'fear-allah'){
-      add('god-conscious'); add('god conscious'); add('awliya allah'); add('awliya-allah'); add('awliya allah swt'); add('awliya-allah-swt'); add('awliyah allah swt'); add('fear allah'); add('fear-allah'); add('fear Allah ﷻ');
+    if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || t === 'itaqallah' || t === 'itaq-allah' || f === 'god-conscious' || f === 'awliya-allah' || f === 'awliya-allah-swt' || f === 'fear-allah' || f === 'itaq-allah'){
+      add('god-conscious'); add('god conscious'); add('awliya allah'); add('awliya-allah'); add('awliya allah swt'); add('awliya-allah-swt'); add('awliyah allah swt'); add('fear allah'); add('fear-allah'); add('fear Allah ﷻ'); add('itaqallah'); add('itaq-allah'); add('itaqAllah');
     }
     if(t === 'finances' || t === 'abundance' || f === 'finances' || f === 'abundance'){
       add('finances'); add('abundance');
@@ -43013,7 +43050,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'finances'){ rec.title = 'abundance'; rec.focus = 'abundance'; }
     else if(t === 'lifestyle'){ rec.title = 'curated lifestyle'; rec.focus = 'curated-lifestyle'; }
     else if(t === 'grad school' || t === 'grad'){ rec.title = 'pepperdine'; rec.focus = 'pepperdine'; }
-    else if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah'){ rec.title = 'fear Allah ﷻ'; rec.focus = 'fear-allah'; }
+    else if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || t === 'itaqallah' || t === 'itaq-allah'){ rec.title = 'itaqAllah'; rec.focus = 'itaq-allah'; }
     else if(t === 'executive'){ rec.title = 'ambition'; rec.focus = 'ambition'; }
     else if(t === 'future self' || t === 'future-self' || t === 'futureself'){ rec.title = 'future self'; rec.focus = 'future-self'; }
     else if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || t === 'ph d'){ rec.title = 'Ph.D'; rec.focus = 'phd'; }
@@ -43027,7 +43064,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var low = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
     if(low === 'executive') return 'ambition';
     if(low === 'body' || low === 'gym' || low === 'toned body' || low === 'toned-body' || low === 'athletic' || low === 'fitness training' || low === 'fitness-training') return 'fitness training';
-    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low.replace(/\uFDFB/g,'').trim() === 'fear allah') return 'fear Allah ﷻ';
+    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low === 'itaqallah' || low === 'itaq-allah' || low.replace(/\uFDFB/g,'').trim() === 'fear allah') return 'itaqAllah';
     if(low === 'pepperdine') return 'Pepperdine';
     if(low === 'future self' || low === 'future-self' || low === 'futureself') return 'future self';
     if(low === 'phd' || low === 'ph.d' || low === 'ph-d' || low === 'ph d') return 'Ph.D';
@@ -43758,7 +43795,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'glow up':1,'glow-up':1,'glow':1,'body':1,'gym':1,'toned body':1,'toned-body':1,'athletic':1,'fitness training':1,'fitness-training':1,'calisthenics':1,'pepperdine':1,'grad school':1,'grad':1,
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1,'potential':1,'resonance':1,
-    'god-conscious':1,'god conscious':1,'awliya allah':1,'awliya-allah':1,'awliya allah swt':1,'awliya-allah-swt':1,'fear allah':1,'fear-allah':1,'fear Allah ﷻ':1,'villains':1,'villain':1,'house':1,
+    'god-conscious':1,'god conscious':1,'awliya allah':1,'awliya-allah':1,'awliya allah swt':1,'awliya-allah-swt':1,'fear allah':1,'fear-allah':1,'fear Allah ﷻ':1,'itaq-allah':1,'itaqallah':1,'itaqAllah':1,'villains':1,'villain':1,'house':1,
     'fight back':1,'envision':1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
   };
   function loadCardPhotoCache(){
@@ -45197,7 +45234,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(title === 'finances') title = 'abundance';
     if(title === 'lifestyle') title = 'curated lifestyle';
     if(title === 'power | purpose' || title === 'power/purpose' || title === 'power-purpose') title = 'power';
-    if(title === 'god conscious' || title === 'god-conscious' || title === 'awliya allah' || title === 'awliya-allah' || title === 'awliya-allah-swt' || title === 'awliyah allah swt' || title === 'fear allah' || title === 'fear-allah') title = 'fear Allah ﷻ';
+    if(title === 'god conscious' || title === 'god-conscious' || title === 'awliya allah' || title === 'awliya-allah' || title === 'awliya-allah-swt' || title === 'awliyah allah swt' || title === 'fear allah' || title === 'fear-allah') title = 'itaqAllah';
     if(title === 'executive') title = 'ambition';
     if(title === 'future-self' || title === 'futureself') title = 'future self';
     if(title === 'phd' || title === 'ph.d' || title === 'ph-d' || title === 'ph d') title = 'ph.d';
@@ -45211,7 +45248,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase() === 'future self') focus = 'future-self';
     if(String(title).toLowerCase() === 'toned body' || String(title).toLowerCase() === 'body' || String(title).toLowerCase() === 'athletic' || String(title).toLowerCase() === 'fitness training') focus = 'body';
     if(String(title).toLowerCase() === 'art | science' || focus === 'art-science'){ focus = 'art-science'; title = 'art | science'; }
-    if(String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'awliya allah swt' || String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'fear allah' || focus === 'awliya-allah' || focus === 'god-conscious' || focus === 'awliya-allah-swt' || focus === 'fear-allah'){ focus = 'fear-allah'; title = 'fear Allah ﷻ'; }
+    if(String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'awliya allah swt' || String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'fear allah' || focus === 'awliya-allah' || focus === 'god-conscious' || focus === 'awliya-allah-swt' || focus === 'fear-allah' || focus === 'itaq-allah' || String(title).toLowerCase() === 'itaqallah'){ focus = 'itaq-allah'; title = 'itaqAllah'; }
     if(String(title).toLowerCase() === 'self-esteem' || focus === 'selfesteem'){ focus = 'self-esteem'; title = 'self-esteem'; }
     var aliases = sectionAliasSet(focus, title);
     var existing = [].slice.call(host.querySelectorAll('.vision-tile')).find(function(tile){
@@ -45963,7 +46000,7 @@ function seedAug30SelectedCards(blk){
     if(done[d]) return false;
     var host = heroHost(blk);
     if(!host) return false;
-    var tile = host.querySelector('.vision-tile[data-focus="fear-allah"]') || host.querySelector('.vision-tile[data-focus="god-conscious"]');
+    var tile = host.querySelector('.vision-tile[data-focus="itaq-allah"]') || host.querySelector('.vision-tile[data-focus="god-conscious"]');
     if(!tile){
       tile = [].slice.call(host.querySelectorAll('.vision-tile')).find(function(t){
         var title = ((t.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -45972,7 +46009,7 @@ function seedAug30SelectedCards(blk){
     }
     var changed = false;
     if(!tile){
-      // New days stay empty — never auto-create fear Allah ﷻ.
+      // New days stay empty — never auto-create itaqAllah.
       done[d] = 1;
       try { localStorage.setItem(MKEY, JSON.stringify(done)); } catch(e){}
       return false;
@@ -46434,13 +46471,13 @@ function seedAug30SelectedCards(blk){
       extra.remove();
       changed = true;
     });
-    if((keep.getAttribute('data-focus') || '') !== 'fear-allah'){
-      keep.setAttribute('data-focus', 'fear-allah');
+    if((keep.getAttribute('data-focus') || '') !== 'itaq-allah'){
+      keep.setAttribute('data-focus', 'itaq-allah');
       changed = true;
     }
     var titleEl = keep.querySelector('.vision-tile-title');
-    if(titleEl && titleEl.textContent !== 'fear Allah ﷻ'){
-      titleEl.textContent = 'fear Allah ﷻ';
+    if(titleEl && titleEl.textContent !== 'itaqAllah'){
+      titleEl.textContent = 'itaqAllah';
       changed = true;
     }
     var data = dayData(blk);
@@ -46451,15 +46488,15 @@ function seedAug30SelectedCards(blk){
         if(!(isFearAllahName(rec.title) || isFearAllahName(rec.focus))) return true;
         if(seen) return false;
         seen = true;
-        rec.title = 'fear Allah ﷻ';
-        rec.focus = 'fear-allah';
+        rec.title = 'itaqAllah';
+        rec.focus = 'itaq-allah';
         changed = true;
         return true;
       });
       (data.addedCards || []).forEach(function(rec){
         if(!rec) return;
         if(isFearAllahName(rec.sectionFocus)){
-          rec.sectionFocus = 'fear-allah';
+          rec.sectionFocus = 'itaq-allah';
           changed = true;
         }
       });
@@ -46529,6 +46566,7 @@ function seedAug30SelectedCards(blk){
       calisthenics:1,
       'awliya-allah':1, 'awliya allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'awliyah allah swt':1,
       'fear-allah':1, 'fear allah':1, 'fear Allah ﷻ':1,
+      'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1,
       'god-conscious':1, 'god conscious':1,
       villains:1, villain:1
     };
@@ -50344,6 +50382,72 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed):has(.vi
 }
 </style>
 
+<style id="vision-card-headline-css">
+/* Sep 1+ editorial headline ON every card (polaroid / shot / habit). Never on .vision-tile-title.
+   Lives on the card — overview collage still hides cards entirely (overview-no-cards). */
+html body .day-block.card-headline-era .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card) {
+  padding-bottom: 52px !important;
+}
+html body .day-block.card-headline-era .vision-board:not(.is-zoomed) .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card) {
+  padding-bottom: 36px !important;
+}
+html body .day-block.card-headline-era .vision-polaroid > .vision-card-headline {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 26px;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  font-family: "Newsreader", "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.18;
+  letter-spacing: 0.015em;
+  color: #2a1c12;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+html body .day-block.card-headline-era .vision-board:not(.is-zoomed) .vision-polaroid > .vision-card-headline {
+  left: 5px;
+  right: 5px;
+  bottom: 20px;
+  font-size: 11px;
+  line-height: 1.12;
+}
+html body .day-block.card-headline-era .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid > .vision-card-headline {
+  left: 10px;
+  right: 10px;
+  bottom: 34px;
+  font-size: 15px;
+  line-height: 1.2;
+}
+html body .day-block.card-headline-era .vision-polaroid.vision-habit-card > .vision-card-headline {
+  left: 14px;
+  right: 14px;
+  bottom: 62px;
+  z-index: 4;
+  color: rgba(246, 239, 228, 0.92);
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+html body .day-block.card-headline-era .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card > .vision-card-headline {
+  bottom: 52px;
+  font-size: 11px;
+}
+html body .day-block.card-headline-era .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card > .vision-card-headline {
+  bottom: 70px;
+  font-size: 14px;
+}
+</style>
+
 <style id="vision-subsections-v1">
 /* Subsections: nested focus areas inside a section tile — not cards, not collage sections */
 html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile {
@@ -51210,21 +51314,9 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     var goBtn = ov.querySelector('.cr-go');
     var selected = {};
     items.forEach(function(it, i){ selected[i] = true; });
-    var dests = futureDestinations(fromDate);
-    var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
-
-    dests.forEach(function(d, i){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'cr-day' + (i === 0 ? ' is-on' : '');
-      b.textContent = d.isTomorrow ? ('tomorrow · ' + d.display) : d.display;
-      b.addEventListener('click', function(){
-        destDate = d.date;
-        destWrap.querySelectorAll('.cr-day').forEach(function(x){ x.classList.remove('is-on'); });
-        b.classList.add('is-on');
-      });
-      destWrap.appendChild(b);
-    });
+    var destChoices = futureDestinations(fromDate);
+    var destDate = destChoices[0] ? destChoices[0].date : nextIso(fromDate);
+    buildDestPicker(destWrap, fromDate, function(iso){ destDate = iso; });
 
     var pts = starLayout(items.length);
     var stars = [];
