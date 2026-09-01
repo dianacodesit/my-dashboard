@@ -50847,11 +50847,14 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   if (window.__constellationRolloverBooted) return;
   window.__constellationRolloverBooted = 1;
 
-  var CSS_ID = 'constellation-rollover-css';
+  var CSS_ID = 'constellation-rollover-css-v2';
   function ensureCss(){
-    if (document.getElementById(CSS_ID)) return;
-    var s = document.createElement('style');
-    s.id = CSS_ID;
+    var s = document.getElementById(CSS_ID);
+    if (!s) {
+      s = document.createElement('style');
+      s.id = CSS_ID;
+      document.head.appendChild(s);
+    }
     s.textContent = [
       'html body .day-block.overview-era-day .overview-carry-forward,',
       'html body .day-block.vision-collage-day .overview-carry-forward {',
@@ -50952,13 +50955,15 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       '  filter: drop-shadow(0 0 4px rgba(196,168,130,0.35));',
       '}',
       '#constellation-rollover .cr-dest {',
-      '  display: flex; flex-direction: column; gap: 10px; align-items: stretch;',
+      '  display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px 12px; align-items: center;',
+      '  position: relative; z-index: 5;',
       '}',
       '#constellation-rollover .cr-dest-label {',
-      '  font-size: 12px; opacity: 0.55; margin-right: 4px; font-style: italic;',
+      '  font-size: 12px; opacity: 0.55; margin-right: 2px; font-style: italic;',
       '}',
-      '#constellation-rollover .cr-dest-pills {',
-      '  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;',
+      '#constellation-rollover .cr-dest-picker {',
+      '  position: relative; display: inline-flex; flex-direction: column; align-items: stretch;',
+      '  max-width: min(100%, 340px);',
       '}',
       '#constellation-rollover .cr-day {',
       '  border: 1px solid rgba(255,248,238,0.22); background: transparent;',
@@ -50973,23 +50978,52 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       '  background: rgba(255,248,238,0.92); color: #2c2418; border-color: transparent;',
       '  box-shadow: 0 0 16px rgba(196,168,130,0.28);',
       '}',
-      '#constellation-rollover .cr-day-more,',
-      '#constellation-rollover .cr-day-pickdate {',
-      '  opacity: 0.88; letter-spacing: 0.01em;',
+      '#constellation-rollover .cr-day-trigger {',
+      '  display: inline-flex; align-items: center; gap: 8px; max-width: 100%;',
+      '  text-align: left;',
       '}',
-      '#constellation-rollover .cr-day-panel {',
-      '  display: none; flex-wrap: wrap; gap: 7px; align-content: flex-start;',
-      '  max-height: 148px; overflow-y: auto; padding: 12px 14px;',
-      '  border-radius: 16px; border: 1px solid rgba(255,248,238,0.14);',
-      '  background: rgba(255,248,238,0.04);',
+      '#constellation-rollover .cr-day-trigger-label {',
+      '  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;',
+      '}',
+      '#constellation-rollover .cr-day-caret {',
+      '  opacity: 0.55; font-style: normal; font-size: 11px; line-height: 1;',
+      '  flex: 0 0 auto;',
+      '}',
+      '#constellation-rollover .cr-dest-picker.is-open .cr-day-caret {',
+      '  transform: rotate(180deg);',
+      '}',
+      '#constellation-rollover .cr-day-menu {',
+      '  display: none; position: absolute; left: 0; right: auto; top: calc(100% + 8px);',
+      '  min-width: 240px; max-width: 320px; max-height: min(42vh, 280px); overflow-y: auto;',
+      '  padding: 8px; border-radius: 16px;',
+      '  border: 1px solid rgba(255,248,238,0.18);',
+      '  background: rgba(18,12,10,0.94);',
+      '  box-shadow: 0 16px 36px rgba(0,0,0,0.42);',
+      '  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);',
+      '  z-index: 20;',
       '  scrollbar-width: thin; scrollbar-color: rgba(196,168,130,0.45) transparent;',
       '}',
-      '#constellation-rollover .cr-day-panel.is-open { display: flex; }',
-      '#constellation-rollover .cr-day-panel .cr-day {',
-      '  font-size: 12px; padding: 6px 11px;',
+      '#constellation-rollover .cr-day-menu.is-open { display: flex; flex-direction: column; gap: 4px; }',
+      '#constellation-rollover .cr-day-option {',
+      '  border: 0; background: transparent; color: rgba(255,248,238,0.82);',
+      '  border-radius: 999px; padding: 8px 12px; text-align: left; cursor: pointer;',
+      '  font: italic 13px/1.15 "Newsreader", Georgia, serif;',
+      '  transition: background 0.15s, color 0.15s;',
+      '}',
+      '#constellation-rollover .cr-day-option:hover {',
+      '  background: rgba(255,248,238,0.12); color: #fff8ee;',
+      '}',
+      '#constellation-rollover .cr-day-option.is-on {',
+      '  background: rgba(255,248,238,0.92); color: #2c2418;',
+      '}',
+      '#constellation-rollover .cr-day-option-custom {',
+      '  margin-top: 4px; opacity: 0.78;',
+      '  border-top: 1px solid rgba(255,248,238,0.12); border-radius: 0 0 12px 12px;',
+      '  padding-top: 10px;',
       '}',
       '#constellation-rollover .cr-date-wrap {',
       '  display: none; align-items: center; gap: 8px; flex-wrap: wrap;',
+      '  width: 100%; margin-top: 2px;',
       '}',
       '#constellation-rollover .cr-date-wrap.is-open { display: flex; }',
       '#constellation-rollover .cr-date-input {',
@@ -51029,7 +51063,6 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       '  to { transform: translate(40vw, -30vh) scale(0.2); opacity: 0; }',
       '}'
     ].join('\n');
-    document.head.appendChild(s);
   }
 
   function pad(n){ return String(n).padStart(2, '0'); }
@@ -51194,104 +51227,166 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     destWrap.innerHTML = '<span class="cr-dest-label">to</span>';
     var dests = futureDestinations(fromDate);
     var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
-    var pillsRow = document.createElement('div');
-    pillsRow.className = 'cr-dest-pills';
-    destWrap.appendChild(pillsRow);
-    var panel = document.createElement('div');
-    panel.className = 'cr-day-panel';
-    panel.setAttribute('role', 'listbox');
-    destWrap.appendChild(panel);
+    var picker = document.createElement('div');
+    picker.className = 'cr-dest-picker';
+    destWrap.appendChild(picker);
+
+    var trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'cr-day cr-day-trigger is-on';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    picker.appendChild(trigger);
+
+    var menu = document.createElement('div');
+    menu.className = 'cr-day-menu';
+    menu.setAttribute('role', 'listbox');
+    picker.appendChild(menu);
+
     var dateWrap = document.createElement('div');
     dateWrap.className = 'cr-date-wrap';
     dateWrap.innerHTML = '<input type="date" class="cr-date-input" aria-label="choose date"/><button type="button" class="cr-day cr-date-apply">set date</button>';
     destWrap.appendChild(dateWrap);
 
-    function setOn(btn, iso){
+    function labelForIso(iso){
+      var i;
+      for (i = 0; i < dests.length; i++) {
+        if (dests[i].date === iso) return destButtonLabel(dests[i]);
+      }
+      return destToastLabel(iso);
+    }
+    function syncTrigger(){
+      trigger.innerHTML = '<span class="cr-day-trigger-label"></span><span class="cr-day-caret" aria-hidden="true">▾</span>';
+      trigger.querySelector('.cr-day-trigger-label').textContent = labelForIso(destDate);
+    }
+    function syncMenuSelection(){
+      [].slice.call(menu.querySelectorAll('.cr-day-option[data-date]')).forEach(function(opt){
+        opt.classList.toggle('is-on', opt.dataset.date === destDate);
+      });
+    }
+    function closeMenu(){
+      menu.classList.remove('is-open');
+      picker.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function openMenu(){
+      dateWrap.classList.remove('is-open');
+      menu.classList.add('is-open');
+      picker.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      syncMenuSelection();
+    }
+    function ensureMenuOption(iso){
+      if (menu.querySelector('.cr-day-option[data-date="'+iso+'"]')) return;
+      var d = null;
+      var i;
+      for (i = 0; i < dests.length; i++) if (dests[i].date === iso) { d = dests[i]; break; }
+      if (!d) {
+        d = {
+          date: iso,
+          display: labelFor(iso),
+          isToday: iso === todayIso(),
+          isTomorrow: iso === nextIso(todayIso())
+        };
+        dests.push(d);
+        dests.sort(function(a,b){ return a.date.localeCompare(b.date); });
+      }
+      var opt = document.createElement('button');
+      opt.type = 'button';
+      opt.className = 'cr-day-option';
+      opt.dataset.date = d.date;
+      opt.setAttribute('role', 'option');
+      opt.textContent = destButtonLabel(d);
+      opt.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        pickIso(d.date);
+      });
+      var custom = menu.querySelector('.cr-day-option-custom');
+      if (custom) menu.insertBefore(opt, custom);
+      else menu.appendChild(opt);
+    }
+    function pickIso(iso){
+      if (!iso || iso < todayIso() || iso === fromDate) return;
       destDate = iso;
       onPick(iso);
-      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
-      if (btn) btn.classList.add('is-on');
-      panel.classList.remove('is-open');
+      ensureMenuOption(iso);
+      syncTrigger();
+      syncMenuSelection();
+      closeMenu();
       dateWrap.classList.remove('is-open');
-      var moreBtn = destWrap.querySelector('.cr-day-more');
-      if (moreBtn) moreBtn.classList.remove('is-on');
-      var pickBtn = destWrap.querySelector('.cr-day-pickdate');
-      if (pickBtn && (!btn || !btn.classList.contains('cr-day-pickdate'))) {
-        pickBtn.textContent = 'choose date…';
-      }
+    }
+    function openCustomDate(){
+      closeMenu();
+      dateWrap.classList.add('is-open');
+      var inp = dateWrap.querySelector('.cr-date-input');
+      inp.min = todayIso();
+      if (!inp.value || inp.value < todayIso() || inp.value === fromDate) inp.value = destDate;
+      try { inp.focus(); } catch(err){}
     }
 
-    function makeDayBtn(d){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'cr-day' + (d.date === destDate ? ' is-on' : '');
-      b.textContent = destButtonLabel(d);
-      b.dataset.date = d.date;
-      b.addEventListener('click', function(){ setOn(b, d.date); });
-      return b;
+    syncTrigger();
+
+    var i;
+    for (i = 0; i < dests.length; i++) {
+      (function(d){
+        var opt = document.createElement('button');
+        opt.type = 'button';
+        opt.className = 'cr-day-option' + (d.date === destDate ? ' is-on' : '');
+        opt.dataset.date = d.date;
+        opt.setAttribute('role', 'option');
+        opt.textContent = destButtonLabel(d);
+        opt.addEventListener('click', function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          pickIso(d.date);
+        });
+        menu.appendChild(opt);
+      })(dests[i]);
     }
 
-    var quickCount = Math.min(4, dests.length);
-    for (i = 0; i < quickCount; i++) pillsRow.appendChild(makeDayBtn(dests[i]));
-
-    if (dests.length > quickCount) {
-      var more = document.createElement('button');
-      more.type = 'button';
-      more.className = 'cr-day cr-day-more';
-      more.textContent = 'pick a day ▾';
-      more.addEventListener('click', function(e){
-        e.stopPropagation();
-        var open = panel.classList.toggle('is-open');
-        more.classList.toggle('is-on', open);
-        dateWrap.classList.remove('is-open');
-        var pickBtn = destWrap.querySelector('.cr-day-pickdate');
-        if (pickBtn) pickBtn.classList.remove('is-on');
-      });
-      pillsRow.appendChild(more);
-      for (i = quickCount; i < dests.length; i++) panel.appendChild(makeDayBtn(dests[i]));
-    }
-
-    var pickDate = document.createElement('button');
-    pickDate.type = 'button';
-    pickDate.className = 'cr-day cr-day-pickdate';
-    pickDate.textContent = 'choose date…';
-    pickDate.addEventListener('click', function(e){
+    var customOpt = document.createElement('button');
+    customOpt.type = 'button';
+    customOpt.className = 'cr-day-option cr-day-option-custom';
+    customOpt.textContent = 'choose date…';
+    customOpt.addEventListener('click', function(e){
+      e.preventDefault();
       e.stopPropagation();
-      var open = dateWrap.classList.toggle('is-open');
-      pickDate.classList.toggle('is-on', open);
-      panel.classList.remove('is-open');
-      var moreBtn = destWrap.querySelector('.cr-day-more');
-      if (moreBtn) moreBtn.classList.remove('is-on');
-      if (open) {
-        var inp = dateWrap.querySelector('.cr-date-input');
-        inp.min = todayIso();
-        if (!inp.value || inp.value < todayIso() || inp.value === fromDate) inp.value = destDate;
-      }
+      openCustomDate();
     });
-    pillsRow.appendChild(pickDate);
+    menu.appendChild(customOpt);
+
+    trigger.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if (menu.classList.contains('is-open')) closeMenu();
+      else openMenu();
+    });
+
+    function onDocClose(ev){
+      if (!destWrap.contains(ev.target)) {
+        closeMenu();
+        dateWrap.classList.remove('is-open');
+      }
+    }
+    setTimeout(function(){
+      document.addEventListener('pointerdown', onDocClose, true);
+    }, 0);
+    destWrap.__crDestCleanup = function(){
+      document.removeEventListener('pointerdown', onDocClose, true);
+    };
 
     var dateInp = dateWrap.querySelector('.cr-date-input');
     dateInp.min = todayIso();
-    dateWrap.querySelector('.cr-date-apply').addEventListener('click', function(){
-      var v = dateInp.value;
-      if (!v || v < todayIso() || v === fromDate) return;
-      destDate = v;
-      onPick(v);
-      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
-      pickDate.classList.add('is-on');
-      pickDate.textContent = labelFor(v);
-      dateWrap.classList.remove('is-open');
+    function applyCustomDate(){
+      pickIso(dateInp.value);
+    }
+    dateWrap.querySelector('.cr-date-apply').addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      applyCustomDate();
     });
-    dateInp.addEventListener('change', function(){
-      var v = dateInp.value;
-      if (!v || v < todayIso() || v === fromDate) return;
-      destDate = v;
-      onPick(v);
-      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
-      pickDate.classList.add('is-on');
-      pickDate.textContent = labelFor(v);
-      dateWrap.classList.remove('is-open');
-    });
+    dateInp.addEventListener('change', applyCustomDate);
 
     return {
       getDate: function(){ return destDate; }
@@ -51587,6 +51682,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
 
     function cleanup(){
       window.removeEventListener('resize', drawFilaments);
+      try { if (destWrap.__crDestCleanup) destWrap.__crDestCleanup(); } catch(e){}
       closeConstellation();
       if (ov.parentNode) ov.remove();
     }
