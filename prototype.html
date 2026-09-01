@@ -43578,8 +43578,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var four = dayWantsDepthFour(blk);
     blk.classList.toggle('depth-four-era', four);
     var mode = overviewDepthOf(blk);
+    var sectionsOnly = (mode === 'sections' || mode === 'overview');
     if(four){
-      blk.classList.toggle('overview-mode-overview', mode === 'overview');
+      /* Keep overview-mode-overview for legacy hide CSS; alias overview-mode-sections. */
+      blk.classList.toggle('overview-mode-overview', sectionsOnly);
+      blk.classList.toggle('overview-mode-sections', sectionsOnly);
       blk.classList.toggle('overview-mode-subsections', mode === 'subsections');
       blk.classList.toggle('overview-mode-cards', mode === 'cards');
       blk.classList.toggle('overview-mode-details', mode === 'cards');
@@ -43588,11 +43591,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       blk.classList.remove('overview-mode-subsections');
       blk.classList.remove('overview-mode-cards');
       blk.classList.remove('overview-mode-tasks');
+      blk.classList.remove('overview-mode-sections');
       blk.classList.toggle('overview-mode-overview', mode === 'overview');
       blk.classList.toggle('overview-mode-details', mode === 'details');
     }
     blk.querySelectorAll('.overview-depth-opt').forEach(function(b){
-      b.classList.toggle('is-on', b.getAttribute('data-mode') === mode);
+      var dm = b.getAttribute('data-mode');
+      var on = dm === mode || (sectionsOnly && (dm === 'sections' || dm === 'overview'));
+      b.classList.toggle('is-on', on);
     });
     try { syncHorizonBlock(blk); } catch(eHz){}
   }
@@ -43653,8 +43659,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         row.insertBefore(center, row.firstChild);
       }
       if(tog.parentNode !== center) center.appendChild(tog);
-      depth.setAttribute('aria-label', 'overview, subsections, cards, or tasks');
-      depth.innerHTML = '<button type="button" class="overview-depth-opt" data-mode="overview">overview</button><button type="button" class="overview-depth-opt" data-mode="subsections">subsections</button><button type="button" class="overview-depth-opt" data-mode="cards">cards</button><button type="button" class="overview-depth-opt" data-mode="tasks">tasks</button>';
+      depth.setAttribute('aria-label', 'sections, subsections, cards, or tasks');
+      depth.innerHTML = '<button type="button" class="overview-depth-opt" data-mode="sections">sections</button><button type="button" class="overview-depth-opt" data-mode="subsections">subsections</button><button type="button" class="overview-depth-opt" data-mode="cards">cards</button><button type="button" class="overview-depth-opt" data-mode="tasks">tasks</button>';
       if(depth.parentNode !== center) center.appendChild(depth);
       if(tools.contains(depth)) try { tools.removeChild(depth); } catch(e){}
     } else {
