@@ -50082,22 +50082,154 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   function futureDestinations(fromDate){
     var out = [];
     var seen = {};
-    var cur = nextIso(fromDate);
-    for (var i = 0; i < 14; i++) {
-      if (!seen[cur]) {
-        out.push({ date: cur, display: labelFor(cur), isTomorrow: i === 0 });
-        seen[cur] = 1;
-      }
-      cur = nextIso(cur);
+    var today = todayIso();
+    var cursor = fromDate < today ? today : nextIso(fromDate);
+    var i;
+    for (i = 0; i < 14; i++) {
+      var d = addDays(cursor, i);
+      if (d < today || d === fromDate || seen[d]) continue;
+      seen[d] = 1;
+      out.push({
+        date: d,
+        display: labelFor(d),
+        isToday: d === today,
+        isTomorrow: d === nextIso(today)
+      });
     }
     [].slice.call(document.querySelectorAll('.day-block[data-date]')).forEach(function(b){
       var d = b.getAttribute('data-date') || '';
-      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(d) || d <= fromDate || seen[d]) return;
+      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(d) || d < today || d === fromDate || seen[d]) return;
       seen[d] = 1;
-      out.push({ date: d, display: labelFor(d), isTomorrow: false });
+      out.push({
+        date: d,
+        display: labelFor(d),
+        isToday: d === today,
+        isTomorrow: d === nextIso(today)
+      });
     });
     out.sort(function(a,b){ return a.date.localeCompare(b.date); });
-    return out.slice(0, 14);
+    return out;
+  }
+
+  function destButtonLabel(d){
+    if (d.isToday) return 'today · ' + d.display;
+    if (d.isTomorrow) return 'tomorrow · ' + d.display;
+    return d.display;
+  }
+
+  function destToastLabel(iso){
+    var today = todayIso();
+    if (iso === today) return 'today · ' + labelFor(iso);
+    if (iso === nextIso(today)) return 'tomorrow · ' + labelFor(iso);
+    return labelFor(iso);
+  }
+
+  function buildDestPicker(destWrap, fromDate, onPick){
+    destWrap.innerHTML = '<span class="cr-dest-label">to</span>';
+    var dests = futureDestinations(fromDate);
+    var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
+    var pillsRow = document.createElement('div');
+    pillsRow.className = 'cr-dest-pills';
+    destWrap.appendChild(pillsRow);
+    var panel = document.createElement('div');
+    panel.className = 'cr-day-panel';
+    panel.setAttribute('role', 'listbox');
+    destWrap.appendChild(panel);
+    var dateWrap = document.createElement('div');
+    dateWrap.className = 'cr-date-wrap';
+    dateWrap.innerHTML = '<input type="date" class="cr-date-input" aria-label="choose date"/><button type="button" class="cr-day cr-date-apply">set date</button>';
+    destWrap.appendChild(dateWrap);
+
+    function setOn(btn, iso){
+      destDate = iso;
+      onPick(iso);
+      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
+      if (btn) btn.classList.add('is-on');
+      panel.classList.remove('is-open');
+      dateWrap.classList.remove('is-open');
+      var moreBtn = destWrap.querySelector('.cr-day-more');
+      if (moreBtn) moreBtn.classList.remove('is-on');
+      var pickBtn = destWrap.querySelector('.cr-day-pickdate');
+      if (pickBtn && (!btn || !btn.classList.contains('cr-day-pickdate'))) {
+        pickBtn.textContent = 'choose date…';
+      }
+    }
+
+    function makeDayBtn(d){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'cr-day' + (d.date === destDate ? ' is-on' : '');
+      b.textContent = destButtonLabel(d);
+      b.dataset.date = d.date;
+      b.addEventListener('click', function(){ setOn(b, d.date); });
+      return b;
+    }
+
+    var quickCount = Math.min(4, dests.length);
+    for (i = 0; i < quickCount; i++) pillsRow.appendChild(makeDayBtn(dests[i]));
+
+    if (dests.length > quickCount) {
+      var more = document.createElement('button');
+      more.type = 'button';
+      more.className = 'cr-day cr-day-more';
+      more.textContent = 'pick a day ▾';
+      more.addEventListener('click', function(e){
+        e.stopPropagation();
+        var open = panel.classList.toggle('is-open');
+        more.classList.toggle('is-on', open);
+        dateWrap.classList.remove('is-open');
+        var pickBtn = destWrap.querySelector('.cr-day-pickdate');
+        if (pickBtn) pickBtn.classList.remove('is-on');
+      });
+      pillsRow.appendChild(more);
+      for (i = quickCount; i < dests.length; i++) panel.appendChild(makeDayBtn(dests[i]));
+    }
+
+    var pickDate = document.createElement('button');
+    pickDate.type = 'button';
+    pickDate.className = 'cr-day cr-day-pickdate';
+    pickDate.textContent = 'choose date…';
+    pickDate.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = dateWrap.classList.toggle('is-open');
+      pickDate.classList.toggle('is-on', open);
+      panel.classList.remove('is-open');
+      var moreBtn = destWrap.querySelector('.cr-day-more');
+      if (moreBtn) moreBtn.classList.remove('is-on');
+      if (open) {
+        var inp = dateWrap.querySelector('.cr-date-input');
+        inp.min = todayIso();
+        if (!inp.value || inp.value < todayIso() || inp.value === fromDate) inp.value = destDate;
+      }
+    });
+    pillsRow.appendChild(pickDate);
+
+    var dateInp = dateWrap.querySelector('.cr-date-input');
+    dateInp.min = todayIso();
+    dateWrap.querySelector('.cr-date-apply').addEventListener('click', function(){
+      var v = dateInp.value;
+      if (!v || v < todayIso() || v === fromDate) return;
+      destDate = v;
+      onPick(v);
+      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
+      pickDate.classList.add('is-on');
+      pickDate.textContent = labelFor(v);
+      dateWrap.classList.remove('is-open');
+    });
+    dateInp.addEventListener('change', function(){
+      var v = dateInp.value;
+      if (!v || v < todayIso() || v === fromDate) return;
+      destDate = v;
+      onPick(v);
+      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
+      pickDate.classList.add('is-on');
+      pickDate.textContent = labelFor(v);
+      dateWrap.classList.remove('is-open');
+    });
+
+    return {
+      getDate: function(){ return destDate; }
+    };
   }
 
   function starLayout(n){
