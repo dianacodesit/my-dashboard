@@ -43110,7 +43110,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return (tile && tile.getAttribute('data-focus')) || slug((tile.querySelector('.vision-tile-title')||{}).textContent);
   }
   function cardTitle(pol){
-    var s = pol && (pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span'));
+    var s = pol && (pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span:not(.vision-card-headline)'));
     return ((s && s.textContent) || '').replace(/\s+/g,' ').trim();
   }
   function tileByFocus(vb, focus){
@@ -44421,9 +44421,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }catch(e){}
   function __fillPackAllTiles(){
     document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
-      var pols = tile.querySelectorAll('.vision-tile-details > .vision-polaroid');
-      if(pols.length >= 1){
-        try{ packTileCards(tile, {force: pols.length >= 2 || looksGridPacked([].slice.call(pols))}); }catch(e){}
+      if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
+        try{ packTileCards(tile, {force: true}); }catch(e){}
       }
     });
   }
