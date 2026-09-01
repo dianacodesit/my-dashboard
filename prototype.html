@@ -46810,15 +46810,25 @@ function seedAug30SelectedCards(blk){
       return t === 'politics' || f === 'politics';
     }
     function cleanPoliticsPhoto(tile){
-      var st = tile.getAttribute('style') || '';
-      st = st.replace(/--tile-photo:\s*[^;]*;?/g, '');
-      tile.setAttribute('style', st);
+      var keep = [];
+      String(tile.getAttribute('style') || '').split(';').forEach(function(part){
+        var p = part.trim();
+        if(!p) return;
+        if(/^--tile-photo/i.test(p)) return;
+        if(/^grid-area\b/i.test(p)) return;
+        keep.push(p);
+      });
+      tile.setAttribute('style', keep.join('; '));
       tile.style.setProperty('--tile-photo', 'url("' + WANT + '")');
     }
-    document.querySelectorAll('.vision-tile').forEach(function(tile){
-      if(!isPoliticsTile(tile)) return;
-      cleanPoliticsPhoto(tile);
-    });
+    function rewritePoliticsPhotosNow(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(!isPoliticsTile(tile)) return;
+        cleanPoliticsPhoto(tile);
+      });
+    }
+    rewritePoliticsPhotosNow();
+    window.__rewritePoliticsPhotosNow = rewritePoliticsPhotosNow;
     if(localStorage.getItem(MKEY)) return;
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1'].forEach(function(k){
@@ -46889,6 +46899,7 @@ function seedAug30SelectedCards(blk){
       if(stripFreshDayAutoSections(blk)) mig = true;
       if(scrubUninvitedAutoSections(blk)) mig = true;
       if(era) ensureOverviewEditChrome(blk);
+      try { if(window.__rewritePoliticsPhotosNow) window.__rewritePoliticsPhotosNow(); } catch(e){}
       if(mig && era) persistDay(blk);
       else if(mig && habits){
         try { syncDayShell(blk); } catch(e){}
