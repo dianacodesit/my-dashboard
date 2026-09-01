@@ -24623,8 +24623,20 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso === '2026-09-01' && window.__scrubEnrollMoveCardsFromDay) {
         try { window.__scrubEnrollMoveCardsFromDay(clone); } catch (e) {}
       }
+      if (iso === '2026-09-02' && window.__seedSep02Audacity) {
+        try { window.__seedSep02Audacity(clone); } catch (e) {}
+      }
+      if (iso === '2026-09-02' && window.__seedSep02Soul) {
+        try { window.__seedSep02Soul(clone); } catch (e) {}
+      }
+      if (iso === '2026-09-02' && window.__seedSep02NewSections) {
+        try { window.__seedSep02NewSections(clone); } catch (e) {}
+      }
       if (iso === '2026-09-02' && window.__seedSep02EnrollMoveCards) {
         try { window.__seedSep02EnrollMoveCards(clone); } catch (e) {}
+      }
+      if (iso === '2026-09-02' && window.__seedRequestedFoci) {
+        try { window.__seedRequestedFoci(clone); } catch (e) {}
       }
 
       // Late-created days miss the DOMContentLoaded collapse wiring — attach now.
@@ -30132,6 +30144,8 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='claim') src='';
       else if(nl==='sabotage') src='manus-storage/zone-sabotage.jpg?v=1';
       else if(nl==='say thank you in advance'||nl==='say-thank-you-in-advance') src='manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
+      else if(nl==='execute') src='manus-storage/zone-execute-checklist.jpg?v=exec1';
+      else if(nl==='curate') src='manus-storage/zone-curate-gallery.jpg?v=curate1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
       else if(nl==='fight back'||nl==='remember who you are'||nl==='fight') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
@@ -43654,7 +43668,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','train','calisthenics','pepperdine','pursuits','ignite','potential','resonance','surrender to Allah ﷻ','envision','become','Ph.D','workflow','focus','align','strengths','plan','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'];
+    var presetSecs=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','train','calisthenics','pepperdine','pursuits','ignite','potential','resonance','surrender to Allah ﷻ','envision','become','Ph.D','workflow','focus','align','strengths','plan','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -47729,7 +47743,7 @@ function seedAug30SelectedCards(blk){
     var changed = false;
     /* Expected Sep1 (with soul/audacity seeded separately): wins, repetitions, intentions, attention, darkness.
        Do NOT seed politics, glow-up, Pepperdine, or fitness. */
-    ['win','repetitions','intentions','attention','darkness'].forEach(function(title){
+    ['win','repetitions','intentions','attention','darkness','execute','curate'].forEach(function(title){
       var focus = slug(title);
       if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, focus, title)) return;
       if(host.querySelector('.vision-tile[data-focus="'+focus+'"]')) return;
@@ -47815,10 +47829,10 @@ function seedAug30SelectedCards(blk){
   }
   window.__seedSep01Audacity = seedSep01Audacity;
 
-  var ENROLL_MOVE_CARD_TITLES = ['tuition payment', 'fall 2026 enrollment'];
+  var ENROLL_MOVE_CARD_TITLES = ['tuition', 'scholarship re-application'];
   var ENROLL_MOVE_CARD_SRC = {
-    'tuition payment': 'manus-storage/card-tuition.jpg?v=v4',
-    'fall 2026 enrollment': 'manus-storage/card-fall-2026-enrollment.jpg?v=1'
+    'tuition': 'manus-storage/card-tuition.jpg?v=v4',
+    'scholarship re-application': 'manus-storage/card-application.jpg?v=v4'
   };
   var ENROLL_LEGACY_SCRUB_NAMES = ['tuition', 'scholarship re-application', 'scholarship application', 'scholarship reapplication', 'tuition payment', 'fall 2026 enrollment'];
   function isEnrollMoveCardName(title){
@@ -47975,6 +47989,81 @@ function seedAug30SelectedCards(blk){
     return changed;
   }
   window.__seedSep02EnrollMoveCards = seedSep02EnrollMoveCards;
+
+  function seedSep02NewSections(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-09-02') return false;
+    /* v1: presence-based — must survive stripFreshDayAutoSections (runs before this). */
+    var host = heroHost(blk);
+    if(!host) return false;
+    var changed = false;
+    ['win','repetitions','intentions','attention','darkness'].forEach(function(title){
+      var focus = slug(title);
+      if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, focus, title)) return;
+      if(host.querySelector('.vision-tile[data-focus="'+focus+'"]')) return;
+      var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
+        var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+        var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+        return f === focus || tt === title;
+      });
+      if(exists) return;
+      addTile(blk, title, true);
+      changed = true;
+    });
+    if(changed){
+      try { syncHeroLayoutClass(blk); } catch(e){}
+    }
+    try { localStorage.setItem('migration-sep02-new-sections-v1', '1'); } catch(e){}
+    return changed;
+  }
+  window.__seedSep02NewSections = seedSep02NewSections;
+
+  function seedSep02Audacity(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-09-02') return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    function isSep02FightBackTile(tile){
+      var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return f === 'audacity' || tt === 'fight' || tt === 'remember who you are' || tt === 'fight back';
+    }
+    if([].slice.call(host.querySelectorAll('.vision-tile')).some(isSep02FightBackTile)){
+      try { ensureAudacityZoomHeader(blk); } catch(e){}
+      try { localStorage.setItem('migration-sep02-audacity-v1', '1'); } catch(e){}
+      return false;
+    }
+    if(typeof isGloballyArchivedSection === 'function' && isGloballyArchivedSection('audacity')) return false;
+    if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, 'audacity', 'audacity')) return false;
+    addTile(blk, 'audacity', true);
+    try { syncHeroLayoutClass(blk); ensureAudacityZoomHeader(blk); } catch(e){}
+    try { localStorage.setItem('migration-sep02-audacity-v1', '1'); } catch(e){}
+    return true;
+  }
+  window.__seedSep02Audacity = seedSep02Audacity;
+
+  function seedSep02Soul(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-09-02') return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    if(host.querySelector('.vision-tile[data-focus="soul"]')){
+      try { localStorage.setItem('migration-sep02-soul-v1', '1'); } catch(e){}
+      return false;
+    }
+    if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, 'soul', 'soul')) return false;
+    var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
+      var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return tt === 'soul' || f === 'soul';
+    });
+    if(exists){
+      try { localStorage.setItem('migration-sep02-soul-v1', '1'); } catch(e){}
+      return false;
+    }
+    addTile(blk, 'soul', true);
+    try { syncHeroLayoutClass(blk); } catch(e){}
+    try { localStorage.setItem('migration-sep02-soul-v1', '1'); } catch(e){}
+    return true;
+  }
+  window.__seedSep02Soul = seedSep02Soul;
 
   function migrateEnrollTuitionSep01ToSep02Stores(){
     var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v1';
@@ -48674,7 +48763,7 @@ function seedAug30SelectedCards(blk){
 
   function seedRequestedFoci(blk){
     var d = dayKey(blk);
-    if(!blkOk(blk) || (d !== '2026-08-30' && d !== '2026-09-01')) return false;
+    if(!blkOk(blk) || (d !== '2026-08-30' && d !== '2026-09-01' && d !== '2026-09-02')) return false;
     var host = heroHost(blk);
     if(!host) return false;
     var changed = false;
@@ -49850,6 +49939,57 @@ function seedAug30SelectedCards(blk){
     } catch(e){}
   })();
 
+  (function rewriteExecuteCuratePhotos(){
+    var MKEY = 'migration-execute-curate-photos-v1';
+    var EXEC = 'manus-storage/zone-execute-checklist.jpg?v=exec1';
+    var CUR = 'manus-storage/zone-curate-gallery.jpg?v=curate1';
+    function isExecTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'execute' || f === 'execute';
+    }
+    function isCurTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'curate' || f === 'curate';
+    }
+    function applyTile(tile, want){
+      if(want){ tile.classList.remove('vision-tile-nophoto'); tile.style.setProperty('--tile-photo', 'url("' + want + '")'); }
+      else { tile.classList.add('vision-tile-nophoto'); tile.style.setProperty('--tile-photo', 'none'); }
+    }
+    function apply(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(isExecTile(tile)) applyTile(tile, EXEC);
+        else if(isCurTile(tile)) applyTile(tile, CUR);
+      });
+    }
+    apply();
+    window.__rewriteExecuteCuratePhotosNow = apply;
+    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw
+          .replace(/manus-storage\/zone-execute(?:-checklist)?(?:\.jpg)?(?:\?v=[^"'?\s;)]*)?/g, EXEC)
+          .replace(/manus-storage\/zone-curate(?:-gallery)?(?:\.jpg)?(?:\?v=[^"'?\s;)]*)?/g, CUR);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var tt = String(rec.title||'').toLowerCase();
+          var f = String(rec.focus||'').toLowerCase();
+          if(tt === 'execute' || f === 'execute') rec.photo = EXEC;
+          if(tt === 'curate' || f === 'curate') rec.photo = CUR;
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
   var _overviewApplied = {};
 
   var ARCHIVE_SCRUB_START = '2026-09-01';
@@ -50010,6 +50150,10 @@ function seedAug30SelectedCards(blk){
       if(seedSep01Soul(blk)) mig = true;
       if(seedSep01NewSections(blk)) mig = true;
       if(scrubEnrollMoveCardsFromDay(blk)) mig = true;
+      /* Sep2 Diana-requested set — AFTER empty-day strip so wipe cannot erase them */
+      if(seedSep02Audacity(blk)) mig = true;
+      if(seedSep02Soul(blk)) mig = true;
+      if(seedSep02NewSections(blk)) mig = true;
       if(seedSep02EnrollMoveCards(blk)) mig = true;
       if(renameFutureSelfToFuture(blk)) mig = true;
       if(dedupeFutureSections(blk)) mig = true;

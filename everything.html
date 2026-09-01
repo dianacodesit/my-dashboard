@@ -13117,7 +13117,9 @@ window.__j22fnApply=run;
     'claim':'amber',
     'sabotage':'coral',
     'say thank you in advance':'warm',
-    'say-thank-you-in-advance':'warm'
+    'say-thank-you-in-advance':'warm',
+    'execute':'sage',
+    'curate':'warm'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -29452,7 +29454,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -44325,14 +44327,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function titleFromCardSrc(src){
     src = String(src || '').toLowerCase();
-    if(/card-tuition/.test(src)) return 'tuition';
-    if(/card-application/.test(src)) return 'scholarship re-application';
+    if(/card-tuition/.test(src)) return 'tuition payment';
+    if(/card-fall-2026-enrollment/.test(src)) return 'fall 2026 enrollment';
     return '';
   }
   function cardPhotoForTitle(t){
     t = String(t || '').replace(/\s+/g,' ').trim().toLowerCase();
-    if(t === 'tuition' || t === 'tuition money') return 'manus-storage/card-tuition.jpg?v=v4';
-    if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') return 'manus-storage/card-application.jpg?v=v4';
+    if(t === 'tuition' || t === 'tuition payment' || t === 'tuition money') return 'manus-storage/card-tuition.jpg?v=v4';
+    if(t === 'fall 2026 enrollment') return 'manus-storage/card-fall-2026-enrollment.jpg?v=1';
     return '';
   }
   function scrubPolaroidHeadlinePollution(pol){
@@ -47417,7 +47419,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function isEnrollMoveCardName(title){
     var k = String(title || '').replace(/\s+/g, ' ').trim().toLowerCase();
     if(k === 'tuition' || k === 'tuition payment') return 'tuition payment';
-    if(k === 'scholarship re-application' || k === 'scholarship application' || k === 'scholarship reapplication' || k === 'fall 2026 enrollment') return 'fall 2026 enrollment';
+    if(k === 'fall 2026 enrollment') return 'fall 2026 enrollment';
     return '';
   }
   function isEnrollLegacyScrubName(title){
@@ -47519,6 +47521,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         changed = true;
       }
       pep.style.setProperty('--tile-photo', "url('"+PEPPER_IMG+"')");
+      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        var ct = cardTitle(pol).toLowerCase();
+        if(ct === 'scholarship re-application' || ct === 'scholarship application' || ct === 'scholarship reapplication'){
+          pol.remove();
+          changed = true;
+        }
+      });
       [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
         var ct = cardTitle(pol);
         var canon = isEnrollMoveCardName(ct);
@@ -47659,7 +47668,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function migrateEnrollTuitionSep01ToSep02Stores(){
     var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v4';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
-    var APP = ENROLL_MOVE_CARD_SRC['fall 2026 enrollment'];
+    var ENR = ENROLL_MOVE_CARD_SRC['fall 2026 enrollment'];
     var TUI = ENROLL_MOVE_CARD_SRC['tuition payment'];
     function canonEnrollTitle(title){
       return isEnrollMoveCardName(title) || '';
@@ -47856,6 +47865,33 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
   }
   try { migrateEnrollCardsSep02V3(); } catch(e){}
+
+  function migrateRestoreSep02UserSections(){
+    /* stripFreshDayAutoSections + stale removedSections blocked Diana's Sep2 additions. */
+    var MKEY = 'migration-restore-sep02-user-sections-v1';
+    try { if(localStorage.getItem(MKEY)) return; } catch(e){}
+    try {
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      var sep2 = edits['2026-09-02'];
+      if(!sep2){ localStorage.setItem(MKEY, '1'); return; }
+      var unblock = {
+        'win':1,'wins':1,'repetitions':1,'intentions':1,'attention':1,'darkness':1,'soul':1,'audacity':1,
+        'say thank you in advance':1,'say-thank-you-in-advance':1,
+        'detach':1,'start over':1,'start-over':1,'tune into':1,'tune-into':1,
+        'self-actualize':1,'self actualize':1,'claim':1,'sabotage':1,
+        'become':1,'glow up':1,'glow-up':1,'train':1,'body':1,'workflow':1,
+        'surrender to allah':1,'surrender-to-allah':1,'itaq-allah':1,'itaq allah':1,
+        'abundant':1,'receive':1,'ask':1,'execute':1,'curate':1,'pepperdine':1,'achieve':1,'enroll':1
+      };
+      sep2.removedSections = (sep2.removedSections || []).filter(function(x){
+        return !unblock[String(x || '').toLowerCase()];
+      });
+      edits['2026-09-02'] = sep2;
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  }
+  try { migrateRestoreSep02UserSections(); } catch(e){}
 
   function seedAug30StrengthsPlan(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
@@ -49599,6 +49635,57 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           var f = String(rec.focus||'').toLowerCase();
           if(tt === 'detach' || f === 'detach') rec.photo = DETACH;
           if(tt === 'start over' || tt === 'start-over' || f === 'start over' || f === 'start-over') rec.photo = START;
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
+  (function rewriteExecuteCuratePhotos(){
+    var MKEY = 'migration-execute-curate-photos-v1';
+    var EXEC = 'manus-storage/zone-execute-checklist.jpg?v=exec1';
+    var CUR = 'manus-storage/zone-curate-gallery.jpg?v=curate1';
+    function isExecTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'execute' || f === 'execute';
+    }
+    function isCurTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'curate' || f === 'curate';
+    }
+    function applyTile(tile, want){
+      if(want){ tile.classList.remove('vision-tile-nophoto'); tile.style.setProperty('--tile-photo', 'url("' + want + '")'); }
+      else { tile.classList.add('vision-tile-nophoto'); tile.style.setProperty('--tile-photo', 'none'); }
+    }
+    function apply(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(isExecTile(tile)) applyTile(tile, EXEC);
+        else if(isCurTile(tile)) applyTile(tile, CUR);
+      });
+    }
+    apply();
+    window.__rewriteExecuteCuratePhotosNow = apply;
+    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw
+          .replace(/manus-storage\/zone-execute(?:-checklist)?(?:\.jpg)?(?:\?v=[^"'?\s;)]*)?/g, EXEC)
+          .replace(/manus-storage\/zone-curate(?:-gallery)?(?:\.jpg)?(?:\?v=[^"'?\s;)]*)?/g, CUR);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var tt = String(rec.title||'').toLowerCase();
+          var f = String(rec.focus||'').toLowerCase();
+          if(tt === 'execute' || f === 'execute') rec.photo = EXEC;
+          if(tt === 'curate' || f === 'curate') rec.photo = CUR;
         });
       });
       localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
