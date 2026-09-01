@@ -51224,7 +51224,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
         var n = rollItems(blk, destDate, pick);
         cleanup();
         ensureCarryControl(blk);
-        toast(n ? ('carried '+n+' → '+labelFor(destDate)) : 'nothing moved', !n);
+        toast(n ? ('carried '+n+' → '+destToastLabel(destDate)) : 'nothing moved', !n);
       }, 520);
     };
     document.addEventListener('keydown', function onEsc(e){
