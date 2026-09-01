@@ -45837,7 +45837,7 @@ function seedAug30SelectedCards(blk){
   }
   try { migrateSmileSetCardPhoto(); } catch(e){}
   function migrateAbundanceCardPhotos(){
-    var MKEY = 'migration-abundance-card-photos-v1';
+    var MKEY = 'migration-abundance-card-photos-v2';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     var MAP = {
       'refunds': 'manus-storage/card-refunds.jpg?v=1',
@@ -45869,7 +45869,7 @@ function seedAug30SelectedCards(blk){
   }
   try { migrateAbundanceCardPhotos(); } catch(e){}
   function migrateScatterFreeformCards(){
-    var MKEY = 'migration-scatter-freeform-cards-v1';
+    var MKEY = 'migration-scatter-freeform-cards-v2';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
       if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 1){

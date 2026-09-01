@@ -19334,7 +19334,6 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;);" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e22579">itaqAllah</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 8%; --py: 18%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
 <article class="vision-tile" data-focus="fear-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;);" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e9706">itaqAllah</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 </div>
-</div>
 <div class="day-block fmt22 vision-collage-day make-flow-day today-block" data-date="2026-08-30">
 <div class="day-dot"></div>
 <div class="day-card">
@@ -45768,6 +45767,32 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return false;
     }
     addTile(blk, 'audacity', true);
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+    return true;
+  }
+
+  function seedSep01Soul(blk){
+    if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
+    var MKEY = 'migration-sep01-soul-v1';
+    if(localStorage.getItem(MKEY)) return false;
+    var host = heroHost(blk);
+    if(!host) return false;
+    if(host.querySelector('.vision-tile[data-focus="soul"]')){
+      try { localStorage.setItem(MKEY, '1'); } catch(e){}
+      return false;
+    }
+    if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, 'soul', 'soul')) return false;
+    var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
+      var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return tt === 'soul' || f === 'soul';
+    });
+    if(exists){
+      try { localStorage.setItem(MKEY, '1'); } catch(e){}
+      return false;
+    }
+    addTile(blk, 'soul', true);
+    try { syncHeroLayoutClass(blk); } catch(e){}
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
     return true;
   }
