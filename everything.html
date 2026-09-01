@@ -41998,7 +41998,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var host = heroHost(blk);
     if(!host) return '';
     var clone = host.cloneNode(true);
-    clone.querySelectorAll('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check').forEach(function(el){ el.remove(); });
+    clone.querySelectorAll('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-horizon, .vision-horizon-above, .vision-horizon-below').forEach(function(el){ el.remove(); });
     clone.querySelectorAll('.is-zoomed').forEach(function(el){ el.classList.remove('is-zoomed'); });
     return clone.innerHTML.replace(/\s+$/,'');
   }
@@ -42641,7 +42641,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(!k || !blk) return;
     try {
       var o = JSON.parse(localStorage.getItem('btm_day_shells_v1') || '{}') || {};
-      o[k] = blk.outerHTML;
+      var clone = blk.cloneNode(true);
+      clone.querySelectorAll('.vision-horizon, .vision-horizon-above, .vision-horizon-below, .vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check').forEach(function(el){ try{ el.remove(); }catch(e){} });
+      clone.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
+      o[k] = clone.outerHTML;
       localStorage.setItem('btm_day_shells_v1', JSON.stringify(o));
     } catch(e){}
   }
