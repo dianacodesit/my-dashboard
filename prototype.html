@@ -48321,6 +48321,34 @@ function seedAug30SelectedCards(blk){
   }
   try { migrateRestoreSep02UserSections(); } catch(e){}
 
+  function migrateUnarchiveSep02CarrySections(){
+    /* Sep1 archives blocked the Sep2 impulse set — unarchive carry-over sections Diana expects on Sep 2. */
+    var MKEY = 'migration-unarchive-sep02-carry-sections-v1';
+    try { if(localStorage.getItem(MKEY)) return; } catch(e){}
+    var CARRY = {
+      'intentions':1,'attention':1,'anticipate':1,'darkness':1,'soul':1,'audacity':1,'fight':1,
+      'fight back':1,'fight-back':1,'remember who you are':1,
+      'detach':1,'start-over':1,'start over':1,'tune-into':1,'tune into':1,
+      'self-actualize':1,'self actualize':1,'claim':1,'sabotage':1,
+      'win':1,'wins':1,'repetitions':1,'say thank you in advance':1,'say-thank-you-in-advance':1
+    };
+    try {
+      var list = JSON.parse(localStorage.getItem('btm_archived_sections_v1') || '[]') || [];
+      if(!Array.isArray(list)){ localStorage.setItem(MKEY, '1'); return; }
+      var next = list.filter(function(it){
+        if(!it) return false;
+        var f = String(it.focus || '').toLowerCase();
+        var t = String(it.title || '').toLowerCase();
+        return !CARRY[f] && !CARRY[t] && !CARRY[String(f).replace(/-/g,' ')] && !CARRY[String(t).replace(/-/g,' ')];
+      });
+      if(next.length !== list.length){
+        localStorage.setItem('btm_archived_sections_v1', JSON.stringify(next));
+      }
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  }
+  try { migrateUnarchiveSep02CarrySections(); } catch(e){}
+
   /* Prototypes page: copy LIVE Sept 1 sections onto Aug 30 — never archived leftovers. */
   function seedProtoAug30Sep01Sections(blk){
     if(!document.body.classList.contains('prototypes-page')) return false;
