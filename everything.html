@@ -23580,6 +23580,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso >= todayStr() && window.__scrubUninvitedAutoSections) {
         try { window.__scrubUninvitedAutoSections(clone); } catch (e) {}
       }
+      if (iso === '2026-09-01' && window.__seedSep01NewSections) {
+        try { window.__seedSep01NewSections(clone); } catch (e) {}
+      }
 
       // Late-created days miss the DOMContentLoaded collapse wiring — attach now.
       try {
