@@ -67,6 +67,7 @@ KNOWN_CARD_PHOTOS = {
     "inversions": "manus-storage/card-inversions.jpg",
     "pepperdine": "manus-storage/zone-pepperdine-malibu.jpg",
     "enroll": "manus-storage/zone-pepperdine-malibu.jpg",
+    "achieve": "manus-storage/zone-pepperdine-malibu.jpg",
     "grad school": "manus-storage/zone-pepperdine-malibu.jpg",
     "grad": "manus-storage/zone-pepperdine-malibu.jpg",
     "soul": "",
@@ -88,6 +89,7 @@ KNOWN_CARD_PHOTOS = {
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "receive": "manus-storage/zone-abundance-tree.jpg?v=tree1",
+    "ask": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "finances": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "become": "manus-storage/zone-envision.jpg?v=swap1",
     "future": "manus-storage/zone-envision.jpg?v=swap1",
@@ -107,6 +109,8 @@ KNOWN_CARD_PHOTOS = {
     "self actualize": "manus-storage/zone-self-actualize-eclose.jpg?v=eclose1",
     "claim": "",
     "sabotage": "manus-storage/zone-sabotage.jpg?v=1",
+    "say thank you in advance": "manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1",
+    "say-thank-you-in-advance": "manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1",
 }
 # Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
 # Never return these from /photo-for for soul, sorrow, darkness, abundance, attention.
@@ -337,6 +341,7 @@ def _tile_aliases(key: str) -> set[str]:
         ("finances", "abundance"),
         ("abundant", "abundance"),
         ("receive", "abundance"),
+        ("ask", "abundance"),
         ("win", "wins"),
         ("become", "future"),
         ("align", "alignment"),
@@ -346,6 +351,7 @@ def _tile_aliases(key: str) -> set[str]:
         ("grad school", "pepperdine"),
         ("grad", "pepperdine"),
         ("enroll", "pepperdine"),
+        ("achieve", "pepperdine"),
         ("god conscious", "god-conscious"),
         ("villain", "villains"),
         ("fight-back", "audacity"),
@@ -795,7 +801,7 @@ def _section_photo_rejected(src: str) -> bool:
 
 
 CONCEPTUAL_SECTION_KEYS = frozenset({
-    "soul", "sorrow", "darkness", "abundance", "abundant", "receive", "attention", "anticipate", "finances",
+    "soul", "sorrow", "darkness", "abundance", "abundant", "receive", "ask", "attention", "anticipate", "finances",
     "tune into", "tune-into", "self-actualize", "self actualize", "claim",
 })
 
