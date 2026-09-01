@@ -43593,6 +43593,167 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var saved = k && loadDepthMap()[k];
     return normalizeDepthMode(saved, dayWantsDepthFour(blk));
   }
+
+  /* ——— Tasks depth: horizon pressure line ——— */
+  var HORIZON_DONE_STORE = 'btm_horizon_card_done_v1';
+  function loadHorizonDoneMap(){
+    try { return JSON.parse(localStorage.getItem(HORIZON_DONE_STORE) || '{}') || {}; } catch(e){ return {}; }
+  }
+  function saveHorizonDoneMap(m){
+    try { localStorage.setItem(HORIZON_DONE_STORE, JSON.stringify(m || {})); } catch(e){}
+  }
+  function horizonDoneKey(blk, tile, title){
+    var day = dayKey(blk) || '';
+    var focus = (tile && (tile.getAttribute('data-focus') || '')) || '';
+    var t = String(title || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    return day + '|' + focus + '|' + t;
+  }
+  function isHorizonCardDone(blk, tile, title){
+    var m = loadHorizonDoneMap();
+    return !!m[horizonDoneKey(blk, tile, title)];
+  }
+  function setHorizonCardDone(blk, tile, title, done){
+    var m = loadHorizonDoneMap();
+    var k = horizonDoneKey(blk, tile, title);
+    if(done) m[k] = 1; else delete m[k];
+    saveHorizonDoneMap(m);
+  }
+  function ensureHorizonChrome(tile){
+    if(!tile) return null;
+    var line = tile.querySelector(':scope > .vision-horizon');
+    if(!line){
+      line = document.createElement('div');
+      line.className = 'vision-horizon';
+      line.setAttribute('aria-hidden', 'true');
+      var photo = tile.querySelector(':scope > .vision-tile-photo');
+      if(photo && photo.nextSibling) tile.insertBefore(line, photo.nextSibling);
+      else tile.insertBefore(line, tile.firstChild);
+    }
+    var above = tile.querySelector(':scope > .vision-horizon-above');
+    if(!above){
+      above = document.createElement('div');
+      above.className = 'vision-horizon-above';
+      tile.insertBefore(above, line.nextSibling);
+    }
+    var below = tile.querySelector(':scope > .vision-horizon-below');
+    if(!below){
+      below = document.createElement('div');
+      below.className = 'vision-horizon-below';
+      tile.insertBefore(below, above.nextSibling);
+    }
+    return { line: line, above: above, below: below };
+  }
+  function clearHorizonChrome(tile){
+    if(!tile) return;
+    [].slice.call(tile.querySelectorAll(':scope > .vision-horizon, :scope > .vision-horizon-above, :scope > .vision-horizon-below')).forEach(function(el){
+      try { el.remove(); } catch(e){}
+    });
+  }
+  function makeHorizonTaskLabel(name, checked, meta){
+    var lab = document.createElement('label');
+    lab.className = 'vision-horizon-task';
+    if(meta && meta.kind) lab.setAttribute('data-hz-kind', meta.kind);
+    if(meta && meta.title) lab.setAttribute('data-hz-title', meta.title);
+    var inp = document.createElement('input');
+    inp.type = 'checkbox';
+    inp.className = 'agenda-check';
+    inp.checked = !!checked;
+    var sp = document.createElement('span');
+    sp.textContent = name;
+    lab.appendChild(inp);
+    lab.appendChild(sp);
+    lab.addEventListener('click', function(ev){ ev.stopPropagation(); });
+    lab.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+    return lab;
+  }
+  function syncHorizonTile(tile){
+    if(!tile) return;
+    var blk = tile.closest('.day-block');
+    var on = !!(blk && blk.classList.contains('depth-four-era') && blk.classList.contains('overview-mode-tasks'));
+    if(!on){
+      clearHorizonChrome(tile);
+      return;
+    }
+    var chrome = ensureHorizonChrome(tile);
+    if(!chrome) return;
+    var above = chrome.above;
+    var below = chrome.below;
+    above.innerHTML = '';
+    below.innerHTML = '';
+    var det = tile.querySelector(':scope > .vision-tile-details');
+    var open = [];
+    var done = [];
+    /* Native vision-check tasks */
+    if(det){
+      [].slice.call(det.querySelectorAll(':scope > .vision-check')).forEach(function(src){
+        var span = src.querySelector('span');
+        var name = ((span && span.textContent) || '').replace(/\s+/g, ' ').trim();
+        if(!name) return;
+        var cb = src.querySelector('input.agenda-check, input[type="checkbox"]');
+        var isDone = !!(cb && cb.checked);
+        var lab = makeHorizonTaskLabel(name, isDone, { kind: 'check', title: name });
+        lab.addEventListener('change', function(){
+          if(cb){
+            cb.checked = lab.querySelector('input').checked;
+            try { cb.dispatchEvent(new Event('change', { bubbles: true })); } catch(e){}
+          }
+          try { if(typeof persistDay === 'function') persistDay(blk); } catch(e2){}
+          syncHorizonTile(tile);
+        });
+        (isDone ? done : open).push(lab);
+      });
+    }
+    /* Card titles as horizon tasks (not polaroid chrome) */
+    if(det){
+      [].slice.call(det.querySelectorAll(':scope > .vision-polaroid')).forEach(function(pol){
+        var span = pol.querySelector(':scope > span');
+        var name = ((span && span.textContent) || '').replace(/\s+/g, ' ').trim();
+        if(!name) return;
+        var isDone = isHorizonCardDone(blk, tile, name);
+        var lab = makeHorizonTaskLabel(name, isDone, { kind: 'card', title: name });
+        lab.addEventListener('change', function(){
+          var now = !!(lab.querySelector('input') && lab.querySelector('input').checked);
+          setHorizonCardDone(blk, tile, name, now);
+          syncHorizonTile(tile);
+        });
+        (isDone ? done : open).push(lab);
+      });
+    }
+    open.forEach(function(el){ above.appendChild(el); });
+    done.forEach(function(el){ below.appendChild(el); });
+  }
+  function syncHorizonBlock(blk){
+    if(!blk) return;
+    [].slice.call(blk.querySelectorAll('.vision-tile')).forEach(syncHorizonTile);
+  }
+  function addVisionCheck(tile, name){
+    name = String(name || '').replace(/\s+/g, ' ').trim();
+    if(!name || !tile) return null;
+    var det = tile.querySelector(':scope > .vision-tile-details');
+    if(!det){
+      det = document.createElement('div');
+      det.className = 'vision-tile-details';
+      tile.appendChild(det);
+    }
+    var dup = [].slice.call(det.querySelectorAll(':scope > .vision-check span')).some(function(sp){
+      return ((sp.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase() === name.toLowerCase());
+    });
+    if(dup) return null;
+    var lab = document.createElement('label');
+    lab.className = 'vision-check';
+    lab.style.setProperty('--px', '48%');
+    lab.style.setProperty('--py', '28%');
+    lab.innerHTML = '<input class="agenda-check" type="checkbox"><span></span>';
+    lab.querySelector('span').textContent = name;
+    det.appendChild(lab);
+    var blk = tile.closest('.day-block');
+    try { if(typeof persistDay === 'function') persistDay(blk); } catch(e){}
+    syncHorizonTile(tile);
+    return lab;
+  }
+  window.__syncHorizonBlock = syncHorizonBlock;
+  window.__addVisionCheck = addVisionCheck;
+
   function applyOverviewDepth(blk){
     if(!blk) return;
     var four = dayWantsDepthFour(blk);
@@ -43614,6 +43775,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     blk.querySelectorAll('.overview-depth-opt').forEach(function(b){
       b.classList.toggle('is-on', b.getAttribute('data-mode') === mode);
     });
+    try { syncHorizonBlock(blk); } catch(eHz){}
   }
   function setOverviewDepth(blk, mode){
     if(!blk) return;
@@ -45558,9 +45720,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return;
     }
     if(e.target.closest('.vision-add-card')){
-      e.preventDefault();
-      e.stopPropagation();
-      openCardPicker(e.target.closest('.vision-add-card'));
+      var addBtn = e.target.closest('.vision-add-card');
+      var addTileEl = addBtn && addBtn.closest('.vision-tile');
+      var addBlk = addTileEl && addTileEl.closest('.day-block');
+      if(addBlk && addBlk.classList.contains('overview-mode-tasks')){
+        e.preventDefault();
+        e.stopPropagation();
+        var tname = window.prompt('add a task');
+        if(tname) addVisionCheck(addTileEl, tname);
+        return;
+      }
+      openCardPicker(addBtn);
       return;
     }
     if(e.target.closest('.vision-tile-del')){
@@ -52099,6 +52269,154 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
   top: 42% !important;
+}
+</style>
+
+
+<style id="tasks-horizon-v1">
+/* Tasks depth = horizon: unfinished hang above a faint line; done fall below and go quiet. Not polaroids. */
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile > .vision-horizon {
+  display: block !important;
+  position: absolute !important;
+  left: 6% !important;
+  right: 6% !important;
+  top: 58% !important;
+  height: 1px !important;
+  z-index: 5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: rgba(255, 248, 238, 0.36) !important;
+  box-shadow: 0 0 22px rgba(255, 248, 238, 0.14) !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile > .vision-horizon::before {
+  content: "must cross" !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: -18px !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 7px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 248, 238, 0.38) !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.45) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile > .vision-horizon-above,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile > .vision-horizon-below {
+  position: absolute !important;
+  left: 7% !important;
+  right: 7% !important;
+  z-index: 6 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 9px !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile > .vision-horizon-above {
+  top: 8% !important;
+  bottom: calc(42% + 10px) !important;
+  justify-content: flex-end !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile > .vision-horizon-below {
+  top: calc(58% + 12px) !important;
+  bottom: 16% !important;
+  justify-content: flex-start !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-task {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 0 0 12px !important;
+  border: 0 !important;
+  border-left: 2px solid rgba(255, 248, 238, 0.55) !important;
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  max-width: 100% !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-task > input {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-task > span {
+  font-family: "Cormorant Garamond", "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: clamp(15px, 1.7vw, 24px) !important;
+  line-height: 1.15 !important;
+  color: #fff8ee !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.55) !important;
+  letter-spacing: 0.01em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-below .vision-horizon-task {
+  border-left-color: rgba(255, 248, 238, 0.18) !important;
+  opacity: 0.72 !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-below .vision-horizon-task > span {
+  font-size: clamp(13px, 1.35vw, 17px) !important;
+  color: rgba(255, 248, 238, 0.3) !important;
+  text-shadow: none !important;
+  text-decoration: line-through !important;
+  text-decoration-thickness: 1px !important;
+  text-decoration-color: rgba(255, 248, 238, 0.28) !important;
+}
+/* Collage tasks mode: hide pill checks — horizon mirrors them */
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-tile-details > .vision-check {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+/* Zoomed section in tasks mode also uses horizon */
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-above,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-below {
+  display: flex !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon {
+  display: block !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details > .vision-check {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-horizon-task > span {
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-horizon-below .vision-horizon-task > span {
+  font-size: clamp(16px, 1.8vw, 22px) !important;
+}
+/* Keep section titles small in tasks mode */
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile-title {
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+  font-size: 36px !important;
+}
+/* Outside tasks mode, horizon chrome stays dormant */
+html body .day-block:not(.overview-mode-tasks) .vision-horizon,
+html body .day-block:not(.overview-mode-tasks) .vision-horizon-above,
+html body .day-block:not(.overview-mode-tasks) .vision-horizon-below {
+  display: none !important;
 }
 </style>
 
