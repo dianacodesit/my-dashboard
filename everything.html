@@ -15682,7 +15682,6 @@ window.__j22fnApply=run;
     /* Force zoomed-out flat tummy in dark gym — overrides prior tummy1 tight bright crop */
     if(!localStorage.getItem('btm_body_tummy_gym_v4')){
       var BODY_TG='manus-storage/zone-athletic.jpg?v=color2';
-      var BODY_QUOTE='obsessed is a word the lazy use to describe the dedicated.';
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"], .pursuit-zone[data-zone="body"], .pursuit-zone[data-zone="gym"]').forEach(function(el){
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+BODY_TG+"')");
         else el.style.setProperty('--zone-photo', "url('"+BODY_TG+"')");
@@ -15692,14 +15691,7 @@ window.__j22fnApply=run;
       });
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
         var q = tile.querySelector(':scope > .vision-tile-quote');
-        if(!q){
-          q = document.createElement('p');
-          q.className = 'vision-tile-quote';
-          var titleEl = tile.querySelector('.vision-tile-title');
-          if(titleEl) tile.insertBefore(q, titleEl);
-          else tile.appendChild(q);
-        }
-        q.textContent = BODY_QUOTE;
+        if(q && /obsessed is a word the lazy use/i.test(q.textContent||'')) q.remove();
       });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -15783,7 +15775,6 @@ window.__j22fnApply=run;
   try{
     if(!localStorage.getItem('btm_body_abs_crop_v7')){
       var BODY_ABS='manus-storage/zone-athletic.jpg?v=color2';
-      var BODY_QUOTE='obsessed is a word the lazy use to describe the dedicated.';
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"], .pursuit-zone[data-zone="body"], .pursuit-zone[data-zone="gym"]').forEach(function(el){
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+BODY_ABS+"')");
         else el.style.setProperty('--zone-photo', "url('"+BODY_ABS+"')");
@@ -15793,14 +15784,7 @@ window.__j22fnApply=run;
       });
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
         var q = tile.querySelector(':scope > .vision-tile-quote');
-        if(!q){
-          q = document.createElement('p');
-          q.className = 'vision-tile-quote';
-          var titleEl = tile.querySelector('.vision-tile-title');
-          if(titleEl) tile.insertBefore(q, titleEl);
-          else tile.appendChild(q);
-        }
-        q.textContent = BODY_QUOTE;
+        if(q && /obsessed is a word the lazy use/i.test(q.textContent||'')) q.remove();
       });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -40765,6 +40749,152 @@ html body .day-block.flow-picking .vision-tile {
     m[k] = Array.isArray(arr) ? arr : [];
     saveImpulseMap(m);
   }
+  function setImpulsesForKey(key, arr){
+    if(!key) return;
+    var m = loadImpulseMap();
+    m[key] = Array.isArray(arr) ? arr : [];
+    saveImpulseMap(m);
+  }
+  function impulsesForKey(key){
+    if(!key) return [];
+    var m = loadImpulseMap();
+    if(!Array.isArray(m[key])) m[key] = [];
+    return m[key];
+  }
+  function closeImpulseDeferPickers(){
+    document.querySelectorAll('.impulses-defer-pick').forEach(function(el){
+      try{ if(el.__idpOff) el.__idpOff(); }catch(e){}
+      if(el && el.parentNode) el.parentNode.removeChild(el);
+    });
+  }
+  function placeImpulseDeferPick(pick, anchorLi){
+    var btn = (anchorLi && anchorLi.querySelector('.impulses-defer')) || anchorLi;
+    if(!pick || !btn || !btn.getBoundingClientRect) return;
+    var r = btn.getBoundingClientRect();
+    var pad = 10;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var pw = Math.max(pick.offsetWidth || 200, 200);
+    var left = Math.min(Math.max(pad, r.right - pw), vw - pw - pad);
+    if(left < pad) left = pad;
+    pick.style.left = left + 'px';
+    pick.style.right = 'auto';
+    var spaceBelow = vh - r.bottom - pad;
+    var spaceAbove = r.top - pad;
+    var preferBelow = spaceBelow >= 160 || spaceBelow >= spaceAbove;
+    var avail = preferBelow ? spaceBelow : spaceAbove;
+    var maxH = Math.max(140, Math.min(avail, Math.floor(vh * 0.72), 480));
+    pick.style.maxHeight = maxH + 'px';
+    if(preferBelow){
+      pick.style.top = (r.bottom + 4) + 'px';
+      pick.style.bottom = 'auto';
+    } else {
+      pick.style.top = 'auto';
+      pick.style.bottom = (vh - r.top + 4) + 'px';
+    }
+  }
+  function impulseDeferDays(fromDate){
+    if(typeof window.__futureDestinations === 'function'){
+      return window.__futureDestinations(fromDate);
+    }
+    var out = [];
+    var seen = {};
+    var cur = fromDate;
+    function pad2(n){ return String(n).padStart(2, '0'); }
+    function nextDay(iso){
+      var p = String(iso||'').split('-').map(Number);
+      var t = new Date(p[0], (p[1]||1)-1, p[2]||1);
+      t.setDate(t.getDate()+1);
+      return t.getFullYear()+'-'+pad2(t.getMonth()+1)+'-'+pad2(t.getDate());
+    }
+    function labelDay(iso){
+      var months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+      var wd = ['sun','mon','tue','wed','thu','fri','sat'];
+      var p = String(iso||'').split('-').map(Number);
+      var t = new Date(p[0], (p[1]||1)-1, p[2]||1);
+      return months[t.getMonth()]+' '+t.getDate()+' · '+wd[t.getDay()];
+    }
+    cur = nextDay(fromDate);
+    for(var i=0; i<14; i++){
+      if(!seen[cur]){
+        out.push({ date: cur, display: labelDay(cur), isTomorrow: i === 0 });
+        seen[cur] = 1;
+      }
+      cur = nextDay(cur);
+    }
+    return out;
+  }
+  function deferImpulseTo(fromBlk, impulseId, targetDate){
+    var fromKey = impulseDayKey(fromBlk);
+    if(!fromKey || !targetDate || !/^\d{4}-\d{2}-\d{2}$/.test(targetDate) || targetDate <= fromKey) return false;
+    var arr = impulsesFor(fromBlk);
+    var item = null;
+    for(var i=0; i<arr.length; i++){
+      if(arr[i].id === impulseId){ item = arr[i]; arr.splice(i, 1); break; }
+    }
+    if(!item || !String(item.text || '').trim()) return false;
+    setImpulses(fromBlk, arr);
+    try{
+      if(window.__ensureDayCard) window.__ensureDayCard(targetDate);
+    }catch(e){}
+    var targetBlk = document.querySelector('.day-block[data-date="'+targetDate+'"]');
+    if(targetBlk && window.__ensureImpulsesView) window.__ensureImpulsesView(targetBlk);
+    var dest = impulsesForKey(targetDate);
+    var moved = {
+      id: item.id,
+      text: item.text,
+      done: !!item.done,
+      at: new Date().toISOString(),
+      deferredFrom: fromKey
+    };
+    dest.unshift(moved);
+    setImpulsesForKey(targetDate, dest);
+    renderImpulses(fromBlk);
+    if(targetBlk && window.__renderImpulses) window.__renderImpulses(targetBlk);
+    return true;
+  }
+  function openImpulseDeferPicker(blk, impulseId, anchorLi){
+    closeImpulseDeferPickers();
+    var fromKey = impulseDayKey(blk);
+    if(!fromKey) return;
+    var days = impulseDeferDays(fromKey);
+    if(!days.length) return;
+    var pick = document.createElement('div');
+    pick.className = 'impulses-defer-pick';
+    pick.innerHTML = '<div class="idp-label">defer to</div><div class="idp-days"></div>';
+    var listEl = pick.querySelector('.idp-days');
+    days.forEach(function(d){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'idp-day';
+      btn.textContent = d.isTomorrow ? ('tomorrow · ' + d.display) : d.display;
+      btn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        deferImpulseTo(blk, impulseId, d.date);
+        closeImpulseDeferPickers();
+      });
+      listEl.appendChild(btn);
+    });
+    document.body.appendChild(pick);
+    placeImpulseDeferPick(pick, anchorLi);
+    function onDoc(ev){
+      if(pick.contains(ev.target)) return;
+      if(anchorLi && anchorLi.contains(ev.target)) return;
+      closeImpulseDeferPickers();
+    }
+    function onResize(){
+      placeImpulseDeferPick(pick, anchorLi);
+    }
+    pick.__idpOff = function(){
+      document.removeEventListener('pointerdown', onDoc, true);
+      window.removeEventListener('resize', onResize, true);
+    };
+    setTimeout(function(){
+      document.addEventListener('pointerdown', onDoc, true);
+      window.addEventListener('resize', onResize, true);
+    }, 0);
+  }
   function renderImpulses(blk){
     var panel = blk && blk.querySelector('.tv-panel.tv-impulses');
     if(!panel) return;
@@ -42619,13 +42749,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return tile;
   }
   var SECTION_TILE_QUOTES = {
-    body: 'obsessed is a word the lazy use to describe the dedicated.',
-    gym: 'obsessed is a word the lazy use to describe the dedicated.',
-    'toned body': 'obsessed is a word the lazy use to describe the dedicated.',
-    'toned-body': 'obsessed is a word the lazy use to describe the dedicated.',
-    athletic: 'obsessed is a word the lazy use to describe the dedicated.',
-    'fitness training': 'obsessed is a word the lazy use to describe the dedicated.',
-    'fitness-training': 'obsessed is a word the lazy use to describe the dedicated.',
     'future self': 'I can do this.',
     'future-self': 'I can do this.'
   };
@@ -42634,18 +42757,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var focus = (tile.getAttribute('data-focus') || '').toLowerCase();
     var titleEl = tile.querySelector('.vision-tile-title');
     var t = ((titleEl && titleEl.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase();
+    var isBodyQuote = focus === 'body' || focus === 'gym' || t === 'body' || t === 'gym' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training';
+    if(isBodyQuote){
+      var strip = tile.querySelector(':scope > .vision-tile-quote');
+      if(strip) strip.remove();
+      return;
+    }
     var key = SECTION_TILE_QUOTES[focus] ? focus : (SECTION_TILE_QUOTES[t] ? t : '');
     if(!key){
       var q = tile.querySelector('.vision-tile-quote');
       if(q && !SECTION_TILE_QUOTES[(tile.getAttribute('data-focus')||'').toLowerCase()]) q.remove();
-      return;
-    }
-    var isBodyQuote = key === 'body' || key === 'gym' || key === 'toned body' || key === 'toned-body' || key === 'athletic' || key === 'fitness training' || key === 'fitness-training';
-    var blk = tile.closest && tile.closest('.day-block');
-    var iso = (blk && blk.getAttribute('data-date')) || '';
-    if(isBodyQuote && iso && iso >= '2026-09-01'){
-      var hide = tile.querySelector(':scope > .vision-tile-quote');
-      if(hide) hide.remove();
       return;
     }
     var quote = tile.querySelector(':scope > .vision-tile-quote');

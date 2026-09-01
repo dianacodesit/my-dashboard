@@ -13038,13 +13038,7 @@ window.__j22fnApply=run;
     'self-esteem':'manus-storage/zone-self-esteem.jpg?v=se1',
     'self esteem':'manus-storage/zone-self-esteem.jpg?v=se1',
     'audacity':'manus-storage/zone-audacity.jpg?v=aud1',
-    'audacity':'manus-storage/zone-audacity.jpg?v=aud1',
-    'politics':'manus-storage/zone-politics.jpg?v=sec1',
-    'wins':'manus-storage/zone-wins.jpg?v=sec1',
-    'repetitions':'manus-storage/zone-repetitions.jpg?v=sec1',
-    'intentions':'manus-storage/zone-intentions.jpg?v=sec1',
-    'attention':'manus-storage/zone-attention.jpg?v=sec1',
-    'darkness':'manus-storage/zone-darkness.jpg?v=sec1',
+    'audacity':'manus-storage/zone-audacity.jpg?v=aud1'
   };
   var KEYWORDS = [
     [/translat|arabic|عربي|bilingual|interpret/, 'manus-storage/pursuit-arabic-translation.jpg'],
@@ -13123,13 +13117,7 @@ window.__j22fnApply=run;
     'self-esteem':'champagne',
     'self esteem':'champagne',
     'audacity':'coral',
-    'audacity':'coral',
-    'politics':'warm',
-    'wins':'amber',
-    'repetitions':'coral',
-    'intentions':'champagne',
-    'attention':'lavender',
-    'darkness':'sage'
+    'audacity':'coral'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -15649,7 +15637,6 @@ window.__j22fnApply=run;
     /* Force zoomed-out flat tummy in dark gym — overrides prior tummy1 tight bright crop */
     if(!localStorage.getItem('btm_body_tummy_gym_v4')){
       var BODY_TG='manus-storage/zone-athletic.jpg?v=color2';
-      var BODY_QUOTE='obsessed is a word the lazy use to describe the dedicated.';
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"], .pursuit-zone[data-zone="body"], .pursuit-zone[data-zone="gym"]').forEach(function(el){
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+BODY_TG+"')");
         else el.style.setProperty('--zone-photo', "url('"+BODY_TG+"')");
@@ -15659,14 +15646,7 @@ window.__j22fnApply=run;
       });
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
         var q = tile.querySelector(':scope > .vision-tile-quote');
-        if(!q){
-          q = document.createElement('p');
-          q.className = 'vision-tile-quote';
-          var titleEl = tile.querySelector('.vision-tile-title');
-          if(titleEl) tile.insertBefore(q, titleEl);
-          else tile.appendChild(q);
-        }
-        q.textContent = BODY_QUOTE;
+        if(q && /obsessed is a word the lazy use/i.test(q.textContent||'')) q.remove();
       });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -15846,7 +15826,6 @@ window.__j22fnApply=run;
   try{
     if(!localStorage.getItem('btm_body_abs_crop_v7')){
       var BODY_ABS='manus-storage/zone-athletic.jpg?v=color2';
-      var BODY_QUOTE='obsessed is a word the lazy use to describe the dedicated.';
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"], .pursuit-zone[data-zone="body"], .pursuit-zone[data-zone="gym"]').forEach(function(el){
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+BODY_ABS+"')");
         else el.style.setProperty('--zone-photo', "url('"+BODY_ABS+"')");
@@ -15856,14 +15835,7 @@ window.__j22fnApply=run;
       });
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
         var q = tile.querySelector(':scope > .vision-tile-quote');
-        if(!q){
-          q = document.createElement('p');
-          q.className = 'vision-tile-quote';
-          var titleEl = tile.querySelector('.vision-tile-title');
-          if(titleEl) tile.insertBefore(q, titleEl);
-          else tile.appendChild(q);
-        }
-        q.textContent = BODY_QUOTE;
+        if(q && /obsessed is a word the lazy use/i.test(q.textContent||'')) q.remove();
       });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -29775,12 +29747,6 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='strengths') src='manus-storage/zone-strengths.jpg?v=soul1';
       else if(nl==='self-esteem'||nl==='self esteem') src='manus-storage/zone-self-esteem.jpg?v=se1';
       else if(nl==='audacity') src='manus-storage/zone-audacity.jpg?v=aud1';
-      else if(nl==='politics') src='manus-storage/zone-politics.jpg?v=sec1';
-      else if(nl==='wins') src='manus-storage/zone-wins.jpg?v=sec1';
-      else if(nl==='repetitions') src='manus-storage/zone-repetitions.jpg?v=sec1';
-      else if(nl==='intentions') src='manus-storage/zone-intentions.jpg?v=sec1';
-      else if(nl==='attention') src='manus-storage/zone-attention.jpg?v=sec1';
-      else if(nl==='darkness') src='manus-storage/zone-darkness.jpg?v=sec1';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
@@ -29798,7 +29764,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','fear Allah ﷻ','villains','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity', 'politics', 'wins', 'repetitions', 'intentions', 'attention', 'darkness'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','pursuits','inner fire','potential','resonance','fear Allah ﷻ','villains','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'abundance', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -42819,7 +42785,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -42851,7 +42817,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','fitness training','calisthenics','pepperdine','pursuits','inner fire','potential','resonance','fear Allah ﷻ','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity', 'politics', 'wins', 'repetitions', 'intentions', 'attention', 'darkness'];
+    var presetSecs=['glow up','curated lifestyle','abundance','power','purpose','executive','quantum','fitness training','calisthenics','pepperdine','pursuits','inner fire','potential','resonance','fear Allah ﷻ','fight back','envision','future self','Ph.D','workflow','focus','alignment','strengths','plan','art | science','self-esteem','audacity'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -42873,7 +42839,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, 'grad school':1, pursuits:1, 'inner fire':1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, villains:1, villain:1, 'fight back':1, envision:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -43772,7 +43738,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1,'potential':1,'resonance':1,
     'god-conscious':1,'god conscious':1,'awliya allah':1,'awliya-allah':1,'awliya allah swt':1,'awliya-allah-swt':1,'fear allah':1,'fear-allah':1,'fear Allah ﷻ':1,'villains':1,'villain':1,'house':1,
-    'fight back':1,'envision':1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, repetitions:1, intentions:1, attention:1, darkness:1
+    'fight back':1,'envision':1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1
   };
   function loadCardPhotoCache(){
     try { return JSON.parse(localStorage.getItem(CARD_PHOTO_STORE) || '{}') || {}; } catch(e){ return {}; }
@@ -46097,32 +46063,6 @@ function seedAug30SelectedCards(blk){
   }
 
 
-  function seedSep01NewSections(blk){
-    if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
-    var MKEY = 'migration-sep01-new-sections-v1';
-    if(localStorage.getItem(MKEY)) return false;
-    var host = heroHost(blk);
-    if(!host) return false;
-    var changed = false;
-    ['politics','wins','repetitions','intentions','attention','darkness'].forEach(function(title){
-      var focus = slug(title);
-      if(host.querySelector('.vision-tile[data-focus="'+focus+'"]')) return;
-      var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
-        var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-        var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
-        return f === focus || tt === title;
-      });
-      if(exists) return;
-      addTile(blk, title, true);
-      changed = true;
-    });
-    if(changed){
-      try { syncHeroLayoutClass(blk); } catch(e){}
-    }
-    try { localStorage.setItem(MKEY, '1'); } catch(e){}
-    return changed;
-  }
-
   function seedSep01Audacity(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
     var MKEY = 'migration-sep01-audacity-v1';
@@ -48171,15 +48111,24 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-b
   transform: scale(1);
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
-  top: 52px;
+  top: 50%;
+  left: 50%;
+  right: auto;
   bottom: auto;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 64px);
+  text-align: center;
   font-size: 36px; /* SECTION zoomed — approved; do not bump */
   font-weight: 600;
   line-height: 1.12;
+  color: rgba(255, 244, 228, 0.82);
+  -webkit-text-stroke: 0.35px rgba(80, 60, 40, 0.16);
   text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.9),
-    0 2px 12px rgba(0, 0, 0, 0.7),
-    0 6px 28px rgba(0, 0, 0, 0.55);
+    -1px -1px 0 rgba(255, 255, 255, 0.42),
+    0 -1px 0 rgba(255, 255, 255, 0.2),
+    1px 1px 0 rgba(0, 0, 0, 0.48),
+    1px 2px 3px rgba(0, 0, 0, 0.52),
+    2px 4px 12px rgba(0, 0, 0, 0.36);
 }
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-details {
   display: block;
@@ -50786,17 +50735,154 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   function futureDestinations(fromDate){
     var out = [];
     var seen = {};
-    var tomorrow = nextIso(fromDate);
-    out.push({ date: tomorrow, display: labelFor(tomorrow), isTomorrow: true });
-    seen[tomorrow] = 1;
+    var today = todayIso();
+    var cursor = fromDate < today ? today : nextIso(fromDate);
+    var i;
+    for (i = 0; i < 14; i++) {
+      var d = addDays(cursor, i);
+      if (d < today || d === fromDate || seen[d]) continue;
+      seen[d] = 1;
+      out.push({
+        date: d,
+        display: labelFor(d),
+        isToday: d === today,
+        isTomorrow: d === nextIso(today)
+      });
+    }
     [].slice.call(document.querySelectorAll('.day-block[data-date]')).forEach(function(b){
       var d = b.getAttribute('data-date') || '';
-      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(d) || d <= fromDate || seen[d]) return;
+      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(d) || d < today || d === fromDate || seen[d]) return;
       seen[d] = 1;
-      out.push({ date: d, display: labelFor(d), isTomorrow: false });
+      out.push({
+        date: d,
+        display: labelFor(d),
+        isToday: d === today,
+        isTomorrow: d === nextIso(today)
+      });
     });
     out.sort(function(a,b){ return a.date.localeCompare(b.date); });
-    return out.slice(0, 8);
+    return out;
+  }
+
+  function destButtonLabel(d){
+    if (d.isToday) return 'today · ' + d.display;
+    if (d.isTomorrow) return 'tomorrow · ' + d.display;
+    return d.display;
+  }
+
+  function destToastLabel(iso){
+    var today = todayIso();
+    if (iso === today) return 'today · ' + labelFor(iso);
+    if (iso === nextIso(today)) return 'tomorrow · ' + labelFor(iso);
+    return labelFor(iso);
+  }
+
+  function buildDestPicker(destWrap, fromDate, onPick){
+    destWrap.innerHTML = '<span class="cr-dest-label">to</span>';
+    var dests = futureDestinations(fromDate);
+    var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
+    var pillsRow = document.createElement('div');
+    pillsRow.className = 'cr-dest-pills';
+    destWrap.appendChild(pillsRow);
+    var panel = document.createElement('div');
+    panel.className = 'cr-day-panel';
+    panel.setAttribute('role', 'listbox');
+    destWrap.appendChild(panel);
+    var dateWrap = document.createElement('div');
+    dateWrap.className = 'cr-date-wrap';
+    dateWrap.innerHTML = '<input type="date" class="cr-date-input" aria-label="choose date"/><button type="button" class="cr-day cr-date-apply">set date</button>';
+    destWrap.appendChild(dateWrap);
+
+    function setOn(btn, iso){
+      destDate = iso;
+      onPick(iso);
+      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
+      if (btn) btn.classList.add('is-on');
+      panel.classList.remove('is-open');
+      dateWrap.classList.remove('is-open');
+      var moreBtn = destWrap.querySelector('.cr-day-more');
+      if (moreBtn) moreBtn.classList.remove('is-on');
+      var pickBtn = destWrap.querySelector('.cr-day-pickdate');
+      if (pickBtn && (!btn || !btn.classList.contains('cr-day-pickdate'))) {
+        pickBtn.textContent = 'choose date…';
+      }
+    }
+
+    function makeDayBtn(d){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'cr-day' + (d.date === destDate ? ' is-on' : '');
+      b.textContent = destButtonLabel(d);
+      b.dataset.date = d.date;
+      b.addEventListener('click', function(){ setOn(b, d.date); });
+      return b;
+    }
+
+    var quickCount = Math.min(4, dests.length);
+    for (i = 0; i < quickCount; i++) pillsRow.appendChild(makeDayBtn(dests[i]));
+
+    if (dests.length > quickCount) {
+      var more = document.createElement('button');
+      more.type = 'button';
+      more.className = 'cr-day cr-day-more';
+      more.textContent = 'pick a day ▾';
+      more.addEventListener('click', function(e){
+        e.stopPropagation();
+        var open = panel.classList.toggle('is-open');
+        more.classList.toggle('is-on', open);
+        dateWrap.classList.remove('is-open');
+        var pickBtn = destWrap.querySelector('.cr-day-pickdate');
+        if (pickBtn) pickBtn.classList.remove('is-on');
+      });
+      pillsRow.appendChild(more);
+      for (i = quickCount; i < dests.length; i++) panel.appendChild(makeDayBtn(dests[i]));
+    }
+
+    var pickDate = document.createElement('button');
+    pickDate.type = 'button';
+    pickDate.className = 'cr-day cr-day-pickdate';
+    pickDate.textContent = 'choose date…';
+    pickDate.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = dateWrap.classList.toggle('is-open');
+      pickDate.classList.toggle('is-on', open);
+      panel.classList.remove('is-open');
+      var moreBtn = destWrap.querySelector('.cr-day-more');
+      if (moreBtn) moreBtn.classList.remove('is-on');
+      if (open) {
+        var inp = dateWrap.querySelector('.cr-date-input');
+        inp.min = todayIso();
+        if (!inp.value || inp.value < todayIso() || inp.value === fromDate) inp.value = destDate;
+      }
+    });
+    pillsRow.appendChild(pickDate);
+
+    var dateInp = dateWrap.querySelector('.cr-date-input');
+    dateInp.min = todayIso();
+    dateWrap.querySelector('.cr-date-apply').addEventListener('click', function(){
+      var v = dateInp.value;
+      if (!v || v < todayIso() || v === fromDate) return;
+      destDate = v;
+      onPick(v);
+      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
+      pickDate.classList.add('is-on');
+      pickDate.textContent = labelFor(v);
+      dateWrap.classList.remove('is-open');
+    });
+    dateInp.addEventListener('change', function(){
+      var v = dateInp.value;
+      if (!v || v < todayIso() || v === fromDate) return;
+      destDate = v;
+      onPick(v);
+      destWrap.querySelectorAll('.cr-day.is-on').forEach(function(x){ x.classList.remove('is-on'); });
+      pickDate.classList.add('is-on');
+      pickDate.textContent = labelFor(v);
+      dateWrap.classList.remove('is-open');
+    });
+
+    return {
+      getDate: function(){ return destDate; }
+    };
   }
 
   function starLayout(n){
