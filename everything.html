@@ -12928,7 +12928,7 @@ window.__j22fnApply=run;
     'strengths':'manus-storage/zone-strengths.jpg?v=soul1',
     'plan':'manus-storage/zone-workflow.jpg?v=swap1',
     'spirit':'manus-storage/zone-spirit.jpg?v=sp1',
-    'soul':'manus-storage/zone-soul.jpg?v=s1',
+    'soul':'manus-storage/zone-soul.jpg?v=essence1',
     'art | science':'manus-storage/zone-art-science.jpg?v=as1',
     'art-science':'manus-storage/zone-art-science.jpg?v=as1',
     'art/science':'manus-storage/zone-art-science.jpg?v=as1',
@@ -12938,9 +12938,9 @@ window.__j22fnApply=run;
     'politics':'manus-storage/zone-politics.jpg?v=play1',
     'wins':'manus-storage/zone-wins.jpg?v=sec1',
     'repetitions':'manus-storage/zone-repetitions.jpg?v=sec1',
-    'intentions':'manus-storage/zone-intentions.jpg?v=sec1',
-    'attention':'manus-storage/zone-attention.jpg?v=sec1',
-    'darkness':'manus-storage/zone-darkness.jpg?v=sec1',
+    'intentions':'manus-storage/zone-intentions.jpg?v=aim1',
+    'attention':'manus-storage/zone-attention.jpg?v=focus1',
+    'darkness':'manus-storage/zone-darkness.jpg?v=abyss1',
   };
   var KEYWORDS = [
     [/translat|arabic|عربي|bilingual|interpret/, 'manus-storage/pursuit-arabic-translation.jpg'],
@@ -12954,7 +12954,7 @@ window.__j22fnApply=run;
     [/money|capital|fund|finance|bank/, 'manus-storage/pursuit-money_57ff14e0.jpg'],
     [/quantum|particle|atom|physics|superposition|entangle|interference/, 'manus-storage/zone-quantum-v15.jpg?v=spectacular1'],
     [/social|instagram|media/, 'manus-storage/pursuit-social-media-v7_c5f03b96.jpg'],
-    [/\bsoul\b|inner stillness|healing spirit|silence the mind/, 'manus-storage/zone-soul.jpg?v=s1'],
+    [/\bsoul\b|inner stillness|healing spirit|silence the mind/, 'manus-storage/zone-soul.jpg?v=essence1'],
     [/person|people|friend|buddy|doctor|\bdr\.?\b|\bmom\b|\bdad\b|mother|father|family|\btext\b|message|sms|whatsapp|\bcall\b|phone|aunt|uncle|sister|brother/, 'manus-storage/pursuit-persons_be56f167.jpg'],
     [/ux|design|ui|figma/, 'manus-storage/pursuit-ux-design-v12_f2f2c818.jpg'],
     [/leverage|influence|advantage/, 'manus-storage/pursuit-leverage-v4.jpg?v=key'],
@@ -29058,12 +29058,12 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='politics') src='manus-storage/zone-politics.jpg?v=play1';
       else if(nl==='wins') src='manus-storage/zone-wins.jpg?v=sec1';
       else if(nl==='repetitions') src='manus-storage/zone-repetitions.jpg?v=sec1';
-      else if(nl==='intentions') src='manus-storage/zone-intentions.jpg?v=sec1';
-      else if(nl==='attention') src='manus-storage/zone-attention.jpg?v=sec1';
-      else if(nl==='darkness') src='manus-storage/zone-darkness.jpg?v=sec1';
+      else if(nl==='intentions') src='manus-storage/zone-intentions.jpg?v=aim1';
+      else if(nl==='attention') src='manus-storage/zone-attention.jpg?v=focus1';
+      else if(nl==='darkness') src='manus-storage/zone-darkness.jpg?v=abyss1';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='spirit') src='manus-storage/zone-spirit.jpg?v=sp1';
-      else if(nl==='soul') src='manus-storage/zone-soul.jpg?v=s1';
+      else if(nl==='soul') src='manus-storage/zone-soul.jpg?v=essence1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah'||nl==='itaqallah'||nl==='itaq-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -46427,6 +46427,63 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return changed;
   }
 
+  
+  (function rewriteConceptSectionPhotosV1(){
+    var MKEY = 'migration-concept-section-photos-v2';
+    var MAP = {
+      attention: 'manus-storage/zone-attention.jpg?v=focus1',
+      darkness: 'manus-storage/zone-darkness.jpg?v=abyss1',
+      soul: 'manus-storage/zone-soul.jpg?v=essence1',
+      intentions: 'manus-storage/zone-intentions.jpg?v=aim1'
+    };
+    function cleanTilePhoto(tile, want){
+      tile.style.setProperty('--tile-photo', 'url("' + want + '")');
+    }
+    function applyAll(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+        var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+        var key = null;
+        Object.keys(MAP).forEach(function(k){ if(t === k || f === k) key = k; });
+        if(!key) return;
+        cleanTilePhoto(tile, MAP[key]);
+      });
+    }
+    window.__rewriteConceptSectionPhotos = applyAll;
+    try { applyAll(); } catch(e){}
+    if(localStorage.getItem(MKEY)) return;
+    try {
+      Object.keys(MAP).forEach(function(k){
+        var WANT = MAP[k];
+        var olds = [
+          'manus-storage/zone-' + k + '.jpg?v=sec1',
+          'manus-storage/zone-' + k + '.jpg?v=s1',
+          'manus-storage/zone-' + k + '.jpg'
+        ];
+        ['btm_day_shells_v1','btm_overview_edits_v1'].forEach(function(store){
+          var raw = localStorage.getItem(store); if(!raw) return;
+          var next = raw;
+          olds.forEach(function(o){ next = next.split(o).join(WANT); });
+          if(next !== raw) localStorage.setItem(store, next);
+        });
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var t = String(rec.title||'').toLowerCase();
+          var f = String(rec.focus||'').toLowerCase();
+          Object.keys(MAP).forEach(function(k){
+            if(t === k || f === k) rec.photo = MAP[k];
+          });
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
   (function rewritePoliticsPodiumPhoto(){
     var MKEY = 'migration-politics-play-photo-v4';
     var WANT = 'manus-storage/zone-politics.jpg?v=play1';
@@ -46543,6 +46600,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(scrubUninvitedAutoSections(blk)) mig = true;
       if(era) ensureOverviewEditChrome(blk);
       try { if(window.__rewritePoliticsPhotosNow) window.__rewritePoliticsPhotosNow(); } catch(e){}
+      try { if(window.__rewriteConceptSectionPhotos) window.__rewriteConceptSectionPhotos(); } catch(e){}
       if(mig && era) persistDay(blk);
       else if(mig){
         try { saveMap(loadMap()); syncHeroLayoutClass(blk); syncDayShell(blk); scheduleHtmlSave(blk); } catch(e){}
