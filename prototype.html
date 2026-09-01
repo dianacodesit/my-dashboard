@@ -39975,9 +39975,6 @@ html body .timeline::before {
   background: rgba(28, 20, 14, 0.45) !important;
   box-shadow: 0 0 6px rgba(20,12,6,0.25);
 }
-html body .jul-rail-fixed {
-  opacity: 0.92 !important;
-}
 html body .rail-day,
 html body .rail-dow,
 html body .rail-header {
@@ -41400,15 +41397,24 @@ html body .day-block.flow-picking .vision-tile {
       var t = new Date(p[0], (p[1]||1)-1, p[2]||1);
       return months[t.getMonth()]+' '+t.getDate()+' · '+wd[t.getDay()];
     }
+    var now = new Date();
+    var today = now.getFullYear()+'-'+pad2(now.getMonth()+1)+'-'+pad2(now.getDate());
+    var tomorrow = nextDay(today);
     cur = nextDay(fromDate);
     for(var i=0; i<14; i++){
       if(!seen[cur]){
-        out.push({ date: cur, display: labelDay(cur), isTomorrow: i === 0 });
+        out.push({ date: cur, display: labelDay(cur), isToday: cur === today, isTomorrow: cur === tomorrow });
         seen[cur] = 1;
       }
       cur = nextDay(cur);
     }
     return out;
+  }
+  function destDayLabel(d){
+    if(typeof window.__destButtonLabel === 'function') return window.__destButtonLabel(d);
+    if(d.isToday) return 'today · ' + d.display;
+    if(d.isTomorrow) return 'tomorrow · ' + d.display;
+    return d.display;
   }
   function deferImpulseTo(fromBlk, impulseId, targetDate){
     var fromKey = impulseDayKey(fromBlk);
@@ -46872,7 +46878,7 @@ function seedAug30SelectedCards(blk){
   (function rewritePoliticsChessPhoto(){
     // v8 chess supersedes v6 corridor2 — always rewrites so corridor cannot win on load
     var MKEY = 'migration-politics-chess-photo-v8';
-    var WANT = 'manus-storage/zone-politics.jpg?v=chess4';
+    var WANT = 'manus-storage/zone-politics.jpg?v=chess5';
     var re = /manus-storage\/zone-politics\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isPoliticsTile(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -52457,4 +52463,17 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
 }
 </style>
 
+<style id="jul-rail-hover-only-v2">
+/* Date reel: hidden at rest; linger-hover on left edge opens it. */
+html body .jul-rail-fixed:not(.rail-open) {
+  left: -80px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html body #julRail.rail-open {
+  left: 10px !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+</style>
 </html>
