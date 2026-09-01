@@ -13068,13 +13068,13 @@ window.__j22fnApply=run;
     'surrender to allah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'surrender-to-allah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'surrender to Allah':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
-    'detach':'manus-storage/zone-detach.jpg?v=1',
-    'start over':'manus-storage/zone-start-over.jpg?v=1',
-    'start-over':'manus-storage/zone-start-over.jpg?v=1',
+    'detach':'manus-storage/zone-detach-rope.jpg?v=rope1',
+    'start over':'manus-storage/zone-start-over-notebook.jpg?v=nb1',
+    'start-over':'manus-storage/zone-start-over-notebook.jpg?v=nb1',
     'tune into':'',
     'tune-into':'',
-    'self-actualize':'',
-    'self actualize':'',
+    'self-actualize':'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1',
+    'self actualize':'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1',
     'claim':'',
     'sabotage':'manus-storage/zone-sabotage.jpg?v=1',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
@@ -13109,7 +13109,7 @@ window.__j22fnApply=run;
     'repetitions':'manus-storage/zone-repetitions.jpg?v=cubes1',
     'intentions':'manus-storage/zone-intentions.jpg?v=aim1',
     'attention':'manus-storage/zone-attention.jpg?v=beam1',
-    'anticipate':'manus-storage/zone-attention.jpg?v=beam1',
+    'anticipate':'manus-storage/zone-anticipating-theater.jpg?v=theater1',
     'darkness':'',
   };
   var KEYWORDS = [
@@ -13161,8 +13161,11 @@ window.__j22fnApply=run;
     [/\bplan\b|planning|blueprint|roadmap|strategy/, 'manus-storage/zone-workflow.jpg?v=swap1'],
     [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1'],
     [/self[- ]?esteem|selfworth|self-worth/, 'manus-storage/zone-self-esteem.jpg?v=se1'],
+    [/self[- ]?actualiz|maslow|eclosion|becoming whole/, 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1'],
     [/\baudacity\b|bold|daring|fearless|unflinching/, 'manus-storage/zone-audacity.jpg?v=finger1'],
-    [/\baudacity\b|bold|daring|fearless|unflinching/, 'manus-storage/zone-audacity.jpg?v=finger1']
+    [/\bdetach\b|sever|unplug|cast.?off|cut.?tie|frayed.?rope|mooring line|let.?go/, 'manus-storage/zone-detach-rope.jpg?v=rope1'],
+    [/\bstart over\b|start-over|begin again|fresh start|blank slate|new chapter|clean slate/, 'manus-storage/zone-start-over-notebook.jpg?v=nb1'],
+    [/\banticipat|awaiting|look ahead|what.?s next|countdown|before the show|empty seats/, 'manus-storage/zone-anticipating-theater.jpg?v=theater1']
   ];
   var THEMES = {
     'persons':'blush','capital blueprint':'amber','body':'blush','toned body':'blush','toned-body':'blush','athletic':'blush','fitness training':'blush','fitness-training':'blush','calisthenics':'blush','glow up':'blush','glow-up':'blush','shopped':'warm','returns':'warm','pickups':'warm',
@@ -24256,7 +24259,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (yEl) saveShell(yIso, yEl);
     };
     let lastDay = todayStr();
-    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="impulses">impulses</button><button class="tv-pill" data-view="flow">flow</button><button class="tv-pill" data-view="nodes">nodes</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="vision-board" aria-label="vision collage"><button type="button" class="vision-zoom-out" hidden>all of today</button><p class="vision-hint">the day, wide — click a focus to go in</p><div class="vision-hero"></div></div></div><div class="tv-panel tv-impulses" style="display:none"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><ul class="impulses-list"></ul></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div></div></div>';
+    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="impulses">impulses</button><button class="tv-pill" data-view="flow">flow</button><button class="tv-pill" data-view="nodes">nodes</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="vision-board" aria-label="vision collage"><button type="button" class="vision-zoom-out" hidden>all of today</button><p class="vision-hint">the day, wide — click a focus to go in</p><div class="vision-hero"></div></div></div><div class="tv-panel tv-impulses" style="display:none"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><div class="impulses-route-map"><div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"></div></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div></div></div>';
     const pickSrc = iso => {
       const days = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'));
       let src = null;
@@ -24401,7 +24404,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         clone.classList.remove('freeplace-day');
         clone.querySelectorAll('.add-board-row, .add-section-btn, .add-card-btn, .j22-actions').forEach(function(el){ el.remove(); });
       }
-      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); clone.classList.add('card-headline-era'); }
+      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); }
       if (iso >= '2026-08-26'){ clone.classList.add('depth-four-era'); clone.classList.add('card-style-deboss-chip'); }
       if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
         try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
@@ -24428,7 +24431,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso === '2026-08-20') clone.classList.add('pursuit-board-day');
       else if (iso === todayStr()) clone.classList.add('today-block');
       if (iso >= '2026-08-26') { clone.classList.add('vision-collage-day'); clone.classList.add('card-style-deboss-chip'); clone.classList.remove('freeplace-day'); }
-      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); clone.classList.add('card-headline-era'); }
+      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); }
       if (iso >= '2026-08-26'){ clone.classList.add('depth-four-era'); clone.classList.add('card-style-deboss-chip'); }
       const dateEl = clone.querySelector('.day-date');
       if (dateEl) dateEl.textContent = labelFor(iso);
@@ -29953,15 +29956,16 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='wins') src='manus-storage/zone-wins.jpg?v=sec1';
       else if(nl==='repetitions') src='manus-storage/zone-repetitions.jpg?v=cubes1';
       else if(nl==='intentions') src='manus-storage/zone-intentions.jpg?v=aim1';
-      else if(nl==='attention' || nl==='anticipate') src='manus-storage/zone-attention.jpg?v=beam1';
+      else if(nl==='attention') src='manus-storage/zone-attention.jpg?v=beam1';
+      else if(nl==='anticipate') src='manus-storage/zone-anticipating-theater.jpg?v=theater1';
       else if(nl==='darkness') src='';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah'||nl==='itaqallah'||nl==='itaq-allah'||nl==='surrender to allah'||nl==='surrender-to-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
-      else if(nl==='detach') src='manus-storage/zone-detach.jpg?v=1';
-      else if(nl==='start over'||nl==='start-over') src='manus-storage/zone-start-over.jpg?v=1';
+      else if(nl==='detach') src='manus-storage/zone-detach-rope.jpg?v=rope1';
+      else if(nl==='start over'||nl==='start-over') src='manus-storage/zone-start-over-notebook.jpg?v=nb1';
       else if(nl==='tune into'||nl==='tune-into') src='';
-      else if(nl==='self-actualize'||nl==='self actualize') src='';
+      else if(nl==='self-actualize'||nl==='self actualize') src='manus-storage/zone-self-actualize-eclose.jpg?v=eclose1';
       else if(nl==='claim') src='';
       else if(nl==='sabotage') src='manus-storage/zone-sabotage.jpg?v=1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -40961,43 +40965,106 @@ html body .day-block .impulses-keep {
 html body .day-block .impulses-keep:hover {
   background: rgba(255,255,255,0.22) !important;
 }
-html body .day-block .impulses-list {
-  list-style: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
+/* Impulses route map — numbered vertical flow (May 11 / Jul 25 pattern) */
+html body .day-block .impulses-route-map {
+  position: relative !important;
+  margin-top: 4px !important;
+  padding: 14px 16px 16px 8px !important;
+  border-radius: 10px !important;
+  background: rgba(18, 12, 10, 0.55) !important;
+  border: 1px solid rgba(196, 168, 130, 0.22) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18) !important;
+}
+html body .day-block .impulses-route-header {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 10px !important;
+  padding: 4px 6px !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: rgba(196, 168, 130, 0.85) !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  cursor: pointer !important;
+  text-align: left !important;
+}
+html body .day-block .impulses-route-map.impulses-route-collapsed .impulses-flow-route,
+html body .day-block .impulses-route-map.impulses-route-collapsed .impulses-empty {
+  display: none !important;
+}
+html body .day-block .impulses-flow-route {
+  position: relative !important;
+  padding: 6px 0 6px 22px !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 8px !important;
+  gap: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  border: none !important;
 }
-html body .day-block .impulses-item {
+html body .day-block .impulses-flow-route::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  top: 18px !important;
+  bottom: 18px !important;
+  width: 1px !important;
+  background: rgba(196, 168, 130, 0.45) !important;
+}
+html body .day-block .impulses-flow-route .route-stop {
   display: flex !important;
-  align-items: flex-start !important;
-  gap: 10px !important;
-  padding: 8px 10px !important;
-  border-radius: 10px !important;
-  background: rgba(255,252,248,0.08) !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 5px 0 !important;
+  position: relative !important;
+  font-size: 14px !important;
+  background: transparent !important;
+  border: none !important;
+  width: auto !important;
 }
-html body .day-block .impulses-item.is-done .impulses-text {
-  opacity: 0.45 !important;
+html body .day-block .impulses-flow-route .route-stop::before {
+  content: "" !important;
+  position: absolute !important;
+  left: -16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: var(--warm, #c4a882) !important;
+  border: 1.5px solid rgba(255, 248, 238, 0.85) !important;
+  box-sizing: border-box !important;
+}
+html body .day-block .impulses-flow-route .route-stop.route-stop-faded {
+  opacity: 0.42 !important;
+}
+html body .day-block .impulses-flow-route .route-stop.route-stop-faded .route-name {
   text-decoration: line-through !important;
 }
-html body .day-block .impulses-check {
-  flex: 0 0 auto !important;
-  margin-top: 3px !important;
-  width: 16px !important;
-  height: 16px !important;
-  accent-color: #c4a882 !important;
+html body .day-block .impulses-flow-route .route-num {
+  font-family: "DM Mono", monospace !important;
+  font-size: 10px !important;
+  color: var(--warm, #c4a882) !important;
+  min-width: 18px !important;
   cursor: pointer !important;
+  flex: 0 0 auto !important;
 }
-html body .day-block .impulses-text {
+html body .day-block .impulses-flow-route .route-name {
   flex: 1 1 auto !important;
   min-width: 0 !important;
   font-family: "Newsreader", Georgia, serif !important;
   font-size: 16px !important;
   color: #fff8ee !important;
-  line-height: 1.35 !important;
+  line-height: 1.25 !important;
+  cursor: text !important;
   outline: none !important;
+}
+html body .day-block .impulses-flow-route .route-name:focus {
+  outline: 1px dashed rgba(196, 168, 130, 0.55) !important;
+  outline-offset: 2px !important;
 }
 html body .day-block .impulses-del {
   flex: 0 0 auto !important;
@@ -41010,12 +41077,77 @@ html body .day-block .impulses-del {
   padding: 2px 4px !important;
 }
 html body .day-block .impulses-del:hover { color: #fff !important; }
+html body .day-block .impulses-actions {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+html body .day-block .impulses-defer {
+  flex: 0 0 auto !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: rgba(255,248,238,0.42) !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  padding: 2px 4px !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+}
+html body .day-block .impulses-defer:hover { color: #fff !important; }
+html body .impulses-defer-pick {
+  position: fixed !important;
+  z-index: 400 !important;
+  min-width: 200px !important;
+  max-width: 280px !important;
+  max-height: min(72vh, 480px) !important;
+  padding: 10px 10px 12px !important;
+  border-radius: 12px !important;
+  background: rgba(18, 12, 10, 0.92) !important;
+  border: 1px solid rgba(255, 248, 238, 0.22) !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  overflow: hidden !important;
+}
+html body .impulses-defer-pick .idp-label {
+  flex: 0 0 auto !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 8px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(196, 168, 130, 0.75) !important;
+}
+html body .impulses-defer-pick .idp-days {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+html body .impulses-defer-pick .idp-day {
+  border: 0 !important;
+  background: transparent !important;
+  color: #fff8ee !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 14px !important;
+  text-align: left !important;
+  padding: 6px 8px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+}
+html body .impulses-defer-pick .idp-day:hover {
+  background: rgba(255,252,248,0.1) !important;
+}
 html body .day-block .impulses-empty {
   font-family: "Newsreader", Georgia, serif !important;
   font-style: italic !important;
   font-size: 14px !important;
   color: rgba(255,248,238,0.45) !important;
-  margin: 4px 2px !important;
+  margin: 4px 2px 4px 22px !important;
 }
 html body .day-block.view-impulses .day-add-zone,
 html body .day-block.view-impulses .overview-empty-add { display: none !important; }
@@ -41784,56 +41916,75 @@ html body .day-block.flow-picking .vision-tile {
       window.addEventListener('resize', onResize, true);
     }, 0);
   }
+  function ensureImpulsesRouteMap(panel){
+    if(!panel) return null;
+    var shell = panel.querySelector('.impulses-shell');
+    if(!shell) return null;
+    var map = shell.querySelector('.impulses-route-map');
+    if(!map){
+      var oldList = shell.querySelector('.impulses-list');
+      if(oldList) oldList.remove();
+      map = document.createElement('div');
+      map.className = 'impulses-route-map';
+      map.innerHTML = '<div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"></div>';
+      shell.appendChild(map);
+    }
+    return map.querySelector('.impulses-flow-route');
+  }
+  var IMPULSES_SHELL_HTML = '<div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><div class="impulses-route-map"><div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"></div></div></div>';
   function renderImpulses(blk){
     var panel = blk && blk.querySelector('.tv-panel.tv-impulses');
     if(!panel) return;
-    var list = panel.querySelector('.impulses-list');
-    if(!list) return;
+    var route = ensureImpulsesRouteMap(panel);
+    if(!route) return;
     var items = impulsesFor(blk);
-    list.innerHTML = '';
+    route.innerHTML = '';
     if(!items.length){
       var empty = document.createElement('p');
       empty.className = 'impulses-empty';
       empty.textContent = 'nothing captured yet';
-      list.appendChild(empty);
+      route.appendChild(empty);
       return;
     }
-    items.forEach(function(it){
-      var li = document.createElement('li');
-      li.className = 'impulses-item' + (it.done ? ' is-done' : '');
-      li.setAttribute('data-id', it.id);
-      var ck = document.createElement('input');
-      ck.type = 'checkbox';
-      ck.className = 'impulses-check';
-      ck.checked = !!it.done;
-      var text = document.createElement('span');
-      text.className = 'impulses-text';
-      text.contentEditable = 'true';
-      text.spellcheck = false;
-      text.textContent = it.text || '';
+    items.forEach(function(it, idx){
+      var stop = document.createElement('div');
+      stop.className = 'route-stop' + (it.done ? ' route-stop-faded' : '');
+      stop.setAttribute('data-id', it.id);
+      var num = document.createElement('span');
+      num.className = 'route-num';
+      num.textContent = String(idx + 1).padStart(2, '0');
+      num.title = 'toggle done';
+      var name = document.createElement('span');
+      name.className = 'route-name';
+      name.contentEditable = 'true';
+      name.spellcheck = false;
+      name.textContent = it.text || '';
       var del = document.createElement('button');
       del.type = 'button';
       del.className = 'impulses-del';
       del.setAttribute('aria-label', 'delete');
       del.textContent = '×';
-      ck.addEventListener('change', function(){
+      num.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
         var arr = impulsesFor(blk);
-        arr.forEach(function(row){ if(row.id === it.id) row.done = !!ck.checked; });
+        arr.forEach(function(row){ if(row.id === it.id) row.done = !row.done; });
         setImpulses(blk, arr);
-        li.classList.toggle('is-done', ck.checked);
+        renderImpulses(blk);
       });
-      text.addEventListener('blur', function(){
-        var v = (text.textContent || '').replace(/\s+/g, ' ').trim();
+      name.addEventListener('blur', function(){
+        var v = (name.textContent || '').replace(/\s+/g, ' ').trim();
         var arr = impulsesFor(blk);
         arr.forEach(function(row){ if(row.id === it.id) row.text = v; });
         setImpulses(blk, arr.filter(function(row){ return row.text; }));
         renderImpulses(blk);
       });
-      text.addEventListener('keydown', function(ev){
-        if(ev.key === 'Enter'){ ev.preventDefault(); text.blur(); }
+      name.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter'){ ev.preventDefault(); name.blur(); }
       });
       del.addEventListener('click', function(ev){
         ev.preventDefault();
+        ev.stopPropagation();
         setImpulses(blk, impulsesFor(blk).filter(function(row){ return row.id !== it.id; }));
         renderImpulses(blk);
       });
@@ -41848,14 +41999,14 @@ html body .day-block.flow-picking .vision-tile {
       defer.addEventListener('click', function(ev){
         ev.preventDefault();
         ev.stopPropagation();
-        openImpulseDeferPicker(blk, it.id, li);
+        openImpulseDeferPicker(blk, it.id, stop);
       });
       actions.appendChild(defer);
       actions.appendChild(del);
-      li.appendChild(ck);
-      li.appendChild(text);
-      li.appendChild(actions);
-      list.appendChild(li);
+      stop.appendChild(num);
+      stop.appendChild(name);
+      stop.appendChild(actions);
+      route.appendChild(stop);
     });
   }
   function addImpulse(blk, raw){
@@ -41888,6 +42039,15 @@ html body .day-block.flow-picking .vision-tile {
         if(ev.key === 'Enter'){ ev.preventDefault(); commit(); }
       });
     }
+    var header = panel.querySelector('.impulses-route-header');
+    if(header && header.getAttribute('data-route-toggle-wired') !== '1'){
+      header.setAttribute('data-route-toggle-wired', '1');
+      header.addEventListener('click', function(ev){
+        ev.preventDefault();
+        var map = panel.querySelector('.impulses-route-map');
+        if(map) map.classList.toggle('impulses-route-collapsed');
+      });
+    }
   }
   function ensureImpulsesView(block){
     if(!block) return null;
@@ -41914,7 +42074,7 @@ html body .day-block.flow-picking .vision-tile {
       panel = document.createElement('div');
       panel.className = 'tv-panel tv-impulses';
       panel.style.display = 'none';
-      panel.innerHTML = '<div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><ul class="impulses-list"></ul></div>';
+      panel.innerHTML = IMPULSES_SHELL_HTML;
       var pursuits = wrap.querySelector('.tv-panel.tv-pursuits');
       var flow = wrap.querySelector('.tv-panel.tv-flow');
       if(flow) wrap.insertBefore(panel, flow);
@@ -42758,6 +42918,50 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var t = tileTitleLow(tile);
     return f === 'glow' || f === 'glow-up' || f === 'glowup' || t === 'glow up' || t === 'glow-up' || t === 'glow';
   }
+  function isProtoAug30CollageHost(host){
+    if(!host || !document.body.classList.contains('prototypes-page')) return false;
+    var blk = host.closest ? host.closest('.day-block[data-date="2026-08-30"]') : null;
+    return !!blk;
+  }
+  function setTileGridPlace(tile, p){
+    if(!tile || !p || p.length < 4) return;
+    tile.style.removeProperty('grid-area');
+    tile.style.setProperty('grid-column-start', String(p[0]), 'important');
+    tile.style.setProperty('grid-column-end', String(p[1]), 'important');
+    tile.style.setProperty('grid-row-start', String(p[2]), 'important');
+    tile.style.setProperty('grid-row-end', String(p[3]), 'important');
+    tile.style.setProperty('grid-column', p[0] + ' / ' + p[1], 'important');
+    tile.style.setProperty('grid-row', p[2] + ' / ' + p[3], 'important');
+  }
+  /* Prototype Aug 30: when glow up shares a row with claim, give glow up the wider span. */
+  function boostProtoAug30GlowUpLayout(host, tiles){
+    if(!isProtoAug30CollageHost(host) || !tiles) return;
+    var glow = null, claim = null;
+    for(var i = 0; i < tiles.length; i++){
+      var t = tiles[i];
+      if(isGlowUpTile(t)) glow = t;
+      var f = (t.getAttribute('data-focus') || '').toLowerCase();
+      if(f === 'claim' || tileTitleLow(t) === 'claim') claim = t;
+    }
+    if(!glow || !claim) return;
+    function parseSpan(styleProp){
+      var v = (styleProp || '').replace(/\s+/g,' ').trim();
+      var m = v.match(/^(\d+)\s*\/\s*(\d+)$/);
+      return m ? [parseInt(m[1], 10), parseInt(m[2], 10)] : null;
+    }
+    var gc = parseSpan(glow.style.gridColumn);
+    var gr = parseSpan(glow.style.gridRow);
+    var cc = parseSpan(claim.style.gridColumn);
+    var cr = parseSpan(claim.style.gridRow);
+    if(!gc || !gr || !cc || !cr) return;
+    if(gr[0] !== cr[0] || gr[1] !== cr[1]) return;
+    var glowW = gc[1] - gc[0];
+    var claimW = cc[1] - cc[0];
+    if(glowW >= claimW) return;
+    setTileGridPlace(glow, [cc[0], cc[1], cr[0], cr[1]]);
+    setTileGridPlace(claim, [gc[0], gc[1], gr[0], gr[1]]);
+    glow.setAttribute('data-card-weight', '3');
+  }
   function isSquarePreferTile(tile){
     if(!tile) return false;
     if(isGlowUpTile(tile)) return true;
@@ -42852,9 +43056,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     tile.style.removeProperty('grid-row');
     tile.style.removeProperty('grid-area');
   }
-  function tileCardWeight(tile){
+  function tileContentScore(tile){
+    if(!tile) return 0;
     var n = 0;
-    try { n = tile.querySelectorAll('.vision-polaroid').length; } catch(e){ n = 0; }
+    try {
+      var det = tile.querySelector(':scope > .vision-tile-details');
+      if(det){
+        n += det.querySelectorAll('.vision-polaroid').length;
+        n += det.querySelectorAll('.vision-check').length;
+      }
+      n += tile.querySelectorAll(':scope > .vision-tile-subsections .vision-subsection, :scope > .vision-subsection').length;
+      n += tile.querySelectorAll(':scope > .vision-horizon-above .vision-horizon-task, :scope > .vision-horizon-below .vision-horizon-task').length;
+    } catch(e){ n = 0; }
+    return n;
+  }
+  function tileCardWeight(tile){
+    var n = tileContentScore(tile);
     if(n >= 4) return 3;
     if(n >= 2) return 2;
     return 1;
@@ -42878,7 +43095,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return tiles.find(isBodyFitnessTile) || null;
   }
 
-  var PHOTO_AR = {"_339ab459.jpg":0.8,"_archive-card-smile-set-generic-aligners.jpg":1.0,"_archive-card-smile-set-library-barcode.jpg":0.615,"abundance-wheat-sunset.jpg":1.778,"accomplishments-mock-4-stamp.jpg":1.778,"adhd-bg.jpg":0.61,"adhd-brain-dashboard.jpg":0.61,"adhd-brain-editorial.jpg":1.778,"adhd-brain-power.jpg":1.778,"adhd-dancer.jpg":0.667,"adhd-neurons-confocal.jpg":1.769,"adhd-neurons-gold.jpg":0.994,"business-cricut-close.jpg":0.667,"business-diana-jundi-ceo-letterhead-old-archived.jpg":1.333,"business-diana-jundi-ceo-letterhead-prepad-archived.jpg":1.778,"business-diana-jundi-ceo-letterhead-source-v1.jpg":1.778,"business-diana-jundi-ceo-letterhead.jpg":1.778,"business-ideas-notebook.jpg":1.778,"business-jundi-building-facade-only.jpg":1.779,"business-jundi-building-wide.jpg":1.778,"business-jundi-building.jpg":1.779,"business-jundi-enterprises.jpg":1.778,"business-jundi-tower-ceo.jpg":1.778,"business-jundi-tower.jpg":1.778,"card-aera.jpg":0.799,"card-amazon-qr-return-codes.jpg":0.667,"card-anthropic.jpg":0.807,"card-application.jpg":0.8,"card-capital-blueprint.jpg":0.773,"card-certified-letters.jpg":0.667,"card-chargebacks.jpg":0.716,"card-cleanse-black-archived.jpg":0.684,"card-cleanse.jpg":0.667,"card-cotton-pads.jpg":0.646,"card-dr-betty-s-ea.jpg":0.635,"card-handshake.jpg":0.667,"card-induction-marble-archive.jpg":0.619,"card-induction.jpg":0.667,"card-neighbor-payment.jpg":0.667,"card-pepperdine-autofetch-archive.jpg":0.677,"card-psi-chi-archive-named.jpg":0.669,"card-psi-chi.jpg":0.667,"card-re-manus-restoration-issue.jpg":0.667,"card-reformer-pilates-6-00.jpg":0.635,"card-research-proposal.jpg":0.618,"card-sabr-armonias-archive.jpg":0.568,"card-sabr.jpg":1.0,"card-shukr-greenbook-archive.jpg":0.828,"card-shukr.jpg":1.0,"card-smile-set.jpg":1.0,"card-trst.jpg":0.681,"card-tuition.jpg":0.8,"curriculum-vitae-bg.jpg":1.778,"curriculum-vitae-real-double-name-archived.jpg":0.807,"curriculum-vitae-real-name-large-archived.jpg":0.807,"curriculum-vitae-real.jpg":0.75,"deen-moodboard-bg_807e7166.jpg":0.75,"dua-open-pages.jpg":1.778,"handshake-pepperdine-gsa.jpg":2.731,"mock-glow-up-skin-v3.jpg":1.0,"mock-glow-up-skin.jpg":1.333,"mock-glow-up.jpg":1.5,"mock-power.jpg":1.321,"pepperdine-campus-collage.jpg":0.562,"pepperdine-committee-checkin.jpg":2.281,"power-opportunities-bg.jpg":1.666,"priming-fountain-pen.jpg":1.332,"pursuit-curated-lifestyle.jpg":1.0,"pursuit-elevate-betty.jpg":1.0,"pursuit-grad-school-malibu-close.jpg":1.0,"pursuit-grad-school-pepperdine.jpg":1.0,"pursuit-grad-school-v2.jpg":1.0,"pursuit-grad-school.jpg":1.0,"pursuit-leverage-v4.jpg":1.0,"pursuit-lifestyle_577937e8.jpg":1.333,"pursuit-momentum-v5_f7c3e8ce.jpg":1.0,"pursuit-momentum-v6_2201ca9a.jpg":1.782,"pursuit-momentum-v7.jpg":1.0,"pursuit-money_57ff14e0.jpg":1.333,"pursuit-pepperdine-blur-stage-archive.jpg":1.48,"pursuit-pepperdine-fullbleed3-archive.jpg":0.562,"pursuit-pepperdine-patio1-full-archive.jpg":0.75,"pursuit-pepperdine-plaza-ocean.jpg":0.75,"pursuit-pepperdine-plaza1-archive.jpg":0.768,"pursuit-pepperdine-plaza2-archive.jpg":1.011,"pursuit-pepperdine-portrait-collage.jpg":0.562,"pursuit-pepperdine.jpg":1.073,"pursuit-persons_be56f167.jpg":1.333,"pursuit-pickups.jpg":1.0,"pursuit-postal_v1_53e3e315.jpg":1.0,"pursuit-returns-v2.jpg":1.0,"pursuit-skincare_e30839d6.jpg":1.333,"pursuit-social-media-v7_c5f03b96.jpg":1.333,"pursuit-travel.jpg":2.0,"pursuit-vibes_a0abc76a.jpg":1.333,"pursuit-vibes_e645a2da.jpg":1.333,"quantum-consciousness-bg.jpg":1.778,"quantum-how-you-look-field.jpg":1.778,"quantum-how-you-look-phrase.jpg":1.778,"quantum-how-you-look-stars2-archived.jpg":0.92,"quantum-how-you-look-stars9-archived.jpg":0.93,"quantum-how-you-look.jpg":0.93,"quantum-ripples.jpg":1.148,"research-act-of-research.jpg":1.778,"research-diana-jundi-journal-eco-archived.jpg":0.75,"research-diana-jundi-journal-everyday-archived.jpg":1.934,"research-diana-jundi-journal-short-archived.jpg":0.75,"research-diana-jundi-journal.jpg":0.667,"research-proposals-docs.jpg":1.778,"striving-path-horizon.jpg":1.913,"zone-abundance.jpg":1.5,"zone-abundance-tree.jpg":0.562,"zone-alignment.jpg":1.5,"zone-ambition-v4.jpg":1.5,"zone-ambition-v5-ascent.jpg":1.5,"zone-art-science.jpg":1.5,"zone-athletic.jpg":0.666,"zone-attention.jpg":1.5,"zone-audacity-glance-lion.jpg":1.5,"zone-audacity-inspire.jpg":1.5,"zone-audacity-leap-forward.jpg":1.5,"zone-audacity-lion-roar.jpg":1.5,"zone-audacity-rope-cross.jpg":1.5,"zone-audacity-sprint.jpg":1.5,"zone-audacity-velvet-rope.jpg":1.5,"zone-audacity.jpg":0.612,"zone-body-abs-archive.jpg":1.5,"zone-body-abs.jpg":1.5,"zone-body-aesthetic-full-pants-src.jpg":0.667,"zone-body-gym-abs-tight-archive.jpg":0.667,"zone-body-gym-abs.jpg":0.667,"zone-body-gym-mid-abs-a.jpg":1.083,"zone-body-gym-mid-abs-b.jpg":1.019,"zone-body-gym-mid-abs.jpg":0.968,"zone-body-gym-rear-alt.jpg":0.667,"zone-body-gym-wide-dark.jpg":0.713,"zone-body-nolegs-final.jpg":1.577,"zone-body-nolegs-mid.jpg":1.187,"zone-body-nolegs-tight.jpg":1.231,"zone-body-nolegs-widebg.jpg":1.577,"zone-body-tummy-gym-dark-abs-macro-archive2.jpg":2.074,"zone-body-tummy-gym-dark-abs-nolegs2-archive.jpg":1.577,"zone-body-tummy-gym-dark-abs-with-thighs-archive.jpg":0.968,"zone-body-tummy-gym-dark-abs.jpg":1.076,"zone-body-tummy-gym-dark-legs-archive.jpg":0.968,"zone-body-tummy-gym-dark-pre-tummygym9.jpg":1.936,"zone-body-tummy-gym-dark-tight-macro-archive.jpg":1.849,"zone-body-tummy-gym-dark.jpg":1.577,"zone-body.jpg":1.5,"zone-calisthenics.jpg":1.5,"zone-curated-lifestyle.jpg":0.665,"zone-darkness-aware.jpg":1.5,"zone-darkness-inner-around.jpg":1.5,"zone-darkness-night-street.jpg":1.5,"zone-darkness.jpg":1.5,"zone-envision.jpg":1.5,"zone-executive-climb-command.jpg":0.667,"zone-executive-climb-stairs-command-archive.jpg":0.667,"zone-executive-climb-stairs-doors-archive.jpg":0.667,"zone-executive-climb-stairs1-archive.jpg":1.328,"zone-executive-climb.jpg":0.667,"zone-executive-command.jpg":1.5,"zone-fight-back-stillife-archive.jpg":1.5,"zone-fight-back.jpg":1.5,"zone-finances-v2.jpg":3.333,"zone-focus.jpg":1.0,"zone-future-self-becoming-archive.jpg":1.5,"zone-future-self-daylight-archive.jpg":1.5,"zone-future-self.jpg":1.5,"zone-god-conscious-remembrance1.jpg":1.5,"zone-god-conscious.jpg":1.5,"zone-inner-fire-abstract-maleback-archive.jpg":1.0,"zone-inner-fire-abstract-navel1-archive.jpg":1.0,"zone-inner-fire-abstract.jpg":1.333,"zone-inner-fire-chest2-archive.jpg":1.0,"zone-inner-fire-coals-archive.jpg":0.667,"zone-inner-fire-ember1-archive.jpg":1.5,"zone-inner-fire-feminine-navel-archive.jpg":1.5,"zone-inner-fire-feminine-navel.jpg":1.333,"zone-inner-fire-lotus-core.jpg":1.333,"zone-inner-fire-navel2-archive.jpg":1.5,"zone-inner-fire-navel2-source.jpg":1.5,"zone-inner-fire-sacred-attempt-archive.jpg":1.333,"zone-inner-fire-sacred-core.jpg":1.333,"zone-inner-fire-sacred1-archive.jpg":1.333,"zone-inner-fire.jpg":1.0,"zone-intentions.jpg":1.5,"zone-pepperdine-diploma.jpg":1.5,"zone-pepperdine-malibu-scenic-archive.jpg":1.778,"zone-pepperdine-malibu.jpg":1.5,"zone-phd.jpg":1.5,"zone-plan-sketchbook-archive.jpg":1.5,"zone-plan.jpg":1.5,"zone-politics-corridor.jpg":1.5,"zone-politics.jpg":1.5,"zone-potential-cosmic-archive.jpg":1.0,"zone-potential-hers-archive.jpg":0.667,"zone-potential-hers.jpg":0.667,"zone-potential-open-road.jpg":1.5,"zone-potential-within-archive.jpg":0.667,"zone-potential.jpg":1.5,"zone-power-agency-chess-noir-archive.jpg":1.5,"zone-power-agency-chess.jpg":1.5,"zone-power-boardfight-archive.jpg":1.5,"zone-power-chess-boardfight.jpg":1.5,"zone-power-chess-gamemove.jpg":1.5,"zone-power-chesswarm-game-alt.jpg":1.5,"zone-power-chesswarm1-src.jpg":1.5,"zone-power-corner-office-archive.jpg":1.5,"zone-power-corner-office.jpg":1.5,"zone-power-forge-molten-archive.jpg":1.5,"zone-power-forge-molten.jpg":1.5,"zone-power-king-focus-archive.jpg":1.5,"zone-power-letterhead-ceo-archive.jpg":0.667,"zone-power-lightning-archive.jpg":1.5,"zone-power-lightning-ocean.jpg":1.5,"zone-power-lone-king-archive.jpg":1.5,"zone-power-purpose-monolith-archive.jpg":1.0,"zone-power-purpose-seal-archive.jpg":0.667,"zone-power-purpose-seal-generic-archive.jpg":0.667,"zone-power-purpose.jpg":0.667,"zone-power-queen-breakthrough.jpg":1.5,"zone-power.jpg":1.5,"zone-purpose-compass-vocation.jpg":0.667,"zone-purpose-hallway-archive.jpg":1.5,"zone-purpose-journal-archive.jpg":1.5,"zone-purpose.jpg":0.667,"zone-pursuits-chase-threshold.jpg":1.5,"zone-pursuits-choice-threads.jpg":1.5,"zone-pursuits-corridor-chase-archive.jpg":1.5,"zone-pursuits-cosmos-pre-manyworlds-archive.jpg":1.5,"zone-pursuits-desk-busywork-archive.jpg":1.5,"zone-pursuits-golden-summit-destiny-archive.jpg":1.5,"zone-pursuits-hallway-archive.jpg":1.5,"zone-pursuits-life-domains-archive.jpg":1.5,"zone-pursuits-life-domains.jpg":1.5,"zone-pursuits-many-worlds.jpg":1.5,"zone-pursuits-many1-archive.jpg":1.5,"zone-pursuits-notebook-archive.jpg":1.5,"zone-pursuits-quantum-cosmos.jpg":1.5,"zone-pursuits-research-desk.jpg":1.5,"zone-pursuits.jpg":1.5,"zone-quantum-v14.jpg":1.5,"zone-quantum-v15-eye-archive.jpg":1.5,"zone-quantum-v15.jpg":1.5,"zone-repetitions.jpg":0.5,"zone-resonance.jpg":1.5,"zone-self-esteem.jpg":1.5,"zone-soul-chair.jpg":1.5,"zone-soul-depth.jpg":0.667,"zone-soul-dua.jpg":1.5,"zone-soul-flame.jpg":1.504,"zone-soul-glance-heart.jpg":1.5,"zone-soul-heal-quiet.jpg":1.5,"zone-soul-heart-glow.jpg":1.5,"zone-soul-mosque-glow.jpg":1.5,"zone-soul-presence.jpg":1.5,"zone-soul-still-water.jpg":0.667,"zone-soul.jpg":1.5,"zone-spirit.jpg":1.5,"zone-strengths-anvil-archive.jpg":1.5,"zone-strengths-geode-archive.jpg":1.5,"zone-strengths-hands-archive.jpg":1.5,"zone-strengths-human-back-archive.jpg":1.5,"zone-strengths-mountain-archive.jpg":1.5,"zone-strengths-room-archive.jpg":1.5,"zone-strengths-spirit-flame-alt.jpg":1.5,"zone-strengths-sprout-archive.jpg":1.5,"zone-strengths-tree-archive.jpg":1.5,"zone-strengths.jpg":1.5,"zone-villains-beam-rim3-archive.jpg":0.667,"zone-villains-beam-spot-archive.jpg":0.667,"zone-villains-beam-spot-archive2.jpg":0.667,"zone-villains-darkness-in-light.jpg":1.5,"zone-villains-mask1-archive.jpg":0.667,"zone-villains-pre-rim11-archive.jpg":0.667,"zone-villains-rim-surround.jpg":1.5,"zone-villains.jpg":1.5,"zone-wins.jpg":1.0,"zone-workflow.jpg":1.5};
+  var PHOTO_AR = {"_339ab459.jpg":0.8,"_archive-card-smile-set-generic-aligners.jpg":1.0,"_archive-card-smile-set-library-barcode.jpg":0.615,"abundance-wheat-sunset.jpg":1.778,"accomplishments-mock-4-stamp.jpg":1.778,"adhd-bg.jpg":0.61,"adhd-brain-dashboard.jpg":0.61,"adhd-brain-editorial.jpg":1.778,"adhd-brain-power.jpg":1.778,"adhd-dancer.jpg":0.667,"adhd-neurons-confocal.jpg":1.769,"adhd-neurons-gold.jpg":0.994,"business-cricut-close.jpg":0.667,"business-diana-jundi-ceo-letterhead-old-archived.jpg":1.333,"business-diana-jundi-ceo-letterhead-prepad-archived.jpg":1.778,"business-diana-jundi-ceo-letterhead-source-v1.jpg":1.778,"business-diana-jundi-ceo-letterhead.jpg":1.778,"business-ideas-notebook.jpg":1.778,"business-jundi-building-facade-only.jpg":1.779,"business-jundi-building-wide.jpg":1.778,"business-jundi-building.jpg":1.779,"business-jundi-enterprises.jpg":1.778,"business-jundi-tower-ceo.jpg":1.778,"business-jundi-tower.jpg":1.778,"card-aera.jpg":0.799,"card-amazon-qr-return-codes.jpg":0.667,"card-anthropic.jpg":0.807,"card-application.jpg":0.8,"card-capital-blueprint.jpg":0.773,"card-certified-letters.jpg":0.667,"card-chargebacks.jpg":0.716,"card-cleanse-black-archived.jpg":0.684,"card-cleanse.jpg":0.667,"card-cotton-pads.jpg":0.646,"card-dr-betty-s-ea.jpg":0.635,"card-handshake.jpg":0.667,"card-induction-marble-archive.jpg":0.619,"card-induction.jpg":0.667,"card-neighbor-payment.jpg":0.667,"card-pepperdine-autofetch-archive.jpg":0.677,"card-psi-chi-archive-named.jpg":0.669,"card-psi-chi.jpg":0.667,"card-re-manus-restoration-issue.jpg":0.667,"card-reformer-pilates-6-00.jpg":0.635,"card-research-proposal.jpg":0.618,"card-sabr-armonias-archive.jpg":0.568,"card-sabr.jpg":1.0,"card-shukr-greenbook-archive.jpg":0.828,"card-shukr.jpg":1.0,"card-smile-set.jpg":1.0,"card-trst.jpg":0.681,"card-tuition.jpg":0.8,"curriculum-vitae-bg.jpg":1.778,"curriculum-vitae-real-double-name-archived.jpg":0.807,"curriculum-vitae-real-name-large-archived.jpg":0.807,"curriculum-vitae-real.jpg":0.75,"deen-moodboard-bg_807e7166.jpg":0.75,"dua-open-pages.jpg":1.778,"handshake-pepperdine-gsa.jpg":2.731,"mock-glow-up-skin-v3.jpg":1.0,"mock-glow-up-skin.jpg":1.333,"mock-glow-up.jpg":1.5,"mock-power.jpg":1.321,"pepperdine-campus-collage.jpg":0.562,"pepperdine-committee-checkin.jpg":2.281,"power-opportunities-bg.jpg":1.666,"priming-fountain-pen.jpg":1.332,"pursuit-curated-lifestyle.jpg":1.0,"pursuit-elevate-betty.jpg":1.0,"pursuit-grad-school-malibu-close.jpg":1.0,"pursuit-grad-school-pepperdine.jpg":1.0,"pursuit-grad-school-v2.jpg":1.0,"pursuit-grad-school.jpg":1.0,"pursuit-leverage-v4.jpg":1.0,"pursuit-lifestyle_577937e8.jpg":1.333,"pursuit-momentum-v5_f7c3e8ce.jpg":1.0,"pursuit-momentum-v6_2201ca9a.jpg":1.782,"pursuit-momentum-v7.jpg":1.0,"pursuit-money_57ff14e0.jpg":1.333,"pursuit-pepperdine-blur-stage-archive.jpg":1.48,"pursuit-pepperdine-fullbleed3-archive.jpg":0.562,"pursuit-pepperdine-patio1-full-archive.jpg":0.75,"pursuit-pepperdine-plaza-ocean.jpg":0.75,"pursuit-pepperdine-plaza1-archive.jpg":0.768,"pursuit-pepperdine-plaza2-archive.jpg":1.011,"pursuit-pepperdine-portrait-collage.jpg":0.562,"pursuit-pepperdine.jpg":1.073,"pursuit-persons_be56f167.jpg":1.333,"pursuit-pickups.jpg":1.0,"pursuit-postal_v1_53e3e315.jpg":1.0,"pursuit-returns-v2.jpg":1.0,"pursuit-skincare_e30839d6.jpg":1.333,"pursuit-social-media-v7_c5f03b96.jpg":1.333,"pursuit-travel.jpg":2.0,"pursuit-vibes_a0abc76a.jpg":1.333,"pursuit-vibes_e645a2da.jpg":1.333,"quantum-consciousness-bg.jpg":1.778,"quantum-how-you-look-field.jpg":1.778,"quantum-how-you-look-phrase.jpg":1.778,"quantum-how-you-look-stars2-archived.jpg":0.92,"quantum-how-you-look-stars9-archived.jpg":0.93,"quantum-how-you-look.jpg":0.93,"quantum-ripples.jpg":1.148,"research-act-of-research.jpg":1.778,"research-diana-jundi-journal-eco-archived.jpg":0.75,"research-diana-jundi-journal-everyday-archived.jpg":1.934,"research-diana-jundi-journal-short-archived.jpg":0.75,"research-diana-jundi-journal.jpg":0.667,"research-proposals-docs.jpg":1.778,"striving-path-horizon.jpg":1.913,"zone-abundance.jpg":1.5,"zone-abundance-tree.jpg":0.562,"zone-alignment.jpg":1.5,"zone-ambition-v4.jpg":1.5,"zone-ambition-v5-ascent.jpg":1.5,"zone-art-science.jpg":1.5,"zone-athletic.jpg":0.666,"zone-attention.jpg":1.5,"zone-anticipating-theater.jpg":1.5,"zone-audacity-glance-lion.jpg":1.5,"zone-audacity-inspire.jpg":1.5,"zone-audacity-leap-forward.jpg":1.5,"zone-audacity-lion-roar.jpg":1.5,"zone-audacity-rope-cross.jpg":1.5,"zone-audacity-sprint.jpg":1.5,"zone-audacity-velvet-rope.jpg":1.5,"zone-audacity.jpg":0.612,"zone-body-abs-archive.jpg":1.5,"zone-body-abs.jpg":1.5,"zone-body-aesthetic-full-pants-src.jpg":0.667,"zone-body-gym-abs-tight-archive.jpg":0.667,"zone-body-gym-abs.jpg":0.667,"zone-body-gym-mid-abs-a.jpg":1.083,"zone-body-gym-mid-abs-b.jpg":1.019,"zone-body-gym-mid-abs.jpg":0.968,"zone-body-gym-rear-alt.jpg":0.667,"zone-body-gym-wide-dark.jpg":0.713,"zone-body-nolegs-final.jpg":1.577,"zone-body-nolegs-mid.jpg":1.187,"zone-body-nolegs-tight.jpg":1.231,"zone-body-nolegs-widebg.jpg":1.577,"zone-body-tummy-gym-dark-abs-macro-archive2.jpg":2.074,"zone-body-tummy-gym-dark-abs-nolegs2-archive.jpg":1.577,"zone-body-tummy-gym-dark-abs-with-thighs-archive.jpg":0.968,"zone-body-tummy-gym-dark-abs.jpg":1.076,"zone-body-tummy-gym-dark-legs-archive.jpg":0.968,"zone-body-tummy-gym-dark-pre-tummygym9.jpg":1.936,"zone-body-tummy-gym-dark-tight-macro-archive.jpg":1.849,"zone-body-tummy-gym-dark.jpg":1.577,"zone-body.jpg":1.5,"zone-calisthenics.jpg":1.5,"zone-curated-lifestyle.jpg":0.665,"zone-darkness-aware.jpg":1.5,"zone-darkness-inner-around.jpg":1.5,"zone-darkness-night-street.jpg":1.5,"zone-darkness.jpg":1.5,"zone-envision.jpg":1.5,"zone-executive-climb-command.jpg":0.667,"zone-executive-climb-stairs-command-archive.jpg":0.667,"zone-executive-climb-stairs-doors-archive.jpg":0.667,"zone-executive-climb-stairs1-archive.jpg":1.328,"zone-executive-climb.jpg":0.667,"zone-executive-command.jpg":1.5,"zone-fight-back-stillife-archive.jpg":1.5,"zone-fight-back.jpg":1.5,"zone-finances-v2.jpg":3.333,"zone-focus.jpg":1.0,"zone-future-self-becoming-archive.jpg":1.5,"zone-future-self-daylight-archive.jpg":1.5,"zone-future-self.jpg":1.5,"zone-god-conscious-remembrance1.jpg":1.5,"zone-god-conscious.jpg":1.5,"zone-inner-fire-abstract-maleback-archive.jpg":1.0,"zone-inner-fire-abstract-navel1-archive.jpg":1.0,"zone-inner-fire-abstract.jpg":1.333,"zone-inner-fire-chest2-archive.jpg":1.0,"zone-inner-fire-coals-archive.jpg":0.667,"zone-inner-fire-ember1-archive.jpg":1.5,"zone-inner-fire-feminine-navel-archive.jpg":1.5,"zone-inner-fire-feminine-navel.jpg":1.333,"zone-inner-fire-lotus-core.jpg":1.333,"zone-inner-fire-navel2-archive.jpg":1.5,"zone-inner-fire-navel2-source.jpg":1.5,"zone-inner-fire-sacred-attempt-archive.jpg":1.333,"zone-inner-fire-sacred-core.jpg":1.333,"zone-inner-fire-sacred1-archive.jpg":1.333,"zone-inner-fire.jpg":1.0,"zone-intentions.jpg":1.5,"zone-pepperdine-diploma.jpg":1.5,"zone-pepperdine-malibu-scenic-archive.jpg":1.778,"zone-pepperdine-malibu.jpg":1.5,"zone-phd.jpg":1.5,"zone-plan-sketchbook-archive.jpg":1.5,"zone-plan.jpg":1.5,"zone-politics-corridor.jpg":1.5,"zone-politics.jpg":1.5,"zone-potential-cosmic-archive.jpg":1.0,"zone-potential-hers-archive.jpg":0.667,"zone-potential-hers.jpg":0.667,"zone-potential-open-road.jpg":1.5,"zone-potential-within-archive.jpg":0.667,"zone-potential.jpg":1.5,"zone-power-agency-chess-noir-archive.jpg":1.5,"zone-power-agency-chess.jpg":1.5,"zone-power-boardfight-archive.jpg":1.5,"zone-power-chess-boardfight.jpg":1.5,"zone-power-chess-gamemove.jpg":1.5,"zone-power-chesswarm-game-alt.jpg":1.5,"zone-power-chesswarm1-src.jpg":1.5,"zone-power-corner-office-archive.jpg":1.5,"zone-power-corner-office.jpg":1.5,"zone-power-forge-molten-archive.jpg":1.5,"zone-power-forge-molten.jpg":1.5,"zone-power-king-focus-archive.jpg":1.5,"zone-power-letterhead-ceo-archive.jpg":0.667,"zone-power-lightning-archive.jpg":1.5,"zone-power-lightning-ocean.jpg":1.5,"zone-power-lone-king-archive.jpg":1.5,"zone-power-purpose-monolith-archive.jpg":1.0,"zone-power-purpose-seal-archive.jpg":0.667,"zone-power-purpose-seal-generic-archive.jpg":0.667,"zone-power-purpose.jpg":0.667,"zone-power-queen-breakthrough.jpg":1.5,"zone-power.jpg":1.5,"zone-purpose-compass-vocation.jpg":0.667,"zone-purpose-hallway-archive.jpg":1.5,"zone-purpose-journal-archive.jpg":1.5,"zone-purpose.jpg":0.667,"zone-pursuits-chase-threshold.jpg":1.5,"zone-pursuits-choice-threads.jpg":1.5,"zone-pursuits-corridor-chase-archive.jpg":1.5,"zone-pursuits-cosmos-pre-manyworlds-archive.jpg":1.5,"zone-pursuits-desk-busywork-archive.jpg":1.5,"zone-pursuits-golden-summit-destiny-archive.jpg":1.5,"zone-pursuits-hallway-archive.jpg":1.5,"zone-pursuits-life-domains-archive.jpg":1.5,"zone-pursuits-life-domains.jpg":1.5,"zone-pursuits-many-worlds.jpg":1.5,"zone-pursuits-many1-archive.jpg":1.5,"zone-pursuits-notebook-archive.jpg":1.5,"zone-pursuits-quantum-cosmos.jpg":1.5,"zone-pursuits-research-desk.jpg":1.5,"zone-pursuits.jpg":1.5,"zone-quantum-v14.jpg":1.5,"zone-quantum-v15-eye-archive.jpg":1.5,"zone-quantum-v15.jpg":1.5,"zone-repetitions.jpg":0.5,"zone-resonance.jpg":1.5,"zone-self-esteem.jpg":1.5,"zone-soul-chair.jpg":1.5,"zone-soul-depth.jpg":0.667,"zone-soul-dua.jpg":1.5,"zone-soul-flame.jpg":1.504,"zone-soul-glance-heart.jpg":1.5,"zone-soul-heal-quiet.jpg":1.5,"zone-soul-heart-glow.jpg":1.5,"zone-soul-mosque-glow.jpg":1.5,"zone-soul-presence.jpg":1.5,"zone-soul-still-water.jpg":0.667,"zone-soul.jpg":1.5,"zone-spirit.jpg":1.5,"zone-strengths-anvil-archive.jpg":1.5,"zone-strengths-geode-archive.jpg":1.5,"zone-strengths-hands-archive.jpg":1.5,"zone-strengths-human-back-archive.jpg":1.5,"zone-strengths-mountain-archive.jpg":1.5,"zone-strengths-room-archive.jpg":1.5,"zone-strengths-spirit-flame-alt.jpg":1.5,"zone-strengths-sprout-archive.jpg":1.5,"zone-strengths-tree-archive.jpg":1.5,"zone-strengths.jpg":1.5,"zone-villains-beam-rim3-archive.jpg":0.667,"zone-villains-beam-spot-archive.jpg":0.667,"zone-villains-beam-spot-archive2.jpg":0.667,"zone-villains-darkness-in-light.jpg":1.5,"zone-villains-mask1-archive.jpg":0.667,"zone-villains-pre-rim11-archive.jpg":0.667,"zone-villains-rim-surround.jpg":1.5,"zone-villains.jpg":1.5,"zone-wins.jpg":1.0,"zone-workflow.jpg":1.5};
   function tilePhotoFile(tile){
     var src = '';
     try {
@@ -43091,6 +43308,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     /* Solo day: one collage row — not a 2-row full-viewport slab. */
     if(n === 1){
       var only = tiles[0];
+      only.setAttribute('data-content-score', String(tileContentScore(only)));
       only.setAttribute('data-card-weight', String(tileCardWeight(only)));
       only.style.setProperty('grid-column', '1 / -1', 'important');
       only.style.setProperty('grid-row', '1 / -1', 'important');
@@ -43129,6 +43347,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var p = spec.places[i];
       if(!p) continue;
       var tile = tiles[i];
+      tile.setAttribute('data-content-score', String(tileContentScore(tile)));
       tile.setAttribute('data-card-weight', String(tileCardWeight(tile)));
       tile.style.removeProperty('grid-area');
       tile.style.setProperty('grid-column-start', String(p[0]), 'important');
@@ -43138,6 +43357,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       tile.style.setProperty('grid-column', p[0] + ' / ' + p[1], 'important');
       tile.style.setProperty('grid-row', p[2] + ' / ' + p[3], 'important');
     }
+    try { boostProtoAug30GlowUpLayout(host, tiles); } catch(eBoost){}
   }
   function syncHeroLayoutClass(blk){
     var host = heroHost(blk);
@@ -43723,7 +43943,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     tile.className = 'vision-tile' + extra;
     tile.setAttribute('data-focus', opts.focus || slug(opts.title));
-    var nophotoInit = (tLowInit === 'soul' || tLowInit === 'darkness' || fLowInit === 'soul' || fLowInit === 'darkness' || tLowInit === 'tune into' || tLowInit === 'tune-into' || fLowInit === 'tune-into' || fLowInit === 'tune into' || tLowInit === 'self-actualize' || tLowInit === 'self actualize' || fLowInit === 'self-actualize' || fLowInit === 'self actualize' || tLowInit === 'claim' || fLowInit === 'claim');
+    var nophotoInit = (tLowInit === 'soul' || tLowInit === 'darkness' || fLowInit === 'soul' || fLowInit === 'darkness' || tLowInit === 'tune into' || tLowInit === 'tune-into' || fLowInit === 'tune-into' || fLowInit === 'tune into' || tLowInit === 'claim' || fLowInit === 'claim');
     if(nophotoInit || opts.photo === ''){
       if(nophotoInit){
         tile.classList.add('vision-tile-nophoto');
@@ -44201,8 +44421,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     tile.classList.add('horizon-armed');
     chrome.above.innerHTML = '';
     chrome.below.innerHTML = '';
-    open.forEach(function(el){ chrome.above.appendChild(el); });
-    done.forEach(function(el){ chrome.below.appendChild(el); });
+    done.forEach(function(el){ chrome.above.appendChild(el); });
+    open.forEach(function(el){ chrome.below.appendChild(el); });
   }
   function syncHorizonBlock(blk){
     if(!blk) return;
@@ -44415,15 +44635,41 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     d.textContent = '×';
     tile.appendChild(d);
   }
-  function dayWantsCardHeadline(){ return false; }
-  function ensureCardHeadline(pol){
-    if(!pol) return;
-    var el = pol.querySelector(':scope > .vision-card-headline');
-    if(el) el.remove();
+  function titleFromCardSrc(src){
+    src = String(src || '').toLowerCase();
+    if(/card-tuition/.test(src)) return 'tuition';
+    if(/card-application/.test(src)) return 'scholarship re-application';
+    return '';
   }
+  function cardPhotoForTitle(t){
+    t = String(t || '').replace(/\s+/g,' ').trim().toLowerCase();
+    if(t === 'tuition' || t === 'tuition money') return 'manus-storage/card-tuition.jpg?v=v4';
+    if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') return 'manus-storage/card-application.jpg?v=v4';
+    return '';
+  }
+  function scrubPolaroidHeadlinePollution(pol){
+    if(!pol) return;
+    pol.querySelectorAll(':scope > .vision-card-headline').forEach(function(h){ h.remove(); });
+    var sp = pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span:not(.vision-card-headline)');
+    var src = pol.getAttribute('data-shot-src') || (pol.querySelector('img') && pol.querySelector('img').getAttribute('src')) || '';
+    var txt = ((sp && sp.textContent) || '').replace(/\s+/g,' ').trim();
+    if(/success begets/i.test(txt)){
+      var recovered = titleFromCardSrc(src);
+      if(recovered && sp) sp.textContent = recovered;
+      else if(sp) sp.textContent = '';
+      txt = ((sp && sp.textContent) || '').replace(/\s+/g,' ').trim();
+    }
+    var photo = cardPhotoForTitle(txt) || cardPhotoForTitle(titleFromCardSrc(src));
+    if(photo){
+      pol.setAttribute('data-shot-src', photo);
+      var img = pol.querySelector('img');
+      if(img) img.src = photo;
+    }
+  }
+  function ensureCardHeadline(pol){ scrubPolaroidHeadlinePollution(pol); }
   function stampCardHeadlines(root){
     var scope = root && root.querySelectorAll ? root : document;
-    [].slice.call(scope.querySelectorAll('.vision-polaroid')).forEach(ensureCardHeadline);
+    [].slice.call(scope.querySelectorAll('.vision-polaroid')).forEach(scrubPolaroidHeadlinePollution);
   }
   window.__stampCardHeadlines = stampCardHeadlines;
   function ensurePolaroidChrome(pol){
@@ -44502,6 +44748,32 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(next !== raw) localStorage.setItem(k, next);
     });
     try { localStorage.setItem('migration-strip-card-headlines-v1', '1'); } catch(e2){}
+  })();
+
+  (function migrationStripCardHeadlinesV2(){
+    var MKEY = 'migration-strip-card-headlines-v2';
+    if(localStorage.getItem(MKEY)) return;
+    function scrubStoredHtml(raw){
+      if(!raw || typeof raw !== 'string') return raw;
+      var next = raw
+        .replace(/<p class="vision-card-headline"[^>]*>[\s\S]*?<\/p>/gi, '')
+        .replace(/success begets success[^<]*/gi, '')
+        .replace(/(<div class="vision-polaroid[^"]*"[^>]*data-shot-src="[^"]*card-tuition[^"]*"[^>]*>[\s\S]*?<span[^>]*>)[^<]*(<\/span>)/gi, '$1tuition$2')
+        .replace(/(<div class="vision-polaroid[^"]*"[^>]*data-shot-src="[^"]*card-application[^"]*"[^>]*>[\s\S]*?<span[^>]*>)[^<]*(<\/span>)/gi, '$1scholarship re-application$2')
+        .replace(/manus-storage\/card-application\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/card-application.jpg?v=v4')
+        .replace(/manus-storage\/card-tuition\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/card-tuition.jpg?v=v4');
+      return next;
+    }
+    ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
+      try {
+        var raw = localStorage.getItem(k);
+        if(!raw) return;
+        var next = scrubStoredHtml(raw);
+        if(next !== raw) localStorage.setItem(k, next);
+      } catch(e){}
+    });
+    document.querySelectorAll('.vision-polaroid').forEach(scrubPolaroidHeadlinePollution);
+    try { localStorage.setItem(MKEY, '1'); } catch(e2){}
   })();
 
   (function refreshCleanseCardPhoto(){
@@ -44695,10 +44967,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     title = String(title||'').replace(/\s+/g,' ').trim();
     var f = String(focus || '').toLowerCase();
     if(f === 'audacity' || title.toLowerCase() === 'audacity') return 'manus-storage/zone-audacity.jpg?v=finger1';
-    if(f === 'attention' || title.toLowerCase() === 'attention' || title.toLowerCase() === 'anticipate') return 'manus-storage/zone-attention.jpg?v=beam1';
+    if(f === 'attention' || title.toLowerCase() === 'attention') return 'manus-storage/zone-attention.jpg?v=beam1';
+    if(f === 'anticipate' || title.toLowerCase() === 'anticipate') return 'manus-storage/zone-anticipating-theater.jpg?v=theater1';
     if(f === 'inner-fire' || f === 'ignite' || title.toLowerCase() === 'inner fire' || title.toLowerCase() === 'inner-fire' || title.toLowerCase() === 'ignite') return 'manus-storage/zone-inner-fire.jpg?v=spark1';
     if(f === 'tune-into' || f === 'tune into' || title.toLowerCase() === 'tune into') return '';
-    if(f === 'self-actualize' || title.toLowerCase() === 'self-actualize' || title.toLowerCase() === 'self actualize') return '';
+    if(f === 'self-actualize' || title.toLowerCase() === 'self-actualize' || title.toLowerCase() === 'self actualize') return 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1';
     if(f === 'claim' || title.toLowerCase() === 'claim') return '';
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(!title) return '';
@@ -46081,7 +46354,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return;
     }
     var photo = hardwiredSectionPhoto(blk, title, focus);
-    if(String(title||'').toLowerCase() === 'soul' || String(title||'').toLowerCase() === 'darkness' || String(title||'').toLowerCase() === 'tune into' || String(title||'').toLowerCase() === 'self-actualize' || String(title||'').toLowerCase() === 'claim' || focus === 'tune-into' || focus === 'self-actualize' || focus === 'claim'){
+    if(String(title||'').toLowerCase() === 'soul' || String(title||'').toLowerCase() === 'darkness' || String(title||'').toLowerCase() === 'tune into' || String(title||'').toLowerCase() === 'claim' || focus === 'tune-into' || focus === 'claim'){
       photo = '';
     } else if(!photo){
       photo = DEFAULT_TILE;
@@ -47318,27 +47591,34 @@ function seedAug30SelectedCards(blk){
 
   function seedSep01Audacity(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
-    /* v2: presence-based so empty-day strip cannot permanently erase Diana-requested audacity */
-    var MKEY = 'migration-sep01-audacity-v2';
+    /* v3: presence-based — audacity displays as fight back (finger photo). Not the archived legacy fight-back tile. */
+    var MKEY = 'migration-sep01-audacity-v3';
     var host = heroHost(blk);
     if(!host) return false;
-    if(host.querySelector('.vision-tile[data-focus="audacity"]')){
-      try { localStorage.setItem(MKEY, '1'); localStorage.setItem('migration-sep01-audacity-v1', '1'); } catch(e){}
-      return false;
-    }
-    if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, 'audacity', 'audacity')) return false;
-    var exists = [].slice.call(host.querySelectorAll('.vision-tile')).some(function(tile){
+    function isSep01FightBackTile(tile){
       var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-      return tt === 'audacity' || f === 'audacity';
-    });
-    if(exists){
-      try { localStorage.setItem(MKEY, '1'); localStorage.setItem('migration-sep01-audacity-v1', '1'); } catch(e){}
+      return f === 'audacity' || tt === 'fight back';
+    }
+    if([].slice.call(host.querySelectorAll('.vision-tile')).some(isSep01FightBackTile)){
+      try { ensureAudacityZoomHeader(blk); } catch(e){}
+      try { localStorage.setItem(MKEY, '1'); localStorage.setItem('migration-sep01-audacity-v2', '1'); localStorage.setItem('migration-sep01-audacity-v1', '1'); } catch(e){}
       return false;
     }
+    if(typeof isGloballyArchivedSection === 'function' && isGloballyArchivedSection('audacity')) return false;
+    var data = dayData(blk);
+    if(data && Array.isArray(data.removedSections)){
+      var purge = { audacity:1, 'fight back':1 };
+      var next = data.removedSections.filter(function(x){
+        var s = String(x || '').toLowerCase();
+        return !purge[s] && !purge[slug(s)];
+      });
+      if(next.length !== data.removedSections.length) data.removedSections = next;
+    }
+    if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, 'audacity', 'audacity')) return false;
     addTile(blk, 'audacity', true);
-    try { syncHeroLayoutClass(blk); } catch(e){}
-    try { localStorage.setItem(MKEY, '1'); localStorage.setItem('migration-sep01-audacity-v1', '1'); } catch(e){}
+    try { syncHeroLayoutClass(blk); ensureAudacityZoomHeader(blk); } catch(e){}
+    try { localStorage.setItem(MKEY, '1'); localStorage.setItem('migration-sep01-audacity-v2', '1'); localStorage.setItem('migration-sep01-audacity-v1', '1'); } catch(e){}
     return true;
   }
   window.__seedSep01Audacity = seedSep01Audacity;
@@ -48323,6 +48603,7 @@ function seedAug30SelectedCards(blk){
       sorrow: '' /* distinct from soul — no approved photo (was soul-rose duplicate) */,
       darkness: '',
       attention: 'manus-storage/zone-attention.jpg?v=beam1',
+      anticipate: 'manus-storage/zone-anticipating-theater.jpg?v=theater1',
       abundance: 'manus-storage/zone-abundance-tree.jpg?v=tree1',
       finances: 'manus-storage/zone-abundance-tree.jpg?v=tree1',
       intentions: 'manus-storage/zone-intentions.jpg?v=aim1',
@@ -48701,13 +48982,11 @@ function seedAug30SelectedCards(blk){
   (function migrationTuneClaimNophotoV1(){
     var MKEY = 'migration-tune-claim-nophoto-v1';
     var TUNE_RE = /manus-storage\/zone-tune-into\.jpg(?:\?v=[^"'?\s;)]*)?/g;
-    var SELF_RE = /manus-storage\/zone-self-actualize\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     var CLAIM_RE = /manus-storage\/zone-claim\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isClearedSection(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
       return t === 'tune into' || t === 'tune-into' || f === 'tune-into' || f === 'tune into'
-        || t === 'self-actualize' || t === 'self actualize' || f === 'self-actualize' || f === 'self actualize'
         || t === 'claim' || f === 'claim';
     }
     function forceNophoto(tile){
@@ -48725,7 +49004,7 @@ function seedAug30SelectedCards(blk){
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
-        var next = raw.replace(TUNE_RE, '').replace(SELF_RE, '').replace(CLAIM_RE, '');
+        var next = raw.replace(TUNE_RE, '').replace(CLAIM_RE, '');
         if(next !== raw) localStorage.setItem(k, next);
       });
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -48736,8 +49015,63 @@ function seedAug30SelectedCards(blk){
           var t = String(rec.title||'').toLowerCase();
           var f = String(rec.focus||'').toLowerCase();
           if(t === 'tune into' || t === 'tune-into' || f === 'tune-into' || f === 'tune into'
-            || t === 'self-actualize' || t === 'self actualize' || f === 'self-actualize' || f === 'self actualize'
             || t === 'claim' || f === 'claim') rec.photo = '';
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
+  (function rewriteSelfActualizePhoto(){
+    /* NEW approved self-actualize — butterfly eclosion macro. Old AI cairn (zone-self-actualize.jpg) banned. */
+    var MKEY = 'migration-self-actualize-eclose-photo-v1';
+    var WANT = 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1';
+    var re = /manus-storage\/zone-self-actualize(?:-[a-z0-9-]+)?\.jpg(?:\?v=[^"'?\s;)]*)?/g;
+    function isSelfActualizeTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'self-actualize' || t === 'self actualize' || f === 'self-actualize' || f === 'self actualize';
+    }
+    function applySelfActualizePhoto(tile){
+      var keep = [];
+      String(tile.getAttribute('style') || '').split(';').forEach(function(part){
+        var p = part.trim();
+        if(!p) return;
+        if(/^--tile-photo/i.test(p)) return;
+        if(/^grid-area\b/i.test(p)) return;
+        keep.push(p);
+      });
+      tile.setAttribute('style', keep.join('; '));
+      tile.classList.remove('vision-tile-nophoto');
+      tile.style.setProperty('--tile-photo', 'url("' + WANT + '")');
+    }
+    function rewriteSelfActualizeNow(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(!isSelfActualizeTile(tile)) return;
+        applySelfActualizePhoto(tile);
+      });
+      document.querySelectorAll('.day-block').forEach(function(blk){
+        try { if(typeof syncHeroLayoutClass === 'function') syncHeroLayoutClass(blk); } catch(e){}
+      });
+    }
+    rewriteSelfActualizeNow();
+    window.__rewriteSelfActualizePhotosNow = rewriteSelfActualizeNow;
+    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(rewriteSelfActualizeNow, ms); });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw.replace(re, WANT);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var t = String(rec.title||'').toLowerCase();
+          var f = String(rec.focus||'').toLowerCase();
+          if(t === 'self-actualize' || t === 'self actualize' || f === 'self-actualize' || f === 'self actualize') rec.photo = WANT;
         });
       });
       localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
@@ -48976,6 +49310,57 @@ function seedAug30SelectedCards(blk){
           var tt = String(rec.title||'').toLowerCase();
           var f = String(rec.focus||'').toLowerCase();
           if(tt === 'repetitions' || f === 'repetitions') rec.photo = WANT;
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
+  (function rewriteDetachStartOverPhotos(){
+    var MKEY = 'migration-detach-startover-photos-v3';
+    var DETACH = 'manus-storage/zone-detach-rope.jpg?v=rope1';
+    var START = 'manus-storage/zone-start-over-notebook.jpg?v=nb1';
+    var reDetach = /manus-storage\/zone-detach(?:\.jpg|-fall(?:-v\d+)?\.jpg|-leaf(?:-v1)?\.jpg|-rope-v1\.jpg)(?:\?v=[^"'?\s;)]*)?/g;
+    var reStart = /manus-storage\/zone-start-over(?:\.jpg|-notebook\.jpg|-road\.jpg)(?:\?v=[^"'?\s;)]*)?/g;
+    function isDetachTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'detach' || f === 'detach';
+    }
+    function isStartTile(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'start over' || t === 'start-over' || f === 'start over' || f === 'start-over';
+    }
+    function applyTile(tile, want){
+      if(want){ tile.classList.remove('vision-tile-nophoto'); tile.style.setProperty('--tile-photo', 'url("' + want + '")'); }
+      else { tile.classList.add('vision-tile-nophoto'); tile.style.setProperty('--tile-photo', 'none'); }
+    }
+    function apply(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(isDetachTile(tile)) applyTile(tile, DETACH);
+        else if(isStartTile(tile)) applyTile(tile, START);
+      });
+    }
+    apply();
+    window.__rewriteDetachStartOverPhotosNow = apply;
+    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw.replace(reDetach, DETACH).replace(reStart, START);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var tt = String(rec.title||'').toLowerCase();
+          var f = String(rec.focus||'').toLowerCase();
+          if(tt === 'detach' || f === 'detach') rec.photo = DETACH;
+          if(tt === 'start over' || tt === 'start-over' || f === 'start over' || f === 'start-over') rec.photo = START;
         });
       });
       localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
@@ -54258,7 +54643,7 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed 
 </style>
 
 <style id="tasks-horizon-v1">
-/* Tasks depth = horizon: unfinished hang above a faint line; done fall below and go quiet. Not polaroids.
+/* Tasks depth = horizon: done rise above a faint line; unfinished hang below and must cross upward. Not polaroids.
    HARD GATE: center line only when the section has tasks — .vision-check and/or card titles (.horizon-armed).
    Empty collage + zoomed-empty = no line. Polaroids stay hidden; their titles ride the horizon. */
 html body .day-block.depth-four-era.overview-mode-tasks .vision-tile.horizon-armed > .vision-horizon,
@@ -54282,7 +54667,7 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-tile:has(> .visi
   content: "must cross" !important;
   position: absolute !important;
   right: 0 !important;
-  top: -18px !important;
+  top: 6px !important;
   font-family: "DM Mono", monospace !important;
   font-size: 7px !important;
   letter-spacing: 0.18em !important;
@@ -54317,7 +54702,7 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-tile:has(> .visi
   bottom: 16% !important;
   justify-content: flex-start !important;
 }
-html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-above .vision-horizon-task {
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-below .vision-horizon-task {
   padding: 0 !important;
   border-left: 0 !important;
 }
@@ -54363,11 +54748,11 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-task > s
   text-overflow: ellipsis !important;
   max-width: 100% !important;
 }
-html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-below .vision-horizon-task {
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-above .vision-horizon-task {
   border-left-color: rgba(255, 248, 238, 0.18) !important;
   opacity: 0.72 !important;
 }
-html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-below .vision-horizon-task > span {
+html body .day-block.depth-four-era.overview-mode-tasks .vision-horizon-above .vision-horizon-task > span {
   font-size: clamp(13px, 1.35vw, 17px) !important;
   color: rgba(255, 248, 238, 0.3) !important;
   text-shadow: none !important;
@@ -54400,7 +54785,7 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed 
 html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-horizon-task > span {
   font-size: clamp(22px, 2.6vw, 34px) !important;
 }
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-horizon-below .vision-horizon-task > span {
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-horizon-above .vision-horizon-task > span {
   font-size: clamp(16px, 1.8vw, 22px) !important;
 }
 /* Keep section titles small in tasks mode */
@@ -54667,6 +55052,7 @@ html body .day-block.depth-four-era .overview-center-stack {
     audacity: 'manus-storage/zone-audacity.jpg?v=finger1',
     darkness: '',
     attention: 'manus-storage/zone-attention.jpg?v=beam1',
+    anticipate: 'manus-storage/zone-anticipating-theater.jpg?v=theater1',
     abundance: 'manus-storage/zone-abundance-tree.jpg?v=tree1',
     finances: 'manus-storage/zone-abundance-tree.jpg?v=tree1'
   };
@@ -54726,7 +55112,13 @@ html body .day-block.depth-four-era .overview-center-stack {
     darkness: '',
     abundance: 'manus-storage/zone-abundance-tree.jpg?v=tree1',
     finances: 'manus-storage/zone-abundance-tree.jpg?v=tree1',
-    attention: 'manus-storage/zone-attention.jpg?v=beam1'
+    attention: 'manus-storage/zone-attention.jpg?v=beam1',
+    anticipate: 'manus-storage/zone-anticipating-theater.jpg?v=theater1',
+    detach: 'manus-storage/zone-detach-rope.jpg?v=rope1',
+    'start over': 'manus-storage/zone-start-over-notebook.jpg?v=nb1',
+    'start-over': 'manus-storage/zone-start-over-notebook.jpg?v=nb1',
+    'self-actualize': 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1',
+    'self actualize': 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1'
   };
   var REJECTED_SECTION_PHOTOS = [
     'zone-soul-flame', 'zone-soul-heal', 'zone-soul-chair', 'zone-soul-depth',
@@ -54748,7 +55140,11 @@ html body .day-block.depth-four-era .overview-center-stack {
     'zone-abundance.jpg', 'zone-finances-v2', 'plenty2', 'plenty1',
     'abundance-wheat', 'abundance-wheat-sunset', 'wheat-sunset', 'wheat field',
     'zone-abundance-harvest', 'zone-abundance-overflow',
-    'abundance-bg', 'abundance-grapes', 'abundance-poppies', 'abundance-bg-wealth'
+    'abundance-bg', 'abundance-grapes', 'abundance-poppies', 'abundance-bg-wealth',
+    /* detach / start over — old leaf + dawn road forever banned */
+    'zone-detach.jpg', 'zone-detach-leaf', 'zone-detach-fall', 'zone-start-over.jpg', 'zone-start-over-road',
+    /* self-actualize — rejected AI cinematic cairn */
+    'zone-self-actualize.jpg'
   ];
   function isBanned(url){
     var s = String(url || '').toLowerCase();
@@ -54881,7 +55277,11 @@ html body .day-block.depth-four-era .overview-center-stack {
         return;
       }
     } catch(e){}
-    document.querySelectorAll('.vision-polaroid > .vision-card-headline').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('.vision-polaroid').forEach(function(pol){
+      pol.querySelectorAll(':scope > .vision-card-headline').forEach(function(el){ el.remove(); });
+      var sp = pol.querySelector(':scope > span:not(.vision-card-headline)');
+      if(sp && /success begets/i.test(sp.textContent || '')) sp.textContent = '';
+    });
   }
   function boot(){
     strip();

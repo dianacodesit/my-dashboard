@@ -98,8 +98,8 @@ KNOWN_CARD_PHOTOS = {
     "start-over": "manus-storage/zone-start-over.jpg?v=1",
     "tune into": "",
     "tune-into": "",
-    "self-actualize": "",
-    "self actualize": "",
+    "self-actualize": "manus-storage/zone-self-actualize-eclose.jpg?v=eclose1",
+    "self actualize": "manus-storage/zone-self-actualize-eclose.jpg?v=eclose1",
     "claim": "",
     "sabotage": "manus-storage/zone-sabotage.jpg?v=1",
 }
@@ -171,6 +171,8 @@ REJECTED_SECTION_PHOTOS = (
     "abundance-grapes",
     "abundance-poppies",
     "abundance-bg-wealth",
+    # self-actualize — rejected AI cinematic cairn (zone-self-actualize.jpg)
+    "zone-self-actualize.jpg",
 )
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
