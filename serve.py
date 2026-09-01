@@ -79,11 +79,15 @@ KNOWN_CARD_PHOTOS = {
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "darkness": "",
     "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
+    "remember who you are": "manus-storage/zone-audacity.jpg?v=finger1",
     "politics": "manus-storage/zone-politics.jpg?v=chess5",
     "repetitions": "manus-storage/zone-repetitions.jpg?v=cubes1",
+    "wins": "manus-storage/zone-wins.jpg?v=sec1",
+    "win": "manus-storage/zone-wins.jpg?v=sec1",
     # abundance — approved money-tree (wheat/plenty2 forever banned)
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
+    "receive": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "finances": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "become": "manus-storage/zone-envision.jpg?v=swap1",
     "future": "manus-storage/zone-envision.jpg?v=swap1",
@@ -172,6 +176,8 @@ REJECTED_SECTION_PHOTOS = (
     "abundance-grapes",
     "abundance-poppies",
     "abundance-bg-wealth",
+    # legacy fight-back coral tile — audacity uses finger photo only
+    "zone-fight-back",
     # detach / start over — rope + old leaf + dawn road forever banned
     "zone-detach.jpg",
     "zone-detach-leaf",
@@ -330,6 +336,8 @@ def _tile_aliases(key: str) -> set[str]:
         ("train", "body"),
         ("finances", "abundance"),
         ("abundant", "abundance"),
+        ("receive", "abundance"),
+        ("win", "wins"),
         ("become", "future"),
         ("align", "alignment"),
         ("lifestyle", "curated lifestyle"),
@@ -340,7 +348,9 @@ def _tile_aliases(key: str) -> set[str]:
         ("enroll", "pepperdine"),
         ("god conscious", "god-conscious"),
         ("villain", "villains"),
-        ("fight-back", "fight back"),
+        ("fight-back", "audacity"),
+        ("fight back", "audacity"),
+        ("remember who you are", "audacity"),
         ("inner-fire", "inner fire"),
         ("ignite", "inner fire"),
         ("glow-up", "glow up"),
@@ -390,7 +400,7 @@ def unswallow_hero_inner(inner: str) -> str:
 # Titles Diana archived that a restore/merge must never put back on Aug 30.
 AUG30_ARCHIVED_EXTRAS = {
     "pursuits", "power", "purpose", "phd", "ph.d", "ph-d", "focus",
-    "strengths", "plan", "envision", "fight back", "fight-back",
+    "strengths", "plan", "envision", "fight back", "fight-back", "remember who you are",
     "villains", "potential", "ambition",
 }
 
@@ -785,7 +795,7 @@ def _section_photo_rejected(src: str) -> bool:
 
 
 CONCEPTUAL_SECTION_KEYS = frozenset({
-    "soul", "sorrow", "darkness", "abundance", "abundant", "attention", "anticipate", "finances",
+    "soul", "sorrow", "darkness", "abundance", "abundant", "receive", "attention", "anticipate", "finances",
     "tune into", "tune-into", "self-actualize", "self actualize", "claim",
 })
 

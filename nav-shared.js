@@ -20,7 +20,7 @@
     { href: 'lifestyle.html', label: 'lifestyle', group: 'wip' },
     { href: 'planner.html', label: 'timelapses', group: 'main' },
     { href: 'accomplishments.html', label: 'accomplishments', group: 'main' },
-    { href: 'wins.html', label: 'wins', group: 'main' },
+    { href: 'wins.html', label: 'win', group: 'main' },
     { href: 'film-strip.html', label: 'film strip', group: 'main' },
     { href: 'striving.html', label: 'striving', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
