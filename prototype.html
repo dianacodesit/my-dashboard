@@ -10254,7 +10254,7 @@ html body.prototypes-page .proto-page-label {
   else setup();
 })();
 </script>
-<script src="nav-shared.js?v=navwins1"></script>
+<script src="nav-shared.js?v=achieve1"></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -13086,6 +13086,7 @@ window.__j22fnApply=run;
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
+    'fight':'manus-storage/zone-audacity.jpg?v=finger1',
     'remember who you are':'manus-storage/zone-audacity.jpg?v=finger1',
     'envision':'manus-storage/zone-future-self.jpg?v=swap1',
     'future':'manus-storage/zone-envision.jpg?v=swap1',
@@ -13172,7 +13173,7 @@ window.__j22fnApply=run;
     [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1'],
     [/self[- ]?esteem|selfworth|self-worth/, 'manus-storage/zone-self-esteem.jpg?v=se1'],
     [/self[- ]?actualiz|maslow|eclosion|becoming whole/, 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1'],
-    [/\baudacity\b|remember who you are|bold|daring|fearless|unflinching/, 'manus-storage/zone-audacity.jpg?v=finger1'],
+    [/\baudacity\b|\bfight\b|remember who you are|bold|daring|fearless|unflinching/, 'manus-storage/zone-audacity.jpg?v=finger1'],
     [/\bdetach\b|sever|unplug|cast.?off|cut.?tie|frayed.?rope|mooring line|let.?go/, 'manus-storage/zone-detach-fall.jpg?v=fall2'],
     [/\bstart over\b|start-over|begin again|fresh start|blank slate|new chapter|clean slate/, 'manus-storage/zone-start-over-notebook.jpg?v=nb1'],
     [/\banticipat|awaiting|look ahead|what.?s next|countdown|before the show|empty seats/, 'manus-storage/zone-anticipating-theater.jpg?v=theater1']
@@ -13203,6 +13204,7 @@ window.__j22fnApply=run;
     'fear allah ﷻ':'warm',
     'villains':'coral',
     'villain':'coral',
+    'fight':'coral',
     'remember who you are':'coral',
     'envision':'lavender',
     'future':'lavender',
@@ -16735,6 +16737,28 @@ window.__j22fnApply=run;
       localStorage.setItem('btm_receive_to_ask_v1','1');
     }
   }catch(e){}
+  try{
+    if(!localStorage.getItem('btm_remember_to_fight_v1')){
+      function rewriteRememberToFight(raw){
+        if(!raw) return raw;
+        return raw
+          .replace(/>remember who you are</g, '>fight<')
+          .replace(/data-carve="remember who you are"/g, 'data-carve="fight"')
+          .replace(/"title":"remember who you are"/g, '"title":"fight"');
+      }
+      document.querySelectorAll('.vision-tile .vision-tile-title').forEach(function(el){
+        var t=String(el.textContent||'').trim().toLowerCase();
+        if(t==='remember who you are') el.textContent='fight';
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k);
+        if(!raw) return;
+        var next=rewriteRememberToFight(raw);
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_remember_to_fight_v1','1');
+    }
+  }catch(e){}
 
 
   try{
@@ -16898,8 +16922,54 @@ window.__j22fnApply=run;
     }
   }catch(e){}
 
+  try{
+    if(!localStorage.getItem('btm_allah_honorific_restore_v1')){
+      var HON='surrender to Allah \uFDFB';
+      document.querySelectorAll('.pursuit-zone-title, .vision-tile-title').forEach(function(el){
+        var t=String(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase().replace(/\uFDFB/g,'').trim();
+        if(t==='surrender to allah'||t==='fear allah'||t==='itaqallah'||t==='itaq allah') el.textContent=HON;
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/>surrender to Allah</g, '>surrender to Allah \uFDFB<')
+          .replace(/>itaqAllah</g, '>surrender to Allah \uFDFB<')
+          .replace(/>fear Allah \uFDFB</g, '>surrender to Allah \uFDFB<')
+          .replace(/\"title\":\"surrender to Allah\"/g, '\"title\":\"surrender to Allah \uFDFB\"')
+          .replace(/\"title\":\"itaqAllah\"/g, '\"title\":\"surrender to Allah \uFDFB\"')
+          .replace(/\"title\":\"fear Allah \uFDFB\"/g, '\"title\":\"surrender to Allah \uFDFB\"')
+          .replace(/data-carve=\"surrender to Allah\"/g, 'data-carve=\"surrender to Allah \uFDFB\"');
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_allah_honorific_restore_v1','1');
+    }
+  }catch(e){}
 
-
+  try{
+    if(!localStorage.getItem('btm_allah_capitalize_v1')){
+      function capAllahTitle(s){ return String(s||'').replace(/\ballah\b/gi,'Allah'); }
+      document.querySelectorAll('.pursuit-zone-title, .vision-tile-title, .allah-inner').forEach(function(el){
+        var t=String(el.textContent||'');
+        var fixed=capAllahTitle(t);
+        if(fixed!==t) el.textContent=fixed;
+      });
+      document.querySelectorAll('.vision-tile-title[data-carve]').forEach(function(el){
+        var c=el.getAttribute('data-carve')||'';
+        var fixed=capAllahTitle(c);
+        if(fixed!==c) el.setAttribute('data-carve', fixed);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/(<h3 class="vision-tile-title"[^>]*>)([^<]*)(<\/h3>)/g, function(_, a, mid, b){ return a+capAllahTitle(mid)+b; })
+          .replace(/(<[^>]*class="[^"]*pursuit-zone-title[^"]*"[^>]*>)([^<]*)(<)/g, function(_, a, mid, b){ return a+capAllahTitle(mid)+b; })
+          .replace(/data-carve="([^"]*)"/g, function(_, v){ var fixed=capAllahTitle(v); return fixed===v ? 'data-carve="'+v+'"' : 'data-carve="'+fixed+'"'; })
+          .replace(/"title":"([^"]*)"/g, function(_, t){ var fixed=capAllahTitle(t); return fixed===t ? '"title":"'+t+'"' : '"title":"'+fixed+'"'; });
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_allah_capitalize_v1','1');
+    }
+  }catch(e){}
 
   try{
     if(!localStorage.getItem('btm_toned_body_to_athletic_v1')){
@@ -20181,7 +20251,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="gsa" style="--tile-photo: url(&quot;manus-storage/handshake-pepperdine-gsa.jpg&quot;); grid-area: 3 / 1 / 4 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">graduate student association</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="committee" style="--tile-photo: url(&quot;manus-storage/pepperdine-committee-checkin.jpg?v=orig&quot;); grid-area: 3 / 2 / 4 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">committee check-in</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="pursuits" style="--tile-photo: url(&quot;manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3&quot;); grid-area: 3 / 3 / 4 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">pursuits</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 4 / 1 / 5 / 2 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">surrender to Allah</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 4 / 1 / 5 / 2 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">surrender to Allah ﷻ</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="spirit" style="--tile-photo: url(&quot;manus-storage/zone-spirit.jpg?v=sp1&quot;); grid-area: 4 / 2 / 5 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">spirit</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="art-science" style="--tile-photo: url('manus-storage/zone-art-science.jpg?v=as1'); grid-area: 4 / 3 / 5 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">art | science</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="self-esteem" style="--tile-photo: url('manus-storage/zone-self-esteem.jpg?v=se1'); grid-area: 5 / 1 / 6 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">self-esteem</h3><div class="vision-tile-details"></div></article>
@@ -20264,7 +20334,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero vision-hero-duo"><article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11720">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e22579">surrender to Allah</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 8%; --py: 18%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e22579">surrender to Allah ﷻ</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 8%; --py: 18%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
 <article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 <div class="day-block fmt22 vision-collage-day card-style-deboss-chip make-flow-day collapsed past" data-date="2026-08-30">
@@ -20286,7 +20356,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="spirit" style="--tile-photo: url('manus-storage/zone-spirit.jpg?v=sp1'); grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="spirit">spirit</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="art-science" style="--tile-photo: url('manus-storage/zone-art-science.jpg?v=as1'); grid-area: 2 / 2 / 3 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="art | science">art | science</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="self-esteem" style="--tile-photo: url('manus-storage/zone-self-esteem.jpg?v=se1'); grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="self-esteem">self-esteem</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1'); grid-area: 3 / 1 / 4 / 2 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="surrender to Allah">surrender to Allah</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1'); grid-area: 3 / 1 / 4 / 2 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="surrender to Allah ﷻ">surrender to Allah ﷻ</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="curated-lifestyle" style="--tile-photo: url('manus-storage/zone-curated-lifestyle.jpg?v=summer1'); grid-area: 3 / 2 / 4 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="curated lifestyle">curated lifestyle</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="abundant" style="grid-area: 3 / 3 / 4 / 4 !important; --tile-photo: url('manus-storage/zone-abundance-tree.jpg?v=tree1');" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="ask">ask</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-refunds.jpg?v=1" style="--px:1.2%;--py:2%;--pw:166px;width:166px;"><img alt="" src="manus-storage/card-refunds.jpg?v=1"><span>refunds</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-enhancv.jpg?v=1" style="--px:26%;--py:2%;--pw:166px;width:166px;"><img alt="" src="manus-storage/card-enhancv.jpg?v=1"><span>EnhanCV</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-amazon-qr-return-codes.jpg?v=2" style="--px: 75.3%; --py: 2.0%; --pw: 166px; width: 166px;"><img alt="" src="manus-storage/card-amazon-qr-return-codes.jpg?v=2"><span>Amazon QR return codes</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-neighbor-payment.jpg?v=2" style="--px: 1.2%; --py: 50.4%; --pw: 166px; width: 166px;"><img alt="" src="manus-storage/card-neighbor-payment.jpg?v=2"><span>Neighbor payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-re-manus-restoration-issue.jpg?v=2" style="--px: 25.9%; --py: 50.4%; --pw: 166px; width: 166px;"><img alt="" src="manus-storage/card-re-manus-restoration-issue.jpg?v=2"><span>re: Manus restoration issue</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid" data-shot-src="manus-storage/card-capital-blueprint.jpg" style="--px: 10%; --py: 18%;"><img alt="" src="manus-storage/card-capital-blueprint.jpg"><span>capital blueprint</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-certified-letters.jpg?v=2" style="--px: 30.4%; --py: 51.9%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-certified-letters.jpg?v=2"><span>certified letters</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="inner-fire" style="--tile-photo: url('manus-storage/zone-inner-fire.jpg?v=spark1'); grid-area: 4 / 1 / 5 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="ignite">ignite</h3><div class="vision-tile-details"></div></article>
@@ -30061,7 +30131,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='sabotage') src='manus-storage/zone-sabotage.jpg?v=1';
       else if(nl==='say thank you in advance'||nl==='say-thank-you-in-advance') src='manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
-      else if(nl==='fight back'||nl==='remember who you are') src='manus-storage/zone-audacity.jpg?v=finger1';
+      else if(nl==='fight back'||nl==='remember who you are'||nl==='fight') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
     }
     var sec=document.createElement('div');
@@ -30074,7 +30144,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','remember who you are','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -30096,7 +30166,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'resonance':[],
     'itaqAllah':['dhikr','quran recitation','sabr','shukr'],
     'villains':['start now','phone down','act anyway'],
-    'remember who you are':[],
+    'fight':[],
     'envision':[],
     'future':['document translation into Arabic','certified letters','litigation wins'],
     'become':['document translation into Arabic','certified letters','litigation wins'],
@@ -43550,7 +43620,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -43604,7 +43674,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -43619,9 +43689,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       pursuits: [],
       executive: [],
       ambition: [],
-      pepperdine: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
-      'grad school': ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
-      grad: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
+      pepperdine: ['tuition payment', 'fall 2026 enrollment', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
+      'grad school': ['tuition payment', 'fall 2026 enrollment', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
+      grad: ['tuition payment', 'fall 2026 enrollment', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
       receive: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       ask: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       finances: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
@@ -43799,8 +43869,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'wins' || t === 'win' || f === 'wins'){
       add('wins'); add('win');
     }
-    if(t === 'audacity' || t === 'fight back' || t === 'remember who you are' || f === 'audacity' || f === 'fight-back' || f === 'fight back'){
-      add('audacity'); add('fight back'); add('remember who you are');
+    if(t === 'audacity' || t === 'fight back' || t === 'remember who you are' || t === 'fight' || f === 'audacity' || f === 'fight-back' || f === 'fight back'){
+      add('audacity'); add('fight back'); add('remember who you are'); add('fight');
     }
     if(t === 'attention' || t === 'anticipate' || f === 'attention' || f === 'anticipate'){
       add('attention'); add('anticipate');
@@ -43815,6 +43885,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'claim' || f === 'claim'){ add('claim'); }
     if(t === 'sabotage' || f === 'sabotage'){ add('sabotage'); }
     if(t === 'say thank you in advance' || f === 'say-thank-you-in-advance'){ add('say thank you in advance'); add('say-thank-you-in-advance'); }
+    if(t === 'execute' || f === 'execute'){ add('execute'); }
+    if(t === 'curate' || f === 'curate'){ add('curate'); }
     return out;
   }
   function normalizeAddedSection(rec){
@@ -43833,18 +43905,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'art-science' || t === 'art/science' || t === 'art science' || t === 'artscience' || t === 'art | science'){ rec.title = 'art | science'; rec.focus = 'art-science'; }
     else if(t === 'self-esteem' || t === 'self esteem' || t === 'selfesteem'){ rec.title = 'self-esteem'; rec.focus = 'self-esteem'; }
     else if(t === 'wins' || t === 'win'){ rec.title = 'win'; rec.focus = 'wins'; }
-    else if(t === 'audacity' || t === 'fight back'){ rec.title = 'remember who you are'; rec.focus = 'audacity'; }
+    else if(t === 'audacity' || t === 'fight back' || t === 'remember who you are'){ rec.title = 'fight'; rec.focus = 'audacity'; }
     else if(t === 'attention' || t === 'anticipate'){ rec.title = 'anticipate'; rec.focus = 'attention'; }
     else if(t === 'inner fire' || t === 'inner-fire' || t === 'ignite'){ rec.title = 'ignite'; rec.focus = 'inner-fire'; }
     else { rec.title = displaySectionTitle(rec.title); }
     if(!rec.focus) rec.focus = slug(rec.title);
     return rec;
   }
+    function capitalizeAllahInTitle(name){
+    return String(name || '').replace(/\ballah\b/gi, 'Allah');
+  }
     function displaySectionTitle(name){
-    var low = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    var raw = String(name || '').replace(/\s+/g, ' ').trim();
+    var low = raw.replace(/\uFDFB/g,'').replace(/\s+/g,' ').trim().toLowerCase();
     if(low === 'executive') return 'ambition';
     if(low === 'body' || low === 'gym' || low === 'toned body' || low === 'toned-body' || low === 'athletic' || low === 'fitness training' || low === 'fitness-training' || low === 'train') return 'train';
-    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low === 'itaqallah' || low === 'itaq-allah' || low === 'surrender to allah' || low === 'surrender-to-allah' || low.replace(/\uFDFB/g,'').trim() === 'fear allah') return 'surrender to Allah ﷻ';
+    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low === 'itaqallah' || low === 'itaq-allah' || low === 'surrender to allah' || low === 'surrender-to-allah') return 'surrender to Allah ﷻ';
     if(low === 'pepperdine' || low === 'enroll' || low === 'achieve') return 'achieve';
     if(low === 'future' || low === 'future self' || low === 'future-self' || low === 'futureself' || low === 'become') return 'become';
     if(low === 'finances' || low === 'abundance' || low === 'abundant' || low === 'receive') return 'ask';
@@ -43853,10 +43929,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(low === 'art-science' || low === 'art/science' || low === 'art science' || low === 'artscience' || low === 'art | science') return 'art | science';
     if(low === 'self-esteem' || low === 'self esteem' || low === 'selfesteem') return 'self-esteem';
     if(low === 'wins') return 'win';
-    if(low === 'audacity' || low === 'fight back') return 'remember who you are';
+    if(low === 'audacity' || low === 'fight back' || low === 'remember who you are') return 'fight';
     if(low === 'attention' || low === 'anticipate') return 'anticipate';
     if(low === 'inner fire' || low === 'inner-fire' || low === 'ignite') return 'ignite';
-    return low;
+    var honor = (raw.match(/\uFDFB/) || [''])[0];
+    return capitalizeAllahInTitle(raw.toLowerCase()) + (honor && raw.indexOf(honor) >= 0 ? (' ' + honor) : '');
   }
   function purgeConflictingAdds(data){
     if(!data) return;
@@ -44741,13 +44818,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function titleFromCardSrc(src){
     src = String(src || '').toLowerCase();
-    if(/card-tuition/.test(src)) return 'tuition';
+    if(/card-tuition/.test(src)) return 'tuition payment';
+    if(/card-fall-2026-enrollment/.test(src)) return 'fall 2026 enrollment';
     if(/card-application/.test(src)) return 'scholarship re-application';
     return '';
   }
   function cardPhotoForTitle(t){
     t = String(t || '').replace(/\s+/g,' ').trim().toLowerCase();
-    if(t === 'tuition' || t === 'tuition money') return 'manus-storage/card-tuition.jpg?v=v4';
+    if(t === 'tuition' || t === 'tuition payment' || t === 'tuition money') return 'manus-storage/card-tuition.jpg?v=v4';
+    if(t === 'fall 2026 enrollment') return 'manus-storage/card-fall-2026-enrollment.jpg?v=1';
     if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') return 'manus-storage/card-application.jpg?v=v4';
     return '';
   }
@@ -44941,7 +45020,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1, ignite:1,'potential':1,'resonance':1,
     'god-conscious':1,'god conscious':1,'awliya allah':1,'awliya-allah':1,'awliya allah swt':1,'awliya-allah-swt':1,'fear allah':1,'fear-allah':1,'fear Allah ﷻ':1,'itaq-allah':1,'itaqallah':1,'itaqAllah':1,'villains':1,'villain':1,'house':1,
-    'fight back':1,'remember who you are':1,'envision':1,future:1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'soul':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, win:1, receive:1, ask:1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1
+    'fight back':1,'remember who you are':1,'envision':1,future:1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'soul':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, win:1, receive:1, ask:1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
   };
   function loadCardPhotoCache(){
     try { return JSON.parse(localStorage.getItem(CARD_PHOTO_STORE) || '{}') || {}; } catch(e){ return {}; }
@@ -45079,6 +45158,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'claim' || title.toLowerCase() === 'claim') return '';
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
+    if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-checklist.jpg?v=exec1';
+    if(f === 'curate' || title.toLowerCase() === 'curate') return 'manus-storage/zone-curate-gallery.jpg?v=curate1';
     if(!title) return '';
     return (window.__overviewPhotoForName && window.__overviewPhotoForName(blk, title))
       || (window.__secImgFor && window.__secImgFor(title))
@@ -46193,7 +46274,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var aliases = sectionAliasSet(rec.focus, rec.title);
       for(var k in aliases){ if(rem[k]) return; }
       if(typeof isGloballyArchivedSection === 'function' && (isGloballyArchivedSection(rec.focus) || isGloballyArchivedSection(rec.title))) return;
-      if(isFreshDayBlk(blk) && isUninvitedAutoSection(blk, rec.focus, rec.title)) return;
+      if(isFreshDayBlk(blk) && isUninvitedAutoSection(blk, rec.focus, rec.title) && !isUserAddedSection(blk, rec.focus, rec.title)) return;
       var want = hardwiredSectionPhoto(blk, rec.title, rec.focus);
       if(want) rec.photo = want;
       var already = [].slice.call(vb.querySelectorAll('.vision-tile')).some(function(tile){
@@ -46439,7 +46520,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'awliya allah swt' || String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'fear allah' || focus === 'awliya-allah' || focus === 'god-conscious' || focus === 'awliya-allah-swt' || focus === 'fear-allah' || focus === 'itaq-allah' || focus === 'surrender-to-allah' || String(title).toLowerCase() === 'itaqallah' || String(title).toLowerCase() === 'surrender to allah'){ focus = 'itaq-allah'; title = 'surrender to Allah ﷻ'; }
     if(String(title).toLowerCase() === 'self-esteem' || focus === 'selfesteem'){ focus = 'self-esteem'; title = 'self-esteem'; }
     if(String(title).toLowerCase() === 'wins' || String(title).toLowerCase() === 'win'){ focus = 'wins'; title = 'win'; }
-    if(String(title).toLowerCase() === 'audacity' || String(title).toLowerCase() === 'fight back' || focus === 'audacity'){ focus = 'audacity'; title = 'remember who you are'; }
+    if(String(title).toLowerCase() === 'audacity' || String(title).toLowerCase() === 'fight back' || String(title).toLowerCase() === 'remember who you are' || focus === 'audacity'){ focus = 'audacity'; title = 'fight'; }
     if(String(title).toLowerCase() === 'attention' || String(title).toLowerCase() === 'anticipate' || focus === 'attention' || focus === 'anticipate'){ focus = 'attention'; title = 'anticipate'; }
     if(String(title).toLowerCase() === 'inner fire' || String(title).toLowerCase() === 'inner-fire' || String(title).toLowerCase() === 'ignite' || focus === 'inner-fire' || focus === 'ignite'){ focus = 'inner-fire'; title = 'ignite'; }
     if(String(title).toLowerCase() === 'pepperdine' || String(title).toLowerCase() === 'enroll' || String(title).toLowerCase() === 'achieve' || title === 'grad school' || title === 'grad' || title === 'grad-school' || focus === 'pepperdine' || focus === 'enroll' || focus === 'achieve' || focus === 'grad' || focus === 'grad-school'){ focus = 'pepperdine'; title = 'achieve'; }
@@ -47072,6 +47153,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return (window.__cardImgFor && window.__cardImgFor('induction')) || 'manus-storage/card-induction.jpg?v=rl2';
   }
   function sectionWasRemovedOrArchived(blk, focus, title){
+    if(typeof isUserAddedSection === 'function' && isUserAddedSection(blk, focus, title)) return false;
     var f = String(focus || '').toLowerCase();
     var t = String(title || focus || '').replace(/\s+/g, ' ').trim().toLowerCase();
     if(typeof isGloballyArchivedSection === 'function'){
@@ -47328,8 +47410,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         });
       }
       if(purs && shouldSeedCard(blk, 'pursuits', "Dr Betty's EA")){ addCard(purs, "Dr Betty's EA"); changed = true; }
-      if(pep && shouldSeedCard(blk, 'pepperdine', 'scholarship re-application')){ addCard(pep, 'scholarship re-application'); changed = true; }
-      if(pep && shouldSeedCard(blk, 'pepperdine', 'tuition')){ addCard(pep, 'tuition'); changed = true; }
+      if(pep && shouldSeedCard(blk, 'pepperdine', 'tuition payment')){ addCard(pep, 'tuition payment'); changed = true; }
     }
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
     return changed;
@@ -47700,14 +47781,14 @@ function seedAug30SelectedCards(blk){
 
   function seedSep01Audacity(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
-    /* v3: presence-based — audacity displays as remember who you are (finger photo). Not the archived legacy fight-back tile. */
+    /* v3: presence-based — audacity displays as fight (finger photo). Not the archived legacy fight-back tile. */
     var MKEY = 'migration-sep01-audacity-v3';
     var host = heroHost(blk);
     if(!host) return false;
     function isSep01FightBackTile(tile){
       var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-      return f === 'audacity' || tt === 'remember who you are' || tt === 'fight back';
+      return f === 'audacity' || tt === 'fight' || tt === 'remember who you are' || tt === 'fight back';
     }
     if([].slice.call(host.querySelectorAll('.vision-tile')).some(isSep01FightBackTile)){
       try { ensureAudacityZoomHeader(blk); } catch(e){}
@@ -47717,7 +47798,7 @@ function seedAug30SelectedCards(blk){
     if(typeof isGloballyArchivedSection === 'function' && isGloballyArchivedSection('audacity')) return false;
     var data = dayData(blk);
     if(data && Array.isArray(data.removedSections)){
-      var purge = { audacity:1, 'fight back':1, 'remember who you are':1 };
+      var purge = { audacity:1, 'fight back':1, 'remember who you are':1, fight:1 };
       var next = data.removedSections.filter(function(x){
         var s = String(x || '').toLowerCase();
         return !purge[s] && !purge[slug(s)];
@@ -47818,16 +47899,17 @@ function seedAug30SelectedCards(blk){
       });
       if(data.removedCards.length !== before) changed = true;
     }
-    var pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
+    var pep = host.querySelector('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="achieve"], .vision-tile[data-focus="enroll"]');
     if(!pep){
-      addTile(blk, 'enroll', true);
-      pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
+      addTile(blk, 'pepperdine', true);
+      pep = host.querySelector('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="achieve"], .vision-tile[data-focus="enroll"]');
       changed = true;
     }
     if(pep){
+      pep.setAttribute('data-focus', 'pepperdine');
       var titleEl = pep.querySelector('.vision-tile-title');
-      if(titleEl && titleEl.textContent !== 'enroll'){
-        titleEl.textContent = 'enroll';
+      if(titleEl && titleEl.textContent !== 'achieve'){
+        titleEl.textContent = 'achieve';
         if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'enroll');
         changed = true;
       }
@@ -47943,6 +48025,33 @@ function seedAug30SelectedCards(blk){
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
   }
   try { migrateEnrollTuitionSep01ToSep02Stores(); } catch(e){}
+
+  function migrateRestoreSep02UserSections(){
+    /* stripFreshDayAutoSections + stale removedSections blocked Diana's Sep2 additions. */
+    var MKEY = 'migration-restore-sep02-user-sections-v1';
+    try { if(localStorage.getItem(MKEY)) return; } catch(e){}
+    try {
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      var sep2 = edits['2026-09-02'];
+      if(!sep2){ localStorage.setItem(MKEY, '1'); return; }
+      var unblock = {
+        'win':1,'wins':1,'repetitions':1,'intentions':1,'attention':1,'darkness':1,'soul':1,'audacity':1,
+        'say thank you in advance':1,'say-thank-you-in-advance':1,
+        'detach':1,'start over':1,'start-over':1,'tune into':1,'tune-into':1,
+        'self-actualize':1,'self actualize':1,'claim':1,'sabotage':1,
+        'become':1,'glow up':1,'glow-up':1,'train':1,'body':1,'workflow':1,
+        'surrender to allah':1,'surrender-to-allah':1,'itaq-allah':1,'itaq allah':1,
+        'abundant':1,'receive':1,'ask':1
+      };
+      sep2.removedSections = (sep2.removedSections || []).filter(function(x){
+        return !unblock[String(x || '').toLowerCase()];
+      });
+      edits['2026-09-02'] = sep2;
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  }
+  try { migrateRestoreSep02UserSections(); } catch(e){}
 
   /* Prototypes page: copy LIVE Sept 1 sections onto Aug 30 — never archived leftovers. */
   function seedProtoAug30Sep01Sections(blk){
@@ -48417,9 +48526,10 @@ function seedAug30SelectedCards(blk){
       'god-conscious': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'surrender to allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'surrender-to-allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
-      audacity: { title: 'remember who you are', focus: 'audacity' },
-      'fight back': { title: 'remember who you are', focus: 'audacity' },
-      'remember who you are': { title: 'remember who you are', focus: 'audacity' },
+      audacity: { title: 'fight', focus: 'audacity' },
+      'fight back': { title: 'fight', focus: 'audacity' },
+      'remember who you are': { title: 'fight', focus: 'audacity' },
+      fight: { title: 'fight', focus: 'audacity' },
       attention: { title: 'anticipate', focus: 'attention' },
       anticipate: { title: 'anticipate', focus: 'attention' },
       'inner fire': { title: 'ignite', focus: 'inner-fire' },
@@ -48488,7 +48598,7 @@ function seedAug30SelectedCards(blk){
       var slugged = [].slice.call(host.querySelectorAll('.vision-tile')).filter(function(tile){
         var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
         var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-        return t === 'remember who you are' || t === 'fight back' || f === 'fight-back' || f === 'fight back' || f === 'audacity';
+        return t === 'fight' || t === 'remember who you are' || t === 'fight back' || f === 'fight-back' || f === 'fight back' || f === 'audacity';
       });
       if(slugged.length === 1) tiles = slugged;
     }
@@ -48499,12 +48609,12 @@ function seedAug30SelectedCards(blk){
       }
       var titleEl = tile.querySelector('.vision-tile-title');
       var title = ((titleEl && titleEl.textContent) || '').replace(/\s+/g,' ').trim();
-      if(titleEl && title.toLowerCase() !== 'remember who you are'){
-        titleEl.textContent = 'remember who you are';
-        if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'remember who you are');
+      if(titleEl && title.toLowerCase() !== 'fight'){
+        titleEl.textContent = 'fight';
+        if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'fight');
         changed = true;
-      } else if(titleEl && titleEl.hasAttribute('data-carve') && titleEl.getAttribute('data-carve') !== 'remember who you are'){
-        titleEl.setAttribute('data-carve', 'remember who you are');
+      } else if(titleEl && titleEl.hasAttribute('data-carve') && titleEl.getAttribute('data-carve') !== 'fight'){
+        titleEl.setAttribute('data-carve', 'fight');
         changed = true;
       }
       var cur = (tile.style.getPropertyValue('--tile-photo') || tile.getAttribute('style') || '');
@@ -48527,7 +48637,7 @@ function seedAug30SelectedCards(blk){
     var host = heroHost(blk);
     if(!host) return false;
     var changed = false;
-    ['detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'].forEach(function(title){
+    ['detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate'].forEach(function(title){
       var focus = slug(title);
       if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, focus, title)) return;
       var aliases = {};

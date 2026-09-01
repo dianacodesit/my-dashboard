@@ -82,6 +82,7 @@ KNOWN_CARD_PHOTOS = {
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "darkness": "",
     "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
+    "fight": "manus-storage/zone-audacity.jpg?v=finger1",
     "remember who you are": "manus-storage/zone-audacity.jpg?v=finger1",
     "politics": "manus-storage/zone-politics.jpg?v=chess5",
     "repetitions": "manus-storage/zone-repetitions.jpg?v=cubes1",
@@ -101,6 +102,7 @@ KNOWN_CARD_PHOTOS = {
     "fitness training": "manus-storage/zone-athletic.jpg?v=color2",
     "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender-to-allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender to allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "itaqallah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "detach": "manus-storage/zone-detach-fall.jpg?v=fall2",
     "start over": "manus-storage/zone-start-over-notebook.jpg?v=nb1",
@@ -361,6 +363,7 @@ def _tile_aliases(key: str) -> set[str]:
         ("fight-back", "audacity"),
         ("fight back", "audacity"),
         ("remember who you are", "audacity"),
+        ("fight", "audacity"),
         ("inner-fire", "inner fire"),
         ("ignite", "inner fire"),
         ("glow-up", "glow up"),
@@ -410,7 +413,7 @@ def unswallow_hero_inner(inner: str) -> str:
 # Titles Diana archived that a restore/merge must never put back on Aug 30.
 AUG30_ARCHIVED_EXTRAS = {
     "pursuits", "power", "purpose", "phd", "ph.d", "ph-d", "focus",
-    "strengths", "plan", "envision", "fight back", "fight-back", "remember who you are",
+    "strengths", "plan", "envision", "fight back", "fight-back", "remember who you are", "fight",
     "villains", "potential", "ambition",
 }
 
