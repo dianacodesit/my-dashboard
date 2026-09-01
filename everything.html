@@ -47692,6 +47692,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         var s1 = scrubStoreHtml(shells['2026-09-01']);
         if(s1 !== shells['2026-09-01']){ shells['2026-09-01'] = s1; localStorage.setItem('btm_day_shells_v1', JSON.stringify(shells)); }
       }
+      if(shells['2026-09-02']){
+        var s2 = scrubStoreHtml(shells['2026-09-02']);
+        if(s2 !== shells['2026-09-02']){ shells['2026-09-02'] = s2; localStorage.setItem('btm_day_shells_v1', JSON.stringify(shells)); }
+      }
     } catch(e){}
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -47700,7 +47704,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       sep1.addedCards = (sep1.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
         if(!sep1.removedCards.some(function(r){
-          return r && String(r.title || '').toLowerCase() === name && String(r.sectionFocus || '').toLowerCase() === 'pepperdine';
+          return r && isEnrollMoveCardName(r.title) === name && String(r.sectionFocus || '').toLowerCase() === 'pepperdine';
         })){
           sep1.removedCards.push({ title: name, sectionFocus: 'pepperdine' });
         }
@@ -48221,8 +48225,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'itaq-allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       itaqAllah: { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'god-conscious': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'god conscious': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'awliya allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'awliya-allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'awliya allah swt': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'awliya-allah-swt': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'awliyah allah swt': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'fear allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'fear-allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'fear Allah ﷻ': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'surrender to allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'surrender-to-allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
+      'surrender to Allah ﷻ': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       audacity: { title: 'fight', focus: 'audacity' },
       'fight back': { title: 'fight', focus: 'audacity' },
       'remember who you are': { title: 'fight', focus: 'audacity' },
