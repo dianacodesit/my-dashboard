@@ -40,6 +40,8 @@ KNOWN_CARD_PHOTOS = {
     "scholarship re-application": "manus-storage/card-application.jpg",
     "scholarship reapplication": "manus-storage/card-application.jpg",
     "tuition": "manus-storage/card-tuition.jpg",
+    "tuition payment": "manus-storage/card-tuition.jpg",
+    "fall 2026 enrollment": "manus-storage/card-application.jpg",
     "tuition money": "manus-storage/card-tuition.jpg",
     "committee check-in": "manus-storage/pepperdine-committee-checkin.jpg",
     "gsa": "manus-storage/handshake-pepperdine-gsa.jpg",
@@ -111,6 +113,8 @@ KNOWN_CARD_PHOTOS = {
     "sabotage": "manus-storage/zone-sabotage.jpg?v=1",
     "say thank you in advance": "manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1",
     "say-thank-you-in-advance": "manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1",
+    "execute": "manus-storage/zone-execute-checklist.jpg?v=exec1",
+    "curate": "manus-storage/zone-curate-gallery.jpg?v=curate1",
 }
 # Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
 # Never return these from /photo-for for soul, sorrow, darkness, abundance, attention.

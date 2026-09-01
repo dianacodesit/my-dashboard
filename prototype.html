@@ -13146,7 +13146,9 @@ window.__j22fnApply=run;
     [/return|refund|exchange/, 'manus-storage/pursuit-returns-v2.jpg'],
     [/pickup|pickups|curbside|bopis/, 'manus-storage/pursuit-pickups.jpg'],
     [/shop|lifestyle|order|buy/, 'manus-storage/pursuit-lifestyle_577937e8.jpg'],
-    [/curat/, 'manus-storage/zone-curated-lifestyle.jpg?v=summer1'],
+    [/\bexecute\b|checklist|action plan|get it done|hammer.*nail|starting pistol/, 'manus-storage/zone-execute-checklist.jpg?v=exec1'],
+    [/\bcurate\b|gallery wall|curated shelf|museum label|organized collection/, 'manus-storage/zone-curate-gallery.jpg?v=curate1'],
+    [/curated\b|curated lifestyle|curated-lifestyle/, 'manus-storage/zone-curated-lifestyle.jpg?v=summer1'],
     [/pepperdine|\benroll\b|\bachieve\b|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/zone-pepperdine-malibu.jpg?v=campus2'],
     [/\bpursuits?\b/, 'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3'],
     [/inner\s*fire|\bignite\b|\bember\b|\bforge\b|molten core/, 'manus-storage/zone-inner-fire.jpg?v=spark1'],
@@ -13224,7 +13226,9 @@ window.__j22fnApply=run;
     'claim':'amber',
     'sabotage':'coral',
     'say thank you in advance':'warm',
-    'say-thank-you-in-advance':'warm'
+    'say-thank-you-in-advance':'warm',
+    'execute':'sage',
+    'curate':'warm'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -13253,8 +13257,10 @@ window.__j22fnApply=run;
     'scholarship application':'manus-storage/card-application.jpg?v=v3',
     'scholarship re-application':'manus-storage/card-application.jpg?v=v3',
     'scholarship reapplication':'manus-storage/card-application.jpg?v=v3',
-    'tuition':'manus-storage/card-tuition.jpg?v=v3',
-    'tuition money':'manus-storage/card-tuition.jpg?v=v3',
+    'tuition payment':'manus-storage/card-tuition.jpg?v=v4',
+    'fall 2026 enrollment':'manus-storage/card-fall-2026-enrollment.jpg?v=1',
+    'tuition':'manus-storage/card-tuition.jpg?v=v4',
+    'tuition money':'manus-storage/card-tuition.jpg?v=v4',
     'committee check-in':'manus-storage/pepperdine-committee-checkin.jpg',
     'committee checkin':'manus-storage/pepperdine-committee-checkin.jpg',
     'gsa':'manus-storage/handshake-pepperdine-gsa.jpg',
@@ -30104,9 +30110,9 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'plan':[],
     'self-esteem':[],
     'audacity':[],
-    'pepperdine':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal'],
-    'achieve':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal'],
-    'enroll':['scholarship re-application','tuition','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal']
+    'pepperdine':['tuition payment','fall 2026 enrollment','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal'],
+    'achieve':['tuition payment','fall 2026 enrollment','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal'],
+    'enroll':['tuition payment','fall 2026 enrollment','committee check-in','Graduate Student Association · Top Applicant','AERA','Anthropic','Elevate',"Dr Betty's EA",'Handshake','Psi Chi','research proposal']
   };
   var CARD_SECTION={};
   CANONICAL_SECTIONS.forEach(function(s){
@@ -47804,6 +47810,14 @@ function seedAug30SelectedCards(blk){
     var host = heroHost(blk);
     if(!host) return false;
     var changed = false;
+    var data = dayData(blk);
+    if(data){
+      var before = (data.removedCards || []).length;
+      data.removedCards = (data.removedCards || []).filter(function(r){
+        return !isEnrollMoveCardName(r && r.title);
+      });
+      if(data.removedCards.length !== before) changed = true;
+    }
     var pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
     if(!pep){
       addTile(blk, 'enroll', true);
@@ -47814,11 +47828,29 @@ function seedAug30SelectedCards(blk){
       var titleEl = pep.querySelector('.vision-tile-title');
       if(titleEl && titleEl.textContent !== 'enroll'){
         titleEl.textContent = 'enroll';
+        if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'enroll');
         changed = true;
       }
+      if(data && Array.isArray(data.addedSections)){
+        data.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var f = String(rec.focus || '').toLowerCase();
+          if(f === 'pepperdine' || f === 'grad' || f === 'grad-school'){
+            if(rec.title !== 'enroll'){ rec.title = 'enroll'; changed = true; }
+            rec.focus = 'pepperdine';
+          }
+        });
+      }
       pep.style.setProperty('--tile-photo', "url('"+PEPPER_IMG+"')");
+      function hasEnrollMoveCardDom(tile, title){
+        if(!tile) return true;
+        var want = String(title || '').toLowerCase();
+        return [].slice.call(tile.querySelectorAll('.vision-polaroid')).some(function(p){
+          return cardTitle(p).toLowerCase() === want;
+        });
+      }
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
-        if(shouldSeedCard(blk, 'pepperdine', name)){
+        if(!hasEnrollMoveCardDom(pep, name)){
           addCard(pep, name, true);
           changed = true;
         }
