@@ -16542,6 +16542,29 @@ window.__j22fnApply=run;
     }
   }catch(e){}
 
+  try{
+    if(!localStorage.getItem('btm_fear_allah_to_itaqallah_v1')){
+      document.querySelectorAll('.pursuit-zone-title, .vision-tile-title').forEach(function(el){
+        var t=String(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase().replace(/\uFDFB/g,'').trim();
+        if(t==='fear allah') el.textContent='itaqAllah';
+      });
+      document.querySelectorAll('.vision-tile[data-focus="fear-allah"]').forEach(function(el){ el.setAttribute('data-focus','itaq-allah'); });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/>fear Allah ﷻ</g, '>itaqAllah<')
+          .replace(/>fear allah</g, '>itaqAllah<')
+          .replace(/data-focus=\"fear-allah\"/g, 'data-focus=\"itaq-allah\"')
+          .replace(/\"title\":\"fear Allah ﷻ\"/g, '\"title\":\"itaqAllah\"')
+          .replace(/\"title\":\"fear allah\"/g, '\"title\":\"itaqAllah\"')
+          .replace(/\"focus\":\"fear-allah\"/g, '\"focus\":\"itaq-allah\"')
+          .replace(/\"sectionFocus\":\"fear-allah\"/g, '\"sectionFocus\":\"itaq-allah\"');
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_fear_allah_to_itaqallah_v1','1');
+    }
+  }catch(e){}
+
 
   try{
     if(!localStorage.getItem('btm_toned_body_to_athletic_v1')){
@@ -42034,6 +42057,24 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(n >= 2) return 2;
     return 1;
   }
+  function tileTitleLow(tile){
+    return ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+  }
+  function isBodyFitnessTile(tile){
+    if(!tile) return false;
+    if(tile.classList.contains('vision-tile-tall') || tile.classList.contains('vision-tile-body')) return true;
+    var f = (tile.getAttribute('data-focus') || '').toLowerCase();
+    if(f === 'body' || f === 'gym') return true;
+    var t = tileTitleLow(tile);
+    return t === 'body' || t === 'gym' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training';
+  }
+  function ensureBodyFitnessClasses(tile){
+    if(!tile || !isBodyFitnessTile(tile)) return;
+    tile.classList.add('vision-tile-body', 'vision-tile-tall');
+  }
+  function findBodyFitnessTile(tiles){
+    return tiles.find(isBodyFitnessTile) || null;
+  }
   function packVisionCollage(host){
     if(!host) return;
     var tiles = [].slice.call(host.querySelectorAll(':scope > .vision-tile'));
@@ -45585,7 +45626,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(done[d]) return false;
     var host = heroHost(blk);
     if(!host) return false;
-    var tile = host.querySelector('.vision-tile[data-focus="itaq-allah"]') || host.querySelector('.vision-tile[data-focus="itaq-allah"]') || host.querySelector('.vision-tile[data-focus="god-conscious"]');
+    var tile = host.querySelector('.vision-tile[data-focus="itaq-allah"]') || host.querySelector('.vision-tile[data-focus="fear-allah"]') || host.querySelector('.vision-tile[data-focus="god-conscious"]');
     if(!tile){
       tile = [].slice.call(host.querySelectorAll('.vision-tile')).find(function(t){
         var title = ((t.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -46337,12 +46378,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
 
   (function rewritePoliticsPodiumPhoto(){
-    var MKEY = 'migration-politics-podium-photo-v1';
+    var MKEY = 'migration-politics-podium-photo-v2';
     if(localStorage.getItem(MKEY)) return;
     var WANT = 'manus-storage/zone-politics.jpg?v=podium1';
     var re = /manus-storage\/zone-politics\.jpg(?:\?[^"'\s)]*)?/g;
-    document.querySelectorAll('.vision-tile[data-focus="politics"]').forEach(function(tile){
-      tile.style.setProperty('--tile-photo', 'url("'+WANT+'")');
+    document.querySelectorAll('.vision-tile').forEach(function(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      if(t !== 'politics' && f !== 'politics') return;
+      tile.style.setProperty('--tile-photo', 'url("' + WANT + '")');
     });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1'].forEach(function(k){
@@ -50463,21 +50507,9 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     var goBtn = ov.querySelector('.cr-go');
     var selected = {};
     items.forEach(function(it, i){ selected[i] = true; });
-    var dests = futureDestinations(fromDate);
-    var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
-
-    dests.forEach(function(d, i){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'cr-day' + (i === 0 ? ' is-on' : '');
-      b.textContent = d.isTomorrow ? ('tomorrow · ' + d.display) : d.display;
-      b.addEventListener('click', function(){
-        destDate = d.date;
-        destWrap.querySelectorAll('.cr-day').forEach(function(x){ x.classList.remove('is-on'); });
-        b.classList.add('is-on');
-      });
-      destWrap.appendChild(b);
-    });
+    var destChoices = futureDestinations(fromDate);
+    var destDate = destChoices[0] ? destChoices[0].date : nextIso(fromDate);
+    buildDestPicker(destWrap, fromDate, function(iso){ destDate = iso; });
 
     var pts = starLayout(items.length);
     var stars = [];
