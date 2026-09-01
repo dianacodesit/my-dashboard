@@ -13127,6 +13127,7 @@ window.__j22fnApply=run;
     'villain':'coral',
     'fight back':'coral',
     'envision':'lavender',
+    'soul':'lavender',
     'self-esteem':'champagne',
     'self esteem':'champagne',
     'audacity':'coral',
@@ -24319,6 +24320,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       }
       if (iso === '2026-09-01' && window.__seedSep01NewSections) {
         try { window.__seedSep01NewSections(clone); } catch (e) {}
+      }
+      if (iso === '2026-09-01' && window.__seedSep01Soul) {
+        try { window.__seedSep01Soul(clone); } catch (e) {}
       }
 
       // Late-created days miss the DOMContentLoaded collapse wiring — attach now.
@@ -46247,6 +46251,7 @@ function seedAug30SelectedCards(blk){
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
     return true;
   }
+  window.__seedSep01Soul = seedSep01Soul;
 
   function seedSep01Audacity(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
