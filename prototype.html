@@ -51566,6 +51566,74 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-ta
 }
 </style>
 
+<style id="vision-tile-title-emboss-v1">
+/* Section titles: carved/embossed INTO the photo — not white stickers with drop shadow.
+   Sizes locked: collage clamp(22px, 2.6vw, 34px); zoomed 36px. */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 48px) !important;
+  margin: 0 !important;
+  text-align: center !important;
+  z-index: 16 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.12 !important;
+  pointer-events: none !important;
+  /* Deboss fill: translucent so photo texture shows through */
+  color: rgba(28, 20, 12, 0.42) !important;
+  -webkit-text-stroke: 0.55px rgba(255, 248, 238, 0.28) !important;
+  /* Classic emboss: light from top-left, shade bottom-right — no floating drop shadow blob */
+  text-shadow:
+    -1px -1px 0 rgba(255, 248, 238, 0.55),
+    -0.5px -0.5px 0 rgba(255, 255, 255, 0.35),
+    1px 1px 0 rgba(12, 8, 4, 0.55),
+    1.5px 1.5px 0 rgba(12, 8, 4, 0.28) !important;
+  mix-blend-mode: soft-light !important;
+  filter: contrast(1.08) !important;
+}
+/* Soft-light alone washes out on very light tiles — layered readable emboss via ::after twin */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::after {
+  content: none !important;
+}
+/* Stronger carved look without sticker white: override earlier cream fills */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 36px !important;
+  color: rgba(28, 20, 12, 0.45) !important;
+  -webkit-text-stroke: 0.6px rgba(255, 248, 238, 0.32) !important;
+  text-shadow:
+    -1.2px -1.2px 0 rgba(255, 248, 238, 0.58),
+    -0.5px -0.5px 0 rgba(255, 255, 255, 0.4),
+    1.2px 1.2px 0 rgba(12, 8, 4, 0.58),
+    2px 2px 0 rgba(12, 8, 4, 0.3) !important;
+  mix-blend-mode: soft-light !important;
+}
+/* Dual-stack for legibility on light AND dark photos: a multiply twin under soft-light */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
+  /* Prefer overlay for midtones; soft-light for texture */
+  mix-blend-mode: overlay !important;
+  color: rgba(255, 244, 228, 0.55) !important;
+  -webkit-text-stroke: 0.4px rgba(20, 14, 10, 0.35) !important;
+  text-shadow:
+    -1px -1px 0.5px rgba(255, 255, 255, 0.45),
+    1px 1px 0.5px rgba(0, 0, 0, 0.55),
+    0 0 1px rgba(20, 14, 10, 0.25) !important;
+  filter: none !important;
+}
+</style>
+
 </html>
 .overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile-body.is-zoomed .vision-tile-photo,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile[data-focus="body"].is-zoomed .vision-tile-photo,
