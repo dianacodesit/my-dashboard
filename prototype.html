@@ -46942,7 +46942,6 @@ function seedAug30SelectedCards(blk){
     }
     rewritePoliticsPhotosNow();
     window.__rewritePoliticsPhotosNow = rewritePoliticsPhotosNow;
-    if(localStorage.getItem(MKEY)) return;
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -52390,12 +52389,23 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
 }
 </style>
 
+<style id="jul-rail-hover-only-v2">
+/* Date reel: hidden at rest; linger-hover on left edge opens it. */
+html body .jul-rail-fixed:not(.rail-open) {
+  left: -80px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+html body #julRail.rail-open {
+  left: 10px !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+</style>
+
 <style id="vision-tile-title-emboss-legible">
-/* USER FIX: embossed titles must be glance-readable.
-   Keep carved feel via highlight+shade lips; NEVER mix-blend (samples photo → illegible).
-   Fixed cream fill + dark stroke/outline ring + soft vignette plate.
-   Sizes locked: collage clamp(22px, 2.6vw, 34px); zoomed 36px. */
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
+/* USER FIX: embossed titles glance-readable. No mix-blend. Sizes stay small. */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile > .vision-tile-title {
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
@@ -52437,7 +52447,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026
     0 0 26px rgba(6, 4, 2, 0.48),
     0 2px 4px rgba(6, 4, 2, 0.78) !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::before {
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile > .vision-tile-title::before {
   content: "" !important;
   position: absolute !important;
   left: 50% !important;
@@ -52446,23 +52456,18 @@ html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026
   width: min(125%, 17em) !important;
   height: 3.35em !important;
   border-radius: 50% !important;
-  background: radial-gradient(
-    ellipse closest-side,
-    rgba(6, 4, 2, 0.62) 0%,
-    rgba(6, 4, 2, 0.34) 46%,
-    transparent 76%
-  ) !important;
+  background: radial-gradient(ellipse closest-side, rgba(6, 4, 2, 0.62) 0%, rgba(6, 4, 2, 0.34) 46%, transparent 76%) !important;
   z-index: -1 !important;
   pointer-events: none !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::after {
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile > .vision-tile-title::after {
   content: none !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile:has(> .vision-tile-quote) .vision-tile-title {
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile:has(> .vision-tile-quote) > .vision-tile-title {
   top: 42% !important;
   transform: translate(-50%, -50%) !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title {
   top: 50% !important;
   left: 50% !important;
   bottom: auto !important;
@@ -52492,22 +52497,29 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
     0 0 28px rgba(6, 4, 2, 0.48),
     0 2px 4px rgba(6, 4, 2, 0.8) !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) > .vision-tile-title {
   top: 42% !important;
 }
 </style>
 
-<style id="jul-rail-hover-only-v2">
-/* Date reel: hidden at rest; linger-hover on left edge opens it. */
-html body .jul-rail-fixed:not(.rail-open) {
-  left: -80px !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-html body #julRail.rail-open {
-  left: 10px !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-</style>
+
+<script id="vision-tile-title-emboss-legible-js">
+(function(){
+  var ID = "vision-tile-title-emboss-legible";
+  var CSS = 'html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile > .vision-tile-title {\n  position: absolute !important;\n  top: 50% !important;\n  left: 50% !important;\n  right: auto !important;\n  bottom: auto !important;\n  transform: translate(-50%, -50%) !important;\n  width: calc(100% - 48px) !important;\n  margin: 0 !important;\n  text-align: center !important;\n  z-index: 16 !important;\n  font-family: "Newsreader", Georgia, serif !important;\n  font-size: clamp(22px, 2.6vw, 34px) !important;\n  font-weight: 600 !important;\n  font-style: italic !important;\n  letter-spacing: 0.02em !important;\n  line-height: 1.12 !important;\n  pointer-events: none !important;\n  isolation: isolate !important;\n  mix-blend-mode: normal !important;\n  filter: none !important;\n  paint-order: stroke fill !important;\n  color: rgba(255, 246, 230, 0.97) !important;\n  -webkit-text-fill-color: rgba(255, 246, 230, 0.97) !important;\n  -webkit-text-stroke: 1.25px rgba(8, 5, 3, 0.86) !important;\n  text-shadow:\n    -1.5px -1.5px 0 rgba(6, 4, 2, 0.92),\n     1.5px -1.5px 0 rgba(6, 4, 2, 0.92),\n    -1.5px  1.5px 0 rgba(6, 4, 2, 0.92),\n     1.5px  1.5px 0 rgba(6, 4, 2, 0.92),\n     0    -1.5px 0 rgba(6, 4, 2, 0.88),\n     0     1.5px 0 rgba(6, 4, 2, 0.88),\n    -1.5px  0    0 rgba(6, 4, 2, 0.88),\n     1.5px  0    0 rgba(6, 4, 2, 0.88),\n    -2px -2px 0 rgba(255, 252, 245, 0.88),\n    -1px -1px 0 rgba(255, 255, 255, 0.5),\n     2px 2px 0 rgba(6, 4, 2, 0.72),\n     3px 3.5px 2px rgba(6, 4, 2, 0.42),\n    0 0 12px rgba(6, 4, 2, 0.7),\n    0 0 26px rgba(6, 4, 2, 0.48),\n    0 2px 4px rgba(6, 4, 2, 0.78) !important;\n}\nhtml body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile > .vision-tile-title::before {\n  content: "" !important;\n  position: absolute !important;\n  left: 50% !important;\n  top: 50% !important;\n  transform: translate(-50%, -50%) !important;\n  width: min(125%, 17em) !important;\n  height: 3.35em !important;\n  border-radius: 50% !important;\n  background: radial-gradient(ellipse closest-side, rgba(6, 4, 2, 0.62) 0%, rgba(6, 4, 2, 0.34) 46%, transparent 76%) !important;\n  z-index: -1 !important;\n  pointer-events: none !important;\n}\nhtml body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile > .vision-tile-title::after {\n  content: none !important;\n}\nhtml body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile:has(> .vision-tile-quote) > .vision-tile-title {\n  top: 42% !important;\n  transform: translate(-50%, -50%) !important;\n}\nhtml body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title {\n  top: 50% !important;\n  left: 50% !important;\n  bottom: auto !important;\n  right: auto !important;\n  transform: translate(-50%, -50%) !important;\n  font-size: 36px !important;\n  paint-order: stroke fill !important;\n  color: rgba(255, 246, 230, 0.98) !important;\n  -webkit-text-fill-color: rgba(255, 246, 230, 0.98) !important;\n  -webkit-text-stroke: 1.35px rgba(8, 5, 3, 0.88) !important;\n  mix-blend-mode: normal !important;\n  filter: none !important;\n  text-shadow:\n    -1.6px -1.6px 0 rgba(6, 4, 2, 0.94),\n     1.6px -1.6px 0 rgba(6, 4, 2, 0.94),\n    -1.6px  1.6px 0 rgba(6, 4, 2, 0.94),\n     1.6px  1.6px 0 rgba(6, 4, 2, 0.94),\n     0    -1.6px 0 rgba(6, 4, 2, 0.9),\n     0     1.6px 0 rgba(6, 4, 2, 0.9),\n    -1.6px  0    0 rgba(6, 4, 2, 0.9),\n     1.6px  0    0 rgba(6, 4, 2, 0.9),\n    -2.2px -2.2px 0 rgba(255, 252, 245, 0.9),\n    -1px -1px 0 rgba(255, 255, 255, 0.55),\n     2.2px 2.2px 0 rgba(6, 4, 2, 0.75),\n     3.5px 4px 2px rgba(6, 4, 2, 0.45),\n    0 0 14px rgba(6, 4, 2, 0.7),\n    0 0 28px rgba(6, 4, 2, 0.48),\n    0 2px 4px rgba(6, 4, 2, 0.8) !important;\n}\nhtml body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) > .vision-tile-title {\n  top: 42% !important;\n}';
+  function apply(){
+    var s = document.getElementById(ID);
+    if(!s){ s = document.createElement("style"); s.id = ID; document.documentElement.appendChild(s); }
+    else if(s.parentNode !== document.documentElement){ document.documentElement.appendChild(s); }
+    if(s.textContent !== CSS) s.textContent = CSS;
+  }
+  apply();
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  setTimeout(apply, 0);
+  setTimeout(apply, 250);
+  setTimeout(apply, 1000);
+})();
+</script>
+
+
 </html>
