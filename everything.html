@@ -17474,7 +17474,7 @@ window.__j22fnApply=run;
     if(!blk || !isOverviewEra(blk)) return;
     blk.classList.add('overview-era-day');
     var iso=blk.getAttribute('data-date')||'';
-    if(iso >= '2026-09-01'){ blk.classList.add('collage-flush'); blk.classList.add('card-headline-era'); }
+    if(iso >= '2026-09-01'){ blk.classList.add('collage-flush'); }
     if(iso >= '2026-08-26' || blk.classList.contains('vision-collage-day') || blk.classList.contains('overview-era-day')){ blk.classList.add('depth-four-era'); blk.classList.add('card-style-deboss-chip'); } else { blk.classList.remove('depth-four-era'); blk.classList.remove('card-style-deboss-chip'); }
     var pill=blk.querySelector('.tv-pill[data-view="pursuits"]');
     if(pill) pill.textContent='overview';
@@ -42109,7 +42109,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(!blk || !isOverviewEra(blk)) return;
     blk.classList.add('overview-era-day');
     var iso=blk.getAttribute('data-date')||'';
-    if(iso >= '2026-09-01'){ blk.classList.add('collage-flush'); blk.classList.add('card-headline-era'); }
+    if(iso >= '2026-09-01'){ blk.classList.add('collage-flush'); }
     if(iso >= '2026-08-26' || blk.classList.contains('vision-collage-day') || blk.classList.contains('overview-era-day')){ blk.classList.add('depth-four-era'); blk.classList.add('card-style-deboss-chip'); } else { blk.classList.remove('depth-four-era'); blk.classList.remove('card-style-deboss-chip'); }
     var pill=blk.querySelector('.tv-pill[data-view="pursuits"]');
     if(pill) pill.textContent='overview';
@@ -43334,7 +43334,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     pol.style.setProperty('--px', opts.px || '12%');
     pol.style.setProperty('--py', opts.py || '24%');
     if(opts.w){ pol.style.setProperty('--pw', opts.w); pol.style.width = opts.w; }
-    pol.innerHTML = '<img alt="" src="'+src+'"><p class="vision-card-headline">success begets success; do one thing ...</p><span></span>';
+    pol.innerHTML = '<img alt="" src="'+src+'"><span></span>';
     pol.querySelector('span').textContent = opts.title || 'new card';
     return pol;
   }
@@ -43957,35 +43957,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     d.textContent = '×';
     tile.appendChild(d);
   }
-  var CARD_HEADLINE = 'success begets success; do one thing ...';
-  function dayWantsCardHeadline(blk){
-    var iso = '';
-    try { iso = (blk && (blk.getAttribute('data-date') || (typeof dayKey === 'function' && dayKey(blk)))) || ''; } catch(e){ iso = ''; }
-    if(iso && iso >= '2026-09-01') return true;
-    try { if(blk && blk.classList && blk.classList.contains('card-headline-era')) return true; } catch(e2){}
-    return false;
-  }
+  function dayWantsCardHeadline(){ return false; }
   function ensureCardHeadline(pol){
     if(!pol) return;
-    var blk = null;
-    try { blk = pol.closest && pol.closest('.day-block'); } catch(e){ blk = null; }
     var el = pol.querySelector(':scope > .vision-card-headline');
-    if(!dayWantsCardHeadline(blk)){
-      if(el) el.remove();
-      return;
-    }
-    if(!el){
-      el = document.createElement('p');
-      el.className = 'vision-card-headline';
-      var cap = pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span:not(.vision-card-headline)');
-      if(cap) pol.insertBefore(el, cap);
-      else pol.appendChild(el);
-    }
-    if(el.textContent !== CARD_HEADLINE) el.textContent = CARD_HEADLINE;
+    if(el) el.remove();
   }
   function stampCardHeadlines(root){
     var scope = root && root.querySelectorAll ? root : document;
-    [].slice.call(scope.querySelectorAll('.day-block.card-headline-era .vision-polaroid, .day-block[data-date^="2026-09"] .vision-polaroid, .day-block[data-date^="2026-1"] .vision-polaroid')).forEach(ensureCardHeadline);
+    [].slice.call(scope.querySelectorAll('.vision-polaroid')).forEach(ensureCardHeadline);
   }
   window.__stampCardHeadlines = stampCardHeadlines;
   function ensurePolaroidChrome(pol){
@@ -44031,28 +44011,39 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 
 
   (function refreshApplicationTuitionPhotos(){
-    var MKEY = 'migration-card-photos-app-tuition-v3';
+    var MKEY = 'migration-card-photos-app-tuition-v4';
     if(localStorage.getItem(MKEY)) return;
     try {
       var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
-      var APP = 'manus-storage/card-application.jpg?v=v3';
-      var TUI = 'manus-storage/card-tuition.jpg?v=v3';
+      var APP = 'manus-storage/card-application.jpg?v=v4';
+      var TUI = 'manus-storage/card-tuition.jpg?v=v4';
       ['application','scholarship application','scholarship re-application','scholarship reapplication'].forEach(function(k){ m[k] = APP; });
       ['tuition','tuition money'].forEach(function(k){ m[k] = TUI; });
       localStorage.setItem('btm_card_photos_v1', JSON.stringify(m));
       localStorage.setItem(MKEY, '1');
+      localStorage.setItem('migration-card-photos-app-tuition-v3', '1');
     } catch(e){}
     document.querySelectorAll('.vision-polaroid').forEach(function(pol){
-      var sp = pol.querySelector(':scope > span');
+      var sp = pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span:not(.vision-card-headline)');
       var t = ((sp && sp.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase();
+      pol.querySelectorAll(':scope > .vision-card-headline').forEach(function(h){ h.remove(); });
       var src = '';
-      if(t === 'tuition' || t === 'tuition money') src = 'manus-storage/card-tuition.jpg?v=v3';
-      if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') src = 'manus-storage/card-application.jpg?v=v3';
+      if(t === 'tuition' || t === 'tuition money') src = 'manus-storage/card-tuition.jpg?v=v4';
+      if(t === 'application' || t === 'scholarship application' || t === 'scholarship re-application' || t === 'scholarship reapplication') src = 'manus-storage/card-application.jpg?v=v4';
       if(!src) return;
       pol.setAttribute('data-shot-src', src);
       var img = pol.querySelector('img');
       if(img) img.src = src;
     });
+    ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
+      var raw = localStorage.getItem(k); if(!raw) return;
+      var next = raw
+        .replace(/<p class="vision-card-headline"[^>]*>[\s\S]*?<\/p>/gi, '')
+        .replace(/manus-storage\/card-application\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/card-application.jpg?v=v4')
+        .replace(/manus-storage\/card-tuition\.jpg(\?v=[^"'\\s)]+)?/g, 'manus-storage/card-tuition.jpg?v=v4');
+      if(next !== raw) localStorage.setItem(k, next);
+    });
+    try { localStorage.setItem('migration-strip-card-headlines-v1', '1'); } catch(e2){}
   })();
 
   /* Replace blank/black cleanse auto-fetch with the real still-life asset */
@@ -51949,71 +51940,17 @@ html body .day-block.overview-mode-details .vision-board:not(.is-zoomed):has(.vi
 </style>
 
 <style id="vision-card-headline-css">
-/* Sep 1+ editorial headline ON every card (polaroid / shot / habit). Never on .vision-tile-title.
-   Lives on the card — overview collage still hides cards entirely (overview-no-cards). */
-html body .day-block .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card) {
-  padding-bottom: 52px !important;
-}
-html body .day-block .vision-board:not(.is-zoomed) .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card) {
-  padding-bottom: 36px !important;
-}
+/* Banned: editorial headline on polaroid photos — section quotes stay on .vision-tile-quote only. */
 html body .day-block .vision-polaroid > .vision-card-headline {
-  position: absolute !important;
-  left: 8px !important;
-  right: 8px !important;
-  bottom: 26px !important;
-  z-index: 5 !important;
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
   margin: 0 !important;
   padding: 0 !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: none !important;
-  font-family: "Newsreader", "Cormorant Garamond", "Iowan Old Style", Georgia, serif !important;
-  font-style: italic !important;
-  font-weight: 600 !important;
-  font-size: 13px !important;
-  line-height: 1.18 !important;
-  letter-spacing: 0.015em !important;
-  color: #2a1c12 !important;
-  text-align: center !important;
-  white-space: normal !important;
-  overflow-wrap: anywhere !important;
-  hyphens: none !important;
-  -webkit-hyphens: none !important;
 }
-html body .day-block .vision-board:not(.is-zoomed) .vision-polaroid > .vision-card-headline {
-  left: 5px;
-  right: 5px;
-  bottom: 20px;
-  font-size: 11px;
-  line-height: 1.12;
-}
-html body .day-block .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid > .vision-card-headline {
-  left: 10px;
-  right: 10px;
-  bottom: 34px;
-  font-size: 15px;
-  line-height: 1.2;
-}
-html body .day-block .vision-polaroid.vision-habit-card > .vision-card-headline {
-  left: 14px;
-  right: 14px;
-  bottom: 62px;
-  z-index: 4;
-  color: rgba(246, 239, 228, 0.92);
-  text-align: left;
-  font-size: 13px;
-  line-height: 1.15;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
-}
-html body .day-block .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card > .vision-card-headline {
-  bottom: 52px;
-  font-size: 11px;
-}
-html body .day-block .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card > .vision-card-headline {
-  bottom: 70px;
-  font-size: 14px;
+html body .day-block .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card) {
+  padding-bottom: 0 !important;
 }
 </style>
 
@@ -54047,29 +53984,18 @@ html body .day-block.depth-four-era .overview-center-stack {
 (function(){
   if(window.__cardHeadlineBoot) return;
   window.__cardHeadlineBoot = true;
-  var TEXT = 'success begets success; do one thing ...';
-  function stamp(){
+  function strip(){
     try {
       if(typeof window.__stampCardHeadlines === 'function'){
         window.__stampCardHeadlines(document);
         return;
       }
     } catch(e){}
-    document.querySelectorAll('.day-block.card-headline-era .vision-polaroid, .day-block[data-date^="2026-09"] .vision-polaroid, .day-block[data-date^="2026-1"] .vision-polaroid').forEach(function(pol){
-      var el = pol.querySelector(':scope > .vision-card-headline');
-      if(!el){
-        el = document.createElement('p');
-        el.className = 'vision-card-headline';
-        var cap = pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span:not(.vision-card-headline)');
-        if(cap) pol.insertBefore(el, cap);
-        else pol.appendChild(el);
-      }
-      if(el.textContent !== TEXT) el.textContent = TEXT;
-    });
+    document.querySelectorAll('.vision-polaroid > .vision-card-headline').forEach(function(el){ el.remove(); });
   }
   function boot(){
-    stamp();
-    [80, 400, 1200, 2800].forEach(function(ms){ setTimeout(stamp, ms); });
+    strip();
+    [80, 400, 1200, 2800].forEach(function(ms){ setTimeout(strip, ms); });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -54077,7 +54003,7 @@ html body .day-block.depth-four-era .overview-center-stack {
     var t = 0;
     new MutationObserver(function(){
       clearTimeout(t);
-      t = setTimeout(stamp, 60);
+      t = setTimeout(strip, 60);
     }).observe(document.documentElement, { childList:true, subtree:true });
   } catch(e){}
 })();
@@ -54237,28 +54163,9 @@ html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collag
   padding: 5px 11px 6px !important;
   bottom: -8px !important;
 }
-/* Sep 1+ editorial headline sits ON the photo above the chip (no cream footer) */
-html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card),
-html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid:has(> .vision-card-headline):not(.vision-habit-card) {
-  padding-bottom: 0 !important;
-}
+/* Card headlines banned — photos only */
 html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-polaroid:not(.vision-habit-card) > .vision-card-headline {
-  left: 8px !important;
-  right: 8px !important;
-  bottom: 18px !important;
-  color: #f6efe4 !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.65) !important;
-  font-size: 12px !important;
-}
-html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > .vision-card-headline {
-  bottom: 14px !important;
-  font-size: 10px !important;
-  left: 6px !important;
-  right: 6px !important;
-}
-html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) > .vision-card-headline {
-  bottom: 22px !important;
-  font-size: 13px !important;
+  display: none !important;
 }
 html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-polaroid:not(.vision-habit-card) > .vision-card-del {
   color: rgba(255,255,255,0.92) !important;
