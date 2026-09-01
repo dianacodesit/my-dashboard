@@ -20,6 +20,8 @@
     { href: 'lifestyle.html', label: 'lifestyle', group: 'wip' },
     { href: 'planner.html', label: 'timelapses', group: 'main' },
     { href: 'accomplishments.html', label: 'accomplishments', group: 'main' },
+    { href: 'wins.html', label: 'wins', group: 'main' },
+    { href: 'film-strip.html', label: 'film strip', group: 'main' },
     { href: 'striving.html', label: 'striving', group: 'main' },
     { href: 'deen.html', label: 'deen', group: 'main' },
     { href: 'quran.html', label: 'Quran', group: 'main', parent: 'deen.html' },
@@ -69,6 +71,7 @@
     { href: 'flow-fonts.html', label: 'cursive flow fonts', group: 'design' },
     { href: 'deadline-fonts.html', label: 'deadline pill fonts', group: 'design' },
     { href: 'flow-styles.html', label: 'flow chart designs', group: 'design' },
+    { href: 'task-display-options.html', label: 'task display options', group: 'design' },
     { href: 'arrows.html', label: 'arrow formations', group: 'design' },
     { href: 'transitions.html', label: 'transition styles', group: 'design' }
   ];

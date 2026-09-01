@@ -68,7 +68,87 @@ KNOWN_CARD_PHOTOS = {
     "pepperdine": "manus-storage/zone-pepperdine-malibu.jpg",
     "grad school": "manus-storage/zone-pepperdine-malibu.jpg",
     "grad": "manus-storage/zone-pepperdine-malibu.jpg",
+    "soul": "",
+    # sorrow is NOT soul — distinct focus; no approved photo (was soul-rose duplicate)
+    "sorrow": "",
+    "attention": "manus-storage/zone-attention.jpg?v=beam1",
+    "darkness": "",
+    "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
+    "politics": "manus-storage/zone-politics.jpg?v=chess5",
+    "repetitions": "manus-storage/zone-repetitions.jpg?v=cubes1",
+    # abundance — approved money-tree (wheat/plenty2 forever banned)
+    "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
+    "finances": "manus-storage/zone-abundance-tree.jpg?v=tree1",
 }
+# Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
+# Never return these from /photo-for for soul, sorrow, darkness, abundance, attention.
+# soul ≠ sorrow — never alias them.
+REJECTED_SECTION_PHOTOS = (
+    "zone-soul-flame",
+    "zone-soul-heal",
+    "zone-soul-chair",
+    "zone-soul-depth",
+    "zone-soul-dua",
+    "zone-soul-heart",
+    "zone-soul-glance-heart",
+    "zone-soul-mosque",
+    "zone-soul-presence",
+    "zone-soul-still-water",
+    "zone-soul-candle",
+    "zone-soul-person-window",
+    "zone-soul.jpg?v=nopeople",
+    "zone-soul.jpg?v=heal",
+    "zone-soul.jpg?v=flame",
+    "zone-soul.jpg?v=inner",
+    "zone-soul.jpg?v=presence",
+    "zone-soul.jpg?v=soul2",
+    "zone-soul.jpg",
+    "zone-sorrow.jpg?v=nopeople",
+    "zone-sorrow.jpg?v=candle",
+    "zone-sorrow.jpg?v=sorrow1",
+    "zone-sorrow.jpg?v=heal",
+    # entire zone-sorrow.jpg was a copy of soul rose — never treat as sorrow photo
+    "zone-sorrow.jpg",
+    "zone-darkness-aware",
+    "zone-darkness-inner",
+    "zone-darkness-night-street",
+    "zone-darkness-person-storm",
+    "zone-darkness-storm-study",
+    "zone-darkness-candle",
+    "zone-darkness-battle",
+    "zone-darkness-night-void",
+    "zone-darkness-ink-abyss",
+    "zone-darkness-room",
+    "zone-darkness.jpg?v=nopeople",
+    "zone-darkness.jpg?v=inner",
+    "zone-darkness.jpg?v=aware",
+    "zone-darkness.jpg?v=storm",
+    "zone-darkness.jpg?v=void1",
+    "zone-darkness.jpg",
+    "person-storm",
+    "person-window",
+    "heal3",
+    "inner3",
+    "/archive/zone-soul-",
+    "/archive/zone-darkness-",
+    "candle-archive",
+    "candle-flame",
+    "candle-aware",
+    # abundance — ALL wheat fields / harvest / plenty2 forever banned
+    "zone-abundance.jpg",
+    "zone-finances-v2",
+    "plenty2",
+    "plenty1",
+    "abundance-wheat",
+    "abundance-wheat-sunset",
+    "wheat-sunset",
+    "zone-abundance-harvest",
+    "zone-abundance-overflow",
+    "abundance-bg",
+    "abundance-grapes",
+    "abundance-poppies",
+    "abundance-bg-wealth",
+)
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
     re.I,
@@ -230,14 +310,18 @@ def _tile_aliases(key: str) -> set[str]:
         ("art/science", "art-science"),
         ("self esteem", "self-esteem"),
         ("selfesteem", "self-esteem"),
-        ("god conscious", "god-conscious"),
-        ("awliya allah", "god-conscious"),
-        ("awliya-allah", "god-conscious"),
-        ("awliya allah swt", "god-conscious"),
-        ("awliya-allah-swt", "god-conscious"),
-        ("fear allah", "god-conscious"),
-        ("fear-allah", "god-conscious"),
-        ("fear allah \ufdfb", "god-conscious"),
+        ("god conscious", "itaq-allah"),
+        ("god-conscious", "itaq-allah"),
+        ("awliya allah", "itaq-allah"),
+        ("awliya-allah", "itaq-allah"),
+        ("awliya allah swt", "itaq-allah"),
+        ("awliya-allah-swt", "itaq-allah"),
+        ("awliyah allah swt", "itaq-allah"),
+        ("fear allah", "itaq-allah"),
+        ("fear-allah", "itaq-allah"),
+        ("fear allah \ufdfb", "itaq-allah"),
+        ("itaqallah", "itaq-allah"),
+        ("itaqAllah", "itaq-allah"),
     )
     for a, b in pairs:
         if k in (a, b, a.replace(" ", "-"), b.replace(" ", "-")):
@@ -249,13 +333,50 @@ def _tiles_from_inner(inner: str) -> list[tuple[str, str]]:
     return [(_tile_key(m.group(0)), m.group(0)) for m in TILE_RE.finditer(inner or "")]
 
 
-def merge_hero_inner(existing_inner: str, new_inner: str, removed=None) -> str:
+_SWALLOW_RE = re.compile(
+    r'(<h4 class="vision-subsection-title">calisthenics</h4></article>)(\s*)(<article class="vision-tile")',
+    re.I,
+)
+
+
+def unswallow_hero_inner(inner: str) -> str:
+    """Close fitness tiles that swallowed later .vision-tile siblings."""
+    text = str(inner or "")
+    prev = None
+    while prev != text:
+        prev = text
+        text = _SWALLOW_RE.sub(r"\1</div></article>\2\3", text)
+    return text
+
+
+# Titles Diana archived that a restore/merge must never put back on Aug 30.
+AUG30_ARCHIVED_EXTRAS = {
+    "pursuits", "power", "purpose", "phd", "ph.d", "ph-d", "focus",
+    "strengths", "plan", "envision", "fight back", "fight-back",
+    "villains", "potential", "ambition",
+}
+
+
+def _drop_key_set(items) -> set[str]:
+    out: set[str] = set()
+    if not items:
+        return out
+    for item in items:
+        out |= _tile_aliases(str(item))
+    return out
+
+
+def merge_hero_inner(existing_inner: str, new_inner: str, removed=None, drop_keys=None) -> str:
     """Keep tiles the incoming HTML forgot, unless they were explicitly removed."""
-    removed_set: set[str] = set()
-    if isinstance(removed, (list, tuple)):
-        for item in removed:
-            removed_set |= _tile_aliases(str(item))
-    new_tiles = _tiles_from_inner(new_inner)
+    existing_inner = unswallow_hero_inner(existing_inner)
+    new_inner = unswallow_hero_inner(new_inner)
+    removed_set: set[str] = _drop_key_set(removed)
+    drop_set: set[str] = _drop_key_set(drop_keys)
+    ban = removed_set | drop_set
+    new_tiles = [
+        (key, chunk) for key, chunk in _tiles_from_inner(new_inner)
+        if not (_tile_aliases(key) & ban)
+    ]
     if not new_tiles:
         return existing_inner if str(existing_inner or "").strip() else str(new_inner or "")
     have: set[str] = set()
@@ -264,14 +385,14 @@ def merge_hero_inner(existing_inner: str, new_inner: str, removed=None) -> str:
     merged = list(new_tiles)
     for key, chunk in _tiles_from_inner(existing_inner):
         aliases = _tile_aliases(key)
-        if aliases & removed_set or aliases & have:
+        if aliases & ban or aliases & have:
             continue
         merged.append((key, chunk))
         have |= aliases
     out = "\n".join(chunk for _key, chunk in merged)
     if out and not out.endswith("\n"):
         out += "\n"
-    return out
+    return unswallow_hero_inner(out)
 
 
 def _vision_hero_span(html: str, date: str) -> tuple[int, int]:
@@ -345,8 +466,17 @@ def replace_vision_hero_inner(html: str, date: str, new_inner: str) -> str:
 OVERVIEW_FILES = (DASHBOARD, ROOT / "prototype.html")
 
 
-def save_overview_hero(date: str, hero_html: str, removed_sections=None) -> dict:
+def save_overview_hero(date: str, hero_html: str, removed_sections=None, archived_sections=None) -> dict:
     """Write vision-collage hero HTML into everything.html and prototype.html."""
+    date = str(date or "").strip()
+    drop_keys = None
+    if date == "2026-08-30":
+        drop_keys = sorted(AUG30_ARCHIVED_EXTRAS | _drop_key_set(archived_sections))
+    # History days: never honor ordinary removed lists from a live tab.
+    # Aug 30 archived extras are banned from merge so a restorer cannot resurrect them.
+    if date and date < "2026-09-01":
+        removed_sections = list(drop_keys) if drop_keys else None
+    hero_html = unswallow_hero_inner(hero_html)
     written: list[str] = []
     warnings: list[str] = []
     for path in OVERVIEW_FILES:
@@ -355,7 +485,7 @@ def save_overview_hero(date: str, hero_html: str, removed_sections=None) -> dict
         try:
             html = path.read_text(encoding="utf-8")
             start_inner, end_inner = _vision_hero_span(html, date)
-            merged = merge_hero_inner(html[start_inner:end_inner], hero_html, removed_sections)
+            merged = merge_hero_inner(html[start_inner:end_inner], hero_html, removed_sections, drop_keys)
             new_html = replace_vision_hero_inner(html, date, merged)
             if new_html != html:
                 path.write_text(new_html, encoding="utf-8")
@@ -611,13 +741,58 @@ def _fetch_still_life(name: str) -> bytes | None:
     return None
 
 
+def _section_photo_rejected(src: str) -> bool:
+    s = str(src or "").lower()
+    return any(token in s for token in REJECTED_SECTION_PHOTOS)
+
+
+CONCEPTUAL_SECTION_KEYS = frozenset({
+    "soul", "sorrow", "darkness", "abundance", "attention", "finances",
+})
+
+
+def _approved_section_photo(key: str) -> str | None:
+    if key not in CONCEPTUAL_SECTION_KEYS:
+        return None
+    # Empty string means intentionally cleared (no approved photo yet).
+    if key not in KNOWN_CARD_PHOTOS:
+        return None
+    return str(KNOWN_CARD_PHOTOS.get(key) or "")
+
+
 def photo_for_name(name: str) -> dict:
     key = " ".join(str(name or "").replace("\u2011", "-").split()).strip().lower()
     if not key:
         return {"ok": False, "error": "empty"}
     with PHOTO_LOCK:
+        approved = _approved_section_photo(key)
         stored = _load_photo_map()
+        # Conceptual sections always use the approved zone URL — never card-* auto-fetch.
+        # Skip blackness usability (darkness void is intentionally near-black).
+        if key in CONCEPTUAL_SECTION_KEYS:
+            cached_c = stored.get(key)
+            if cached_c and _section_photo_rejected(str(cached_c)):
+                stored.pop(key, None)
+                _save_photo_map(stored)
+                cached_c = None
+            if approved:
+                kpath = ROOT / str(approved).split("?", 1)[0]
+                if kpath.exists() and kpath.is_file() and kpath.stat().st_size >= 20000:
+                    stored[key] = approved
+                    _save_photo_map(stored)
+                    return {"ok": True, "src": approved, "cached": True}
+            # Intentionally cleared — do not auto-fetch a replacement.
+            return {"ok": False, "error": "no photo", "cleared": True}
+        if approved:
+            kpath = ROOT / str(approved).split("?", 1)[0]
+            if kpath.exists() and kpath.is_file() and kpath.stat().st_size >= 20000:
+                stored[key] = approved
+                _save_photo_map(stored)
+                return {"ok": True, "src": approved, "cached": True}
         cached = stored.get(key) or KNOWN_CARD_PHOTOS.get(key)
+        if cached and _section_photo_rejected(str(cached)):
+            stored.pop(key, None)
+            cached = approved or KNOWN_CARD_PHOTOS.get(key)
         if cached:
             path = ROOT / str(cached).split("?", 1)[0]
             if path.exists() and _photo_path_usable(path):
@@ -646,7 +821,7 @@ def photo_for_name(name: str) -> dict:
             known = KNOWN_CARD_PHOTOS.get(key)
             if known:
                 kpath = ROOT / str(known).split("?", 1)[0]
-                if _photo_path_usable(kpath):
+                if kpath.exists() and kpath.is_file() and kpath.stat().st_size >= 20000:
                     stored[key] = known
                     _save_photo_map(stored)
                     return {"ok": True, "src": known, "cached": True}
@@ -708,7 +883,8 @@ class Handler(SimpleHTTPRequestHandler):
                 date = body.get("date") if isinstance(body, dict) else None
                 hero_html = body.get("html") if isinstance(body, dict) else None
                 removed = body.get("removedSections") if isinstance(body, dict) else None
-                result = save_overview_hero(str(date or ""), str(hero_html or ""), removed)
+                archived = body.get("archivedSections") if isinstance(body, dict) else None
+                result = save_overview_hero(str(date or ""), str(hero_html or ""), removed, archived)
                 return self._json(200, result)
             if path in ("/save", "/move-cards"):
                 # Acknowledge UI autosave hooks; durable path is /bake.

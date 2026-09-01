@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>card style · A–F · replace the polaroids</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=cardstyle1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #120e0b;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 18px 100px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 10px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.62);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 680px;
+    margin: 0 auto 22px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.55);
+    font-size: 1.02rem;
+    line-height: 1.5;
+  }
+  .sep {
+    max-width: 680px;
+    margin: 0 auto 28px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(201,168,114,0.55);
+  }
+  .sep a { color: #c9a872; text-decoration: none; border-bottom: 1px solid rgba(201,168,114,0.35); }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: -6px auto 22px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  /* —— now (baseline polaroid) —— */
+  .now {
+    max-width: 1180px;
+    margin: 0 auto 28px;
+    border-radius: 16px;
+    border: 1px dashed rgba(255,248,238,0.18);
+    background: rgba(255,248,238,0.03);
+    overflow: hidden;
+  }
+  .now-head, .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .now-head .letter, .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.2rem;
+    color: rgba(255,248,238,0.75);
+  }
+  .now-head .letter em, .panel-head .letter em {
+    font-style: normal;
+    color: rgba(201,168,114,0.85);
+    margin-right: 8px;
+  }
+  .now-head .tag, .panel-head .tag {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+  }
+  .now-cap, .panel-cap {
+    padding: 0 16px 12px;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: rgba(247,239,228,0.5);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (min-width: 980px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .panel {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,248,238,0.04);
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: left;
+    color: inherit;
+    width: 100%;
+    font: inherit;
+    display: block;
+    padding: 0;
+  }
+  .panel:hover {
+    border-color: rgba(201,168,114,0.45);
+    transform: translateY(-2px);
+  }
+  .panel.is-active {
+    border-color: rgba(201,168,114,0.85);
+    box-shadow: 0 0 0 1px rgba(201,168,114,0.35), 0 18px 40px rgba(0,0,0,0.35);
+  }
+
+  /* Shared stage — zoomed section feel */
+  .stage {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    background: #1a1410 center/cover no-repeat;
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(12,8,4,0.15) 0%, rgba(12,8,4,0.35) 55%, rgba(12,8,4,0.72) 100%),
+      radial-gradient(ellipse at 30% 20%, rgba(201,168,114,0.08), transparent 55%);
+    pointer-events: none;
+  }
+  .stage-title {
+    position: absolute;
+    z-index: 2;
+    left: 18px;
+    bottom: 14px;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(22px, 2.6vw, 30px);
+    color: #fff8ee;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+    pointer-events: none;
+  }
+  .cards {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  /* —— NOW: classic polaroid —— */
+  .card-pol {
+    position: absolute;
+    width: 118px;
+    padding: 7px 7px 28px;
+    background: #f6efe4;
+    box-shadow: 0 12px 28px rgba(12, 8, 4, 0.45);
+    transform: rotate(-3.2deg);
+  }
+  .card-pol img {
+    display: block;
+    width: 100%;
+    height: 92px;
+    object-fit: cover;
+  }
+  .card-pol span {
+    position: absolute;
+    left: 6px; right: 6px; bottom: 5px;
+    font-family: "Cormorant Garamond", "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.1;
+    color: #1a140e;
+    text-align: center;
+  }
+  .card-pol.p2 { left: 38%; top: 22%; transform: rotate(2.4deg); width: 124px; }
+  .card-pol.p1 { left: 12%; top: 28%; }
+  .card-pol.p3 { left: 64%; top: 34%; transform: rotate(-1.6deg); width: 112px; }
+
+  /* —— A: flush photo + caption overlay —— */
+  .card-flush {
+    position: absolute;
+    width: 122px;
+    aspect-ratio: 4/5;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+  }
+  .card-flush img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .card-flush span {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 22px 8px 8px;
+    background: linear-gradient(transparent, rgba(10,6,3,0.82));
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    color: #fff8ee;
+    text-align: left;
+    line-height: 1.1;
+  }
+  .card-flush.p1 { left: 10%; top: 24%; transform: rotate(-1.5deg); }
+  .card-flush.p2 { left: 38%; top: 20%; transform: rotate(1.2deg); width: 128px; }
+  .card-flush.p3 { left: 66%; top: 32%; transform: rotate(-0.8deg); width: 110px; }
+
+  /* —— B: champagne glass frame —— */
+  .card-glass {
+    position: absolute;
+    width: 120px;
+    padding: 4px;
+    border-radius: 6px;
+    background: linear-gradient(145deg, rgba(247,239,228,0.22), rgba(201,168,114,0.08));
+    border: 1px solid rgba(247,239,228,0.32);
+    box-shadow:
+      0 12px 28px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,248,238,0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .card-glass .inner {
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-glass img {
+    display: block;
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+  }
+  .card-glass span {
+    display: block;
+    padding: 7px 6px 6px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #f7efe4;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .card-glass.p1 { left: 11%; top: 22%; transform: rotate(-2deg); }
+  .card-glass.p2 { left: 39%; top: 18%; transform: rotate(2.1deg); width: 126px; }
+  .card-glass.p3 { left: 66%; top: 30%; transform: rotate(-1deg); width: 114px; }
+
+  /* —— C: refined ticket / shot-card —— */
+  .card-ticket {
+    position: absolute;
+    width: 128px;
+    background: #1c1612;
+    border: 1px solid rgba(201,168,114,0.45);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+    overflow: hidden;
+  }
+  .card-ticket::before,
+  .card-ticket::after {
+    content: "";
+    position: absolute;
+    top: 52%;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #120e0b;
+    z-index: 2;
+  }
+  .card-ticket::before { left: -5px; }
+  .card-ticket::after { right: -5px; }
+  .card-ticket img {
+    display: block;
+    width: 100%;
+    height: 86px;
+    object-fit: cover;
+    border-bottom: 1px dashed rgba(201,168,114,0.35);
+  }
+  .card-ticket .stub {
+    padding: 8px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .card-ticket .stub span {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    color: #fff8ee;
+    line-height: 1.1;
+  }
+  .card-ticket .stub em {
+    font-family: "DM Mono", monospace;
+    font-style: normal;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(201,168,114,0.75);
+  }
+  .card-ticket.p1 { left: 10%; top: 24%; transform: rotate(-2.5deg); }
+  .card-ticket.p2 { left: 38%; top: 18%; transform: rotate(1.8deg); width: 134px; }
+  .card-ticket.p3 { left: 65%; top: 32%; transform: rotate(-1.2deg); width: 120px; }
+
+  /* —— D: soft shadow float (no thick border) —— */
+  .card-float {
+    position: absolute;
+    width: 118px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.2),
+      0 16px 36px rgba(0,0,0,0.45);
+  }
+  .card-float img {
+    display: block;
+    width: 100%;
+    height: 108px;
+    object-fit: cover;
+  }
+  .card-float span {
+    position: absolute;
+    left: 8px; bottom: 8px;
+    padding: 3px 8px 4px;
+    background: rgba(18,12,8,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 999px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #fff8ee;
+    white-space: nowrap;
+    max-width: calc(100% - 16px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-float.p1 { left: 12%; top: 26%; transform: rotate(-1.8deg); }
+  .card-float.p2 { left: 39%; top: 20%; transform: rotate(1.5deg); width: 126px; }
+  .card-float.p3 { left: 66%; top: 34%; transform: rotate(-0.6deg); width: 112px; }
+
+  /* —— E: letterpress / debossed label chip ——
+     Same caption face as .card-pol span / live .vision-polaroid span.
+     Text is pressed INTO the plaque (deboss), not soft drop-shadow glow. */
+  .card-emboss {
+    position: absolute;
+    width: 120px;
+  }
+  .card-emboss .photo {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.4);
+  }
+  .card-emboss .chip {
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 6px 14px 7px;
+    border-radius: 2px;
+    /* Dark metal/leather plaque — recessed well */
+    background:
+      linear-gradient(180deg,
+        #241c14 0%,
+        #16110c 42%,
+        #1a140e 100%);
+    border: 1px solid rgba(8, 5, 3, 0.95);
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.42),
+      inset 0 2px 4px rgba(0, 0, 0, 0.78),
+      inset 0 3px 8px rgba(0, 0, 0, 0.45),
+      inset 0 -1px 1px rgba(255, 248, 238, 0.07),
+      inset 1px 0 2px rgba(0, 0, 0, 0.35),
+      inset -1px 0 2px rgba(0, 0, 0, 0.35);
+  }
+  .card-emboss .chip::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 1px;
+    pointer-events: none;
+    box-shadow:
+      inset 0 1px 0 rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(255, 248, 238, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.35);
+  }
+  .card-emboss .chip span {
+    position: relative;
+    z-index: 1;
+    display: block;
+    /* Match polaroid / shot-card caption face exactly */
+    font-family: "Cormorant Garamond", "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.12;
+    letter-spacing: 0.03em;
+    /* Ink in the trough — darker than plaque highlights, not cream accent */
+    color: #4f4032;
+    -webkit-text-fill-color: #4f4032;
+    /* Letterpress deboss: dark top lip (shade), whisper catch on bottom rim only */
+    text-shadow:
+      0 -1.5px 0 rgba(0, 0, 0, 1),
+      0 -2.5px 2px rgba(0, 0, 0, 0.75),
+      -1.25px -1.25px 0 rgba(0, 0, 0, 0.7),
+      0 1.25px 0 rgba(210, 190, 160, 0.22),
+      0 2px 1px rgba(0, 0, 0, 0.35);
+  }
+  .card-emboss.p1 { left: 11%; top: 24%; transform: rotate(-2deg); }
+  .card-emboss.p2 { left: 38%; top: 18%; transform: rotate(1.6deg); width: 128px; }
+  .card-emboss.p3 { left: 66%; top: 30%; transform: rotate(-1deg); width: 114px; }
+
+  /* —— F: archival / film-strip print —— */
+  .card-film {
+    position: absolute;
+    width: 116px;
+    background: #0e0c0a;
+    padding: 0 0 0;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+  }
+  .card-film .sprocket {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 6px;
+    background: #0e0c0a;
+  }
+  .card-film .sprocket i {
+    width: 7px; height: 9px;
+    border-radius: 1px;
+    background: #120e0b;
+    box-shadow: inset 0 0 0 1px rgba(247,239,228,0.18);
+  }
+  .card-film img {
+    display: block;
+    width: 100%;
+    height: 88px;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(0.92);
+  }
+  .card-film .caption {
+    padding: 6px 8px 8px;
+    border-top: 1px solid rgba(247,239,228,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .card-film .caption span {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #e8d9c0;
+    line-height: 1.1;
+  }
+  .card-film .caption em {
+    font-family: "DM Mono", monospace;
+    font-style: normal;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+    color: rgba(201,168,114,0.55);
+    flex-shrink: 0;
+  }
+  .card-film.p1 { left: 11%; top: 22%; transform: rotate(-2.2deg); }
+  .card-film.p2 { left: 38%; top: 16%; transform: rotate(1.9deg); width: 124px; }
+  .card-film.p3 { left: 66%; top: 28%; transform: rotate(-0.9deg); width: 112px; }
+
+  .foot {
+    max-width: 760px;
+    margin: 36px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.35);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>card chrome</h1>
+  <p>replacements for the polaroid · same collage context · pick by looking</p>
+</div>
+<p class="note">Each panel shows three real cards on a zoomed Pepperdine section. Click a direction to mark it.</p>
+<p class="sep">Separate gallery: <a href="/depth-style-mocks.html">depth toggle styles</a> (sections · subsections · cards · tasks)</p>
+<div class="picked" id="picked"></div>
+
+<!-- NOW -->
+<section class="now" aria-label="Current polaroid">
+  <div class="now-head">
+    <div class="letter"><em>now</em>classic polaroid</div>
+    <div class="tag">baseline · white frame + bottom caption</div>
+  </div>
+  <p class="now-cap">What live cards look like today — thick cream border, italic caption in the white footer, slight tilt.</p>
+  <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+    <div class="cards">
+      <div class="card-pol p1">
+        <img src="/manus-storage/card-tuition.jpg" alt=""/>
+        <span>tuition</span>
+      </div>
+      <div class="card-pol p2">
+        <img src="/manus-storage/card-application.jpg" alt=""/>
+        <span>scholarship re-application</span>
+      </div>
+      <div class="card-pol p3">
+        <img src="/manus-storage/card-enhancv.jpg" alt=""/>
+        <span>EnhanCV</span>
+      </div>
+    </div>
+    <div class="stage-title">Pepperdine</div>
+  </div>
+</section>
+
+<div class="grid">
+
+  <!-- A -->
+  <button type="button" class="panel" data-letter="A" data-name="flush overlay">
+    <div class="panel-head">
+      <div class="letter"><em>A</em>flush overlay</div>
+      <div class="tag">no white frame</div>
+    </div>
+    <p class="panel-cap">Full-bleed photo tile; caption sits in a soft gradient on the image — no polaroid border.</p>
+    <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+      <div class="cards">
+        <div class="card-flush p1"><img src="/manus-storage/card-tuition.jpg" alt=""/><span>tuition</span></div>
+        <div class="card-flush p2"><img src="/manus-storage/card-application.jpg" alt=""/><span>scholarship re-application</span></div>
+        <div class="card-flush p3"><img src="/manus-storage/card-enhancv.jpg" alt=""/><span>EnhanCV</span></div>
+      </div>
+      <div class="stage-title">Pepperdine</div>
+    </div>
+  </button>
+
+  <!-- B -->
+  <button type="button" class="panel" data-letter="B" data-name="champagne glass">
+    <div class="panel-head">
+      <div class="letter"><em>B</em>champagne glass</div>
+      <div class="tag">thin frost frame</div>
+    </div>
+    <p class="panel-cap">Hairline champagne rim + frosted glass panel; caption under the photo in the translucent body.</p>
+    <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+      <div class="cards">
+        <div class="card-glass p1"><div class="inner"><img src="/manus-storage/card-tuition.jpg" alt=""/></div><span>tuition</span></div>
+        <div class="card-glass p2"><div class="inner"><img src="/manus-storage/card-application.jpg" alt=""/></div><span>scholarship re-application</span></div>
+        <div class="card-glass p3"><div class="inner"><img src="/manus-storage/card-enhancv.jpg" alt=""/></div><span>EnhanCV</span></div>
+      </div>
+      <div class="stage-title">Pepperdine</div>
+    </div>
+  </button>
+
+  <!-- C -->
+  <button type="button" class="panel" data-letter="C" data-name="ticket stub">
+    <div class="panel-head">
+      <div class="letter"><em>C</em>ticket stub</div>
+      <div class="tag">shot-card refined</div>
+    </div>
+    <p class="panel-cap">Dark ticket with perforated edge cue, dashed photo divider, mono stub label under italic title.</p>
+    <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+      <div class="cards">
+        <div class="card-ticket p1"><img src="/manus-storage/card-tuition.jpg" alt=""/><div class="stub"><span>tuition</span><em>card</em></div></div>
+        <div class="card-ticket p2"><img src="/manus-storage/card-application.jpg" alt=""/><div class="stub"><span>scholarship re-application</span><em>card</em></div></div>
+        <div class="card-ticket p3"><img src="/manus-storage/card-enhancv.jpg" alt=""/><div class="stub"><span>EnhanCV</span><em>card</em></div></div>
+      </div>
+      <div class="stage-title">Pepperdine</div>
+    </div>
+  </button>
+
+  <!-- D -->
+  <button type="button" class="panel" data-letter="D" data-name="soft float">
+    <div class="panel-head">
+      <div class="letter"><em>D</em>soft float</div>
+      <div class="tag">shadow only</div>
+    </div>
+    <p class="panel-cap">Borderless photo with deep soft shadow; tiny translucent pill caption in the corner.</p>
+    <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+      <div class="cards">
+        <div class="card-float p1"><img src="/manus-storage/card-tuition.jpg" alt=""/><span>tuition</span></div>
+        <div class="card-float p2"><img src="/manus-storage/card-application.jpg" alt=""/><span>scholarship re-application</span></div>
+        <div class="card-float p3"><img src="/manus-storage/card-enhancv.jpg" alt=""/><span>EnhanCV</span></div>
+      </div>
+      <div class="stage-title">Pepperdine</div>
+    </div>
+  </button>
+
+  <!-- E -->
+  <button type="button" class="panel" data-letter="E" data-name="debossed chip">
+    <div class="panel-head">
+      <div class="letter"><em>E</em>debossed chip</div>
+      <div class="tag">label plaque</div>
+    </div>
+    <p class="panel-cap">Bare photo; name rides a dark recessed plaque with real letterpress (pressed-in) type — same caption font as polaroids.</p>
+    <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+      <div class="cards">
+        <div class="card-emboss p1"><img class="photo" src="/manus-storage/card-tuition.jpg" alt=""/><div class="chip"><span>tuition</span></div></div>
+        <div class="card-emboss p2"><img class="photo" src="/manus-storage/card-application.jpg" alt=""/><div class="chip"><span>scholarship re-application</span></div></div>
+        <div class="card-emboss p3"><img class="photo" src="/manus-storage/card-enhancv.jpg" alt=""/><div class="chip"><span>EnhanCV</span></div></div>
+      </div>
+      <div class="stage-title">Pepperdine</div>
+    </div>
+  </button>
+
+  <!-- F -->
+  <button type="button" class="panel" data-letter="F" data-name="film strip">
+    <div class="panel-head">
+      <div class="letter"><em>F</em>film strip</div>
+      <div class="tag">archival print</div>
+    </div>
+    <p class="panel-cap">Black film-strip frame with sprocket holes; caption + frame mark in a quiet archival footer.</p>
+    <div class="stage" style="background-image:url('/manus-storage/pursuit-pepperdine.jpg')">
+      <div class="cards">
+        <div class="card-film p1">
+          <div class="sprocket"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <img src="/manus-storage/card-tuition.jpg" alt=""/>
+          <div class="sprocket"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="caption"><span>tuition</span><em>01</em></div>
+        </div>
+        <div class="card-film p2">
+          <div class="sprocket"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <img src="/manus-storage/card-application.jpg" alt=""/>
+          <div class="sprocket"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="caption"><span>scholarship re-application</span><em>02</em></div>
+        </div>
+        <div class="card-film p3">
+          <div class="sprocket"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <img src="/manus-storage/card-enhancv.jpg" alt=""/>
+          <div class="sprocket"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="caption"><span>EnhanCV</span><em>03</em></div>
+        </div>
+      </div>
+      <div class="stage-title">Pepperdine</div>
+    </div>
+  </button>
+
+</div>
+
+<p class="foot">mock only · nothing wired into everything / prototype yet</p>
+
+<script>
+(function () {
+  var picked = document.getElementById('picked');
+  var panels = [].slice.call(document.querySelectorAll('.panel'));
+  panels.forEach(function (p) {
+    p.addEventListener('click', function () {
+      panels.forEach(function (x) { x.classList.remove('is-active'); });
+      p.classList.add('is-active');
+      picked.textContent = 'marked · ' + p.getAttribute('data-letter') + ' · ' + p.getAttribute('data-name');
+      picked.classList.add('on');
+    });
+  });
+})();
+</script>
+</body>
+</html>

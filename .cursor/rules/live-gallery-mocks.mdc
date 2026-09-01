@@ -1,24 +1,40 @@
 ---
-description: Deliver design mock-ups as live gallery HTML pages on the dashboard
+description: When Diana says show me / mock up / options, open a real popup or live gallery page — never text multiple-choice alone
 alwaysApply: true
 ---
 
-# Live gallery for mock-ups
+# Live gallery / popup mocks — never text-only options
 
-When Diana asks for mock-ups, design options, or "show me alternatives":
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`).
 
-1. **Always build a live gallery page** on `/Users/diana/my-dashboard/` (served at `http://127.0.0.1:8765/`).
-2. Pattern: stacked figures with image + label + short caption (see `accomplishments-mocks.html`, `capture-panel-mocks.html`).
-3. **Give her the URL** in the reply — do not rely on inline chat images alone.
-4. Images live in `manus-storage/`; gallery HTML links to them with cache-bust query params.
-5. After she picks, apply the winner to the live page.
+## Trigger phrases (any of these)
 
-## Image direction
+**show me**, **mock up** / **mock-up** / **mockups**, **options**, **which one**, **placements**, **alternatives**, **design choices**, or any ask to *see* UI/layout variants before picking.
 
-- Prefer **literal, instantly readable** visuals over clever metaphors that need decoding.
-- No other people's faces or names in generated/found images (see `no-other-faces-or-names` rule).
+## Required delivery
 
-## Gallery naming
+1. **Open a real visual mock** she can look at — not a chat bullet list.
+2. Prefer:
+   - dedicated `{feature}-mocks.html` / `{page}-mocks.html` on the dashboard, **or**
+   - a full-screen dismissible overlay / popup on the live page (`?mock=…` / `#mock-…`)
+3. Serve at `http://127.0.0.1:8080/` (or whatever `serve.py` is using) and **give her the URL**.
+4. Prefer **one composition**: options side-by-side or tabbed in a single popup/page — not scattered chat screenshots.
+5. Match real chrome feel (collage, pills, tools) when mocking UI — not empty wireframe boxes alone.
+6. After she picks, wire the winner to the live board.
 
-- `{page}-mocks.html` for background or full-page direction mocks
-- `{feature}-mocks.html` for UI chrome / panel / component mocks
+## Never
+
+- End with “Say which one and I’ll wire it” / “Which do you prefer?” **without** the visual mock already open
+- Reply with A/B/C/D as a **text-only** multiple-choice in chat
+- Rely on inline chat images alone when a live gallery/popup is feasible
+- Ask her to imagine the placement from prose
+
+## Pattern references
+
+- `accomplishments-mocks.html`, `capture-panel-mocks.html`, `margin-mocks.html`
+- `depth-placement-mock.html` (overview depth A–D placements)
+
+## Naming
+
+- `{page}-mocks.html` — background / full-page direction
+- `{feature}-mocks.html` or `{feature}-mock.html` — UI chrome / panel / placement

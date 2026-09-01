@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>depth style · A–E · pick by looking</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=depthstyle1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #120e0b;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 18px 100px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 720px; margin: 0 auto 10px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.62);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 680px;
+    margin: 0 auto 22px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.55);
+    font-size: 1.02rem;
+    line-height: 1.5;
+  }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: -6px auto 22px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  /* —— now (baseline) —— */
+  .now {
+    max-width: 1180px;
+    margin: 0 auto 28px;
+    border-radius: 16px;
+    border: 1px dashed rgba(255,248,238,0.18);
+    background: rgba(255,248,238,0.03);
+    overflow: hidden;
+  }
+  .now-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .now-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.2rem;
+    color: rgba(255,248,238,0.75);
+  }
+  .now-head .letter em {
+    font-style: normal;
+    color: rgba(201,168,114,0.75);
+    margin-right: 8px;
+  }
+  .now-head .tag {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+  }
+  .now-cap {
+    padding: 0 16px 12px;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: rgba(247,239,228,0.5);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (min-width: 980px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .panel {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,248,238,0.04);
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: left;
+    color: inherit;
+    width: 100%;
+    font: inherit;
+    padding: 0;
+    display: block;
+  }
+  .panel:hover {
+    border-color: rgba(201,168,114,0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .panel.is-picked {
+    border-color: rgba(201,168,114,0.95);
+    box-shadow: 0 0 0 2px rgba(201,168,114,0.35), 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.55rem;
+    color: #fff8ee;
+  }
+  .panel-head .letter em {
+    font-style: normal;
+    color: #c9a872;
+    margin-right: 8px;
+  }
+  .panel-head .tag {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.5);
+    white-space: nowrap;
+  }
+  .panel-cap {
+    padding: 0 16px 14px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.58);
+    line-height: 1.45;
+  }
+
+  /* —— shared stage chrome —— */
+  .stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #1a1410;
+  }
+  .day-chrome {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 12px 10px;
+    background:
+      linear-gradient(180deg, rgba(12,8,6,0.35) 0%, rgba(12,8,6,0.15) 28%, rgba(12,8,6,0.55) 100%),
+      url("manus-storage/_339ab459.jpg") center / cover no-repeat;
+  }
+  .day-title {
+    font-family: "Italiana", serif;
+    font-size: 16px;
+    color: rgba(255,248,238,0.88);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  .toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    gap: 8px;
+    margin-bottom: 10px;
+    min-height: 34px;
+    position: relative;
+    z-index: 4;
+  }
+  .toolbar .spacer { min-width: 1px; }
+  .view-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+    justify-self: center;
+    padding: 2px;
+    border-radius: 999px;
+    background: rgba(20, 14, 10, 0.28);
+    border: 1px solid rgba(255, 248, 238, 0.22);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .view-pill {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 11px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    color: rgba(255,248,238,0.55);
+    border: 0;
+    background: transparent;
+  }
+  .view-pill.on {
+    background: rgba(255,248,238,0.92);
+    color: #2c2418;
+  }
+  .tools {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 7px;
+    justify-self: end;
+    position: relative;
+  }
+  .carry {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 11px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 0;
+    color: #2c2418;
+    background: rgba(255,248,238,0.92);
+    cursor: default;
+  }
+  .plus {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.28);
+    background: rgba(20,14,10,0.35);
+    color: rgba(255,248,238,0.85);
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    line-height: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: default;
+  }
+  .collage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    min-height: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .tile {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .tile:nth-child(1) { grid-row: 1 / 3; }
+  .tile span {
+    position: absolute;
+    left: 7px;
+    bottom: 5px;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    color: #fff8ee;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.65);
+  }
+  .t1 { background-image: url("manus-storage/zone-body-gym-abs.jpg"); }
+  .t2 { background-image: url("manus-storage/pursuit-pepperdine-plaza-ocean.jpg"); }
+  .t3 { background-image: url("manus-storage/zone-audacity-lion-roar.jpg"); }
+  .t4 { background-image: url("manus-storage/zone-attention.jpg"); }
+  .t5 { background: linear-gradient(160deg, #2a1c14, #0e0a08); }
+  .t5 span { color: rgba(201,168,114,0.95); }
+
+  .depth-opt {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+  }
+
+  /* —— NOW: current fat pill —— */
+  .depth-now {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 2px;
+    border-radius: 999px;
+    background: rgba(20, 14, 10, 0.28);
+    border: 1px solid rgba(255, 248, 238, 0.22);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .depth-now .depth-opt {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 11px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    color: rgba(255,248,238,0.62);
+  }
+  .depth-now .depth-opt.is-on {
+    background: rgba(255,248,238,0.92);
+    color: #2c2418;
+  }
+
+  /* —— A: editorial hairline / letterspaced —— */
+  .depth-a {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    border-bottom: 1px solid rgba(255,248,238,0.18);
+  }
+  .depth-a .depth-opt {
+    font-family: "DM Mono", monospace;
+    font-style: normal;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 7px 7px;
+    color: rgba(255,248,238,0.42);
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    border-radius: 0;
+  }
+  .depth-a .depth-opt.is-on {
+    color: rgba(255,248,238,0.95);
+    border-bottom-color: rgba(201,168,114,0.95);
+  }
+
+  /* —— B: vertical stack far right —— */
+  .tools-b {
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tools-b .row-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .depth-b {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1px;
+    padding: 4px;
+    border-radius: 12px;
+    background: rgba(20, 14, 10, 0.42);
+    border: 1px solid rgba(255, 248, 238, 0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    min-width: 108px;
+  }
+  .depth-b .depth-opt {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 11px;
+    text-align: right;
+    padding: 5px 9px;
+    border-radius: 8px;
+    color: rgba(255,248,238,0.5);
+  }
+  .depth-b .depth-opt.is-on {
+    background: rgba(255,248,238,0.12);
+    color: #fff8ee;
+    box-shadow: inset 2px 0 0 rgba(201,168,114,0.95);
+  }
+
+  /* —— C: compact expand + glass overlay (picked) —— */
+  .depth-c {
+    position: relative;
+  }
+  .depth-c-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255,248,238,0.10), rgba(20,14,10,0.38));
+    border: 1px solid rgba(255, 248, 238, 0.22);
+    box-shadow:
+      inset 0 1px 0 rgba(255,248,238,0.14),
+      inset 0 -1px 0 rgba(0,0,0,0.28);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 11px;
+    color: #fff8ee;
+    cursor: pointer;
+  }
+  .depth-c-trigger::after {
+    content: "▾";
+    font-style: normal;
+    font-size: 9px;
+    opacity: 0.65;
+  }
+  .depth-c-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    z-index: 8;
+    min-width: 132px;
+    padding: 5px;
+    border-radius: 12px;
+    background:
+      linear-gradient(180deg, rgba(255,248,238,0.10), rgba(16,11,8,0.72));
+    border: 1px solid rgba(255, 248, 238, 0.22);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,248,238,0.12),
+      inset 0 -1px 0 rgba(0,0,0,0.28),
+      0 14px 32px rgba(0,0,0,0.45);
+  }
+  .depth-c.is-open .depth-c-menu,
+  .depth-c:hover .depth-c-menu,
+  .depth-c:focus-within .depth-c-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .depth-c-menu .depth-opt {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    text-align: left;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: rgba(255,248,238,0.65);
+  }
+  .depth-c-menu .depth-opt.is-on {
+    color: #fff8ee;
+    background: rgba(255,248,238,0.08);
+    box-shadow:
+      inset 0 1px 2px rgba(0,0,0,0.45),
+      inset 0 -1px 0 rgba(255,248,238,0.08),
+      0 0 0 1px rgba(201,168,114,0.35);
+    text-shadow: 0 0 12px rgba(201,168,114,0.35);
+  }
+
+  /* —— D: icon marks —— */
+  .depth-d {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(20, 14, 10, 0.32);
+    border: 1px solid rgba(255, 248, 238, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .depth-d .depth-opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    color: rgba(255,248,238,0.48);
+  }
+  .depth-d .depth-opt .ico {
+    width: 12px;
+    height: 12px;
+    display: block;
+    opacity: 0.7;
+    flex: 0 0 auto;
+  }
+  .depth-d .depth-opt .lbl {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 10px;
+  }
+  .depth-d .depth-opt.is-on {
+    background: rgba(255,248,238,0.1);
+    color: #fff8ee;
+    box-shadow: inset 0 0 0 1px rgba(201,168,114,0.7);
+  }
+  .depth-d .depth-opt.is-on .ico { opacity: 1; }
+  @media (max-width: 1100px) {
+    .depth-d .depth-opt .lbl { display: none; }
+    .depth-d .depth-opt { padding: 6px 7px; }
+    .depth-d .depth-opt[title]::after { content: none; }
+  }
+
+  /* —— E: embossed glass (no solid white fill) —— */
+  .depth-e {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 3px;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255,248,238,0.08), rgba(20,14,10,0.35));
+    border: 1px solid rgba(255, 248, 238, 0.2);
+    box-shadow:
+      inset 0 1px 0 rgba(255,248,238,0.12),
+      inset 0 -1px 0 rgba(0,0,0,0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .depth-e .depth-opt {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 11px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    color: rgba(255,248,238,0.5);
+  }
+  .depth-e .depth-opt.is-on {
+    color: #fff8ee;
+    background: rgba(255,248,238,0.08);
+    box-shadow:
+      inset 0 1px 2px rgba(0,0,0,0.45),
+      inset 0 -1px 0 rgba(255,248,238,0.08),
+      0 0 0 1px rgba(201,168,114,0.35);
+    text-shadow: 0 0 12px rgba(201,168,114,0.35);
+  }
+
+  .hint {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    z-index: 3;
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+    background: rgba(12,8,6,0.55);
+    padding: 3px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .foot {
+    max-width: 720px;
+    margin: 32px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.4);
+    line-height: 1.7;
+  }
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 28px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(247,239,228,0.55);
+    text-decoration: none;
+  }
+  .back:hover { color: #fff8ee; }
+
+  /* stop panel click when interacting with depth */
+  .stage .tools,
+  .stage .depth-c,
+  .stage .depth-a,
+  .stage .depth-b,
+  .stage .depth-d,
+  .stage .depth-e,
+  .stage .depth-now {
+    pointer-events: auto;
+  }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <h1>depth style</h1>
+    <p>right tools · sections · subsections · cards · tasks</p>
+  </div>
+  <p class="note">Same place as today (right of overview · impulses · flow · nodes, before carry / +). <strong style="color:#c9a872;font-weight:400;">Picked: C · Compact expand + glass</strong> — wired live on everything / prototype.</p>
+  <div class="picked on" id="pickedBanner">picked · C · Compact expand + glass · live</div>
+
+  <!-- baseline reference -->
+  <div class="now" aria-label="Current depth style">
+    <div class="now-head">
+      <div class="letter"><em>Now</em> Filled white pill</div>
+      <div class="tag">baseline · what you have</div>
+    </div>
+    <p class="now-cap">Translucent glass cluster · active = solid white fill. Compare the five alternatives below.</p>
+    <div class="stage" style="aspect-ratio: 21 / 9;">
+      <div class="day-chrome">
+        <div class="day-title">Tuesday · Sept 1</div>
+        <div class="toolbar">
+          <div class="spacer"></div>
+          <div class="view-pills" aria-hidden="true">
+            <span class="view-pill on">overview</span>
+            <span class="view-pill">impulses</span>
+            <span class="view-pill">flow</span>
+            <span class="view-pill">nodes</span>
+          </div>
+          <div class="tools">
+            <div class="depth-now" data-depth-group role="group" aria-label="depth now">
+              <button type="button" class="depth-opt" data-mode="sections">sections</button>
+              <button type="button" class="depth-opt" data-mode="subsections">subsections</button>
+              <button type="button" class="depth-opt" data-mode="cards">cards</button>
+              <button type="button" class="depth-opt is-on" data-mode="tasks">tasks</button>
+            </div>
+            <span class="carry">carry</span>
+            <span class="plus">+</span>
+          </div>
+        </div>
+        <div class="collage">
+          <div class="tile t1"><span>fitness training</span></div>
+          <div class="tile t2"><span>Pepperdine</span></div>
+          <div class="tile t3"><span>audacity</span></div>
+          <div class="tile t4"><span>attention</span></div>
+          <div class="tile t5"><span>abundance</span></div>
+        </div>
+        <div class="hint">click labels to switch active</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" id="grid">
+    <!-- A -->
+    <article class="panel" tabindex="0" role="button" data-choice="A" aria-label="Option A editorial hairline">
+      <div class="panel-head">
+        <div class="letter"><em>A</em> Editorial hairline</div>
+        <div class="tag">letterspaced · underline</div>
+      </div>
+      <p class="panel-cap">Quiet mono caps with a champagne underline — no fat filled pill, still on the right before carry.</p>
+      <div class="stage">
+        <div class="day-chrome">
+          <div class="day-title">Tuesday · Sept 1</div>
+          <div class="toolbar">
+            <div class="spacer"></div>
+            <div class="view-pills" aria-hidden="true">
+              <span class="view-pill on">overview</span>
+              <span class="view-pill">impulses</span>
+              <span class="view-pill">flow</span>
+              <span class="view-pill">nodes</span>
+            </div>
+            <div class="tools" data-stop>
+              <div class="depth-a" data-depth-group role="group" aria-label="depth A">
+                <button type="button" class="depth-opt" data-mode="sections">sections</button>
+                <button type="button" class="depth-opt" data-mode="subsections">subsections</button>
+                <button type="button" class="depth-opt" data-mode="cards">cards</button>
+                <button type="button" class="depth-opt is-on" data-mode="tasks">tasks</button>
+              </div>
+              <span class="carry">carry</span>
+              <span class="plus">+</span>
+            </div>
+          </div>
+          <div class="collage">
+            <div class="tile t1"><span>fitness training</span></div>
+            <div class="tile t2"><span>Pepperdine</span></div>
+            <div class="tile t3"><span>audacity</span></div>
+            <div class="tile t4"><span>attention</span></div>
+            <div class="tile t5"><span>abundance</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- B -->
+    <article class="panel" tabindex="0" role="button" data-choice="B" aria-label="Option B vertical stack">
+      <div class="panel-head">
+        <div class="letter"><em>B</em> Vertical right rail</div>
+        <div class="tag">stack · champagne edge</div>
+      </div>
+      <p class="panel-cap">Depth stacks as a short column on the far right; carry / + sit under it. Active = soft inset + gold edge.</p>
+      <div class="stage">
+        <div class="day-chrome">
+          <div class="day-title">Tuesday · Sept 1</div>
+          <div class="toolbar">
+            <div class="spacer"></div>
+            <div class="view-pills" aria-hidden="true">
+              <span class="view-pill on">overview</span>
+              <span class="view-pill">impulses</span>
+              <span class="view-pill">flow</span>
+              <span class="view-pill">nodes</span>
+            </div>
+            <div class="tools tools-b" data-stop>
+              <div class="depth-b" data-depth-group role="group" aria-label="depth B">
+                <button type="button" class="depth-opt" data-mode="sections">sections</button>
+                <button type="button" class="depth-opt" data-mode="subsections">subsections</button>
+                <button type="button" class="depth-opt" data-mode="cards">cards</button>
+                <button type="button" class="depth-opt is-on" data-mode="tasks">tasks</button>
+              </div>
+              <div class="row-actions">
+                <span class="carry">carry</span>
+                <span class="plus">+</span>
+              </div>
+            </div>
+          </div>
+          <div class="collage">
+            <div class="tile t1"><span>fitness training</span></div>
+            <div class="tile t2"><span>Pepperdine</span></div>
+            <div class="tile t3"><span>audacity</span></div>
+            <div class="tile t4"><span>attention</span></div>
+            <div class="tile t5"><span>abundance</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- C · PICKED: compact expand + glass -->
+    <article class="panel is-picked" tabindex="0" role="button" data-choice="C" aria-label="Option C compact expand glass — picked">
+      <div class="panel-head">
+        <div class="letter"><em>C</em> Compact expand + glass</div>
+        <div class="tag">picked · live</div>
+      </div>
+      <p class="panel-cap">Resting chip shows the active depth; hover/click expands the four. Material = frosted glass (E feel) — no fat white fill.</p>
+      <div class="stage">
+        <div class="day-chrome">
+          <div class="day-title">Tuesday · Sept 1</div>
+          <div class="toolbar">
+            <div class="spacer"></div>
+            <div class="view-pills" aria-hidden="true">
+              <span class="view-pill on">overview</span>
+              <span class="view-pill">impulses</span>
+              <span class="view-pill">flow</span>
+              <span class="view-pill">nodes</span>
+            </div>
+            <div class="tools" data-stop>
+              <div class="depth-c is-open" data-depth-group data-compact role="group" aria-label="depth C glass">
+                <button type="button" class="depth-c-trigger" data-c-trigger>tasks</button>
+                <div class="depth-c-menu">
+                  <button type="button" class="depth-opt" data-mode="sections">sections</button>
+                  <button type="button" class="depth-opt" data-mode="subsections">subsections</button>
+                  <button type="button" class="depth-opt" data-mode="cards">cards</button>
+                  <button type="button" class="depth-opt is-on" data-mode="tasks">tasks</button>
+                </div>
+              </div>
+              <span class="carry">carry</span>
+              <span class="plus">+</span>
+            </div>
+          </div>
+          <div class="collage">
+            <div class="tile t1"><span>fitness training</span></div>
+            <div class="tile t2"><span>Pepperdine</span></div>
+            <div class="tile t3"><span>audacity</span></div>
+            <div class="tile t4"><span>attention</span></div>
+            <div class="tile t5"><span>abundance</span></div>
+          </div>
+          <div class="hint">picked · wired live · hover / click chip</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- D -->
+    <article class="panel" tabindex="0" role="button" data-choice="D" aria-label="Option D icon marks">
+      <div class="panel-head">
+        <div class="letter"><em>D</em> Icon + label</div>
+        <div class="tag">glyphs · soft ring</div>
+      </div>
+      <p class="panel-cap">Tiny layer glyphs beside each label; active uses a champagne ring instead of a chalk-white fill. Narrow widths hide labels (icons keep titles).</p>
+      <div class="stage">
+        <div class="day-chrome">
+          <div class="day-title">Tuesday · Sept 1</div>
+          <div class="toolbar">
+            <div class="spacer"></div>
+            <div class="view-pills" aria-hidden="true">
+              <span class="view-pill on">overview</span>
+              <span class="view-pill">impulses</span>
+              <span class="view-pill">flow</span>
+              <span class="view-pill">nodes</span>
+            </div>
+            <div class="tools" data-stop>
+              <div class="depth-d" data-depth-group role="group" aria-label="depth D">
+                <button type="button" class="depth-opt" data-mode="sections" title="sections">
+                  <svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="1" width="4.5" height="4.5" fill="currentColor" opacity=".9"/><rect x="6.5" y="1" width="4.5" height="4.5" fill="currentColor" opacity=".55"/><rect x="1" y="6.5" width="4.5" height="4.5" fill="currentColor" opacity=".55"/><rect x="6.5" y="6.5" width="4.5" height="4.5" fill="currentColor" opacity=".35"/></svg>
+                  <span class="lbl">sections</span>
+                </button>
+                <button type="button" class="depth-opt" data-mode="subsections" title="subsections">
+                  <svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="1" width="10" height="3" fill="currentColor" opacity=".85"/><rect x="3" y="5" width="8" height="2.2" fill="currentColor" opacity=".55"/><rect x="3" y="8.3" width="8" height="2.2" fill="currentColor" opacity=".4"/></svg>
+                  <span class="lbl">subsections</span>
+                </button>
+                <button type="button" class="depth-opt" data-mode="cards" title="cards">
+                  <svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.2" y="1.5" width="7.6" height="9" rx="0.8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 8.5h4" stroke="currentColor" stroke-width="1.1"/></svg>
+                  <span class="lbl">cards</span>
+                </button>
+                <button type="button" class="depth-opt is-on" data-mode="tasks" title="tasks">
+                  <svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6h9" stroke="currentColor" stroke-width="1.2"/><circle cx="4" cy="4" r="1.1" fill="currentColor"/><circle cx="8" cy="8" r="1.1" fill="currentColor" opacity=".7"/></svg>
+                  <span class="lbl">tasks</span>
+                </button>
+              </div>
+              <span class="carry">carry</span>
+              <span class="plus">+</span>
+            </div>
+          </div>
+          <div class="collage">
+            <div class="tile t1"><span>fitness training</span></div>
+            <div class="tile t2"><span>Pepperdine</span></div>
+            <div class="tile t3"><span>audacity</span></div>
+            <div class="tile t4"><span>attention</span></div>
+            <div class="tile t5"><span>abundance</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- E -->
+    <article class="panel" tabindex="0" role="button" data-choice="E" aria-label="Option E embossed glass">
+      <div class="panel-head">
+        <div class="letter"><em>E</em> Embossed glass</div>
+        <div class="tag">pressed · no white fill</div>
+      </div>
+      <p class="panel-cap">Same pill cluster silhouette, but active is pressed into the glass with a soft champagne glow — no opaque white capsule.</p>
+      <div class="stage">
+        <div class="day-chrome">
+          <div class="day-title">Tuesday · Sept 1</div>
+          <div class="toolbar">
+            <div class="spacer"></div>
+            <div class="view-pills" aria-hidden="true">
+              <span class="view-pill on">overview</span>
+              <span class="view-pill">impulses</span>
+              <span class="view-pill">flow</span>
+              <span class="view-pill">nodes</span>
+            </div>
+            <div class="tools" data-stop>
+              <div class="depth-e" data-depth-group role="group" aria-label="depth E">
+                <button type="button" class="depth-opt" data-mode="sections">sections</button>
+                <button type="button" class="depth-opt" data-mode="subsections">subsections</button>
+                <button type="button" class="depth-opt" data-mode="cards">cards</button>
+                <button type="button" class="depth-opt is-on" data-mode="tasks">tasks</button>
+              </div>
+              <span class="carry">carry</span>
+              <span class="plus">+</span>
+            </div>
+          </div>
+          <div class="collage">
+            <div class="tile t1"><span>fitness training</span></div>
+            <div class="tile t2"><span>Pepperdine</span></div>
+            <div class="tile t3"><span>audacity</span></div>
+            <div class="tile t4"><span>attention</span></div>
+            <div class="tile t5"><span>abundance</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <p class="foot">depth stays on the right · C + glass is live · center view pills unchanged</p>
+  <a class="back" href="prototype.html">← back to prototype</a>
+
+<script>
+(function () {
+  var banner = document.getElementById('pickedBanner');
+  var labels = {
+    A: 'A · Editorial hairline',
+    B: 'B · Vertical right rail',
+    C: 'C · Compact expand + glass · live',
+    D: 'D · Icon + label',
+    E: 'E · Embossed glass'
+  };
+
+  try { localStorage.setItem('btm_depth_style_pick_v1', 'C'); } catch (err) {}
+
+  document.querySelectorAll('.panel[data-choice]').forEach(function (panel) {
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('[data-stop], .depth-opt, .depth-c-trigger, [data-depth-group]')) {
+        e.stopPropagation();
+        return;
+      }
+      document.querySelectorAll('.panel.is-picked').forEach(function (p) {
+        p.classList.remove('is-picked');
+      });
+      panel.classList.add('is-picked');
+      var key = panel.getAttribute('data-choice');
+      banner.textContent = 'picked · ' + (labels[key] || key);
+      banner.classList.add('on');
+      try { localStorage.setItem('btm_depth_style_pick_v1', key); } catch (err) {}
+    });
+  });
+
+  try {
+    var saved = localStorage.getItem('btm_depth_style_pick_v1') || 'C';
+    if (saved && labels[saved]) {
+      document.querySelectorAll('.panel.is-picked').forEach(function (p) {
+        p.classList.remove('is-picked');
+      });
+      var el = document.querySelector('.panel[data-choice="' + saved + '"]');
+      if (el) {
+        el.classList.add('is-picked');
+        banner.textContent = 'picked · ' + labels[saved];
+        banner.classList.add('on');
+      }
+    }
+  } catch (err) {}
+
+  function setActive(group, mode) {
+    group.querySelectorAll('.depth-opt').forEach(function (btn) {
+      btn.classList.toggle('is-on', btn.getAttribute('data-mode') === mode);
+    });
+    var trigger = group.querySelector('[data-c-trigger]');
+    if (trigger) trigger.textContent = mode;
+  }
+
+  document.querySelectorAll('[data-depth-group]').forEach(function (group) {
+    group.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var opt = e.target.closest('.depth-opt');
+      if (!opt) {
+        var trig = e.target.closest('[data-c-trigger]');
+        if (trig) {
+          group.classList.toggle('is-open');
+        }
+        return;
+      }
+      setActive(group, opt.getAttribute('data-mode'));
+      if (group.hasAttribute('data-compact')) {
+        group.classList.remove('is-open');
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>film strip · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,300;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Special+Elite&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=navveil5"/>
+<style>
+  :root { --strip-h: 158px; --cream: #F5F0E8; --champagne: #c4a882; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #0c0a09;
+    color: #f4efe6;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .still {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      url("manus-storage/zone-athletic.jpg?v=color2") center 30% / cover no-repeat;
+  }
+  .still::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,8,6,0.10) 0%, rgba(10,8,6,0.00) 38%, rgba(10,8,6,0.18) 72%, rgba(8,6,4,0.36) 100%);
+    pointer-events: none;
+  }
+
+  .wordmark {
+    position: fixed;
+    left: 22px;
+    right: 22px;
+    bottom: calc(var(--strip-h) + 16px);
+    z-index: 2;
+    pointer-events: none;
+    text-shadow: 0 2px 22px rgba(0,0,0,0.72), 0 1px 3px rgba(0,0,0,0.55);
+  }
+  .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.62);
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: #fff8ee;
+  }
+  .beat {
+    margin-top: 4px;
+    font-style: italic;
+    font-size: clamp(16px, 2vw, 20px);
+    color: rgba(244,239,230,0.78);
+    min-height: 1.2em;
+  }
+
+  .film {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+    height: var(--strip-h);
+    background: #100e0c;
+    box-shadow: 0 -16px 48px rgba(0,0,0,0.42);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 0 7px;
+  }
+  .sprockets {
+    height: 10px;
+    margin: 0 12px;
+    background-image: radial-gradient(ellipse 4px 3.2px at 50% 50%, #1c1814 0 62%, transparent 64%);
+    background-size: 18px 10px;
+    background-repeat: repeat-x;
+    background-position: center;
+    opacity: 0.92;
+    pointer-events: none;
+  }
+  .sprockets.bottom { margin-top: 6px; }
+  .sprockets.top { margin-bottom: 6px; }
+
+  .frames {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .frames::-webkit-scrollbar { display: none; }
+
+  .frame {
+    flex: 0 0 auto;
+    width: 118px;
+    border: 1px solid rgba(196,168,130,0.22);
+    background: #14110e;
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    position: relative;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+  .frame:hover { border-color: rgba(196,168,130,0.5); }
+  .frame.is-on {
+    border-color: var(--champagne);
+    box-shadow: 0 0 0 1px rgba(196,168,130,0.35);
+  }
+  .frame img {
+    display: block;
+    width: 100%;
+    height: 74px;
+    object-fit: cover;
+    background: #1a1612;
+  }
+  .frame .cap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 5px 6px 6px;
+  }
+  .frame .num {
+    font-family: "Special Elite", "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    color: rgba(196,168,130,0.55);
+    flex: 0 0 auto;
+  }
+  .frame em {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    font-style: normal;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #d8c7aa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .frame .cut {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 16px;
+    height: 16px;
+    border: 0;
+    background: rgba(12,10,9,0.55);
+    color: rgba(244,239,230,0.72);
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .frame.is-on .cut {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .add-slot {
+    flex: 0 0 auto;
+    width: 118px;
+    min-height: 108px;
+    border: 1px dashed rgba(196,168,130,0.32);
+    background: rgba(20,16,12,0.55);
+    color: rgba(216,199,170,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: "Italiana", serif;
+    font-size: 28px;
+    font-weight: 400;
+  }
+  .add-slot:hover { border-color: rgba(196,168,130,0.6); color: #f4efe6; }
+  .add-form {
+    flex: 0 0 auto;
+    width: 168px;
+    min-height: 108px;
+    border: 1px solid rgba(196,168,130,0.4);
+    background: rgba(20,16,12,0.88);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    gap: 8px;
+  }
+  .add-form input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid rgba(196,168,130,0.4);
+    background: transparent;
+    color: #f4efe6;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    outline: none;
+    padding: 2px 0 4px;
+  }
+  .add-form input::placeholder { color: rgba(244,239,230,0.38); }
+  .add-form .hint {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(196,168,130,0.62);
+  }
+
+  @media (max-width: 640px) {
+    :root { --strip-h: 148px; }
+    .wordmark { left: 16px; right: 16px; }
+    .frame, .add-slot { width: 104px; }
+    .frame img { height: 66px; }
+    .add-form { width: 150px; }
+  }
+</style>
+</head>
+<body>
+<div class="still" aria-hidden="true"></div>
+<header class="wordmark">
+  <p class="eyebrow">02 · contact sheet</p>
+  <h1>film strip</h1>
+  <p class="beat" id="beat">scan the frames · the still stays</p>
+</header>
+<div class="film" role="region" aria-label="contact sheet">
+  <div class="sprockets top" aria-hidden="true"></div>
+  <div class="frames" id="frames"></div>
+  <div class="sprockets bottom" aria-hidden="true"></div>
+</div>
+<script src="nav-shared.js?v=navfilm1"></script>
+<script>
+(function(){
+  var KEY = 'page_film_strip_v1';
+  var SEED = [
+    { title: 'calisthenics', photo: 'manus-storage/card-calisthenics.jpg' },
+    { title: 'inversions', photo: 'manus-storage/card-inversions.jpg' },
+    { title: 'cleanse', photo: 'manus-storage/card-cleanse.jpg' },
+    { title: 'induction', photo: 'manus-storage/card-induction.jpg' },
+    { title: 'core', photo: 'manus-storage/zone-body-abs.jpg' },
+    { title: 'EnhanCV', photo: 'manus-storage/card-enhancv.jpg' },
+    { title: 'tuition', photo: 'manus-storage/card-tuition.jpg' },
+    { title: 'refunds', photo: 'manus-storage/card-refunds.jpg' }
+  ];
+  var framesEl = document.getElementById('frames');
+  var beatEl = document.getElementById('beat');
+  var adding = false;
+  var selected = null;
+
+  function uid(){ return 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function load(){
+    try {
+      var raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (raw && Array.isArray(raw.frames) && raw.frames.length) {
+        selected = raw.selected || null;
+        return raw.frames.map(function(it, i){
+          return { id: it.id || uid() + i, title: it.title || 'frame', photo: it.photo || '' };
+        });
+      }
+    } catch (e) {}
+    return SEED.map(function(it){ return { id: uid(), title: it.title, photo: it.photo }; });
+  }
+  function save(list){
+    try { localStorage.setItem(KEY, JSON.stringify({ frames: list, selected: selected })); } catch (e) {}
+  }
+  var frames = load();
+  if (!selected && frames[0]) selected = frames[0].id;
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  function render(){
+    framesEl.innerHTML = '';
+    frames.forEach(function(it, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'frame' + (it.id === selected ? ' is-on' : '');
+      btn.dataset.id = it.id;
+      var img = it.photo
+        ? '<img src="'+it.photo+'" alt=""/>'
+        : '<img alt="" style="opacity:0.2"/>';
+      btn.innerHTML = img +
+        '<span class="cap"><span class="num">'+pad(i + 1)+'</span><em>'+esc(it.title)+'</em></span>' +
+        '<span class="cut" data-cut="1" aria-label="remove frame">×</span>';
+      framesEl.appendChild(btn);
+    });
+    if (adding) {
+      var form = document.createElement('form');
+      form.className = 'add-form';
+      form.innerHTML = '<input id="new-frame" type="text" placeholder="a beat to keep" autocomplete="off" maxlength="64"/><span class="hint">enter · keep</span>';
+      form.addEventListener('submit', onAdd);
+      framesEl.appendChild(form);
+      var inp = form.querySelector('input');
+      setTimeout(function(){ inp.focus(); }, 20);
+    } else {
+      var add = document.createElement('button');
+      add.type = 'button';
+      add.className = 'add-slot';
+      add.setAttribute('aria-label', 'add a frame');
+      add.textContent = '+';
+      add.addEventListener('click', function(){
+        adding = true;
+        render();
+        framesEl.scrollLeft = framesEl.scrollWidth;
+      });
+      framesEl.appendChild(add);
+    }
+    var on = frames.filter(function(f){ return f.id === selected; })[0];
+    beatEl.textContent = on ? on.title : 'scan the frames · the still stays';
+  }
+
+  function esc(s){
+    return String(s || '').replace(/[&<>"']/g, function(ch){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch];
+    });
+  }
+
+  function onAdd(e){
+    e.preventDefault();
+    var inp = document.getElementById('new-frame');
+    var title = ((inp && inp.value) || '').replace(/\s+/g, ' ').trim();
+    adding = false;
+    if (!title) { render(); return; }
+    var item = { id: uid(), title: title, photo: '' };
+    frames.push(item);
+    selected = item.id;
+    save(frames);
+    render();
+    framesEl.scrollLeft = framesEl.scrollWidth;
+    fetch('/photo-for?name=' + encodeURIComponent(title)).then(function(r){ return r.json(); }).then(function(j){
+      if (j && j.ok && j.src) {
+        item.photo = j.src;
+        save(frames);
+        render();
+      }
+    }).catch(function(){});
+  }
+
+  framesEl.addEventListener('click', function(e){
+    var cut = e.target.closest && e.target.closest('[data-cut]');
+    var btn = e.target.closest && e.target.closest('.frame');
+    if (cut && btn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var id = btn.dataset.id;
+      frames = frames.filter(function(f){ return f.id !== id; });
+      if (selected === id) selected = frames[0] ? frames[0].id : null;
+      save(frames);
+      render();
+      return;
+    }
+    if (!btn) return;
+    selected = btn.dataset.id;
+    save(frames);
+    render();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    var i = frames.findIndex(function(f){ return f.id === selected; });
+    if (e.key === 'ArrowRight' && i < frames.length - 1) {
+      selected = frames[i + 1].id;
+      save(frames);
+      render();
+    } else if (e.key === 'ArrowLeft' && i > 0) {
+      selected = frames[i - 1].id;
+      save(frames);
+      render();
+    } else if (e.key === 'Escape' && adding) {
+      adding = false;
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
