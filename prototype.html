@@ -46826,6 +46826,9 @@ function seedAug30SelectedCards(blk){
         if(!isPoliticsTile(tile)) return;
         cleanPoliticsPhoto(tile);
       });
+      document.querySelectorAll('.day-block').forEach(function(blk){
+        try { if(typeof syncHeroLayoutClass === 'function') syncHeroLayoutClass(blk); } catch(e){}
+      });
     }
     rewritePoliticsPhotosNow();
     window.__rewritePoliticsPhotosNow = rewritePoliticsPhotosNow;

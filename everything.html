@@ -46453,6 +46453,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(!isPoliticsTile(tile)) return;
         cleanPoliticsPhoto(tile);
       });
+      document.querySelectorAll('.day-block').forEach(function(blk){
+        try { if(typeof syncHeroLayoutClass === 'function') syncHeroLayoutClass(blk); } catch(e){}
+      });
     }
     rewritePoliticsPhotosNow();
     window.__rewritePoliticsPhotosNow = rewritePoliticsPhotosNow;
