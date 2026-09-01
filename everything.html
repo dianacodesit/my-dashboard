@@ -12974,6 +12974,7 @@ window.__j22fnApply=run;
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
+    'fight':'manus-storage/zone-audacity.jpg?v=finger1',
     'remember who you are':'manus-storage/zone-audacity.jpg?v=finger1',
     'envision':'manus-storage/zone-future-self.jpg?v=swap1',
     'future':'manus-storage/zone-envision.jpg?v=swap1',
@@ -13060,7 +13061,7 @@ window.__j22fnApply=run;
     [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1'],
     [/self[- ]?esteem|selfworth|self-worth/, 'manus-storage/zone-self-esteem.jpg?v=se1'],
     [/self[- ]?actualiz|maslow|eclosion|becoming whole/, 'manus-storage/zone-self-actualize-eclose.jpg?v=eclose1'],
-    [/\baudacity\b|remember who you are|bold|daring|fearless|unflinching/, 'manus-storage/zone-audacity.jpg?v=finger1'],
+    [/\baudacity\b|\bfight\b|remember who you are|bold|daring|fearless|unflinching/, 'manus-storage/zone-audacity.jpg?v=finger1'],
     [/\bdetach\b|sever|unplug|cast.?off|cut.?tie|frayed.?rope|mooring line|let.?go/, 'manus-storage/zone-detach-fall.jpg?v=fall2'],
     [/\bstart over\b|start-over|begin again|fresh start|blank slate|new chapter|clean slate/, 'manus-storage/zone-start-over-notebook.jpg?v=nb1'],
     [/\banticipat|awaiting|look ahead|what.?s next|countdown|before the show|empty seats/, 'manus-storage/zone-anticipating-theater.jpg?v=theater1']
@@ -13092,6 +13093,7 @@ window.__j22fnApply=run;
     'surrender to Allah ﷻ':'warm',
     'villains':'coral',
     'villain':'coral',
+    'fight':'coral',
     'remember who you are':'coral',
     'envision':'lavender',
     'future':'lavender',
@@ -16806,6 +16808,31 @@ window.__j22fnApply=run;
     }
   }catch(e){}
 
+  try{
+    if(!localStorage.getItem('btm_allah_capitalize_v1')){
+      function capAllahTitle(s){ return String(s||'').replace(/\ballah\b/gi,'Allah'); }
+      document.querySelectorAll('.pursuit-zone-title, .vision-tile-title, .allah-inner').forEach(function(el){
+        var t=String(el.textContent||'');
+        var fixed=capAllahTitle(t);
+        if(fixed!==t) el.textContent=fixed;
+      });
+      document.querySelectorAll('.vision-tile-title[data-carve]').forEach(function(el){
+        var c=el.getAttribute('data-carve')||'';
+        var fixed=capAllahTitle(c);
+        if(fixed!==c) el.setAttribute('data-carve', fixed);
+      });
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw
+          .replace(/(<h3 class="vision-tile-title"[^>]*>)([^<]*)(<\/h3>)/g, function(_, a, mid, b){ return a+capAllahTitle(mid)+b; })
+          .replace(/(<[^>]*class="[^"]*pursuit-zone-title[^"]*"[^>]*>)([^<]*)(<)/g, function(_, a, mid, b){ return a+capAllahTitle(mid)+b; })
+          .replace(/data-carve="([^"]*)"/g, function(_, v){ var fixed=capAllahTitle(v); return fixed===v ? 'data-carve="'+v+'"' : 'data-carve="'+fixed+'"'; })
+          .replace(/"title":"([^"]*)"/g, function(_, t){ var fixed=capAllahTitle(t); return fixed===t ? '"title":"'+t+'"' : '"title":"'+fixed+'"'; });
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      localStorage.setItem('btm_allah_capitalize_v1','1');
+    }
+  }catch(e){}
 
   try{
     if(!localStorage.getItem('btm_toned_body_to_athletic_v1')){
@@ -18274,7 +18301,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1 };
+        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -19587,24 +19614,23 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many">
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2');" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px:12.5%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px:38%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
-<article class="vision-tile" data-focus="execute" style="--tile-photo: url('manus-storage/zone-execute-checklist.jpg?v=exec1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">execute</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="curate" style="--tile-photo: url('manus-storage/zone-curate-gallery.jpg?v=curate1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">curate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins.jpg?v=sec1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">win</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url('manus-storage/zone-repetitions.jpg?v=cubes1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">repetitions</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="intentions" style="--tile-photo: url('manus-storage/zone-intentions.jpg?v=aim1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">intentions</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="attention" style="--tile-photo: url('manus-storage/zone-attention.jpg?v=beam1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">attention</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="darkness" style="--tile-photo: url('none');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">darkness</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="audacity" style="--tile-photo: url('manus-storage/zone-audacity.jpg?v=finger1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">remember who you are</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="soul" style="--tile-photo: url('none');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">soul</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="detach" style="--tile-photo: url('manus-storage/zone-detach-fall.jpg?v=fall2');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">detach</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="start-over" style="--tile-photo: url('manus-storage/zone-start-over-notebook.jpg?v=nb1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">start over</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="tune-into" style="--tile-photo: url('none');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">tune into</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="self-actualize" style="--tile-photo: url('manus-storage/zone-self-actualize-eclose.jpg?v=eclose1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">self-actualize</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="claim" style="--tile-photo: url('none');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">claim</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="sabotage" style="--tile-photo: url('manus-storage/zone-sabotage.jpg?v=1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">sabotage</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="say-thank-you-in-advance" style="--tile-photo: url('manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1');" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">say thank you in advance</h3><div class="vision-tile-details"></div></article>
+<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="3" data-content-score="6"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="achieve">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px:12.5%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v4" style="--px:38%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/card-application.jpg?v=v4"><span>scholarship re-application</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 12.5%; --py: 2%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v4" style="--px: 12.5%; --py: 2%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-application.jpg?v=v4"><span>scholarship re-application</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship re-application</span></label></div></article>
+<article class="vision-tile" data-focus="execute" style="--tile-photo: url('manus-storage/zone-execute-checklist.jpg?v=exec1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="execute">execute</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="curate" style="--tile-photo: url('manus-storage/zone-curate-gallery.jpg?v=curate1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 5 / 1 / 6 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="curate">curate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins.jpg?v=sec1'); --photo-ar: 1; --zoom-ar: 1; grid-area: 8 / 1 / 10 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="win">win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 7 / 1 / 8 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="repetitions">repetitions</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="intentions" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="intentions">intentions</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="attention" style="--tile-photo: url(&quot;manus-storage/zone-anticipating-theater.jpg?v=theater1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="anticipate">anticipate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="darkness" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 6 / 2 / 7 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="darkness">darkness</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.612; --zoom-ar: 0.612; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); grid-area: 8 / 2 / 9 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="fight">fight</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="soul" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 9 / 2 / 10 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><p class="vision-tile-quote">the soul usually knows what to do to heal itself. the challenge is to silence the mind.</p><h3 class="vision-tile-title" data-carve="soul">soul</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="detach" style="--tile-photo: url(&quot;manus-storage/zone-detach-fall.jpg?v=fall2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="detach">detach</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="start-over" style="--tile-photo: url(&quot;manus-storage/zone-start-over-notebook.jpg?v=nb1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 1 / 7 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="start over">start over</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="tune-into" style="--tile-photo: none; --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 2 / 3 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="tune into">tune into</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="self-actualize" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-self-actualize-eclose.jpg?v=eclose1&quot;); grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="self-actualize">self-actualize</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="claim" style="--tile-photo: none; --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 3 / 4 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="claim">claim</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="sabotage" style="--tile-photo: url('manus-storage/zone-sabotage.jpg?v=1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 5 / 3 / 6 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="sabotage">sabotage</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="say-thank-you-in-advance" style="--tile-photo: url('manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 3 / 8 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="say thank you in advance">say thank you in advance</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 
 <div class="day-block" data-date="doha">
@@ -29365,7 +29391,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='sabotage') src='manus-storage/zone-sabotage.jpg?v=1';
       else if(nl==='say thank you in advance'||nl==='say-thank-you-in-advance') src='manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
-      else if(nl==='fight back'||nl==='remember who you are') src='manus-storage/zone-audacity.jpg?v=finger1';
+      else if(nl==='fight back'||nl==='remember who you are'||nl==='fight') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
       else if(nl==='pepperdine'||nl==='enroll'||nl==='achieve'||nl==='grad school'||nl==='grad') src='manus-storage/zone-pepperdine-malibu.jpg?v=campus2';
     }
@@ -29379,7 +29405,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','remember who you are','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repetitions', 'intentions', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -29403,7 +29429,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
     'itaqAllah':['dhikr','quran recitation','sabr','shukr'],
     'surrender to Allah ﷻ':['dhikr','quran recitation','sabr','shukr'],
     'villains':['start now','phone down','act anyway'],
-    'remember who you are':[],
+    'fight':[],
     'envision':[],
     'future':['document translation into Arabic','certified letters','litigation wins'],
     'become':['document translation into Arabic','certified letters','litigation wins'],
@@ -43054,7 +43080,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -43108,7 +43134,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -43123,9 +43149,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       pursuits: [],
       executive: [],
       ambition: [],
-      pepperdine: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
-      'grad school': ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
-      grad: ['scholarship re-application', 'tuition', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
+      pepperdine: ['tuition payment', 'fall 2026 enrollment', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
+      'grad school': ['tuition payment', 'fall 2026 enrollment', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
+      grad: ['tuition payment', 'fall 2026 enrollment', 'committee check-in', 'Graduate Student Association · Top Applicant', 'AERA', 'Anthropic', 'Elevate', "Dr Betty's EA", 'Handshake', 'Psi Chi', 'research proposal'],
       receive: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       ask: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
       finances: ['capital blueprint', 'tuition money', 'chargebacks', 'refunds'],
@@ -43302,8 +43328,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'wins' || t === 'win' || f === 'wins'){
       add('wins'); add('win');
     }
-    if(t === 'audacity' || t === 'fight back' || t === 'remember who you are' || f === 'audacity' || f === 'fight-back' || f === 'fight back'){
-      add('audacity'); add('fight back'); add('remember who you are');
+    if(t === 'audacity' || t === 'fight back' || t === 'remember who you are' || t === 'fight' || f === 'audacity' || f === 'fight-back' || f === 'fight back'){
+      add('audacity'); add('fight back'); add('remember who you are'); add('fight');
     }
     if(t === 'attention' || t === 'anticipate' || f === 'attention' || f === 'anticipate'){
       add('attention'); add('anticipate');
@@ -43336,18 +43362,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'art-science' || t === 'art/science' || t === 'art science' || t === 'artscience' || t === 'art | science'){ rec.title = 'art | science'; rec.focus = 'art-science'; }
     else if(t === 'self-esteem' || t === 'self esteem' || t === 'selfesteem'){ rec.title = 'self-esteem'; rec.focus = 'self-esteem'; }
     else if(t === 'wins' || t === 'win'){ rec.title = 'win'; rec.focus = 'wins'; }
-    else if(t === 'audacity' || t === 'fight back'){ rec.title = 'remember who you are'; rec.focus = 'audacity'; }
+    else if(t === 'audacity' || t === 'fight back' || t === 'remember who you are'){ rec.title = 'fight'; rec.focus = 'audacity'; }
     else if(t === 'attention' || t === 'anticipate'){ rec.title = 'anticipate'; rec.focus = 'attention'; }
     else if(t === 'inner fire' || t === 'inner-fire' || t === 'ignite'){ rec.title = 'ignite'; rec.focus = 'inner-fire'; }
     else { rec.title = displaySectionTitle(rec.title); }
     if(!rec.focus) rec.focus = slug(rec.title);
     return rec;
   }
+    function capitalizeAllahInTitle(name){
+    return String(name || '').replace(/\ballah\b/gi, 'Allah');
+  }
     function displaySectionTitle(name){
-    var low = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    var raw = String(name || '').replace(/\s+/g, ' ').trim();
+    var low = raw.replace(/\uFDFB/g,'').replace(/\s+/g,' ').trim().toLowerCase();
     if(low === 'executive') return 'ambition';
     if(low === 'body' || low === 'gym' || low === 'toned body' || low === 'toned-body' || low === 'athletic' || low === 'fitness training' || low === 'fitness-training' || low === 'train') return 'train';
-    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low === 'itaqallah' || low === 'itaq-allah' || low === 'surrender to allah' || low === 'surrender-to-allah' || low.replace(/\uFDFB/g,'').trim() === 'fear allah') return 'surrender to Allah ﷻ';
+    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low === 'itaqallah' || low === 'itaq-allah' || low === 'surrender to allah' || low === 'surrender-to-allah') return 'surrender to Allah ﷻ';
     if(low === 'pepperdine' || low === 'enroll' || low === 'achieve') return 'achieve';
     if(low === 'future' || low === 'future self' || low === 'future-self' || low === 'futureself' || low === 'become') return 'become';
     if(low === 'finances' || low === 'abundance' || low === 'abundant' || low === 'receive') return 'ask';
@@ -43356,7 +43386,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(low === 'art-science' || low === 'art/science' || low === 'art science' || low === 'artscience' || low === 'art | science') return 'art | science';
     if(low === 'self-esteem' || low === 'self esteem' || low === 'selfesteem') return 'self-esteem';
     if(low === 'wins') return 'win';
-    if(low === 'audacity' || low === 'fight back') return 'remember who you are';
+    if(low === 'audacity' || low === 'fight back' || low === 'remember who you are') return 'fight';
     if(low === 'attention' || low === 'anticipate') return 'anticipate';
     if(low === 'inner fire' || low === 'inner-fire' || low === 'ignite') return 'ignite';
     var honor = (raw.match(/\uFDFB/) || [''])[0];
@@ -44447,7 +44477,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1, ignite:1,'potential':1,'resonance':1,
     'god-conscious':1,'god conscious':1,'awliya allah':1,'awliya-allah':1,'awliya allah swt':1,'awliya-allah-swt':1,'villains':1,'villain':1,'house':1,
-    'fight back':1,'remember who you are':1,'envision':1,future:1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, win:1, receive:1, ask:1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1
+    'fight back':1,'remember who you are':1,'envision':1,future:1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, win:1, receive:1, ask:1, repetitions:1, intentions:1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
   };
   function loadCardPhotoCache(){
     try { return JSON.parse(localStorage.getItem(CARD_PHOTO_STORE) || '{}') || {}; } catch(e){ return {}; }
@@ -45790,7 +45820,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       for(var k in aliases){ if(rem[k]) return; }
       if(typeof isGloballyArchivedSection === 'function' && (isGloballyArchivedSection(rec.focus) || isGloballyArchivedSection(rec.title))) return;
       if((dayKey(blk)||'') === '2026-08-30' && typeof shouldDropAug30ArchivedSection === 'function' && shouldDropAug30ArchivedSection(rec.focus, rec.title)) return;
-      if(isFreshDayBlk(blk) && isUninvitedAutoSection(blk, rec.focus, rec.title)) return;
+      if(isFreshDayBlk(blk) && isUninvitedAutoSection(blk, rec.focus, rec.title) && !isUserAddedSection(blk, rec.focus, rec.title)) return;
       var want = hardwiredSectionPhoto(blk, rec.title, rec.focus);
       if(want) rec.photo = want;
       var already = [].slice.call(vb.querySelectorAll('.vision-tile')).some(function(tile){
@@ -46021,7 +46051,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'awliya allah swt' || String(title).toLowerCase().replace(/\uFDFB/g,'').trim() === 'fear allah' || focus === 'awliya-allah' || focus === 'god-conscious' || focus === 'awliya-allah-swt' || focus === 'fear-allah' || focus === 'itaq-allah' || focus === 'surrender-to-allah' || String(title).toLowerCase() === 'itaqallah' || String(title).toLowerCase() === 'surrender to allah'){ focus = 'itaq-allah'; title = 'surrender to Allah ﷻ'; }
     if(String(title).toLowerCase() === 'self-esteem' || focus === 'selfesteem'){ focus = 'self-esteem'; title = 'self-esteem'; }
     if(String(title).toLowerCase() === 'wins' || String(title).toLowerCase() === 'win'){ focus = 'wins'; title = 'win'; }
-    if(String(title).toLowerCase() === 'audacity' || String(title).toLowerCase() === 'fight back' || focus === 'audacity'){ focus = 'audacity'; title = 'remember who you are'; }
+    if(String(title).toLowerCase() === 'audacity' || String(title).toLowerCase() === 'fight back' || String(title).toLowerCase() === 'remember who you are' || focus === 'audacity'){ focus = 'audacity'; title = 'fight'; }
     if(String(title).toLowerCase() === 'attention' || String(title).toLowerCase() === 'anticipate' || focus === 'attention' || focus === 'anticipate'){ focus = 'attention'; title = 'anticipate'; }
     if(String(title).toLowerCase() === 'inner fire' || String(title).toLowerCase() === 'inner-fire' || String(title).toLowerCase() === 'ignite' || focus === 'inner-fire' || focus === 'ignite'){ focus = 'inner-fire'; title = 'ignite'; }
     if(String(title).toLowerCase() === 'pepperdine' || String(title).toLowerCase() === 'enroll' || String(title).toLowerCase() === 'achieve' || title === 'grad school' || title === 'grad' || title === 'grad-school' || focus === 'pepperdine' || focus === 'enroll' || focus === 'achieve' || focus === 'grad' || focus === 'grad-school'){ focus = 'pepperdine'; title = 'achieve'; }
@@ -46654,6 +46684,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return (window.__cardImgFor && window.__cardImgFor('induction')) || 'manus-storage/card-induction.jpg?v=rl2';
   }
   function sectionWasRemovedOrArchived(blk, focus, title){
+    if(typeof isUserAddedSection === 'function' && isUserAddedSection(blk, focus, title)) return false;
     var f = String(focus || '').toLowerCase();
     var t = String(title || focus || '').replace(/\s+/g, ' ').trim().toLowerCase();
     if(typeof isGloballyArchivedSection === 'function'){
@@ -47268,14 +47299,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 
   function seedSep01Audacity(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
-    /* v3: presence-based — audacity displays as remember who you are (finger photo). Not the archived legacy fight-back tile. */
+    /* v3: presence-based — audacity displays as fight (finger photo). Not the archived legacy fight-back tile. */
     var MKEY = 'migration-sep01-audacity-v3';
     var host = heroHost(blk);
     if(!host) return false;
     function isSep01FightBackTile(tile){
       var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-      return f === 'audacity' || tt === 'remember who you are' || tt === 'fight back';
+      return f === 'audacity' || tt === 'fight' || tt === 'remember who you are' || tt === 'fight back';
     }
     if([].slice.call(host.querySelectorAll('.vision-tile')).some(isSep01FightBackTile)){
       try { ensureAudacityZoomHeader(blk); } catch(e){}
@@ -47285,7 +47316,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(typeof isGloballyArchivedSection === 'function' && isGloballyArchivedSection('audacity')) return false;
     var data = dayData(blk);
     if(data && Array.isArray(data.removedSections)){
-      var purge = { audacity:1, 'fight back':1, 'remember who you are':1 };
+      var purge = { audacity:1, 'fight back':1, 'remember who you are':1, fight:1 };
       var next = data.removedSections.filter(function(x){
         var s = String(x || '').toLowerCase();
         return !purge[s] && !purge[slug(s)];
@@ -47327,16 +47358,21 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   window.__seedSep01Soul = seedSep01Soul;
 
-  var ENROLL_MOVE_CARD_TITLES = ['tuition payment', 'fall 2026 enrollment'];
+  var ENROLL_MOVE_CARD_TITLES = ['tuition', 'scholarship re-application'];
   var ENROLL_MOVE_CARD_SRC = {
-    'tuition payment': 'manus-storage/card-tuition.jpg?v=v4',
-    'fall 2026 enrollment': 'manus-storage/card-fall-2026-enrollment.jpg?v=1'
+    'tuition': 'manus-storage/card-tuition.jpg?v=v4',
+    'scholarship re-application': 'manus-storage/card-application.jpg?v=v4'
   };
   function isEnrollMoveCardName(title){
     var k = String(title || '').replace(/\s+/g, ' ').trim().toLowerCase();
-    if(k === 'tuition payment' || k === 'tuition') return 'tuition payment';
-    if(k === 'fall 2026 enrollment' || k === 'scholarship re-application' || k === 'scholarship application' || k === 'scholarship reapplication') return 'fall 2026 enrollment';
+    if(k === 'tuition' || k === 'tuition payment') return 'tuition';
+    if(k === 'scholarship re-application' || k === 'scholarship application' || k === 'scholarship reapplication' || k === 'fall 2026 enrollment') return 'scholarship re-application';
     return '';
+  }
+  function enrollSectionTile(blk){
+    var host = heroHost(blk);
+    if(!host) return null;
+    return host.querySelector('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="achieve"]');
   }
   function recordEnrollMoveCardRemoved(blk, title){
     if(!blkOk(blk)) return;
@@ -47358,11 +47394,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function scrubEnrollMoveCardsFromDay(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
     var changed = false;
-    var pep = blk.querySelector('.vision-tile[data-focus="pepperdine"]');
+    var pep = enrollSectionTile(blk);
     if(pep){
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
         [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
-          if(isEnrollMoveCardName(cardTitle(pol))){
+          var ct = cardTitle(pol);
+          if(isEnrollLegacyScrubName(ct)){
             pol.remove();
             changed = true;
           }
@@ -47370,7 +47407,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         [].slice.call(pep.querySelectorAll('.vision-check')).forEach(function(chk){
           var span = chk.querySelector('span');
           var t = ((span && span.textContent) || '').replace(/\s+/g, ' ').trim();
-          if(isEnrollMoveCardName(t)){
+          if(isEnrollLegacyScrubName(t)){
             chk.remove();
             changed = true;
           }
@@ -47413,19 +47450,38 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
       if(data.removedCards.length !== before) changed = true;
     }
-    var pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
+    var pep = enrollSectionTile(blk);
     if(!pep){
-      addTile(blk, 'achieve', true);
-      pep = host.querySelector('.vision-tile[data-focus="pepperdine"]');
+      addTile(blk, 'pepperdine', true);
+      pep = enrollSectionTile(blk);
       changed = true;
     }
     if(pep){
+      pep.setAttribute('data-focus', 'pepperdine');
       var titleEl = pep.querySelector('.vision-tile-title');
       if(titleEl && titleEl.textContent !== 'achieve'){
         titleEl.textContent = 'achieve';
         changed = true;
       }
       pep.style.setProperty('--tile-photo', "url('"+PEPPER_IMG+"')");
+      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        var ct = cardTitle(pol);
+        var canon = isEnrollMoveCardName(ct);
+        if(!canon) return;
+        var span = pol.querySelector(':scope > span:not(.vision-card-headline)');
+        if(span && span.textContent !== canon){
+          span.textContent = canon;
+          changed = true;
+        }
+        var wantSrc = ENROLL_MOVE_CARD_SRC[canon];
+        if(wantSrc){
+          var cur = pol.getAttribute('data-shot-src') || '';
+          if(cur !== wantSrc){
+            applyPolaroidSrc(pol, wantSrc);
+            changed = true;
+          }
+        }
+      });
       function hasEnrollMoveCardDom(tile, title){
         if(!tile) return true;
         var want = String(title || '').toLowerCase();
@@ -47481,7 +47537,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     function isSep02FightBackTile(tile){
       var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-      return f === 'audacity' || tt === 'remember who you are' || tt === 'fight back';
+      return f === 'audacity' || tt === 'fight' || tt === 'remember who you are' || tt === 'fight back';
     }
     if([].slice.call(host.querySelectorAll('.vision-tile')).some(isSep02FightBackTile)){
       try { ensureAudacityZoomHeader(blk); } catch(e){}
@@ -47523,7 +47579,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__seedSep02Soul = seedSep02Soul;
 
   function migrateEnrollTuitionSep01ToSep02Stores(){
-    var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v2';
+    var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v3';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     var APP = ENROLL_MOVE_CARD_SRC['scholarship re-application'];
     var TUI = ENROLL_MOVE_CARD_SRC.tuition;
@@ -47579,7 +47635,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
       sep2.addedCards = (sep2.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
       sep2.userAddedCards = sep2.userAddedCards || [];
-      [['tuition payment', TUI], ['fall 2026 enrollment', APP]].forEach(function(pair){
+      [['tuition', TUI], ['scholarship re-application', APP]].forEach(function(pair){
         var name = pair[0], src = pair[1];
         if(!sep2.addedCards.some(function(c){ return c && String(c.title || '').toLowerCase() === name; })){
           sep2.addedCards.push({ sectionFocus: 'pepperdine', title: name, src: src, px: '12.5%', py: '2%', w: '126px', shot: true });
@@ -47592,9 +47648,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         }
       });
       if(!sep2.userAddedSections){
-        sep2.userAddedSections = ['pepperdine', 'enroll'];
+        sep2.userAddedSections = ['pepperdine', 'achieve'];
       } else {
-        ['pepperdine','enroll'].forEach(function(x){
+        ['pepperdine','achieve'].forEach(function(x){
           if(sep2.userAddedSections.indexOf(x) < 0) sep2.userAddedSections.push(x);
         });
       }
@@ -47987,9 +48043,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'god-conscious': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'surrender to allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
       'surrender-to-allah': { title: 'surrender to Allah ﷻ', focus: 'itaq-allah' },
-      audacity: { title: 'remember who you are', focus: 'audacity' },
-      'fight back': { title: 'remember who you are', focus: 'audacity' },
-      'remember who you are': { title: 'remember who you are', focus: 'audacity' },
+      audacity: { title: 'fight', focus: 'audacity' },
+      'fight back': { title: 'fight', focus: 'audacity' },
+      'remember who you are': { title: 'fight', focus: 'audacity' },
+      fight: { title: 'fight', focus: 'audacity' },
       attention: { title: 'anticipate', focus: 'attention' },
       anticipate: { title: 'anticipate', focus: 'attention' },
       'inner fire': { title: 'ignite', focus: 'inner-fire' },
@@ -48008,10 +48065,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     [].slice.call(host.querySelectorAll('.vision-tile')).forEach(function(tile){
       var focus = (tile.getAttribute('data-focus') || '').toLowerCase();
       var titleEl = tile.querySelector('.vision-tile-title');
-      var title = ((titleEl && titleEl.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase();
+      var titleRaw = ((titleEl && titleEl.textContent) || '').replace(/\s+/g,' ').trim();
+      var title = titleRaw.replace(/\uFDFB/g,'').trim().toLowerCase();
       var want = wantFor(focus, title);
       if(!want) return;
-      if(focus === want.focus && title === String(want.title || '').toLowerCase()) return;
+      if(focus === want.focus && capitalizeAllahInTitle(titleRaw).replace(/\uFDFB/g,'').trim().toLowerCase() === want.title.replace(/\uFDFB/g,'').trim().toLowerCase()) return;
       tile.setAttribute('data-focus', want.focus);
       if(titleEl){
         titleEl.textContent = want.title;
@@ -48058,7 +48116,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var slugged = [].slice.call(host.querySelectorAll('.vision-tile')).filter(function(tile){
         var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
         var f = (tile.getAttribute('data-focus')||'').toLowerCase();
-        return t === 'remember who you are' || t === 'fight back' || f === 'fight-back' || f === 'fight back' || f === 'audacity';
+        return t === 'fight' || t === 'remember who you are' || t === 'fight back' || f === 'fight-back' || f === 'fight back' || f === 'audacity';
       });
       if(slugged.length === 1) tiles = slugged;
     }
@@ -48069,12 +48127,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
       var titleEl = tile.querySelector('.vision-tile-title');
       var title = ((titleEl && titleEl.textContent) || '').replace(/\s+/g,' ').trim();
-      if(titleEl && title.toLowerCase() !== 'remember who you are'){
-        titleEl.textContent = 'remember who you are';
-        if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'remember who you are');
+      if(titleEl && title.toLowerCase() !== 'fight'){
+        titleEl.textContent = 'fight';
+        if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'fight');
         changed = true;
-      } else if(titleEl && titleEl.hasAttribute('data-carve') && titleEl.getAttribute('data-carve') !== 'remember who you are'){
-        titleEl.setAttribute('data-carve', 'remember who you are');
+      } else if(titleEl && titleEl.hasAttribute('data-carve') && titleEl.getAttribute('data-carve') !== 'fight'){
+        titleEl.setAttribute('data-carve', 'fight');
         changed = true;
       }
       var cur = (tile.style.getPropertyValue('--tile-photo') || tile.getAttribute('style') || '');
