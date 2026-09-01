@@ -50885,6 +50885,15 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     t.setDate(t.getDate()+1);
     return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
   }
+  function addDays(iso, n){
+    var t = parseIso(iso);
+    t.setDate(t.getDate() + n);
+    return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+  }
+  function todayIso(){
+    var t = new Date();
+    return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+  }
   function labelFor(iso){
     var months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
     var wd = ['sun','mon','tue','wed','thu','fri','sat'];
