@@ -43209,7 +43209,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       if(center && !center.childNodes.length) try { center.remove(); } catch(e){}
       depth.setAttribute('aria-label', 'overview or details');
       depth.innerHTML = '<button type="button" class="overview-depth-opt" data-mode="overview">overview</button><button type="button" class="overview-depth-opt" data-mode="details">details</button>';
-      if(depth.parentNode !== tools) tools.appendChild(depth);
+      /* Legacy right cluster must stay: overview/details | carry | +
+         Never appendChild(depth) after carry/+ (persisted shells regressed that way). */
+      if(depth.parentNode !== tools || tools.firstElementChild !== depth){
+        tools.insertBefore(depth, tools.firstChild);
+      }
       if(center && center.contains(depth)) try { center.removeChild(depth); } catch(e){}
     }
     var add = row.querySelector('.overview-add-section');
@@ -43220,7 +43224,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       add.setAttribute('aria-label', 'add section');
       add.textContent = '+';
     }
-    if(add.parentNode !== tools) tools.appendChild(add);
+    /* Keep + furthest right; carry sits just before it. */
+    if(add.parentNode !== tools || tools.lastElementChild !== add){
+      tools.appendChild(add);
+    }
+    var carryBtn = tools.querySelector('.overview-carry-forward');
+    if(carryBtn && add && carryBtn.nextElementSibling !== add){
+      tools.insertBefore(carryBtn, add);
+    }
+    if(!four && depth.parentNode === tools && tools.firstElementChild !== depth){
+      tools.insertBefore(depth, tools.firstChild);
+    }
     applyOverviewDepth(blk);
     return row;
   }
@@ -50590,10 +50604,13 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       btn.className = 'overview-carry-forward';
       btn.setAttribute('aria-label', 'carry unfinished forward');
       btn.textContent = 'carry';
-      var add = tools.querySelector('.overview-add-section');
-      if (add) tools.insertBefore(btn, add);
-      else tools.appendChild(btn);
     }
+    /* Order: depth (legacy) | carry | +  — never after + */
+    var add = tools.querySelector('.overview-add-section');
+    var depth = tools.querySelector('.overview-depth-toggle');
+    if (add) tools.insertBefore(btn, add);
+    else if (depth && depth.nextSibling) tools.insertBefore(btn, depth.nextSibling);
+    else tools.appendChild(btn);
     var n = collectOpenItems(blk).length;
     btn.classList.toggle('is-armed', n > 0);
     btn.title = n ? (n + ' open — carry forward') : 'nothing open to carry';
@@ -51152,6 +51169,102 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-ta
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
+}
+</style>
+
+<style id="vision-tile-title-emboss-v2">
+/* Carved INTO the photo, glance-readable on light AND dark tiles.
+   No mix-blend — overlay/soft-light samples photo into the fill and kills legibility.
+   Letterforms are defined by strong highlight + shade edges + a soft local vignette.
+   Sizes locked: collage clamp(22px, 2.6vw, 34px); zoomed 36px. */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 48px) !important;
+  margin: 0 !important;
+  text-align: center !important;
+  z-index: 16 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important; /* SECTION — do not enlarge */
+  font-weight: 600 !important;
+  font-style: italic !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.12 !important;
+  pointer-events: none !important;
+  isolation: isolate !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  /* Warm cream fill — fixed (not photo-sampled), translucent enough to feel in-photo */
+  color: rgba(244, 232, 212, 0.92) !important;
+  -webkit-text-fill-color: rgba(244, 232, 212, 0.92) !important;
+  /* Dark rim so cream doesn't vanish on light tiles */
+  -webkit-text-stroke: 0.7px rgba(14, 9, 5, 0.62) !important;
+  text-shadow:
+    /* highlight lip (top-left) */
+    -1.5px -1.5px 0 rgba(255, 252, 245, 0.95),
+    -0.5px -0.5px 0 rgba(255, 255, 255, 0.65),
+    /* carved shade (bottom-right) */
+    1.5px 1.5px 0 rgba(8, 5, 3, 0.82),
+    2.5px 3px 1.5px rgba(8, 5, 3, 0.5),
+    /* soft local contrast (reads as recess lighting, not sticker drop-shadow) */
+    0 0 8px rgba(8, 5, 3, 0.55),
+    0 0 18px rgba(8, 5, 3, 0.38),
+    0 1px 2px rgba(8, 5, 3, 0.7) !important;
+}
+/* Soft vignette plate behind title only — lifts cream-on-cream and dark-on-dark */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(108%, 15em) !important;
+  height: 2.75em !important;
+  border-radius: 50% !important;
+  background: radial-gradient(
+    ellipse closest-side,
+    rgba(10, 7, 4, 0.42) 0%,
+    rgba(10, 7, 4, 0.2) 46%,
+    transparent 74%
+  ) !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::after {
+  content: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile:has(> .vision-tile-quote) .vision-tile-title {
+  top: 42% !important;
+  transform: translate(-50%, -50%) !important;
+}
+/* Zoomed section — same carve, approved 36px */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 36px !important; /* SECTION zoomed — approved; do not bump */
+  color: rgba(244, 232, 212, 0.94) !important;
+  -webkit-text-fill-color: rgba(244, 232, 212, 0.94) !important;
+  -webkit-text-stroke: 0.75px rgba(14, 9, 5, 0.65) !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  text-shadow:
+    -1.6px -1.6px 0 rgba(255, 252, 245, 0.97),
+    -0.5px -0.5px 0 rgba(255, 255, 255, 0.7),
+    1.6px 1.6px 0 rgba(8, 5, 3, 0.85),
+    2.5px 3px 2px rgba(8, 5, 3, 0.52),
+    0 0 10px rgba(8, 5, 3, 0.55),
+    0 0 22px rgba(8, 5, 3, 0.38),
+    0 1px 2px rgba(8, 5, 3, 0.72) !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
+  top: 42% !important;
 }
 </style>
 
