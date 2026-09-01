@@ -15788,7 +15788,14 @@ window.__j22fnApply=run;
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
         tile.style.setProperty('--tile-photo', "url('"+BODY_TUMMY+"')");
         var q = tile.querySelector(':scope > .vision-tile-quote');
-        if(q && /obsessed is a word the lazy use/i.test(q.textContent||'')) q.remove();
+        if(!q){
+          q = document.createElement('p');
+          q.className = 'vision-tile-quote';
+          var titleEl = tile.querySelector('.vision-tile-title');
+          if(titleEl) tile.insertBefore(q, titleEl);
+          else tile.appendChild(q);
+        }
+        q.textContent = 'obsessed is a word the lazy use to describe the dedicated.';
       });
       document.querySelectorAll('.vision-polaroid').forEach(function(pol){
         var sp = pol.querySelector(':scope > span');
@@ -51109,21 +51116,8 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     var goBtn = ov.querySelector('.cr-go');
     var selected = {};
     items.forEach(function(it, i){ selected[i] = true; });
-    var dests = futureDestinations(fromDate);
-    var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
-
-    dests.forEach(function(d, i){
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'cr-day' + (i === 0 ? ' is-on' : '');
-      b.textContent = d.isTomorrow ? ('tomorrow · ' + d.display) : d.display;
-      b.addEventListener('click', function(){
-        destDate = d.date;
-        destWrap.querySelectorAll('.cr-day').forEach(function(x){ x.classList.remove('is-on'); });
-        b.classList.add('is-on');
-      });
-      destWrap.appendChild(b);
-    });
+    var destDate = futureDestinations(fromDate)[0] ? futureDestinations(fromDate)[0].date : nextIso(fromDate);
+    buildDestPicker(destWrap, fromDate, function(iso){ destDate = iso; });
 
     var pts = starLayout(items.length);
     var stars = [];

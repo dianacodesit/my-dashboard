@@ -44743,6 +44743,20 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     // Canonical renames — never create a sibling "grad school" beside pepperdine.
     if(title === 'grad school' || title === 'grad' || title === 'grad-school') title = 'pepperdine';
+    if(title === 'calisthenics'){
+      var hostCal = heroHost(blk);
+      if(hostCal){
+        var bodyForCal = findBodyFitnessTile([].slice.call(hostCal.querySelectorAll('.vision-tile')));
+        if(!bodyForCal){
+          addTile(blk, 'fitness training', asUser);
+          bodyForCal = findBodyFitnessTile([].slice.call(hostCal.querySelectorAll('.vision-tile')));
+        }
+        if(bodyForCal){
+          addCard(bodyForCal, 'calisthenics', asUser);
+          return;
+        }
+      }
+    }
     if(title === 'gym' || title === 'toned-body' || title === 'toned body' || title === 'athletic' || title === 'fitness training' || title === 'fitness-training') title = 'body';
     if(title === 'finances') title = 'abundance';
     if(title === 'lifestyle') title = 'curated lifestyle';
