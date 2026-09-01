@@ -23610,6 +23610,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso === '2026-09-01' && window.__seedSep01NewSections) {
         try { window.__seedSep01NewSections(clone); } catch (e) {}
       }
+      if (iso === '2026-09-01' && window.__seedSep01Soul) {
+        try { window.__seedSep01Soul(clone); } catch (e) {}
+      }
 
       // Late-created days miss the DOMContentLoaded collapse wiring — attach now.
       try {
@@ -45900,6 +45903,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
     return true;
   }
+  window.__seedSep01Soul = seedSep01Soul;
 
   function seedAug30StrengthsPlan(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-08-30') return false;
