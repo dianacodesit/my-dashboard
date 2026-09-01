@@ -12928,7 +12928,7 @@ window.__j22fnApply=run;
     'strengths':'manus-storage/zone-strengths.jpg?v=soul1',
     'plan':'manus-storage/zone-workflow.jpg?v=swap1',
     'spirit':'manus-storage/zone-spirit.jpg?v=sp1',
-    'soul':'manus-storage/zone-soul.jpg?v=essence1',
+    'soul':'manus-storage/zone-soul.jpg?v=presence1',
     'art | science':'manus-storage/zone-art-science.jpg?v=as1',
     'art-science':'manus-storage/zone-art-science.jpg?v=as1',
     'art/science':'manus-storage/zone-art-science.jpg?v=as1',
@@ -12954,7 +12954,7 @@ window.__j22fnApply=run;
     [/money|capital|fund|finance|bank/, 'manus-storage/pursuit-money_57ff14e0.jpg'],
     [/quantum|particle|atom|physics|superposition|entangle|interference/, 'manus-storage/zone-quantum-v15.jpg?v=spectacular1'],
     [/social|instagram|media/, 'manus-storage/pursuit-social-media-v7_c5f03b96.jpg'],
-    [/\bsoul\b|inner stillness|healing spirit|silence the mind/, 'manus-storage/zone-soul.jpg?v=essence1'],
+    [/\bsoul\b|inner stillness|healing spirit|silence the mind/, 'manus-storage/zone-soul.jpg?v=presence1'],
     [/person|people|friend|buddy|doctor|\bdr\.?\b|\bmom\b|\bdad\b|mother|father|family|\btext\b|message|sms|whatsapp|\bcall\b|phone|aunt|uncle|sister|brother/, 'manus-storage/pursuit-persons_be56f167.jpg'],
     [/ux|design|ui|figma/, 'manus-storage/pursuit-ux-design-v12_f2f2c818.jpg'],
     [/leverage|influence|advantage/, 'manus-storage/pursuit-leverage-v4.jpg?v=key'],
@@ -28972,7 +28972,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='darkness') src='manus-storage/zone-darkness.jpg?v=aware1';
       else if(nl==='plan') src='manus-storage/zone-workflow.jpg?v=swap1';
       else if(nl==='spirit') src='manus-storage/zone-spirit.jpg?v=sp1';
-      else if(nl==='soul') src='manus-storage/zone-soul.jpg?v=essence1';
+      else if(nl==='soul') src='manus-storage/zone-soul.jpg?v=presence1';
       else if(nl==='resonance') src='manus-storage/zone-resonance.jpg?v=res1';
       else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah'||nl==='itaqallah'||nl==='itaq-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -46424,11 +46424,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 
   
   (function rewriteConceptSectionPhotosV1(){
-    var MKEY = 'migration-concept-section-photos-v3';
+    var MKEY = 'migration-concept-section-photos-v4';
     var MAP = {
       attention: 'manus-storage/zone-attention.jpg?v=notice1',
       darkness: 'manus-storage/zone-darkness.jpg?v=aware1',
-      soul: 'manus-storage/zone-soul.jpg?v=essence1',
+      soul: 'manus-storage/zone-soul.jpg?v=presence1',
       intentions: 'manus-storage/zone-intentions.jpg?v=aim1'
     };
     function cleanTilePhoto(tile, want){
@@ -46481,8 +46481,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   })();
 
   (function rewritePoliticsChessPhoto(){
-    // v8 chess supersedes v6 corridor2 — always rewrites so corridor cannot win on load
-    var MKEY = 'migration-politics-chess-photo-v8';
+    // v9 chess supersedes v6 corridor2 — always rewrites so corridor cannot win on load
+    var MKEY = 'migration-politics-chess-photo-v9';
     var WANT = 'manus-storage/zone-politics.jpg?v=chess5';
     var re = /manus-storage\/zone-politics\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isPoliticsTile(tile){
@@ -51230,97 +51230,6 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zo
 }
 </style>
 
-<style id="vision-tile-title-emboss-v3">
-/* Debossed INTO the photo — more depth, no cream fill.
-   Dark ink + multiply/overlay so letters take the photo and recede.
-   Glance contrast = groove (deep inset + one-edge lip), not a white stencil.
-   Sizes locked: collage clamp(22px, 2.6vw, 34px); zoomed 36px. */
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: auto !important;
-  transform: translate(-50%, -50%) !important;
-  width: calc(100% - 48px) !important;
-  margin: 0 !important;
-  text-align: center !important;
-  z-index: 16 !important;
-  font-family: "Newsreader", Georgia, serif !important;
-  font-size: clamp(22px, 2.6vw, 34px) !important; /* SECTION — do not enlarge */
-  font-weight: 600 !important;
-  font-style: italic !important;
-  letter-spacing: 0.02em !important;
-  line-height: 1.12 !important;
-  pointer-events: none !important;
-  isolation: auto !important;
-  filter: none !important;
-  paint-order: fill !important;
-  /* Photo-tinted ink — never cream/white fill */
-  color: rgba(16, 10, 6, 0.62) !important;
-  -webkit-text-fill-color: rgba(16, 10, 6, 0.62) !important;
-  -webkit-text-stroke: 0 !important;
-  /* Overlay keeps both the darkened floor AND the far-lip highlight */
-  mix-blend-mode: overlay !important;
-  text-shadow:
-    /* deep inset — top-left wall of the carve */
-    -1.6px -1.6px 0 rgba(0, 0, 0, 0.82),
-    -2.5px -2.2px 1.6px rgba(0, 0, 0, 0.46),
-    /* one-edge highlight only — dim, not a white outline */
-    1.15px 1.35px 0 rgba(255, 236, 214, 0.22),
-    /* recessed floor */
-    0 2px 3px rgba(0, 0, 0, 0.4) !important;
-}
-/* Whisper well — a dip in the photo, not a dark plaque */
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: min(100%, 14em) !important;
-  height: 2.4em !important;
-  border-radius: 50% !important;
-  background: radial-gradient(
-    ellipse closest-side,
-    rgba(6, 3, 1, 0.2) 0%,
-    rgba(6, 3, 1, 0.08) 52%,
-    transparent 76%
-  ) !important;
-  z-index: -1 !important;
-  pointer-events: none !important;
-}
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::after {
-  content: none !important;
-}
-html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile:has(> .vision-tile-quote) .vision-tile-title {
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-}
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
-  top: 50% !important;
-  left: 50% !important;
-  bottom: auto !important;
-  right: auto !important;
-  transform: translate(-50%, -50%) !important;
-  font-size: 36px !important; /* SECTION zoomed — approved; do not bump */
-  color: rgba(16, 10, 6, 0.64) !important;
-  -webkit-text-fill-color: rgba(16, 10, 6, 0.64) !important;
-  -webkit-text-stroke: 0 !important;
-  mix-blend-mode: overlay !important;
-  filter: none !important;
-  text-shadow:
-    -1.8px -1.8px 0 rgba(0, 0, 0, 0.84),
-    -2.8px -2.4px 1.8px rgba(0, 0, 0, 0.48),
-    1.25px 1.5px 0 rgba(255, 236, 214, 0.24),
-    0 2px 4px rgba(0, 0, 0, 0.42) !important;
-}
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
-  top: 50% !important;
-}
-</style>
-
-
 <style id="tasks-horizon-v1">
 /* Tasks depth = horizon: unfinished hang above a faint line; done fall below and go quiet. Not polaroids.
    HARD GATE: center line only when the section has actual .vision-check tasks (.horizon-armed).
@@ -51548,59 +51457,110 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
 }
 </style>
 
-</html>
- quote only when zoomed.
-   Do not fold into embossed centered section titles. Keep section titles small. */
-html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-tile-quote,
-html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-quote {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-/* Overview title stays centered — quote presence must not shift it */
-html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-tile:has(> .vision-tile-quote) .vision-tile-title {
+<style id="vision-tile-title-emboss-legible">
+/* USER FIX: embossed titles must be glance-readable.
+   Keep carved feel via highlight+shade lips; NEVER mix-blend (samples photo → illegible).
+   Fixed cream fill + dark stroke/outline ring + soft vignette plate.
+   Sizes locked: collage clamp(22px, 2.6vw, 34px); zoomed 36px. */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
+  position: absolute !important;
   top: 50% !important;
   left: 50% !important;
   right: auto !important;
   bottom: auto !important;
   transform: translate(-50%, -50%) !important;
-}
-/* Zoomed: soft faint quote at top; title stays centered embossed */
-html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-quote {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 0.62 !important;
-  position: absolute !important;
-  top: 28px !important;
-  bottom: auto !important;
-  left: 50% !important;
-  right: auto !important;
-  transform: translateX(-50%) !important;
-  width: calc(100% - 72px) !important;
-  max-width: 34em !important;
+  width: calc(100% - 48px) !important;
   margin: 0 !important;
-  z-index: 18 !important;
   text-align: center !important;
+  z-index: 16 !important;
   font-family: "Newsreader", Georgia, serif !important;
-  font-size: clamp(15px, 1.55vw, 22px) !important;
-  font-weight: 400 !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  font-weight: 600 !important;
   font-style: italic !important;
   letter-spacing: 0.02em !important;
-  line-height: 1.35 !important;
-  color: rgba(255, 246, 232, 0.72) !important;
+  line-height: 1.12 !important;
+  pointer-events: none !important;
+  isolation: isolate !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  paint-order: stroke fill !important;
+  color: rgba(255, 246, 230, 0.97) !important;
+  -webkit-text-fill-color: rgba(255, 246, 230, 0.97) !important;
+  -webkit-text-stroke: 1.25px rgba(8, 5, 3, 0.86) !important;
   text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.45),
-    0 2px 14px rgba(0, 0, 0, 0.35) !important;
+    -1.5px -1.5px 0 rgba(6, 4, 2, 0.92),
+     1.5px -1.5px 0 rgba(6, 4, 2, 0.92),
+    -1.5px  1.5px 0 rgba(6, 4, 2, 0.92),
+     1.5px  1.5px 0 rgba(6, 4, 2, 0.92),
+     0    -1.5px 0 rgba(6, 4, 2, 0.88),
+     0     1.5px 0 rgba(6, 4, 2, 0.88),
+    -1.5px  0    0 rgba(6, 4, 2, 0.88),
+     1.5px  0    0 rgba(6, 4, 2, 0.88),
+    -2px -2px 0 rgba(255, 252, 245, 0.88),
+    -1px -1px 0 rgba(255, 255, 255, 0.5),
+     2px 2px 0 rgba(6, 4, 2, 0.72),
+     3px 3.5px 2px rgba(6, 4, 2, 0.42),
+    0 0 12px rgba(6, 4, 2, 0.7),
+    0 0 26px rgba(6, 4, 2, 0.48),
+    0 2px 4px rgba(6, 4, 2, 0.78) !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(125%, 17em) !important;
+  height: 3.35em !important;
+  border-radius: 50% !important;
+  background: radial-gradient(
+    ellipse closest-side,
+    rgba(6, 4, 2, 0.62) 0%,
+    rgba(6, 4, 2, 0.34) 46%,
+    transparent 76%
+  ) !important;
+  z-index: -1 !important;
   pointer-events: none !important;
 }
-html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026-08-20"]) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title::after {
+  content: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile:has(> .vision-tile-quote) .vision-tile-title {
+  top: 42% !important;
+  transform: translate(-50%, -50%) !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
   top: 50% !important;
   left: 50% !important;
   bottom: auto !important;
   right: auto !important;
   transform: translate(-50%, -50%) !important;
-  font-size: 36px !important; /* SECTION zoomed — approved; do not bump */
+  font-size: 36px !important;
+  paint-order: stroke fill !important;
+  color: rgba(255, 246, 230, 0.98) !important;
+  -webkit-text-fill-color: rgba(255, 246, 230, 0.98) !important;
+  -webkit-text-stroke: 1.35px rgba(8, 5, 3, 0.88) !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  text-shadow:
+    -1.6px -1.6px 0 rgba(6, 4, 2, 0.94),
+     1.6px -1.6px 0 rgba(6, 4, 2, 0.94),
+    -1.6px  1.6px 0 rgba(6, 4, 2, 0.94),
+     1.6px  1.6px 0 rgba(6, 4, 2, 0.94),
+     0    -1.6px 0 rgba(6, 4, 2, 0.9),
+     0     1.6px 0 rgba(6, 4, 2, 0.9),
+    -1.6px  0    0 rgba(6, 4, 2, 0.9),
+     1.6px  0    0 rgba(6, 4, 2, 0.9),
+    -2.2px -2.2px 0 rgba(255, 252, 245, 0.9),
+    -1px -1px 0 rgba(255, 255, 255, 0.55),
+     2.2px 2.2px 0 rgba(6, 4, 2, 0.75),
+     3.5px 4px 2px rgba(6, 4, 2, 0.45),
+    0 0 14px rgba(6, 4, 2, 0.7),
+    0 0 28px rgba(6, 4, 2, 0.48),
+    0 2px 4px rgba(6, 4, 2, 0.8) !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed:has(> .vision-tile-quote) .vision-tile-title {
+  top: 42% !important;
 }
 </style>
 
