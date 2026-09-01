@@ -44421,8 +44421,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }catch(e){}
   function __fillPackAllTiles(){
     document.querySelectorAll('.day-block.overview-era-day .vision-tile, .day-block.vision-collage-day .vision-tile').forEach(function(tile){
-      if(tile.querySelectorAll('.vision-tile-details > .vision-polaroid').length >= 2){
-        try{ packTileCards(tile, {force: true}); }catch(e){}
+      var pols = tile.querySelectorAll('.vision-tile-details > .vision-polaroid');
+      if(pols.length >= 1){
+        try{ packTileCards(tile, {force: pols.length >= 2 || looksGridPacked([].slice.call(pols))}); }catch(e){}
       }
     });
   }
