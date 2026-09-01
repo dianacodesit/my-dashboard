@@ -73,6 +73,9 @@ KNOWN_CARD_PHOTOS = {
     "sorrow": "",
     "attention": "manus-storage/zone-attention.jpg?v=beam1",
     "anticipate": "manus-storage/zone-attention.jpg?v=beam1",
+    "inner fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
+    "inner-fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
+    "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "darkness": "",
     "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
     "politics": "manus-storage/zone-politics.jpg?v=chess5",
@@ -97,6 +100,8 @@ KNOWN_CARD_PHOTOS = {
     "tune-into": "manus-storage/zone-tune-into.jpg?v=1",
     "self-actualize": "manus-storage/zone-self-actualize.jpg?v=1",
     "self actualize": "manus-storage/zone-self-actualize.jpg?v=1",
+    "claim": "manus-storage/zone-claim.jpg?v=1",
+    "sabotage": "manus-storage/zone-sabotage.jpg?v=1",
 }
 # Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
 # Never return these from /photo-for for soul, sorrow, darkness, abundance, attention.
@@ -327,6 +332,7 @@ def _tile_aliases(key: str) -> set[str]:
         ("villain", "villains"),
         ("fight-back", "fight back"),
         ("inner-fire", "inner fire"),
+        ("ignite", "inner fire"),
         ("glow-up", "glow up"),
         ("art | science", "art-science"),
         ("art/science", "art-science"),
