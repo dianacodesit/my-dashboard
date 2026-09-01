@@ -63,6 +63,8 @@ KNOWN_CARD_PHOTOS = {
     "neighbor payment": "manus-storage/card-neighbor-payment.jpg",
     "re: manus restoration issue": "manus-storage/card-re-manus-restoration-issue.jpg",
     # Pepperdine section / zone only — not tuition/application cards
+    "calisthenics": "manus-storage/card-calisthenics.jpg",
+    "inversions": "manus-storage/card-inversions.jpg",
     "pepperdine": "manus-storage/zone-pepperdine-malibu.jpg",
     "grad school": "manus-storage/zone-pepperdine-malibu.jpg",
     "grad": "manus-storage/zone-pepperdine-malibu.jpg",
