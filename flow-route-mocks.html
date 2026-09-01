@@ -1,7 +1,530 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
-<title>flow mock</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>flow route UI · A–D · pick by looking</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=flowroute1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #120e0b;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 18px 100px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 10px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.62);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 680px;
+    margin: 0 auto 18px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.55);
+    font-size: 1.02rem;
+    line-height: 1.5;
+  }
+  .live-bar {
+    max-width: 680px;
+    margin: 0 auto 28px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .live-bar a {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1c1612;
+    background: rgba(255,248,238,0.92);
+    padding: 8px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 1px solid rgba(201,168,114,0.35);
+  }
+  .live-bar a:hover { background: #fff8ee; }
+  .live-bar a.ghost {
+    background: rgba(255,248,238,0.08);
+    color: #f7efe4;
+    border-color: rgba(255,248,238,0.22);
+  }
+  .sep {
+    max-width: 680px;
+    margin: 0 auto 28px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(201,168,114,0.55);
+  }
+  .sep a { color: #c9a872; text-decoration: none; border-bottom: 1px solid rgba(201,168,114,0.35); }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: -6px auto 22px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (min-width: 980px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .panel {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,248,238,0.04);
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: left;
+    color: inherit;
+    width: 100%;
+    font: inherit;
+    padding: 0;
+    display: block;
+  }
+  .panel:hover {
+    border-color: rgba(201,168,114,0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .panel.is-picked {
+    border-color: rgba(201,168,114,0.95);
+    box-shadow: 0 0 0 2px rgba(201,168,114,0.35), 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.55rem;
+    color: #fff8ee;
+  }
+  .panel-head .letter em {
+    font-style: normal;
+    color: #c9a872;
+    margin-right: 8px;
+  }
+  .panel-head .tag {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.5);
+    white-space: nowrap;
+  }
+  .panel-cap {
+    padding: 0 16px 14px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.58);
+    line-height: 1.45;
+  }
+  .panel-open {
+    display: inline-block;
+    margin: 0 16px 12px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c9a872;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(201,168,114,0.35);
+  }
+  .panel-open:hover { color: #fff8ee; }
+
+  .stage-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #1a1410;
+  }
+  .stage-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(12,8,6,0.25) 0%, rgba(12,8,6,0.12) 40%, rgba(12,8,6,0.45) 100%),
+      url("manus-storage/dashboard-hq-bg.jpg") center / cover no-repeat;
+  }
+  .mock-stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* —— shared flow-route mock chrome (scoped) —— */
+  .mock-rail {
+    position: absolute;
+    top: 12%;
+    right: 0;
+    width: 42%;
+    max-width: 188px;
+    padding: 10px 10px 12px 6px;
+    border-radius: 8px 0 0 8px;
+    background: rgba(42,42,42,0.92);
+    color: #fdfaf3;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .mock-rail-head {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(196,168,130,0.85);
+    padding: 2px 4px 8px;
+  }
+  .mock-stop {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 2px;
+    background: none;
+    border: 0;
+    width: 100%;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+  }
+  .mock-stop.is-faded { opacity: 0.4; }
+  .mock-stop.is-on .mock-name { color: #fff8ee; }
+  .mock-num {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    color: #c4a882;
+    min-width: 14px;
+  }
+  .mock-name {
+    font-family: "Newsreader", serif;
+    font-size: 13px;
+    color: #fdfaf3;
+  }
+  .mock-pins { position: absolute; inset: 0; }
+  .mock-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 6px;
+    border: 1px solid rgba(247,239,228,0.22);
+    border-radius: 999px;
+    background: rgba(22,16,12,0.52);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #f7efe4;
+    cursor: pointer;
+    font: inherit;
+    max-width: 46%;
+  }
+  .mock-pin.is-faded { opacity: 0.42; }
+  .mock-pin .mock-name { display: none; font-size: 12px; }
+  .mock-pin.is-open .mock-name,
+  .mock-stage[data-frm="thread"] .mock-pin .mock-name,
+  .mock-stage[data-frm="done"] .mock-pin .mock-name { display: inline; }
+  .mock-stage[data-frm="rail"] .mock-pins,
+  .mock-stage[data-frm="rail"] .mock-thread { display: none; }
+  .mock-stage[data-frm="pins"] .mock-rail,
+  .mock-stage[data-frm="pins"] .mock-thread { display: none; }
+  .mock-stage[data-frm="thread"] .mock-rail { display: none; }
+  .mock-stage[data-frm="done"] .mock-rail { display: none; }
+  .mock-thread {
+    display: none;
+    position: absolute;
+    inset: 10% 8% 12% 8%;
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+  .mock-stage[data-frm="thread"] .mock-thread,
+  .mock-stage[data-frm="done"] .mock-thread { display: block; }
+  .mock-thread path {
+    fill: none;
+    stroke: rgba(196,168,130,0.55);
+    stroke-width: 0.35;
+    filter: drop-shadow(0 0 2px rgba(196,168,130,0.35));
+  }
+  .hint {
+    position: absolute;
+    left: 10px;
+    bottom: 8px;
+    z-index: 3;
+    font-family: "DM Mono", monospace;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.55);
+    background: rgba(12,8,6,0.55);
+    padding: 3px 7px;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .foot {
+    max-width: 720px;
+    margin: 32px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.4);
+    line-height: 1.7;
+  }
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 28px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(247,239,228,0.55);
+    text-decoration: none;
+  }
+  .back:hover { color: #fff8ee; }
+
+  .panel .mock-stage,
+  .panel .mock-stop,
+  .panel .mock-pin { pointer-events: auto; }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <h1>flow route UI</h1>
+    <p>Aug 30 errands route · four ways to show stops on the mountain</p>
+  </div>
+  <p class="note">Same nine stops (Kaiser → Rockcress). Click inside each preview — rail marks a stop, pins open on tap, thread connects them, fade toggles done/skip.</p>
+  <div class="live-bar">
+    <a href="prototype.html?mock=flow&amp;v=flowmock1">full-screen tabbed mock</a>
+    <a href="prototype.html?mock=flow&amp;variant=rail" class="ghost">A rail</a>
+    <a href="prototype.html?mock=flow&amp;variant=pins" class="ghost">B pins</a>
+    <a href="prototype.html?mock=flow&amp;variant=thread" class="ghost">C thread</a>
+    <a href="prototype.html?mock=flow&amp;variant=done" class="ghost">D fade</a>
+  </div>
+  <div class="picked" id="pickedBanner">picked · tap a panel</div>
+
+  <div class="grid" id="grid">
+    <article class="panel" tabindex="0" role="button" data-choice="A" data-frm="rail" aria-label="Option A rail">
+      <div class="panel-head">
+        <div class="letter"><em>A</em> Rail</div>
+        <div class="tag">one glass list · right</div>
+      </div>
+      <p class="panel-cap">One glass list on the right — no double stack with a separate timeline.</p>
+      <a class="panel-open" href="prototype.html?mock=flow&amp;variant=rail" data-stop>open full-screen A →</a>
+      <div class="stage-wrap" data-stop>
+        <div class="stage-bg" aria-hidden="true"></div>
+        <div class="mock-stage" data-frm="rail" data-panel="A"></div>
+        <div class="hint">click a stop</div>
+      </div>
+    </article>
+
+    <article class="panel" tabindex="0" role="button" data-choice="B" data-frm="pins" aria-label="Option B pins">
+      <div class="panel-head">
+        <div class="letter"><em>B</em> Pins</div>
+        <div class="tag">chips · tap to open</div>
+      </div>
+      <p class="panel-cap">Chips on the mountain — tap a pin to open the name.</p>
+      <a class="panel-open" href="prototype.html?mock=flow&amp;variant=pins" data-stop>open full-screen B →</a>
+      <div class="stage-wrap" data-stop>
+        <div class="stage-bg" aria-hidden="true"></div>
+        <div class="mock-stage" data-frm="pins" data-panel="B"></div>
+        <div class="hint">tap a pin</div>
+      </div>
+    </article>
+
+    <article class="panel" tabindex="0" role="button" data-choice="C" data-frm="thread" aria-label="Option C thread">
+      <div class="panel-head">
+        <div class="letter"><em>C</em> Thread</div>
+        <div class="tag">connected · same stops</div>
+      </div>
+      <p class="panel-cap">Same stops, connected by a champagne thread along the route.</p>
+      <a class="panel-open" href="prototype.html?mock=flow&amp;variant=thread" data-stop>open full-screen C →</a>
+      <div class="stage-wrap" data-stop>
+        <div class="stage-bg" aria-hidden="true"></div>
+        <div class="mock-stage" data-frm="thread" data-panel="C"></div>
+        <div class="hint">click to mark</div>
+      </div>
+    </article>
+
+    <article class="panel" tabindex="0" role="button" data-choice="D" data-frm="done" aria-label="Option D fade">
+      <div class="panel-head">
+        <div class="letter"><em>D</em> Fade</div>
+        <div class="tag">done / skip · tap to fade</div>
+      </div>
+      <p class="panel-cap">Tap a stop to fade it — done or skip, thread still visible.</p>
+      <a class="panel-open" href="prototype.html?mock=flow&amp;variant=done" data-stop>open full-screen D →</a>
+      <div class="stage-wrap" data-stop>
+        <div class="stage-bg" aria-hidden="true"></div>
+        <div class="mock-stage" data-frm="done" data-panel="D"></div>
+        <div class="hint">tap to fade</div>
+      </div>
+    </article>
+  </div>
+
+  <p class="sep">Related: <a href="depth-style-mocks.html">depth toggle styles</a> · <a href="card-style-mocks.html">card styles</a> · <a href="flow-styles.html">flow chart designs</a></p>
+  <p class="foot">not wired live yet · pick by looking · full mock on prototype Aug 30 flow</p>
+  <a class="back" href="prototype.html">← back to prototype</a>
+
 <script>
-  location.replace('prototype.html?mock=flow&v=flowmock1');
+(function () {
+  var STOPS = [
+    {n:'01', name:'Kaiser SC', x:18, y:22},
+    {n:'02', name:'CVS Marguerite', x:28, y:34},
+    {n:'03', name:'Verizon', x:36, y:42},
+    {n:'04', name:'53 Le Mans', x:44, y:52},
+    {n:'05', name:'Wells Fargo', x:54, y:64, faded:true},
+    {n:'06', name:'Sephora', x:62, y:72},
+    {n:'07', name:'Best Buy', x:70, y:80, faded:true},
+    {n:'08', name:'Apple', x:78, y:86},
+    {n:'09', name:'Rockcress', x:88, y:90}
+  ];
+  var labels = {
+    A: 'A · Rail · one glass list on the right',
+    B: 'B · Pins · chips on the mountain',
+    C: 'C · Thread · same stops, connected',
+    D: 'D · Fade · tap to fade done/skip'
+  };
+  var banner = document.getElementById('pickedBanner');
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function stopBtn(stage, s, kind, pinsHost) {
+    var b = el('button', kind === 'pin' ? 'mock-pin' : 'mock-stop');
+    if (s.faded) b.classList.add('is-faded');
+    b.type = 'button';
+    b.setAttribute('data-n', s.n);
+    if (kind === 'pin') {
+      b.style.left = s.x + '%';
+      b.style.top = s.y + '%';
+    }
+    b.appendChild(el('span', 'mock-num', s.n));
+    b.appendChild(el('span', 'mock-name', s.name));
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var mode = stage.getAttribute('data-frm');
+      if (mode === 'pins') {
+        var open = b.classList.contains('is-open');
+        pinsHost.querySelectorAll('.mock-pin').forEach(function (p) {
+          p.classList.remove('is-open', 'is-on');
+        });
+        if (!open) b.classList.add('is-open', 'is-on');
+      } else if (mode === 'done') {
+        b.classList.toggle('is-faded');
+        var twin = stage.querySelector((kind === 'pin' ? '.mock-stop' : '.mock-pin') + '[data-n="' + s.n + '"]');
+        if (twin) twin.classList.toggle('is-faded', b.classList.contains('is-faded'));
+      } else {
+        stage.querySelectorAll('.mock-stop, .mock-pin').forEach(function (p) {
+          p.classList.remove('is-on');
+        });
+        b.classList.add('is-on');
+        var twin2 = stage.querySelector((kind === 'pin' ? '.mock-stop' : '.mock-pin') + '[data-n="' + s.n + '"]');
+        if (twin2) twin2.classList.add('is-on');
+      }
+    });
+    return b;
+  }
+
+  function buildStage(stage) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'mock-thread');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M18,22 C28,30 36,38 42,48 C50,62 58,70 68,78 C76,84 84,86 88,90');
+    svg.appendChild(path);
+
+    var rail = el('aside', 'mock-rail');
+    rail.appendChild(el('div', 'mock-rail-head', 'route'));
+    var railList = el('div', 'mock-rail-list');
+    rail.appendChild(railList);
+
+    var pinsHost = el('div', 'mock-pins');
+    STOPS.forEach(function (s) {
+      railList.appendChild(stopBtn(stage, s, 'rail', pinsHost));
+      pinsHost.appendChild(stopBtn(stage, s, 'pin', pinsHost));
+    });
+
+    stage.appendChild(svg);
+    stage.appendChild(rail);
+    stage.appendChild(pinsHost);
+  }
+
+  document.querySelectorAll('.mock-stage').forEach(buildStage);
+
+  document.querySelectorAll('.panel[data-choice]').forEach(function (panel) {
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('[data-stop]')) {
+        e.stopPropagation();
+        return;
+      }
+      document.querySelectorAll('.panel.is-picked').forEach(function (p) {
+        p.classList.remove('is-picked');
+      });
+      panel.classList.add('is-picked');
+      var key = panel.getAttribute('data-choice');
+      banner.textContent = 'picked · ' + (labels[key] || key);
+      banner.classList.add('on');
+      try { localStorage.setItem('btm_flow_route_pick_v1', key); } catch (err) {}
+    });
+  });
+
+  try {
+    var saved = localStorage.getItem('btm_flow_route_pick_v1');
+    if (saved && labels[saved]) {
+      var elSaved = document.querySelector('.panel[data-choice="' + saved + '"]');
+      if (elSaved) {
+        elSaved.classList.add('is-picked');
+        banner.textContent = 'picked · ' + labels[saved];
+        banner.classList.add('on');
+      }
+    }
+  } catch (err) {}
+})();
 </script>
-<p><a href="prototype.html?mock=flow&v=flowmock1">Open the flow mock on prototype</a></p>
+<script src="nav-shared.js?v=flowroute1"></script>
+</body>
+</html>

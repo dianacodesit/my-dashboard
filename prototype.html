@@ -49843,7 +49843,19 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:no
   -webkit-backdrop-filter: blur(8px) !important;
   transition: opacity 0.15s ease, background 0.15s ease !important;
 }
-/* Overview collage: keep section + visible (not hover-only). */
+/* Mouse: + only on the section you hover. Touch keeps it visible. */
+@media (hover: hover) and (pointer: fine) {
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile > .vision-add-card {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile:hover > .vision-add-card,
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile:focus-within > .vision-add-card,
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile.picker-open > .vision-add-card {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile > .vision-add-card span {
   font-family: "DM Mono", monospace !important;
   font-size: 18px !important;
@@ -54272,11 +54284,6 @@ html body .day-block.depth-four-era:is(.overview-mode-overview, .overview-mode-s
   visibility: hidden !important;
   pointer-events: none !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day, .depth-four-era):is(.overview-mode-overview, .overview-mode-sections) .vision-board:not(.is-zoomed) .vision-tile > .vision-add-card {
-  display: flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
 html body .day-block.depth-four-era.overview-mode-subsections .vision-board:not(.is-zoomed) .vision-tile-subsections {
   display: block !important;
   visibility: visible !important;
@@ -55738,10 +55745,24 @@ html body.frm-open .day-block.view-flow .tv-panel.tv-flow {
     hint.textContent = HINT[mode] || '';
     try { sessionStorage.setItem('btm_flow_route_mock_v1', mode); } catch (e) {}
   }
+  function readVariant(){
+    var mode = 'rail';
+    try {
+      var u = new URL(location.href);
+      mode = u.searchParams.get('variant') || u.searchParams.get('frm') || sessionStorage.getItem('btm_flow_route_mock_v1') || 'rail';
+    } catch (e) {}
+    if (mode === 'a') mode = 'rail';
+    if (mode === 'b') mode = 'pins';
+    if (mode === 'c') mode = 'thread';
+    if (mode === 'd' || mode === 'fade') mode = 'done';
+    if (['rail','pins','thread','done'].indexOf(mode) < 0) mode = 'rail';
+    return mode;
+  }
   function show(){
     build();
     root.hidden = false;
     document.body.classList.add('frm-open');
+    setMode(readVariant());
     var blk = document.querySelector('.day-block[data-date="2026-08-30"]');
     if (blk) {
       blk.classList.add('view-flow');

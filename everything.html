@@ -10083,6 +10083,10 @@ html body .day-block.collapsed .vision-hero-six {
 <a href="flow-fonts.html">cursive flow fonts</a>
 <a href="deadline-fonts.html">deadline pill fonts</a>
 <a href="flow-styles.html">flow chart designs</a>
+<a href="flow-route-mocks.html">flow route UI · A–D</a>
+<a href="depth-style-mocks.html">depth toggle styles</a>
+<a href="card-style-mocks.html">card style mocks</a>
+<a href="capture-panel-mocks.html">capture panel mocks</a>
 <a href="arrows.html">arrow formations</a>
 <a href="transitions.html">transition styles</a>
 </nav>
@@ -49386,7 +49390,19 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:no
   -webkit-backdrop-filter: blur(8px) !important;
   transition: opacity 0.15s ease, background 0.15s ease !important;
 }
-/* Overview collage: keep section + visible (not hover-only). */
+/* Mouse: + only on the section you hover. Touch keeps it visible. */
+@media (hover: hover) and (pointer: fine) {
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile > .vision-add-card {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile:hover > .vision-add-card,
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile:focus-within > .vision-add-card,
+  html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile.picker-open > .vision-add-card {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-tile > .vision-add-card span {
   font-family: "DM Mono", monospace !important;
   font-size: 18px !important;
@@ -53369,11 +53385,6 @@ html body .day-block.depth-four-era:is(.overview-mode-overview, .overview-mode-s
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
-}
-html body .day-block:is(.overview-era-day, .vision-collage-day, .depth-four-era):is(.overview-mode-overview, .overview-mode-sections) .vision-board:not(.is-zoomed) .vision-tile > .vision-add-card {
-  display: flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
 }
 html body .day-block.depth-four-era.overview-mode-subsections .vision-board:not(.is-zoomed) .vision-tile-subsections {
   display: block !important;

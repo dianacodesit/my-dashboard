@@ -71,6 +71,10 @@
     { href: 'flow-fonts.html', label: 'cursive flow fonts', group: 'design' },
     { href: 'deadline-fonts.html', label: 'deadline pill fonts', group: 'design' },
     { href: 'flow-styles.html', label: 'flow chart designs', group: 'design' },
+    { href: 'flow-route-mocks.html', label: 'flow route UI · A–D', group: 'design' },
+    { href: 'depth-style-mocks.html', label: 'depth toggle styles', group: 'design' },
+    { href: 'card-style-mocks.html', label: 'card style mocks', group: 'design' },
+    { href: 'capture-panel-mocks.html', label: 'capture panel mocks', group: 'design' },
     { href: 'task-display-options.html', label: 'task display options', group: 'design' },
     { href: 'arrows.html', label: 'arrow formations', group: 'design' },
     { href: 'transitions.html', label: 'transition styles', group: 'design' }
