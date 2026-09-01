@@ -20030,6 +20030,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="alignment" style="--tile-photo: url('manus-storage/zone-alignment.jpg?v=align1'); grid-area: 6 / 1 / 7 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">alignment</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url('manus-storage/mock-glow-up-skin-v3.jpg?v=cheek'); grid-area: 6 / 2 / 7 / 3 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">glow up</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card is-done" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 35.3%; --py: 2.0%; --pw: 172px; width: 172px;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge is-done">daily</em><div class="vision-habit-status is-done">done today</div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-smile-set.jpg?v=aligners1" style="--px: 45.3%; --py: 2.0%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-smile-set.jpg?v=aligners1"><span>smile set</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-cleanse.jpg?v=cleanse2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-cleanse.jpg?v=cleanse2"><span>cleanse</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 </div>
+</div>
 <div class="tv-panel tv-impulses" style="display:none"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><ul class="impulses-list"></ul></div></div>
 <div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div>
 <div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div>
@@ -46868,9 +46869,10 @@ function seedAug30SelectedCards(blk){
     } catch(e){}
   })();
 
-  (function rewritePoliticsPodiumPhoto(){
-    var MKEY = 'migration-politics-chess-photo-v7';
-    var WANT = 'manus-storage/zone-politics.jpg?v=chess2';
+  (function rewritePoliticsChessPhoto(){
+    // v8 chess supersedes v6 corridor2 — always rewrites so corridor cannot win on load
+    var MKEY = 'migration-politics-chess-photo-v8';
+    var WANT = 'manus-storage/zone-politics.jpg?v=chess4';
     var re = /manus-storage\/zone-politics\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isPoliticsTile(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
