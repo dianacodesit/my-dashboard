@@ -16438,6 +16438,40 @@ window.__j22fnApply=run;
     }
   }catch(e){}
 
+  try{
+    var DARK_AWARE='manus-storage/zone-darkness.jpg?v=aware1';
+    function applyDarknessAwarePhoto(){
+      document.querySelectorAll('.vision-tile').forEach(function(el){
+        var t=((el.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+        var f=(el.getAttribute('data-focus')||'').toLowerCase();
+        if(t==='darkness'||f==='darkness') el.style.setProperty('--tile-photo', "url('"+DARK_AWARE+"')");
+      });
+    }
+    applyDarknessAwarePhoto();
+    window.__rewriteDarknessPhotosNow = applyDarknessAwarePhoto;
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applyDarknessAwarePhoto, ms); });
+    if(!localStorage.getItem('btm_darkness_photo_aware1')){
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw=localStorage.getItem(k); if(!raw) return;
+        var next=raw.replace(/manus-storage\/zone-darkness\.jpg(\?v=[^"'\\s)]+)?/g, DARK_AWARE);
+        if(next!==raw) localStorage.setItem(k, next);
+      });
+      try{
+        var edits=JSON.parse(localStorage.getItem('btm_overview_edits_v1')||'{}')||{};
+        Object.keys(edits).forEach(function(day){
+          var d=edits[day]; if(!d||!Array.isArray(d.addedSections)) return;
+          d.addedSections.forEach(function(rec){
+            if(!rec) return;
+            var t=String(rec.title||'').toLowerCase();
+            var f=String(rec.focus||'').toLowerCase();
+            if(t==='darkness'||f==='darkness') rec.photo=DARK_AWARE;
+          });
+        });
+        localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      }catch(e2){}
+      localStorage.setItem('btm_darkness_photo_aware1','1');
+    }
+  }catch(e){}
 
   try{
     var ST_SOUL='manus-storage/zone-strengths.jpg?v=soul1';

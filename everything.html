@@ -50466,9 +50466,13 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   }
 
   function destButtonLabel(d){
-    if (d.isToday) return 'today · ' + d.display;
-    if (d.isTomorrow) return 'tomorrow · ' + d.display;
-    return d.display;
+    if (!d) return '';
+    var iso = d.date || '';
+    var today = todayIso();
+    var display = d.display || labelFor(iso);
+    if (d.isToday || iso === today) return 'today · ' + display;
+    if (d.isTomorrow || iso === nextIso(today)) return 'tomorrow · ' + display;
+    return display;
   }
 
   function destToastLabel(iso){
