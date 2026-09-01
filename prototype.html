@@ -47829,16 +47829,16 @@ function seedAug30SelectedCards(blk){
   }
   window.__seedSep01Audacity = seedSep01Audacity;
 
-  var ENROLL_MOVE_CARD_TITLES = ['tuition', 'scholarship re-application'];
+  var ENROLL_MOVE_CARD_TITLES = ['tuition payment', 'fall 2026 enrollment'];
   var ENROLL_MOVE_CARD_SRC = {
-    'tuition': 'manus-storage/card-tuition.jpg?v=v4',
-    'scholarship re-application': 'manus-storage/card-application.jpg?v=v4'
+    'tuition payment': 'manus-storage/card-tuition.jpg?v=v4',
+    'fall 2026 enrollment': 'manus-storage/card-fall-2026-enrollment.jpg?v=1'
   };
   var ENROLL_LEGACY_SCRUB_NAMES = ['tuition', 'scholarship re-application', 'scholarship application', 'scholarship reapplication', 'tuition payment', 'fall 2026 enrollment'];
   function isEnrollMoveCardName(title){
     var k = String(title || '').replace(/\s+/g, ' ').trim().toLowerCase();
-    if(k === 'tuition' || k === 'tuition payment') return 'tuition';
-    if(k === 'scholarship re-application' || k === 'scholarship application' || k === 'scholarship reapplication' || k === 'fall 2026 enrollment') return 'scholarship re-application';
+    if(k === 'tuition' || k === 'tuition payment') return 'tuition payment';
+    if(k === 'fall 2026 enrollment') return 'fall 2026 enrollment';
     return '';
   }
   function isEnrollLegacyScrubName(title){
@@ -47940,6 +47940,21 @@ function seedAug30SelectedCards(blk){
         changed = true;
       }
       pep.style.setProperty('--tile-photo', "url('"+PEPPER_IMG+"')");
+      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        var ct = cardTitle(pol).toLowerCase();
+        if(ct === 'scholarship re-application' || ct === 'scholarship application' || ct === 'scholarship reapplication'){
+          pol.remove();
+          changed = true;
+        }
+      });
+      [].slice.call(pep.querySelectorAll('.vision-check')).forEach(function(chk){
+        var span = chk.querySelector('span');
+        var t = ((span && span.textContent) || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        if(t === 'scholarship re-application' || t === 'scholarship application' || t === 'scholarship reapplication' || t === 'tuition'){
+          chk.remove();
+          changed = true;
+        }
+      });
       [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
         var ct = cardTitle(pol);
         var canon = isEnrollMoveCardName(ct);
@@ -48080,8 +48095,8 @@ function seedAug30SelectedCards(blk){
   function migrateEnrollTuitionSep01ToSep02Stores(){
     var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v5';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
-    var APP = ENROLL_MOVE_CARD_SRC['scholarship re-application'];
-    var TUI = ENROLL_MOVE_CARD_SRC.tuition;
+    var ENR = ENROLL_MOVE_CARD_SRC['fall 2026 enrollment'];
+    var TUI = ENROLL_MOVE_CARD_SRC['tuition payment'];
     function canonEnrollTitle(title){
       return isEnrollMoveCardName(title) || '';
     }
@@ -48153,7 +48168,7 @@ function seedAug30SelectedCards(blk){
       }
       sep2.addedCards = (sep2.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
       sep2.userAddedCards = sep2.userAddedCards || [];
-      [['tuition', TUI], ['scholarship re-application', APP]].forEach(function(pair){
+      [['tuition payment', TUI], ['fall 2026 enrollment', ENR]].forEach(function(pair){
         var name = pair[0], src = pair[1];
         if(!sep2.addedCards.some(function(c){ return c && String(c.title || '').toLowerCase() === name; })){
           sep2.addedCards.push({ sectionFocus: 'pepperdine', title: name, src: src, px: '12.5%', py: '2%', w: '126px', shot: true });
@@ -48191,28 +48206,19 @@ function seedAug30SelectedCards(blk){
   }
   try { migrateEnrollTuitionSep01ToSep02Stores(); } catch(e){}
 
-  function migrateEnrollCardsSep02V4(){
-    var MKEY = 'migration-enroll-cards-sep02-v4';
+  function migrateEnrollCardsSep02V5(){
+    var MKEY = 'migration-enroll-cards-sep02-v5';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
-    var TUI = ENROLL_MOVE_CARD_SRC.tuition;
-    var APP = ENROLL_MOVE_CARD_SRC['scholarship re-application'];
+    var TUI = ENROLL_MOVE_CARD_SRC['tuition payment'];
+    var ENR = ENROLL_MOVE_CARD_SRC['fall 2026 enrollment'];
     function patchSep02StoredHtml(html){
       if(!html) return html;
       var s = String(html);
-      var seen = {};
-      s = s.replace(/<div class="vision-polaroid[^"]*"[^>]*>[\s\S]*?<\/div>\s*/gi, function(block){
-        var m = block.match(/<span[^>]*>([^<]*)<\/span>/i);
-        var canon = isEnrollMoveCardName(m ? m[1] : '');
-        if(!canon) return block;
-        if(seen[canon]) return '';
-        seen[canon] = 1;
-        var src = ENROLL_MOVE_CARD_SRC[canon];
-        return block
-          .replace(/(<span[^>]*>)[^<]*(<\/span>)/i, '$1'+canon+'$2')
-          .replace(/data-shot-src="[^"]*"/i, 'data-shot-src="'+src+'"')
-          .replace(/src="[^"]*"/i, 'src="'+src+'"');
-      });
-      return s;
+      var next = s
+        .replace(/<div class="vision-polaroid[^"]*"[^>]*data-shot-src="[^"]*card-application[^"]*"[^>]*>[\s\S]*?<\/div>\s*/gi, '')
+        .replace(/(<div class="vision-polaroid[^"]*"[^>]*data-shot-src="[^"]*card-tuition[^"]*"[^>]*>[\s\S]*?<span[^>]*>)\s*tuition\s*(<\/span>)/gi, '$1tuition payment$2')
+        .replace(/<label class="vision-check"[^>]*>[\s\S]*?<span[^>]*>\s*(?:tuition|scholarship re-application|scholarship application|scholarship reapplication)\s*<\/span>[\s\S]*?<\/label>\s*/gi, '');
+      return next === s ? html : next;
     }
     try {
       var shells = JSON.parse(localStorage.getItem('btm_day_shells_v1') || '{}') || {};
@@ -48224,16 +48230,33 @@ function seedAug30SelectedCards(blk){
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
-      sep2.addedCards = (sep2.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
-      sep2.userAddedCards = (sep2.userAddedCards || []).filter(function(c){ return !isEnrollMoveCardName((c && c.title) || c); });
-      sep2.removedCards = (sep2.removedCards || []).filter(function(r){ return !isEnrollMoveCardName(r && r.title); });
-      [['tuition', TUI], ['scholarship re-application', APP]].forEach(function(pair){
+      sep2.addedCards = (sep2.addedCards || []).filter(function(c){
+        if(!c) return false;
+        var t = String(c.title || '').toLowerCase();
+        return t !== 'scholarship re-application' && t !== 'scholarship application' && t !== 'scholarship reapplication' && t !== 'tuition';
+      });
+      sep2.userAddedCards = (sep2.userAddedCards || []).filter(function(c){
+        var t = String((c && c.title) || c || '').toLowerCase();
+        return t !== 'scholarship re-application' && t !== 'scholarship application' && t !== 'scholarship reapplication' && t !== 'tuition';
+      });
+      [['tuition payment', TUI], ['fall 2026 enrollment', ENR]].forEach(function(pair){
         var name = pair[0], src = pair[1];
-        if(!sep2.addedCards.some(function(c){ return c && isEnrollMoveCardName(c.title) === name; })){
+        if(!sep2.addedCards.some(function(c){ return c && String(c.title || '').toLowerCase() === name; })){
           sep2.addedCards.push({ sectionFocus: 'pepperdine', title: name, src: src, px: '12.5%', py: '2%', w: '126px', shot: true });
         }
-        if(!sep2.userAddedCards.some(function(c){ return isEnrollMoveCardName((c && c.title) || c) === name; })){
+        if(!sep2.userAddedCards.some(function(c){
+          var t = String((c && c.title) || c || '').toLowerCase();
+          return t === name;
+        })){
           sep2.userAddedCards.push({ title: name, sectionFocus: 'pepperdine' });
+        }
+      });
+      sep2.removedCards = sep2.removedCards || [];
+      ['scholarship re-application','scholarship application','scholarship reapplication','tuition'].forEach(function(name){
+        if(!sep2.removedCards.some(function(r){
+          return r && String(r.title || '').toLowerCase() === name && String(r.sectionFocus || '').toLowerCase() === 'pepperdine';
+        })){
+          sep2.removedCards.push({ title: name, sectionFocus: 'pepperdine' });
         }
       });
       edits['2026-09-02'] = sep2;
@@ -48241,17 +48264,21 @@ function seedAug30SelectedCards(blk){
     } catch(e){}
     try {
       var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
-      m.tuition = TUI;
-      m['scholarship re-application'] = APP;
-      delete m['tuition payment'];
-      delete m['fall 2026 enrollment'];
+      m['tuition payment'] = TUI;
+      m['fall 2026 enrollment'] = ENR;
+      delete m.tuition;
+      delete m['scholarship re-application'];
       localStorage.setItem('btm_card_photos_v1', JSON.stringify(m));
     } catch(e){}
     try {
       var hz = JSON.parse(localStorage.getItem('btm_horizon_card_done_v1') || '{}') || {};
       var nextHz = {};
       Object.keys(hz).forEach(function(k){
-        var nk = k.replace(/\|tuition payment$/, '|tuition').replace(/\|fall 2026 enrollment$/, '|scholarship re-application');
+        if(/2026-09-02\|/.test(k) && /scholarship/.test(k)) return;
+        var nk = k;
+        if(/2026-09-02\|/.test(k) && /\|tuition$/.test(k)) nk = k.replace(/\|tuition$/, '|tuition payment');
+        if(/2026-09-01\|/.test(k) && /\|tuition$/.test(k)) nk = k.replace('2026-09-01|', '2026-09-02|').replace(/\|tuition$/, '|tuition payment');
+        if(/\|scholarship/.test(nk)) return;
         nextHz[nk] = hz[k];
       });
       localStorage.setItem('btm_horizon_card_done_v1', JSON.stringify(nextHz));
@@ -48262,16 +48289,19 @@ function seedAug30SelectedCards(blk){
     } catch(e){}
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
   }
-  try { migrateEnrollCardsSep02V4(); } catch(e){}
+  try { migrateEnrollCardsSep02V5(); } catch(e){}
 
   function migrateRestoreSep02UserSections(){
     /* stripFreshDayAutoSections + stale removedSections blocked Diana's Sep2 additions. */
-    var MKEY = 'migration-restore-sep02-user-sections-v1';
+    var MKEY = 'migration-restore-sep02-user-sections-v2';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'];
-      if(!sep2){ localStorage.setItem(MKEY, '1'); return; }
+      if(!sep2){
+        sep2 = { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
+        edits['2026-09-02'] = sep2;
+      }
       var unblock = {
         'win':1,'wins':1,'repetitions':1,'intentions':1,'attention':1,'darkness':1,'soul':1,'audacity':1,
         'say thank you in advance':1,'say-thank-you-in-advance':1,
