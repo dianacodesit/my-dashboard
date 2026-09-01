@@ -47874,7 +47874,8 @@ function seedAug30SelectedCards(blk){
     if(pep){
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
         [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
-          if(isEnrollLegacyScrubName(cardTitle(pol))){
+          var ct = cardTitle(pol);
+          if(isEnrollLegacyScrubName(ct)){
             pol.remove();
             changed = true;
           }
@@ -47982,6 +47983,17 @@ function seedAug30SelectedCards(blk){
           changed = true;
         }
       });
+      var seenMove = {};
+      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        var canon = isEnrollMoveCardName(cardTitle(pol));
+        if(!canon) return;
+        if(seenMove[canon]){
+          pol.remove();
+          changed = true;
+          return;
+        }
+        seenMove[canon] = 1;
+      });
     }
     if(changed){
       try { syncHeroLayoutClass(blk); } catch(e){}
@@ -48066,25 +48078,44 @@ function seedAug30SelectedCards(blk){
   window.__seedSep02Soul = seedSep02Soul;
 
   function migrateEnrollTuitionSep01ToSep02Stores(){
-    var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v1';
+    var MKEY = 'migration-enroll-tuition-sep01-to-sep02-v5';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     var APP = ENROLL_MOVE_CARD_SRC['scholarship re-application'];
     var TUI = ENROLL_MOVE_CARD_SRC.tuition;
+    function canonEnrollTitle(title){
+      return isEnrollMoveCardName(title) || '';
+    }
     function scrubStoreHtml(html){
       if(!html) return html;
       var s = String(html);
+      var seen = {};
+      s = s.replace(/<div class="vision-polaroid[^"]*"[^>]*>[\s\S]*?<\/div>\s*/gi, function(block){
+        var m = block.match(/<span[^>]*>([^<]*)<\/span>/i);
+        var t = m ? m[1] : '';
+        var canon = canonEnrollTitle(t);
+        if(!canon) return block;
+        if(seen[canon]) return '';
+        seen[canon] = 1;
+        var src = ENROLL_MOVE_CARD_SRC[canon];
+        var next = block
+          .replace(/(<span[^>]*>)[^<]*(<\/span>)/i, '$1'+canon+'$2')
+          .replace(/data-shot-src="[^"]*"/i, 'data-shot-src="'+src+'"')
+          .replace(/src="[^"]*"/i, 'src="'+src+'"');
+        return next;
+      });
       var next = s
-        .replace(/<div class="vision-polaroid[^"]*"[^>]*data-shot-src="[^"]*card-tuition[^"]*"[^>]*>[\s\S]*?<\/div>\s*/gi, '')
-        .replace(/<div class="vision-polaroid[^"]*"[^>]*data-shot-src="[^"]*card-application[^"]*"[^>]*>[\s\S]*?<\/div>\s*/gi, '')
-        .replace(/<label class="vision-check"[^>]*>[\s\S]*?<span[^>]*>\s*tuition\s*<\/span>[\s\S]*?<\/label>\s*/gi, '')
-        .replace(/<label class="vision-check"[^>]*>[\s\S]*?<span[^>]*>\s*scholarship re-application\s*<\/span>[\s\S]*?<\/label>\s*/gi, '');
-      return next === s ? html : next;
+        .replace(/<label class="vision-check"[^>]*>[\s\S]*?<span[^>]*>\s*(?:tuition(?: payment)?|scholarship re-application|fall 2026 enrollment)\s*<\/span>[\s\S]*?<\/label>\s*/gi, '');
+      return next === html ? html : next;
     }
     try {
       var shells = JSON.parse(localStorage.getItem('btm_day_shells_v1') || '{}') || {};
       if(shells['2026-09-01']){
         var s1 = scrubStoreHtml(shells['2026-09-01']);
         if(s1 !== shells['2026-09-01']){ shells['2026-09-01'] = s1; localStorage.setItem('btm_day_shells_v1', JSON.stringify(shells)); }
+      }
+      if(shells['2026-09-02']){
+        var s2 = scrubStoreHtml(shells['2026-09-02']);
+        if(s2 !== shells['2026-09-02']){ shells['2026-09-02'] = s2; localStorage.setItem('btm_day_shells_v1', JSON.stringify(shells)); }
       }
     } catch(e){}
     try {
@@ -48094,7 +48125,7 @@ function seedAug30SelectedCards(blk){
       sep1.addedCards = (sep1.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
         if(!sep1.removedCards.some(function(r){
-          return r && String(r.title || '').toLowerCase() === name && String(r.sectionFocus || '').toLowerCase() === 'pepperdine';
+          return r && isEnrollMoveCardName(r.title) === name && String(r.sectionFocus || '').toLowerCase() === 'pepperdine';
         })){
           sep1.removedCards.push({ title: name, sectionFocus: 'pepperdine' });
         }
@@ -48103,7 +48134,7 @@ function seedAug30SelectedCards(blk){
         if(!s) return false;
         var f = String(s.focus || '').toLowerCase();
         var t = String(s.title || '').toLowerCase();
-        return f === 'pepperdine' || t === 'enroll' || t === 'pepperdine';
+        return f === 'pepperdine' || t === 'enroll' || t === 'achieve' || t === 'pepperdine';
       }) && !sep1.addedCards.length;
       if(onlyEnroll) sep1.addedSections = [];
       edits['2026-09-01'] = sep1;
@@ -48114,19 +48145,33 @@ function seedAug30SelectedCards(blk){
         if(!s) return false;
         var f = String(s.focus || '').toLowerCase();
         var t = String(s.title || '').toLowerCase();
-        return f === 'pepperdine' || t === 'enroll' || t === 'pepperdine';
+        return f === 'pepperdine' || t === 'enroll' || t === 'achieve' || t === 'pepperdine';
       });
       if(!hasPep){
         sep2.addedSections = sep2.addedSections || [];
-        sep2.addedSections.push({ focus: 'pepperdine', title: 'enroll', photo: PEPPER_IMG });
+        sep2.addedSections.push({ focus: 'pepperdine', title: 'achieve', photo: PEPPER_IMG });
       }
       sep2.addedCards = (sep2.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
+      sep2.userAddedCards = sep2.userAddedCards || [];
       [['tuition', TUI], ['scholarship re-application', APP]].forEach(function(pair){
         var name = pair[0], src = pair[1];
         if(!sep2.addedCards.some(function(c){ return c && String(c.title || '').toLowerCase() === name; })){
           sep2.addedCards.push({ sectionFocus: 'pepperdine', title: name, src: src, px: '12.5%', py: '2%', w: '126px', shot: true });
         }
+        if(!sep2.userAddedCards.some(function(c){
+          var t = String((c && c.title) || c || '').toLowerCase();
+          return t === name;
+        })){
+          sep2.userAddedCards.push({ title: name, sectionFocus: 'pepperdine' });
+        }
       });
+      if(!sep2.userAddedSections){
+        sep2.userAddedSections = ['pepperdine', 'achieve'];
+      } else {
+        ['pepperdine','achieve'].forEach(function(x){
+          if(sep2.userAddedSections.indexOf(x) < 0) sep2.userAddedSections.push(x);
+        });
+      }
       edits['2026-09-02'] = sep2;
       localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
     } catch(e){}
@@ -48145,6 +48190,79 @@ function seedAug30SelectedCards(blk){
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
   }
   try { migrateEnrollTuitionSep01ToSep02Stores(); } catch(e){}
+
+  function migrateEnrollCardsSep02V4(){
+    var MKEY = 'migration-enroll-cards-sep02-v4';
+    try { if(localStorage.getItem(MKEY)) return; } catch(e){}
+    var TUI = ENROLL_MOVE_CARD_SRC.tuition;
+    var APP = ENROLL_MOVE_CARD_SRC['scholarship re-application'];
+    function patchSep02StoredHtml(html){
+      if(!html) return html;
+      var s = String(html);
+      var seen = {};
+      s = s.replace(/<div class="vision-polaroid[^"]*"[^>]*>[\s\S]*?<\/div>\s*/gi, function(block){
+        var m = block.match(/<span[^>]*>([^<]*)<\/span>/i);
+        var canon = isEnrollMoveCardName(m ? m[1] : '');
+        if(!canon) return block;
+        if(seen[canon]) return '';
+        seen[canon] = 1;
+        var src = ENROLL_MOVE_CARD_SRC[canon];
+        return block
+          .replace(/(<span[^>]*>)[^<]*(<\/span>)/i, '$1'+canon+'$2')
+          .replace(/data-shot-src="[^"]*"/i, 'data-shot-src="'+src+'"')
+          .replace(/src="[^"]*"/i, 'src="'+src+'"');
+      });
+      return s;
+    }
+    try {
+      var shells = JSON.parse(localStorage.getItem('btm_day_shells_v1') || '{}') || {};
+      if(shells['2026-09-02']){
+        var s2 = patchSep02StoredHtml(shells['2026-09-02']);
+        if(s2 !== shells['2026-09-02']){ shells['2026-09-02'] = s2; localStorage.setItem('btm_day_shells_v1', JSON.stringify(shells)); }
+      }
+    } catch(e){}
+    try {
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
+      sep2.addedCards = (sep2.addedCards || []).filter(function(c){ return !isEnrollMoveCardName(c && c.title); });
+      sep2.userAddedCards = (sep2.userAddedCards || []).filter(function(c){ return !isEnrollMoveCardName((c && c.title) || c); });
+      sep2.removedCards = (sep2.removedCards || []).filter(function(r){ return !isEnrollMoveCardName(r && r.title); });
+      [['tuition', TUI], ['scholarship re-application', APP]].forEach(function(pair){
+        var name = pair[0], src = pair[1];
+        if(!sep2.addedCards.some(function(c){ return c && isEnrollMoveCardName(c.title) === name; })){
+          sep2.addedCards.push({ sectionFocus: 'pepperdine', title: name, src: src, px: '12.5%', py: '2%', w: '126px', shot: true });
+        }
+        if(!sep2.userAddedCards.some(function(c){ return isEnrollMoveCardName((c && c.title) || c) === name; })){
+          sep2.userAddedCards.push({ title: name, sectionFocus: 'pepperdine' });
+        }
+      });
+      edits['2026-09-02'] = sep2;
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+    } catch(e){}
+    try {
+      var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
+      m.tuition = TUI;
+      m['scholarship re-application'] = APP;
+      delete m['tuition payment'];
+      delete m['fall 2026 enrollment'];
+      localStorage.setItem('btm_card_photos_v1', JSON.stringify(m));
+    } catch(e){}
+    try {
+      var hz = JSON.parse(localStorage.getItem('btm_horizon_card_done_v1') || '{}') || {};
+      var nextHz = {};
+      Object.keys(hz).forEach(function(k){
+        var nk = k.replace(/\|tuition payment$/, '|tuition').replace(/\|fall 2026 enrollment$/, '|scholarship re-application');
+        nextHz[nk] = hz[k];
+      });
+      localStorage.setItem('btm_horizon_card_done_v1', JSON.stringify(nextHz));
+    } catch(e){}
+    try {
+      var blk = document.querySelector('.day-block[data-date="2026-09-02"]');
+      if(blk && window.__seedSep02EnrollMoveCards) window.__seedSep02EnrollMoveCards(blk);
+    } catch(e){}
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+  }
+  try { migrateEnrollCardsSep02V4(); } catch(e){}
 
   function migrateRestoreSep02UserSections(){
     /* stripFreshDayAutoSections + stale removedSections blocked Diana's Sep2 additions. */

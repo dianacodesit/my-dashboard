@@ -47527,13 +47527,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
       pep.style.setProperty('--tile-photo', "url('"+PEPPER_IMG+"')");
       [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
-        var ct = cardTitle(pol).toLowerCase();
-        if(ct === 'scholarship re-application' || ct === 'scholarship application' || ct === 'scholarship reapplication'){
-          pol.remove();
-          changed = true;
-        }
-      });
-      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
         var ct = cardTitle(pol);
         var canon = isEnrollMoveCardName(ct);
         if(!canon) return;
