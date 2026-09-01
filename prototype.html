@@ -43615,8 +43615,33 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     d.textContent = '×';
     tile.appendChild(d);
   }
+  var CARD_HEADLINE = 'success begets success; do one thing ...';
+  function dayWantsCardHeadline(blk){
+    var iso = '';
+    try { iso = (blk && (blk.getAttribute('data-date') || (typeof dayKey === 'function' && dayKey(blk)))) || ''; } catch(e){ iso = ''; }
+    return !!iso && iso >= '2026-09-01';
+  }
+  function ensureCardHeadline(pol){
+    if(!pol) return;
+    var blk = null;
+    try { blk = pol.closest && pol.closest('.day-block'); } catch(e){ blk = null; }
+    var el = pol.querySelector(':scope > .vision-card-headline');
+    if(!dayWantsCardHeadline(blk)){
+      if(el) el.remove();
+      return;
+    }
+    if(!el){
+      el = document.createElement('p');
+      el.className = 'vision-card-headline';
+      var cap = pol.querySelector(':scope > span');
+      if(cap) pol.insertBefore(el, cap);
+      else pol.appendChild(el);
+    }
+    if(el.textContent !== CARD_HEADLINE) el.textContent = CARD_HEADLINE;
+  }
   function ensurePolaroidChrome(pol){
     if(!pol) return;
+    ensureCardHeadline(pol);
     if(!pol.querySelector(':scope > .vision-card-del')){
     var d = document.createElement('button');
     d.type = 'button';
