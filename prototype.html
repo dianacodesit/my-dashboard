@@ -45158,6 +45158,20 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     // Canonical renames — never create a sibling "grad school" beside pepperdine.
     if(title === 'grad school' || title === 'grad' || title === 'grad-school') title = 'pepperdine';
+    if(title === 'calisthenics'){
+      var hostCal = heroHost(blk);
+      if(hostCal){
+        var bodyForCal = findBodyFitnessTile([].slice.call(hostCal.querySelectorAll('.vision-tile')));
+        if(!bodyForCal){
+          addTile(blk, 'fitness training', asUser);
+          bodyForCal = findBodyFitnessTile([].slice.call(hostCal.querySelectorAll('.vision-tile')));
+        }
+        if(bodyForCal){
+          addCard(bodyForCal, 'calisthenics', asUser);
+          return;
+        }
+      }
+    }
     if(title === 'gym' || title === 'toned-body' || title === 'toned body' || title === 'athletic' || title === 'fitness training' || title === 'fitness-training') title = 'body';
     if(title === 'finances') title = 'abundance';
     if(title === 'lifestyle') title = 'curated lifestyle';
@@ -51116,8 +51130,21 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     var goBtn = ov.querySelector('.cr-go');
     var selected = {};
     items.forEach(function(it, i){ selected[i] = true; });
-    var destDate = futureDestinations(fromDate)[0] ? futureDestinations(fromDate)[0].date : nextIso(fromDate);
-    buildDestPicker(destWrap, fromDate, function(iso){ destDate = iso; });
+    var dests = futureDestinations(fromDate);
+    var destDate = dests[0] ? dests[0].date : nextIso(fromDate);
+
+    dests.forEach(function(d, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'cr-day' + (i === 0 ? ' is-on' : '');
+      b.textContent = d.isTomorrow ? ('tomorrow · ' + d.display) : d.display;
+      b.addEventListener('click', function(){
+        destDate = d.date;
+        destWrap.querySelectorAll('.cr-day').forEach(function(x){ x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+      });
+      destWrap.appendChild(b);
+    });
 
     var pts = starLayout(items.length);
     var stars = [];
