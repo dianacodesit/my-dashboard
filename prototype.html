@@ -17375,7 +17375,7 @@ window.__j22fnApply=run;
     if(!blk || !isOverviewEra(blk)) return;
     blk.classList.add('overview-era-day');
     var iso=blk.getAttribute('data-date')||'';
-    if(iso >= '2026-09-01') blk.classList.add('collage-flush');
+    if(iso >= '2026-09-01'){ blk.classList.add('collage-flush'); blk.classList.add('card-headline-era'); }
     var pill=blk.querySelector('.tv-pill[data-view="pursuits"]');
     if(pill) pill.textContent='overview';
     if(blk.classList.contains('today-block')){
@@ -24228,7 +24228,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         clone.classList.remove('freeplace-day');
         clone.querySelectorAll('.add-board-row, .add-section-btn, .add-card-btn, .j22-actions').forEach(function(el){ el.remove(); });
       }
-      if (iso >= '2026-09-01') clone.classList.add('collage-flush');
+      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); clone.classList.add('card-headline-era'); }
       if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
         try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
       }
@@ -24254,7 +24254,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso === '2026-08-20') clone.classList.add('pursuit-board-day');
       else if (iso === todayStr()) clone.classList.add('today-block');
       if (iso >= '2026-08-26') { clone.classList.add('vision-collage-day'); clone.classList.remove('freeplace-day'); }
-      if (iso >= '2026-09-01') clone.classList.add('collage-flush');
+      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); clone.classList.add('card-headline-era'); }
       const dateEl = clone.querySelector('.day-date');
       if (dateEl) dateEl.textContent = labelFor(iso);
       insertDay(clone, iso);
@@ -51462,6 +51462,51 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
 </style>
 
 <style id="overview-depth-four-v1">
+
+/* Section titles embossed/carved into the photo — not white stickers.
+   Collage size clamp(22px, 2.6vw, 34px); zoomed 36px — do not enlarge. */
+html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-tile-title {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 48px) !important;
+  margin: 0 !important;
+  text-align: center !important;
+  z-index: 16 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.12 !important;
+  pointer-events: none !important;
+  color: rgba(255, 244, 228, 0.55) !important;
+  -webkit-text-stroke: 0.4px rgba(20, 14, 10, 0.35) !important;
+  text-shadow:
+    -1px -1px 0.5px rgba(255, 255, 255, 0.45),
+    1px 1px 0.5px rgba(0, 0, 0, 0.55),
+    0 0 1px rgba(20, 14, 10, 0.25) !important;
+  mix-blend-mode: overlay !important;
+  filter: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 36px !important;
+  color: rgba(255, 244, 228, 0.58) !important;
+  -webkit-text-stroke: 0.5px rgba(20, 14, 10, 0.38) !important;
+  text-shadow:
+    -1.2px -1.2px 0.5px rgba(255, 255, 255, 0.5),
+    1.2px 1.2px 0.5px rgba(0, 0, 0, 0.58),
+    0 0 1px rgba(20, 14, 10, 0.28) !important;
+  mix-blend-mode: overlay !important;
+}
+
 /* Four layers: sections / subsections / cards / tasks.
    Depth toggle sits UNDER overview·impulses·flow·nodes. Carry + stay right. */
 html body .day-block.overview-era-day .overview-toggle-row,
