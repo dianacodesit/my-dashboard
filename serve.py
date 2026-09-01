@@ -93,7 +93,7 @@ KNOWN_CARD_PHOTOS = {
     "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender-to-allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "itaqallah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "detach": "manus-storage/zone-detach-rope.jpg?v=rope1",
+    "detach": "manus-storage/zone-detach-fall.jpg?v=fall2",
     "start over": "manus-storage/zone-start-over-notebook.jpg?v=nb1",
     "start-over": "manus-storage/zone-start-over-notebook.jpg?v=nb1",
     "tune into": "",
@@ -171,10 +171,10 @@ REJECTED_SECTION_PHOTOS = (
     "abundance-grapes",
     "abundance-poppies",
     "abundance-bg-wealth",
-    # detach / start over — old leaf + dawn road forever banned
+    # detach / start over — rope + old leaf + dawn road forever banned
     "zone-detach.jpg",
     "zone-detach-leaf",
-    "zone-detach-fall",
+    "zone-detach-rope",
     "zone-start-over.jpg",
     "zone-start-over-road",
     # self-actualize — rejected AI cinematic cairn (zone-self-actualize.jpg)
