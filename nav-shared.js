@@ -40,7 +40,7 @@
     { href: 'dashboard.html', label: 'dashboard', group: 'main' },
     { href: 'brain-dump.html', label: 'brain dump', group: 'main' },
     { href: 'adhd.html', label: 'ADHD / neurodiversity', group: 'main' },
-    { href: 'pepperdine.html', label: 'Pepperdine', group: 'main' },
+    { href: 'pepperdine.html', label: 'enroll', group: 'main' },
     { href: 'research-proposals.html', label: 'research proposals', group: 'main', parent: 'pepperdine.html' },
     { href: 'diana-jundi.html', label: 'Diana Jundi', group: 'main' },
     { href: 'curriculum-vitae.html', label: 'Curriculum Vitae', group: 'main', parent: 'diana-jundi.html' },
