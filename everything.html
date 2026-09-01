@@ -42769,7 +42769,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function makeTile(opts){
     opts = opts || {};
     var tile = document.createElement('article');
-    tile.className = 'vision-tile' + (opts.extraClass ? ' ' + opts.extraClass : '');
+    var extra = opts.extraClass ? ' ' + opts.extraClass : '';
+    var tLowInit = String(opts.title || opts.focus || '').toLowerCase();
+    var fLowInit = String(opts.focus || '').toLowerCase();
+    if(tLowInit === 'body' || tLowInit === 'gym' || tLowInit === 'toned body' || tLowInit === 'toned-body' || tLowInit === 'athletic' || tLowInit === 'fitness training' || tLowInit === 'fitness-training' || fLowInit === 'body' || fLowInit === 'gym'){
+      extra += ' vision-tile-body vision-tile-tall';
+    }
+    tile.className = 'vision-tile' + extra;
     tile.setAttribute('data-focus', opts.focus || slug(opts.title));
     tile.style.setProperty('--tile-photo', 'url("'+ (opts.photo || DEFAULT_TILE) +'")');
     tile.innerHTML = '<div class="vision-tile-photo"></div><h3 class="vision-tile-title"></h3><div class="vision-tile-details"></div>';
