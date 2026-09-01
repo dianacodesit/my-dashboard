@@ -72,13 +72,31 @@ KNOWN_CARD_PHOTOS = {
     # sorrow is NOT soul — distinct focus; no approved photo (was soul-rose duplicate)
     "sorrow": "",
     "attention": "manus-storage/zone-attention.jpg?v=beam1",
+    "anticipate": "manus-storage/zone-attention.jpg?v=beam1",
     "darkness": "",
     "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
     "politics": "manus-storage/zone-politics.jpg?v=chess5",
     "repetitions": "manus-storage/zone-repetitions.jpg?v=cubes1",
     # abundance — approved money-tree (wheat/plenty2 forever banned)
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
+    "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "finances": "manus-storage/zone-abundance-tree.jpg?v=tree1",
+    "become": "manus-storage/zone-envision.jpg?v=swap1",
+    "future": "manus-storage/zone-envision.jpg?v=swap1",
+    "align": "manus-storage/zone-alignment.jpg?v=align1",
+    "alignment": "manus-storage/zone-alignment.jpg?v=align1",
+    "train": "manus-storage/zone-athletic.jpg?v=color2",
+    "fitness training": "manus-storage/zone-athletic.jpg?v=color2",
+    "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender-to-allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "itaqallah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "detach": "manus-storage/zone-detach.jpg?v=1",
+    "start over": "manus-storage/zone-start-over.jpg?v=1",
+    "start-over": "manus-storage/zone-start-over.jpg?v=1",
+    "tune into": "manus-storage/zone-tune-into.jpg?v=1",
+    "tune-into": "manus-storage/zone-tune-into.jpg?v=1",
+    "self-actualize": "manus-storage/zone-self-actualize.jpg?v=1",
+    "self actualize": "manus-storage/zone-self-actualize.jpg?v=1",
 }
 # Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
 # Never return these from /photo-for for soul, sorrow, darkness, abundance, attention.
@@ -295,7 +313,11 @@ def _tile_aliases(key: str) -> set[str]:
         ("athletic", "body"),
         ("fitness training", "body"),
         ("fitness-training", "body"),
+        ("train", "body"),
         ("finances", "abundance"),
+        ("abundant", "abundance"),
+        ("become", "future"),
+        ("align", "alignment"),
         ("lifestyle", "curated lifestyle"),
         ("curated-lifestyle", "curated lifestyle"),
         ("ambition", "executive"),
@@ -747,7 +769,7 @@ def _section_photo_rejected(src: str) -> bool:
 
 
 CONCEPTUAL_SECTION_KEYS = frozenset({
-    "soul", "sorrow", "darkness", "abundance", "attention", "finances",
+    "soul", "sorrow", "darkness", "abundance", "abundant", "attention", "anticipate", "finances",
 })
 
 
