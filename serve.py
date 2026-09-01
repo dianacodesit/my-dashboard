@@ -41,7 +41,7 @@ KNOWN_CARD_PHOTOS = {
     "scholarship reapplication": "manus-storage/card-application.jpg",
     "tuition": "manus-storage/card-tuition.jpg",
     "tuition payment": "manus-storage/card-tuition.jpg",
-    "fall 2026 enrollment": "manus-storage/card-application.jpg",
+    "fall 2026 enrollment": "manus-storage/card-fall-2026-enrollment.jpg",
     "tuition money": "manus-storage/card-tuition.jpg",
     "committee check-in": "manus-storage/pepperdine-committee-checkin.jpg",
     "gsa": "manus-storage/handshake-pepperdine-gsa.jpg",

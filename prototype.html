@@ -13083,6 +13083,8 @@ window.__j22fnApply=run;
     'sabotage':'manus-storage/zone-sabotage.jpg?v=1',
     'say thank you in advance':'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
     'say-thank-you-in-advance':'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
+    'execute':'manus-storage/zone-execute-checklist.jpg?v=exec1',
+    'curate':'manus-storage/zone-curate-gallery.jpg?v=curate1',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
@@ -47813,16 +47815,26 @@ function seedAug30SelectedCards(blk){
   }
   window.__seedSep01Audacity = seedSep01Audacity;
 
-  var ENROLL_MOVE_CARD_TITLES = ['tuition', 'scholarship re-application'];
+  var ENROLL_MOVE_CARD_TITLES = ['tuition payment', 'fall 2026 enrollment'];
   var ENROLL_MOVE_CARD_SRC = {
-    'tuition': 'manus-storage/card-tuition.jpg?v=v4',
-    'scholarship re-application': 'manus-storage/card-application.jpg?v=v4'
+    'tuition payment': 'manus-storage/card-tuition.jpg?v=v4',
+    'fall 2026 enrollment': 'manus-storage/card-fall-2026-enrollment.jpg?v=1'
   };
+  var ENROLL_LEGACY_SCRUB_NAMES = ['tuition', 'scholarship re-application', 'scholarship application', 'scholarship reapplication', 'tuition payment', 'fall 2026 enrollment'];
   function isEnrollMoveCardName(title){
     var k = String(title || '').replace(/\s+/g, ' ').trim().toLowerCase();
-    if(k === 'tuition') return 'tuition';
-    if(k === 'scholarship re-application' || k === 'scholarship application' || k === 'scholarship reapplication') return 'scholarship re-application';
+    if(k === 'tuition' || k === 'tuition payment') return 'tuition';
+    if(k === 'scholarship re-application' || k === 'scholarship application' || k === 'scholarship reapplication' || k === 'fall 2026 enrollment') return 'scholarship re-application';
     return '';
+  }
+  function isEnrollLegacyScrubName(title){
+    var k = String(title || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    return ENROLL_LEGACY_SCRUB_NAMES.indexOf(k) >= 0;
+  }
+  function enrollSectionTile(blk){
+    var host = heroHost(blk);
+    if(!host) return null;
+    return host.querySelector('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="achieve"]');
   }
   function recordEnrollMoveCardRemoved(blk, title){
     if(!blkOk(blk)) return;
@@ -47844,11 +47856,11 @@ function seedAug30SelectedCards(blk){
   function scrubEnrollMoveCardsFromDay(blk){
     if(!blkOk(blk) || dayKey(blk) !== '2026-09-01') return false;
     var changed = false;
-    var pep = blk.querySelector('.vision-tile[data-focus="pepperdine"]');
+    var pep = enrollSectionTile(blk);
     if(pep){
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
         [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
-          if(isEnrollMoveCardName(cardTitle(pol))){
+          if(isEnrollLegacyScrubName(cardTitle(pol))){
             pol.remove();
             changed = true;
           }
@@ -47856,7 +47868,7 @@ function seedAug30SelectedCards(blk){
         [].slice.call(pep.querySelectorAll('.vision-check')).forEach(function(chk){
           var span = chk.querySelector('span');
           var t = ((span && span.textContent) || '').replace(/\s+/g, ' ').trim();
-          if(isEnrollMoveCardName(t)){
+          if(isEnrollLegacyScrubName(t)){
             chk.remove();
             changed = true;
           }
@@ -47874,7 +47886,7 @@ function seedAug30SelectedCards(blk){
             if(!s) return false;
             var f = String(s.focus || '').toLowerCase();
             var t = String(s.title || '').toLowerCase();
-            return f !== 'pepperdine' && t !== 'enroll' && t !== 'pepperdine' && t !== 'grad school' && t !== 'grad';
+            return f !== 'pepperdine' && t !== 'enroll' && t !== 'achieve' && t !== 'pepperdine' && t !== 'grad school' && t !== 'grad';
           });
         }
       }
@@ -47899,10 +47911,10 @@ function seedAug30SelectedCards(blk){
       });
       if(data.removedCards.length !== before) changed = true;
     }
-    var pep = host.querySelector('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="achieve"], .vision-tile[data-focus="enroll"]');
+    var pep = enrollSectionTile(blk);
     if(!pep){
       addTile(blk, 'pepperdine', true);
-      pep = host.querySelector('.vision-tile[data-focus="pepperdine"], .vision-tile[data-focus="achieve"], .vision-tile[data-focus="enroll"]');
+      pep = enrollSectionTile(blk);
       changed = true;
     }
     if(pep){
@@ -47910,27 +47922,46 @@ function seedAug30SelectedCards(blk){
       var titleEl = pep.querySelector('.vision-tile-title');
       if(titleEl && titleEl.textContent !== 'achieve'){
         titleEl.textContent = 'achieve';
-        if(titleEl.hasAttribute('data-carve')) titleEl.setAttribute('data-carve', 'enroll');
         changed = true;
       }
-      if(data && Array.isArray(data.addedSections)){
-        data.addedSections.forEach(function(rec){
-          if(!rec) return;
-          var f = String(rec.focus || '').toLowerCase();
-          if(f === 'pepperdine' || f === 'grad' || f === 'grad-school'){
-            if(rec.title !== 'enroll'){ rec.title = 'enroll'; changed = true; }
-            rec.focus = 'pepperdine';
-          }
-        });
-      }
       pep.style.setProperty('--tile-photo', "url('"+PEPPER_IMG+"')");
+      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        var ct = cardTitle(pol);
+        var canon = isEnrollMoveCardName(ct);
+        if(!canon) return;
+        var span = pol.querySelector(':scope > span:not(.vision-card-headline)');
+        if(span && span.textContent !== canon){
+          span.textContent = canon;
+          changed = true;
+        }
+        var wantSrc = ENROLL_MOVE_CARD_SRC[canon];
+        if(wantSrc){
+          var cur = pol.getAttribute('data-shot-src') || '';
+          if(cur !== wantSrc){
+            applyPolaroidSrc(pol, wantSrc);
+            changed = true;
+          }
+        }
+      });
       function hasEnrollMoveCardDom(tile, title){
         if(!tile) return true;
         var want = String(title || '').toLowerCase();
         return [].slice.call(tile.querySelectorAll('.vision-polaroid')).some(function(p){
-          return cardTitle(p).toLowerCase() === want;
+          var ct = cardTitle(p).toLowerCase();
+          return ct === want || isEnrollMoveCardName(ct) === want;
         });
       }
+      var seenCanon = {};
+      [].slice.call(pep.querySelectorAll('.vision-polaroid')).forEach(function(pol){
+        var canon = isEnrollMoveCardName(cardTitle(pol));
+        if(!canon) return;
+        if(seenCanon[canon]){
+          pol.remove();
+          changed = true;
+          return;
+        }
+        seenCanon[canon] = 1;
+      });
       ENROLL_MOVE_CARD_TITLES.forEach(function(name){
         if(!hasEnrollMoveCardDom(pep, name)){
           addCard(pep, name, true);
