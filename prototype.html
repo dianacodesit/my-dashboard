@@ -17408,7 +17408,7 @@ window.__j22fnApply=run;
     if(!blk || !isOverviewEra(blk)) return;
     blk.classList.add('overview-era-day');
     var iso=blk.getAttribute('data-date')||'';
-    if(iso >= '2026-09-01') blk.classList.add('collage-flush');
+    if(iso >= '2026-09-01'){ blk.classList.add('collage-flush'); blk.classList.add('card-headline-era'); }
     var pill=blk.querySelector('.tv-pill[data-view="pursuits"]');
     if(pill) pill.textContent='overview';
     if(blk.classList.contains('today-block')){
@@ -24263,7 +24263,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         clone.classList.remove('freeplace-day');
         clone.querySelectorAll('.add-board-row, .add-section-btn, .add-card-btn, .j22-actions').forEach(function(el){ el.remove(); });
       }
-      if (iso >= '2026-09-01') clone.classList.add('collage-flush');
+      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); clone.classList.add('card-headline-era'); }
       if (iso >= '2026-08-27' && window.__ensureNodesAndFlowchart) {
         try { window.__ensureNodesAndFlowchart(clone); } catch (e) {}
       }
@@ -24289,7 +24289,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (iso === '2026-08-20') clone.classList.add('pursuit-board-day');
       else if (iso === todayStr()) clone.classList.add('today-block');
       if (iso >= '2026-08-26') { clone.classList.add('vision-collage-day'); clone.classList.remove('freeplace-day'); }
-      if (iso >= '2026-09-01') clone.classList.add('collage-flush');
+      if (iso >= '2026-09-01'){ clone.classList.add('collage-flush'); clone.classList.add('card-headline-era'); }
       const dateEl = clone.querySelector('.day-date');
       if (dateEl) dateEl.textContent = labelFor(iso);
       insertDay(clone, iso);
