@@ -15,6 +15,21 @@
     filter: saturate(0.75) brightness(0.72);
   }
   body.capture-page #hamburger-menu span { background: #f3e6d0; }
+  body.capture-page .page-shell {
+    max-width: 1180px;
+    width: 100%;
+    align-items: stretch;
+    padding: 72px 24px 80px;
+  }
+  body.capture-page .hero { max-width: none; }
+  body.capture-page .panel {
+    width: 100%;
+    max-width: none;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
   .archive-empty {
     margin-top: 18px;
     font-family: "Newsreader", Georgia, serif;
@@ -23,25 +38,101 @@
     color: rgba(247,239,228,0.72);
     text-align: center;
   }
-  .archive-list {
+  .archive-overview {
     list-style: none;
-    margin: 18px 0 0;
+    margin: 22px 0 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
   }
-  .archive-list a {
+  .archive-card {
+    position: relative;
     display: block;
-    font-family: "Newsreader", Georgia, serif;
-    font-size: 18px;
-    color: #f7efe4;
+    aspect-ratio: 4 / 5;
+    min-height: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(247,239,228,0.22);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.38);
+    background: #1a1410 center/cover no-repeat;
     text-decoration: none;
-    padding: 10px 14px;
-    border: 1px solid rgba(247,239,228,0.18);
-    background: rgba(20,12,8,0.28);
+    color: inherit;
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
-  .archive-list a:hover { border-color: rgba(247,239,228,0.4); }
+  .archive-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(247,239,228,0.45);
+  }
+  .archive-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,8,6,0.12) 0%, rgba(10,8,6,0.2) 42%, rgba(8,6,4,0.82) 100%);
+    pointer-events: none;
+  }
+  .archive-card .title {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 28px;
+    z-index: 1;
+    margin: 0;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 2.8vw, 32px);
+    color: #f7efe4;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.55);
+  }
+  .archive-card .meta {
+    position: absolute;
+    left: 16px;
+    right: 56px;
+    bottom: 10px;
+    z-index: 1;
+    margin: 0;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.7);
+  }
+  .archive-card .unarchive-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    margin: 0;
+    padding: 7px 10px;
+    border: 1px solid rgba(247,239,228,0.35);
+    border-radius: 999px;
+    background: rgba(12,9,7,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f7efe4;
+    cursor: pointer;
+  }
+  .archive-card .unarchive-btn:hover {
+    border-color: rgba(247,239,228,0.7);
+    background: rgba(20,14,10,0.72);
+  }
+  .archive-card.no-photo {
+    background: linear-gradient(160deg, rgba(60,42,28,0.95), rgba(20,14,10,0.98));
+  }
+  .status {
+    margin-top: 18px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.55);
+  }
 </style>
 </head>
 <body class="capture-page">
@@ -50,23 +141,113 @@
   <header class="hero">
     <p class="eyebrow">archived · pages</p>
     <h1>pages</h1>
-    <p class="sub">board pages you’ve set aside</p>
+    <p class="sub">board pages you’ve set aside — open one, or unarchive it back to nav</p>
   </header>
   <section class="panel">
-    <ul class="archive-list" id="list"></ul>
+    <ul class="archive-overview" id="list"></ul>
     <p class="archive-empty" id="empty">nothing archived yet</p>
     <p class="status" id="status">saved here</p>
   </section>
 </main>
-<script src="nav-shared.js?v=navarchive2"></script>
+<script src="nav-shared.js?v=navarchive3"></script>
 <script>
 (function(){
   var KEY = 'btm_archived_pages_v1';
+  var PAGE_PHOTO = {
+      '2030.html': 'manus-storage/2030-bg-horizon.jpg?v=1',
+      'abundance.html': 'manus-storage/abundance-bg.jpg?v=rows',
+      'accomplishments.html': 'manus-storage/accomplishments-bg.jpg?v=cairn1',
+      'adhd.html': 'manus-storage/adhd-bg.jpg?v=revertcover',
+      'al-ghayb.html': 'manus-storage/deen-al-ghayb-bg.jpg?v=1',
+      'alchemy.html': 'manus-storage/page-alchemy-bg.jpg?v=1',
+      'arrows.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'attraction.html': 'manus-storage/page-attraction-bg.jpg?v=1',
+      'backgrounds.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'banking-matters.html': 'manus-storage/banking-matters-bg.jpg?v=ledger1',
+      'brain-dump.html': 'manus-storage/brain-dump-bg-potential.jpg?v=pot1',
+      'business-ideas.html': 'manus-storage/business-jundi-building.jpg?v=blend14',
+      'center.html': 'manus-storage/page-center-bg.jpg?v=1',
+      'colors.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'curriculum-vitae.html': 'manus-storage/curriculum-vitae-real.jpg?v=cv10',
+      'dashboard.html': 'manus-storage/dashboard-hq-bg.jpg',
+      'deadline-fonts.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'deen.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'delusion.html': 'manus-storage/page-delusion-bg.jpg?v=wrongwave1',
+      'diana-jundi.html': 'manus-storage/business-diana-jundi-ceo-letterhead.jpg?v=baseright5',
+      'dimensions.html': 'manus-storage/_339ab459.jpg',
+      'duaa.html': 'manus-storage/duaa-supplication-bg.jpg?v=2',
+      'everything.html': 'manus-storage/_339ab459.jpg',
+      'failures.html': 'manus-storage/page-failures-bg.jpg?v=quantum1',
+      'flow-fonts.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'flow-styles.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'fonts.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'goals.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'grids.html': 'manus-storage/_339ab459.jpg',
+      'identity.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'index.html': 'manus-storage/dashboard-hq-bg.jpg',
+      'lataif-al-sitta.html': 'manus-storage/deen-lataif-al-sitta-bg.jpg?v=1',
+      'lifestyle.html': 'manus-storage/agenda-bg-wall.jpg?v=wall',
+      'manifestation.html': 'manus-storage/page-manifestation-bg.jpg?v=frame1',
+      'narrative.html': 'manus-storage/page-narrative-bg.jpg?v=thread1',
+      'palettes.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'parallel-timelines.html': 'manus-storage/parallel-timelines-bg.jpg?v=linen',
+      'pepperdine.html': 'manus-storage/zone-pepperdine-malibu.jpg?v=campus2',
+      'planner.html': 'manus-storage/planner-bg-hold-time.jpg?v=hold1',
+      'potential.html': 'manus-storage/page-potential-quantum.jpg?v=field1',
+      'power-opportunities.html': 'manus-storage/power-boardroom-table.jpg?v=table',
+      'priming.html': 'manus-storage/priming-fountain-pen.jpg?v=pen',
+      'projects.html': 'manus-storage/projects-bg.jpg?v=day',
+      'prosperity.html': 'manus-storage/abundance-bg-wealth.jpg?v=gold1',
+      'prototype.html': 'manus-storage/_339ab459.jpg',
+      'quantum-consciousness.html': 'manus-storage/quantum-how-you-look.jpg?v=field-clean1',
+      'qudra.html': 'manus-storage/deen-qudra-bg.jpg?v=1',
+      'quran.html': 'manus-storage/dua-open-pages.jpg?v=1',
+      'research-proposals.html': 'manus-storage/research-diana-jundi-journal.jpg?v=long1',
+      'sabr.html': 'manus-storage/deen-sabr-bg.jpg?v=1',
+      'self.html': 'manus-storage/page-self-bg.jpg?v=1',
+      'shukr.html': 'manus-storage/deen-shukr-bg.jpg?v=1',
+      'striving.html': 'manus-storage/striving-path-horizon.jpg?v=path',
+      'surrender.html': 'manus-storage/deen-surrender-bg.jpg?v=1',
+      'tasks-obsidian-v1127.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'tauba.html': 'manus-storage/deen-tauba-bg.jpg?v=1',
+      'thoughts.html': 'manus-storage/thoughts-bg.jpg',
+      'transitions.html': 'manus-storage/deen-moodboard-bg_807e7166.jpg',
+      'transmutation.html': 'manus-storage/page-transmutation-bg.jpg?v=1',
+      'victory-docket.html': 'manus-storage/victory-docket-bg.jpg?v=desk4'
+  };
+  function fileOf(href){
+    return String(href || '').split('/').pop();
+  }
   function load(){
     try {
       var raw = JSON.parse(localStorage.getItem(KEY) || '[]');
       return Array.isArray(raw) ? raw : [];
     } catch (e) { return []; }
+  }
+  function save(list){
+    try { localStorage.setItem(KEY, JSON.stringify(list || [])); } catch (e) {}
+  }
+  function photoFor(it){
+    if (!it) return '';
+    var p = String(it.photo || '').trim();
+    if (p) return p.replace(/^['"]|['"]$/g, '');
+    var href = fileOf(it.href);
+    return PAGE_PHOTO[href] || '';
+  }
+  function setStatus(msg){
+    var el = document.getElementById('status');
+    if (el) el.textContent = msg || 'saved here';
+  }
+  function unarchive(it){
+    if (!it || !it.href) return;
+    if (typeof window.__unarchiveNavPage === 'function') {
+      window.__unarchiveNavPage(it.href, it.label);
+    } else {
+      var href = fileOf(it.href);
+      save(load().filter(function(row){ return !(row && fileOf(row.href) === href); }));
+    }
+    setStatus((it.label || fileOf(it.href)) + ' · back in nav');
+    render();
   }
   function render(){
     var items = load();
@@ -75,10 +256,33 @@
     list.innerHTML = '';
     items.forEach(function(it){
       if (!it || !it.href) return;
+      var href = fileOf(it.href);
       var li = document.createElement('li');
       var a = document.createElement('a');
-      a.href = it.href;
-      a.textContent = it.label || it.href;
+      a.className = 'archive-card';
+      a.href = href;
+      var photo = photoFor(it);
+      if (photo) a.style.backgroundImage = 'url("' + photo.replace(/"/g, '\\"') + '")';
+      else a.classList.add('no-photo');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'unarchive-btn';
+      btn.textContent = 'unarchive';
+      btn.setAttribute('aria-label', 'unarchive ' + (it.label || href));
+      btn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        unarchive(it);
+      });
+      a.appendChild(btn);
+      var title = document.createElement('p');
+      title.className = 'title';
+      title.textContent = it.label || href.replace(/\.html$/i, '');
+      a.appendChild(title);
+      var meta = document.createElement('p');
+      meta.className = 'meta';
+      meta.textContent = 'archived page';
+      a.appendChild(meta);
       li.appendChild(a);
       list.appendChild(li);
     });

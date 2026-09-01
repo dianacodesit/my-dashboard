@@ -114,7 +114,7 @@
   function isArchiveIndex(href){
     return !!ARCHIVE_INDEX[fileOf(href)];
   }
-  function archiveNavPage(href, label){
+  function archiveNavPage(href, label, photo){
     href = fileOf(href);
     if (!href || isArchiveIndex(href)) return false;
     var byHref = byHrefMap();
@@ -122,11 +122,13 @@
     var list = loadArchivedPages().filter(function(it){
       return it && it.href && fileOf(it.href) !== href;
     });
-    list.unshift({
+    var entry = {
       href: href,
       label: label || (meta && meta.label) || href,
       archivedAt: Date.now()
-    });
+    };
+    if (photo) entry.photo = String(photo);
+    list.unshift(entry);
     saveArchivedPages(list);
     // Drop from live layout; clear any parent pointers at this href.
     var layout = resolvedLinks().map(function(it){
@@ -140,8 +142,63 @@
     try { localStorage.setItem(STORE, JSON.stringify(layout)); } catch (e) {}
     return true;
   }
+  function unarchiveNavPage(href, label){
+    href = fileOf(href);
+    if (!href || isArchiveIndex(href)) return false;
+    var archived = loadArchivedPages();
+    var found = null;
+    var nextArchived = archived.filter(function(it){
+      if (!it || !it.href) return false;
+      if (fileOf(it.href) === href) {
+        found = it;
+        return false;
+      }
+      return true;
+    });
+    saveArchivedPages(nextArchived);
+    var byHref = byHrefMap();
+    var meta = byHref[href] || {};
+    var layout = resolvedLinks().map(function(it){
+      return { href: it.href, group: it.group, parent: it.parent || null };
+    });
+    var already = layout.some(function(it){ return fileOf(it.href) === href; });
+    if (!already) {
+      layout.push({
+        href: href,
+        group: meta.group || 'main',
+        parent: meta.parent || null
+      });
+      try { localStorage.setItem(STORE, JSON.stringify(layout)); } catch (e) {}
+    }
+    try { rebuildNav(); } catch (e2) {}
+    return true;
+  }
   window.__archiveNavPage = archiveNavPage;
+  window.__unarchiveNavPage = unarchiveNavPage;
   window.__rebuildNav = function(){ rebuildNav(); };
+
+  /* Document-level ⌘/Ctrl+click — don't rely on sidebar bubble (links stopPropagation). */
+  if (!window.__navCmdArchiveWired) {
+    window.__navCmdArchiveWired = 1;
+    function tryArchiveNavLink(e){
+      if (!(e && (e.metaKey || e.ctrlKey))) return false;
+      if (e.button != null && e.button !== 0) return false;
+      var a = e.target && e.target.closest && e.target.closest('#nav-sidebar nav a');
+      if (!a) return false;
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      if (window.__justArchivedNav && (Date.now() - window.__justArchivedNav) < 500) return true;
+      var href = a.getAttribute('href') || a.getAttribute('data-nav-href');
+      if (archiveNavPage(href, (a.textContent || '').replace(/\s+/g, ' ').trim())) {
+        window.__justArchivedNav = Date.now();
+        rebuildNav();
+      }
+      return true;
+    }
+    document.addEventListener('pointerdown', tryArchiveNavLink, true);
+    document.addEventListener('click', tryArchiveNavLink, true);
+  }
   function byHrefMap(){
     var byHref = {};
     LINKS.forEach(function(x){

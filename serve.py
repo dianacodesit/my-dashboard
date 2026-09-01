@@ -55,10 +55,17 @@ KNOWN_CARD_PHOTOS = {
     "handshake": "manus-storage/card-handshake.jpg",
     "sabr": "manus-storage/card-sabr.jpg",
     "shukr": "manus-storage/card-shukr.jpg",
+    "refunds": "manus-storage/card-refunds.jpg",
+    "enhancv": "manus-storage/card-enhancv.jpg",
+    "certified letters": "manus-storage/card-certified-letters.jpg",
+    "amazon qr return codes": "manus-storage/card-amazon-qr-return-codes.jpg",
+    "amazon return qr codes": "manus-storage/card-amazon-qr-return-codes.jpg",
+    "neighbor payment": "manus-storage/card-neighbor-payment.jpg",
+    "re: manus restoration issue": "manus-storage/card-re-manus-restoration-issue.jpg",
     # Pepperdine section / zone only — not tuition/application cards
-    "pepperdine": "manus-storage/pursuit-pepperdine.jpg",
-    "grad school": "manus-storage/pursuit-pepperdine.jpg",
-    "grad": "manus-storage/pursuit-pepperdine.jpg",
+    "pepperdine": "manus-storage/zone-pepperdine-malibu.jpg",
+    "grad school": "manus-storage/zone-pepperdine-malibu.jpg",
+    "grad": "manus-storage/zone-pepperdine-malibu.jpg",
 }
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
@@ -201,6 +208,11 @@ def _tile_aliases(key: str) -> set[str]:
     out = {k, k.replace(" ", "-")}
     pairs = (
         ("gym", "body"),
+        ("toned body", "body"),
+        ("toned-body", "body"),
+        ("athletic", "body"),
+        ("fitness training", "body"),
+        ("fitness-training", "body"),
         ("finances", "abundance"),
         ("lifestyle", "curated lifestyle"),
         ("curated-lifestyle", "curated lifestyle"),
@@ -212,6 +224,18 @@ def _tile_aliases(key: str) -> set[str]:
         ("fight-back", "fight back"),
         ("inner-fire", "inner fire"),
         ("glow-up", "glow up"),
+        ("art | science", "art-science"),
+        ("art/science", "art-science"),
+        ("self esteem", "self-esteem"),
+        ("selfesteem", "self-esteem"),
+        ("god conscious", "god-conscious"),
+        ("awliya allah", "god-conscious"),
+        ("awliya-allah", "god-conscious"),
+        ("awliya allah swt", "god-conscious"),
+        ("awliya-allah-swt", "god-conscious"),
+        ("fear allah", "god-conscious"),
+        ("fear-allah", "god-conscious"),
+        ("fear allah \ufdfb", "god-conscious"),
     )
     for a, b in pairs:
         if k in (a, b, a.replace(" ", "-"), b.replace(" ", "-")):

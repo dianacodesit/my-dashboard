@@ -129,15 +129,27 @@
     power: 'manus-storage/zone-power.jpg?v=lightning1',
     purpose: 'manus-storage/zone-purpose.jpg?v=compass1',
     villains: 'manus-storage/zone-villains.jpg?v=rim13',
-    body: 'manus-storage/zone-body-tummy-gym-dark-abs.jpg?v=abs1',
+    body: 'manus-storage/zone-athletic.jpg?v=color2',
+    'toned body': 'manus-storage/zone-athletic.jpg?v=color2',
+    'toned-body': 'manus-storage/zone-athletic.jpg?v=color2',
+    athletic: 'manus-storage/zone-athletic.jpg?v=color2',
+    'fitness training': 'manus-storage/zone-athletic.jpg?v=color2',
+    'fitness-training': 'manus-storage/zone-athletic.jpg?v=color2',
+    calisthenics: 'manus-storage/zone-calisthenics.jpg?v=sec1',
     'inner fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
     'inner-fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
     executive: 'manus-storage/zone-executive-command.jpg?v=board1',
     pursuits: 'manus-storage/zone-pursuits.jpg?v=chase3',
-    pepperdine: 'manus-storage/pursuit-pepperdine.jpg?v=fullbleed3',
+    pepperdine: 'manus-storage/zone-pepperdine-malibu.jpg?v=campus2',
     'glow up': 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'glow-up': 'manus-storage/mock-glow-up-skin-v3.jpg?v=cheek',
     'god-conscious': 'manus-storage/zone-god-conscious.jpg',
+    'awliya-allah': 'manus-storage/zone-god-conscious.jpg',
+    'awliya allah': 'manus-storage/zone-god-conscious.jpg',
+    'awliya allah swt': 'manus-storage/zone-god-conscious.jpg',
+    'fear-allah': 'manus-storage/zone-god-conscious.jpg',
+    'fear allah': 'manus-storage/zone-god-conscious.jpg',
+    'fear allah \ufdfb': 'manus-storage/zone-god-conscious.jpg',
     manifestation: 'manus-storage/zone-manifestation.jpg',
     delusion: 'manus-storage/zone-delusion.jpg',
     workflow: 'manus-storage/zone-workflow.jpg?v=flow1',
@@ -145,7 +157,10 @@
     'future self': 'manus-storage/zone-future-self.jpg?v=path1',
     'future-self': 'manus-storage/zone-future-self.jpg?v=path1',
     phd: 'manus-storage/zone-phd.jpg?v=desk1',
-    'ph.d': 'manus-storage/zone-phd.jpg?v=desk1'
+    'ph.d': 'manus-storage/zone-phd.jpg?v=desk1',
+    strengths: 'manus-storage/zone-strengths.jpg?v=soul1',
+    'self-esteem': 'manus-storage/zone-self-esteem.jpg?v=se1',
+    'self esteem': 'manus-storage/zone-self-esteem.jpg?v=se1'
   };
   function load(){
     try {
@@ -173,7 +188,16 @@
     add(String(title || '').replace(/-/g, ' '));
     // Common section aliases
     if(set.villain || set.villains){ set.villain = 1; set.villains = 1; }
-    if(set['god conscious'] || set['god-conscious']){ set['god conscious'] = 1; set['god-conscious'] = 1; }
+    if(set['god conscious'] || set['god-conscious'] || set['awliya allah'] || set['awliya-allah'] || set['awliya allah swt'] || set['fear allah'] || set['fear-allah']){
+      set['god conscious'] = 1; set['god-conscious'] = 1;
+      set['awliya allah'] = 1; set['awliya-allah'] = 1;
+      set['awliya allah swt'] = 1; set['awliya-allah-swt'] = 1;
+      set['fear allah'] = 1; set['fear-allah'] = 1;
+      set['fear allah \ufdfb'] = 1;
+    }
+    if(set.body || set.gym || set['toned body'] || set['toned-body'] || set.athletic || set['fitness training'] || set['fitness-training']){
+      set.body = 1; set.gym = 1; set['toned body'] = 1; set['toned-body'] = 1; set.athletic = 1; set['fitness training'] = 1; set['fitness-training'] = 1;
+    }
     if(set['inner fire'] || set['inner-fire']){ set['inner fire'] = 1; set['inner-fire'] = 1; }
     if(set['future self'] || set['future-self']){ set['future self'] = 1; set['future-self'] = 1; }
     if(set.phd || set['ph.d'] || set['ph-d']){ set.phd = 1; set['ph.d'] = 1; set['ph-d'] = 1; }
@@ -208,7 +232,12 @@
   }
   function photoFor(it){
     var p = (it && it.photo) ? String(it.photo).trim() : '';
-    if (p) return p.replace(/^['"]|['"]$/g, '');
+    if (p) {
+      p = p.replace(/^['"]|['"]$/g, '');
+      p = p.replace(/(\?v=[^?&]+)(\?v=[^?&]+)+/g, '$1');
+      if (/zone-strengths\.jpg/i.test(p)) return FOCUS_PHOTO.strengths;
+      return p;
+    }
     var key = String((it && (it.focus || it.title)) || '').toLowerCase().replace(/\s+/g, ' ').trim();
     return FOCUS_PHOTO[key] || FOCUS_PHOTO[key.replace(/\s+/g, '-')] || '';
   }
