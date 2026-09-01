@@ -96,11 +96,11 @@ KNOWN_CARD_PHOTOS = {
     "detach": "manus-storage/zone-detach.jpg?v=1",
     "start over": "manus-storage/zone-start-over.jpg?v=1",
     "start-over": "manus-storage/zone-start-over.jpg?v=1",
-    "tune into": "manus-storage/zone-tune-into.jpg?v=1",
-    "tune-into": "manus-storage/zone-tune-into.jpg?v=1",
-    "self-actualize": "manus-storage/zone-self-actualize.jpg?v=1",
-    "self actualize": "manus-storage/zone-self-actualize.jpg?v=1",
-    "claim": "manus-storage/zone-claim.jpg?v=1",
+    "tune into": "",
+    "tune-into": "",
+    "self-actualize": "",
+    "self actualize": "",
+    "claim": "",
     "sabotage": "manus-storage/zone-sabotage.jpg?v=1",
 }
 # Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
@@ -776,6 +776,7 @@ def _section_photo_rejected(src: str) -> bool:
 
 CONCEPTUAL_SECTION_KEYS = frozenset({
     "soul", "sorrow", "darkness", "abundance", "abundant", "attention", "anticipate", "finances",
+    "tune into", "tune-into", "self-actualize", "self actualize", "claim",
 })
 
 

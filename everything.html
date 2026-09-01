@@ -12953,11 +12953,11 @@ window.__j22fnApply=run;
     'detach':'manus-storage/zone-detach.jpg?v=1',
     'start over':'manus-storage/zone-start-over.jpg?v=1',
     'start-over':'manus-storage/zone-start-over.jpg?v=1',
-    'tune into':'manus-storage/zone-tune-into.jpg?v=1',
-    'tune-into':'manus-storage/zone-tune-into.jpg?v=1',
-    'self-actualize':'manus-storage/zone-self-actualize.jpg?v=1',
-    'self actualize':'manus-storage/zone-self-actualize.jpg?v=1',
-    'claim':'manus-storage/zone-claim.jpg?v=1',
+    'tune into':'',
+    'tune-into':'',
+    'self-actualize':'',
+    'self actualize':'',
+    'claim':'',
     'sabotage':'manus-storage/zone-sabotage.jpg?v=1',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
@@ -13024,7 +13024,6 @@ window.__j22fnApply=run;
     [/pepperdine|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/zone-pepperdine-malibu.jpg?v=campus2'],
     [/\bpursuits?\b/, 'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3'],
     [/inner\s*fire|\bignite\b|\bember\b|\bforge\b|molten core/, 'manus-storage/zone-inner-fire.jpg?v=spark1'],
-    [/\bclaim\b|stake|survey marker|right of way/, 'manus-storage/zone-claim.jpg?v=1'],
     [/\bsabotage\b|broken lock|cut wire|undercut/, 'manus-storage/zone-sabotage.jpg?v=1'],
     [/\bpotential\b|unlimited potential|inner light|boundless/, 'manus-storage/zone-potential.jpg?v=road1'],
     [/\bresonan|sympath|attun|entrain|awakening field/, 'manus-storage/zone-resonance.jpg?v=res1'],
@@ -29199,9 +29198,9 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='god-conscious'||nl==='god conscious'||nl==='awliya allah'||nl==='awliya-allah'||nl==='awliya allah swt'||nl==='fear allah'||nl==='fear-allah'||nl==='itaqallah'||nl==='itaq-allah'||nl==='surrender to allah'||nl==='surrender-to-allah') src='manus-storage/zone-god-conscious.jpg?v=remembrance1';
       else if(nl==='detach') src='manus-storage/zone-detach.jpg?v=1';
       else if(nl==='start over'||nl==='start-over') src='manus-storage/zone-start-over.jpg?v=1';
-      else if(nl==='tune into'||nl==='tune-into') src='manus-storage/zone-tune-into.jpg?v=1';
-      else if(nl==='self-actualize'||nl==='self actualize') src='manus-storage/zone-self-actualize.jpg?v=1';
-      else if(nl==='claim') src='manus-storage/zone-claim.jpg?v=1';
+      else if(nl==='tune into'||nl==='tune-into') src='';
+      else if(nl==='self-actualize'||nl==='self actualize') src='';
+      else if(nl==='claim') src='';
       else if(nl==='sabotage') src='manus-storage/zone-sabotage.jpg?v=1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
       else if(nl==='fight back') src='manus-storage/zone-fight-back.jpg?v=fb2';
@@ -43250,7 +43249,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     tile.className = 'vision-tile' + extra;
     tile.setAttribute('data-focus', opts.focus || slug(opts.title));
-    var nophotoInit = (tLowInit === 'soul' || tLowInit === 'darkness' || fLowInit === 'soul' || fLowInit === 'darkness');
+    var nophotoInit = (tLowInit === 'soul' || tLowInit === 'darkness' || fLowInit === 'soul' || fLowInit === 'darkness' || tLowInit === 'tune into' || tLowInit === 'tune-into' || fLowInit === 'tune-into' || fLowInit === 'tune into' || tLowInit === 'self-actualize' || tLowInit === 'self actualize' || fLowInit === 'self-actualize' || fLowInit === 'self actualize' || tLowInit === 'claim' || fLowInit === 'claim');
     if(nophotoInit || opts.photo === ''){
       if(nophotoInit){
         tile.classList.add('vision-tile-nophoto');
@@ -44235,7 +44234,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'audacity' || title.toLowerCase() === 'audacity') return 'manus-storage/zone-audacity.jpg?v=finger1';
     if(f === 'attention' || title.toLowerCase() === 'attention' || title.toLowerCase() === 'anticipate') return 'manus-storage/zone-attention.jpg?v=beam1';
     if(f === 'inner-fire' || f === 'ignite' || title.toLowerCase() === 'inner fire' || title.toLowerCase() === 'inner-fire' || title.toLowerCase() === 'ignite') return 'manus-storage/zone-inner-fire.jpg?v=spark1';
-    if(f === 'claim' || title.toLowerCase() === 'claim') return 'manus-storage/zone-claim.jpg?v=1';
+    if(f === 'tune-into' || f === 'tune into' || title.toLowerCase() === 'tune into') return '';
+    if(f === 'self-actualize' || title.toLowerCase() === 'self-actualize' || title.toLowerCase() === 'self actualize') return '';
+    if(f === 'claim' || title.toLowerCase() === 'claim') return '';
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(!title) return '';
     return (window.__overviewPhotoForName && window.__overviewPhotoForName(blk, title))
@@ -45691,7 +45692,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return;
     }
     var photo = hardwiredSectionPhoto(blk, title, focus);
-    if(String(title||'').toLowerCase() === 'soul' || String(title||'').toLowerCase() === 'darkness'){
+    if(String(title||'').toLowerCase() === 'soul' || String(title||'').toLowerCase() === 'darkness' || String(title||'').toLowerCase() === 'tune into' || String(title||'').toLowerCase() === 'self-actualize' || String(title||'').toLowerCase() === 'claim' || focus === 'tune-into' || focus === 'self-actualize' || focus === 'claim'){
       photo = '';
     } else if(!photo){
       photo = DEFAULT_TILE;
@@ -48252,6 +48253,53 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       localStorage.removeItem('btm_darkness_photo_void1');
       localStorage.removeItem('btm_darkness_photo_void2');
       localStorage.setItem('btm_soul_darkness_nophoto_v1', '1');
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
+  (function migrationTuneClaimNophotoV1(){
+    var MKEY = 'migration-tune-claim-nophoto-v1';
+    var TUNE_RE = /manus-storage\/zone-tune-into\.jpg(?:\?v=[^"'?\s;)]*)?/g;
+    var SELF_RE = /manus-storage\/zone-self-actualize\.jpg(?:\?v=[^"'?\s;)]*)?/g;
+    var CLAIM_RE = /manus-storage\/zone-claim\.jpg(?:\?v=[^"'?\s;)]*)?/g;
+    function isClearedSection(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'tune into' || t === 'tune-into' || f === 'tune-into' || f === 'tune into'
+        || t === 'self-actualize' || t === 'self actualize' || f === 'self-actualize' || f === 'self actualize'
+        || t === 'claim' || f === 'claim';
+    }
+    function forceNophoto(tile){
+      tile.style.setProperty('--tile-photo', 'none');
+      tile.classList.add('vision-tile-nophoto');
+    }
+    function applyTuneClaimNophoto(){
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(isClearedSection(tile)) forceNophoto(tile);
+      });
+    }
+    window.__rewriteTuneClaimPhotosNow = applyTuneClaimNophoto;
+    applyTuneClaimNophoto();
+    [80, 400, 1200].forEach(function(ms){ setTimeout(applyTuneClaimNophoto, ms); });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw.replace(TUNE_RE, '').replace(SELF_RE, '').replace(CLAIM_RE, '');
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec) return;
+          var t = String(rec.title||'').toLowerCase();
+          var f = String(rec.focus||'').toLowerCase();
+          if(t === 'tune into' || t === 'tune-into' || f === 'tune-into' || f === 'tune into'
+            || t === 'self-actualize' || t === 'self actualize' || f === 'self-actualize' || f === 'self actualize'
+            || t === 'claim' || f === 'claim') rec.photo = '';
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
       localStorage.setItem(MKEY, '1');
     } catch(e){}
   })();
