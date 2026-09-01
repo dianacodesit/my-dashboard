@@ -15788,14 +15788,7 @@ window.__j22fnApply=run;
       document.querySelectorAll('.vision-tile[data-focus="body"], .vision-tile[data-focus="gym"]').forEach(function(tile){
         tile.style.setProperty('--tile-photo', "url('"+BODY_TUMMY+"')");
         var q = tile.querySelector(':scope > .vision-tile-quote');
-        if(!q){
-          q = document.createElement('p');
-          q.className = 'vision-tile-quote';
-          var titleEl = tile.querySelector('.vision-tile-title');
-          if(titleEl) tile.insertBefore(q, titleEl);
-          else tile.appendChild(q);
-        }
-        q.textContent = 'obsessed is a word the lazy use to describe the dedicated.';
+        if(q && /obsessed is a word the lazy use/i.test(q.textContent||'')) q.remove();
       });
       document.querySelectorAll('.vision-polaroid').forEach(function(pol){
         var sp = pol.querySelector(':scope > span');
