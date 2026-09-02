@@ -12973,7 +12973,7 @@ window.__j22fnApply=run;
     'say-thank-you-in-advance':'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
     'execute':'manus-storage/zone-execute-focus.jpg?v=focus2',
     'curate':'manus-storage/zone-curate-materials.jpg?v=mat2',
-    'to love':'manus-storage/zone-to-love-aurora.jpg?v=field1',
+    'to love':'manus-storage/zone-to-love-rings.jpg?v=love1',
     'to persevere':'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
     'to feel':'manus-storage/zone-to-feel-rain.jpg?v=sense1',
     'to-feel':'manus-storage/zone-to-feel-rain.jpg?v=sense1',
@@ -12982,8 +12982,8 @@ window.__j22fnApply=run;
     'to-persevere':'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
     'topersevere':'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
     'persevere':'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
-    'to-love':'manus-storage/zone-to-love-aurora.jpg?v=field1',
-    'tolove':'manus-storage/zone-to-love-aurora.jpg?v=field1',
+    'to-love':'manus-storage/zone-to-love-rings.jpg?v=love1',
+    'tolove':'manus-storage/zone-to-love-rings.jpg?v=love1',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
@@ -13054,7 +13054,7 @@ window.__j22fnApply=run;
     [/shop|lifestyle|order|buy/, 'manus-storage/pursuit-lifestyle_577937e8.jpg'],
     [/\bexecute\b|get it done|finish|complete|focus desk|deep work|action plan/, 'manus-storage/zone-execute-focus.jpg?v=focus2'],
     [/\bcurate\b|material samples|mood ?board|design materials|fabric swatch|gallery wall|curated shelf|organized collection/, 'manus-storage/zone-curate-materials.jpg?v=mat2'],
-    [/to[- ]?love|\bbiofield|loving souls|universal love/, 'manus-storage/zone-to-love-aurora.jpg?v=field1'],
+    [/to[- ]?love|loving another|soulmate|beloved|wedding rings|human love/, 'manus-storage/zone-to-love-rings.jpg?v=love1'],
     [/to[- ]?persevere|\bpersevere\b|endurance|keep going/, 'manus-storage/zone-to-persevere-peaks.jpg?v=endure1'],
     [/to[- ]?feel|\bto feel\b|sensation|embodied feeling/, 'manus-storage/zone-to-feel-rain.jpg?v=sense1'],
     [/curated\b|curated lifestyle|curated-lifestyle/, 'manus-storage/zone-curated-lifestyle.jpg?v=summer1'],
@@ -13162,12 +13162,22 @@ window.__j22fnApply=run;
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
     if(IMG[n]) return IMG[n];
+    if(/^to\s+/.test(n)){
+      var bare = n.replace(/^to\s+/, '');
+      if(IMG[bare]) return IMG[bare];
+      if(IMG['to ' + bare]) return IMG['to ' + bare];
+    }
     for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(n)) return KEYWORDS[i][1]; }
     return '';
   }
   function resolveTheme(name){
     var n=(name||'').trim().toLowerCase();
     if(THEMES[n]) return THEMES[n];
+    if(/^to\s+/.test(n)){
+      var bare = n.replace(/^to\s+/, '');
+      if(THEMES[bare]) return THEMES[bare];
+      if(THEMES['to ' + bare]) return THEMES['to ' + bare];
+    }
     if(/power|money|capital/.test(n)) return 'amber';
     if(/person|glow|beauty|skin/.test(n)) return 'blush';
     if(/legal|litigat|social|work/.test(n)) return 'sage';
@@ -13214,7 +13224,7 @@ window.__j22fnApply=run;
     'neighbor payment':'manus-storage/card-neighbor-payment.jpg?v=2',
         're: manus restoration issue':'manus-storage/card-re-manus-restoration-issue.jpg?v=2',
     'calisthenics':'manus-storage/card-calisthenics.jpg?v=cal1',
-    'inversions':'manus-storage/card-inversions.jpg?v=inv1'
+    'inversions':'manus-storage/card-inversions-yoga.jpg?v=yoga1'
   };
   function resolveCardImg(name){
     var n=(name||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -19708,27 +19718,27 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=focus2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="execute" data-cursor-ref="e24006">execute</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="curate" style="--tile-photo: url(&quot;manus-storage/zone-curate-materials.jpg?v=mat2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 9 / 1 / 10 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="curate" data-cursor-ref="e24007">curate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="repeat 10,000 times" data-cursor-ref="e24009">repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="become" data-cursor-ref="e24011">become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/mock-glow-up-skin-v3.jpg?v=cheek&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="glow up" data-cursor-ref="e24012">glow up</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="workflow" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 2 / 7 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="workflow" data-cursor-ref="e24017">workflow</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="detach" style="--photo-ar: 1.7777777777777777; --zoom-ar: 1.7777777777777777; --tile-photo: url(&quot;manus-storage/zone-detach-silhouette-woman.jpg?v=woman1&quot;); grid-area: 8 / 2 / 9 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="detach" data-cursor-ref="e24683">detach</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.6123046875; --zoom-ar: 0.6123046875; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); grid-area: 10 / 2 / 11 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="fight" data-cursor-ref="e24689">fight</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="intentions" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 11 / 2 / 12 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="set the mark" data-cursor-ref="e24691">set the mark</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="3" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="train" data-cursor-ref="e24013">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="surrender yourself to Allah ﷻ" data-cursor-ref="e24016">surrender yourself to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="align" style="--tile-photo: url(&quot;manus-storage/zone-alignment.jpg?v=align1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 1 / 7 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="align" data-cursor-ref="e25516">align</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="curated-lifestyle" style="--tile-photo: url('manus-storage/zone-curated-lifestyle.jpg?v=summer1'); --photo-ar: 0.665; --zoom-ar: 0.665; grid-area: 8 / 1 / 9 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="curated lifestyle" data-cursor-ref="e25517">curated lifestyle</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-love" style="--tile-photo: url(&quot;manus-storage/zone-to-love-aurora.jpg?v=field1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to love" data-cursor-ref="e25518">to love</h3><div class="vision-tile-details"></div></article>
+<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=focus2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to execute" data-cursor-ref="e24006">to execute</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="curate" style="--tile-photo: url(&quot;manus-storage/zone-curate-materials.jpg?v=mat2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 9 / 1 / 10 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to curate" data-cursor-ref="e24007">to curate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to repeat 10,000 times" data-cursor-ref="e24009">to repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to become" data-cursor-ref="e24011">to become</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/mock-glow-up-skin-v3.jpg?v=cheek&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to glow up" data-cursor-ref="e24012">to glow up</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="workflow" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 2 / 7 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to workflow" data-cursor-ref="e24017">to workflow</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="detach" style="--photo-ar: 1.7777777777777777; --zoom-ar: 1.7777777777777777; --tile-photo: url(&quot;manus-storage/zone-detach-silhouette-woman.jpg?v=woman1&quot;); grid-area: 8 / 2 / 9 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to detach" data-cursor-ref="e24683">to detach</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.6123046875; --zoom-ar: 0.6123046875; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); grid-area: 10 / 2 / 11 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="to fight" data-cursor-ref="e24689">to fight</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="intentions" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 11 / 2 / 12 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to set the mark" data-cursor-ref="e24691">to set the mark</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="3" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to train" data-cursor-ref="e24013">to train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to surrender yourself to Allah ﷻ" data-cursor-ref="e24016">to surrender yourself to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="align" style="--tile-photo: url(&quot;manus-storage/zone-alignment.jpg?v=align1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 1 / 7 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to align" data-cursor-ref="e25516">to align</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="curated-lifestyle" style="--tile-photo: url('manus-storage/zone-curated-lifestyle.jpg?v=summer1'); --photo-ar: 0.665; --zoom-ar: 0.665; grid-area: 8 / 1 / 9 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to curated lifestyle" data-cursor-ref="e25517">to curated lifestyle</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-love" style="--tile-photo: url(&quot;manus-storage/zone-to-love-rings.jpg?v=love1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to love" data-cursor-ref="e25518">to love</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-peaks.jpg?v=endure1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to persevere" data-cursor-ref="e25519">to persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="to-feel" style="--tile-photo: url(&quot;manus-storage/zone-to-feel-rain.jpg?v=sense1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel" data-cursor-ref="e25520">to feel</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins.jpg?v=sec1&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="win" data-cursor-ref="e25521">win</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="create-again" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-create-again-design.jpg?v=design1&quot;); grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="create again" data-cursor-ref="e25522">create again</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 10 / 1 / 12 / 2 !important;" data-content-score="6" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="achieve" data-cursor-ref="e25523">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship</span></label></div></article>
-<article class="vision-tile" data-focus="tune-into" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-tune-into-field.jpg?v=vib1&quot;); grid-area: 7 / 3 / 8 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="tune into" data-cursor-ref="e25524">tune into</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="self-actualize" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-self-actualize-maslow.jpg?v=maslow1&quot;); grid-area: 9 / 3 / 10 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="self-actualize" data-cursor-ref="e25525">self-actualize</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins.jpg?v=sec1&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to win" data-cursor-ref="e25521">to win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="create-again" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-create-again-design.jpg?v=design1&quot;); grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to create again" data-cursor-ref="e25522">to create again</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 10 / 1 / 12 / 2 !important;" data-content-score="6" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to achieve" data-cursor-ref="e25523">to achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship</span></label></div></article>
+<article class="vision-tile" data-focus="tune-into" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-tune-into-field.jpg?v=vib1&quot;); grid-area: 7 / 3 / 8 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to tune into" data-cursor-ref="e25524">to tune into</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="self-actualize" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-self-actualize-maslow.jpg?v=maslow1&quot;); grid-area: 9 / 3 / 10 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to self-actualize" data-cursor-ref="e25525">to self-actualize</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 
 <div class="day-block" data-date="doha">
@@ -29515,7 +29525,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='say thank you in advance'||nl==='say-thank-you-in-advance') src='manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
       else if(nl==='execute') src='manus-storage/zone-execute-focus.jpg?v=focus2';
       else if(nl==='curate') src='manus-storage/zone-curate-materials.jpg?v=mat2';
-      else if(nl==='to love' || nl==='to-love' || nl==='tolove') src='manus-storage/zone-to-love-aurora.jpg?v=field1';
+      else if(nl==='to love' || nl==='to-love' || nl==='tolove') src='manus-storage/zone-to-love-rings.jpg?v=love1';
       else if(nl==='to persevere' || nl==='to-persevere' || nl==='topersevere' || nl==='persevere') src='manus-storage/zone-to-persevere-peaks.jpg?v=endure1';
       else if(nl==='to feel' || nl==='to-feel' || nl==='tofeel' || nl==='feel') src='manus-storage/zone-to-feel-rain.jpg?v=sense1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -29533,7 +29543,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender yourself to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repeat 10,000 times', 'set the mark', 'anticipate', 'darkness','detach','create again','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','to feel','to persevere','to love','curate'];
+  var CANONICAL_SECTIONS=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to pursuits','to achieve','to ignite','to potential','to resonance','to surrender yourself to Allah ﷻ','to villains','to fight','to envision','to become','to Ph.D','to workflow','to focus','to align','to strengths','to plan','to spirit','to soul','to art | science','to self-esteem','to audacity', 'to politics', 'to win', 'to repeat 10,000 times', 'to set the mark', 'to anticipate', 'to darkness','to detach','to create again','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to feel','to persevere','to love','to curate'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -42851,8 +42861,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(tile.classList.contains('vision-tile-tall') || tile.classList.contains('vision-tile-body')) return true;
     var f = (tile.getAttribute('data-focus') || '').toLowerCase();
     if(f === 'body' || f === 'gym') return true;
-    var t = tileTitleLow(tile);
-    return t === 'body' || t === 'gym' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training';
+    var t = bareSectionTitle(tileTitleLow(tile));
+    return t === 'body' || t === 'gym' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training' || t === 'train';
   }
   function ensureBodyFitnessClasses(tile){
     if(!tile || !isBodyFitnessTile(tile)) return;
@@ -43247,7 +43257,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','train','achieve','pursuits','ignite','potential','resonance','surrender yourself to Allah ﷻ','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','art | science','self-esteem','audacity', 'politics', 'win', 'repeat 10,000 times', 'set the mark', 'anticipate', 'darkness','detach','create again','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','to feel','to persevere','to love','curate'];
+    var presetSecs=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to train','to achieve','to pursuits','to ignite','to potential','to resonance','to surrender yourself to Allah ﷻ','to envision','to become','to Ph.D','to workflow','to focus','to align','to strengths','to plan','to spirit','to art | science','to self-esteem','to audacity', 'to politics', 'to win', 'to repeat 10,000 times', 'to set the mark', 'to anticipate', 'to darkness','to detach','to create again','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to feel','to persevere','to love','to curate'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -43412,12 +43422,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var out = {};
     function add(x){
       x = String(x || '').replace(/\s+/g, ' ').trim().toLowerCase();
-      if(x) out[x] = 1;
+      if(!x) return;
+      out[x] = 1;
+      if(!/^to\s+/.test(x) && x !== 'to love' && x !== 'to feel' && x !== 'to persevere'){
+        out['to ' + x] = 1;
+      }
     }
     add(focus);
     add(title);
     add(slug(title || focus));
-    var t = String(title || focus || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    var tFull = String(title || focus || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    var t = bareSectionTitle(tFull);
+    add(t);
     var f = String(focus || '').toLowerCase();
     if(t === 'gym' || t === 'body' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training' || t === 'train' || f === 'gym' || f === 'body' || f === 'toned-body' || f === 'athletic' || f === 'fitness-training' || f === 'train'){
       add('gym'); add('body'); add('toned body'); add('toned-body'); add('athletic'); add('fitness training'); add('fitness-training'); add('train');
@@ -43494,61 +43510,80 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function normalizeAddedSection(rec){
     if(!rec) return rec;
-    var t = String(rec.title || '').replace(/\s+/g, ' ').trim().toLowerCase();
-    if(t === 'gym' || t === 'body' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training' || t === 'train'){ rec.title = 'train'; rec.focus = 'body'; }
-    else if(t === 'power | purpose' || t === 'power-purpose' || t === 'power/purpose'){ rec.title = 'power'; rec.focus = 'power'; }
-    else if(t === 'finances' || t === 'abundance' || t === 'abundant' || t === 'receive' || t === 'ask'){ rec.title = 'ask'; rec.focus = 'abundant'; }
-    else if(t === 'lifestyle'){ rec.title = 'curated lifestyle'; rec.focus = 'curated-lifestyle'; }
-    else if(t === 'grad school' || t === 'grad' || t === 'pepperdine' || t === 'enroll' || t === 'achieve'){ rec.title = 'achieve'; rec.focus = 'pepperdine'; }
-    else if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || t === 'itaqallah' || t === 'itaq-allah' || t === 'surrender to allah' || t === 'surrender-to-allah' || t === 'surrender yourself to allah' || t === 'surrender-yourself-to-allah' || t === 'surrender yourself to allah'){ rec.title = 'surrender yourself to Allah ﷻ'; rec.focus = 'itaq-allah'; }
-    else if(t === 'executive'){ rec.title = 'ambition'; rec.focus = 'ambition'; }
-    else if(t === 'future' || t === 'future self' || t === 'future-self' || t === 'futureself' || t === 'become'){ rec.title = 'become'; rec.focus = 'become'; }
-    else if(t === 'alignment' || t === 'align'){ rec.title = 'align'; rec.focus = 'align'; }
-    else if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || t === 'ph d'){ rec.title = 'Ph.D'; rec.focus = 'phd'; }
-    else if(t === 'art-science' || t === 'art/science' || t === 'art science' || t === 'artscience' || t === 'art | science'){ rec.title = 'art | science'; rec.focus = 'art-science'; }
-    else if(t === 'self-esteem' || t === 'self esteem' || t === 'selfesteem'){ rec.title = 'self-esteem'; rec.focus = 'self-esteem'; }
-    else if(t === 'wins' || t === 'win'){ rec.title = 'win'; rec.focus = 'wins'; }
-    else if(t === 'audacity' || t === 'fight back' || t === 'remember who you are'){ rec.title = 'fight'; rec.focus = 'audacity'; }
-    else if(t === 'attention' || t === 'anticipate'){ rec.title = 'anticipate'; rec.focus = 'attention'; }
-    else if(t === 'intentions' || t === 'set the mark' || t === 'set-the-mark'){ rec.title = 'set the mark'; rec.focus = 'intentions'; }
-    else if(t === 'repetitions' || t === 'repeat 10,000 times' || t === 'repeat 10000 times' || t === 'repeat-10000-times'){ rec.title = 'repeat 10,000 times'; rec.focus = 'repetitions'; }
-    else if(t === 'to love' || t === 'to-love' || t === 'tolove'){ rec.title = 'to love'; rec.focus = 'to-love'; }
+    var t = bareSectionTitle(String(rec.title || '').replace(/\s+/g, ' ').trim().toLowerCase());
+    if(t === 'gym' || t === 'body' || t === 'toned body' || t === 'toned-body' || t === 'athletic' || t === 'fitness training' || t === 'fitness-training' || t === 'train'){ rec.title = 'to train'; rec.focus = 'body'; }
+    else if(t === 'power | purpose' || t === 'power-purpose' || t === 'power/purpose'){ rec.title = 'to power'; rec.focus = 'power'; }
+    else if(t === 'finances' || t === 'abundance' || t === 'abundant' || t === 'receive' || t === 'ask'){ rec.title = 'to ask'; rec.focus = 'abundant'; }
+    else if(t === 'lifestyle' || t === 'curated lifestyle' || t === 'curated-lifestyle'){ rec.title = 'to curated lifestyle'; rec.focus = 'curated-lifestyle'; }
+    else if(t === 'grad school' || t === 'grad' || t === 'pepperdine' || t === 'enroll' || t === 'achieve'){ rec.title = 'to achieve'; rec.focus = 'pepperdine'; }
+    else if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || t === 'itaqallah' || t === 'itaq-allah' || t === 'surrender to allah' || t === 'surrender-to-allah' || t === 'surrender yourself to allah' || t === 'surrender-yourself-to-allah' || t.indexOf('surrender yourself to allah') === 0){ rec.title = 'to surrender yourself to Allah ﷻ'; rec.focus = 'itaq-allah'; }
+    else if(t === 'executive' || t === 'ambition'){ rec.title = 'to ambition'; rec.focus = 'ambition'; }
+    else if(t === 'future' || t === 'future self' || t === 'future-self' || t === 'futureself' || t === 'become'){ rec.title = 'to become'; rec.focus = 'become'; }
+    else if(t === 'alignment' || t === 'align'){ rec.title = 'to align'; rec.focus = 'align'; }
+    else if(t === 'phd' || t === 'ph.d' || t === 'ph-d' || t === 'ph d'){ rec.title = 'to Ph.D'; rec.focus = 'phd'; }
+    else if(t === 'art-science' || t === 'art/science' || t === 'art science' || t === 'artscience' || t === 'art | science'){ rec.title = 'to art | science'; rec.focus = 'art-science'; }
+    else if(t === 'self-esteem' || t === 'self esteem' || t === 'selfesteem'){ rec.title = 'to self-esteem'; rec.focus = 'self-esteem'; }
+    else if(t === 'wins' || t === 'win'){ rec.title = 'to win'; rec.focus = 'wins'; }
+    else if(t === 'audacity' || t === 'fight back' || t === 'remember who you are' || t === 'fight'){ rec.title = 'to fight'; rec.focus = 'audacity'; }
+    else if(t === 'attention' || t === 'anticipate'){ rec.title = 'to anticipate'; rec.focus = 'attention'; }
+    else if(t === 'intentions' || t === 'set the mark' || t === 'set-the-mark'){ rec.title = 'to set the mark'; rec.focus = 'intentions'; }
+    else if(t === 'repetitions' || t === 'repeat 10,000 times' || t === 'repeat 10000 times' || t === 'repeat-10000-times'){ rec.title = 'to repeat 10,000 times'; rec.focus = 'repetitions'; }
+    else if(t === 'to love' || t === 'to-love' || t === 'tolove' || t === 'love'){ rec.title = 'to love'; rec.focus = 'to-love'; }
     else if(t === 'to persevere' || t === 'to-persevere' || t === 'topersevere' || t === 'persevere'){ rec.title = 'to persevere'; rec.focus = 'to-persevere'; }
     else if(t === 'to feel' || t === 'to-feel' || t === 'tofeel' || t === 'feel'){ rec.title = 'to feel'; rec.focus = 'to-feel'; }
-    else if(t === 'start over' || t === 'start-over' || t === 'create again' || t === 'create-again'){ rec.title = 'create again'; rec.focus = 'create-again'; }
-    else if(t === 'inner fire' || t === 'inner-fire' || t === 'ignite'){ rec.title = 'ignite'; rec.focus = 'inner-fire'; }
+    else if(t === 'start over' || t === 'start-over' || t === 'create again' || t === 'create-again'){ rec.title = 'to create again'; rec.focus = 'create-again'; }
+    else if(t === 'inner fire' || t === 'inner-fire' || t === 'ignite'){ rec.title = 'to ignite'; rec.focus = 'inner-fire'; }
     else { rec.title = displaySectionTitle(rec.title); }
-    if(!rec.focus) rec.focus = slug(rec.title);
+    rec.title = ensureToSectionTitle(rec.title);
+    if(!rec.focus) rec.focus = slug(bareSectionTitle(rec.title));
     return rec;
   }
     function capitalizeAllahInTitle(name){
     return String(name || '').replace(/\ballah\b/gi, 'Allah');
   }
+  function ensureToSectionTitle(name){
+    var s = String(name || '').replace(/\s+/g, ' ').trim();
+    if(!s) return s;
+    if(/^to\s+/i.test(s)) return s.replace(/^To\s+/i, 'to ');
+    return 'to ' + s;
+  }
+  function bareSectionTitle(name){
+    var t = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    /* Canonical “to love / to feel / to persevere” keep the full phrase */
+    if(t === 'to love' || t === 'to feel' || t === 'to persevere') return t;
+    if(/^to\s+/.test(t)) return t.replace(/^to\s+/, '');
+    return t;
+  }
     function displaySectionTitle(name){
     var raw = String(name || '').replace(/\s+/g, ' ').trim();
     var low = raw.replace(/\uFDFB/g,'').replace(/\s+/g,' ').trim().toLowerCase();
-    if(low === 'executive') return 'ambition';
-    if(low === 'body' || low === 'gym' || low === 'toned body' || low === 'toned-body' || low === 'athletic' || low === 'fitness training' || low === 'fitness-training' || low === 'train') return 'train';
-    if(low === 'god-conscious' || low === 'god conscious' || low === 'awliya allah' || low === 'awliya-allah' || low === 'awliya allah swt' || low === 'awliya-allah-swt' || low === 'awliyah allah swt' || low === 'fear allah' || low === 'fear-allah' || low === 'itaqallah' || low === 'itaq-allah' || low === 'surrender to allah' || low === 'surrender-to-allah' || low === 'surrender yourself to allah' || low === 'surrender-yourself-to-allah' || low === 'surrender yourself to allah') return 'surrender yourself to Allah ﷻ';
-    if(low === 'pepperdine' || low === 'enroll' || low === 'achieve') return 'achieve';
-    if(low === 'future' || low === 'future self' || low === 'future-self' || low === 'futureself' || low === 'become') return 'become';
-    if(low === 'finances' || low === 'abundance' || low === 'abundant' || low === 'receive') return 'ask';
-    if(low === 'alignment' || low === 'align') return 'align';
-    if(low === 'phd' || low === 'ph.d' || low === 'ph-d' || low === 'ph d') return 'Ph.D';
-    if(low === 'art-science' || low === 'art/science' || low === 'art science' || low === 'artscience' || low === 'art | science') return 'art | science';
-    if(low === 'self-esteem' || low === 'self esteem' || low === 'selfesteem') return 'self-esteem';
-    if(low === 'wins') return 'win';
-    if(low === 'audacity' || low === 'fight back' || low === 'remember who you are') return 'fight';
-    if(low === 'attention' || low === 'anticipate') return 'anticipate';
-    if(low === 'intentions' || low === 'set the mark' || low === 'set-the-mark') return 'set the mark';
-    if(low === 'repetitions' || low === 'repeat 10,000 times' || low === 'repeat 10000 times' || low === 'repeat-10000-times') return 'repeat 10,000 times';
-    if(low === 'to love' || low === 'to-love' || low === 'tolove') return 'to love';
-    if(low === 'to persevere' || low === 'to-persevere' || low === 'topersevere' || low === 'persevere') return 'to persevere';
-    if(low === 'to feel' || low === 'to-feel' || low === 'tofeel' || low === 'feel') return 'to feel';
-    if(low === 'inner fire' || low === 'inner-fire' || low === 'ignite') return 'ignite';
-    if(low === 'start over' || low === 'start-over' || low === 'create again' || low === 'create-again') return 'create again';
-    var honor = (raw.match(/\uFDFB/) || [''])[0];
-    return capitalizeAllahInTitle(raw.toLowerCase()) + (honor && raw.indexOf(honor) >= 0 ? (' ' + honor) : '');
+    var bare = bareSectionTitle(low);
+    var base = '';
+    if(bare === 'executive') base = 'ambition';
+    else if(bare === 'body' || bare === 'gym' || bare === 'toned body' || bare === 'toned-body' || bare === 'athletic' || bare === 'fitness training' || bare === 'fitness-training' || bare === 'train') base = 'train';
+    else if(bare === 'god-conscious' || bare === 'god conscious' || bare === 'awliya allah' || bare === 'awliya-allah' || bare === 'awliya allah swt' || bare === 'awliya-allah-swt' || bare === 'awliyah allah swt' || bare === 'fear allah' || bare === 'fear-allah' || bare === 'itaqallah' || bare === 'itaq-allah' || bare === 'surrender to allah' || bare === 'surrender-to-allah' || bare === 'surrender yourself to allah' || bare === 'surrender-yourself-to-allah' || low.indexOf('surrender yourself to allah') === 0) base = 'surrender yourself to Allah ﷻ';
+    else if(bare === 'pepperdine' || bare === 'enroll' || bare === 'achieve') base = 'achieve';
+    else if(bare === 'future' || bare === 'future self' || bare === 'future-self' || bare === 'futureself' || bare === 'become') base = 'become';
+    else if(bare === 'finances' || bare === 'abundance' || bare === 'abundant' || bare === 'receive' || bare === 'ask') base = 'ask';
+    else if(bare === 'alignment' || bare === 'align') base = 'align';
+    else if(bare === 'phd' || bare === 'ph.d' || bare === 'ph-d' || bare === 'ph d') base = 'Ph.D';
+    else if(bare === 'art-science' || bare === 'art/science' || bare === 'art science' || bare === 'artscience' || bare === 'art | science') base = 'art | science';
+    else if(bare === 'self-esteem' || bare === 'self esteem' || bare === 'selfesteem') base = 'self-esteem';
+    else if(bare === 'wins' || bare === 'win') base = 'win';
+    else if(bare === 'audacity' || bare === 'fight back' || bare === 'remember who you are' || bare === 'fight') base = 'fight';
+    else if(bare === 'attention' || bare === 'anticipate') base = 'anticipate';
+    else if(bare === 'intentions' || bare === 'set the mark' || bare === 'set-the-mark') base = 'set the mark';
+    else if(bare === 'repetitions' || bare === 'repeat 10,000 times' || bare === 'repeat 10000 times' || bare === 'repeat-10000-times') base = 'repeat 10,000 times';
+    else if(bare === 'to love' || bare === 'to-love' || bare === 'tolove' || bare === 'love') base = 'to love';
+    else if(bare === 'to persevere' || bare === 'to-persevere' || bare === 'topersevere' || bare === 'persevere') base = 'to persevere';
+    else if(bare === 'to feel' || bare === 'to-feel' || bare === 'tofeel' || bare === 'feel') base = 'to feel';
+    else if(bare === 'inner fire' || bare === 'inner-fire' || bare === 'ignite') base = 'ignite';
+    else if(bare === 'start over' || bare === 'start-over' || bare === 'create again' || bare === 'create-again') base = 'create again';
+    else {
+      var honor = (raw.match(/\uFDFB/) || [''])[0];
+      base = capitalizeAllahInTitle(raw.toLowerCase()) + (honor && raw.indexOf(honor) >= 0 ? (' ' + honor) : '');
+    }
+    return ensureToSectionTitle(base);
   }
   function purgeConflictingAdds(data){
     if(!data) return;
@@ -43815,7 +43850,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   var SUBSECTION_PHOTOS = {
     calisthenics: 'manus-storage/card-calisthenics.jpg?v=cal1',
-    inversions: 'manus-storage/card-inversions.jpg?v=inv1'
+    inversions: 'manus-storage/card-inversions-yoga.jpg?v=yoga1'
   };
   var FITNESS_SUBSECTIONS = ['calisthenics', 'inversions'];
   function subsectionPhotoFor(title){
@@ -43856,7 +43891,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function fitnessTrainingTile(vb){
     if(!vb) return null;
     return tileByFocus(vb, 'body') || [].slice.call(vb.querySelectorAll('.vision-tile')).find(function(tile){
-      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var t = bareSectionTitle(((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase());
       return t === 'fitness training' || t === 'train';
     }) || null;
   }
@@ -43941,10 +43976,21 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var changed = false;
     FITNESS_SUBSECTIONS.forEach(function(name){
       var box = ensureSubsectionsContainer(ft);
-      var have = [].slice.call(box.querySelectorAll(':scope > .vision-subsection')).some(function(s){
+      var existing = [].slice.call(box.querySelectorAll(':scope > .vision-subsection')).filter(function(s){
         return subsectionTitle(s).toLowerCase() === name;
       });
-      if(!have){ addSubsection(ft, name, false); changed = true; }
+      if(!existing.length){ addSubsection(ft, name, false); changed = true; }
+      else {
+        var want = subsectionPhotoFor(name);
+        existing.forEach(function(sub){
+          if(!want) return;
+          var cur = (sub.style.getPropertyValue('--sub-photo') || '');
+          if(cur.indexOf(want.split('?')[0]) < 0){
+            sub.style.setProperty('--sub-photo', 'url("' + want + '")');
+            changed = true;
+          }
+        });
+      }
     });
     return changed;
   }
@@ -44038,6 +44084,37 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(changed) persistDay(blk);
     return changed;
   }
+
+  /* Inversions = yoga headstand, not gym rings (rings was calisthenics twin). */
+  (function migrateInversionsYogaPhoto(){
+    var MKEY = 'migration-inversions-yoga-photo-v1';
+    var WANT = 'manus-storage/card-inversions-yoga.jpg?v=yoga1';
+    function forceAll(){
+      document.querySelectorAll('.vision-subsection').forEach(function(sub){
+        var slug = (sub.getAttribute('data-sub') || '').toLowerCase();
+        var t = ((sub.querySelector('.vision-subsection-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+        if(slug === 'inversions' || slug === 'inversion' || t === 'inversions' || t === 'inversion'){
+          sub.style.setProperty('--sub-photo', 'url("' + WANT + '")');
+        }
+      });
+    }
+    forceAll();
+    setTimeout(forceAll, 0);
+    setTimeout(forceAll, 250);
+    setTimeout(forceAll, 900);
+    if(localStorage.getItem(MKEY)) return;
+    try {
+      Object.keys(localStorage).forEach(function(k){
+        var v = localStorage.getItem(k);
+        if(!v || v.indexOf('inversions') < 0) return;
+        if(v.indexOf('card-inversions.jpg') < 0 && v.indexOf('card-inversions-rings') < 0) return;
+        localStorage.setItem(k, v
+          .replace(/manus-storage\/card-inversions\.jpg(\?v=[^"'\\s)]+)?/g, WANT)
+          .replace(/manus-storage\/archive\/card-inversions-rings-archive\.jpg(\?v=[^"'\\s)]+)?/g, WANT));
+      });
+    } catch(e){}
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+  })();
 
   var DEPTH_STORE = 'btm_day_overview_mode_v1';
   /* Four-era canonical first mode is "sections" (UI). Legacy storage/class "overview" still maps here. */
@@ -44810,7 +44887,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
     if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-focus.jpg?v=focus2';
     if(f === 'curate' || title.toLowerCase() === 'curate') return 'manus-storage/zone-curate-materials.jpg?v=mat2';
-    if(f === 'to-love' || f === 'tolove' || title.toLowerCase() === 'to love' || title.toLowerCase() === 'tolove') return 'manus-storage/zone-to-love-aurora.jpg?v=field1';
+    if(f === 'to-love' || f === 'tolove' || title.toLowerCase() === 'to love' || title.toLowerCase() === 'tolove') return 'manus-storage/zone-to-love-rings.jpg?v=love1';
     if(f === 'to-persevere' || f === 'topersevere' || f === 'persevere' || title.toLowerCase() === 'to persevere' || title.toLowerCase() === 'topersevere' || title.toLowerCase() === 'persevere') return 'manus-storage/zone-to-persevere-peaks.jpg?v=endure1';
     if(f === 'to-feel' || f === 'tofeel' || f === 'feel' || title.toLowerCase() === 'to feel' || title.toLowerCase() === 'tofeel' || title.toLowerCase() === 'feel') return 'manus-storage/zone-to-feel-rain.jpg?v=sense1';
     if(f === 'intentions' || f === 'set-the-mark' || title.toLowerCase() === 'intentions' || title.toLowerCase() === 'set the mark' || title.toLowerCase() === 'set-the-mark') return 'manus-storage/zone-intentions.jpg?v=aim1';
@@ -49069,7 +49146,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'set-the-mark': 'manus-storage/zone-intentions.jpg?v=aim1',
       repetitions: 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'repeat 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
-      'to love': 'manus-storage/zone-to-love-aurora.jpg?v=field1',
+      'to love': 'manus-storage/zone-to-love-rings.jpg?v=love1',
       'to persevere': 'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
       'to-persevere': 'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
       topersevere: 'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
@@ -49078,8 +49155,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       tofeel: 'manus-storage/zone-to-feel-rain.jpg?v=sense1',
       feel: 'manus-storage/zone-to-feel-rain.jpg?v=sense1',
       persevere: 'manus-storage/zone-to-persevere-peaks.jpg?v=endure1',
-      'to-love': 'manus-storage/zone-to-love-aurora.jpg?v=field1',
-      tolove: 'manus-storage/zone-to-love-aurora.jpg?v=field1',
+      'to-love': 'manus-storage/zone-to-love-rings.jpg?v=love1',
+      tolove: 'manus-storage/zone-to-love-rings.jpg?v=love1',
       'repeat 10000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'repeat-10000-times': 'manus-storage/zone-repetitions.jpg?v=cubes1'
     };
@@ -50121,17 +50198,68 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     localStorage.setItem(MKEY, '1');
   })();
 
+  /* Prefix every section title with “to …” (to train, to glow up, …). Keep focus slugs. */
+  (function migrateSectionToPrefix(){
+    var MKEY = 'migration-section-to-prefix-v1';
+    function applyTitle(el){
+      if(!el) return false;
+      var cur = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if(!cur) return false;
+      var next = (typeof displaySectionTitle === 'function') ? displaySectionTitle(cur) : ((/^to\s+/i.test(cur) ? cur : ('to ' + cur)));
+      if(next === cur) return false;
+      el.textContent = next;
+      if(el.hasAttribute('data-carve')) el.setAttribute('data-carve', next);
+      return true;
+    }
+    function forceAll(){
+      document.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+    }
+    forceAll();
+    setTimeout(forceAll, 0);
+    setTimeout(forceAll, 300);
+    setTimeout(forceAll, 1000);
+    if(localStorage.getItem(MKEY)) return;
+    try {
+      Object.keys(localStorage).forEach(function(k){
+        var v = localStorage.getItem(k);
+        if(!v || v.indexOf('vision-tile-title') < 0) return;
+        var next = v.replace(/(<h3 class="vision-tile-title"[^>]*>)([^<]*)(<\/h3>)/g, function(_, a, mid, b){
+          var cur = String(mid || '').replace(/\s+/g, ' ').trim();
+          if(!cur || /^to\s+/i.test(cur)) return _;
+          var titled = (typeof displaySectionTitle === 'function') ? displaySectionTitle(cur) : ('to ' + cur);
+          return a + titled + b;
+        }).replace(/data-carve="([^"]*)"/g, function(m, c){
+          var cur = String(c || '').replace(/\s+/g, ' ').trim();
+          if(!cur || /^to\s+/i.test(cur)) return m;
+          var titled = (typeof displaySectionTitle === 'function') ? displaySectionTitle(cur) : ('to ' + cur);
+          return 'data-carve="' + titled + '"';
+        });
+        if(next !== v) localStorage.setItem(k, next);
+      });
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      Object.keys(edits).forEach(function(day){
+        var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+        d.addedSections.forEach(function(rec){
+          if(!rec || !rec.title) return;
+          rec.title = (typeof displaySectionTitle === 'function') ? displaySectionTitle(rec.title) : ensureToSectionTitle(rec.title);
+        });
+      });
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+    } catch(e){}
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+  })();
+
   (function rewriteExecuteCuratePhotos(){
     var MKEY = 'migration-execute-curate-photos-v3';
     var EXEC = 'manus-storage/zone-execute-focus.jpg?v=focus2';
     var CUR = 'manus-storage/zone-curate-materials.jpg?v=mat2';
     function isExecTile(tile){
-      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var t = bareSectionTitle(((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase());
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
       return t === 'execute' || f === 'execute';
     }
     function isCurTile(tile){
-      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var t = bareSectionTitle(((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase());
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
       return t === 'curate' || f === 'curate';
     }
@@ -50440,7 +50568,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   (function migrationSeedToLoveV1(){
     var MKEY = 'migration-seed-to-love-v1';
     if(localStorage.getItem(MKEY)) return;
-    var WANT = 'manus-storage/zone-to-love-aurora.jpg?v=field1';
+    var WANT = 'manus-storage/zone-to-love-rings.jpg?v=love1';
     var TITLE = 'to love';
     var FOCUS = 'to-love';
     function isTile(tile){
@@ -50495,6 +50623,32 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       localStorage.setItem('btm_zone_photos_v1', JSON.stringify(zp));
       localStorage.setItem(MKEY, '1');
     } catch(e){}
+  })();
+
+  /* to love = loving another human/soul (rings), not aurora/northern lights. */
+  (function(){
+    var MKEY = 'migration-to-love-rings-photo-v1';
+    if(localStorage.getItem(MKEY)) return;
+    var WANT = 'manus-storage/zone-to-love-rings.jpg?v=love1';
+    var re = /manus-storage\/zone-to-love(?:-aurora|-rings)?\.jpg(?:\?v=[^"'\s;)]*)?/g;
+    function isLove(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return t === 'to love' || t === 'to-love' || t === 'tolove' || f === 'to-love' || f === 'tolove' || f === 'to love';
+    }
+    document.querySelectorAll('.vision-tile').forEach(function(tile){
+      if(!isLove(tile)) return;
+      tile.classList.remove('vision-tile-nophoto');
+      tile.style.setProperty('--tile-photo', 'url("' + WANT + '")');
+    });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw.replace(re, WANT);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+    } catch(e){}
+    localStorage.setItem(MKEY, '1');
   })();
 
   (function migrationScrubToLoveFromPastDaysV1(){
@@ -54222,7 +54376,12 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
 }
 </style>
 <style id="vision-habit-zoom-visible-css">
-/* Habit must stay visible when section is zoomed (details OR overview). */
+/* Habit must stay visible + sized when section is zoomed.
+   openTile reparents .vision-board onto body (vision-zoom-open), so rules
+   that require .day-block no longer match — without these, habits stretch
+   full-bleed (induction filling the whole train zoom). */
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card,
+html body .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card {
   display: block !important;
   visibility: visible !important;
@@ -54230,11 +54389,26 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
   pointer-events: auto !important;
   position: absolute !important;
   left: var(--px, 6%) !important;
-  top: var(--py, 18%) !important;
-  width: var(--pw, 228px) !important;
+  top: var(--py, 12%) !important;
+  /* Proportional to zoomed subsections — not full tile, not a tiny stub */
+  width: var(--pw, clamp(200px, 28%, 320px)) !important;
+  max-width: min(320px, 32%) !important;
+  height: auto !important;
   z-index: 8 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-overview .vision-board.is-zoomed .vision-polaroid.vision-habit-card {
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card > img,
+html body .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card > img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 3 / 4 !important;
+  object-fit: cover !important;
+  max-height: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-overview .vision-board.is-zoomed .vision-polaroid.vision-habit-card,
+html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-polaroid.vision-habit-card {
   display: block !important;
   visibility: visible !important;
   pointer-events: auto !important;
@@ -54326,7 +54500,9 @@ html body .vision-subsection-title {
   pointer-events: none;
 }
 html body .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection {
+  /* Cap % --sw so collage freeplace sizes don't dominate full-viewport zoom */
   width: var(--sw, clamp(120px, 22%, 220px));
+  max-width: min(320px, 32%);
 }
 html body .day-block:is(.vision-collage-day, .overview-era-day).overview-mode-overview .vision-board:not(.is-zoomed) .vision-subsection {
   display: none !important;
@@ -56261,7 +56437,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   /* Forever ban: candle / people / rejected conceptuals cannot win on soul, sorrow, darkness, abundance, attention.
      soul ≠ sorrow — never alias them.
      Audacity finger silhouette is NOT banned (Diana-supplied exception). */
-  var MKEY = 'migration-rejected-section-photos-banlist-v8';
+  var MKEY = 'migration-rejected-section-photos-banlist-v9';
   var APPROVED = {
     soul: '',
     sorrow: '', /* distinct from soul — no approved photo (was soul-rose duplicate) */
@@ -56303,7 +56479,7 @@ html body .day-block.depth-four-era .overview-center-stack {
     'zone-abundance-harvest', 'zone-abundance-overflow',
     'abundance-bg', 'abundance-grapes', 'abundance-poppies', 'abundance-bg-wealth',
     /* detach / start over — rope + old leaf + dawn/cliché open road forever banned */
-    'zone-detach.jpg', 'zone-detach-leaf', 'zone-detach-rope', 'zone-detach-silhouette.jpg', 'zone-start-over.jpg', 'zone-start-over-road', 'zone-start-over-openroad',
+    'zone-detach.jpg', 'zone-detach-leaf', 'zone-detach-rope', 'zone-detach-silhouette.jpg', 'zone-to-love-aurora', 'zone-start-over.jpg', 'zone-start-over-road', 'zone-start-over-openroad',
     /* self-actualize — rejected AI cairn + mountain summit (not Maslow hierarchy) */
     'zone-self-actualize-summit', 'zone-self-actualize.jpg'
   ];
