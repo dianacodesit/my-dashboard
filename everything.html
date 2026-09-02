@@ -54448,18 +54448,30 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
 })();
 </script>
 
-<style id="vision-zoom-full-photo-v1">
-/* Zoom = FULL section photograph. Tile stage matches --zoom-ar (intrinsic).
-   Cover fills that stage edge-to-edge — no crop into a wide board, no contain letterbox. */
+<style id="vision-zoom-full-photo-v2">
+/* Zoom = FULL VIEWPORT cover. Crop edges OK — never shrink to intrinsic AR / 78vh letterbox stage. */
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  container-type: size !important;
-  width: 100% !important;
-  height: min(78vh, 820px) !important;
-  min-height: min(78vh, 820px) !important;
-  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: 1fr !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  z-index: 92000 !important;
+  container-type: normal !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  background: #0a0908 !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero-solo,
@@ -54481,35 +54493,40 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero-five > .vision-tile.is-zoomed,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero-six > .vision-tile.is-zoomed,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero-many > .vision-tile.is-zoomed {
-  grid-column: auto !important;
-  grid-row: auto !important;
-  grid-area: auto !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 1 / -1 !important;
+  grid-area: 1 / 1 / -1 / -1 !important;
   position: relative !important;
-  flex: 0 1 auto !important;
-  justify-self: center !important;
-  align-self: center !important;
-  width: min(100%, calc(100cqh * var(--zoom-ar, 1.5))) !important;
-  height: auto !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
-  aspect-ratio: var(--zoom-ar, 1.5) !important;
+  inset: auto !important;
+  flex: none !important;
+  justify-self: stretch !important;
+  align-self: stretch !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
   min-width: 0 !important;
   min-height: 0 !important;
+  aspect-ratio: auto !important;
+  border-radius: 0 !important;
 }
 @media (max-width: 820px) {
   html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed,
   html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero > .vision-tile.is-zoomed,
   html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-hero-many > .vision-tile.is-zoomed {
-    grid-column: auto !important;
-    grid-row: auto !important;
-    width: min(100%, calc(100cqh * var(--zoom-ar, 1.5))) !important;
-    max-height: 100% !important;
-    aspect-ratio: var(--zoom-ar, 1.5) !important;
+    grid-column: 1 / -1 !important;
+    grid-row: 1 / -1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
   }
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-photo {
   position: absolute !important;
   inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
@@ -55376,14 +55393,10 @@ html body .day-block.depth-four-era .overview-center-stack {
 </script>
 
 
-<style id="vision-native-photo-ar-v1">
-/* Zoom only: stage matches intrinsic photo AR.
-   Collage unzoomed stays the asymmetric vision-grid (not flex masonry). */
-html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed {
-  aspect-ratio: var(--zoom-ar, var(--photo-ar, 1.5)) !important;
-  width: min(100%, calc(100cqh * var(--zoom-ar, var(--photo-ar, 1.5)))) !important;
-}
-/* Kill any leftover native-ar flex class if present in saved HTML. */
+<style id="vision-native-photo-ar-v2">
+/* Collage unzoomed stays the asymmetric vision-grid (not flex masonry).
+   Zoom size is owned by vision-zoom-full-photo-v2 (full viewport cover) — do NOT
+   re-impose intrinsic --zoom-ar sizing here. */
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-hero.vision-hero-native-ar,
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-more.vision-hero-native-ar {
   display: grid !important;
