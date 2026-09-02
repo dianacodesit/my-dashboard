@@ -17683,11 +17683,16 @@ window.__j22fnApply=run;
     if(pill) pill.textContent='overview';
     if(blk.classList.contains('today-block')){
       var hdr=blk.querySelector('.day-card-header');
-      if(hdr && !hdr.querySelector('.overview-pursuits-label')){
-        var lab=document.createElement('span');
-        lab.className='day-title overview-pursuits-label';
-        lab.textContent='Pursuits';
-        hdr.appendChild(lab);
+      if(hdr){
+        /* Sep 2+ — no "Pursuits" word on the date line */
+        if(iso >= '2026-09-02'){
+          hdr.querySelectorAll('.overview-pursuits-label').forEach(function(el){ try{ el.remove(); }catch(e){} });
+        } else if(!hdr.querySelector('.overview-pursuits-label')){
+          var lab=document.createElement('span');
+          lab.className='day-title overview-pursuits-label';
+          lab.textContent='Pursuits';
+          hdr.appendChild(lab);
+        }
       }
     }
     var active=blk.querySelector('.tv-pill.active[data-view]');
@@ -23479,7 +23484,7 @@ function wireDayDots(opts) {
   if (!document.body.dataset.dayHeaderCollapseWired) {
     document.body.dataset.dayHeaderCollapseWired = '1';
     document.body.addEventListener('click', (e) => {
-      if (e.target.closest('input, button, .agenda-check, .agenda-subcheck, .day-dot, .overview-depth-opt, .overview-add-section, .tv-pill, .make-flow-btn, .day-pop-x')) return;
+      if (e.target.closest('input, button, .agenda-check, .agenda-subcheck, .day-dot, .overview-depth-opt, .overview-add-section, .overview-carry-forward, .overview-center-stack, .overview-right-tools, .today-view-toggle, .tv-pill, .make-flow-btn, .day-pop-x')) return;
       const header = e.target.closest('.day-card-header');
       if (!header) return;
       const block = header.closest('.day-block');
@@ -42511,11 +42516,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(pill) pill.textContent='overview';
     if(blk.classList.contains('today-block')){
       var hdr=blk.querySelector('.day-card-header');
-      if(hdr && !hdr.querySelector('.overview-pursuits-label')){
-        var lab=document.createElement('span');
-        lab.className='day-title overview-pursuits-label';
-        lab.textContent='Pursuits';
-        hdr.appendChild(lab);
+      if(hdr){
+        /* Sep 2+ — no "Pursuits" word on the date line */
+        if(iso >= '2026-09-02'){
+          hdr.querySelectorAll('.overview-pursuits-label').forEach(function(el){ try{ el.remove(); }catch(e){} });
+        } else if(!hdr.querySelector('.overview-pursuits-label')){
+          var lab=document.createElement('span');
+          lab.className='day-title overview-pursuits-label';
+          lab.textContent='Pursuits';
+          hdr.appendChild(lab);
+        }
       }
     }
     var active=blk.querySelector('.tv-pill.active[data-view]');
@@ -44323,10 +44333,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function ensureToggleRow(blk){
     var card = blk.querySelector('.day-card');
+    var hdrEarly = card && card.querySelector('.day-card-header');
     var tog = card && card.querySelector('.today-view-toggle');
     if(!card || !tog) return null;
     var four = dayWantsDepthFour(blk);
-    var row = tog.closest('.tv-toggle-row');
+    var row = tog.closest('.tv-toggle-row') || card.querySelector('.tv-toggle-row');
     if(!row){
       row = document.createElement('div');
       row.className = 'tv-toggle-row overview-toggle-row';
@@ -44334,14 +44345,19 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       row.appendChild(tog);
     }
     row.classList.add('overview-toggle-row');
-    var center = row.querySelector('.overview-center-stack');
-    var tools = row.querySelector('.overview-right-tools');
+    /* Prefer chrome already parked on the date header — never spawn duplicates. */
+    var center = (hdrEarly && hdrEarly.querySelector(':scope > .overview-center-stack')) || row.querySelector('.overview-center-stack');
+    var tools = (hdrEarly && hdrEarly.querySelector(':scope > .overview-right-tools')) || row.querySelector('.overview-right-tools');
+    if(hdrEarly){
+      [].slice.call(hdrEarly.querySelectorAll(':scope > .overview-center-stack')).forEach(function(el, i){ if(i && el !== center) try{ el.remove(); }catch(e){} });
+      [].slice.call(hdrEarly.querySelectorAll(':scope > .overview-right-tools')).forEach(function(el, i){ if(i && el !== tools) try{ el.remove(); }catch(e){} });
+    }
     if(!tools){
       tools = document.createElement('div');
       tools.className = 'overview-right-tools';
       row.appendChild(tools);
     }
-    var depth = row.querySelector('.overview-depth-toggle');
+    var depth = (center && center.querySelector('.overview-depth-toggle')) || row.querySelector('.overview-depth-toggle') || (hdrEarly && hdrEarly.querySelector('.overview-depth-toggle'));
     if(!depth){
       depth = document.createElement('div');
       depth.className = 'overview-depth-toggle';
@@ -44390,7 +44406,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
       if(center && center.contains(depth)) try { center.removeChild(depth); } catch(e){}
     }
-    var add = row.querySelector('.overview-add-section');
+    var add = tools.querySelector('.overview-add-section') || row.querySelector('.overview-add-section');
     if(!add){
       add = document.createElement('button');
       add.type = 'button';
@@ -44409,6 +44425,31 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(!four && depth.parentNode === tools && tools.firstElementChild !== depth){
       tools.insertBefore(depth, tools.firstChild);
     }
+
+    /* Park view pills + carry/+ on the date header line (open overview-era days). */
+    var hdr = card.querySelector('.day-card-header');
+    if(hdr && typeof isOverviewEra === 'function' && isOverviewEra(blk)){
+      hdr.classList.add('day-header-chrome');
+      var dateEl = hdr.querySelector('.day-date');
+      function placeAfterDate(el){
+        if(!el) return;
+        if(el.parentNode === hdr) return;
+        if(dateEl && dateEl.nextSibling) hdr.insertBefore(el, dateEl.nextSibling);
+        else hdr.appendChild(el);
+      }
+      if(four && center){
+        placeAfterDate(center);
+        if(tools) hdr.appendChild(tools);
+      } else {
+        if(tog) placeAfterDate(tog);
+        if(tools) hdr.appendChild(tools);
+      }
+      if(row && row.parentNode === card && !row.querySelector('.today-view-toggle, .overview-center-stack, .overview-right-tools')){
+        row.style.display = 'none';
+        row.setAttribute('aria-hidden', 'true');
+      }
+    }
+
     depth.hidden = !blk.classList.contains('view-overview');
     applyOverviewDepth(blk);
     return row;
@@ -51213,6 +51254,84 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile.vis
 }
 </style>
 <style id="overview-edit-css">
+
+/* Open-day header chrome: view pills on the date line (above the hairline). */
+html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  column-gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 9 !important;
+  padding: 10px 4px 10px 0 !important;
+  border-bottom: 1px solid rgba(245, 240, 234, 0.95) !important;
+}
+html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome > .day-date {
+  grid-column: 1 !important;
+  justify-self: start !important;
+  z-index: 1 !important;
+}
+html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome > .overview-center-stack,
+html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome > .today-view-toggle {
+  grid-column: 2 !important;
+  justify-self: center !important;
+  align-self: center !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome > .overview-center-stack {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome > .overview-right-tools {
+  grid-column: 3 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  z-index: 2 !important;
+}
+/* Empty leftover toggle row under header — gone */
+html body .day-block.overview-era-day:not(.collapsed) .day-card > .tv-toggle-row.overview-toggle-row[aria-hidden="true"],
+html body .day-block.overview-era-day:not(.collapsed) .day-card > .tv-toggle-row.overview-toggle-row:not(:has(.today-view-toggle)):not(:has(.overview-center-stack)):not(:has(.overview-right-tools)) {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+}
+/* carry | + — same header line, hover to appear (overview view only) */
+html body .day-block.overview-era-day .day-card-header .overview-right-tools {
+  display: none !important;
+}
+html body .day-block.overview-era-day.view-overview:not(.collapsed) .day-card-header .overview-right-tools {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.16s ease !important;
+}
+html body .day-block.overview-era-day.view-overview:not(.collapsed) .day-card-header:hover .overview-right-tools,
+html body .day-block.overview-era-day.view-overview:not(.collapsed) .day-card-header .overview-right-tools:focus-within,
+html body .day-block.overview-era-day.view-overview:not(.collapsed) .day-card-header .overview-right-tools:hover {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+/* Collapsed: never show parked chrome on the date line */
+html body .day-block.collapsed .day-card-header .overview-center-stack,
+html body .day-block.collapsed .day-card-header .overview-right-tools,
+html body .day-block.collapsed .day-card-header .today-view-toggle,
+html body .day-block.fmt22.collapsed .day-card-header .overview-center-stack,
+html body .day-block.fmt22.collapsed .day-card-header .overview-right-tools,
+html body .day-block.fmt22.collapsed .day-card-header .today-view-toggle {
+  display: none !important;
+}
+
 html body .day-block.overview-era-day .overview-toggle-row {
   display: grid !important;
   grid-template-columns: 1fr auto 1fr !important;
