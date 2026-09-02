@@ -53191,6 +53191,7 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
           document.documentElement.classList.remove(c);
         });
       }
+      try { vb.removeAttribute('data-zoom-depth'); } catch(eDepth){}
     } catch(eHome){}
     var blk = vb.closest('.day-block') || (home && home.parent && home.parent.closest && home.parent.closest('.day-block'));
     if (blk && window.__syncHeroLayoutClass) try { window.__syncHeroLayoutClass(blk); } catch (e) {}
@@ -53208,14 +53209,31 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
       }
       document.documentElement.classList.add('vision-zoom-open');
       document.body.classList.add('vision-zoom-open');
-      /* Stamp day depth onto body so zoom CSS still knows sections vs cards after reparent. */
+      /* Stamp day depth onto body + board so zoom CSS still knows sections vs cards after reparent.
+         Bare view-overview (no overview-mode-*) counts as sections — otherwise ask/certified-letters paints over the tree. */
       try {
         var blkMode = (vb.__zoomHome && vb.__zoomHome.parent && vb.__zoomHome.parent.closest)
           ? vb.__zoomHome.parent.closest('.day-block')
           : (tile && tile.closest && tile.closest('.day-block'));
-        ['overview-mode-sections','overview-mode-overview','overview-mode-subsections','overview-mode-cards','overview-mode-details','overview-mode-tasks'].forEach(function(c){
-          document.body.classList.toggle(c, !!(blkMode && blkMode.classList.contains(c)));
-          document.documentElement.classList.toggle(c, !!(blkMode && blkMode.classList.contains(c)));
+        var depth = 'sections';
+        if (blkMode) {
+          if (blkMode.classList.contains('overview-mode-cards') || blkMode.classList.contains('overview-mode-details')) depth = 'cards';
+          else if (blkMode.classList.contains('overview-mode-tasks')) depth = 'tasks';
+          else if (blkMode.classList.contains('overview-mode-subsections')) depth = 'subsections';
+          else depth = 'sections';
+        }
+        vb.setAttribute('data-zoom-depth', depth);
+        var modeOn = {
+          'overview-mode-sections': depth === 'sections',
+          'overview-mode-overview': depth === 'sections',
+          'overview-mode-subsections': depth === 'subsections',
+          'overview-mode-cards': depth === 'cards',
+          'overview-mode-details': depth === 'cards',
+          'overview-mode-tasks': depth === 'tasks'
+        };
+        Object.keys(modeOn).forEach(function(c){
+          document.body.classList.toggle(c, !!modeOn[c]);
+          document.documentElement.classList.toggle(c, !!modeOn[c]);
         });
       } catch(eMode){}
     } catch(eHome){}
@@ -57386,7 +57404,7 @@ html body .day-block.view-flow .flow-timeline-card {
 </script>
 
 
-<style id="vision-card-zoom-body-reparent-v2">
+<style id="vision-card-zoom-body-reparent-v3">
 /* Hard cap: zoomed freeplace cards must never paint at natural size.
    Board is reparented onto body, so .day-block rules drop — without this,
    ask/certified-letters (and tuition, etc.) fill the section zoom. */
@@ -57418,15 +57436,28 @@ html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not
   object-fit: cover !important;
   aspect-ratio: auto !important;
 }
-/* Sections depth zoom = clean section photo only (no polaroid takeover). */
+/* Sections / overview zoom = clean section photo only (no polaroid / check takeover).
+   data-zoom-depth is stamped in openTile; bare view-overview maps to sections. */
+html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-polaroid,
+html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-shot-card,
 html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
 html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
 html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
 html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
-html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card),
-html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card),
-html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card),
-html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) {
+html body > .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-polaroid,
+html body > .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-shot-card {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-check,
+html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check,
+html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check,
+html body > .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-check {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
