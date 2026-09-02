@@ -1,0 +1,39 @@
+---
+description: Rejected section photos are banned forever — never re-apply candle/people/old migrations
+alwaysApply: true
+---
+
+# Rejected section photos — banned forever
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) section / zone photos.
+
+## Once rejected = forever banned
+
+When Diana rejects a section photo, it is **BANNED forever**. Never re-apply it from:
+
+- Old one-shot migrations / `localStorage` MKEY leftovers
+- `MAP` / `IMG` caches / `KNOWN_CARD_PHOTOS` / bake data
+- “Restore previous” / “nopeople” / earlier conceptual attempts
+- Archive copies under `manus-storage/archive/`
+
+## Conceptual sections (soul, sorrow, darkness, abundance, attention)
+
+**soul ≠ sorrow.** They are distinct foci. Never alias sorrow → soul (or soul → sorrow) in IMG maps, KEYWORDS, migrations, apply scripts, or photo assignment. Do not caption the soul tile as sorrow. Do not auto-create a sorrow section just because soul exists. `zone-sorrow.jpg` was only a duplicate of the soul rose — do not use sorrow naming on the soul asset (`zone-soul.jpg?v=soul2`).
+
+- **No faces / photoreal people** on these conceptual tiles (person-in-storm, person-at-window with a visible person) — see also `no-other-faces-or-names`. **Woman silhouettes are OK** going forward unless that specific silhouette asset was rejected
+- **No candles / flames** after the candle rejection (soul especially; sorrow if/when it has its own photo)
+- Prefer conceptual still-lifes: spotlight/magnifier (attention), void rainy window (darkness), wilted rose rainy sill (**soul** only — not “soul/sorrow”)
+- **Abundance wheat is BANNED forever:** `zone-abundance.jpg?v=plenty2`, any `zone-abundance` / wheat harvest / `abundance-wheat-sunset` / plenty assets were **rejected**. Never restore them. Abundance may stay **nophoto / black** until a **NEW** non-rejected photo is assigned (new filename + APPROVED map entry) — empty is correct after rejection. Do not “fix” by re-applying wheat or any AI cinematic surplus still-life.
+- **to channel abstract orb (`zone-to-channel.jpg?v=field1` / luminous single-core field without shared souls) is BANNED** — it did not read as shared energy / biofield / souls in the same field. Never restore it.
+- **Exception:** audacity finger silhouette is Diana-supplied — do **not** ban it
+
+## When replacing
+
+1. Bump cache `?v=` **and** migration `MKEY` so older one-shots cannot leave stale candle/people/wheat winning
+2. Archive the rejected asset; never point live MAP / IMG / `serve.py` at it
+3. Keep `everything.html` + `prototype.html` + `serve.py` in sync
+4. Runtime `REJECTED_SECTION_PHOTOS` banlist must scrub banned URL substrings → approved WANT URLs (or **nophoto** when there is no approved replacement, as with abundance after wheat)
+
+## If a rejected image returns
+
+Complaint = instruction. Scrub banlist + force the approved URL (or clear to nophoto) immediately. Do not ask permission.
