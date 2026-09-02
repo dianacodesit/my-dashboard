@@ -23781,7 +23781,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         }
       });
       // Eject anything a dated day swallowed (archive chrome, page footer) —
-      // never eject route overlays: they belong on May 11 / Jul 25 and lose
+      // never eject route overlays: they belong on May 11 / May 25 and lose
       // their date-scoped glass styling if orphaned onto #agendaBody.
       Array.from(rail.querySelectorAll(':scope > .day-block[data-date]')).forEach(function(host){
         const hd = host.getAttribute('data-date') || '';
@@ -23800,6 +23800,31 @@ document.addEventListener('DOMContentLoaded',()=>{
           dest.appendChild(ch);
         });
       });
+      // Missing </div>s can nest archive chrome / sched-footer / page footer
+      // inside a .day-card (not as day-block direct children). Pull them out.
+      (function ejectSwallowedPageChrome(){
+        const dest = rail.parentElement || document.body;
+        const markers = [];
+        const archBtn = document.getElementById('archiveToggle');
+        const archSec = document.getElementById('archiveSection');
+        const sched = document.querySelector('.sched-footer');
+        if (archBtn) markers.push(archBtn);
+        if (archSec) markers.push(archSec);
+        if (sched) markers.push(sched);
+        Array.from(document.querySelectorAll('#agendaBody > footer, .agenda-body > footer')).forEach(function(f){ markers.push(f); });
+        markers.forEach(function(el){
+          if (!el) return;
+          const hostCard = el.closest('.day-card');
+          const hostDay = el.closest('.day-block[data-date]');
+          if (!hostCard || !hostDay) return;
+          const hd = hostDay.getAttribute('data-date') || '';
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(hd)) return;
+          if (hostDay.classList.contains('archive-block') || hostDay.classList.contains('template-block')) return;
+          const off = offRailMarker(rail);
+          if (off) rail.parentElement.insertBefore(el, off.nextSibling);
+          else dest.appendChild(el);
+        });
+      })();
       if (window.__scrubOrphanRouteOverlays) window.__scrubOrphanRouteOverlays();
     };
     window.__unnestSwallowedDays = unnestSwallowedDays;
