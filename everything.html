@@ -12971,6 +12971,9 @@ window.__j22fnApply=run;
     'say-thank-you-in-advance':'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
     'execute':'manus-storage/zone-execute-focus.jpg?v=focus2',
     'curate':'manus-storage/zone-curate-materials.jpg?v=mat2',
+    'to love':'manus-storage/zone-to-love-aurora.jpg?v=field1',
+    'to-love':'manus-storage/zone-to-love-aurora.jpg?v=field1',
+    'tolove':'manus-storage/zone-to-love-aurora.jpg?v=field1',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
@@ -13041,6 +13044,7 @@ window.__j22fnApply=run;
     [/shop|lifestyle|order|buy/, 'manus-storage/pursuit-lifestyle_577937e8.jpg'],
     [/\bexecute\b|get it done|finish|complete|focus desk|deep work|action plan/, 'manus-storage/zone-execute-focus.jpg?v=focus2'],
     [/\bcurate\b|material samples|mood ?board|design materials|fabric swatch|gallery wall|curated shelf|organized collection/, 'manus-storage/zone-curate-materials.jpg?v=mat2'],
+    [/to[- ]?love|\bbiofield|loving souls|universal love/, 'manus-storage/zone-to-love-aurora.jpg?v=field1'],
     [/curated\b|curated lifestyle|curated-lifestyle/, 'manus-storage/zone-curated-lifestyle.jpg?v=summer1'],
     [/pepperdine|\benroll\b|\bachieve\b|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/zone-pepperdine-malibu.jpg?v=campus2'],
     [/\bpursuits?\b/, 'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3'],
@@ -13085,6 +13089,9 @@ window.__j22fnApply=run;
     'ignite':'coral',
     'potential':'lavender',
     'resonance':'lavender',
+    'to love':'lavender',
+    'to-love':'lavender',
+    'tolove':'lavender',
     'god-conscious':'warm',
     'god conscious':'warm',
     'awliya allah':'warm',
@@ -18360,7 +18367,7 @@ window.__j22fnApply=run;
       try{
         var o=JSON.parse(localStorage.getItem('btm_grids_v1')||'{}');
         var arr=o[LIVE_DAY]||[];
-        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1 };
+        var titles={ 'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1, executive:1, ambition:1, quantum:1, pursuits:1, body:1, gym:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1, 'to love':1, 'to-love':1, tolove:1 };
         var names=arr.map(function(r){ return r&&r.name; }).filter(Boolean);
         var pack={};
         names.forEach(function(n){
@@ -19673,22 +19680,23 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=focus2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="execute" data-cursor-ref="e24006">execute</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="curate" style="--tile-photo: url(&quot;manus-storage/zone-curate-materials.jpg?v=mat2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="curate" data-cursor-ref="e24007">curate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins.jpg?v=sec1'); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 2 / 3 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="win" data-cursor-ref="e24008">win</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 3 / 1 / 4 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="repeat 10,000 times" data-cursor-ref="e24009">repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="become" data-cursor-ref="e24011">become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/mock-glow-up-skin-v3.jpg?v=cheek&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 7 / 3 / 8 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="glow up" data-cursor-ref="e24012">glow up</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="workflow" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="workflow" data-cursor-ref="e24017">workflow</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="detach" style="--photo-ar: 1.7777777777777777; --tile-photo: url(&quot;manus-storage/zone-detach-silhouette.jpg?v=sil1&quot;); --zoom-ar: 1.7777777777777777; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="detach" data-cursor-ref="e24683">detach</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="start-over" style="--photo-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-start-over-openroad.jpg?v=road1&quot;); --zoom-ar: 1.5; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="start over" data-cursor-ref="e24684">start over</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="tune-into" style="--photo-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-tune-into-radio.jpg?v=freq1&quot;); --zoom-ar: 1.5; grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="tune into" data-cursor-ref="e24685">tune into</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="self-actualize" style="--photo-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-self-actualize-summit.jpg?v=summit1&quot;); --zoom-ar: 1.5; grid-area: 6 / 1 / 7 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="self-actualize" data-cursor-ref="e24686">self-actualize</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.6123046875; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); --zoom-ar: 0.6123046875; grid-area: 6 / 2 / 7 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="fight" data-cursor-ref="e24689">fight</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="intentions" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="set the mark" data-cursor-ref="e24691">set the mark</h3><div class="vision-tile-details"></div></article>
+<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=focus2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="execute" data-cursor-ref="e24006">execute</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="curate" style="--tile-photo: url(&quot;manus-storage/zone-curate-materials.jpg?v=mat2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="curate" data-cursor-ref="e24007">curate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins.jpg?v=sec1'); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="win" data-cursor-ref="e24008">win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 4 / 2 / 5 / 4 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="repeat 10,000 times" data-cursor-ref="e24009">repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 2 / 7 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="become" data-cursor-ref="e24011">become</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/mock-glow-up-skin-v3.jpg?v=cheek&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="glow up" data-cursor-ref="e24012">glow up</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="workflow" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 8 / 2 / 9 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="workflow" data-cursor-ref="e24017">workflow</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="detach" style="--photo-ar: 1.7777777777777777; --zoom-ar: 1.7777777777777777; --tile-photo: url(&quot;manus-storage/zone-detach-silhouette.jpg?v=sil1&quot;); grid-area: 9 / 2 / 10 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="detach" data-cursor-ref="e24683">detach</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="start-over" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-start-over-openroad.jpg?v=road1&quot;); grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="start over" data-cursor-ref="e24684">start over</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="tune-into" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-tune-into-radio.jpg?v=freq1&quot;); grid-area: 6 / 1 / 7 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="tune into" data-cursor-ref="e24685">tune into</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="self-actualize" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-self-actualize-summit.jpg?v=summit1&quot;); grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="self-actualize" data-cursor-ref="e24686">self-actualize</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.6123046875; --zoom-ar: 0.6123046875; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="fight" data-cursor-ref="e24689">fight</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="intentions" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="set the mark" data-cursor-ref="e24691">set the mark</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="3" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="train" data-cursor-ref="e24013">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 8 / 1 / 9 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="surrender to Allah ﷻ" data-cursor-ref="e24016">surrender to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 8 / 2 / 9 / 4 !important;" data-content-score="6" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="achieve">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship</span></label></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="surrender to Allah ﷻ" data-cursor-ref="e24016">surrender to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-love" style="--tile-photo: url(&quot;manus-storage/zone-to-love-aurora.jpg?v=field1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 3 / 8 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to love">to love</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 8 / 1 / 10 / 2 !important;" data-content-score="6" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="achieve">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-application.jpg?v=v3" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-application.jpg?v=v3"><span>scholarship</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship</span></label></div></article>
 </div></div></div></div></div></div>
 
 <div class="day-block" data-date="doha">
@@ -29475,6 +29483,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='say thank you in advance'||nl==='say-thank-you-in-advance') src='manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
       else if(nl==='execute') src='manus-storage/zone-execute-focus.jpg?v=focus2';
       else if(nl==='curate') src='manus-storage/zone-curate-materials.jpg?v=mat2';
+      else if(nl==='to love' || nl==='to-love' || nl==='tolove') src='manus-storage/zone-to-love-aurora.jpg?v=field1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
       else if(nl==='fight back'||nl==='remember who you are'||nl==='fight') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
@@ -29490,7 +29499,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repeat 10,000 times', 'set the mark', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate'];
+  var CANONICAL_SECTIONS=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','pursuits','achieve','ignite','potential','resonance','surrender to Allah ﷻ','villains','fight','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','soul','art | science','self-esteem','audacity', 'politics', 'win', 'repeat 10,000 times', 'set the mark', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','to love','curate'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -43165,7 +43174,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1, 'to love':1, 'to-love':1, tolove:1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -43197,7 +43206,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       seen[low] = 1;
       out.push(displaySectionTitle(name));
     }
-    var presetSecs=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','train','achieve','pursuits','ignite','potential','resonance','surrender to Allah ﷻ','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','art | science','self-esteem','audacity', 'politics', 'win', 'repeat 10,000 times', 'set the mark', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate'];
+    var presetSecs=['glow up','curated lifestyle','ask','power','purpose','executive','quantum','train','achieve','pursuits','ignite','potential','resonance','surrender to Allah ﷻ','envision','become','Ph.D','workflow','focus','align','strengths','plan','spirit','art | science','self-esteem','audacity', 'politics', 'win', 'repeat 10,000 times', 'set the mark', 'anticipate', 'darkness','detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','to love','curate'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -43219,7 +43228,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     var SECTION_NAMES = {
       'glow up':1, lifestyle:1, 'curated lifestyle':1, finances:1, abundance:1, power:1, purpose:1, 'power | purpose':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1, 'to love':1, 'to-love':1, tolove:1
     };
     var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
     var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
@@ -43437,6 +43446,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'say thank you in advance' || f === 'say-thank-you-in-advance'){ add('say thank you in advance'); add('say-thank-you-in-advance'); }
     if(t === 'execute' || f === 'execute'){ add('execute'); }
     if(t === 'curate' || f === 'curate'){ add('curate'); }
+    if(t === 'to love' || t === 'to-love' || t === 'tolove' || f === 'to-love' || f === 'tolove' || f === 'to love'){ add('to love'); add('to-love'); add('tolove'); }
     return out;
   }
   function normalizeAddedSection(rec){
@@ -43459,6 +43469,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'attention' || t === 'anticipate'){ rec.title = 'anticipate'; rec.focus = 'attention'; }
     else if(t === 'intentions' || t === 'set the mark' || t === 'set-the-mark'){ rec.title = 'set the mark'; rec.focus = 'intentions'; }
     else if(t === 'repetitions' || t === 'repeat 10,000 times' || t === 'repeat 10000 times' || t === 'repeat-10000-times'){ rec.title = 'repeat 10,000 times'; rec.focus = 'repetitions'; }
+    else if(t === 'to love' || t === 'to-love' || t === 'tolove'){ rec.title = 'to love'; rec.focus = 'to-love'; }
     else if(t === 'inner fire' || t === 'inner-fire' || t === 'ignite'){ rec.title = 'ignite'; rec.focus = 'inner-fire'; }
     else { rec.title = displaySectionTitle(rec.title); }
     if(!rec.focus) rec.focus = slug(rec.title);
@@ -43485,6 +43496,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(low === 'attention' || low === 'anticipate') return 'anticipate';
     if(low === 'intentions' || low === 'set the mark' || low === 'set-the-mark') return 'set the mark';
     if(low === 'repetitions' || low === 'repeat 10,000 times' || low === 'repeat 10000 times' || low === 'repeat-10000-times') return 'repeat 10,000 times';
+    if(low === 'to love' || low === 'to-love' || low === 'tolove') return 'to love';
     if(low === 'inner fire' || low === 'inner-fire' || low === 'ignite') return 'ignite';
     var honor = (raw.match(/\uFDFB/) || [''])[0];
     return capitalizeAllahInTitle(raw.toLowerCase()) + (honor && raw.indexOf(honor) >= 0 ? (' ' + honor) : '');
@@ -44574,7 +44586,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     'curated lifestyle':1,'lifestyle':1,'abundance':1,'finances':1,'power | purpose':1,'power':1,
     'purpose':1,'executive':1,'ambition':1,'quantum':1,'pursuits':1,'inner fire':1, ignite:1,'potential':1,'resonance':1,
     'god-conscious':1,'god conscious':1,'awliya allah':1,'awliya-allah':1,'awliya allah swt':1,'awliya-allah-swt':1,'villains':1,'villain':1,'house':1,
-    'fight back':1,'remember who you are':1,'envision':1,future:1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, win:1, receive:1, ask:1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1
+    'fight back':1,'remember who you are':1,'envision':1,future:1,'future self':1,'future-self':1,'phd':1,'ph.d':1,'ph-d':1,'Ph.D':1,'workflow':1,'focus':1,'alignment':1,'strengths':1,'plan':1,'art | science':1,'art-science':1,'spirit':1,'self-esteem':1,'self esteem':1,'audacity':1,politics:1, wins:1, win:1, receive:1, ask:1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1, 'to love':1, 'to-love':1, tolove:1
   };
   function loadCardPhotoCache(){
     try { return JSON.parse(localStorage.getItem(CARD_PHOTO_STORE) || '{}') || {}; } catch(e){ return {}; }
@@ -44718,6 +44730,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
     if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-focus.jpg?v=focus2';
     if(f === 'curate' || title.toLowerCase() === 'curate') return 'manus-storage/zone-curate-materials.jpg?v=mat2';
+    if(f === 'to-love' || f === 'tolove' || title.toLowerCase() === 'to love' || title.toLowerCase() === 'tolove') return 'manus-storage/zone-to-love-aurora.jpg?v=field1';
     if(f === 'intentions' || f === 'set-the-mark' || title.toLowerCase() === 'intentions' || title.toLowerCase() === 'set the mark' || title.toLowerCase() === 'set-the-mark') return 'manus-storage/zone-intentions.jpg?v=aim1';
     if(f === 'repetitions' || f === 'repeat-10000-times' || title.toLowerCase() === 'repetitions' || title.toLowerCase() === 'repeat 10,000 times' || title.toLowerCase() === 'repeat 10000 times' || title.toLowerCase() === 'repeat-10000-times') return 'manus-storage/zone-repetitions.jpg?v=cubes1';
     if(!title) return '';
@@ -46158,6 +46171,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase() === 'attention' || String(title).toLowerCase() === 'anticipate' || focus === 'attention' || focus === 'anticipate'){ focus = 'attention'; title = 'anticipate'; }
     if(String(title).toLowerCase() === 'intentions' || String(title).toLowerCase() === 'set the mark' || String(title).toLowerCase() === 'set-the-mark' || focus === 'intentions' || focus === 'set-the-mark' || focus === 'set the mark'){ focus = 'intentions'; title = 'set the mark'; }
     if(String(title).toLowerCase() === 'repetitions' || String(title).toLowerCase() === 'repeat 10,000 times' || String(title).toLowerCase() === 'repeat 10000 times' || String(title).toLowerCase() === 'repeat-10000-times' || focus === 'repetitions' || focus === 'repeat-10000-times' || focus === 'repeat 10,000 times' || focus === 'repeat 10000 times'){ focus = 'repetitions'; title = 'repeat 10,000 times'; }
+    if(String(title).toLowerCase() === 'to love' || String(title).toLowerCase() === 'to-love' || String(title).toLowerCase() === 'tolove' || focus === 'to-love' || focus === 'tolove' || focus === 'to love'){ focus = 'to-love'; title = 'to love'; }
     if(String(title).toLowerCase() === 'inner fire' || String(title).toLowerCase() === 'inner-fire' || String(title).toLowerCase() === 'ignite' || focus === 'inner-fire' || focus === 'ignite'){ focus = 'inner-fire'; title = 'ignite'; }
     if(String(title).toLowerCase() === 'pepperdine' || String(title).toLowerCase() === 'enroll' || String(title).toLowerCase() === 'achieve' || title === 'grad school' || title === 'grad' || title === 'grad-school' || focus === 'pepperdine' || focus === 'enroll' || focus === 'achieve' || focus === 'grad' || focus === 'grad-school'){ focus = 'pepperdine'; title = 'achieve'; }
     var aliases = sectionAliasSet(focus, title);
@@ -47667,7 +47681,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var host = heroHost(blk);
     if(!host) return false;
     var changed = false;
-    ['win','repeat 10,000 times','set the mark','attention','darkness'].forEach(function(title){
+    ['win','repeat 10,000 times','set the mark','attention','darkness','to love'].forEach(function(title){
       var focus = slug(title);
       if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, focus, title)) return;
       if(host.querySelector('.vision-tile[data-focus="'+focus+'"]')) return;
@@ -47959,7 +47973,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         'self-actualize':1,'self actualize':1,'claim':1,'sabotage':1,
         'become':1,'glow up':1,'glow-up':1,'train':1,'body':1,'workflow':1,
         'surrender to allah':1,'surrender-to-allah':1,'itaq-allah':1,'itaq allah':1,
-        'abundant':1,'receive':1,'ask':1,'execute':1,'curate':1,'pepperdine':1,'achieve':1,'enroll':1
+        'abundant':1,'receive':1,'ask':1,'execute':1,'curate':1,'to love':1,'to-love':1,'tolove':1,'pepperdine':1,'achieve':1,'enroll':1
       };
       sep2.removedSections = (sep2.removedSections || []).filter(function(x){
         return !unblock[String(x || '').toLowerCase()];
@@ -48400,7 +48414,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       enroll: { title: 'achieve', focus: 'pepperdine' },
       achieve: { title: 'achieve', focus: 'pepperdine' },
       wins: { title: 'win', focus: 'wins' },
-      win: { title: 'win', focus: 'wins' }
+      win: { title: 'win', focus: 'wins' },
+      'to love': { title: 'to love', focus: 'to-love' },
+      'to-love': { title: 'to love', focus: 'to-love' },
+      tolove: { title: 'to love', focus: 'to-love' }
     };
     function wantFor(focus, title){
       return MAP[title] || MAP[focus] || null;
@@ -48498,7 +48515,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var host = heroHost(blk);
     if(!host) return false;
     var changed = false;
-    ['detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate'].forEach(function(title){
+    ['detach','start over','tune into','self-actualize','claim','sabotage','say thank you in advance','execute','curate','to love'].forEach(function(title){
       var focus = slug(title);
       if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, focus, title)) return;
       var aliases = {};
@@ -48956,6 +48973,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'set-the-mark': 'manus-storage/zone-intentions.jpg?v=aim1',
       repetitions: 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'repeat 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
+      'to love': 'manus-storage/zone-to-love-aurora.jpg?v=field1',
+      'to-love': 'manus-storage/zone-to-love-aurora.jpg?v=field1',
+      tolove: 'manus-storage/zone-to-love-aurora.jpg?v=field1',
       'repeat 10000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'repeat-10000-times': 'manus-storage/zone-repetitions.jpg?v=cubes1'
     };
@@ -50148,6 +50168,67 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       localStorage.setItem(MKEY, '1');
     } catch(e){}
   })();
+
+  (function migrationSeedToLoveV1(){
+    var MKEY = 'migration-seed-to-love-v1';
+    if(localStorage.getItem(MKEY)) return;
+    var WANT = 'manus-storage/zone-to-love-aurora.jpg?v=field1';
+    var TITLE = 'to love';
+    var FOCUS = 'to-love';
+    function isTile(tile){
+      var tt = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').toLowerCase();
+      return tt === TITLE || tt === 'tolove' || f === FOCUS || f === 'tolove' || f === 'to love';
+    }
+    function apply(){
+      var blk = document.querySelector('.day-block[data-date="2026-09-02"]');
+      if(blk && typeof addTile === 'function'){
+        var host = (typeof heroHost === 'function') ? heroHost(blk) : null;
+        var exists = host && [].slice.call(host.querySelectorAll('.vision-tile')).some(isTile);
+        if(!exists){
+          try { addTile(blk, TITLE, true); } catch(e){}
+        }
+      }
+      document.querySelectorAll('.vision-tile').forEach(function(tile){
+        if(!isTile(tile)) return;
+        tile.setAttribute('data-focus', FOCUS);
+        tile.classList.remove('vision-tile-nophoto');
+        tile.style.setProperty('--tile-photo', 'url("'+WANT+'")');
+        var title = tile.querySelector('.vision-tile-title');
+        if(title){
+          title.textContent = TITLE;
+          title.setAttribute('data-carve', TITLE);
+        }
+      });
+      try {
+        var blk2 = document.querySelector('.day-block[data-date="2026-09-02"]');
+        if(blk2 && typeof syncHeroLayoutClass === 'function') syncHeroLayoutClass(blk2);
+      } catch(e){}
+    }
+    apply();
+    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
+    try {
+      var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+      var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
+      sep2.removedSections = (sep2.removedSections || []).filter(function(f){
+        var x = String(f||'').toLowerCase();
+        return x !== FOCUS && x !== TITLE && x !== 'tolove';
+      });
+      sep2.addedSections = sep2.addedSections || [];
+      if(!sep2.addedSections.some(function(s){
+        return s && (String(s.focus||'').toLowerCase() === FOCUS || String(s.title||'').toLowerCase() === TITLE);
+      })){
+        sep2.addedSections.push({ focus: FOCUS, title: TITLE, photo: WANT });
+      }
+      edits['2026-09-02'] = sep2;
+      localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
+      zp[FOCUS] = WANT; zp[TITLE] = WANT; zp.tolove = WANT;
+      localStorage.setItem('btm_zone_photos_v1', JSON.stringify(zp));
+      localStorage.setItem(MKEY, '1');
+    } catch(e){}
+  })();
+
 
 
 
