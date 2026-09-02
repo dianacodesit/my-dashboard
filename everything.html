@@ -51795,7 +51795,20 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     vb.querySelectorAll('.vision-tile.is-zoomed').forEach(function(t){ t.classList.remove('is-zoomed'); });
     var btn = vb.querySelector('.vision-zoom-out');
     if (btn) { btn.hidden = true; btn.setAttribute('hidden',''); }
-    var blk = vb.closest('.day-block');
+    var home = null;
+    try { home = vb.__zoomHome || null; } catch(e0){ home = null; }
+    try {
+      if (home && home.parent && home.parent.isConnected) {
+        if (home.next && home.next.parentNode === home.parent) home.parent.insertBefore(vb, home.next);
+        else home.parent.appendChild(vb);
+      }
+      vb.__zoomHome = null;
+      if (!document.querySelector('.vision-board.is-zoomed')) {
+        document.documentElement.classList.remove('vision-zoom-open');
+        document.body.classList.remove('vision-zoom-open');
+      }
+    } catch(eHome){}
+    var blk = vb.closest('.day-block') || (home && home.parent && home.parent.closest && home.parent.closest('.day-block'));
     if (blk && window.__syncHeroLayoutClass) try { window.__syncHeroLayoutClass(blk); } catch (e) {}
     else if (blk && window.__packVisionCollage) {
       try { window.__packVisionCollage(vb.querySelector('.vision-hero')); } catch (e) {}
@@ -51804,6 +51817,14 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     if (blk && window.__bootVisionTileSortables) try { window.__bootVisionTileSortables(); } catch (e) {}
   }
   function openTile(vb, tile){
+    try {
+      if (vb && vb.parentNode !== document.body) {
+        if (!vb.__zoomHome) vb.__zoomHome = { parent: vb.parentNode, next: vb.nextSibling };
+        document.body.appendChild(vb);
+      }
+      document.documentElement.classList.add('vision-zoom-open');
+      document.body.classList.add('vision-zoom-open');
+    } catch(eHome){}
     vb.classList.add('is-zoomed');
     vb.querySelectorAll('.vision-tile').forEach(function(t){
       t.classList.toggle('is-zoomed', t === tile);
@@ -54449,6 +54470,10 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
 </script>
 
 <style id="vision-zoom-full-photo-v2">
+html.vision-zoom-open, html.vision-zoom-open body {
+  overflow: hidden !important;
+}
+
 /* Zoom = FULL VIEWPORT cover. Crop edges OK — never shrink to intrinsic AR / 78vh letterbox stage. */
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed {
   display: grid !important;
