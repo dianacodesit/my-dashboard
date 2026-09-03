@@ -42940,12 +42940,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(glowAt >= 0){
       var bestSq = -1, bestSqScore = -1e9;
       for(var gk = 0; gk < n; gk++){
-        if(bodyLocked && gk === 0) continue;
         var gp = places[gk];
         if(!gp) continue;
         var gcs = gp[1] - gp[0], grs = Math.max(1, gp[3] - gp[2]);
         if(gcs !== 1) continue;
-        var gsc = placeSquareScore(gp) + (grs >= 2 ? 8 : 0);
+        var gsc = placeSquareScore(gp) + (grs >= 2 ? 30 : 0);
+        if(bodyLocked && gk === 0 && grs >= 2) gsc -= 4;
         if(gsc > bestSqScore){ bestSqScore = gsc; bestSq = gk; }
       }
       if(bestSq >= 0 && bestSq !== glowAt){
