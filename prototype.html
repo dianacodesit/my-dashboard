@@ -44341,6 +44341,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function persistDay(blk, immediate){
     var k = dayKey(blk);
     if(!k) return;
+    // Removals win over bake / seeds — strip before snapshotting live tiles.
+    try { honorDayRemovedSections(blk); } catch(eHon){}
     // Snapshot live tiles + card homes into the overlay, then flush.
     try { scrubUninvitedAutoSections(blk); } catch(e){}
     try { if(typeof window.__scrubVibeDefaultTiles === 'function') window.__scrubVibeDefaultTiles(); } catch(eVibe){}

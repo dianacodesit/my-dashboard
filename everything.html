@@ -25369,6 +25369,16 @@ setTimeout(() => { updateFlowSectionAutoToggle(); attachFlowSectionListeners(); 
     transition: opacity 0.2s;
   }
   #sync-state-btn:hover { opacity: 1; }
+  /* EDIT is page chrome — viewport bottom-right, stacked above SYNC. Never day-card / margin. */
+  html body #editBtn.edit-toggle,
+  html body #editBtn {
+    position: fixed !important;
+    bottom: 74px !important;
+    right: 14px !important;
+    left: auto !important;
+    top: auto !important;
+    z-index: 99999 !important;
+  }
   #save-github-btn {
     position: fixed;
     bottom: 14px;
@@ -48631,7 +48641,7 @@ if(title === 'calisthenics' || title === 'inversions'){
       }
     } catch(e){}
     try {
-      ['enh-jump-today','enh-scroll-top','enh-dark-toggle','enh-search-overlay','archiveToggle','archiveSection','sync-state-btn','save-github-btn'].forEach(function(id){
+      ['enh-jump-today','enh-scroll-top','enh-dark-toggle','enh-search-overlay','archiveToggle','archiveSection','sync-state-btn','save-github-btn','editBtn','exportBtn'].forEach(function(id){
         var el = document.getElementById(id);
         if(el && el.parentElement !== document.body) document.body.appendChild(el);
       });
