@@ -42813,9 +42813,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var left = n - 4;
     var row = 3;
     var flip = 0;
+    var reservedSquare = false;
     while(left > 0){
+      if(needSquare && !reservedSquare && left >= 3){
+        /* Extra 1-col × 2-row so glow-up stays square without stealing fitness. */
+        places.push([1,2,row,row+2],[2,4,row,row+1],[2,4,row+1,row+2]);
+        left -= 3;
+        row += 2;
+        reservedSquare = true;
+        continue;
+      }
       if(left === 1){
-        if(places.length >= 6){
+        if(reservedSquare){
+          places.push([1,4,row,row+2]);
+          left = 0;
+          row += 2;
+        } else if(places.length >= 6){
           /* Fold prior pair + leftover into tall 1×2 + two stacked — no ribbon. */
           places.pop();
           places.pop();
@@ -42838,7 +42851,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
     }
     var nRows = row - 1;
-    return { columns:C, rows:autoRows(nRows), places:places, squareSlot: (places.length >= 3 ? places.length - 3 : -1) };
+    return { columns:C, rows:autoRows(nRows), places:places, squareSlot: reservedSquare ? 4 : (places.length >= 3 ? places.length - 3 : -1) };
   }
   function isGlowUpTile(tile){
     if(!tile) return false;
@@ -60117,4 +60130,35 @@ html body > .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoo
 
 </style>
 
+<style id="page-edit-btn-bottom-v1">
+/* EDIT = page-bottom chrome (same principle as SYNC / SAVE / TODAY). Never day-card or margin. */
+html body #editBtn.edit-toggle,
+html body #editBtn {
+  position: fixed !important;
+  bottom: 74px !important;
+  right: 14px !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 99999 !important;
+}
+</style>
+<script id="page-edit-btn-bottom-js">
+(function(){
+  function parkEdit(){
+    ['editBtn','exportBtn'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el && el.parentElement !== document.body){
+        try { document.body.appendChild(el); } catch(e){}
+      }
+    });
+    var badge = document.querySelector('.editing-badge');
+    if(badge && badge.parentElement !== document.body){
+      try { document.body.appendChild(badge); } catch(e){}
+    }
+  }
+  parkEdit();
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', parkEdit);
+  [0, 80, 400, 1200].forEach(function(ms){ setTimeout(parkEdit, ms); });
+})();
+</script>
 </html>
