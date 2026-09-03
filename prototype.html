@@ -44325,6 +44325,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var focus = tileFocus(tile);
       if(!title) return;
       if(typeof isGloballyArchivedSection === 'function' && (isGloballyArchivedSection(focus) || isGloballyArchivedSection(title))) return;
+      if(typeof sectionWasRemovedOrArchived === 'function' && sectionWasRemovedOrArchived(blk, focus, title)) return;
       var aliases = sectionAliasSet(focus, title);
       for(var k in aliases){ if(have[k]) return; }
       var photo = '';
