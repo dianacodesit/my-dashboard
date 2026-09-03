@@ -43210,6 +43210,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
 
   function packVisionCollage(host){
     if(!host) return;
+    try {
+      [].slice.call(host.querySelectorAll('.vision-tile .vision-tile')).forEach(function(nested){
+        var outer = nested.parentElement && nested.parentElement.closest && nested.parentElement.closest('.vision-tile');
+        if(!outer || !outer.parentElement) return;
+        outer.parentElement.insertBefore(nested, outer.nextSibling);
+      });
+    } catch(eUnwrap){}
     var found = collectHeroTiles(host);
     host = found.host || host;
     var tiles = found.tiles || [];
@@ -43251,7 +43258,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       } catch(eAr){}
     });
 
-    var spec = visionPackSpec(n);
+    var spec = visionPackSpec(n, tiles.some(isGlowUpTile));
     if(!spec) return;
     try { tiles = assignTilesToPlaces(tiles, spec.places, spec.squareSlot); } catch(eAssign){}
 
