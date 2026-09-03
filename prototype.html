@@ -24528,7 +24528,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         // which left late-created days (Aug 29+) unable to expand after reload.
         el.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
         /* Never bake page FABs into day shells */
-        el.querySelectorAll('#enh-jump-today, #enh-scroll-top, #enh-dark-toggle, #enh-search-overlay, #sync-state-btn, #save-github-btn, #archiveToggle, #archiveSection, .sched-footer, #priorityToggle, #priorityOverlay, .priority-toggle').forEach(function(n){
+        el.querySelectorAll('#enh-jump-today, #enh-scroll-top, #enh-dark-toggle, #enh-search-overlay, #sync-state-btn, #save-github-btn, #archiveToggle, #archiveSection, .sched-footer, #priorityToggle, #priorityOverlay, .priority-toggle, #editBtn, #exportBtn, .edit-toggle, .editing-badge').forEach(function(n){
           try { if(n && n.parentNode) n.parentNode.removeChild(n); } catch(e){}
         });
         const o = loadShells();
