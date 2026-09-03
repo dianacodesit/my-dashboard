@@ -26,6 +26,58 @@ html.btm-today-first .progress-wrap,
 html.btm-today-first .schedule-header,
 html.btm-today-first .day-block:not(.today-block){display:none !important}
 </style>
+<style id="no-card-flash">
+/* Card photos must never paint at intrinsic size before late polaroid CSS parses.
+   Enrollment form was flashing full-viewport on refresh. */
+.vision-polaroid, .vision-shot-card {
+  overflow: hidden;
+  max-width: 200px;
+  max-height: 240px;
+}
+.vision-polaroid img, .vision-shot-card img,
+img[src*="card-fall-2026-enrollment"] {
+  max-width: 160px;
+  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.shot-lightbox img,
+.shot-lightbox img[src*="card-fall-2026-enrollment"] {
+  max-width: min(1200px, 96vw);
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+#page-bg-img[src*="card-fall-2026-enrollment"],
+#page-bg-img[src*="card-tuition"] {
+  display: none !important;
+}
+</style>
+<script id="no-card-flash-js">
+(function(){
+  function scrub(){
+    try {
+      var bg = document.getElementById('page-bg-img');
+      if (bg && /card-fall-2026-enrollment|card-tuition/i.test(bg.getAttribute('src') || '')) {
+        bg.setAttribute('src', 'manus-storage/_339ab459.jpg');
+      }
+      document.querySelectorAll('.shot-lightbox').forEach(function(el){ el.remove(); });
+      document.querySelectorAll('.vision-board.is-zoomed').forEach(function(vb){
+        vb.classList.remove('is-zoomed');
+        vb.querySelectorAll('.vision-tile.is-zoomed').forEach(function(t){ t.classList.remove('is-zoomed'); });
+      });
+      document.documentElement.classList.remove('vision-zoom-open');
+      if (document.body) document.body.classList.remove('vision-zoom-open');
+    } catch (e) {}
+  }
+  scrub();
+  document.addEventListener('DOMContentLoaded', scrub);
+  window.addEventListener('pageshow', function(ev){ if (ev.persisted) scrub(); else scrub(); });
+})();
+</script>
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
@@ -43184,7 +43236,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(!tile) return 1.5;
     var f = (tile.getAttribute('data-focus') || '').toLowerCase();
     var t = tileTitleLow(tile);
-    if(f === 'glow' || f === 'glow-up' || f === 'glowup' || t === 'glow up' || t === 'glow-up' || t === 'glow') return 1.0;
+    if(f === 'glow' || f === 'glow-up' || f === 'glowup' || /glow\s*up/.test(t) || t === 'glow') return 1.5;
     var existing = 0;
     try { existing = parseFloat(tile.style.getPropertyValue('--photo-ar') || ''); } catch(e){}
     if(existing && isFinite(existing) && existing > 0.2 && existing < 4) return existing;
@@ -59755,7 +59807,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   })();
 
 
-    var MKEY = 'migration-rejected-section-photos-banlist-v21';
+    var MKEY = 'migration-rejected-section-photos-banlist-v22';
   var APPROVED = {
     soul: '',
     sorrow: '', /* distinct from soul — no approved photo (was soul-rose duplicate) */
@@ -59853,7 +59905,9 @@ html body .day-block.depth-four-era .overview-center-stack {
     /* seize — door + racing/running silhouettes banned; chess (seize4) is approved */
     'zone-seize-opportunities.jpg?v=seize1', 'zone-seize-opportunities.jpg?v=seize3', 'zone-seize-opportunities-door-banned', 'zone-seize-opportunities-racing-banned', '/archive/zone-seize-opportunities-door', '/archive/zone-seize-opportunities-racing',
     /* to curate — paintbrushes / wet paint / studio-painting still-life forever banned */
-    'zone-curate-create', 'zone-curate-create.jpg?v=create1', '/archive/zone-curate-create-paint'
+    'zone-curate-create', 'zone-curate-create.jpg?v=create1', '/archive/zone-curate-create-paint',
+    /* glow-up — burnt-orange abstract gold crop + pale pink highlighter forever banned */
+    'zone-glow-up-gold', 'zone-glow-up.jpg?v=glow5', 'zone-glow-up.jpg?v=glow4', 'zone-glow-up-pink'
   ];
   function isBanned(url){
     var s = String(url || '').toLowerCase();
