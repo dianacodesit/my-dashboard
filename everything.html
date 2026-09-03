@@ -16127,7 +16127,7 @@ window.__j22fnApply=run;
         if(el.classList.contains('vision-tile')) el.style.setProperty('--tile-photo', "url('"+WF+"')");
         else el.style.setProperty('--zone-photo', "url('"+WF+"')");
       });
-      document.querySelectorAll('.vision-tile[data-focus="workflow"] img, .vision-tile[data-focus="start"] img, .pursuit-zone[data-zone="workflow"] img, .pursuit-zone[data-zone="start"] img').forEach(function(img){
+      document.querySelectorAll('.vision-tile[data-focus="workflow"] img, .vision-tile[data-focus="start"] img, .vision-tile[data-focus="navigate"] img, .pursuit-zone[data-zone="workflow"] img, .pursuit-zone[data-zone="start"] img, .pursuit-zone[data-zone="navigate"] img').forEach(function(img){
         if(/zone-workflow/i.test(img.getAttribute('src')||'')) img.setAttribute('src', WF);
       });
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -16440,7 +16440,7 @@ window.__j22fnApply=run;
       }
       setPhoto('.vision-tile[data-focus="future"], .vision-tile[data-focus="future-self"], .vision-tile[data-focus="future self"], .pursuit-zone[data-zone="future"], .pursuit-zone[data-zone="future-self"], .pursuit-zone[data-zone="future self"]', FS_IMG);
       setPhoto('.vision-tile[data-focus="envision"], .pursuit-zone[data-zone="envision"]', ENV_IMG);
-      setPhoto('.vision-tile[data-focus="workflow"], .vision-tile[data-focus="start"], .pursuit-zone[data-zone="workflow"], .pursuit-zone[data-zone="start"]', WF_IMG);
+      setPhoto('.vision-tile[data-focus="workflow"], .vision-tile[data-focus="start"], .vision-tile[data-focus="navigate"], .pursuit-zone[data-zone="workflow"], .pursuit-zone[data-zone="start"], .pursuit-zone[data-zone="navigate"]', WF_IMG);
       setPhoto('.vision-tile[data-focus="plan"], .pursuit-zone[data-zone="plan"]', PL_IMG);
     }
     applySectionPhotoSwap();
