@@ -20,8 +20,18 @@ This applies regardless of conversation context or recently edited days.
 
 <meta charset="utf-8"/><script src="boot-seed.js" defer></script>
 <style id="no-card-flash">
-/* Card photos must never paint at intrinsic size before late polaroid CSS parses.
-   Enrollment form was flashing full-viewport on refresh. */
+/* Hide the day card until collage CSS (50k lines later) has parsed.
+   Otherwise refresh paints a raw left-column stack + enrollment form. */
+html:not(.btm-collage-ready) .day-block .day-card,
+html:not(.btm-collage-ready) .vision-board,
+html:not(.btm-collage-ready) .vision-hint,
+html:not(.btm-collage-ready) .vision-polaroid,
+html:not(.btm-collage-ready) .vision-shot-card,
+html:not(.btm-collage-ready) .vision-check {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+/* Card photos must never paint at intrinsic size before late polaroid CSS parses. */
 .vision-polaroid, .vision-shot-card {
   overflow: hidden;
   max-width: 200px;
@@ -69,6 +79,7 @@ img[src*="card-fall-2026-enrollment"] {
   scrub();
   document.addEventListener('DOMContentLoaded', scrub);
   window.addEventListener('pageshow', function(){ scrub(); });
+  setTimeout(function(){ document.documentElement.classList.add('btm-collage-ready'); }, 2500);
 })();
 </script>
 
@@ -20642,7 +20653,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to become">to become</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="3" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to train">to train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
 <article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-continue.jpg?v=go1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to persevere">to persevere</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1; --zoom-ar: 1; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to i glow up">to i glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="luscious-hair" style="--sub-photo: url(&quot;manus-storage/card-luscious-hair.jpg?v=glow4&quot;); --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
+<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to i glow up">to i glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="luscious-hair" style="--sub-photo: url(&quot;manus-storage/card-luscious-hair.jpg?v=glow4&quot;); --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
 <article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to i recoup">to i recoup</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="resonance" style="--tile-photo: url(&quot;manus-storage/zone-resonance.jpg?v=res1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to i resonate">to i resonate</h3><div class="vision-tile-details"></div></article>
 </div>
