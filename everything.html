@@ -18,11 +18,14 @@ This applies regardless of conversation context or recently edited days.
 <html lang="en">
 <head>
 
-<meta charset="utf-8"/><script src="boot-seed.js" defer></script>
+<meta charset="utf-8"/><script src="boot-seed.js" defer></script><script src="boot-today.js" defer></script>
 <style id="btm-today-first">
-/* Do not hide days on load — that flashed the mountain / April / today in a loop. */
+/* Do not hide days on load — that stalled the page. */
 </style>
-<script>document.documentElement.classList.add('btm-collage-ready');</script>
+<script>
+try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (e) {}
+document.documentElement.classList.add('btm-collage-ready');
+</script>
 <script>
 window.__btmHtmlSaveArmed = false;
 window.__armBtmHtmlSave = function(){ /* autosave writes HTML and snaps every open page back to April */ };
@@ -9404,20 +9407,7 @@ html body .day-block.collapsed .vision-hero-six {
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
-  if(window.MutationObserver){
-    var t=null;
-    var mo=new MutationObserver(function(){
-      if(window.__vbScrapDragging){ clearTimeout(t); return; }
-      clearTimeout(t);
-      t=setTimeout(function(){ if(!window.__vbScrapDragging) layoutAll(); }, 300);
-    });
-    function observeBody(){
-      if(!document.body) return;
-      try{ mo.observe(document.body, {childList:true, subtree:true, characterData:true}); }catch(e){}
-    }
-    if(document.body) observeBody();
-    else document.addEventListener('DOMContentLoaded', observeBody);
-  }
+  /* no live layout observer — it reflowed the whole page on every refresh */
 })();
 </script>
 
@@ -10984,8 +10974,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 <div class="agenda-body" id="agendaBody">
 <div class="timeline">
-<script src="boot-today.js"></script>
-<div class="day-block past" data-date="2026-04-11">
+<div class="day-block past collapsed" data-date="2026-04-11">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 11 · fri</span><span class="day-title">RISE + online blitz</span><span class="day-badge badge-mixed">event + online</span></div>
@@ -10996,7 +10985,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block past" data-date="2026-04-12">
+<div class="day-block past collapsed" data-date="2026-04-12">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 12 · sat</span><span class="day-title">Online admin</span><span class="day-badge badge-online">online</span></div>
@@ -11009,7 +10998,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-16">
+<div class="day-block collapsed past" data-date="2026-04-16">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 16 · wed</span><span class="day-title">Storage OC + Errands</span><span class="day-badge badge-inperson">in person</span></div>
@@ -11021,7 +11010,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-17">
+<div class="day-block collapsed past" data-date="2026-04-17">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 17 · thu</span><span class="day-title">Storage DTLA</span><span class="day-badge badge-inperson">in person</span></div>
@@ -11031,7 +11020,7 @@ html body .day-block.collapsed .vision-hero-six {
 <p class="day-note">OC → DTLA · dedicated day for the drive</p>
 </div>
 </div>
-<div class="day-block past" data-date="2026-04-20">
+<div class="day-block past collapsed" data-date="2026-04-20">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 20 · sun</span><span class="day-title"></span><span class="day-badge badge-mixed">past</span></div>
@@ -11085,7 +11074,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-21">
+<div class="day-block collapsed past" data-date="2026-04-21">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 21 · tue</span><span class="day-title"></span><span class="day-badge badge-mixed">past</span></div>
@@ -11175,7 +11164,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block past" data-date="2026-04-22">
+<div class="day-block past collapsed" data-date="2026-04-22">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 22 · wed</span><span class="day-title">Pharmacy + Hair</span><span class="day-badge badge-mixed">yesterday</span></div>
@@ -11187,7 +11176,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block past" data-date="2026-04-23">
+<div class="day-block past collapsed" data-date="2026-04-23">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 23 · thu</span><span class="day-title"></span><span class="day-badge badge-mixed">yesterday</span></div>
@@ -11214,7 +11203,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-24">
+<div class="day-block collapsed past" data-date="2026-04-24">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 24 · fri</span><span class="day-title"></span></div>
@@ -11227,7 +11216,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-25">
+<div class="day-block collapsed past" data-date="2026-04-25">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 25 · sat</span><span class="day-title"></span></div>
@@ -11315,7 +11304,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-26">
+<div class="day-block collapsed past" data-date="2026-04-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 26 · sun</span><span class="day-title"></span></div>
@@ -11352,7 +11341,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-27">
+<div class="day-block collapsed past" data-date="2026-04-27">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 27 · mon</span><span class="day-title"></span></div>
@@ -11380,7 +11369,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-28">
+<div class="day-block collapsed past" data-date="2026-04-28">
 <div class="day-dot buffer"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 28 · tue</span><span class="day-title"></span></div>
@@ -11431,7 +11420,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-29">
+<div class="day-block collapsed past" data-date="2026-04-29">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 29 · wed</span><span class="day-title"></span></div>
@@ -11485,7 +11474,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-04-30">
+<div class="day-block collapsed past" data-date="2026-04-30">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">apr 30 · thu</span><span class="day-title"></span></div>
@@ -11548,7 +11537,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-01">
+<div class="day-block collapsed past" data-date="2026-05-01">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 1 · fri</span></div>
@@ -11574,7 +11563,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-02">
+<div class="day-block collapsed past" data-date="2026-05-02">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 2 · sat</span></div>
@@ -11583,7 +11572,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-03">
+<div class="day-block collapsed past" data-date="2026-05-03">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 3 · sun</span></div>
@@ -11593,7 +11582,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-04">
+<div class="day-block collapsed past" data-date="2026-05-04">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 4 · mon</span></div>
@@ -11623,7 +11612,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-05">
+<div class="day-block collapsed past" data-date="2026-05-05">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 5 · tue</span></div>
@@ -11651,7 +11640,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div><span class="task-group-label center">reckoning</span><span class="task-group-label center">ADHD regimen v2</span><div class="day-task-item expandable"><span class="day-task-text">Vyvanse</span><input class="agenda-check" type="checkbox"/><div class="task-extras"><div class="task-subtask priority"><span class="day-task-text">Creyos assessment</span><input checked="checked" class="agenda-subcheck" onclick="event.stopPropagation()" type="checkbox"/></div></div></div><div class="day-task-item expandable"><span class="day-task-text">Strattera</span><input class="agenda-check" type="checkbox"/><div class="task-extras"><div class="task-subtask priority"><span class="day-task-text">RedBox Rx onboarding</span><input class="agenda-subcheck" onclick="event.stopPropagation()" type="checkbox"/></div></div></div><span class="task-group-label center">GSEP</span><div class="day-task-item"><span class="day-task-text">PsyD virtual event registration</span><input class="agenda-check" type="checkbox"/></div><div class="day-task-item"><span class="day-task-text">1:1 w/ Dr. Betty</span><input class="agenda-check" type="checkbox"/></div><div class="day-task-item"><span class="day-task-text">email from ___</span><input class="agenda-check" type="checkbox"/></div><div class="day-task-item"><span class="day-task-text">Spring Term Midday Mentors</span><input class="agenda-check" type="checkbox"/></div><span class="task-group-label center">homebound</span><div class="day-task-item"><span class="day-task-text">Condor flight change to Mon 5/11</span><input class="agenda-check" type="checkbox"/></div><span class="task-group-label center">homefront</span><div class="day-task-item"><span class="day-task-text">stools</span><input class="agenda-check" type="checkbox"/></div><span class="task-group-label center">deen</span><div class="day-task-item timed-task"><span class="day-task-text">Understanding the Quran</span><span class="task-time-inline">7:30 – 8:30 pm</span><input class="agenda-check" type="checkbox"/></div></div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-06">
+<div class="day-block collapsed past" data-date="2026-05-06">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 6 · wed</span></div>
@@ -11753,7 +11742,7 @@ html body .day-block.collapsed .vision-hero-six {
 <input class="agenda-check" type="checkbox"/>
 </div><span class="task-group-label center">reckoning</span><div class="day-task-item popup-only"><span class="day-task-text">Jetta check</span><input class="agenda-check partial" type="checkbox"/><div class="task-extras"><div class="task-subtask priority completed"><span class="day-task-text">AAA tow to 53 Le Mans</span><input checked="checked" class="agenda-subcheck" onclick="event.stopPropagation()" type="checkbox"/></div><div class="task-subtask"><span class="day-task-text">safety inspection</span><input class="agenda-subcheck" onclick="event.stopPropagation()" type="checkbox"/></div></div></div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-07">
+</div><div class="day-block collapsed past" data-date="2026-05-07">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 7 · thu</span></div>
@@ -11770,7 +11759,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-08">
+</div><div class="day-block collapsed past" data-date="2026-05-08">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 8 · fri</span></div>
@@ -11780,7 +11769,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div></div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-09">
+<div class="day-block collapsed past" data-date="2026-05-09">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 9 · sat</span></div>
@@ -11792,7 +11781,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-10">
+</div><div class="day-block collapsed past" data-date="2026-05-10">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 10 · sun</span></div>
@@ -11915,7 +11904,7 @@ html body .day-block.collapsed .vision-hero-six {
 <input class="agenda-check" type="checkbox"/>
 </div><div class="day-task-item timed-task"><span class="day-task-text">PSY-658 exam due</span><span class="task-time-inline">7:00 pm</span><input class="agenda-check" type="checkbox"/></div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-11" style="position: relative"><div class="route-overlay-may11 route-overlay-collapsed"><div class="flow-section-toggle route-overlay-header">route</div><div class="flow-route"><div class="route-stop"><span class="route-num">01</span><span class="route-name">Kaiser SC</span></div><div class="route-stop"><span class="route-num">02</span><span class="route-name">CVS Marguerite</span></div><div class="route-stop"><span class="route-num">03</span><span class="route-name">Verizon</span></div><div class="route-stop"><span class="route-num">04</span><span class="route-name">53 Le Mans</span></div><div class="route-stop route-stop-faded"><span class="route-num">05</span><span class="route-name">Wells Fargo</span></div><div class="route-stop"><span class="route-num">06</span><span class="route-name">Sephora</span></div><div class="route-stop route-stop-faded"><span class="route-num">07</span><span class="route-name">Best Buy</span></div><div class="route-stop route-stop-faded"><span class="route-num">08</span><span class="route-name">Apple</span></div><div class="route-stop"><span class="route-num">09</span><span class="route-name">Rockcress</span></div></div></div>
+</div><div class="day-block collapsed past" data-date="2026-05-11" style="position: relative"><div class="route-overlay-may11 route-overlay-collapsed"><div class="flow-section-toggle route-overlay-header">route</div><div class="flow-route"><div class="route-stop"><span class="route-num">01</span><span class="route-name">Kaiser SC</span></div><div class="route-stop"><span class="route-num">02</span><span class="route-name">CVS Marguerite</span></div><div class="route-stop"><span class="route-num">03</span><span class="route-name">Verizon</span></div><div class="route-stop"><span class="route-num">04</span><span class="route-name">53 Le Mans</span></div><div class="route-stop route-stop-faded"><span class="route-num">05</span><span class="route-name">Wells Fargo</span></div><div class="route-stop"><span class="route-num">06</span><span class="route-name">Sephora</span></div><div class="route-stop route-stop-faded"><span class="route-num">07</span><span class="route-name">Best Buy</span></div><div class="route-stop route-stop-faded"><span class="route-num">08</span><span class="route-name">Apple</span></div><div class="route-stop"><span class="route-num">09</span><span class="route-name">Rockcress</span></div></div></div>
 <div class="day-dot depart"></div>
 <div class="day-card depart-card">
 <div class="day-card-header"><span class="day-date">may 11 · mon</span><span class="day-title">Depart ✈</span><span class="day-badge badge-depart">departure</span></div>
@@ -11946,7 +11935,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 <p class="day-note">you've got this · everything is handled · safe travels 🌿</p>
 </div>
-</div><div class="day-block" data-date="2026-05-12">
+</div><div class="day-block collapsed past" data-date="2026-05-12">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 12 · tue</span></div>
@@ -12061,7 +12050,7 @@ html body .day-block.collapsed .vision-hero-six {
 <input class="agenda-check" type="checkbox"/>
 </div></div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-13">
+</div><div class="day-block collapsed past" data-date="2026-05-13">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 13 · wed</span></div>
@@ -12071,7 +12060,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-14">
+</div><div class="day-block collapsed past" data-date="2026-05-14">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 14 · thu</span></div>
@@ -12081,7 +12070,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-15">
+</div><div class="day-block collapsed past" data-date="2026-05-15">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 15 · fri</span></div>
@@ -12089,7 +12078,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="day-task-item"><span class="day-task-text">The Bridge, 2nd gathering</span><span class="task-time-inline">3 pm</span><input class="agenda-check" type="checkbox"/></div>
 <div class="flow-chart-card"><p class="flow-title">flow</p><label class="flow-step done"><input checked="checked" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>call to Extra Space</label><div class="flow-arrow">↓</div><label class="flow-step done"><input checked="checked" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>email to Dr. Blas</label><div class="flow-arrow">↓</div><label class="flow-step done"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>The Bridge zoom meeting<span class="flow-time" style="text-decoration: none !important; text-decoration-line: none !important; display: inline-block;">3 pm PST</span></label></div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-16">
+</div><div class="day-block collapsed past" data-date="2026-05-16">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 16 · sat</span></div>
@@ -12099,7 +12088,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step done"><input checked="checked" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>call to Amer</label><div class="flow-arrow">↓</div><label class="flow-section-toggle done"><input checked="" class="flow-check" onchange="this.closest('.flow-section-toggle').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-section-text">calls to</span></label><label class="flow-step done"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Maram</label><div class="flow-arrow">↓</div><label class="flow-step done"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Aftkar</label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-17">
+</div><div class="day-block collapsed past" data-date="2026-05-17">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 17 · sun</span></div>
@@ -12109,7 +12098,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-step-row" data-check-order="2" data-sequence="1"><label class="flow-step done"><input checked="checked" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>dishes</label><label class="flow-step flow-concurrent done" data-edit-history='[{"date": "2026-05-17", "old": "microfiber cloths laundry", "new": "Microfiber wash cycle"}, {"date": "2026-05-17", "old": "Microfiber wash cycle", "new": "microfiber wash cycle"}]'><input checked="checked" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>microfiber<span class="wash-dry-stack"><span class="wd-line"><input checked="checked" class="wd-check" onchange="handleWashDry(this)" type="checkbox"/> wash</span><span class="wd-line"><input checked="checked" class="wd-check" onchange="handleWashDry(this)" type="checkbox"/> dry</span></span> cycle</label></div><div class="flow-arrow">↓</div><label class="flow-step done" data-check-order="3" data-sequence="3"><input checked="checked" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>PSY-623 quiz 5</label><div class="flow-arrow">↓</div><label class="flow-step done" data-check-order="1"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Best Buy return</label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-18">
+</div><div class="day-block collapsed past" data-date="2026-05-18">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 18 · mon</span></div>
@@ -12118,7 +12107,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-step done may18-task" data-check-order="1" data-sequence="2"><span class="task-label-text" onclick="toggleMay18Done(this)">PSY-623 midterm</span><span class="task-done-check">✓</span><span class="task-yn-buttons"><button class="task-yes" onclick="handleMay18Yes(this)" type="button">yes</button><button class="task-no" onclick="handleMay18No(this)" type="button">no</button></span></div><div class="flow-arrow">↓</div><div class="flow-step may18-task" data-edit-history='[{"date": "2026-05-17", "old": "final draft of speech", "new": "speech script"}, {"date": "2026-05-17", "old": "speech script", "new": "Pepperdine speech script"}, {"date": "2026-05-17", "old": "Pepperdine speech script", "new": "polished script for Elevate Your Life graduation speech"}, {"date": "2026-05-17", "old": "polished script for Elevate Your Life graduation speech", "new": "Elevate Your Life graduation speech"}, {"date": "2026-05-17", "old": "Elevate Your Life graduation speech", "new": "The Self Within speech"}]'><span class="task-label-text" onclick="toggleMay18Done(this)">final reply to Daruty</span><span class="task-done-check">✓</span><span class="task-yn-buttons"><button class="task-yes" onclick="handleMay18Yes(this)" type="button">yes</button><button class="task-no" onclick="handleMay18No(this)" type="button">no</button></span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span></div><div class="flow-arrow">↓</div><div class="flow-step may18-task" data-edit-history='[{"date": "2026-05-17", "old": "email thread reply to Daruty &amp; tenants", "new": "email reply to thread w/ Daruty &amp; tenants"}]'><span class="task-label-text" onclick="toggleMay18Done(this)">consultation w/ a landlord attorney</span><span class="task-done-check">✓</span><span class="task-yn-buttons"><button class="task-yes" onclick="handleMay18Yes(this)" type="button">yes</button><button class="task-no" onclick="handleMay18No(this)" type="button">no</button></span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span></div><div class="flow-arrow">↓</div><div class="flow-step may18-task"><span class="task-label-text" onclick="toggleMay18Done(this)">Wells Fargo statements audit</span><span class="task-done-check">✓</span><span class="task-yn-buttons"><button class="task-yes" onclick="handleMay18Yes(this)" type="button">yes</button><button class="task-no" onclick="handleMay18No(this)" type="button">no</button></span></div></div><div class="floating-section" data-floating-section="2026-05-18"><div class="floating-section-label">floating · 3</div><div class="floating-section-items"><div class="floating-item">reply message to Sabrina</div><div class="floating-item">call to Marissa</div><div class="floating-item">TaskRabbit refund</div></div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-19">
+</div><div class="day-block collapsed past" data-date="2026-05-19">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 19 · tue</span></div>
@@ -12127,7 +12116,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step done"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>PSY-623<span class="task-time-inline">3:30a</span></label><div class="flow-arrow">↓</div><label class="flow-step done"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Fajr<span class="task-time-inline">3:19a</span></label><div class="flow-arrow">↓</div><label class="flow-step" data-edit-history="[{&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;final draft of speech&quot;, &quot;new&quot;: &quot;speech script&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;speech script&quot;, &quot;new&quot;: &quot;Pepperdine speech script&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;Pepperdine speech script&quot;, &quot;new&quot;: &quot;polished script for Elevate Your Life graduation speech&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;polished script for Elevate Your Life graduation speech&quot;, &quot;new&quot;: &quot;Elevate Your Life graduation speech&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;Elevate Your Life graduation speech&quot;, &quot;new&quot;: &quot;The Self Within speech&quot;}, {&quot;date&quot;: &quot;2026-05-20&quot;, &quot;old&quot;: &quot;Self Within speech transcript&quot;, &quot;new&quot;: &quot;'Self Within' speech script&quot;}]"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>'Self Within' speech script<span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span></label><div class="flow-arrow">↓</div><label class="flow-step" data-sequence="5"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>SCLA onboarding</label></div>
 <span class="task-group-label center">threads</span><div class="day-task-item popup-only"><span class="day-task-text">reply message [&amp; photos] to Sabrina</span><input class="agenda-check" type="checkbox"/></div><span class="task-group-label center">Adderalls</span><div class="day-task-item popup-only"><span class="day-task-text">Adderall IR quantity check</span><input class="agenda-check" type="checkbox"/></div><span class="task-group-label center">homefront</span><div class="day-task-item popup-only"><span class="day-task-text">groceries</span><input class="agenda-check" onclick="event.stopPropagation()" type="checkbox"/><div class="task-extras"><div class="task-subtask"><span class="day-task-text">pumpkin seeds</span><input class="agenda-check" type="checkbox"/></div><div class="task-subtask"><span class="day-task-text">Callipo tuna</span><input class="agenda-check" type="checkbox"/></div><div class="task-subtask"><span class="day-task-text">Rio tuna</span><input class="agenda-check" type="checkbox"/></div><div class="task-subtask"><span class="day-task-text">Organyc cotton swabs</span><input class="agenda-check" type="checkbox"/></div></div></div><div class="day-task-item popup-only"><span class="day-task-text">Nike sneakers odor treatment</span><input class="agenda-check" type="checkbox"/></div><div class="day-task-item popup-only"><span class="day-task-text">screenshots of Snoonu carts</span><input class="agenda-check" type="checkbox"/></div><span class="task-group-label center">executive</span><div class="day-task-item popup-only"><span class="day-task-text">Capital One statement screenshot</span><input class="agenda-check" type="checkbox"/></div><div class="day-task-item popup-only"><span class="day-task-text">reply message [&amp; follow-up inquiry] to MD Repairs</span><input class="agenda-check" type="checkbox"/></div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-20">
+</div><div class="day-block collapsed past" data-date="2026-05-20">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 20 · wed</span></div>
@@ -12136,7 +12125,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step done"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/>PSY-658 Module 7<button aria-label="delete task" class="flow-delete" type="button">×</button></label><div class="flow-arrow">↓</div><label class="flow-step" data-edit-history="[{&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;final draft of speech&quot;, &quot;new&quot;: &quot;speech script&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;speech script&quot;, &quot;new&quot;: &quot;Pepperdine speech script&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;Pepperdine speech script&quot;, &quot;new&quot;: &quot;polished script for Elevate Your Life graduation speech&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;polished script for Elevate Your Life graduation speech&quot;, &quot;new&quot;: &quot;Elevate Your Life graduation speech&quot;}, {&quot;date&quot;: &quot;2026-05-17&quot;, &quot;old&quot;: &quot;Elevate Your Life graduation speech&quot;, &quot;new&quot;: &quot;The Self Within speech&quot;}, {&quot;date&quot;: &quot;2026-05-20&quot;, &quot;old&quot;: &quot;Self Within speech transcript&quot;, &quot;new&quot;: &quot;'Self Within' speech script&quot;}]"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>'Self Within' speech script<span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><button aria-label="delete task" class="flow-delete" type="button">×</button></label><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" style=""><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Home Box order<button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><label class="flow-step" data-edit-history='[{"date": "2026-05-17", "old": "tenant security deposit disposition", "new": "security deposit disposition"}]' style=""><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>security deposit disposition<span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><span class="edit-history-asterisk" title="view edit history">*</span><button aria-label="delete task" class="flow-delete" type="button">×</button></label><div class="flow-arrow">↓</div><label class="flow-step" style=""><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Psi Chi induction info reply<button aria-label="delete task" class="flow-delete" type="button">×</button></label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-21">
+</div><div class="day-block collapsed past" data-date="2026-05-21">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 21 · thu</span></div>
@@ -12145,7 +12134,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-22">
+</div><div class="day-block collapsed past" data-date="2026-05-22">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 22 · fri</span></div>
@@ -12154,7 +12143,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-step" draggable="false"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" data-hover-note="new member bio for Induction Ceremony" data-no-truncate="true" spellcheck="false">email reply to Psi Chi</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">video call w/ Ilham &amp; Judd</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" data-hover-note="for 'Elevate Your Life' Keynote" spellcheck="false">Elevate 15 min speech</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">SCLA Career Readiness Certificate</span><span class="task-deadline">May 25</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div "="" class="flow-step done" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">glow-up sesh</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div "="" class="flow-step done" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Burj al-Hammam</span><span class="task-time-inline">7 PM</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" data-section="transfer to" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Wells Fargo</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" data-section="transfer to" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Citi</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">voice note message to Nienke</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false" data-hover-note="for 'Elevate Your Life' Keynote">speech final draft</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-23">
+</div><div class="day-block collapsed past" data-date="2026-05-23">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 23 · sat</span></div>
@@ -12164,7 +12153,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Elevate speech rehearsal</label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-24">
+</div><div class="day-block collapsed past" data-date="2026-05-24">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 24 · sun</span></div>
@@ -12173,7 +12162,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step" style=""><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Elevate speech rehearsal</span><button aria-label="delete task" class="flow-delete" type="button">×</button></label><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" style=""><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>IKEA Qatar order<button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Summer 2026 registration</span><button aria-label="delete task" class="flow-delete" type="button">×</button></label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-25">
+</div><div class="day-block collapsed past" data-date="2026-05-25">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 25 · mon</span></div>
@@ -12182,14 +12171,14 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">SCLA Career Readiness Certificate</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step done" data-done-at="1748189400000" draggable="false"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">chat with Dr. Betty</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" data-hover-note="for 'Elevate Your Life' Keynote" spellcheck="false">Elevate 15 min speech</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step done" data-done-at="1748188800000" data-section="transfer to" draggable="false"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">PayPal</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-26">
+</div><div class="day-block collapsed past" data-date="2026-05-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 26 · tue</span></div>
 <div class="day-tasks">
 <div class="flow-chart-card"><p class="flow-title">flow</p>
 <div class="flow-step done" data-done-at="1779834190548" data-pos-x="376" data-pos-y="60" draggable="false"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">registration for Pepperdine / PsyConnect events</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step done" data-done-at="1779832748562" data-pos-x="271" data-pos-y="192" draggable="false"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="false" spellcheck="false">registration for Para Ella Symposium</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><label class="flow-step" data-done-at="1779798614351" data-pos-x="304" data-pos-y="228" data-recorded="true"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Elevate speech rehearsal</span><button aria-label="toggle recorded" class="flow-cam-toggle" type="button"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 16 16"><rect height="8" rx="1" width="9" x="1" y="4"></rect><path d="M10 7l4-2v6l-4-2"></path></svg></button><button aria-label="delete task" class="flow-delete" type="button">×</button></label><div class="flow-arrow">↓</div><div class="flow-step" data-flow-hidden="true" data-recorded="true" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="false" spellcheck="false">video call w/ Ilham &amp; Judd</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" data-pos-x="173" data-pos-y="244" data-section="transfer to" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="false" spellcheck="false">Wells Fargo</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" data-pos-x="190" data-pos-y="368" data-section="transfer to" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="false" spellcheck="false">Citi</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step done" data-done-at="1779787326523" data-pos-x="315" data-pos-y="21" draggable="false"><input checked="" class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="false" spellcheck="false">SCLA Career Readiness Certificate</span><button aria-label="delete task" class="flow-delete" type="button">×</button><span class="task-deadline">May 25</span></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Ounass returns</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" data-flow-hidden="true" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="false" spellcheck="false">photo share w/ Sabrina</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div></div><div class="floating-section" data-floating-section="2026-05-26"><div class="floating-section-label">floating · 2</div><div class="floating-section-items"><div class="floating-item" data-recorded="true">video call w/ Ilham + Judd</div><div class="floating-item">photo share w/ Sabrina</div></div></div></div></div></div>
-<div class="day-block" data-date="2026-05-27">
+<div class="day-block collapsed past" data-date="2026-05-27">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 27 · wed</span></div>
@@ -12198,7 +12187,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">Spring Midday Mentors Event w/ Dr. Dennis Lowe</span><span class="task-time-inline">10–11 PM</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" data-pos-x="340" data-pos-y="108"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">colors &amp; intmates</span><span class="flow-step-descriptor">colors &amp; intmates</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">PSY-658 Module 8</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">Eid glow-up</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">professional headshot for Psi Chi induction</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">mu'ayadeh to friends</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" data-pos-x="383" data-pos-y="511"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">Maram's house</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" data-pos-x="232" data-pos-y="571"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">fit check in 2 dresses</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" data-pos-x="86" data-pos-y="666"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Stargold green luggage set</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false" data-pos-x="224" data-pos-y="771"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">check-in ready</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step done" draggable="false" data-done-at="1779863172770"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" checked=""><span class="flow-step-text" contenteditable="true" spellcheck="false">washing machine cleaner</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div></div></div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-28">
+<div class="day-block collapsed past" data-date="2026-05-28">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 28 · thu</span></div>
@@ -12207,7 +12196,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Elevate speech rehearsal</label><div class="flow-arrow">↓</div><label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>practice run for speech</label><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">PSY-658 interview paper</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">SCLA BIG Celebration</span><span class="task-time-inline">2–3 AM</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">PSY-658</span><span class="task-time-inline">3–5 AM</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">HIA</span><span class="task-time-inline">5 AM</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">Turo booking</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-05-29">
+</div><div class="day-block collapsed past" data-date="2026-05-29">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 29 · fri</span><span class="day-title"></span><span class="day-badge badge-inperson">in person</span></div>
@@ -12217,7 +12206,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-chart-card"><p class="flow-title">flow</p><label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Elevate speech rehearsal</label><div class="flow-arrow">↓</div><label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>motion to vacate unlawful detainer judgment</label></div></div>
 </div>
 </div>
-<div class="day-block" data-date="2026-05-30">
+<div class="day-block collapsed past" data-date="2026-05-30">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 30 · sat</span><span class="day-title">Psi Chi Spring Banquet</span><span class="day-badge badge-inperson">in person</span></div>
@@ -12231,7 +12220,7 @@ html body .day-block.collapsed .vision-hero-six {
 <div class="flow-chart-card"><p class="flow-title">flow</p>
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Elevate speech rehearsal</label><div class="flow-arrow">↓</div><label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>practice run for speech</label><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Self Within speech transcript</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Poised review of May 7 session</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">CFPB claim</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Bonus Elevate Exclusive Opportunity: Voice &amp; Delivery Training</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Psi Chi Membership Certificate</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div></div></div>
 </div>
-</div><div class="day-block" data-date="2026-05-31">
+</div><div class="day-block collapsed past" data-date="2026-05-31">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">may 31 · sun</span></div>
@@ -12241,7 +12230,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Elevate speech rehearsal</label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-01">
+</div><div class="day-block collapsed past" data-date="2026-06-01">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 1 · mon</span></div>
@@ -12261,7 +12250,7 @@ html body .day-block.collapsed .vision-hero-six {
 
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-02">
+</div><div class="day-block collapsed past" data-date="2026-06-02">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 2 · tue</span></div>
@@ -12271,7 +12260,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/>Elevate speech rehearsal</label><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">tirosint</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">glam seamless haios</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">radianthotyoga month membership</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-03">
+</div><div class="day-block collapsed past" data-date="2026-06-03">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 3 · wed</span></div>
@@ -12295,7 +12284,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-04">
+</div><div class="day-block collapsed past" data-date="2026-06-04">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 4 · thu</span></div>
@@ -12304,7 +12293,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">Elevate speech rehearsal</span><button class="flow-cam-toggle" type="button" aria-label="toggle recorded"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="9" height="8" rx="1"></rect><path d="M10 7l4-2v6l-4-2"></path></svg></button><button class="flow-delete" type="button" aria-label="delete task">×</button></label><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">modafinil</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Lock &amp; Leave Storage 10×20 unit</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Dr. Ray's intake forms</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">move-outs of Extra Space units</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-section-divider">· people ·</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">mom</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">dad</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Ahmad</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Maram</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Aftkar</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-section-divider">· errands ·</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Kohl's</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Nordstrom</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">Target</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div><div class="flow-arrow">↓</div><div class="flow-step" draggable="false"><input class="flow-check" type="checkbox" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)"><span class="flow-step-text" contenteditable="true" spellcheck="false">AAA membership downgrade</span><button class="flow-delete" type="button" aria-label="delete task">×</button></div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-05">
+</div><div class="day-block collapsed past" data-date="2026-06-05">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 5 · fri</span></div>
@@ -12315,7 +12304,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-06">
+</div><div class="day-block collapsed past" data-date="2026-06-06">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 6 · sat</span></div>
@@ -12326,7 +12315,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-07">
+</div><div class="day-block collapsed past" data-date="2026-06-07">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 7 · sun</span></div>
@@ -12394,7 +12383,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"><span class="flow-step-text" contenteditable="true" spellcheck="false">Pepperdine speech</span><button class="flow-delete" type="button" aria-label="delete task">×</button></label></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-08">
+</div><div class="day-block collapsed past" data-date="2026-06-08">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 8 · mon</span></div>
@@ -12480,7 +12469,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-09">
+</div><div class="day-block collapsed past" data-date="2026-06-09">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 9 · tue</span></div>
@@ -12491,7 +12480,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-10">
+</div><div class="day-block collapsed past" data-date="2026-06-10">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 10 · wed</span></div>
@@ -12502,7 +12491,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-11">
+</div><div class="day-block collapsed past" data-date="2026-06-11">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 11 · thu</span></div>
@@ -12513,7 +12502,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-12">
+</div><div class="day-block collapsed past" data-date="2026-06-12">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 12 · fri</span></div>
@@ -12522,7 +12511,7 @@ html body .day-block.collapsed .vision-hero-six {
 <label class="flow-step"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.checked)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">Elevate speech rehearsal</span><button aria-label="toggle recorded" class="flow-cam-toggle" type="button"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 16 16"><rect height="8" rx="1" width="9" x="1" y="4"></rect><path d="M10 7l4-2v6l-4-2"></path></svg></button><button aria-label="delete task" class="flow-delete" type="button">×</button></label><div class="flow-arrow">↓</div><div class="flow-step" data-done-at="1779854100364" data-pos-x="183" data-pos-y="107" draggable="false"><input class="flow-check" onchange="this.closest('.flow-step').classList.toggle('done', this.)" type="checkbox"/><span class="flow-step-text" contenteditable="true" spellcheck="false">PsyConnect: Virtual Employer Meetup · PsyConnect · Fri Jun 12 · 10 AM - NOON PT · VIRTUAL via ZOOM</span><span class="task-time-inline">10 AM–noon PT</span><button aria-label="delete task" class="flow-delete" type="button">×</button></div></div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-13">
+</div><div class="day-block collapsed past" data-date="2026-06-13">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 13 · sat</span></div>
@@ -12533,7 +12522,7 @@ html body .day-block.collapsed .vision-hero-six {
 </div>
 </div>
 </div>
-</div><div class="day-block" data-date="2026-06-17">
+</div><div class="day-block collapsed past" data-date="2026-06-17">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 17 · wed</span></div>
@@ -12647,7 +12636,7 @@ html body .day-block.collapsed .vision-hero-six {
 </script>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-22">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-22">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 22 · mon</span></div>
@@ -12950,7 +12939,7 @@ window.openJ22Rollover=function(fromDate, mode){
  ov.querySelector('.rollover-picker-toggle-none').onclick=function(){ ov.querySelectorAll('.rollover-picker-cb').forEach(function(c){c.checked=false;}); };
  ov.querySelector('.rollover-picker-roll-selected').onclick=function(){ var picked=[].slice.call(ov.querySelectorAll('.rollover-picker-cb:checked')).map(function(c){return tasks[+c.dataset.i];}); var dest=sel.value; close(); if(picked.length){ if(isCopy) doCopy(fromDate,dest,picked); else doRoll(fromDate,dest,picked); } };
 };
-var applying=false; function safeReplay(){ if(applying) return; applying=true; try{ replay(); }catch(e){} applying=false; } if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',safeReplay); else safeReplay(); [1400,3000].forEach(function(ms){ setTimeout(safeReplay,ms); });
+var applying=false; function safeReplay(){ if(applying) return; applying=true; try{ replay(); }catch(e){} applying=false; } if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',safeReplay); else safeReplay();
 })();
 </script>
 
@@ -12982,8 +12971,6 @@ i=j;
 var busy=false;
 function run(){ if(busy) return; busy=true; try{ apply(); }catch(e){} busy=false; }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-window.addEventListener('load',run);
-if(window.MutationObserver){ var tm=null; new MutationObserver(function(){ if(busy) return; clearTimeout(tm); tm=setTimeout(run,300); }).observe(document.body,{childList:true,subtree:true}); }
 window.__j22fnApply=run;
 })();
 </script>
@@ -18981,12 +18968,11 @@ window.__j22fnApply=run;
   }
   function boot(){
     go();
-    loadCloudState().then(function(){ go(); }).catch(function(){});
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
-<div class="day-block fmt22" data-date="2026-06-23">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-23">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 23 · tue</span></div>
@@ -18999,7 +18985,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-24">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-24">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 24 · wed</span></div>
@@ -19007,7 +18993,7 @@ window.__j22fnApply=run;
 <div class="flow-chart-card"><p class="flow-title">flow</p><div class="sec-grid"><div class="j22-section card sec-card" data-theme="blush"><div class="card-visual theme-blush"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><svg width="55" height="55" viewBox="0 0 90 90" fill="none" stroke="#bf8f93" stroke-width="1.25"><circle cx="35" cy="40" r="8"/><path d="M23 62 Q23 49 35 49 Q47 49 47 62"/><circle cx="57" cy="43" r="7"/><path d="M47 62 Q47 51 57 51 Q67 51 67 62"/></svg></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="persons">persons</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">Nienke</span></label><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">Fatin</span></label></div></div></div><div class="j22-section card sec-card" data-theme="warm"><div class="card-visual theme-warm"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><svg width="55" height="55" viewBox="0 0 90 90" fill="none" stroke="#c4a882" stroke-width="1.25"><line x1="21" y1="63" x2="69" y2="63"/><rect x="29" y="39" width="9" height="24" rx="1.5"/><circle cx="48" cy="53" r="10"/><rect x="58" y="43" width="11" height="20" rx="1.5"/><line x1="61" y1="43" x2="66" y2="43"/></svg></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="shopped">curated lifestyle</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">SkinCeuticals</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">A.G.E. Eye Complex (2)</span></label><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">Sunday Natural supplements</span></label><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">ES-2401 override key</span></label></div></div></div><div class="j22-section card sec-card" data-theme="lavender"><div class="card-visual theme-lavender"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><svg width="55" height="55" viewBox="0 0 90 90" fill="none" stroke="#9b8ec4" stroke-width="1.25"><rect x="25" y="36" width="40" height="18" rx="9" fill="#e8e2f4"/><line x1="45" y1="36" x2="45" y2="54"/><text x="35" y="49" font-family="monospace" font-size="9" text-anchor="middle" stroke="none" fill="#9b8ec4">Rx</text></svg></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="adderall">adderall / adhd meds</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">Dr Fuller</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">early refill</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">90-day supply</span></label><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">Dr Cody Nugent</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">90-day fill</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">prior authorization</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">Qelbree prescription</span></label><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">Blossom Health</span></label></div></div></div><div class="j22-section card sec-card" data-theme="amber"><div class="card-visual theme-amber"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><svg width="55" height="55" viewBox="0 0 90 90" fill="none" stroke="#c4a882" stroke-width="1.25"><rect x="26" y="35" width="38" height="22" rx="3" fill="none"/><text x="45" y="47" font-family="Georgia" font-size="15" text-anchor="middle" dominant-baseline="central" stroke="none" fill="#c4a882">$</text><path d="M31 62 q13 6 26 0" fill="none"/><polyline points="49 55 62 63 48 71" fill="none"/></svg></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="capital blueprint">capital blueprint</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">called Ounass</span></label></div></div></div><div class="j22-section card sec-card" data-theme="sage"><div class="card-visual theme-sage"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><img src="manus-storage/pursuit-social-media-v7_c5f03b96.jpg" alt="social media" style="width:55px;height:55px;object-fit:cover;border-radius:8px;opacity:0.9;"></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="social media">social media</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">posted Ashura IG stories</span></label><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">edited rest of June '26 photos</span></label></div></div></div><div class="j22-section card sec-card" data-theme="blush"><div class="card-visual theme-blush"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><svg width="55" height="55" viewBox="0 0 90 90" fill="none" stroke="#bf8f93" stroke-width="1.25"><rect x="15" y="46" width="8" height="16" rx="1.5"/><rect x="17" y="42" width="4" height="4"/><rect x="26" y="43" width="7" height="19" rx="1.5"/><rect x="28" y="39" width="3" height="4"/><rect x="36" y="50" width="10" height="12" rx="1.5"/><line x1="36" y1="50" x2="46" y2="50"/><path d="M49 48 q2.5 -2 5 0 l-1 14 q-1.5 1 -3 0 Z"/><circle cx="61" cy="45" r="4.5"/><line x1="61" y1="49.5" x2="61" y2="61"/><rect x="67" y="49" width="9" height="13" rx="1.5"/><circle cx="71.5" cy="55" r="2.3"/></svg></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="glow up">glow up</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">best skincare for:</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">jawline</span></label><label class="j22-item j22-sub"><input class="agenda-check" type="checkbox"><span class="j22-t">undereye folds</span></label></div></div></div><div class="j22-section card sec-card" data-theme="lavender"><div class="card-visual theme-lavender"><button class="done-check" type="button"><svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></button><svg width="55" height="55" viewBox="0 0 90 90" fill="none" stroke="#9b8ec4" stroke-width="1.25"><circle cx="45" cy="45" r="2.5" fill="#9b8ec4" stroke="none"/><g fill="none" stroke-linecap="round"><path d="M53 37 Q58 45 53 53"/><path d="M60 31 Q68 45 60 59"/><path d="M37 37 Q32 45 37 53"/><path d="M30 31 Q22 45 30 59"/></g></svg></div><div class="card-body"><p class="j22-group" contenteditable="true" spellcheck="false" data-newhdr="vibes">vibes</p><div class="j22-section-items"><label class="j22-item"><input class="agenda-check" type="checkbox"><span class="j22-t">tidied up</span></label></div></div></div></div></div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-25">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-25">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 25 · thu</span></div>
@@ -19016,7 +19002,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-26">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 26 · fri</span></div>
@@ -19025,7 +19011,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-27">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-27">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 27 · sat</span></div>
@@ -19034,7 +19020,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-28">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-28">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 28 · sun</span></div>
@@ -19043,7 +19029,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-29">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-29">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 29 · mon</span></div>
@@ -19052,7 +19038,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-06-30">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-06-30">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jun 30 · tue</span></div>
@@ -19061,7 +19047,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-01">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-01">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 1 · wed</span></div>
@@ -19070,7 +19056,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-02">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-02">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 2 · thu</span></div>
@@ -19079,7 +19065,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-03">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-03">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 3 · fri</span></div>
@@ -19088,7 +19074,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-04">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-04">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 4 · sat</span></div>
@@ -19097,7 +19083,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-05">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-05">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 5 · sun</span></div>
@@ -19106,7 +19092,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-06">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-06">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 6 · mon</span></div>
@@ -19118,7 +19104,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-07-07">
+<div class="day-block collapsed past" data-date="2026-07-07">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 7 · tue</span></div>
@@ -19130,7 +19116,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-07-08">
+<div class="day-block collapsed past" data-date="2026-07-08">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 8 · wed</span></div>
@@ -19139,7 +19125,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-07-09">
+<div class="day-block collapsed past" data-date="2026-07-09">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 9 · thu</span></div>
@@ -19151,7 +19137,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-07-10">
+<div class="day-block collapsed past" data-date="2026-07-10">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 10 · fri</span></div>
@@ -19160,7 +19146,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block" data-date="2026-07-11">
+<div class="day-block collapsed past" data-date="2026-07-11">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 11 · sat</span></div>
@@ -19170,7 +19156,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-12">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-12">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 12 · sun</span></div>
@@ -19193,7 +19179,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-13">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-13">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 13 · mon</span></div>
@@ -19226,7 +19212,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-14">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-14">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 14 · tue</span></div>
@@ -19243,7 +19229,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-15">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-15">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 15 · wed</span></div>
@@ -19260,7 +19246,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-16">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-16">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 16 · thu</span></div>
@@ -19277,7 +19263,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-17">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-17">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 17 · fri</span></div>
@@ -19298,7 +19284,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-18">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-18">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 18 · sat</span></div>
@@ -19315,7 +19301,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-19">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-19">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 19 · sun</span></div>
@@ -19332,7 +19318,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-20">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-20">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 20 · mon</span></div>
@@ -19350,7 +19336,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-21">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-21">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 21 · tue</span></div>
@@ -19367,7 +19353,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-22">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-22">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 22 · wed</span></div>
@@ -19384,7 +19370,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-23">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-23">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 23 · thu</span></div>
@@ -19401,7 +19387,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-24">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-24">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 24 · fri</span></div>
@@ -19418,7 +19404,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-25" style="position: relative"><div class="route-overlay route-overlay-collapsed"><div class="flow-section-toggle route-overlay-header">route</div><div class="flow-route"><div class="route-stop"><span class="route-num">01</span><span class="route-name" contenteditable="true" spellcheck="false">Kaiser SC</span></div><div class="route-stop"><span class="route-num">02</span><span class="route-name" contenteditable="true" spellcheck="false">CVS Marguerite</span></div><div class="route-stop"><span class="route-num">03</span><span class="route-name" contenteditable="true" spellcheck="false">Verizon</span></div><div class="route-stop"><span class="route-num">04</span><span class="route-name" contenteditable="true" spellcheck="false">53 Le Mans</span></div><div class="route-stop route-stop-faded"><span class="route-num">05</span><span class="route-name" contenteditable="true" spellcheck="false">Wells Fargo</span></div><div class="route-stop"><span class="route-num">06</span><span class="route-name" contenteditable="true" spellcheck="false">Sephora</span></div><div class="route-stop route-stop-faded"><span class="route-num">07</span><span class="route-name" contenteditable="true" spellcheck="false">Best Buy</span></div><div class="route-stop route-stop-faded"><span class="route-num">08</span><span class="route-name" contenteditable="true" spellcheck="false">Apple</span></div><div class="route-stop"><span class="route-num">09</span><span class="route-name" contenteditable="true" spellcheck="false">Rockcress</span></div></div></div>
+<div class="day-block fmt22 collapsed past" data-date="2026-07-25" style="position: relative"><div class="route-overlay route-overlay-collapsed"><div class="flow-section-toggle route-overlay-header">route</div><div class="flow-route"><div class="route-stop"><span class="route-num">01</span><span class="route-name" contenteditable="true" spellcheck="false">Kaiser SC</span></div><div class="route-stop"><span class="route-num">02</span><span class="route-name" contenteditable="true" spellcheck="false">CVS Marguerite</span></div><div class="route-stop"><span class="route-num">03</span><span class="route-name" contenteditable="true" spellcheck="false">Verizon</span></div><div class="route-stop"><span class="route-num">04</span><span class="route-name" contenteditable="true" spellcheck="false">53 Le Mans</span></div><div class="route-stop route-stop-faded"><span class="route-num">05</span><span class="route-name" contenteditable="true" spellcheck="false">Wells Fargo</span></div><div class="route-stop"><span class="route-num">06</span><span class="route-name" contenteditable="true" spellcheck="false">Sephora</span></div><div class="route-stop route-stop-faded"><span class="route-num">07</span><span class="route-name" contenteditable="true" spellcheck="false">Best Buy</span></div><div class="route-stop route-stop-faded"><span class="route-num">08</span><span class="route-name" contenteditable="true" spellcheck="false">Apple</span></div><div class="route-stop"><span class="route-num">09</span><span class="route-name" contenteditable="true" spellcheck="false">Rockcress</span></div></div></div>
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 25 · sat</span></div>
@@ -19436,7 +19422,7 @@ window.__j22fnApply=run;
 
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-26">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 26 · sun</span></div>
@@ -19454,7 +19440,7 @@ window.__j22fnApply=run;
 
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-07-27">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-07-27">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 27 · mon</span></div>
@@ -19471,7 +19457,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-28">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-28">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 28 · tue</span></div>
@@ -19488,7 +19474,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-29">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-29">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 29 · wed</span></div>
@@ -19505,7 +19491,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-30">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-30">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 30 · thu</span></div>
@@ -19523,7 +19509,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-07-31">
+<div class="day-block fmt22 collapsed past" data-date="2026-07-31">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">jul 31 · fri</span></div>
@@ -19544,7 +19530,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22 pursuit-board-day" data-date="2026-08-20">
+<div class="day-block fmt22 pursuit-board-day collapsed past" data-date="2026-08-20">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 20 · thu</span></div>
@@ -19690,7 +19676,7 @@ window.__j22fnApply=run;
 
 </div>
 </div>
-</div><div class="day-block fmt22" data-date="2026-08-22">
+</div><div class="day-block fmt22 collapsed past" data-date="2026-08-22">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 22 · sat</span></div>
@@ -19710,7 +19696,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-08-23">
+<div class="day-block fmt22 collapsed past" data-date="2026-08-23">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 23 · sun</span></div>
@@ -19728,7 +19714,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-08-24">
+<div class="day-block fmt22 collapsed past" data-date="2026-08-24">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 24 · mon</span></div>
@@ -19746,7 +19732,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22" data-date="2026-08-25">
+<div class="day-block fmt22 collapsed past" data-date="2026-08-25">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 25 · tue</span></div>
@@ -19764,7 +19750,7 @@ window.__j22fnApply=run;
 </div>
 </div>
 </div>
-<div class="day-block fmt22 vision-collage-day card-style-deboss-chip" data-date="2026-08-26">
+<div class="day-block fmt22 vision-collage-day card-style-deboss-chip collapsed past" data-date="2026-08-26">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 26 · wed</span></div>
@@ -19807,7 +19793,7 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="strengths" style="--tile-photo: url(&quot;manus-storage/zone-strengths.jpg?v=soul1&quot;); grid-area: 9 / 2 / 10 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">strengths</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="plan" style="--tile-photo: url('manus-storage/zone-workflow.jpg?v=swap1'); grid-area: 9 / 3 / 10 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">plan</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
-<div class="day-block fmt22 vision-collage-day card-style-deboss-chip" data-date="2026-08-27">
+<div class="day-block fmt22 vision-collage-day card-style-deboss-chip collapsed past" data-date="2026-08-27">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">aug 27 · thu</span></div>
@@ -19905,7 +19891,7 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="align" style="--tile-photo: url('manus-storage/zone-alignment.jpg?v=align1'); grid-area: 6 / 1 / 7 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">align</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6'); grid-area: 6 / 2 / 7 / 3 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">glow up</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-smile-set.jpg?v=aligners1" style="--px: 45.3%; --py: 2.0%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-smile-set.jpg?v=aligners1"><span>smile set</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-cleanse.jpg?v=cleanse2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-cleanse.jpg?v=cleanse2"><span>cleanse</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 </div></div></div></div></div></div>
-<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-01">
+<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era collapsed past" data-date="2026-09-01">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">sep 1 · tue</span></div>
@@ -19937,7 +19923,7 @@ window.__j22fnApply=run;
 </div>
 </div></div></div></div></div>
 
-<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-02" data-baked-collage="sep02-v1">
+<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era collapsed past" data-date="2026-09-02" data-baked-collage="sep02-v1">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">sep 2 · wed</span></div>
@@ -21610,24 +21596,41 @@ function applyDateRoles() {
       const date = block.dataset.date;
       if (!date) return;
       
-      block.classList.remove('today-block', 'featured-block', 'past');
       var dateKey = String(date).replace(/-clone$/, '').replace(/-dup$/, '');
-      if (dateKey === todayStr) {
-        block.classList.add('today-block');
-      } else if (dateKey === tomorrowStr) {
-        block.classList.add('featured-block');
-      } else if (dateKey < todayStr) {
-        block.classList.add('past');
+      var want = dateKey === todayStr ? 'today-block' : dateKey === tomorrowStr ? 'featured-block' : dateKey < todayStr ? 'past' : '';
+      if (want === 'today-block') {
+        if (!block.classList.contains('today-block')) {
+          block.classList.remove('featured-block', 'past');
+          block.classList.add('today-block');
+        }
+      } else if (want === 'featured-block') {
+        if (!block.classList.contains('featured-block')) {
+          block.classList.remove('today-block', 'past');
+          block.classList.add('featured-block');
+        }
+      } else if (want === 'past') {
+        if (!block.classList.contains('past')) {
+          block.classList.remove('today-block', 'featured-block');
+          block.classList.add('past');
+        }
+      } else {
+        if (block.classList.contains('today-block') || block.classList.contains('featured-block') || block.classList.contains('past')) {
+          block.classList.remove('today-block', 'featured-block', 'past');
+        }
       }
       if (dateKey === '2026-08-20') {
-        block.classList.add('pursuit-board-day');
-        block.classList.remove('today-block');
-      } else {
+        if (!block.classList.contains('pursuit-board-day')) block.classList.add('pursuit-board-day');
+        if (block.classList.contains('today-block')) block.classList.remove('today-block');
+      } else if (block.classList.contains('pursuit-board-day')) {
         block.classList.remove('pursuit-board-day');
       }
       if (/^\d{4}-\d{2}-\d{2}$/.test(dateKey) && dateKey >= '2026-08-26') {
-        if (block.querySelector('.vision-board')) block.classList.remove('freeplace-day');
-        else block.classList.add('freeplace-day');
+        var hasVision = !!block.querySelector('.vision-board');
+        if (hasVision) {
+          if (block.classList.contains('freeplace-day')) block.classList.remove('freeplace-day');
+        } else if (!block.classList.contains('freeplace-day')) {
+          block.classList.add('freeplace-day');
+        }
       }
       // Future cards beyond tomorrow stay as plain day-block
     });
@@ -23900,7 +23903,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   
   updateProgress();
   injectDayCounts();
-  wireDayDots();
+  wireDayDots({ applyDefaults: false });
   wireSectionLabels();
   setupLongPress();
   injectRemoveInfoButtons();
@@ -24360,11 +24363,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     };
     try {
       window.__rescuePageChrome = rescuePageChrome;
-      rescuePageChrome();
     } catch(eRes){}
     const jumpTodayViewport = (block) => {
       if (!block) return;
-      try { unnestSwallowedDays(); } catch (eUn) {}
       block = document.querySelector('.day-block[data-date="' + (block.getAttribute('data-date')||'') + '"]') || block;
       block.classList.add('today-block');
       block.classList.remove('collapsed', 'past');
@@ -24383,18 +24384,13 @@ document.addEventListener('DOMContentLoaded',()=>{
       const iso = todayStr();
       let block = document.querySelector(`.day-block[data-date="${iso}"]`)
         || document.querySelector('.day-block.today-block');
-      document.documentElement.classList.remove('btm-today-first');
+      document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
       jumpTodayViewport(block);
+      window.__earlyTodayReady = true;
     };
     window.__ensureDayCard = ensureDayCard;
     try { window.__scrollToToday = scrollToToday; window.__ensureTodayCard = ensureTodayCard; } catch (e) {}
-    try { unnestSwallowedDays(); } catch (eUn) {}
     scrollToToday();
-    var laterBoot = window.requestIdleCallback || function(cb){ setTimeout(cb, 1); };
-    laterBoot(function(){
-      if (typeof applyDateRoles === 'function') { try { applyDateRoles(); } catch(e){} }
-      try { persistOpenDays(); } catch(e){}
-    });
     document.addEventListener('visibilitychange', () => { if (document.hidden) persistOpenDays(); });
     window.addEventListener('pagehide', persistOpenDays);
     // Stay aware of the real date: if it rolls over while open, keep yesterday + make today
@@ -25300,12 +25296,8 @@ setTimeout(injectFlowNodePolaroidClones, 1200);
 function reWireAllSections() {
   if (typeof wireSectionLabels === 'function') wireSectionLabels();
 }
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => setTimeout(reWireAllSections, 500));
-} else {
-  setTimeout(reWireAllSections, 500);
-}
-setTimeout(reWireAllSections, 1500);
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reWireAllSections);
+else reWireAllSections();
 </script>
 <script>
 // One-time: clear stale section-collapsed state for May 5
@@ -25327,12 +25319,8 @@ function forceRewireAllSections() {
     wireSectionLabels();
   }
 }
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => setTimeout(forceRewireAllSections, 800));
-} else {
-  setTimeout(forceRewireAllSections, 800);
-}
-setTimeout(forceRewireAllSections, 2000);
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', forceRewireAllSections);
+else forceRewireAllSections();
 </script>
 <script>
 function attachDirectSectionToggle() {
@@ -25390,12 +25378,8 @@ function attachDirectSectionToggle() {
   });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => setTimeout(attachDirectSectionToggle, 1000));
-} else {
-  setTimeout(attachDirectSectionToggle, 1000);
-}
-setTimeout(attachDirectSectionToggle, 2500);
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attachDirectSectionToggle);
+else attachDirectSectionToggle();
 </script>
 <script>
 // One-time migration: force-check items in localStorage that should be checked from file
@@ -29094,8 +29078,6 @@ function handleMay18No(btn) {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootAll);
   else bootAll();
-  var mo = new MutationObserver(function() { bootAll(); });
-  mo.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
 
@@ -29147,32 +29129,6 @@ function handleMay18No(btn) {
   }
   function init() {
     organize();
-    // Re-organize after may22 sections build (handles late insertion)
-    setTimeout(organize, 500);
-    setTimeout(organize, 1200);
-    setTimeout(organize, 2500);
-    // Watch for class changes on sections (collapse/expand)
-    var block = getDayBlock();
-    if (block) {
-      var mo = new MutationObserver(function(muts) {
-        var shouldOrg = false;
-        muts.forEach(function(m) {
-          if (m.type === 'attributes' && m.attributeName === 'class') {
-            shouldOrg = true;
-          }
-          if (m.type === 'childList' && m.addedNodes.length) {
-            for (var i = 0; i < m.addedNodes.length; i++) {
-              var n = m.addedNodes[i];
-              if (n.nodeType === 1 && (n.matches && (n.matches('.may22-section') || n.matches('.onetwothree-section')))) {
-                shouldOrg = true; break;
-              }
-            }
-          }
-        });
-        if (shouldOrg) organize();
-      });
-      mo.observe(block, { attributes: true, attributeFilter: ['class'], subtree: true, childList: true });
-    }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
@@ -29229,10 +29185,7 @@ function handleMay18No(btn) {
     if(chk.checked) o[k]=1; else delete o[k];
     save(o);
   }, true);
-  function init(){ apply();
-    var mo=new MutationObserver(function(){ clearTimeout(window.__sdT); window.__sdT=setTimeout(apply,300); });
-    mo.observe(document.body,{childList:true,subtree:true});
-  }
+  function init(){ apply(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
@@ -29284,10 +29237,7 @@ function handleMay18No(btn) {
       });
     });
   }
-  function init(){ apply();
-    var mo=new MutationObserver(function(){ clearTimeout(window.__secT); window.__secT=setTimeout(apply,400); });
-    mo.observe(document.body,{childList:true,subtree:true});
-  }
+  function init(){ apply(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
@@ -29376,10 +29326,7 @@ function handleMay18No(btn) {
     var key=day+'|'+hdrOf(sec); var o=ckLoad();
     if(b.classList.contains('checked')) o[key]=1; else delete o[key]; ckSave(o);
   }, true);
-  function init(){ cards(); setTimeout(cards,700); setTimeout(cards,1800); setTimeout(cards,3500);
-    var mo=new MutationObserver(function(){ clearTimeout(window.__cdT); window.__cdT=setTimeout(cards,450); });
-    mo.observe(document.body,{childList:true,subtree:true});
-  }
+  function init(){ cards(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
@@ -29439,10 +29386,7 @@ function handleMay18No(btn) {
       }
     });
   }
-  function init(){ setup(); setTimeout(setup,1000); setTimeout(setup,2500); setTimeout(setup,4500);
-    var mo=new MutationObserver(function(){ clearTimeout(window.__coT); window.__coT=setTimeout(setup,600); });
-    mo.observe(document.body,{childList:true,subtree:true});
-  }
+  function init(){ setup(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
@@ -31335,7 +31279,7 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 
   // --- Jump to Today ---
   if (jumpBtn) jumpBtn.addEventListener('click', function() {
-    document.documentElement.classList.remove('btm-today-first');
+    document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
     try { if (window.__unnestSwallowedDays) window.__unnestSwallowedDays(); } catch (eU) {}
     if (typeof window.__scrollToToday === 'function') {
       try { window.__scrollToToday(); } catch (e) {}
@@ -57457,7 +57401,7 @@ html body .day-block:is(.vision-collage-day, .overview-era-day).overview-mode-ov
 }
 </style>
 
-<script id="collage-nest-guard">/*collage-nest-guard*/(function(){function run(){try{if(window.__unnestSwallowedDays)window.__unnestSwallowedDays();}catch(e){}try{if(window.__clearArchivedRemovalsOnHistoryDays)window.__clearArchivedRemovalsOnHistoryDays();}catch(e){}try{if(window.__repairSwallowedVisionTiles){document.querySelectorAll('.day-block[data-date]').forEach(function(b){window.__repairSwallowedVisionTiles(b);});}}catch(e){}try{var a=document.querySelector('.day-block[data-date="2026-08-30"]');if(a&&window.__restoreAug30HistorySections)window.__restoreAug30HistorySections(a);}catch(e){}}setTimeout(run,0);setTimeout(run,180);})();</script>
+<script id="collage-nest-guard">/* no load unnest / repair retries */</script>
 <style id="hide-vision-zoom-out">
 html body .vision-zoom-out,
 html body .day-block .vision-zoom-out,
