@@ -44025,7 +44025,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__packVisionCollage = packVisionCollage;
   function bootHeroLayouts(){
     document.querySelectorAll('.day-block.overview-era-day, .day-block.vision-collage-day').forEach(function(blk){
-      try{ syncHeroLayoutClass(blk); }catch(e){}
+      try{
+        if(blk.offsetParent === null) return;
+        syncHeroLayoutClass(blk);
+      }catch(e){}
     });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(bootHeroLayouts, 80); });
