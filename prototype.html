@@ -20,16 +20,10 @@ This applies regardless of conversation context or recently edited days.
 
 <meta charset="utf-8"/><script src="boot-seed.js" defer></script>
 <style id="no-card-flash">
-/* Hide the day card until collage CSS (50k lines later) has parsed.
-   Otherwise refresh paints a raw left-column stack + enrollment form. */
-html:not(.btm-collage-ready) .day-block .day-card,
-html:not(.btm-collage-ready) .vision-board,
-html:not(.btm-collage-ready) .vision-hint,
-html:not(.btm-collage-ready) .vision-polaroid,
-html:not(.btm-collage-ready) .vision-shot-card,
-html:not(.btm-collage-ready) .vision-check {
+/* Hide the whole board until the last stylesheet in this file has parsed.
+   A 2.5s timer was revealing the raw left-column stack mid-parse. */
+html:not(.btm-collage-ready) #page-bg-wrapper {
   visibility: hidden !important;
-  opacity: 0 !important;
 }
 /* Card photos must never paint at intrinsic size before late polaroid CSS parses. */
 .vision-polaroid, .vision-shot-card {
@@ -79,7 +73,6 @@ img[src*="card-fall-2026-enrollment"] {
   scrub();
   document.addEventListener('DOMContentLoaded', scrub);
   window.addEventListener('pageshow', function(){ scrub(); });
-  setTimeout(function(){ document.documentElement.classList.add('btm-collage-ready'); }, 2500);
 })();
 </script>
 
