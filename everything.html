@@ -19,14 +19,25 @@ This applies regardless of conversation context or recently edited days.
 <head>
 
 <meta charset="utf-8"/><script src="boot-seed.js" defer></script>
-<script>document.documentElement.classList.add('btm-today-first');</script>
 <style id="btm-today-first">
-html.btm-today-first #page-bg-wrapper > header,
-html.btm-today-first .progress-wrap,
-html.btm-today-first .schedule-header,
-html.btm-today-first .day-block:not(.today-block){display:none !important}
+/* Do not hide days on load — that flashed the mountain / April / today in a loop. */
 </style>
 <script>document.documentElement.classList.add('btm-collage-ready');</script>
+<script>
+window.__btmHtmlSaveArmed = false;
+window.__armBtmHtmlSave = function(){ /* autosave writes HTML and snaps every open page back to April */ };
+window.__isLiveDayBlock = function(blk){
+  if(!blk) return false;
+  try {
+    if(document.body && document.body.classList.contains('prototypes-page'))
+      return blk.getAttribute('data-date') === '2026-08-30';
+  } catch(e){}
+  if(blk.classList.contains('today-block')) return true;
+  if(blk.getAttribute('data-btm-hydrated') === '1') return true;
+  return false;
+};
+</script>
+
 <style id="no-card-flash">
 /* Never hide #page-bg-wrapper — that stuck both pages on the mountain. */
 html body .day-block.vision-collage-day .vision-board,
@@ -122,10 +133,10 @@ img[src*="card-fall-2026-enrollment"] {
 <meta http-equiv="Expires" content="0"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>everything · diana's board</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=DM+Mono:wght@300;400&amp;family=Amiri:ital,wght@0,400;0,700;1,400&amp;family=Amiri+Quran&amp;family=Aref+Ruqaa:wght@400;700&amp;family=Aref+Ruqaa+Ink:wght@400;700&amp;family=Vibes&amp;family=Reem+Kufi:wght@400;500;700&amp;family=Reem+Kufi+Fun:wght@400;500;700&amp;family=Markazi+Text:wght@400;500&amp;family=Prata&amp;family=Italiana&amp;family=Cormorant+Upright:wght@300;400;500&amp;family=Whisper&amp;family=Reenie+Beanie&amp;family=Spectral:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
-<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400&amp;family=Cinzel&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
-<link href="https://fonts.googleapis.com/css2?family=Italiana&amp;family=Marcellus&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=DM+Mono:wght@300;400&amp;family=Amiri:ital,wght@0,400;0,700;1,400&amp;family=Amiri+Quran&amp;family=Aref+Ruqaa:wght@400;700&amp;family=Aref+Ruqaa+Ink:wght@400;700&amp;family=Vibes&amp;family=Reem+Kufi:wght@400;500;700&amp;family=Reem+Kufi+Fun:wght@400;500;700&amp;family=Markazi+Text:wght@400;500&amp;family=Prata&amp;family=Italiana&amp;family=Cormorant+Upright:wght@300;400;500&amp;family=Whisper&amp;family=Reenie+Beanie&amp;family=Spectral:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400&amp;family=Cinzel&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&amp;family=Marcellus&amp;display=swap" rel="stylesheet"/>
 <style>
   :root { --cream:#F5F0E8; --sage:#8A9E85; --dark:#2A2A25; --warm:#C4A882; --dusty:#B5A99A; --light-sage:#D4DDD1; --accent:#7A8C6E; }
   html { background:#E7E0D2; }
@@ -9390,7 +9401,6 @@ html body .day-block.collapsed .vision-hero-six {
   window.__layoutVisionBoard = layoutAll;
   function boot(){
     layoutAll();
-    [400, 1000, 2200, 4000].forEach(function(ms){ setTimeout(layoutAll, ms); });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -12973,7 +12983,6 @@ var busy=false;
 function run(){ if(busy) return; busy=true; try{ apply(); }catch(e){} busy=false; }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
 window.addEventListener('load',run);
-[400,1500].forEach(function(ms){ setTimeout(run,ms); });
 if(window.MutationObserver){ var tm=null; new MutationObserver(function(){ if(busy) return; clearTimeout(tm); tm=setTimeout(run,300); }).observe(document.body,{childList:true,subtree:true}); }
 window.__j22fnApply=run;
 })();
@@ -13472,7 +13481,6 @@ window.__j22fnApply=run;
   function go(){ try{ normalizeSecCards(); }catch(e){} }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', go);
   else go();
-  [300,1000,2500].forEach(function(ms){ setTimeout(go, ms); });
 })();
 </script>
 <script>
@@ -16593,7 +16601,6 @@ window.__j22fnApply=run;
       setPhoto('.vision-tile[data-focus="plan"], .pursuit-zone[data-zone="plan"]', PL_IMG);
     }
     applySectionPhotoSwap();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySectionPhotoSwap, ms); });
     if(!localStorage.getItem('btm_swap_fs_env_wf_plan_v1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16618,7 +16625,6 @@ window.__j22fnApply=run;
       });
     }
     applyPepperDiploma();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyPepperDiploma, ms); });
   }catch(e){}
 
   try{
@@ -16629,7 +16635,6 @@ window.__j22fnApply=run;
       });
     }
     applyArtSciencePhoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyArtSciencePhoto, ms); });
   }catch(e){}
 
   try{
@@ -16640,7 +16645,6 @@ window.__j22fnApply=run;
       });
     }
     applySelfEsteemPhoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySelfEsteemPhoto, ms); });
   }catch(e){}
 
 
@@ -16654,7 +16658,6 @@ window.__j22fnApply=run;
       });
     }
     applyCuratedLifestylePhoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyCuratedLifestylePhoto, ms); });
     if(!localStorage.getItem('btm_curated_lifestyle_photo_summer1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16683,7 +16686,6 @@ window.__j22fnApply=run;
     }
     applyAthleticPhoto();
     stripObsessedQuoteSep1();
-    [80, 400, 1200, 3000].forEach(function(ms){ setTimeout(function(){ applyAthleticPhoto(); stripObsessedQuoteSep1(); }, ms); });
     if(!localStorage.getItem('btm_athletic_photo_color2')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16714,7 +16716,6 @@ window.__j22fnApply=run;
     }
     applyDarknessBattlePhoto();
     window.__rewriteDarknessPhotosNow = applyDarknessBattlePhoto;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyDarknessBattlePhoto, ms); });
     if(!localStorage.getItem('btm_darkness_photo_void2')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16754,7 +16755,6 @@ window.__j22fnApply=run;
     }
     applySoulPhoto();
     window.__rewriteSoulPhotosNow = applySoulPhoto;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySoulPhoto, ms); });
     ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
       var raw=localStorage.getItem(k); if(!raw) return;
       var next=raw.replace(/manus-storage\/zone-soul(?:-[a-z0-9-]+)?\.jpg(\?v=[^"'\\s)]+)?/g, SOUL_PHOTO);
@@ -19781,9 +19781,9 @@ window.__j22fnApply=run;
 <div class="vision-tile-photo"></div>
 
 <h3 class="vision-tile-title" data-cursor-ref="e11706">train</h3>
-<div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
+<div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
 <article class="vision-tile" data-focus="glow" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">glow up</h3><div class="vision-tile-details"><div class="vision-polaroid" data-shot-src="manus-storage/pursuit-skincare_e30839d6.jpg" style="--px: 8%; --py: 16%;"><img alt="" src="manus-storage/pursuit-skincare_e30839d6.jpg"><span>vanity</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid" data-shot-src="manus-storage/card-reformer-pilates-6-00.jpg" style="--px: 50.7%; --py: 2.0%; --pw: 136px; width: 136px;"><img alt="" src="manus-storage/card-reformer-pilates-6-00.jpg"><span>reformer pilates · 6:00</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 35.3%; --py: 2.0%; --pw: 172px; width: 172px;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-smile-set.jpg?v=aligners1" style="--px: 45%; --py: 2%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-smile-set.jpg?v=aligners1"><span>smile set</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-cleanse.jpg?v=cleanse2" style="--px: 6%; --py: 40%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-cleanse.jpg?v=cleanse2"><span>cleanse</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 3 !important;" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 19.3%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px: 34.8%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig"><span>Committee check-in</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px: 65.8%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-aera.jpg" style="--px: 34.8%; --py: 51.7%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-aera.jpg"><span>AERA</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-psi-chi.jpg?v=v2" style="--px: 50.3%; --py: 51.7%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-psi-chi.jpg?v=v2"><span>Psi Chi</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 3 !important;" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 19.3%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px: 34.8%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig"><span>Committee check-in</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px: 65.8%; --py: 2.0%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-aera.jpg" style="--px: 34.8%; --py: 51.7%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-aera.jpg"><span>AERA</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-psi-chi.jpg?v=v2" style="--px: 50.3%; --py: 51.7%; --pw: 200px; width: 200px;"><img alt="" src="manus-storage/card-psi-chi.jpg?v=v2"><span>Psi Chi</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label></div></article>
 <article class="vision-tile" data-focus="ambition" style="--tile-photo: url(&quot;manus-storage/zone-ambition-v4.jpg?v=glass1&quot;); grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">ambition</h3><div class="vision-tile-details"><div class="vision-polaroid" data-shot-src="manus-storage/pursuit-elevate-betty.jpg?v=1" style="--px: 8%; --py: 16%;"><img alt="" src="manus-storage/pursuit-elevate-betty.jpg?v=1"><span>Elevate</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="gsa" style="--tile-photo: url(&quot;manus-storage/handshake-pepperdine-gsa.jpg&quot;); grid-area: 3 / 1 / 4 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">graduate student association</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="committee" style="--tile-photo: url(&quot;manus-storage/pepperdine-committee-checkin.jpg?v=orig&quot;); grid-area: 3 / 2 / 4 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">committee check-in</h3><div class="vision-tile-details"></div></article>
@@ -19831,8 +19831,8 @@ window.__j22fnApply=run;
 <h3 class="vision-tile-title" data-cursor-ref="e17953" data-carve="committee check-in">committee check-in</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17955" data-carve="train">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="achieve">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig"><span>Committee check-in</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e17955" data-carve="train">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="achieve">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig"><span>Committee check-in</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label></div></article>
 </div></div></div></div></div></div>
 <div class="day-block fmt22 vision-collage-day card-style-deboss-chip make-flow-day collapsed past" data-date="2026-08-28">
 <div class="day-dot"></div>
@@ -19853,8 +19853,8 @@ window.__j22fnApply=run;
 <h3 class="vision-tile-title" data-cursor-ref="e11716">pursuits</h3>
 <div class="vision-tile-details"></div>
 </article>
-<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig"><span>Committee check-in</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
+<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/pepperdine-committee-checkin.jpg?v=orig" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/pepperdine-committee-checkin.jpg?v=orig"><span>Committee check-in</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label></div></article>
 </div></div></div></div></div></div>
 <div class="day-block fmt22 vision-collage-day card-style-deboss-chip make-flow-day collapsed past" data-date="2026-08-29">
 <div class="day-dot"></div>
@@ -19870,9 +19870,9 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero vision-hero-duo"><article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11720">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
+<div class="vision-hero vision-hero-duo"><article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e11720">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
 <article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e22579">surrender yourself to Allah ﷻ</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-sabr.jpg?v=2" style="--px: 3.5%; --py: 5.0%;"><img alt="" src="manus-storage/card-sabr.jpg?v=2"><span>sabr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-shukr.jpg?v=2" style="--px: 72.0%; --py: 5.0%;"><img alt="" src="manus-storage/card-shukr.jpg?v=2"><span>shukr</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 8%; --py: 18%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div><em class="vision-habit-badge">daily</em><div class="vision-habit-status">check to complete</div></div></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 2 / 2 / 3 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label></div></article>
 </div></div></div></div></div></div>
 <div class="day-block fmt22 vision-collage-day card-style-deboss-chip make-flow-day collapsed past" data-date="2026-08-30">
 <div class="day-dot"></div>
@@ -19889,7 +19889,7 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<!--AUG30-COLLAGE-FIXED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<!--AUG30-COLLAGE-FIXED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card vision-habit-card" data-shot-src="manus-storage/card-induction.jpg?v=rl2" data-habit-id="induction" data-habit-cadence="daily" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-induction.jpg?v=rl2"><span class="vision-habit-title">induction</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="spirit" style="--tile-photo: url('manus-storage/zone-spirit.jpg?v=sp1'); grid-area: 1 / 2 / 2 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">spirit</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="art-science" style="--tile-photo: url('manus-storage/zone-art-science.jpg?v=as1'); grid-area: 2 / 2 / 3 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">art | science</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="self-esteem" style="--tile-photo: url('manus-storage/zone-self-esteem.jpg?v=se1'); grid-area: 2 / 3 / 3 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">self-esteem</h3><div class="vision-tile-details"></div></article>
@@ -19901,7 +19901,7 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="quantum" style="--tile-photo: url('manus-storage/zone-quantum-v15.jpg?v=spectacular1'); grid-area: 4 / 3 / 5 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">quantum</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="become" style="--tile-photo: url('manus-storage/zone-envision.jpg?v=swap1'); grid-area: 5 / 1 / 6 / 2 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title">become</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-dr-betty-s-ea.jpg" style="--px: 12.5%; --py: 2.0%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-dr-betty-s-ea.jpg"><span>Dr Betty's EA</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-research-proposal.jpg" style="--px: 38.0%; --py: 2.0%; --pw: 187px; width: 187px;"><img alt="" src="manus-storage/card-research-proposal.jpg"><span>research proposal</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-anthropic.jpg" style="--px: 63.0%; --py: 2.0%; --pw: 187px; width: 187px;"><img alt="" src="manus-storage/card-anthropic.jpg"><span>Anthropic</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="navigate" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); grid-area: 5 / 2 / 6 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">I navigate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 5 / 3 / 6 / 4 !important;" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px:38%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px:63.5%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-handshake.jpg" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-handshake.jpg"><span>Handshake</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); grid-area: 5 / 3 / 6 / 4 !important;" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v3" style="--px:38%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v3"><span>tuition</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/handshake-pepperdine-gsa.jpg" style="--px:63.5%;--py:2%;--pw:126px;width:126px;"><img alt="" src="manus-storage/handshake-pepperdine-gsa.jpg"><span>Graduate Student Association · Top Applicant</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-handshake.jpg" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-handshake.jpg"><span>Handshake</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship opportunities</span></label></div></article>
 <article class="vision-tile" data-focus="align" style="--tile-photo: url('manus-storage/zone-alignment.jpg?v=align1'); grid-area: 6 / 1 / 7 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">align</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6'); grid-area: 6 / 2 / 7 / 3 !important;" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title">glow up</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-smile-set.jpg?v=aligners1" style="--px: 45.3%; --py: 2.0%; --pw: 148px; width: 148px;"><img alt="" src="manus-storage/card-smile-set.jpg?v=aligners1"><span>smile set</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-cleanse.jpg?v=cleanse2" style="--px: 6%; --py: 12%;"><img alt="" src="manus-storage/card-cleanse.jpg?v=cleanse2"><span>cleanse</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 </div></div></div></div></div></div>
@@ -19920,20 +19920,20 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero"><article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --title-ink: rgba(210,186,150,0.94); --title-stroke: rgba(20,10,4,0.55); --title-shade: rgba(6,3,1,0.9); --title-shade-deep: rgba(6,3,1,0.55); --title-lip: rgba(255,246,230,0.55); --title-lip-soft: rgba(255,236,214,0.28); --title-well: rgba(0,0,0,0.45); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e20695" data-carve="to become">to become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins.jpg?v=sec1&quot;); --photo-ar: 1.333; --zoom-ar: 1.333; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to win">to win</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to repeat 10,000 times">to repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="aim-above-the-mark" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to aim above the mark">to aim above the mark</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=chess1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to execute">to execute</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="curate" style="--tile-photo: url(&quot;manus-storage/zone-to-curate-select.jpg?v=select1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to curate">to curate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="detach" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-detach-silhouette-woman.jpg?v=woman1&quot;); grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to detach">to detach</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="travel" style="--tile-photo: url(&quot;manus-storage/zone-start-over-positano.jpg?v=travel1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to travel">to travel</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="tune-into" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to tune into">to tune into</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="self-actualize" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to self-actualize">to self-actualize</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="seize-opportunities" style="--tile-photo: url(&quot;manus-storage/zone-seize-opportunities.jpg?v=seize4&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 1 / 7 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to seize opportunities">to seize opportunities</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-litigate" style="--tile-photo: url(&quot;manus-storage/zone-to-litigate.jpg?v=court1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 2 / 7 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to litigate">to litigate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to recoup every dollar">to recoup every dollar</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="feel-it-into-being" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 7 / 3 / 8 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel it into being">to feel it into being</h3><div class="vision-tile-details"></div></article>
+<div class="vision-hero"><article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --title-ink: rgba(210,186,150,0.94); --title-stroke: rgba(20,10,4,0.55); --title-shade: rgba(6,3,1,0.9); --title-shade-deep: rgba(6,3,1,0.55); --title-lip: rgba(255,246,230,0.55); --title-lip-soft: rgba(255,236,214,0.28); --title-well: rgba(0,0,0,0.45); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e20695" data-carve="I become">I become</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins.jpg?v=sec1&quot;); --photo-ar: 1.333; --zoom-ar: 1.333; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I win">I win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I repeat 10,000 times">I repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="aim-above-the-mark" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I aim above the mark">I aim above the mark</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=chess1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I execute">I execute</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="curate" style="--tile-photo: url(&quot;manus-storage/zone-to-curate-select.jpg?v=select1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I curate">I curate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="detach" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-detach-silhouette-woman.jpg?v=woman1&quot;); grid-area: 6 / 2 / 7 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I detach">I detach</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="travel" style="--tile-photo: url(&quot;manus-storage/zone-start-over-positano.jpg?v=travel1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I travel">I travel</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="tune-into" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 6 / 1 / 7 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I tune into">I tune into</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="self-actualize" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I self-actualize">I self-actualize</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="seize-opportunities" style="--tile-photo: url(&quot;manus-storage/zone-seize-opportunities.jpg?v=seize4&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I seize opportunities">I seize opportunities</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-litigate" style="--tile-photo: url(&quot;manus-storage/zone-to-litigate.jpg?v=court1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I litigate">I litigate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I recoup every dollar">I recoup every dollar</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="feel-it-into-being" style="--tile-photo: none; --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 3 / 8 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I feel it into being">I feel it into being</h3><div class="vision-tile-details"></div></article>
 </div>
 </div></div></div></div></div>
 
@@ -19952,16 +19952,16 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="to-persevere" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-to-persevere-continue.jpg?v=go1&quot;); grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to persevere" data-cursor-ref="e26731">to persevere</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to become" data-cursor-ref="e24011">to become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to glow up" data-cursor-ref="e24012">to glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="luscious-hair" style="--sub-photo: url(&quot;manus-storage/card-luscious-hair.jpg?v=glow4&quot;); --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
-<article class="vision-tile" data-focus="navigate" style="--tile-photo: url(&quot;manus-storage/zone-plan.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to navigate" data-cursor-ref="e24017">to navigate</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.6123046875; --zoom-ar: 0.6123046875; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="to fight" data-cursor-ref="e24689">to fight</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666015625; --zoom-ar: 0.666015625; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="3" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to train" data-cursor-ref="e24013">to train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to surrender yourself to Allah ﷻ" data-cursor-ref="e24016">to surrender yourself to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to recoup every dollar" data-cursor-ref="e26742">to recoup every dollar</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile horizon-armed" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="8" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to achieve">to achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship opportunities</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="feel-it-into-being" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel it into being">to feel it into being</h3><div class="vision-tile-details"></div></article>
+<!--SEP02-BAKED-V1--><div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="to-persevere" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: url(&quot;manus-storage/zone-to-persevere-continue.jpg?v=go1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I persevere" data-cursor-ref="e26731">I persevere</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I become" data-cursor-ref="e24011">I become</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 5 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I glow up" data-cursor-ref="e24012">I glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="luscious-hair" style="--sub-photo: url(&quot;manus-storage/card-luscious-hair.jpg?v=glow4&quot;); --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
+<article class="vision-tile" data-focus="navigate" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 2 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I navigate" data-cursor-ref="e24017">I navigate</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="audacity" style="--photo-ar: 0.6123046875; --zoom-ar: 0.6123046875; --tile-photo: url(&quot;manus-storage/zone-audacity.jpg?v=finger1&quot;); grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote vision-tile-kicker">audacity</p><h3 class="vision-tile-title" data-carve="I fight" data-cursor-ref="e24689">I fight</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666015625; --zoom-ar: 0.666015625; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="2" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I train" data-cursor-ref="e24013">I train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I surrender myself" data-cursor-ref="e24016">I surrender myself</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I recoup every dollar" data-cursor-ref="e26742">I recoup every dollar</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile horizon-armed" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 6 / 1 / 8 / 4 !important;" data-content-score="8" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I achieve">I achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-tuition.jpg?v=v4" style="--px: 6%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-tuition.jpg?v=v4"><span>tuition payment</span><div class="vision-pol-resize" title="drag to resize"></div></div><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship opportunities</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="feel-it-into-being" style="--photo-ar: 1.5; --zoom-ar: 1.5; --tile-photo: none; grid-area: 5 / 3 / 6 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I feel it into being">I feel it into being</h3><div class="vision-tile-details"></div></article>
 </div>
 </div></div></div></div></div>
 
@@ -19980,15 +19980,13 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero"><article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url(&quot;manus-storage/zone-pepperdine-malibu.jpg?v=campus2&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to achieve" data-cursor-ref="e27651">to achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship opportunities</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to surrender yourself to Allah ﷻ" data-cursor-ref="e27652">to surrender yourself to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to become" data-cursor-ref="e27653">to become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 3 / 3 / 4 / 4 !important;" data-content-score="3" data-card-weight="2"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to train" data-cursor-ref="e27654">to train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-continue.jpg?v=go1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to persevere" data-cursor-ref="e27655">to persevere</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to glow up" data-cursor-ref="e27656">to glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="luscious-hair" style="--sub-photo: url(&quot;manus-storage/card-luscious-hair.jpg?v=glow4&quot;); --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
-<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to recoup every dollar" data-cursor-ref="e27657">to recoup every dollar</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="resonance" style="--tile-photo: url(&quot;manus-storage/zone-resonance.jpg?v=res1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 2 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to resonate" data-cursor-ref="e27658">to resonate</h3><div class="vision-tile-details"></div></article>
-</div></div></div></div>
+<div class="vision-hero"><article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-pepperdine-malibu.jpg?v=campus2'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I achieve" data-cursor-ref="e27651">I achieve</h3><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship opportunities</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I surrender myself" data-cursor-ref="e27652">I surrender myself</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic.jpg?v=color2'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 3 / 2 / 4 / 4 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I train" data-cursor-ref="e27654">I train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
+<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-continue.jpg?v=go1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I persevere" data-cursor-ref="e27655">I persevere</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I glow up" data-cursor-ref="e27656">I glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="luscious-hair" style="--sub-photo: url(&quot;manus-storage/card-luscious-hair.jpg?v=glow4&quot;); --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article><article class="vision-subsection" data-sub="glass-skin" style="--sub-photo: url(&quot;manus-storage/card-glass-skin.jpg?v=glow4&quot;); --sx: 2%; --sy: 2%; --sw: 20%; --sr: -2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">glass skin</h4></article><article class="vision-subsection" data-sub="aligned-teeth" style="--sub-photo: url(&quot;manus-storage/card-aligned-teeth.jpg?v=glow4&quot;); --sx: 2%; --sy: 58%; --sw: 20%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">aligned teeth</h4></article><article class="vision-subsection" data-sub="facial-tone" style="--sub-photo: url(&quot;manus-storage/card-facial-tone.jpg?v=glow4&quot;); --sx: 78%; --sy: 58%; --sw: 20%; --sr: -2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">facial tone</h4></article></div></article>
+<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=refund1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I recoup every dollar" data-cursor-ref="e27657">I recoup every dollar</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon</span></label></div></article>
+</div></div></div></div></div></div>
 
 <div class="day-block" data-date="doha">
 <div class="day-dot"></div>
@@ -23669,6 +23667,12 @@ function wireDayDots(opts) {
       if (!block) return;
       block.classList.toggle('collapsed');
       refreshPursuitBoardLayout(block);
+      if (!block.classList.contains('collapsed')) {
+        try {
+          block.setAttribute('data-btm-hydrated', '1');
+          if (typeof window.__bootOverviewDay === 'function') window.__bootOverviewDay(block);
+        } catch (eHydra) {}
+      }
       // Persist
       try {
         const dateStr = block.dataset.date || block.querySelector('.day-date')?.textContent || '';
@@ -23763,6 +23767,12 @@ function wireDayDots(opts) {
       if (!block) return;
       block.classList.toggle('collapsed');
       refreshPursuitBoardLayout(block);
+      if (!block.classList.contains('collapsed')) {
+        try {
+          block.setAttribute('data-btm-hydrated', '1');
+          if (typeof window.__bootOverviewDay === 'function') window.__bootOverviewDay(block);
+        } catch (eHydra) {}
+      }
       try {
         const dateStr = block.dataset.date || block.querySelector('.day-date')?.textContent || '';
         const collapsedSet = new Set(JSON.parse(localStorage.getItem('collapsed-days') || '[]'));
@@ -23832,8 +23842,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   } catch(e) {}
   
-  // Restore full edit-mode structure BEFORE loadState (overrides initial HTML if user has edits)
-  loadFullStructure();
+  // Do not rewrite April–July innerHTML on load — that snaps the viewport back off today.
   
   loadState();
   
@@ -24352,40 +24361,34 @@ document.addEventListener('DOMContentLoaded',()=>{
     try {
       window.__rescuePageChrome = rescuePageChrome;
       rescuePageChrome();
-      setInterval(rescuePageChrome, 1500);
     } catch(eRes){}
     const jumpTodayViewport = (block) => {
       if (!block) return;
+      try { unnestSwallowedDays(); } catch (eUn) {}
+      block = document.querySelector('.day-block[data-date="' + (block.getAttribute('data-date')||'') + '"]') || block;
       block.classList.add('today-block');
       block.classList.remove('collapsed', 'past');
       document.querySelectorAll('.day-block.today-block').forEach(function(b){
         if (b !== block) b.classList.remove('today-block');
       });
       try { block.scrollIntoView({ behavior: 'auto', block: 'start' }); } catch (e) {}
-      try { window.scrollTo(0, Math.max(0, block.getBoundingClientRect().top + window.scrollY - 12)); } catch(e){}
+      try {
+        var y = Math.max(0, block.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop || 0) - 12);
+        document.documentElement.scrollTop = y;
+        if (document.body) document.body.scrollTop = y;
+        window.scrollTo(0, y);
+      } catch(e){}
     };
     const scrollToToday = () => {
       const iso = todayStr();
       let block = document.querySelector(`.day-block[data-date="${iso}"]`)
         || document.querySelector('.day-block.today-block');
-      if (!block) {
-        try { ensureTodayCard(); } catch(e){}
-        block = document.querySelector(`.day-block[data-date="${iso}"]`)
-          || document.querySelector('.day-block.today-block');
-      }
+      document.documentElement.classList.remove('btm-today-first');
       jumpTodayViewport(block);
-      if (!block) return;
-      requestAnimationFrame(function(){ jumpTodayViewport(block); });
-      var later = window.requestIdleCallback || function(cb){ setTimeout(cb, 1); };
-      later(function(){
-        try { ensureTodayCard(); } catch(e){}
-        try { placeDatedBeforeOffRail(); } catch(e){}
-        try { rescuePageChrome(); } catch(e){}
-        jumpTodayViewport(document.querySelector(`.day-block[data-date="${iso}"]`) || block);
-      });
     };
     window.__ensureDayCard = ensureDayCard;
     try { window.__scrollToToday = scrollToToday; window.__ensureTodayCard = ensureTodayCard; } catch (e) {}
+    try { unnestSwallowedDays(); } catch (eUn) {}
     scrollToToday();
     var laterBoot = window.requestIdleCallback || function(cb){ setTimeout(cb, 1); };
     laterBoot(function(){
@@ -29226,7 +29229,7 @@ function handleMay18No(btn) {
     if(chk.checked) o[k]=1; else delete o[k];
     save(o);
   }, true);
-  function init(){ apply(); setTimeout(apply,400); setTimeout(apply,1200); setTimeout(apply,2500);
+  function init(){ apply();
     var mo=new MutationObserver(function(){ clearTimeout(window.__sdT); window.__sdT=setTimeout(apply,300); });
     mo.observe(document.body,{childList:true,subtree:true});
   }
@@ -29281,7 +29284,7 @@ function handleMay18No(btn) {
       });
     });
   }
-  function init(){ apply(); setTimeout(apply,500); setTimeout(apply,1500); setTimeout(apply,3000);
+  function init(){ apply();
     var mo=new MutationObserver(function(){ clearTimeout(window.__secT); window.__secT=setTimeout(apply,400); });
     mo.observe(document.body,{childList:true,subtree:true});
   }
@@ -30465,7 +30468,7 @@ html body .day-block[data-date="2026-08-20"] .task-count-badge {
     });
     if(changed) save(o);
   }
-  function init(){ apply(); setTimeout(apply,800); setTimeout(apply,2500);
+  function init(){ apply();
     var mo=new MutationObserver(function(){ clearTimeout(window.__ccT2); window.__ccT2=setTimeout(apply,500); });
     mo.observe(document.body,{childList:true,subtree:true});
   }
@@ -31332,6 +31335,8 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 
   // --- Jump to Today ---
   if (jumpBtn) jumpBtn.addEventListener('click', function() {
+    document.documentElement.classList.remove('btm-today-first');
+    try { if (window.__unnestSwallowedDays) window.__unnestSwallowedDays(); } catch (eU) {}
     if (typeof window.__scrollToToday === 'function') {
       try { window.__scrollToToday(); } catch (e) {}
     }
@@ -35598,7 +35603,6 @@ window.__refreshPinnedAgenda = function(){};
   window.__ensureGsepRetreat = ensure;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(ensure, 300); });
   else setTimeout(ensure, 300);
-  [800, 1600, 2800, 4500, 6000, 9000, 12000].forEach(function(ms){ setTimeout(ensure, ms); });
   setInterval(ensure, 4000);
 })();
 </script>
@@ -35817,7 +35821,6 @@ window.__refreshPinnedAgenda = function(){};
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(wireAll, 200); });
   else setTimeout(wireAll, 200);
-  [600, 1200, 2500, 4000].forEach(function(ms){ setTimeout(wireAll, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(wireAll, 350); }).observe(document.body,{childList:true,subtree:true});
@@ -36344,7 +36347,6 @@ window.__refreshPinnedAgenda = function(){};
   }
   window.__flowTimelineDragging = function(){ return __flowDragging; };
   window.__initFlowTimelineSortable = initFlowTimelineSortable;
-  [400, 1000, 2000, 3500, 6000].forEach(function(ms){ setTimeout(initFlowTimelineSortable, ms); });
   // Keepalive: reattach if sync/restore orphaned Sortable (all days)
   setInterval(initFlowTimelineSortable, 2500);
   if(window.MutationObserver){
@@ -36387,7 +36389,6 @@ window.__refreshPinnedAgenda = function(){};
   }
   function go(){ try{ run(); }catch(e){} }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', go); else go();
-  [600,1600,3000].forEach(function(ms){ setTimeout(go, ms); });
 })();
 </script>
 <script>
@@ -36840,7 +36841,6 @@ window.__refreshPinnedAgenda = function(){};
     if(window.__ensureGsepRetreat) window.__ensureGsepRetreat();
   }
   /* Run at multiple intervals to catch all late-loading scripts */
-  [100, 500, 1000, 2000, 3000, 4000, 5000, 7000, 10000].forEach(function(ms){ setTimeout(run, ms); });
   window.addEventListener('load', function(){ setTimeout(run, 500); setTimeout(run, 2000); });
 })();
 </script>
@@ -36947,8 +36947,6 @@ window.__refreshPinnedAgenda = function(){};
     }
   }
   killFirstLetterRules();
-  setInterval(killFirstLetterRules,200);
-  new MutationObserver(function(){killFirstLetterRules();}).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
 <style id="btm-ux-pack">
@@ -37549,7 +37547,6 @@ window.__refreshPinnedAgenda = function(){};
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(tick, 400); });
   else setTimeout(tick, 400);
-  [1200, 2800, 5000].forEach(function(ms){ setTimeout(tick, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(tick, 500); }).observe(document.body,{childList:true,subtree:true});
@@ -38623,7 +38620,6 @@ html body .day-block.today-block .today-agenda-list {
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', lock);
   else lock();
-  [200,800,1600,3200].forEach(function(ms){ setTimeout(lock, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(lock, 80); }).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['src','style','class']});
@@ -40742,7 +40738,6 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', prepAll);
   else prepAll();
-  [400,1200,2800].forEach(function(ms){ setTimeout(prepAll, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(prepAll, 350); }).observe(document.body,{childList:true,subtree:true});
@@ -42480,7 +42475,6 @@ html body .day-block.flow-picking .vision-tile {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restore);
   else setTimeout(restore, 0);
-  [400, 1200, 2800].forEach(function(ms){ setTimeout(restore, ms); });
   if (window.MutationObserver) {
     var t = null;
     new MutationObserver(function(){
@@ -42676,7 +42670,6 @@ html body .day-block.fmt22 .sec-card.shot-card .card-resize {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 50); });
   else setTimeout(boot, 50);
-  [400, 900, 2200, 4200].forEach(function(ms){ setTimeout(ensure, ms); });
   window.__aug25HandshakeGsaV2 = true;
 })();
 </script>
@@ -43558,17 +43551,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function bootHeroLayouts(){
     document.querySelectorAll('.day-block.overview-era-day, .day-block.vision-collage-day').forEach(function(blk){
       try{
+        if(window.__isLiveDayBlock && !window.__isLiveDayBlock(blk)) return;
         if(blk.offsetParent === null) return;
         syncHeroLayoutClass(blk);
       }catch(e){}
     });
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(bootHeroLayouts, 80); });
-  else setTimeout(bootHeroLayouts, 80);
-  [400,1200].forEach(function(ms){ setTimeout(bootHeroLayouts, ms); });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bootHeroLayouts);
+  else bootHeroLayouts();
     function scheduleHtmlSave(blk, immediate){
-    var k = dayKey(blk);
-    if(!k) return;
+    return;
     clearTimeout(_htmlSaveTimers[k]);
     var run = function(){
       try { if(window.__unnestSwallowedDays) window.__unnestSwallowedDays(); } catch(e){}
@@ -43836,7 +43828,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var k = dayKey(blk);
     if(!k) return null;
     var m = loadMap();
-    if(!m[k]) m[k] = {removedSections:[], addedSections:[], removedCards:[], addedCards:[], addedSubsections:[]};
+    if(!m[k]) m[k] = {removedSections:[], addedSections:[], removedCards:[], addedCards:[], addedSubsections:[], addedChecks:[]};
     return m[k];
   }
   function sectionAliasSet(focus, title){
@@ -44116,6 +44108,39 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       Object.keys(aliases).forEach(function(a){ have[a] = 1; });
     });
   }
+  function syncAddedChecksFromDom(blk){
+    var data = dayData(blk);
+    var host = heroHost(blk);
+    if(!data || !host) return;
+    data.addedChecks = data.addedChecks || [];
+    var live = {};
+    [].slice.call(host.querySelectorAll('.vision-check')).forEach(function(lab){
+      if(lab.closest('.vision-horizon-task')) return;
+      var span = lab.querySelector('span');
+      var title = ((span && span.textContent) || '').replace(/\s+/g,' ').trim();
+      var focus = tileFocus(lab.closest('.vision-tile'));
+      if(!title || !focus) return;
+      var cb = lab.querySelector('input.agenda-check, input[type="checkbox"]');
+      live[String(focus).toLowerCase() + '\0' + title.toLowerCase()] = {
+        title: title,
+        sectionFocus: focus,
+        checked: !!(cb && cb.checked)
+      };
+    });
+    var have = {};
+    data.addedChecks.forEach(function(c){
+      if(!c || !c.title || !c.sectionFocus) return;
+      var key = String(c.sectionFocus).toLowerCase() + '\0' + String(c.title).toLowerCase();
+      if(live[key]){
+        c.checked = live[key].checked;
+        have[key] = 1;
+      }
+    });
+    Object.keys(live).forEach(function(key){
+      if(have[key]) return;
+      data.addedChecks.push(live[key]);
+    });
+  }
   function persistDay(blk, immediate){
     var k = dayKey(blk);
     if(!k) return;
@@ -44127,11 +44152,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     syncAddedSectionsFromDom(blk);
     syncAddedCardsFromDom(blk);
     syncAddedSubsectionsFromDom(blk);
+    syncAddedChecksFromDom(blk);
     purgeConflictingAdds(dayData(blk));
     saveMap(loadMap());
     syncHeroLayoutClass(blk);
-    syncDayShell(blk);
-    scheduleHtmlSave(blk, immediate);
+    if(window.__btmHtmlSaveArmed){
+      syncDayShell(blk);
+      scheduleHtmlSave(blk, immediate);
+    }
   }
   function slug(s){
     return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,32) || 'focus';
@@ -44466,9 +44494,22 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     FITNESS_SUBSECTIONS.forEach(function(name){
       var box = ensureSubsectionsContainer(ft);
       var existing = [].slice.call(box.querySelectorAll(':scope > .vision-subsection')).filter(function(s){
-        return subsectionTitle(s).toLowerCase() === name;
+        return subsectionTitle(s).toLowerCase() === name || s.getAttribute('data-sub') === slug(name);
       });
-      if(!existing.length){ addSubsection(ft, name, false); changed = true; }
+      if(!existing.length){
+        var defaults = {
+          calisthenics: { sx: '56%', sy: '6%', sw: '36%', sr: '2.5deg' },
+          inversions: { sx: '8%', sy: '52%', sw: '34%', sr: '-3deg' }
+        };
+        var dd = defaults[name] || { sx: '12%', sy: '18%', sw: '32%', sr: '0deg' };
+        box.appendChild(makeSubsection({
+          title: name,
+          slug: slug(name),
+          photo: subsectionPhotoFor(name),
+          sx: dd.sx, sy: dd.sy, sw: dd.sw, sr: dd.sr
+        }));
+        changed = true;
+      }
       else {
         var want = subsectionPhotoFor(name);
         existing.forEach(function(sub){
@@ -44553,7 +44594,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -44764,9 +44804,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
     }
     forceAll();
-    setTimeout(forceAll, 0);
-    setTimeout(forceAll, 250);
-    setTimeout(forceAll, 900);
     if(localStorage.getItem(MKEY)) return;
     try {
       Object.keys(localStorage).forEach(function(k){
@@ -45051,6 +45088,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var blk = tile.closest('.day-block');
     if(opts && opts.quiet) return lab;
     try { if(typeof persistDay === 'function') persistDay(blk); } catch(e){}
+    try {
+      var iso = blk && blk.getAttribute('data-date');
+      var focus = tile.getAttribute('data-focus') || '';
+      if(iso && name){
+        fetch('/save-task', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date: iso, focus: focus, title: name })
+        }).catch(function(){});
+      }
+    } catch(eBake){}
     syncHorizonTile(tile);
     /* Flip to tasks depth so the new horizon task is visible */
     if(blk && dayWantsDepthFour(blk)){
@@ -46199,7 +46247,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
   }
   window.__fillPackAllTiles = __fillPackAllTiles;
-  [40, 240, 800].forEach(function(ms){ setTimeout(__fillPackAllTiles, ms); });
   if(!window.__packFillResizeWired){
     window.__packFillResizeWired = 1;
     window.addEventListener('resize', function(){
@@ -46577,7 +46624,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__bootVisionTileSortables = bootVisionTileSortables;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(bootVisionTileSortables, 120); });
   else setTimeout(bootVisionTileSortables, 120);
-  [500, 1500, 3500].forEach(function(ms){ setTimeout(bootVisionTileSortables, ms); });
   if(window.MutationObserver && !window.__visionTileSortMo){
     window.__visionTileSortMo = new MutationObserver(function(){
       clearTimeout(window.__visionTileSortT);
@@ -46923,6 +46969,34 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         return;
       }
       det.appendChild(makePolaroid(rec));
+    });
+    (data.addedSubsections || []).forEach(function(rec){
+      if(!rec || !rec.title) return;
+      var tile = rec.sectionFocus ? tileByFocus(vb, rec.sectionFocus) : null;
+      if(!tile) return;
+      var box = ensureSubsectionsContainer(tile);
+      var title = String(rec.title).toLowerCase();
+      var have = [].slice.call(box.querySelectorAll('.vision-subsection')).some(function(s){
+        return subsectionTitle(s).toLowerCase() === title || s.getAttribute('data-sub') === (rec.slug || slug(title));
+      });
+      if(have) return;
+      box.appendChild(makeSubsection(rec));
+    });
+    (data.addedChecks || []).forEach(function(rec){
+      if(!rec || !rec.title || !rec.sectionFocus) return;
+      var tile = tileByFocus(vb, rec.sectionFocus);
+      if(!tile) return;
+      var lab = addVisionCheck(tile, rec.title, { quiet: true });
+      if(!lab){
+        lab = [].slice.call(tile.querySelectorAll(':scope > .vision-tile-details > .vision-check')).find(function(el){
+          var sp = el.querySelector('span');
+          return ((sp && sp.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase() === String(rec.title).toLowerCase();
+        });
+      }
+      if(lab && rec.checked){
+        var inp = lab.querySelector('input.agenda-check, input[type="checkbox"]');
+        if(inp) inp.checked = true;
+      }
     });
     ensureOverviewEditChrome(blk);
     try { if(typeof homeInductionOnTrain === 'function') homeInductionOnTrain(blk); } catch(eInd){}
@@ -48921,9 +48995,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     forceAll();
-    setTimeout(forceAll, 0);
-    setTimeout(forceAll, 300);
-    setTimeout(forceAll, 1000);
     if(localStorage.getItem(MKEY)) return;
     try {
       Object.keys(localStorage).forEach(function(k){
@@ -49085,7 +49156,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     window.__restoreFall2026EnrollmentNow = function(){ patchStores(); apply(); };
     patchStores();
     apply();
-    [80, 400, 1200, 2500].forEach(function(ms){ setTimeout(function(){ patchStores(); apply(); }, ms); });
   })();
 
 
@@ -50293,7 +50363,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteConceptSectionPhotos = applyAll;
     try { applyAll(); } catch(e){}
-    [80, 400, 1200, 2800].forEach(function(ms){ setTimeout(applyAll, ms); });
     try {
       Object.keys(MAP).forEach(function(k){
         var WANT = MAP[k];
@@ -50353,7 +50422,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     rewriteDarknessPhotosNow();
     window.__rewriteDarknessPhotosNow = rewriteDarknessPhotosNow;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(rewriteDarknessPhotosNow, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -50560,7 +50628,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     applySoul();
     window.__rewriteSoulPhotosNow = applySoul;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySoul, ms); });
     if(localStorage.getItem(MKEY)) return;
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -50616,7 +50683,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     window.__rewriteSoulPhotosNow = applySoulDarknessNophoto;
     window.__rewriteDarknessPhotosNow = applySoulDarknessNophoto;
     applySoulDarknessNophoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySoulDarknessNophoto, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -50662,7 +50728,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteTuneClaimPhotosNow = applyTuneClaimNophoto;
     applyTuneClaimNophoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyTuneClaimNophoto, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -50723,7 +50788,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteFourSectionPhotosNow = rewriteDom;
     rewriteDom();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(rewriteDom, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var RE = {
@@ -50791,7 +50855,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     rewriteSelfActualizeNow();
     window.__rewriteSelfActualizePhotosNow = rewriteSelfActualizeNow;
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(rewriteSelfActualizeNow, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -50954,7 +51017,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       localStorage.removeItem('migration-abundance-plenty-photo-v6');
     } catch(e){}
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
-    [60, 300, 1200, 2800].forEach(function(ms){ setTimeout(rewriteAbundancePhotosNow, ms); });
   })();
 
 
@@ -50996,7 +51058,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     rewriteAbundanceTreeNow();
     window.__rewriteAbundanceTreePhotosNow = rewriteAbundanceTreeNow;
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(rewriteAbundanceTreeNow, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51039,7 +51100,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     apply();
     window.__rewriteAttentionPhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51079,7 +51139,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     apply();
     window.__rewriteAnticipatePhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51126,7 +51185,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     apply();
     window.__rewriteRepetitionsPhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51176,7 +51234,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     apply();
     window.__rewriteDetachStartOverPhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51324,12 +51381,12 @@ if(title === 'calisthenics' || title === 'inversions'){
       return true;
     }
     function forceAll(){
-      document.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+      document.querySelectorAll('.day-block').forEach(function(blk){
+        if(window.__isLiveDayBlock && !window.__isLiveDayBlock(blk)) return;
+        blk.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+      });
     }
     forceAll();
-    setTimeout(forceAll, 0);
-    setTimeout(forceAll, 300);
-    setTimeout(forceAll, 1000);
     if(localStorage.getItem(MKEY)) return;
     try {
       Object.keys(localStorage).forEach(function(k){
@@ -51376,12 +51433,12 @@ if(title === 'calisthenics' || title === 'inversions'){
       return true;
     }
     function forceAll(){
-      document.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+      document.querySelectorAll('.day-block').forEach(function(blk){
+        if(window.__isLiveDayBlock && !window.__isLiveDayBlock(blk)) return;
+        blk.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+      });
     }
     forceAll();
-    setTimeout(forceAll, 0);
-    setTimeout(forceAll, 300);
-    setTimeout(forceAll, 1000);
     if(localStorage.getItem(MKEY)) return;
     function rewriteStoredTitle(s){
       s = String(s || '').replace(/\s+/g, ' ').trim();
@@ -51447,12 +51504,12 @@ if(title === 'calisthenics' || title === 'inversions'){
       }
     }
     function forceAll(){
-      document.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+      document.querySelectorAll('.day-block').forEach(function(blk){
+        if(window.__isLiveDayBlock && !window.__isLiveDayBlock(blk)) return;
+        blk.querySelectorAll('.vision-tile-title').forEach(applyTitle);
+      });
     }
     forceAll();
-    setTimeout(forceAll, 0);
-    setTimeout(forceAll, 300);
-    setTimeout(forceAll, 1000);
     if(localStorage.getItem(MKEY)) return;
     function rewriteStoredTitle(s){
       s = String(s || '').replace(/\s+/g, ' ').trim();
@@ -51513,7 +51570,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     apply();
     window.__rewriteExecuteCuratePhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51556,7 +51612,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [60, 300, 1000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51596,7 +51651,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [60, 300, 1000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51657,7 +51711,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51726,7 +51779,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       }
     }
     apply();
-    [120, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
       m['scholarship'] = APP;
@@ -51799,7 +51851,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51854,7 +51905,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -51905,7 +51955,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52012,7 +52061,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -52080,7 +52128,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52142,7 +52189,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52204,7 +52250,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52251,7 +52296,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [120, 600, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
       ['to feel','feel','to-feel','tofeel'].forEach(function(k){ zp[k] = WANT; });
@@ -52306,7 +52350,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52353,7 +52396,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [120, 600, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
       ['to persevere','persevere','to-persevere','topersevere'].forEach(function(k){ zp[k] = WANT; });
@@ -52405,7 +52447,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
@@ -52473,7 +52514,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
@@ -52620,7 +52660,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       document.querySelectorAll('.day-block[data-date]').forEach(scrubDay);
     }
     apply();
-    [120, 600, 1600].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -52690,7 +52729,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52766,7 +52804,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -52814,7 +52851,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -52852,7 +52888,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -52895,7 +52930,6 @@ if(title === 'calisthenics' || title === 'inversions'){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -52965,7 +52999,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteTuneSelfActualizeNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53028,7 +53061,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteTravelPositanoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53093,7 +53125,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteToLoveNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(!localStorage.getItem(MKEY)){
         ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -53140,7 +53171,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteToFeelNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53277,7 +53307,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__splitAimAndFeelItNow = apply;
     apply();
-    [100, 500, 1500, 3000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
@@ -53365,7 +53394,6 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__rewriteToPersevereNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(!localStorage.getItem(MKEY)){
         ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -53551,13 +53579,7 @@ if(title === 'calisthenics' || title === 'inversions'){
     }
     window.__dedupeToPrefixFocusClonesNow = applyAll;
     applyAll();
-    [50, 200, 600, 1200, 2500, 5000, 9000, 15000].forEach(function(ms){ setTimeout(applyAll, ms); });
-    try {
-      new MutationObserver(function(){
-        clearTimeout(window.__dedupeAliasTimer);
-        window.__dedupeAliasTimer = setTimeout(applyAll, 150);
-      }).observe(document.documentElement, { childList:true, subtree:true });
-    } catch(e){}
+    /* no live observer — re-applying on every DOM change flashed the page */
     try { localStorage.setItem(MKEY, '1'); localStorage.removeItem('migration-dedupe-to-prefix-focus-clones-v1'); } catch(e){}
   })();
 
@@ -53658,10 +53680,13 @@ if(title === 'calisthenics' || title === 'inversions'){
   window.__restoreAug30HistorySections = restoreAug30HistorySections;
   window.__clearArchivedRemovalsOnHistoryDays = clearArchivedRemovalsOnHistoryDays;
 
-  function boot(){
+  function boot(onlyBlk){
     try { if(window.__unnestSwallowedDays) window.__unnestSwallowedDays(); } catch(e){}
-    try { clearArchivedRemovalsOnHistoryDays(); } catch(e){}
+    try { if(!onlyBlk) clearArchivedRemovalsOnHistoryDays(); } catch(e){}
     document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
+      if(onlyBlk && blk !== onlyBlk) return;
+      if(!onlyBlk && window.__isLiveDayBlock && !window.__isLiveDayBlock(blk)) return;
+      try { blk.setAttribute('data-btm-hydrated', '1'); } catch(eHyd){}
       var mig = migratePepperdineSection(blk);
       // Repair past days first (incl. Aug 26–27 collage) before overview-era work.
       if(repairPreAug30PepperdineCardDemotion(blk)) mig = true;
@@ -53769,9 +53794,8 @@ if(title === 'calisthenics' || title === 'inversions'){
       localStorage.setItem(MKEY, JSON.stringify(done));
     } catch(e){}
   })();
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
-  [400, 1400].forEach(function(ms){ setTimeout(boot, ms); });
+  window.__bootOverviewDay = boot;
+  /* Do not run overview boot on reload — it restyles the live collage and flashes the page. */
   document.addEventListener('click', function(e){
     var vb = e.target.closest && e.target.closest('.day-block.overview-era-day .vision-board');
     if(vb) setTimeout(function(){
@@ -54869,6 +54893,9 @@ html body .day-block.overview-era-day .tv-panel.tv-nodes .card-del:hover {
   background: rgba(40,32,24,0.45) !important;
 }
 </style>
+<style id="date-rail-page-left">
+/* gutter that shoved cards right — reverted */
+</style>
 <style id="aug20-vision-board-css">
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .tv-panel.tv-pursuits:has(.vision-board),
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .tv-panel.tv-pursuits.active:has(.vision-board) {
@@ -55946,7 +55973,6 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
   pinCollapse();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyLook, 80); });
   else setTimeout(applyLook, 80);
-  [400, 1200, 2400].forEach(function(ms){ setTimeout(applyLook, ms); });
 })();
 </script>
 <style id="aug20-nodes-edit-css">
@@ -56575,7 +56601,6 @@ html body .day-block svg.aug20-zone-web path.aug20-edge {
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 120); });
   else setTimeout(boot, 120);
-  [500, 1400, 2800].forEach(function(ms){ setTimeout(draw, ms); });
   document.addEventListener('pointerup', function(){ setTimeout(draw, 30); }, true);
 })();
 </script>
@@ -57043,7 +57068,6 @@ html body .day-block.fmt22.today-block.freeplace-day.fp-empty .make-flow-btn {
   function boot(){ layout(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
-  [200, 800, 2000].forEach(function(ms){ setTimeout(boot, ms); });
   window.__layoutFreeplaceDays = layout;
   var moT=null;
   try {
@@ -59501,12 +59525,6 @@ html body .day-block.depth-four-era .overview-center-stack {
   }
   stamp();
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", stamp);
-  setTimeout(stamp, 80);
-  setTimeout(stamp, 400);
-  setTimeout(stamp, 1200);
-  try {
-    new MutationObserver(stamp).observe(document.documentElement, {childList:true, subtree:true});
-  } catch(e){}
 })();
 </script>
 
@@ -59538,7 +59556,6 @@ html body .day-block.depth-four-era .overview-center-stack {
     });
   }
   mute();
-  [0, 100, 400, 1200, 2500].forEach(function(ms){ setTimeout(mute, ms); });
 })();
 </script>
 
@@ -59579,12 +59596,13 @@ html body .day-block.depth-four-era .overview-center-stack {
       var key = Object.prototype.hasOwnProperty.call(MAP, t) ? t : (Object.prototype.hasOwnProperty.call(MAP, f) ? f : null);
       if(!key) return;
       if(!MAP[key]){
-        tile.style.setProperty('--tile-photo', 'none');
+        if(tile.style.getPropertyValue('--tile-photo') !== 'none') tile.style.setProperty('--tile-photo', 'none');
         tile.classList.add('vision-tile-nophoto');
         return;
       }
+      var want = 'url("' + MAP[key] + '")';
       tile.classList.remove('vision-tile-nophoto');
-      tile.style.setProperty('--tile-photo', 'url("' + MAP[key] + '")');
+      if(tile.style.getPropertyValue('--tile-photo') !== want) tile.style.setProperty('--tile-photo', want);
     });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -59606,12 +59624,7 @@ html body .day-block.depth-four-era .overview-center-stack {
     } catch(e){}
   }
   apply();
-  [60, 250, 900, 2200, 5000].forEach(function(ms){ setTimeout(apply, ms); });
-  try {
-    var t=0;
-    new MutationObserver(function(){ clearTimeout(t); t=setTimeout(apply, 80); })
-      .observe(document.documentElement, {childList:true, subtree:true});
-  } catch(e){}
+  /* no live observer — restyling tiles on every mutation flashed photos */
   window.__applySoulAudacityDarkness = apply;
 })();
 </script>
@@ -59642,7 +59655,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -59680,7 +59692,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200, 2500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -59726,7 +59737,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -59761,7 +59771,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -59799,7 +59808,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
@@ -59844,7 +59852,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200, 2400].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
@@ -59898,7 +59905,6 @@ html body .day-block.depth-four-era .overview-center-stack {
     }
     window.__scrubVibeDefaultTiles = apply;
     apply();
-    [80, 400, 1200, 2500, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     /* vibe scrub is one-shot + timeouts — do not poll every 2s on boot */
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -60119,7 +60125,6 @@ html body .day-block.depth-four-era .overview-center-stack {
   window.__isRejectedSectionPhoto = isBanned;
   window.__scrubRejectedSectionPhotos = applyAll;
   applyAll();
-  [40, 120, 400, 1000, 2500, 5000].forEach(function(ms){ setTimeout(applyAll, ms); });
   try {
     scrubStores();
     localStorage.setItem(MKEY, '1');
@@ -60128,13 +60133,7 @@ html body .day-block.depth-four-era .overview-center-stack {
     localStorage.removeItem('btm_darkness_photo_inner3');
     localStorage.removeItem('btm_darkness_photo_nopeople1');
   } catch(e){}
-  try {
-    var t = 0;
-    new MutationObserver(function(){
-      clearTimeout(t);
-      t = setTimeout(scrubTiles, 80);
-    }).observe(document.documentElement, { childList:true, subtree:true, attributes:true, attributeFilter:['style','class'] });
-  } catch(e){}
+  /* No attribute observer — restyling --tile-photo retriggered this and flashed the collage. */
 })();
 </script>
 
@@ -60158,7 +60157,6 @@ html body .day-block.depth-four-era .overview-center-stack {
   }
   function boot(){
     strip();
-    [80, 400, 1200, 2800].forEach(function(ms){ setTimeout(strip, ms); });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -60545,7 +60543,6 @@ html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026
   }
   stamp();
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", stamp);
-  [80,400,1200].forEach(function(ms){ setTimeout(stamp, ms); });
   try { new MutationObserver(stamp).observe(document.documentElement, {childList:true, subtree:true}); } catch(e){}
 })();
 </script>
@@ -60720,7 +60717,6 @@ html body #editBtn {
   }
   parkEdit();
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', parkEdit);
-  [0, 80, 400, 1200].forEach(function(ms){ setTimeout(parkEdit, ms); });
 })();
 </script>
 </html>

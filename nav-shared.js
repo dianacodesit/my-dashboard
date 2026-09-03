@@ -60,6 +60,7 @@
     { href: 'priming.html', label: 'priming & prompting', group: 'main' },
     { href: 'prosperity.html', label: 'prosperity', group: 'main' },
     { href: 'banking-matters.html', label: 'banking matters', group: 'main', parent: 'prosperity.html' },
+    { href: 'credit-score.html', label: 'credit score', group: 'main', parent: 'prosperity.html' },
     { href: 'parallel-timelines.html', label: 'parallel timelines', group: 'main' },
     { href: '2030.html', label: '2030', group: 'main' },
     { href: 'archived-pages.html', label: 'pages', group: 'archived' },

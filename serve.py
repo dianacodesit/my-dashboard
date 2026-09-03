@@ -2,7 +2,7 @@
 """Dashboard static server with durable GitHub bake.
 
 POST /bake  JSON {"data": {localStorageKey: value, ...}}
-  - Rewrites the /*baked-data*/ seed script in everything.html
+  - Writes baked-data.json (idle-seeded by boot-seed.js; not inlined in HTML)
   - Writes localStorage_dump.json
   - Commits and pushes to origin
 
@@ -12,11 +12,13 @@ as no-op 200s so the UI does not spam console errors.
 
 from __future__ import annotations
 
+import gzip
 import json
 import os
 import re
 import subprocess
 import threading
+from io import BytesIO
 from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -29,6 +31,7 @@ BRAIN = ROOT / "brain-dump.html"
 DUMP = ROOT / "localStorage_dump.json"
 PORT = int(os.environ.get("PORT", "8080"))
 GIT_LOCK = threading.Lock()
+SAVE_OVERVIEW_LOCK = threading.Lock()
 PHOTO_LOCK = threading.Lock()
 PHOTO_MAP = ROOT / "manus-storage" / "card-photos.json"
 STORAGE = ROOT / "manus-storage"
@@ -81,6 +84,12 @@ KNOWN_CARD_PHOTOS = {
     "inner fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "inner-fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
+    "glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "glow-up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "glow": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "to glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "i glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "I glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "darkness": "",
     "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
     "fight": "manus-storage/zone-audacity.jpg?v=finger1",
@@ -103,16 +112,28 @@ KNOWN_CARD_PHOTOS = {
     "align": "manus-storage/zone-alignment.jpg?v=align1",
     "workflow": "manus-storage/zone-plan.jpg?v=swap1",
     "to workflow": "manus-storage/zone-plan.jpg?v=swap1",
+    "i workflow": "manus-storage/zone-plan.jpg?v=swap1",
+    "I workflow": "manus-storage/zone-plan.jpg?v=swap1",
     "start": "manus-storage/zone-plan.jpg?v=swap1",
     "to start": "manus-storage/zone-plan.jpg?v=swap1",
+    "i start": "manus-storage/zone-plan.jpg?v=swap1",
+    "I start": "manus-storage/zone-plan.jpg?v=swap1",
     "to-start": "manus-storage/zone-plan.jpg?v=swap1",
     "navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "to navigate": "manus-storage/zone-plan.jpg?v=swap1",
+    "i navigate": "manus-storage/zone-plan.jpg?v=swap1",
+    "I navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "to-navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "alignment": "manus-storage/zone-alignment.jpg?v=align1",
     "train": "manus-storage/zone-athletic.jpg?v=color2",
     "fitness training": "manus-storage/zone-athletic.jpg?v=color2",
     "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender-to-allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender to allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "itaqallah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
@@ -123,6 +144,8 @@ KNOWN_CARD_PHOTOS = {
     "create-again": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "to travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
+    "i travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
+    "I travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "to-travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "tune into": "",
     "tune-into": "",
@@ -134,28 +157,49 @@ KNOWN_CARD_PHOTOS = {
     "say-thank-you-in-advance": "manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1",
     "execute": "manus-storage/zone-execute-focus.jpg?v=chess1",
     "to seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
+    "i seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
+    "I seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "seize-opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "seize": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "to litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
+    "i litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
+    "I litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "to-litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "to recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
+    "i recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
+    "I recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
+    "I recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=refund1",
+    "i recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=refund1",
     "recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
     "to-recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
     "to scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
+    "i scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
+    "I scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "scholarship-application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "to-scholarship-application": "manus-storage/zone-scholarship-application.jpg?v=app1",
-    "curate": "manus-storage/zone-curate-create.jpg?v=create1",
-    "to curate": "manus-storage/zone-curate-create.jpg?v=create1",
+    "curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
+    "to curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
+    "i curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
+    "I curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
+    "to-curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "to love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
+    "i love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
+    "I love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
     "to persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
+    "i persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
+    "I persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "to feel": "",
+    "i feel": "",
+    "I feel": "",
     "to-feel": "",
     "tofeel": "",
     "feel": "",
     "to channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
+    "i channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
+    "I channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "to-channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "tochannel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
@@ -238,10 +282,11 @@ REJECTED_SECTION_PHOTOS = (
     "wheat-sunset",
     "zone-abundance-harvest",
     "zone-abundance-overflow",
-    "abundance-bg",
+    "abundance-bg.jpg",
     "abundance-grapes",
     "abundance-poppies",
-    # prosperity gold bars (abundance-bg-wealth) is NOT banned — page background, not wheat
+    # prosperity gold bars (abundance-bg-wealth / prosperity-bg-gold-bars) is NOT banned — not wheat
+    # live prosperity page: prosperity-bg-money-magnet.jpg
     # legacy fight-back coral tile — audacity uses finger photo only
     "zone-fight-back",
     # detach / start over — rope + old leaf + dawn road forever banned
@@ -267,6 +312,10 @@ REJECTED_SECTION_PHOTOS = (
     "zone-seize-opportunities-racing-banned",
     "/archive/zone-seize-opportunities-door",
     "/archive/zone-seize-opportunities-racing",
+    # to curate — paintbrushes / wet paint / studio painting forever banned
+    "zone-curate-create",
+    "zone-curate-create.jpg?v=create1",
+    "/archive/zone-curate-create-paint",
 )
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
@@ -311,18 +360,9 @@ def bake_to_github(data: dict) -> dict:
     # localStorage values are always strings
     clean = {str(k): ("" if v is None else str(v)) for k, v in data.items()}
 
-    html = DASHBOARD.read_text(encoding="utf-8")
-    start = html.find(BAKE_START)
-    if start < 0:
-        raise RuntimeError("baked-data script not found in everything.html")
-    obj_start = start + len(BAKE_START)
-    end = html.find(BAKE_END, obj_start)
-    if end < 0:
-        raise RuntimeError("baked-data script end marker not found")
-
+    # Keep the 1.8MB seed off the HTML critical path (boot-seed.js fetches this idle).
     payload = json.dumps(clean, ensure_ascii=False, separators=(",", ":"))
-    new_html = html[:obj_start] + payload + html[end:]
-    DASHBOARD.write_text(new_html, encoding="utf-8")
+    (ROOT / "baked-data.json").write_text(payload, encoding="utf-8")
     DUMP.write_text(json.dumps(clean, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     with GIT_LOCK:
@@ -332,7 +372,7 @@ def bake_to_github(data: dict) -> dict:
         if not status.stdout.strip():
             return {"ok": True, "committed": False, "message": "already up to date"}
 
-        add = _git("add", "everything.html", "localStorage_dump.json")
+        add = _git("add", "baked-data.json", "localStorage_dump.json")
         if add.returncode != 0:
             raise RuntimeError(add.stderr.strip() or "git add failed")
 
@@ -343,7 +383,7 @@ def bake_to_github(data: dict) -> dict:
             "-m",
             msg,
             "-m",
-            "Persist phone/browser localStorage into everything.html and localStorage_dump.json for durable GitHub sync.",
+            "Persist phone/browser localStorage into baked-data.json and localStorage_dump.json for durable GitHub sync.",
         )
         if commit.returncode != 0:
             raise RuntimeError(commit.stderr.strip() or commit.stdout.strip() or "git commit failed")
@@ -389,6 +429,63 @@ def _day_block_bounds(html: str, date: str) -> tuple[int, int, int]:
     nxt = re.search(r'\n<div class="day-block[^"]*"\s+data-date="', html[m.end() :])
     block_end = (m.end() + nxt.start()) if nxt else len(html)
     return marker_i, block_start, block_end
+
+
+def _day_label(date: str) -> str:
+    dt = datetime.strptime(date, "%Y-%m-%d")
+    mon = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"][dt.month - 1]
+    dow = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"][dt.weekday()]
+    return f"{mon} {dt.day} · {dow}"
+
+
+def _overview_day_shell(date: str) -> str:
+    label = _day_label(date)
+    return (
+        f'<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="{date}">\n'
+        f'<div class="day-dot"></div>\n'
+        f'<div class="day-card">\n'
+        f'<div class="day-card-header"><span class="day-date">{label}</span></div>\n'
+        f'<div class="today-view-toggle">\n'
+        f'<button class="tv-pill active" data-view="pursuits">overview</button>\n'
+        f'<button class="tv-pill" data-view="impulses">impulses</button>\n'
+        f'<button class="tv-pill" data-view="flow">flow</button>\n'
+        f'<button class="tv-pill" data-view="nodes">nodes</button>\n'
+        f'</div>\n'
+        f'<div class="day-tasks">\n'
+        f'<div class="tv-panel tv-pursuits active">\n'
+        f'<div class="vision-board" aria-label="vision collage">\n'
+        f'<button type="button" class="vision-zoom-out" hidden>all of today</button>\n'
+        f'<p class="vision-hint">the day, wide — click a focus to go in</p>\n'
+        f'<div class="vision-hero">\n'
+        f'</div>\n'
+        f'</div></div></div></div></div>\n'
+    )
+
+
+def _next_day_block_index(html: str, date: str) -> int:
+    """Insert point: first later dated day-block, else doha/archive."""
+    best = -1
+    for m in re.finditer(r'\n<div class="day-block[^"]*"\s+data-date="([^"]+)"', html):
+        other = m.group(1)
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", other) and other > date:
+            return m.start()
+        if other in ("doha", "archive") and best < 0:
+            best = m.start()
+    return best
+
+
+def ensure_overview_day_block(html: str, date: str) -> str:
+    """Add a vision-collage day shell so /save-overview can bake a missing date."""
+    try:
+        _day_block_bounds(html, date)
+        return html
+    except ValueError:
+        pass
+    insert_at = _next_day_block_index(html, date)
+    shell = _overview_day_shell(date)
+    if insert_at < 0:
+        return html + "\n" + shell
+    return html[:insert_at] + "\n" + shell + html[insert_at:]
 
 
 TILE_RE = re.compile(
@@ -466,7 +563,7 @@ def _tiles_from_inner(inner: str) -> list[tuple[str, str]]:
 
 
 _SWALLOW_RE = re.compile(
-    r'(<h4 class="vision-subsection-title">calisthenics</h4></article>)(\s*)(<article class="vision-tile")',
+    r'(<h4 class="vision-subsection-title">[^<]*</h4></article>)(\s*)(<article class="vision-tile")',
     re.I,
 )
 
@@ -551,7 +648,7 @@ def _vision_hero_span(html: str, date: str) -> tuple[int, int]:
         next_open = html.find("<div", pos)
         next_close = html.find("</div>", pos)
         if next_close < 0 or next_close >= block_end:
-            raise ValueError(f"unclosed vision-hero for {date}")
+            break
         if next_open >= 0 and next_open < next_close and next_open < block_end:
             depth += 1
             pos = next_open + 4
@@ -562,7 +659,10 @@ def _vision_hero_span(html: str, date: str) -> tuple[int, int]:
             break
         pos = next_close + 6
     if end_inner < 0:
-        raise ValueError(f"could not parse vision-hero for {date}")
+        # Swallowed / unclosed hero: bake up to the next day-block, then close.
+        end_inner = block_end
+        while end_inner > start_inner and html[end_inner - 1] in " \t\r\n":
+            end_inner -= 1
     return start_inner, end_inner
 
 
@@ -582,6 +682,11 @@ def replace_vision_hero_inner(html: str, date: str, new_inner: str) -> str:
     inner = str(new_inner or "")
     if inner and not inner.endswith("\n"):
         inner += "\n"
+    # If the hero never closed, the span runs to the next day-block — close
+    # vision-hero + board/panel/tasks/card/block so later days stay siblings.
+    tail = html[end_inner:end_inner + 6]
+    if tail != "</div>":
+        inner += "</div>\n</div></div></div></div></div>\n"
     new_html = html[:start_inner] + inner + html[end_inner:]
 
     # Integrity: never allow the known mid-regex splice corruption, and never
@@ -599,7 +704,17 @@ OVERVIEW_FILES = (DASHBOARD, ROOT / "prototype.html")
 
 
 def save_overview_hero(date: str, hero_html: str, removed_sections=None, archived_sections=None) -> dict:
-    """Write vision-collage hero HTML into everything.html and prototype.html."""
+    """Autosave used to rewrite everything.html + prototype.html on every tab load.
+    That file-write reloads every open page. Disk persist is SAVE TO GITHUB /bake."""
+    return {
+        "ok": True,
+        "skipped": True,
+        "committed": False,
+        "pushed": False,
+        "date": str(date or "").strip(),
+        "files": [],
+        "warnings": [],
+    }
     date = str(date or "").strip()
     drop_keys = None
     if date == "2026-08-30":
@@ -611,14 +726,21 @@ def save_overview_hero(date: str, hero_html: str, removed_sections=None, archive
     hero_html = unswallow_hero_inner(hero_html)
     written: list[str] = []
     warnings: list[str] = []
-    for path in OVERVIEW_FILES:
+    with SAVE_OVERVIEW_LOCK:
+      for path in OVERVIEW_FILES:
         if not path.exists():
             continue
         try:
-            html = path.read_text(encoding="utf-8")
+            html = ensure_overview_day_block(path.read_text(encoding="utf-8"), date)
             start_inner, end_inner = _vision_hero_span(html, date)
             merged = merge_hero_inner(html[start_inner:end_inner], hero_html, removed_sections, drop_keys)
             new_html = replace_vision_hero_inner(html, date, merged)
+            if "<!DOCTYPE" not in new_html[:80]:
+                raise ValueError(f"refusing save: {path.name} lost its document shell")
+            if len(html) > 500_000 and len(new_html) < 500_000:
+                raise ValueError(
+                    f"refusing save: {path.name} would shrink from {len(html)} to {len(new_html)}"
+                )
             if new_html != html:
                 path.write_text(new_html, encoding="utf-8")
             written.append(path.name)
@@ -626,75 +748,142 @@ def save_overview_hero(date: str, hero_html: str, removed_sections=None, archive
             warnings.append(f"{path.name}: {exc}")
     if not written:
         raise ValueError(warnings[0] if warnings else "no overview file written")
+    # Disk only. GitHub is the SAVE TO GITHUB /bake button — do not commit/push here.
+    return {
+        "ok": True,
+        "committed": False,
+        "pushed": False,
+        "date": date,
+        "files": written,
+        "warnings": warnings,
+    }
 
-    with GIT_LOCK:
-        status = _git("status", "--porcelain")
-        if status.returncode != 0:
-            return {
-                "ok": True,
-                "committed": False,
-                "pushed": False,
-                "date": date,
-                "files": written,
-                "warning": status.stderr.strip() or "git status failed",
-            }
-        if not status.stdout.strip():
-            return {
-                "ok": True,
-                "committed": False,
-                "pushed": False,
-                "date": date,
-                "files": written,
-                "message": "already up to date",
-            }
 
-        add = _git("add", *[name for name in ("everything.html", "prototype.html") if name in written])
-        if add.returncode != 0:
-            return {
-                "ok": True,
-                "committed": False,
-                "pushed": False,
-                "date": date,
-                "files": written,
-                "warning": add.stderr.strip() or "git add failed",
-            }
+def _xml_escape(s: str) -> str:
+    return (
+        str(s)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
 
-        stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-        msg = f"Save overview collage for {date} ({stamp})."
-        commit = _git("commit", "-m", msg)
-        if commit.returncode != 0:
-            return {
-                "ok": True,
-                "committed": False,
-                "pushed": False,
-                "date": date,
-                "warning": commit.stderr.strip() or commit.stdout.strip() or "git commit failed",
-            }
 
-        branch = _git("rev-parse", "--abbrev-ref", "HEAD")
-        branch_name = (branch.stdout or "main").strip()
-        push = _git("push", "-u", "origin", branch_name)
-        if push.returncode != 0:
-            sha = _git("rev-parse", "--short", "HEAD")
-            return {
-                "ok": True,
-                "committed": True,
-                "pushed": False,
-                "date": date,
-                "branch": branch_name,
-                "sha": (sha.stdout or "").strip(),
-                "warning": push.stderr.strip() or push.stdout.strip() or "git push failed",
-            }
+def _article_span(block: str, start: int) -> tuple[int, int]:
+    i = start
+    depth = 0
+    while i < len(block):
+        nxt_open = block.find("<article", i)
+        nxt_close = block.find("</article>", i)
+        if nxt_close < 0:
+            raise ValueError("unclosed article")
+        if nxt_open >= 0 and nxt_open < nxt_close:
+            depth += 1
+            i = nxt_open + 8
+        else:
+            depth -= 1
+            end = nxt_close + len("</article>")
+            if depth == 0:
+                return start, end
+            i = end
+    raise ValueError("unclosed article")
 
-        sha = _git("rev-parse", "--short", "HEAD")
-        return {
-            "ok": True,
-            "committed": True,
-            "pushed": True,
-            "date": date,
-            "branch": branch_name,
-            "sha": (sha.stdout or "").strip(),
-        }
+
+def _insert_before_matching_div_close(html: str, open_idx: int, insert: str) -> str:
+    tag_end = html.find(">", open_idx) + 1
+    depth = 1
+    i = tag_end
+    while i < len(html) and depth:
+        nxt_open = html.find("<div", i)
+        nxt_close = html.find("</div>", i)
+        if nxt_close < 0:
+            raise ValueError("unclosed details")
+        if nxt_open >= 0 and nxt_open < nxt_close:
+            depth += 1
+            i = nxt_open + 4
+        else:
+            depth -= 1
+            if depth == 0:
+                return html[:nxt_close] + insert + html[nxt_close:]
+            i = nxt_close + 6
+    raise ValueError("unclosed details")
+
+
+def _tile_span_for_focus(block: str, focus: str) -> tuple[int, int] | None:
+    want = re.sub(r"\s+", " ", str(focus or "")).strip().lower()
+    if not want:
+        return None
+    aliases = _tile_aliases(want) | {want}
+    for m in re.finditer(r"<article\b(?=[^>]*\bvision-tile\b)[^>]*>", block, re.I):
+        fm = re.search(r'data-focus="([^"]+)"', m.group(0), re.I)
+        tile_focus = (fm.group(1) if fm else "").strip().lower()
+        if tile_focus in aliases or want in _tile_aliases(tile_focus):
+            return _article_span(block, m.start())
+    return None
+
+
+def save_vision_check(date: str, focus: str, title: str) -> dict:
+    """Insert one user-added vision-check into the day's tile in both HTML files."""
+    date = str(date or "").strip()
+    focus = str(focus or "").strip()
+    title = re.sub(r"\s+", " ", str(title or "")).strip()
+    if not date or not title:
+        raise ValueError("date and title required")
+    safe = _xml_escape(title)
+    label = (
+        f'<label class="vision-check" style="--px: 48%; --py: 28%;">'
+        f'<input class="agenda-check" type="checkbox"><span>{safe}</span></label>'
+    )
+    written: list[str] = []
+    warnings: list[str] = []
+    with SAVE_OVERVIEW_LOCK:
+        for path in OVERVIEW_FILES:
+            if not path.exists():
+                continue
+            try:
+                html = path.read_text(encoding="utf-8")
+                _, start, end = _day_block_bounds(html, date)
+                block = html[start:end]
+                span = _tile_span_for_focus(block, focus)
+                if not span:
+                    raise ValueError(f"section {focus or title} not found on {date}")
+                art_s, art_e = span
+                art = block[art_s:art_e]
+                if re.search(
+                    r'<span>\s*' + re.escape(safe) + r"\s*</span>",
+                    art,
+                    re.I,
+                ):
+                    written.append(path.name)
+                    continue
+                det = re.search(r'<div class="vision-tile-details">', art)
+                if det:
+                    new_art = _insert_before_matching_div_close(art, det.start(), label)
+                else:
+                    new_art = (
+                        art[: -len("</article>")]
+                        + '<div class="vision-tile-details">'
+                        + label
+                        + "</div></article>"
+                    )
+                new_block = block[:art_s] + new_art + block[art_e:]
+                new_html = html[:start] + new_block + html[end:]
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "task not baked")
+    return {
+        "ok": True,
+        "date": date,
+        "title": title,
+        "focus": focus,
+        "files": written,
+        "warnings": warnings,
+    }
 
 
 def save_brain_dump(entries) -> dict:
@@ -966,6 +1155,25 @@ def photo_for_name(name: str) -> dict:
         return {"ok": True, "src": src, "cached": False}
 
 
+_GZIP_CACHE: dict[str, tuple[tuple[str, float, int], bytes]] = {}
+_GZIP_LOCK = threading.Lock()
+
+
+def _gzip_file(path: str) -> bytes | None:
+    try:
+        st = os.stat(path)
+    except OSError:
+        return None
+    key = (path, st.st_mtime, st.st_size)
+    with _GZIP_LOCK:
+        hit = _GZIP_CACHE.get(path)
+        if hit and hit[0] == key:
+            return hit[1]
+        compressed = gzip.compress(Path(path).read_bytes(), compresslevel=5)
+        _GZIP_CACHE[path] = (key, compressed)
+        return compressed
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
@@ -1011,6 +1219,14 @@ class Handler(SimpleHTTPRequestHandler):
                 entries = body.get("entries") if isinstance(body, dict) else None
                 result = save_brain_dump(entries)
                 return self._json(200, result)
+            if path == "/save-task":
+                body = self._read_json()
+                result = save_vision_check(
+                    str((body or {}).get("date") or ""),
+                    str((body or {}).get("focus") or ""),
+                    str((body or {}).get("title") or ""),
+                )
+                return self._json(200, result)
             if path == "/save-overview":
                 body = self._read_json()
                 date = body.get("date") if isinstance(body, dict) else None
@@ -1030,8 +1246,35 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(500, {"ok": False, "error": str(e)})
 
     def end_headers(self):
-        self.send_header("Cache-Control", "no-store")
+        if not getattr(self, "_cache_set", False):
+            path = urlparse(self.path).path.lower()
+            ext = Path(path).suffix
+            if ext in {".jpg", ".jpeg", ".png", ".webp", ".gif", ".woff2", ".woff", ".ico"}:
+                self.send_header("Cache-Control", "public, max-age=604800")
+            else:
+                self.send_header("Cache-Control", "no-store")
+            self._cache_set = True
         super().end_headers()
+
+    def send_head(self):
+        path = self.translate_path(self.path)
+        if os.path.isdir(path) or not os.path.isfile(path):
+            return super().send_head()
+        ext = Path(path).suffix.lower()
+        accept = self.headers.get("Accept-Encoding", "")
+        if ext in {".html", ".js", ".css", ".json", ".svg", ".txt"} and "gzip" in accept:
+            compressed = _gzip_file(path)
+            if compressed is None:
+                self.send_error(404, "File not found")
+                return None
+            self.send_response(200)
+            self.send_header("Content-type", self.guess_type(path))
+            self.send_header("Content-Encoding", "gzip")
+            self.send_header("Content-Length", str(len(compressed)))
+            self.send_header("Vary", "Accept-Encoding")
+            self.end_headers()
+            return BytesIO(compressed)
+        return super().send_head()
 
     def log_message(self, fmt, *args):
         sys_stderr = __import__("sys").stderr
@@ -1041,6 +1284,8 @@ class Handler(SimpleHTTPRequestHandler):
 def main():
     # Avoid serving parent paths; stay in ROOT.
     os.chdir(ROOT)
+    for name in ("everything.html", "prototype.html"):
+        _gzip_file(str(ROOT / name))
     httpd = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
     print(f"dashboard server on http://127.0.0.1:{PORT}/", flush=True)
     print("POST /bake to persist localStorage into GitHub", flush=True)
