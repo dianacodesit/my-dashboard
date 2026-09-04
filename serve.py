@@ -71,15 +71,19 @@ KNOWN_CARD_PHOTOS = {
     # Pepperdine section / zone only — not tuition/application cards
     "calisthenics": "manus-storage/card-calisthenics.jpg",
     "inversions": "manus-storage/card-inversions-yoga.jpg?v=yoga1",
+    "istighfar": "manus-storage/sub-istighfar.jpg?v=ist1",
+    "Istighfar": "manus-storage/sub-istighfar.jpg?v=ist1",
     "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "achieve": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "I will achieve": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "achieve": "manus-storage/zone-to-achieve.jpg?v=dip1",
+    "I will achieve": "manus-storage/zone-to-achieve.jpg?v=dip1",
+    "i will achieve": "manus-storage/zone-to-achieve.jpg?v=dip1",
+    "to achieve": "manus-storage/zone-to-achieve.jpg?v=dip1",
+    "to-achieve": "manus-storage/zone-to-achieve.jpg?v=dip1",
     "I will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "i will achieve": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "grad school": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "grad": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "soul": "",
@@ -91,11 +95,11 @@ KNOWN_CARD_PHOTOS = {
     "inner-fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
-    "luscious hair": "manus-storage/card-luscious-hair-lux.jpg?v=lux1",
-    "glass skin": "manus-storage/card-glass-skin-cheek.jpg?v=cheek1",
-    "facial tone": "manus-storage/card-facial-tone-sculpt.jpg?v=sculpt1",
-    "facial structure": "manus-storage/card-facial-tone-sculpt.jpg?v=sculpt1",
-    "aligned teeth": "manus-storage/card-aligned-teeth.jpg?v=glow4",
+    "luscious hair": "",
+    "glass skin": "",
+    "facial tone": "",
+    "facial structure": "",
+    "aligned teeth": "",
     "glow-up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "glow": "manus-storage/zone-glow-up.jpg?v=glow6",
     "she pursues": "manus-storage/zone-she-pursues.jpg?v=pursue1",
@@ -119,11 +123,11 @@ KNOWN_CARD_PHOTOS = {
     "repeat 10,000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat 10000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat-10000-times": "manus-storage/zone-repetitions.jpg?v=cubes1",
-    "wins": "manus-storage/zone-wins.jpg?v=game2",
-    "win": "manus-storage/zone-wins.jpg?v=game2",
-    "I will win": "manus-storage/zone-wins.jpg?v=game2",
-    "i will win": "manus-storage/zone-wins.jpg?v=game2",
-    "I win": "manus-storage/zone-wins.jpg?v=game2",
+    "wins": "manus-storage/zone-wins-hand.jpg?v=game3",
+    "win": "manus-storage/zone-wins-hand.jpg?v=game3",
+    "I will win": "manus-storage/zone-wins-hand.jpg?v=game3",
+    "i will win": "manus-storage/zone-wins-hand.jpg?v=game3",
+    "I win": "manus-storage/zone-wins-hand.jpg?v=game3",
     # abundance — approved money-tree (wheat/plenty2 forever banned)
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
@@ -151,12 +155,15 @@ KNOWN_CARD_PHOTOS = {
     "I will navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "to-navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "alignment": "manus-storage/zone-alignment.jpg?v=align1",
-    "train": "manus-storage/zone-athletic.jpg?v=color2",
-    "i train": "manus-storage/zone-athletic.jpg?v=color2",
-    "I train": "manus-storage/zone-athletic.jpg?v=color2",
-    "I will train": "manus-storage/zone-athletic.jpg?v=color2",
-    "i will train": "manus-storage/zone-athletic.jpg?v=color2",
-    "fitness training": "manus-storage/zone-athletic.jpg?v=color2",
+    "train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "i train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "I train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "I will train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "i will train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "fitness training": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "body": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "gym": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "athletic": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
@@ -218,6 +225,13 @@ KNOWN_CARD_PHOTOS = {
     "i recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
     "recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
     "to-recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "I will earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "i will earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "to earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "i earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "I earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "to-earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "to scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "i scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "I scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
@@ -234,10 +248,11 @@ KNOWN_CARD_PHOTOS = {
     "i love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
     "I love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
     "I will love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
-    "to persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
-    "i persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
-    "I persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
-    "I will persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
+    "to persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
+    "i persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
+    "I persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
+    "I will persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
+    "i will persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
     "to feel": "",
     "i feel": "",
     "I feel": "",
@@ -252,9 +267,9 @@ KNOWN_CARD_PHOTOS = {
     "to-channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "tochannel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
-    "to-persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
-    "topersevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
-    "persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
+    "to-persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
+    "topersevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
+    "persevere": "manus-storage/zone-to-persevere-summit.jpg?v=summit1",
     "to-love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
     "tolove": "manus-storage/zone-to-love-souls.jpg?v=souls3",
 }
@@ -1210,7 +1225,8 @@ def _bare_section_name(s: str) -> str:
 
 
 def _is_fitness_subsection_name(title: str, focus: str = "") -> bool:
-    return _bare_section_name(title) in {"calisthenics", "inversions"} or _bare_section_name(focus) in {"calisthenics", "inversions"}
+    nested = {"calisthenics", "inversions", "istighfar", "to defeat the enemy", "defeat the enemy"}
+    return _bare_section_name(title) in nested or _bare_section_name(focus) in nested
 
 
 def _normalize_section_recs(body: dict) -> list[dict]:
@@ -1663,6 +1679,13 @@ def photo_for_name(name: str) -> dict:
                     if key not in KNOWN_CARD_PHOTOS:
                         _archive_bad_photo(path)
             stored.pop(key, None)
+        known = KNOWN_CARD_PHOTOS.get(key)
+        if known:
+            kpath = ROOT / str(known).split("?", 1)[0]
+            if kpath.exists() and kpath.is_file() and kpath.stat().st_size >= 20000:
+                stored[key] = known
+                _save_photo_map(stored)
+                return {"ok": True, "src": known, "cached": True}
         dest = STORAGE / f"card-{_photo_slug(key)}.jpg"
         if dest.exists():
             if _photo_path_usable(dest):
