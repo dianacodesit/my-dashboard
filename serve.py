@@ -71,11 +71,17 @@ KNOWN_CARD_PHOTOS = {
     # Pepperdine section / zone only — not tuition/application cards
     "calisthenics": "manus-storage/card-calisthenics.jpg",
     "inversions": "manus-storage/card-inversions-yoga.jpg?v=yoga1",
-    "pepperdine": "manus-storage/zone-pepperdine-malibu.jpg",
-    "enroll": "manus-storage/zone-pepperdine-malibu.jpg",
-    "achieve": "manus-storage/zone-pepperdine-malibu.jpg",
-    "grad school": "manus-storage/zone-pepperdine-malibu.jpg",
-    "grad": "manus-storage/zone-pepperdine-malibu.jpg",
+    "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "achieve": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "I will achieve": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "I will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "i will achieve": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "grad school": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "grad": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "soul": "",
     # sorrow is NOT soul — distinct focus; no approved photo (was soul-rose duplicate)
     "sorrow": "",
@@ -85,11 +91,19 @@ KNOWN_CARD_PHOTOS = {
     "inner-fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "luscious hair": "manus-storage/card-luscious-hair.jpg?v=brown1",
+    "glass skin": "manus-storage/card-glass-skin.jpg?v=dew1",
+    "facial tone": "manus-storage/card-facial-tone.jpg?v=struct1",
+    "aligned teeth": "manus-storage/card-aligned-teeth.jpg?v=glow4",
     "glow-up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "glow": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "she pursues": "manus-storage/zone-she-pursues.jpg?v=pursue1",
+    "she-pursues": "manus-storage/zone-she-pursues.jpg?v=pursue1",
     "to glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "i glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "I glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "I will glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "i will glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "darkness": "",
     "audacity": "manus-storage/zone-audacity.jpg?v=finger1",
     "fight": "manus-storage/zone-audacity.jpg?v=finger1",
@@ -99,8 +113,11 @@ KNOWN_CARD_PHOTOS = {
     "repeat 10,000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat 10000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat-10000-times": "manus-storage/zone-repetitions.jpg?v=cubes1",
-    "wins": "manus-storage/zone-wins.jpg?v=sec1",
-    "win": "manus-storage/zone-wins.jpg?v=sec1",
+    "wins": "manus-storage/zone-wins.jpg?v=game2",
+    "win": "manus-storage/zone-wins.jpg?v=game2",
+    "I will win": "manus-storage/zone-wins.jpg?v=game2",
+    "i will win": "manus-storage/zone-wins.jpg?v=game2",
+    "I win": "manus-storage/zone-wins.jpg?v=game2",
     # abundance — approved money-tree (wheat/plenty2 forever banned)
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
@@ -114,26 +131,41 @@ KNOWN_CARD_PHOTOS = {
     "to workflow": "manus-storage/zone-plan.jpg?v=swap1",
     "i workflow": "manus-storage/zone-plan.jpg?v=swap1",
     "I workflow": "manus-storage/zone-plan.jpg?v=swap1",
+    "I will workflow": "manus-storage/zone-plan.jpg?v=swap1",
     "start": "manus-storage/zone-plan.jpg?v=swap1",
     "to start": "manus-storage/zone-plan.jpg?v=swap1",
     "i start": "manus-storage/zone-plan.jpg?v=swap1",
     "I start": "manus-storage/zone-plan.jpg?v=swap1",
+    "I will start": "manus-storage/zone-plan.jpg?v=swap1",
     "to-start": "manus-storage/zone-plan.jpg?v=swap1",
     "navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "to navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "i navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "I navigate": "manus-storage/zone-plan.jpg?v=swap1",
+    "I will navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "to-navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "alignment": "manus-storage/zone-alignment.jpg?v=align1",
     "train": "manus-storage/zone-athletic.jpg?v=color2",
+    "i train": "manus-storage/zone-athletic.jpg?v=color2",
+    "I train": "manus-storage/zone-athletic.jpg?v=color2",
+    "I will train": "manus-storage/zone-athletic.jpg?v=color2",
+    "i will train": "manus-storage/zone-athletic.jpg?v=color2",
     "fitness training": "manus-storage/zone-athletic.jpg?v=color2",
     "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "I surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I will surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "I surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I surrender myself to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I will surrender myself to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I will surrender to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "I will surrender": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "i surrender myself to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender myself to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender-to-allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "surrender to allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "itaqallah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
@@ -146,6 +178,7 @@ KNOWN_CARD_PHOTOS = {
     "to travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "i travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "I travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
+    "I will travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "to-travel": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "tune into": "",
     "tune-into": "",
@@ -159,6 +192,7 @@ KNOWN_CARD_PHOTOS = {
     "to seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "i seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "I seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
+    "I will seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "seize opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "seize-opportunities": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
     "seize": "manus-storage/zone-seize-opportunities.jpg?v=seize4",
@@ -166,40 +200,49 @@ KNOWN_CARD_PHOTOS = {
     "to litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "i litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "I litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
+    "I will litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "to-litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
-    "to recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
-    "i recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
-    "I recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
-    "I recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=refund1",
-    "i recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=refund1",
-    "recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
-    "to-recoup": "manus-storage/zone-to-recoup.jpg?v=refund1",
+    "to recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "i recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "I recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "I will recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "I recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "I will recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "i recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "to-recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
     "to scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "i scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "I scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
+    "I will scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "scholarship-application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "to-scholarship-application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "to curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "i curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "I curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
+    "I will curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "to-curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "to love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
     "i love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
     "I love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
+    "I will love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
     "to persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "i persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "I persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
+    "I will persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "to feel": "",
     "i feel": "",
     "I feel": "",
+    "I will feel": "",
     "to-feel": "",
     "tofeel": "",
     "feel": "",
     "to channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "i channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "I channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
+    "I will channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "to-channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "tochannel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
     "channel": "manus-storage/zone-to-channel-souls.jpg?v=souls1",
@@ -501,9 +544,29 @@ def _tile_key(chunk: str) -> str:
     return re.sub(r"\s+", " ", key).strip().lower()
 
 
+_SECTION_PREFIX_RE = re.compile(r"^(to|i will|i)[\s-]+")
+
+
+def _bare_section(key: str) -> str:
+    s = re.sub(r"\s+", " ", str(key or "")).strip().lower()
+    while _SECTION_PREFIX_RE.match(s):
+        s = _SECTION_PREFIX_RE.sub("", s, count=1)
+    return s
+
+
 def _tile_aliases(key: str) -> set[str]:
     k = re.sub(r"\s+", " ", str(key or "")).strip().lower()
-    out = {k, k.replace(" ", "-")}
+    bare = _bare_section(k)
+    out = {k, k.replace(" ", "-"), bare, bare.replace(" ", "-")}
+    if bare:
+        out.update({
+            f"to {bare}",
+            f"i {bare}",
+            f"i will {bare}",
+            f"to-{bare.replace(' ', '-')}",
+            f"i-{bare.replace(' ', '-')}",
+            f"i-will-{bare.replace(' ', '-')}",
+        })
     pairs = (
         ("gym", "body"),
         ("toned body", "body"),
@@ -553,8 +616,9 @@ def _tile_aliases(key: str) -> set[str]:
         ("itaqAllah", "itaq-allah"),
     )
     for a, b in pairs:
-        if k in (a, b, a.replace(" ", "-"), b.replace(" ", "-")):
-            out.update((a, b, a.replace(" ", "-"), b.replace(" ", "-")))
+        names = (a, b, a.replace(" ", "-"), b.replace(" ", "-"))
+        if k in names or bare in names:
+            out.update(names)
     return {x for x in out if x}
 
 
@@ -809,15 +873,26 @@ def _insert_before_matching_div_close(html: str, open_idx: int, insert: str) -> 
 
 
 def _tile_span_for_focus(block: str, focus: str) -> tuple[int, int] | None:
-    want = re.sub(r"\s+", " ", str(focus or "")).strip().lower()
-    if not want:
+    return _tile_span_for_section(block, focus, "")
+
+
+def _tile_span_for_section(block: str, focus: str, title: str = "") -> tuple[int, int] | None:
+    aliases = _tile_aliases(focus) | _tile_aliases(title)
+    if not aliases:
         return None
-    aliases = _tile_aliases(want) | {want}
     for m in re.finditer(r"<article\b(?=[^>]*\bvision-tile\b)[^>]*>", block, re.I):
+        try:
+            start, end = _article_span(block, m.start())
+        except ValueError:
+            continue
+        chunk = block[start:end]
         fm = re.search(r'data-focus="([^"]+)"', m.group(0), re.I)
+        tm = re.search(r'<h3 class="vision-tile-title"[^>]*>([^<]+)</h3>', chunk, re.I)
         tile_focus = (fm.group(1) if fm else "").strip().lower()
-        if tile_focus in aliases or want in _tile_aliases(tile_focus):
-            return _article_span(block, m.start())
+        tile_title = re.sub(r"\s+", " ", (tm.group(1) if tm else "")).strip().lower()
+        keys = _tile_aliases(tile_focus) | _tile_aliases(tile_title)
+        if keys & aliases:
+            return start, end
     return None
 
 
@@ -881,6 +956,331 @@ def save_vision_check(date: str, focus: str, title: str) -> dict:
         "date": date,
         "title": title,
         "focus": focus,
+        "files": written,
+        "warnings": warnings,
+    }
+
+
+_VISION_CHECK_RE = re.compile(
+    r'<label class="vision-check"[^>]*>.*?</label>',
+    re.I | re.S,
+)
+
+
+def save_vision_check_order(date: str, focus: str, titles, page: str = "") -> dict:
+    """Reorder vision-check labels inside a day's section tile."""
+    date = str(date or "").strip()
+    focus = str(focus or "").strip()
+    want = []
+    seen = set()
+    for raw in titles or []:
+        t = re.sub(r"\s+", " ", str(raw or "")).strip()
+        k = t.lower()
+        if t and k not in seen:
+            want.append(t)
+            seen.add(k)
+    if not date or not want:
+        raise ValueError("date and titles required")
+    paths = OVERVIEW_FILES
+    written: list[str] = []
+    warnings: list[str] = []
+    with SAVE_OVERVIEW_LOCK:
+        for path in paths:
+            if not path.exists():
+                continue
+            try:
+                html = path.read_text(encoding="utf-8")
+                _, start, end = _day_block_bounds(html, date)
+                block = html[start:end]
+                span = _tile_span_for_focus(block, focus)
+                if not span:
+                    raise ValueError(f"section {focus} not found on {date}")
+                art_s, art_e = span
+                art = block[art_s:art_e]
+                checks = _VISION_CHECK_RE.findall(art)
+                if not checks:
+                    written.append(path.name)
+                    continue
+
+                def check_key(chunk: str) -> str:
+                    m = re.search(r"<span[^>]*>([^<]*)</span>", chunk, re.I)
+                    return re.sub(r"\s+", " ", (m.group(1) if m else "")).strip().lower()
+
+                by_key: dict[str, str] = {}
+                for chunk in checks:
+                    k = check_key(chunk)
+                    if k and k not in by_key:
+                        by_key[k] = chunk
+                ordered = []
+                used = set()
+                for title in want:
+                    k = title.lower()
+                    if k in by_key and k not in used:
+                        ordered.append(by_key[k])
+                        used.add(k)
+                for chunk in checks:
+                    k = check_key(chunk)
+                    if k not in used:
+                        ordered.append(chunk)
+                        used.add(k)
+                art_no = _VISION_CHECK_RE.sub("", art)
+                det = re.search(r'<div class="vision-tile-details">', art_no)
+                if not det:
+                    written.append(path.name)
+                    continue
+                insert_at = det.end()
+                new_art = art_no[:insert_at] + "".join(ordered) + art_no[insert_at:]
+                new_block = block[:art_s] + new_art + block[art_e:]
+                new_html = html[:start] + new_block + html[end:]
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "task order not baked")
+    return {
+        "ok": True,
+        "date": date,
+        "focus": focus,
+        "titles": want,
+        "files": written,
+        "warnings": warnings,
+    }
+
+
+def _overview_paths_for_page(page: str) -> list[Path]:
+    p = str(page or "").strip().lower()
+    if p in ("prototype", "prototypes", "prototype.html", "prototypes-page"):
+        return [ROOT / "prototype.html"]
+    return [DASHBOARD]
+
+
+def _safe_section_photo(photo: str) -> str:
+    photo = str(photo or "").strip()
+    if not photo:
+        return ""
+    wrapped = re.match(r"""(?i)url\(\s*['"]?([^'")]+)['"]?\s*\)""", photo)
+    if wrapped:
+        photo = wrapped.group(1).strip()
+    if photo.lower() in ("none", "nophoto"):
+        return ""
+    photo = photo.split("#", 1)[0]
+    photo = re.sub(r"^https?://(?:127\.0\.0\.1|localhost)(?::\d+)?/", "", photo, flags=re.I)
+    photo = photo.lstrip("/")
+    if photo.startswith("./"):
+        photo = photo[2:]
+    if not photo.startswith("manus-storage/"):
+        return ""
+    if ".." in photo or any(c in photo for c in "<>\"'\\ \n\r"):
+        return ""
+    if not re.fullmatch(r"manus-storage/[A-Za-z0-9._/?=-]+", photo):
+        return ""
+    return photo
+
+
+def _normalize_section_recs(body: dict) -> list[dict]:
+    raw: list = []
+    sections = body.get("sections") if isinstance(body, dict) else None
+    if isinstance(sections, list):
+        raw.extend(item for item in sections if isinstance(item, dict))
+    elif isinstance(body, dict) and (body.get("title") or body.get("focus")):
+        raw.append(body)
+    out: list[dict] = []
+    seen: set[str] = set()
+    for rec in raw:
+        title = re.sub(r"\s+", " ", str(rec.get("title") or "")).strip()[:80]
+        focus_src = str(rec.get("focus") or title)
+        focus = re.sub(r"[^a-z0-9.-]+", "-", focus_src.lower()).strip("-")[:48]
+        if not title or not focus:
+            continue
+        key = f"{focus}\n{title.lower()}"
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({
+            "focus": focus,
+            "title": title,
+            "photo": _safe_section_photo(str(rec.get("photo") or "")),
+        })
+    return out
+
+
+def _hero_has_section(inner: str, focus: str, title: str) -> bool:
+    if _tile_span_for_focus(inner, focus):
+        return True
+    want = re.sub(r"\s+", " ", str(title or "")).strip().lower()
+    if not want:
+        return False
+    for m in re.finditer(r'<h3 class="vision-tile-title"[^>]*>([^<]*)</h3>', inner, re.I):
+        got = re.sub(r"\s+", " ", m.group(1)).strip().lower()
+        if got == want or got in _tile_aliases(focus) or want in _tile_aliases(got):
+            return True
+    return False
+
+
+def _vision_tile_html(focus: str, title: str, photo: str) -> str:
+    extra = ""
+    aliases = _tile_aliases(focus) | _tile_aliases(title)
+    if aliases & {
+        "body", "gym", "train", "toned body", "toned-body",
+        "athletic", "fitness training", "fitness-training",
+    }:
+        extra += " vision-tile-body vision-tile-tall"
+    if not photo:
+        extra += " vision-tile-nophoto"
+        style = "--tile-photo: none;"
+    else:
+        style = f"--tile-photo: url('{photo}');"
+    safe_title = _xml_escape(title)
+    carve = safe_title.replace('"', "&quot;")
+    focus_attr = _xml_escape(focus)
+    return (
+        f'<article class="vision-tile{extra}" data-focus="{focus_attr}" '
+        f'style="{style}">'
+        f'<div class="vision-tile-photo"></div>'
+        f'<h3 class="vision-tile-title" data-carve="{carve}">{safe_title}</h3>'
+        f'<div class="vision-tile-details"></div></article>\n'
+    )
+
+
+def save_vision_sections(date: str, recs: list, page: str) -> dict:
+    """Insert user-added vision tiles into one day's collage. One file, one write."""
+    date = str(date or "").strip()
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        raise ValueError(f"invalid overview date: {date}")
+    if not recs:
+        raise ValueError("section title required")
+    paths = [p for p in _overview_paths_for_page(page) if p.exists()]
+    if not paths:
+        raise ValueError("overview file not found")
+    written: list[str] = []
+    warnings: list[str] = []
+    added: list[str] = []
+    with SAVE_OVERVIEW_LOCK:
+        for path in paths:
+            try:
+                html = path.read_text(encoding="utf-8")
+                start_inner, end_inner = _vision_hero_span(html, date)
+                inner = html[start_inner:end_inner]
+                chunks: list[str] = []
+                for rec in recs:
+                    focus = rec["focus"]
+                    title = rec["title"]
+                    aliases = _tile_aliases(focus) | _tile_aliases(title)
+                    if date == "2026-08-30" and aliases & AUG30_ARCHIVED_EXTRAS:
+                        continue
+                    probe = inner + "".join(chunks)
+                    if _hero_has_section(probe, focus, title):
+                        continue
+                    chunks.append(_vision_tile_html(focus, title, rec.get("photo") or ""))
+                    added.append(title)
+                if not chunks:
+                    written.append(path.name)
+                    continue
+                insert = "".join(chunks)
+                if not inner.endswith("\n"):
+                    insert = "\n" + insert
+                if html[end_inner:end_inner + 6] == "</div>":
+                    new_html = html[:end_inner] + insert + html[end_inner:]
+                else:
+                    new_inner = inner + ("" if inner.endswith("\n") else "\n") + "".join(chunks)
+                    new_html = replace_vision_hero_inner(html, date, new_inner)
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if len(html) > 500_000 and len(new_html) < 500_000:
+                    raise ValueError(
+                        f"refusing save: {path.name} would shrink from {len(html)} to {len(new_html)}"
+                    )
+                if '.replace(/<h3 class="vision-tile-title">\n<article' in new_html:
+                    raise ValueError("refusing save: would corrupt power-purpose JS splice")
+                for later in (
+                    "2026-06-23", "2026-08-28", "2026-08-29",
+                    "2026-08-30", "2026-09-01", "2026-09-02", "2026-09-03",
+                ):
+                    marker = f'data-date="{later}"'
+                    if marker in html and marker not in new_html:
+                        raise ValueError(f"refusing save: would delete day block {later}")
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "section not baked")
+    return {
+        "ok": True,
+        "date": date,
+        "page": "prototype" if paths[0].name == "prototype.html" else "everything",
+        "added": added,
+        "files": written,
+        "warnings": warnings,
+    }
+
+
+def remove_vision_sections(date: str, recs: list, page: str) -> dict:
+    """Cut specific vision tiles out of one day's collage. One file, one write."""
+    date = str(date or "").strip()
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        raise ValueError(f"invalid overview date: {date}")
+    if not recs:
+        raise ValueError("section required")
+    paths = [p for p in _overview_paths_for_page(page) if p.exists()]
+    if not paths:
+        raise ValueError("overview file not found")
+    written: list[str] = []
+    warnings: list[str] = []
+    removed: list[str] = []
+    with SAVE_OVERVIEW_LOCK:
+        for path in paths:
+            try:
+                html = path.read_text(encoding="utf-8")
+                start_inner, end_inner = _vision_hero_span(html, date)
+                inner = html[start_inner:end_inner]
+                cut = 0
+                for rec in recs:
+                    span = _tile_span_for_section(inner, rec.get("focus") or "", rec.get("title") or "")
+                    if not span:
+                        continue
+                    s, e = span
+                    while e < len(inner) and inner[e] in " \t\r\n":
+                        e += 1
+                    inner = inner[:s] + inner[e:]
+                    cut += 1
+                    removed.append(rec.get("title") or rec.get("focus") or "")
+                if not cut:
+                    written.append(path.name)
+                    continue
+                new_html = html[:start_inner] + inner + html[end_inner:]
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if len(html) > 500_000 and len(new_html) < 500_000:
+                    raise ValueError(
+                        f"refusing save: {path.name} would shrink from {len(html)} to {len(new_html)}"
+                    )
+                if '.replace(/<h3 class="vision-tile-title">\n<article' in new_html:
+                    raise ValueError("refusing save: would corrupt power-purpose JS splice")
+                for later in (
+                    "2026-06-23", "2026-08-28", "2026-08-29",
+                    "2026-08-30", "2026-09-01", "2026-09-02", "2026-09-03",
+                ):
+                    marker = f'data-date="{later}"'
+                    if marker in html and marker not in new_html:
+                        raise ValueError(f"refusing save: would delete day block {later}")
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "section not removed")
+    return {
+        "ok": True,
+        "date": date,
+        "page": "prototype" if paths[0].name == "prototype.html" else "everything",
+        "removed": removed,
         "files": written,
         "warnings": warnings,
     }
@@ -1227,6 +1627,33 @@ class Handler(SimpleHTTPRequestHandler):
                     str((body or {}).get("title") or ""),
                 )
                 return self._json(200, result)
+            if path == "/save-task-order":
+                body = self._read_json()
+                result = save_vision_check_order(
+                    str((body or {}).get("date") or ""),
+                    str((body or {}).get("focus") or ""),
+                    (body or {}).get("titles") or [],
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
+            if path == "/save-section":
+                body = self._read_json()
+                recs = _normalize_section_recs(body if isinstance(body, dict) else {})
+                result = save_vision_sections(
+                    str((body or {}).get("date") or ""),
+                    recs,
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
+            if path == "/remove-section":
+                body = self._read_json()
+                recs = _normalize_section_recs(body if isinstance(body, dict) else {})
+                result = remove_vision_sections(
+                    str((body or {}).get("date") or ""),
+                    recs,
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
             if path == "/save-overview":
                 body = self._read_json()
                 date = body.get("date") if isinstance(body, dict) else None
@@ -1290,7 +1717,7 @@ def main():
     print(f"dashboard server on http://127.0.0.1:{PORT}/", flush=True)
     print("POST /bake to persist localStorage into GitHub", flush=True)
     print("POST /brain-dump to write thoughts into brain-dump.html", flush=True)
-    print("POST /save-overview to write vision collage into everything.html + prototype.html", flush=True)
+    print("POST /save-overview is a no-op; POST /save-section, /remove-section, /save-task and /save-task-order bake into HTML", flush=True)
     httpd.serve_forever()
 
 
