@@ -1,4 +1,4 @@
-/* Jump to today once, after the first layout. No hold, no observers, no retries. */
+/* Land on today as soon as it exists; correct after collapse + fonts. */
 (function () {
   try {
     if (document.documentElement.classList.contains('prototypes-page')) return;
@@ -12,27 +12,32 @@
     };
 
     function jump() {
-      if (window.__earlyTodayReady) return;
       var iso = isoNow();
       var block = document.querySelector('.day-block[data-date="' + iso + '"]')
         || document.querySelector('.day-block.today-block');
       if (!block) return;
       block.classList.add('today-block');
       block.classList.remove('collapsed', 'past');
-      try { block.scrollIntoView({ behavior: 'auto', block: 'start' }); } catch (e) {}
+      try { block.scrollIntoView({ behavior: 'instant', block: 'start' }); } catch (e) {
+        try { block.scrollIntoView({ behavior: 'auto', block: 'start' }); } catch (e2) {}
+      }
       try {
         var y = Math.max(0, block.getBoundingClientRect().top + (window.scrollY || 0) - 12);
-        window.scrollTo(0, y);
-      } catch (e2) {}
+        window.scrollTo({ top: y, behavior: 'instant' });
+      } catch (e3) {}
       window.__earlyTodayReady = true;
     }
 
-    function afterLayout() {
-      requestAnimationFrame(function () { requestAnimationFrame(jump); });
-    }
-
     window.__scrollToToday = jump;
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', afterLayout);
-    else afterLayout();
+    if (!window.__earlyTodayReady) jump();
+
+    function correct() {
+      requestAnimationFrame(function () { jump(); });
+    }
+    if (document.readyState === 'complete') correct();
+    else document.addEventListener('DOMContentLoaded', correct);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { jump(); }).catch(function () {});
+    }
   } catch (err) {}
 })();

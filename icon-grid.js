@@ -1,11 +1,11 @@
-/* Wrap grids cards into sections. Pack each section as a cluster —
-   cards stay close, and dragging one makes the others accommodate. */
+/* Wrap grids cards into sections. Each section is a force-directed
+   cluster: cards stay linked, and moving one reflows the others. */
 (function () {
   var POS_KEY = "grids_freeform_pos_v3";
   var SEC_KEY = "grids_card_section_v1";
   var zTop = 6;
   var GAP = 16;
-  var FOLLOW_R = 560;
+  var FOLLOW_R = 780;
 
   function hash(s) {
     var h = 2166136261;
@@ -219,8 +219,49 @@
     return hash(label ? label.textContent : "section");
   }
 
+  function packTwoAcross(cards, W, saved) {
+    var gap = 20;
+    var pad = 16;
+    var avail = Math.max(280, W - pad * 2 - gap);
+    var w = Math.min(340, Math.max(220, Math.floor(avail / 2)));
+    if (W < 520) w = Math.min(w, W - 24);
+    cards.forEach(function (card, i) {
+      clearColumnCard(card);
+      var prev = saved && card.id ? saved[card.id] : null;
+      var rot = prev && typeof prev.r === "number" ? prev.r : 0;
+      var x = pad + i * (w + gap);
+      var y = 10;
+      if (W < 520) {
+        x = pad;
+        y = 10 + i * 8;
+      }
+      x = clampX(x, w, W);
+      card.style.position = "absolute";
+      card.style.width = w + "px";
+      card.style.left = x + "px";
+      card.style.top = y + "px";
+      card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
+      if (saved && card.id) saved[card.id] = { x: x, y: y, r: rot, w: w };
+    });
+  }
+
+  function savedPairIsStacked(cards, saved) {
+    if (cards.length !== 2 || !saved) return false;
+    var a = saved[cards[0].id];
+    var b = saved[cards[1].id];
+    if (!a || !b || typeof a.x !== "number" || typeof b.x !== "number") return false;
+    var minW = Math.min(a.w || 248, b.w || 248);
+    return Math.abs(a.x - b.x) < minW * 0.5 && Math.abs((a.y || 0) - (b.y || 0)) > 70;
+  }
+
   function findPackSlot(placed, w, h, W, originX, originY, rnd) {
     if (!placed.length) return { x: originX, y: originY };
+    if (placed.length === 1 && W >= w + placed[0].w + GAP + 24) {
+      return {
+        x: clampX(placed[0].x + placed[0].w + GAP, w, W),
+        y: placed[0].y
+      };
+    }
 
     var cx = 0, cy = 0;
     placed.forEach(function (p) {
@@ -336,6 +377,27 @@
     saveSections(secs);
   }
 
+  function forcePairedCards(grid) {
+    var pairs = [
+      { ids: ["c5", "c12"], title: "storage" },
+      { ids: ["c7", "c8"], title: "devices repairs" }
+    ];
+    var byTitle = {};
+    Array.from(grid.querySelectorAll(".grid-section")).forEach(function (sec) {
+      var canvas = sec.querySelector(":scope > .grid-section-cards");
+      var title = sectionTitle(canvas);
+      if (canvas && title) byTitle[title.toLowerCase()] = canvas;
+    });
+    pairs.forEach(function (pair) {
+      var dest = byTitle[pair.title];
+      if (!dest) return;
+      pair.ids.forEach(function (id) {
+        var card = document.getElementById(id);
+        if (card) dest.appendChild(card);
+      });
+    });
+  }
+
   function applySavedSections(grid) {
     var secs = loadSections();
     if (!secs || !Object.keys(secs).length) return;
@@ -389,8 +451,8 @@
             Math.abs(dx) - (a.w + b.w) / 2,
             Math.abs(dy) - (a.h + b.h) / 2
           );
-          if (edgeGap > 22 && edgeGap < 130) {
-            var pull = Math.min(16, (edgeGap - 18) * 0.09);
+          if (edgeGap > 16) {
+            var pull = Math.min(36, (edgeGap - 12) * 0.16);
             vx[i] += nx * pull;
             vy[i] += ny * pull;
             vx[j] -= nx * pull;
@@ -409,6 +471,113 @@
     }
   }
 
+  function visualSort(cards) {
+    return cards.slice().sort(function (a, b) {
+      var ay = parseFloat(a.style.top) || 0;
+      var by = parseFloat(b.style.top) || 0;
+      if (Math.abs(ay - by) > 36) return ay - by;
+      return (parseFloat(a.style.left) || 0) - (parseFloat(b.style.left) || 0);
+    });
+  }
+
+  function clusterHasHole(nodes, W) {
+    if (!nodes || nodes.length < 2) return false;
+    var minW = nodes.reduce(function (m, n) { return Math.min(m, n.w || 248); }, 248);
+    var rows = [];
+    nodes.forEach(function (n) {
+      var row = null;
+      for (var i = 0; i < rows.length; i++) {
+        if (Math.abs(rows[i].y - n.y) < Math.min(rows[i].h, n.h) * 0.5) {
+          row = rows[i];
+          break;
+        }
+      }
+      if (!row) {
+        rows.push({ y: n.y, h: n.h, items: [n] });
+      } else {
+        row.items.push(n);
+        row.h = Math.max(row.h, n.h);
+      }
+    });
+    for (var r = 0; r < rows.length; r++) {
+      var items = rows[r].items.slice().sort(function (a, b) { return a.x - b.x; });
+      if (items[0].x > 28 + minW * 0.45) return true;
+      for (var i = 0; i < items.length - 1; i++) {
+        if (items[i + 1].x - (items[i].x + items[i].w) > minW * 0.5) return true;
+      }
+      var last = items[items.length - 1];
+      var slack = W - 16 - (last.x + last.w);
+      if (r < rows.length - 1 && slack > minW + GAP) return true;
+    }
+    return false;
+  }
+
+  function packCluster(canvas, saved) {
+    var cards = queryCards(canvas);
+    if (!cards.length) {
+      canvas.style.minHeight = "0px";
+      canvas.style.height = "0px";
+      return;
+    }
+    if (cards.length === 1) {
+      applyColumnCard(cards[0]);
+      canvas.style.height = "";
+      canvas.style.minHeight = "";
+      return;
+    }
+    var W = canvasWidth(canvas);
+    if (cards.length === 2 && W >= 520) {
+      packTwoAcross(cards, W, saved);
+      fitCanvas(canvas, readNodes(canvas));
+      return;
+    }
+    var ordered = visualSort(cards);
+    var cols = W >= 980 ? 3 : W >= 520 ? 2 : 1;
+    var gap = 20;
+    var pad = 16;
+    var w = Math.min(340, Math.max(220, Math.floor((W - pad * 2 - gap * (cols - 1)) / cols)));
+    if (W < 420) w = Math.min(w, W - 24);
+    ordered.forEach(function (card) {
+      clearColumnCard(card);
+      card.style.position = "absolute";
+      card.style.width = w + "px";
+    });
+    var x = pad;
+    var y = 10;
+    var col = 0;
+    var rowH = 0;
+    ordered.forEach(function (card) {
+      var h = Math.max(card.offsetHeight || 180, 140);
+      if (col >= cols) {
+        x = pad;
+        y += rowH + gap;
+        col = 0;
+        rowH = 0;
+      }
+      x = clampX(x, w, W);
+      var prev = saved && card.id ? saved[card.id] : null;
+      var rot = prev && typeof prev.r === "number" ? prev.r : 0;
+      card.style.left = x + "px";
+      card.style.top = y + "px";
+      card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
+      if (saved && card.id) saved[card.id] = { x: x, y: y, r: rot, w: w };
+      x += w + gap;
+      col += 1;
+      rowH = Math.max(rowH, h);
+    });
+    fitCanvas(canvas, readNodes(canvas));
+  }
+
+  function withSettleAnim(canvas, fn) {
+    if (!canvas) return;
+    var cards = queryCards(canvas);
+    cards.forEach(function (c) { c.classList.add("is-settling"); });
+    fn();
+    window.setTimeout(function () {
+      cards.forEach(function (c) { c.classList.remove("is-settling"); });
+    }, 420);
+  }
+
   function followPinned(nodes, pinned, dx, dy) {
     var pcx = pinned.x + pinned.w / 2;
     var pcy = pinned.y + pinned.h / 2;
@@ -419,8 +588,8 @@
       var d = Math.hypot(cx - pcx, cy - pcy);
       var infl = Math.max(0, 1 - d / FOLLOW_R);
       infl = infl * infl;
-      n.x += dx * infl * 0.68;
-      n.y += dy * infl * 0.68;
+      n.x += dx * infl * 0.86;
+      n.y += dy * infl * 0.86;
     });
   }
 
@@ -438,6 +607,31 @@
       return;
     }
     var W = canvasWidth(canvas);
+    if (cards.length === 2 && (W >= 520 || savedPairIsStacked(cards, saved))) {
+      packTwoAcross(cards, W, saved);
+      fitCanvas(canvas, readNodes(canvas));
+      return;
+    }
+    if (cards.length >= 3) {
+      var probe = [];
+      var holey = false;
+      cards.forEach(function (card) {
+        var prev = saved && card.id ? saved[card.id] : null;
+        if (prev && typeof prev.x === "number" && typeof prev.y === "number") {
+          probe.push({
+            x: prev.x,
+            y: prev.y,
+            w: prev.w || 248,
+            h: Math.max(card.offsetHeight || 180, 140)
+          });
+        }
+      });
+      if (probe.length === cards.length) holey = clusterHasHole(probe, W);
+      if (holey || probe.length !== cards.length) {
+        packCluster(canvas, saved);
+        return;
+      }
+    }
     var rnd = rng(sectionSeed(canvas));
     var originX = 16 + Math.floor(rnd() * 28);
     var originY = 10 + Math.floor(rnd() * 8);
@@ -572,7 +766,26 @@
       return;
     }
     var W = canvasWidth(canvas);
+    if (cards.length === 2 && W >= 520) {
+      withSettleAnim(canvas, function () {
+        packTwoAcross(cards, W, loadPos());
+        persistCanvas(canvas);
+        fitCanvas(canvas, readNodes(canvas));
+      });
+      var gridPair = canvas.closest(".icon-task-grid") || canvas.closest(".grid");
+      if (gridPair) syncSoloColumns(gridPair);
+      return;
+    }
     var nodes = readNodes(canvas);
+    if (!pinnedEl || clusterHasHole(nodes, W)) {
+      withSettleAnim(canvas, function () {
+        packCluster(canvas, loadPos());
+        persistCanvas(canvas);
+      });
+      var gridPack = canvas.closest(".icon-task-grid") || canvas.closest(".grid");
+      if (gridPack) syncSoloColumns(gridPack);
+      return;
+    }
     var k;
     for (k = 0; k < 14; k++) stepForces(nodes, pinnedEl || null, W, { pad: GAP, attract: true });
     applyNodes(nodes);
@@ -586,10 +799,14 @@
     if (!card || !toCanvas || fromCanvas === toCanvas) return fromCanvas;
     if (fromCanvas) {
       queryCards(fromCanvas).forEach(function (c) { c.classList.remove("is-relating"); });
-      // Shrink source without the card still counting toward height
-      fitCanvas(fromCanvas, readNodes(fromCanvas).filter(function (n) { return n.el !== card; }));
     }
     toCanvas.appendChild(card);
+    if (fromCanvas) {
+      withSettleAnim(fromCanvas, function () {
+        packCluster(fromCanvas, loadPos());
+        persistCanvas(fromCanvas);
+      });
+    }
     if (queryCards(toCanvas).length >= 2) promoteFromSolo(toCanvas);
     setCardSectionLabel(card, toCanvas);
     var crect = toCanvas.getBoundingClientRect();
@@ -743,6 +960,7 @@
     }
     wrapIntoSections(grid);
     applySavedSections(grid);
+    forcePairedCards(grid);
     scatterAll(grid);
     bindDrag(grid);
   }

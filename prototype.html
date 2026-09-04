@@ -64,6 +64,76 @@ img[src*="card-fall-2026-enrollment"] {
 #page-bg-img[src*="card-tuition"] {
   display: none !important;
 }
+/* First paint = current chrome. Do not wait for end-of-file CSS/JS. */
+html body #editBtn,
+html body #editBtn.edit-toggle,
+html body #sync-state-btn,
+html body #sync-btn,
+html body #exportBtn,
+html body .editing-badge {
+  display: none !important;
+}
+html body #enh-left-fab {
+  position: fixed !important;
+  left: 24px !important;
+  bottom: 24px !important;
+  top: auto !important;
+  right: auto !important;
+  z-index: 99990 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  pointer-events: none !important;
+}
+html body #enh-left-fab #enh-jump-today,
+html body #enh-left-fab #enh-scroll-top {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: auto !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+}
+html body #enh-left-fab #enh-jump-today {
+  height: 36px !important;
+  padding: 0 14px !important;
+  border: none !important;
+  border-radius: 18px !important;
+  background: rgba(138,158,133,0.9) !important;
+  color: #fff !important;
+  font-family: 'DM Mono', monospace, sans-serif !important;
+  font-size: 9px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 2px 12px rgba(138,158,133,0.3) !important;
+}
+html body #enh-left-fab #enh-scroll-top {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(245,240,232,0.9) !important;
+  border: 1px solid rgba(196,168,130,0.4) !important;
+  color: #2A2A25 !important;
+  font-size: 18px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+}
+@media (max-width: 768px) {
+  html body #enh-left-fab {
+    left: 16px !important;
+    bottom: 16px !important;
+  }
+}
+html body .day-block.collapsed {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 56px;
+}
 </style>
 <script id="no-card-flash-js">
 (function(){
@@ -10168,6 +10238,10 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
 
 </head>
 <body class="prototypes-page">
+<div id="enh-left-fab">
+<button id="enh-jump-today" class="enh-visible" title="Jump to today (Ctrl+T)" type="button">today</button>
+<button id="enh-scroll-top" class="enh-visible" title="Scroll to top" type="button">&#8593;</button>
+</div>
 <!-- Global SVG defs for pin markers -->
 <svg width="0" height="0" style="position:absolute;pointer-events:none;" aria-hidden="true">
   <defs>
@@ -10370,7 +10444,7 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
   else setup();
 })();
 </script>
-<script src="nav-shared.js?v=navcreditscore1"></script>
+<script src="nav-shared.js?v=navcreditscore1" defer></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -13165,6 +13239,17 @@ window.__j22fnApply=run;
     'pepperdine':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'enroll':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'achieve':'manus-storage/zone-achieve-csol.jpg?v=csol2',
+    'I will achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'I will master':'manus-storage/zone-to-master.jpg?v=dip3',
+    'i will master':'manus-storage/zone-to-master.jpg?v=dip3',
+    'I master':'manus-storage/zone-to-master.jpg?v=dip3',
+    'to master':'manus-storage/zone-to-master.jpg?v=dip3',
+    'to-master':'manus-storage/zone-to-master.jpg?v=dip3',
+    'master':'manus-storage/zone-to-master.jpg?v=dip3',
+    'i will achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'I achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'to achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'to-achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
     'succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'I will succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'to succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
@@ -13300,11 +13385,11 @@ window.__j22fnApply=run;
     'audacity':'manus-storage/zone-audacity.jpg?v=finger1',
     'audacity':'manus-storage/zone-audacity.jpg?v=finger1',
     'politics':'manus-storage/zone-politics.jpg?v=chess5',
-    'wins':'manus-storage/zone-wins-hand.jpg?v=game3',
-    'win':'manus-storage/zone-wins-hand.jpg?v=game3',
-    'I will win':'manus-storage/zone-wins-hand.jpg?v=game3',
-    'i will win':'manus-storage/zone-wins-hand.jpg?v=game3',
-    'I win':'manus-storage/zone-wins-hand.jpg?v=game3',
+    'wins':'manus-storage/zone-wins-hand.jpg?v=game6',
+    'win':'manus-storage/zone-wins-hand.jpg?v=game6',
+    'I will win':'manus-storage/zone-wins-hand.jpg?v=game6',
+    'i will win':'manus-storage/zone-wins-hand.jpg?v=game6',
+    'I win':'manus-storage/zone-wins-hand.jpg?v=game6',
     'repetitions':'manus-storage/zone-repetitions.jpg?v=cubes1',
     'repeat 10,000 times':'manus-storage/zone-repetitions.jpg?v=cubes1',
     'repeat 10000 times':'manus-storage/zone-repetitions.jpg?v=cubes1',
@@ -13483,13 +13568,13 @@ window.__j22fnApply=run;
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
-    if(IMG[n]) return IMG[n];
+    if(Object.prototype.hasOwnProperty.call(IMG, n)) return IMG[n] || '';
     if(/^(to|i will|i)\s+/.test(n)){
       var bare = n.replace(/^(to|i will|i)\s+/, '');
-      if(IMG[bare]) return IMG[bare];
-      if(IMG['to ' + bare]) return IMG['to ' + bare];
-      if(IMG['i will ' + bare]) return IMG['i will ' + bare];
-      if(IMG['i ' + bare]) return IMG['i ' + bare];
+      if(Object.prototype.hasOwnProperty.call(IMG, bare)) return IMG[bare] || '';
+      if(Object.prototype.hasOwnProperty.call(IMG, 'to ' + bare)) return IMG['to ' + bare] || '';
+      if(Object.prototype.hasOwnProperty.call(IMG, 'i will ' + bare)) return IMG['i will ' + bare] || '';
+      if(Object.prototype.hasOwnProperty.call(IMG, 'i ' + bare)) return IMG['i ' + bare] || '';
     }
     for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(n)) return KEYWORDS[i][1]; }
     return '';
@@ -17903,6 +17988,9 @@ window.__j22fnApply=run;
       var sp=lab.querySelector('span');
       push(sp ? sp.textContent : '');
     });
+    [].slice.call(blk.querySelectorAll('.tv-panel.tv-pursuits .j22-item .j22-t')).forEach(function(el){
+      push(el.textContent);
+    });
     return out;
   }
   function isOverviewEra(blk){
@@ -18087,6 +18175,7 @@ window.__j22fnApply=run;
   }
   window.__ensureOverviewNodesGrid=ensureOverviewNodesGrid;
   window.__isOverviewEra=isOverviewEra;
+  window.__dayTasksOnly=dayTasksOnly;
   window.__overviewTasksForDay=overviewTasksForDay;
   window.__overviewPhotoForName=overviewPhotoForName;
   window.__syncOverviewEraChrome=syncOverviewEraChrome;
@@ -20668,7 +20757,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="focus" style="--tile-photo: url(&quot;manus-storage/zone-focus.jpg?v=lens1&quot;); grid-area: 8 / 1 / 9 / 2 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="focus">focus</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="strengths" style="--tile-photo: url(&quot;manus-storage/zone-strengths.jpg?v=soul1&quot;); grid-area: 8 / 2 / 9 / 3 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="strengths">strengths</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="plan" style="--tile-photo: url('manus-storage/zone-workflow.jpg?v=swap1'); grid-area: 8 / 3 / 9 / 4 !important;" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="plan">plan</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game3');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="to win">to win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game6');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="to win">to win</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="repetitions" style="--tile-photo: url('manus-storage/zone-repetitions.jpg?v=cubes1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to repeat 10,000 times">to repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="politics" style="--tile-photo: url('manus-storage/zone-politics.jpg?v=chess5');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to politics">to politics</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="execute" style="--tile-photo: url('manus-storage/zone-execute-focus.jpg?v=chess1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to execute">to execute</h3><div class="vision-tile-details"></div></article>
@@ -20685,6 +20774,9 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="to-channel" style="--tile-photo: url('manus-storage/zone-to-channel-souls.jpg?v=souls1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to channel">to channel</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="aim-above-the-mark" style="--tile-photo: url('manus-storage/zone-intentions.jpg?v=aim1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to aim above the mark">to aim above the mark</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="feel-it-into-being" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel it into being">to feel it into being</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-master" style="--tile-photo: url('manus-storage/zone-to-master.jpg?v=dip3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to master">to master</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-to-earn-gold.jpg?v=earn3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to earn">to earn</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 <script src="boot-today.js"></script>
 <div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-01">
@@ -20703,7 +20795,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero"><article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --title-ink: rgba(210,186,150,0.94); --title-stroke: rgba(20,10,4,0.55); --title-shade: rgba(6,3,1,0.9); --title-shade-deep: rgba(6,3,1,0.55); --title-lip: rgba(255,246,230,0.55); --title-lip-soft: rgba(255,236,214,0.28); --title-well: rgba(0,0,0,0.45); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e20695" data-carve="I will become">I will become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins-hand.jpg?v=game3&quot;); --photo-ar: 0.75; --zoom-ar: 0.75; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins-hand.jpg?v=game6&quot;); --photo-ar: 0.75; --zoom-ar: 0.75; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will repeat 10,000 times">I will repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="aim-above-the-mark" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will aim above the mark">I will aim above the mark</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=chess1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will execute">I will execute</h3><div class="vision-tile-details"></div></article>
@@ -21059,7 +21151,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="editing-badge">editing</div>
 <button class="edit-toggle export-btn" id="exportBtn" onclick="exportChanges()" title="Export edits to send to Claude (for source HTML update)">📤</button>
 <!-- saveToClaude button archived to _archive/save-to-claude.html on 2026-05-20 -->
-<button class="edit-toggle" id="editBtn" onclick="toggleEdit()" style="bottom:74px;right:14px;background:#B4BFB1;color:#3a4438;padding:6px 10px;font-size:9px;border-radius:3px;letter-spacing:0.1em;text-transform:uppercase;">✎ edit</button>
+<button class="edit-toggle" id="editBtn" hidden onclick="toggleEdit()" style="bottom:74px;right:14px;background:#B4BFB1;color:#3a4438;padding:6px 10px;font-size:9px;border-radius:3px;letter-spacing:0.1em;text-transform:uppercase;">✎ edit</button>
 <script>
 
   // NUCLEAR MIGRATION v220: wipe stale full-structure cache for Jul 13+ to kill duplicate tasks
@@ -26362,7 +26454,7 @@ setTimeout(() => { updateFlowSectionAutoToggle(); attachFlowSectionListeners(); 
     btn.textContent='error';
     setTimeout(function(){btn.textContent='SYNC';btn.disabled=false;},2000);
   });
-})(this)" type="button">SYNC</button>
+})(this)" type="button" hidden>SYNC</button>
 <button id="save-github-btn" type="button">SAVE TO GITHUB</button>
 <style>
   #sync-state-btn {
@@ -30656,7 +30748,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='self-esteem'||nl==='self esteem') src='manus-storage/zone-self-esteem.jpg?v=se1';
       else if(nl==='audacity') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='politics') src='manus-storage/zone-politics.jpg?v=chess5';
-      else if(nl==='wins'||nl==='win') src='manus-storage/zone-wins-hand.jpg?v=game3';
+      else if(nl==='wins'||nl==='win') src='manus-storage/zone-wins-hand.jpg?v=game6';
       else if(nl==='repetitions' || nl==='repeat 10,000 times' || nl==='repeat 10000 times' || nl==='repeat-10000-times') src='manus-storage/zone-repetitions.jpg?v=cubes1';
       else if(nl==='intentions' || nl==='set the mark' || nl==='set-the-mark' || nl==='aim-above-the-mark' || nl==='aim above the mark' || nl==='to aim above the mark') src='manus-storage/zone-intentions.jpg?v=aim1';
       else if(nl==='feel it into being' || nl==='feel-it-into-being' || nl==='to feel it into being' || nl==='feel into being' || nl==='to feel into being') src='';
@@ -30698,7 +30790,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to pursuits','I will pursue','to succeed','to ignite','to potential','I resonate','to surrender yourself to Allah ﷻ','to villains','to fight','to envision','to become','to Ph.D','to navigate','to focus','to align','to strengths','to plan','to spirit','to soul','to art | science','to self-esteem','to audacity', 'to politics', 'to win', 'to repeat 10,000 times', 'to aim above the mark', 'to feel it into being', 'to anticipate', 'to darkness','to detach','to travel','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to channel','to feel','to persevere','to love','to curate','to seize opportunities','to litigate','to recoup'];
+  var CANONICAL_SECTIONS=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to pursuits','I will pursue','to succeed','I will master','I will achieve','to ignite','to potential','I resonate','to surrender yourself to Allah ﷻ','to villains','to fight','to envision','to become','to Ph.D','to navigate','to focus','to align','to strengths','to plan','to spirit','to soul','to art | science','to self-esteem','to audacity', 'to politics', 'to win', 'to repeat 10,000 times', 'to aim above the mark', 'to feel it into being', 'to anticipate', 'to darkness','to detach','to travel','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to channel','to feel','to persevere','to love','to curate','to seize opportunities','to litigate','to recoup','I will earn'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -31743,7 +31835,7 @@ html body .day-block[data-date="2026-08-20"] .task-count-badge {
 /* --- Enhancement Layer: Visual polish + UX utilities --- */
 
 /* Smoother scrolling */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 
 /* Better text rendering */
 body {
@@ -32087,10 +32179,8 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 }
 </style>
 
-<!-- dark toggle removed -->
+<!-- dark toggle removed — today + up-arrow live in #enh-left-fab at <body> -->
 <button id="enh-dark-toggle" title="Toggle dark mode" type="button">&#9788;</button>
-<button id="enh-scroll-top" title="Scroll to top">&#8593;</button>
-<button id="enh-jump-today" title="Jump to today (Ctrl+T)">today</button>
 
 <div id="enh-search-overlay">
   <div id="enh-search-modal">
@@ -36776,10 +36866,11 @@ window.__refreshPinnedAgenda = function(){};
         if(n) already[n] = 1;
       });
     }
-    var tasks = window.__overviewTasksForDay(blk).filter(function(t){ return !already[t.toLowerCase()]; });
+    var collect = window.__dayTasksOnly || window.__overviewTasksForDay;
+    var tasks = (collect ? collect(blk) : []).filter(function(t){ return !already[String(t).toLowerCase()]; });
     var lab = document.createElement('p');
     lab.className = 'plus-picker-label';
-    lab.textContent = tasks.length ? 'from overview' : 'no tasks in overview yet';
+    lab.textContent = tasks.length ? "this day's tasks" : 'no tasks on this day yet';
     box.appendChild(lab);
     if(tasks.length){
       var listEl = document.createElement('div');
@@ -36831,7 +36922,10 @@ window.__refreshPinnedAgenda = function(){};
     });
     var frozen = addBtn.getBoundingClientRect();
     placeFlowAddPicker(box, addBtn, frozen);
-    requestAnimationFrame(function(){ placeFlowAddPicker(box, addBtn, frozen); });
+    requestAnimationFrame(function(){
+      placeFlowAddPicker(box, addBtn, frozen);
+      requestAnimationFrame(function(){ placeFlowAddPicker(box, addBtn, frozen); });
+    });
     var onMove = function(){ placeFlowAddPicker(box, addBtn, frozen); };
     window.addEventListener('resize', onMove);
     box.__placeCleanup = function(){
@@ -43984,7 +44078,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return tiles.find(isBodyFitnessTile) || null;
   }
 
-  var PHOTO_AR = {"zone-athletic-gym.jpg":0.666,"_339ab459.jpg":0.8,"_archive-card-smile-set-generic-aligners.jpg":1.0,"_archive-card-smile-set-library-barcode.jpg":0.615,"abundance-wheat-sunset.jpg":1.778,"accomplishments-mock-4-stamp.jpg":1.778,"adhd-bg.jpg":0.61,"adhd-brain-dashboard.jpg":0.61,"adhd-brain-editorial.jpg":1.778,"adhd-brain-power.jpg":1.778,"adhd-dancer.jpg":0.667,"adhd-neurons-confocal.jpg":1.769,"adhd-neurons-gold.jpg":0.994,"business-cricut-close.jpg":0.667,"business-diana-jundi-ceo-letterhead-old-archived.jpg":1.333,"business-diana-jundi-ceo-letterhead-prepad-archived.jpg":1.778,"business-diana-jundi-ceo-letterhead-source-v1.jpg":1.778,"business-diana-jundi-ceo-letterhead.jpg":1.778,"business-ideas-notebook.jpg":1.778,"business-jundi-building-facade-only.jpg":1.779,"business-jundi-building-wide.jpg":1.778,"business-jundi-building.jpg":1.779,"business-jundi-enterprises.jpg":1.778,"business-jundi-tower-ceo.jpg":1.778,"business-jundi-tower.jpg":1.778,"card-aera.jpg":0.799,"card-amazon-qr-return-codes.jpg":0.667,"card-anthropic.jpg":0.807,"card-application.jpg":0.8,"card-capital-blueprint.jpg":0.773,"card-certified-letters.jpg":0.667,"card-chargebacks.jpg":0.716,"card-cleanse-black-archived.jpg":0.684,"card-cleanse.jpg":0.667,"card-cotton-pads.jpg":0.646,"card-dr-betty-s-ea.jpg":0.635,"card-handshake.jpg":0.667,"card-induction-marble-archive.jpg":0.619,"card-induction.jpg":0.667,"card-neighbor-payment.jpg":0.667,"card-pepperdine-autofetch-archive.jpg":0.677,"card-psi-chi-archive-named.jpg":0.669,"card-psi-chi.jpg":0.667,"card-re-manus-restoration-issue.jpg":0.667,"card-reformer-pilates-6-00.jpg":0.635,"card-research-proposal.jpg":0.618,"card-sabr-armonias-archive.jpg":0.568,"card-sabr.jpg":1.0,"card-shukr-greenbook-archive.jpg":0.828,"card-shukr.jpg":1.0,"card-smile-set.jpg":1.0,"card-trst.jpg":0.681,"card-tuition.jpg":0.8,"curriculum-vitae-bg.jpg":1.778,"curriculum-vitae-real-double-name-archived.jpg":0.807,"curriculum-vitae-real-name-large-archived.jpg":0.807,"curriculum-vitae-real.jpg":0.75,"deen-moodboard-bg_807e7166.jpg":0.75,"dua-open-pages.jpg":1.778,"handshake-pepperdine-gsa.jpg":2.731,"mock-glow-up-skin-v3.jpg":1.0,"mock-glow-up-skin.jpg":1.333,"mock-glow-up.jpg":1.5,"mock-power.jpg":1.321,"pepperdine-campus-collage.jpg":0.562,"pepperdine-committee-checkin.jpg":2.281,"power-opportunities-bg.jpg":1.666,"priming-fountain-pen.jpg":1.332,"pursuit-curated-lifestyle.jpg":1.0,"pursuit-elevate-betty.jpg":1.0,"pursuit-grad-school-malibu-close.jpg":1.0,"pursuit-grad-school-pepperdine.jpg":1.0,"pursuit-grad-school-v2.jpg":1.0,"pursuit-grad-school.jpg":1.0,"pursuit-leverage-v4.jpg":1.0,"pursuit-lifestyle_577937e8.jpg":1.333,"pursuit-momentum-v5_f7c3e8ce.jpg":1.0,"pursuit-momentum-v6_2201ca9a.jpg":1.782,"pursuit-momentum-v7.jpg":1.0,"pursuit-money_57ff14e0.jpg":1.333,"pursuit-pepperdine-blur-stage-archive.jpg":1.48,"pursuit-pepperdine-fullbleed3-archive.jpg":0.562,"pursuit-pepperdine-patio1-full-archive.jpg":0.75,"pursuit-pepperdine-plaza-ocean.jpg":0.75,"pursuit-pepperdine-plaza1-archive.jpg":0.768,"pursuit-pepperdine-plaza2-archive.jpg":1.011,"pursuit-pepperdine-portrait-collage.jpg":0.562,"pursuit-pepperdine.jpg":1.073,"pursuit-persons_be56f167.jpg":1.333,"pursuit-pickups.jpg":1.0,"pursuit-postal_v1_53e3e315.jpg":1.0,"pursuit-returns-v2.jpg":1.0,"pursuit-skincare_e30839d6.jpg":1.333,"pursuit-social-media-v7_c5f03b96.jpg":1.333,"pursuit-travel.jpg":2.0,"pursuit-vibes_a0abc76a.jpg":1.333,"pursuit-vibes_e645a2da.jpg":1.333,"quantum-consciousness-bg.jpg":1.778,"quantum-how-you-look-field.jpg":1.778,"quantum-how-you-look-phrase.jpg":1.778,"quantum-how-you-look-stars2-archived.jpg":0.92,"quantum-how-you-look-stars9-archived.jpg":0.93,"quantum-how-you-look.jpg":0.93,"quantum-ripples.jpg":1.148,"research-act-of-research.jpg":1.778,"research-diana-jundi-journal-eco-archived.jpg":0.75,"research-diana-jundi-journal-everyday-archived.jpg":1.934,"research-diana-jundi-journal-short-archived.jpg":0.75,"research-diana-jundi-journal.jpg":0.667,"research-proposals-docs.jpg":1.778,"striving-path-horizon.jpg":1.913,"zone-abundance.jpg":1.5,"zone-abundance-tree.jpg":0.562,"zone-alignment.jpg":1.5,"zone-ambition-v4.jpg":1.5,"zone-ambition-v5-ascent.jpg":1.5,"zone-art-science.jpg":1.5,"zone-athletic.jpg":0.666,"zone-attention.jpg":1.5,"zone-anticipating-theater.jpg":1.5,"zone-audacity-glance-lion.jpg":1.5,"zone-audacity-inspire.jpg":1.5,"zone-audacity-leap-forward.jpg":1.5,"zone-audacity-lion-roar.jpg":1.5,"zone-audacity-rope-cross.jpg":1.5,"zone-audacity-sprint.jpg":1.5,"zone-audacity-velvet-rope.jpg":1.5,"zone-audacity.jpg":0.612,"zone-body-abs-archive.jpg":1.5,"zone-body-abs.jpg":1.5,"zone-body-aesthetic-full-pants-src.jpg":0.667,"zone-body-gym-abs-tight-archive.jpg":0.667,"zone-body-gym-abs.jpg":0.667,"zone-body-gym-mid-abs-a.jpg":1.083,"zone-body-gym-mid-abs-b.jpg":1.019,"zone-body-gym-mid-abs.jpg":0.968,"zone-body-gym-rear-alt.jpg":0.667,"zone-body-gym-wide-dark.jpg":0.713,"zone-body-nolegs-final.jpg":1.577,"zone-body-nolegs-mid.jpg":1.187,"zone-body-nolegs-tight.jpg":1.231,"zone-body-nolegs-widebg.jpg":1.577,"zone-body-tummy-gym-dark-abs-macro-archive2.jpg":2.074,"zone-body-tummy-gym-dark-abs-nolegs2-archive.jpg":1.577,"zone-body-tummy-gym-dark-abs-with-thighs-archive.jpg":0.968,"zone-body-tummy-gym-dark-abs.jpg":1.076,"zone-body-tummy-gym-dark-legs-archive.jpg":0.968,"zone-body-tummy-gym-dark-pre-tummygym9.jpg":1.936,"zone-body-tummy-gym-dark-tight-macro-archive.jpg":1.849,"zone-body-tummy-gym-dark.jpg":1.577,"zone-body.jpg":1.5,"zone-calisthenics.jpg":1.5,"zone-curated-lifestyle.jpg":0.665,"zone-darkness-aware.jpg":1.5,"zone-darkness-inner-around.jpg":1.5,"zone-darkness-night-street.jpg":1.5,"zone-darkness.jpg":1.5,"zone-envision.jpg":1.5,"zone-executive-climb-command.jpg":0.667,"zone-executive-climb-stairs-command-archive.jpg":0.667,"zone-executive-climb-stairs-doors-archive.jpg":0.667,"zone-executive-climb-stairs1-archive.jpg":1.328,"zone-executive-climb.jpg":0.667,"zone-executive-command.jpg":1.5,"zone-fight-back-stillife-archive.jpg":1.5,"zone-fight-back.jpg":1.5,"zone-finances-v2.jpg":3.333,"zone-focus.jpg":1.0,"zone-future-self-becoming-archive.jpg":1.5,"zone-future-self-daylight-archive.jpg":1.5,"zone-future-self.jpg":1.5,"zone-god-conscious-remembrance1.jpg":1.5,"zone-god-conscious.jpg":1.5,"zone-inner-fire-abstract-maleback-archive.jpg":1.0,"zone-inner-fire-abstract-navel1-archive.jpg":1.0,"zone-inner-fire-abstract.jpg":1.333,"zone-inner-fire-chest2-archive.jpg":1.0,"zone-inner-fire-coals-archive.jpg":0.667,"zone-inner-fire-ember1-archive.jpg":1.5,"zone-inner-fire-feminine-navel-archive.jpg":1.5,"zone-inner-fire-feminine-navel.jpg":1.333,"zone-inner-fire-lotus-core.jpg":1.333,"zone-inner-fire-navel2-archive.jpg":1.5,"zone-inner-fire-navel2-source.jpg":1.5,"zone-inner-fire-sacred-attempt-archive.jpg":1.333,"zone-inner-fire-sacred-core.jpg":1.333,"zone-inner-fire-sacred1-archive.jpg":1.333,"zone-inner-fire.jpg":1.0,"zone-intentions.jpg":1.5,"zone-pepperdine-diploma.jpg":1.5,"zone-pepperdine-malibu-scenic-archive.jpg":1.778,"zone-pepperdine-malibu.jpg":1.5,"zone-phd.jpg":1.5,"zone-plan-sketchbook-archive.jpg":1.5,"zone-plan.jpg":1.5,"zone-politics-corridor.jpg":1.5,"zone-politics.jpg":1.5,"zone-potential-cosmic-archive.jpg":1.0,"zone-potential-hers-archive.jpg":0.667,"zone-potential-hers.jpg":0.667,"zone-potential-open-road.jpg":1.5,"zone-potential-within-archive.jpg":0.667,"zone-potential.jpg":1.5,"zone-power-agency-chess-noir-archive.jpg":1.5,"zone-power-agency-chess.jpg":1.5,"zone-power-boardfight-archive.jpg":1.5,"zone-power-chess-boardfight.jpg":1.5,"zone-power-chess-gamemove.jpg":1.5,"zone-power-chesswarm-game-alt.jpg":1.5,"zone-power-chesswarm1-src.jpg":1.5,"zone-power-corner-office-archive.jpg":1.5,"zone-power-corner-office.jpg":1.5,"zone-power-forge-molten-archive.jpg":1.5,"zone-power-forge-molten.jpg":1.5,"zone-power-king-focus-archive.jpg":1.5,"zone-power-letterhead-ceo-archive.jpg":0.667,"zone-power-lightning-archive.jpg":1.5,"zone-power-lightning-ocean.jpg":1.5,"zone-power-lone-king-archive.jpg":1.5,"zone-power-purpose-monolith-archive.jpg":1.0,"zone-power-purpose-seal-archive.jpg":0.667,"zone-power-purpose-seal-generic-archive.jpg":0.667,"zone-power-purpose.jpg":0.667,"zone-power-queen-breakthrough.jpg":1.5,"zone-power.jpg":1.5,"zone-purpose-compass-vocation.jpg":0.667,"zone-purpose-hallway-archive.jpg":1.5,"zone-purpose-journal-archive.jpg":1.5,"zone-purpose.jpg":0.667,"zone-pursuits-chase-threshold.jpg":1.5,"zone-pursuits-choice-threads.jpg":1.5,"zone-pursuits-corridor-chase-archive.jpg":1.5,"zone-pursuits-cosmos-pre-manyworlds-archive.jpg":1.5,"zone-pursuits-desk-busywork-archive.jpg":1.5,"zone-pursuits-golden-summit-destiny-archive.jpg":1.5,"zone-pursuits-hallway-archive.jpg":1.5,"zone-pursuits-life-domains-archive.jpg":1.5,"zone-pursuits-life-domains.jpg":1.5,"zone-pursuits-many-worlds.jpg":1.5,"zone-pursuits-many1-archive.jpg":1.5,"zone-pursuits-notebook-archive.jpg":1.5,"zone-pursuits-quantum-cosmos.jpg":1.5,"zone-pursuits-research-desk.jpg":1.5,"zone-pursuits.jpg":1.5,"zone-quantum-v14.jpg":1.5,"zone-quantum-v15-eye-archive.jpg":1.5,"zone-quantum-v15.jpg":1.5,"zone-repetitions.jpg":0.5,"zone-resonance.jpg":1.5,"zone-self-esteem.jpg":1.5,"zone-soul-chair.jpg":1.5,"zone-soul-depth.jpg":0.667,"zone-soul-dua.jpg":1.5,"zone-soul-flame.jpg":1.504,"zone-soul-glance-heart.jpg":1.5,"zone-soul-heal-quiet.jpg":1.5,"zone-soul-heart-glow.jpg":1.5,"zone-soul-mosque-glow.jpg":1.5,"zone-soul-presence.jpg":1.5,"zone-soul-still-water.jpg":0.667,"zone-soul.jpg":1.5,"zone-spirit.jpg":1.5,"zone-strengths-anvil-archive.jpg":1.5,"zone-strengths-geode-archive.jpg":1.5,"zone-strengths-hands-archive.jpg":1.5,"zone-strengths-human-back-archive.jpg":1.5,"zone-strengths-mountain-archive.jpg":1.5,"zone-strengths-room-archive.jpg":1.5,"zone-strengths-spirit-flame-alt.jpg":1.5,"zone-strengths-sprout-archive.jpg":1.5,"zone-strengths-tree-archive.jpg":1.5,"zone-strengths.jpg":1.5,"zone-villains-beam-rim3-archive.jpg":0.667,"zone-villains-beam-spot-archive.jpg":0.667,"zone-villains-beam-spot-archive2.jpg":0.667,"zone-villains-darkness-in-light.jpg":1.5,"zone-villains-mask1-archive.jpg":0.667,"zone-villains-pre-rim11-archive.jpg":0.667,"zone-villains-rim-surround.jpg":1.5,"zone-villains.jpg":1.5,"zone-wins.jpg":0.814,"zone-workflow.jpg":1.5,"zone-to-earn.jpg":1.778,"zone-to-earn-desk.jpg":0.75,"zone-to-earn-gold.jpg":1.333,"zone-wins-hand.jpg":0.75};
+  var PHOTO_AR = {"zone-to-master.jpg":1.5,"zone-athletic-gym.jpg":0.666,"_339ab459.jpg":0.8,"_archive-card-smile-set-generic-aligners.jpg":1.0,"_archive-card-smile-set-library-barcode.jpg":0.615,"abundance-wheat-sunset.jpg":1.778,"accomplishments-mock-4-stamp.jpg":1.778,"adhd-bg.jpg":0.61,"adhd-brain-dashboard.jpg":0.61,"adhd-brain-editorial.jpg":1.778,"adhd-brain-power.jpg":1.778,"adhd-dancer.jpg":0.667,"adhd-neurons-confocal.jpg":1.769,"adhd-neurons-gold.jpg":0.994,"business-cricut-close.jpg":0.667,"business-diana-jundi-ceo-letterhead-old-archived.jpg":1.333,"business-diana-jundi-ceo-letterhead-prepad-archived.jpg":1.778,"business-diana-jundi-ceo-letterhead-source-v1.jpg":1.778,"business-diana-jundi-ceo-letterhead.jpg":1.778,"business-ideas-notebook.jpg":1.778,"business-jundi-building-facade-only.jpg":1.779,"business-jundi-building-wide.jpg":1.778,"business-jundi-building.jpg":1.779,"business-jundi-enterprises.jpg":1.778,"business-jundi-tower-ceo.jpg":1.778,"business-jundi-tower.jpg":1.778,"card-aera.jpg":0.799,"card-amazon-qr-return-codes.jpg":0.667,"card-anthropic.jpg":0.807,"card-application.jpg":0.8,"card-capital-blueprint.jpg":0.773,"card-certified-letters.jpg":0.667,"card-chargebacks.jpg":0.716,"card-cleanse-black-archived.jpg":0.684,"card-cleanse.jpg":0.667,"card-cotton-pads.jpg":0.646,"card-dr-betty-s-ea.jpg":0.635,"card-handshake.jpg":0.667,"card-induction-marble-archive.jpg":0.619,"card-induction.jpg":0.667,"card-neighbor-payment.jpg":0.667,"card-pepperdine-autofetch-archive.jpg":0.677,"card-psi-chi-archive-named.jpg":0.669,"card-psi-chi.jpg":0.667,"card-re-manus-restoration-issue.jpg":0.667,"card-reformer-pilates-6-00.jpg":0.635,"card-research-proposal.jpg":0.618,"card-sabr-armonias-archive.jpg":0.568,"card-sabr.jpg":1.0,"card-shukr-greenbook-archive.jpg":0.828,"card-shukr.jpg":1.0,"card-smile-set.jpg":1.0,"card-trst.jpg":0.681,"card-tuition.jpg":0.8,"curriculum-vitae-bg.jpg":1.778,"curriculum-vitae-real-double-name-archived.jpg":0.807,"curriculum-vitae-real-name-large-archived.jpg":0.807,"curriculum-vitae-real.jpg":0.75,"deen-moodboard-bg_807e7166.jpg":0.75,"dua-open-pages.jpg":1.778,"handshake-pepperdine-gsa.jpg":2.731,"mock-glow-up-skin-v3.jpg":1.0,"mock-glow-up-skin.jpg":1.333,"mock-glow-up.jpg":1.5,"mock-power.jpg":1.321,"pepperdine-campus-collage.jpg":0.562,"pepperdine-committee-checkin.jpg":2.281,"power-opportunities-bg.jpg":1.666,"priming-fountain-pen.jpg":1.332,"pursuit-curated-lifestyle.jpg":1.0,"pursuit-elevate-betty.jpg":1.0,"pursuit-grad-school-malibu-close.jpg":1.0,"pursuit-grad-school-pepperdine.jpg":1.0,"pursuit-grad-school-v2.jpg":1.0,"pursuit-grad-school.jpg":1.0,"pursuit-leverage-v4.jpg":1.0,"pursuit-lifestyle_577937e8.jpg":1.333,"pursuit-momentum-v5_f7c3e8ce.jpg":1.0,"pursuit-momentum-v6_2201ca9a.jpg":1.782,"pursuit-momentum-v7.jpg":1.0,"pursuit-money_57ff14e0.jpg":1.333,"pursuit-pepperdine-blur-stage-archive.jpg":1.48,"pursuit-pepperdine-fullbleed3-archive.jpg":0.562,"pursuit-pepperdine-patio1-full-archive.jpg":0.75,"pursuit-pepperdine-plaza-ocean.jpg":0.75,"pursuit-pepperdine-plaza1-archive.jpg":0.768,"pursuit-pepperdine-plaza2-archive.jpg":1.011,"pursuit-pepperdine-portrait-collage.jpg":0.562,"pursuit-pepperdine.jpg":1.073,"pursuit-persons_be56f167.jpg":1.333,"pursuit-pickups.jpg":1.0,"pursuit-postal_v1_53e3e315.jpg":1.0,"pursuit-returns-v2.jpg":1.0,"pursuit-skincare_e30839d6.jpg":1.333,"pursuit-social-media-v7_c5f03b96.jpg":1.333,"pursuit-travel.jpg":2.0,"pursuit-vibes_a0abc76a.jpg":1.333,"pursuit-vibes_e645a2da.jpg":1.333,"quantum-consciousness-bg.jpg":1.778,"quantum-how-you-look-field.jpg":1.778,"quantum-how-you-look-phrase.jpg":1.778,"quantum-how-you-look-stars2-archived.jpg":0.92,"quantum-how-you-look-stars9-archived.jpg":0.93,"quantum-how-you-look.jpg":0.93,"quantum-ripples.jpg":1.148,"research-act-of-research.jpg":1.778,"research-diana-jundi-journal-eco-archived.jpg":0.75,"research-diana-jundi-journal-everyday-archived.jpg":1.934,"research-diana-jundi-journal-short-archived.jpg":0.75,"research-diana-jundi-journal.jpg":0.667,"research-proposals-docs.jpg":1.778,"striving-path-horizon.jpg":1.913,"zone-abundance.jpg":1.5,"zone-abundance-tree.jpg":0.562,"zone-alignment.jpg":1.5,"zone-ambition-v4.jpg":1.5,"zone-ambition-v5-ascent.jpg":1.5,"zone-art-science.jpg":1.5,"zone-athletic.jpg":0.666,"zone-attention.jpg":1.5,"zone-anticipating-theater.jpg":1.5,"zone-audacity-glance-lion.jpg":1.5,"zone-audacity-inspire.jpg":1.5,"zone-audacity-leap-forward.jpg":1.5,"zone-audacity-lion-roar.jpg":1.5,"zone-audacity-rope-cross.jpg":1.5,"zone-audacity-sprint.jpg":1.5,"zone-audacity-velvet-rope.jpg":1.5,"zone-audacity.jpg":0.612,"zone-body-abs-archive.jpg":1.5,"zone-body-abs.jpg":1.5,"zone-body-aesthetic-full-pants-src.jpg":0.667,"zone-body-gym-abs-tight-archive.jpg":0.667,"zone-body-gym-abs.jpg":0.667,"zone-body-gym-mid-abs-a.jpg":1.083,"zone-body-gym-mid-abs-b.jpg":1.019,"zone-body-gym-mid-abs.jpg":0.968,"zone-body-gym-rear-alt.jpg":0.667,"zone-body-gym-wide-dark.jpg":0.713,"zone-body-nolegs-final.jpg":1.577,"zone-body-nolegs-mid.jpg":1.187,"zone-body-nolegs-tight.jpg":1.231,"zone-body-nolegs-widebg.jpg":1.577,"zone-body-tummy-gym-dark-abs-macro-archive2.jpg":2.074,"zone-body-tummy-gym-dark-abs-nolegs2-archive.jpg":1.577,"zone-body-tummy-gym-dark-abs-with-thighs-archive.jpg":0.968,"zone-body-tummy-gym-dark-abs.jpg":1.076,"zone-body-tummy-gym-dark-legs-archive.jpg":0.968,"zone-body-tummy-gym-dark-pre-tummygym9.jpg":1.936,"zone-body-tummy-gym-dark-tight-macro-archive.jpg":1.849,"zone-body-tummy-gym-dark.jpg":1.577,"zone-body.jpg":1.5,"zone-calisthenics.jpg":1.5,"zone-curated-lifestyle.jpg":0.665,"zone-darkness-aware.jpg":1.5,"zone-darkness-inner-around.jpg":1.5,"zone-darkness-night-street.jpg":1.5,"zone-darkness.jpg":1.5,"zone-envision.jpg":1.5,"zone-executive-climb-command.jpg":0.667,"zone-executive-climb-stairs-command-archive.jpg":0.667,"zone-executive-climb-stairs-doors-archive.jpg":0.667,"zone-executive-climb-stairs1-archive.jpg":1.328,"zone-executive-climb.jpg":0.667,"zone-executive-command.jpg":1.5,"zone-fight-back-stillife-archive.jpg":1.5,"zone-fight-back.jpg":1.5,"zone-finances-v2.jpg":3.333,"zone-focus.jpg":1.0,"zone-future-self-becoming-archive.jpg":1.5,"zone-future-self-daylight-archive.jpg":1.5,"zone-future-self.jpg":1.5,"zone-god-conscious-remembrance1.jpg":1.5,"zone-god-conscious.jpg":1.5,"zone-inner-fire-abstract-maleback-archive.jpg":1.0,"zone-inner-fire-abstract-navel1-archive.jpg":1.0,"zone-inner-fire-abstract.jpg":1.333,"zone-inner-fire-chest2-archive.jpg":1.0,"zone-inner-fire-coals-archive.jpg":0.667,"zone-inner-fire-ember1-archive.jpg":1.5,"zone-inner-fire-feminine-navel-archive.jpg":1.5,"zone-inner-fire-feminine-navel.jpg":1.333,"zone-inner-fire-lotus-core.jpg":1.333,"zone-inner-fire-navel2-archive.jpg":1.5,"zone-inner-fire-navel2-source.jpg":1.5,"zone-inner-fire-sacred-attempt-archive.jpg":1.333,"zone-inner-fire-sacred-core.jpg":1.333,"zone-inner-fire-sacred1-archive.jpg":1.333,"zone-inner-fire.jpg":1.0,"zone-intentions.jpg":1.5,"zone-pepperdine-diploma.jpg":1.5,"zone-pepperdine-malibu-scenic-archive.jpg":1.778,"zone-pepperdine-malibu.jpg":1.5,"zone-phd.jpg":1.5,"zone-plan-sketchbook-archive.jpg":1.5,"zone-plan.jpg":1.5,"zone-politics-corridor.jpg":1.5,"zone-politics.jpg":1.5,"zone-potential-cosmic-archive.jpg":1.0,"zone-potential-hers-archive.jpg":0.667,"zone-potential-hers.jpg":0.667,"zone-potential-open-road.jpg":1.5,"zone-potential-within-archive.jpg":0.667,"zone-potential.jpg":1.5,"zone-power-agency-chess-noir-archive.jpg":1.5,"zone-power-agency-chess.jpg":1.5,"zone-power-boardfight-archive.jpg":1.5,"zone-power-chess-boardfight.jpg":1.5,"zone-power-chess-gamemove.jpg":1.5,"zone-power-chesswarm-game-alt.jpg":1.5,"zone-power-chesswarm1-src.jpg":1.5,"zone-power-corner-office-archive.jpg":1.5,"zone-power-corner-office.jpg":1.5,"zone-power-forge-molten-archive.jpg":1.5,"zone-power-forge-molten.jpg":1.5,"zone-power-king-focus-archive.jpg":1.5,"zone-power-letterhead-ceo-archive.jpg":0.667,"zone-power-lightning-archive.jpg":1.5,"zone-power-lightning-ocean.jpg":1.5,"zone-power-lone-king-archive.jpg":1.5,"zone-power-purpose-monolith-archive.jpg":1.0,"zone-power-purpose-seal-archive.jpg":0.667,"zone-power-purpose-seal-generic-archive.jpg":0.667,"zone-power-purpose.jpg":0.667,"zone-power-queen-breakthrough.jpg":1.5,"zone-power.jpg":1.5,"zone-purpose-compass-vocation.jpg":0.667,"zone-purpose-hallway-archive.jpg":1.5,"zone-purpose-journal-archive.jpg":1.5,"zone-purpose.jpg":0.667,"zone-pursuits-chase-threshold.jpg":1.5,"zone-pursuits-choice-threads.jpg":1.5,"zone-pursuits-corridor-chase-archive.jpg":1.5,"zone-pursuits-cosmos-pre-manyworlds-archive.jpg":1.5,"zone-pursuits-desk-busywork-archive.jpg":1.5,"zone-pursuits-golden-summit-destiny-archive.jpg":1.5,"zone-pursuits-hallway-archive.jpg":1.5,"zone-pursuits-life-domains-archive.jpg":1.5,"zone-pursuits-life-domains.jpg":1.5,"zone-pursuits-many-worlds.jpg":1.5,"zone-pursuits-many1-archive.jpg":1.5,"zone-pursuits-notebook-archive.jpg":1.5,"zone-pursuits-quantum-cosmos.jpg":1.5,"zone-pursuits-research-desk.jpg":1.5,"zone-pursuits.jpg":1.5,"zone-quantum-v14.jpg":1.5,"zone-quantum-v15-eye-archive.jpg":1.5,"zone-quantum-v15.jpg":1.5,"zone-repetitions.jpg":0.5,"zone-resonance.jpg":1.5,"zone-self-esteem.jpg":1.5,"zone-soul-chair.jpg":1.5,"zone-soul-depth.jpg":0.667,"zone-soul-dua.jpg":1.5,"zone-soul-flame.jpg":1.504,"zone-soul-glance-heart.jpg":1.5,"zone-soul-heal-quiet.jpg":1.5,"zone-soul-heart-glow.jpg":1.5,"zone-soul-mosque-glow.jpg":1.5,"zone-soul-presence.jpg":1.5,"zone-soul-still-water.jpg":0.667,"zone-soul.jpg":1.5,"zone-spirit.jpg":1.5,"zone-strengths-anvil-archive.jpg":1.5,"zone-strengths-geode-archive.jpg":1.5,"zone-strengths-hands-archive.jpg":1.5,"zone-strengths-human-back-archive.jpg":1.5,"zone-strengths-mountain-archive.jpg":1.5,"zone-strengths-room-archive.jpg":1.5,"zone-strengths-spirit-flame-alt.jpg":1.5,"zone-strengths-sprout-archive.jpg":1.5,"zone-strengths-tree-archive.jpg":1.5,"zone-strengths.jpg":1.5,"zone-villains-beam-rim3-archive.jpg":0.667,"zone-villains-beam-spot-archive.jpg":0.667,"zone-villains-beam-spot-archive2.jpg":0.667,"zone-villains-darkness-in-light.jpg":1.5,"zone-villains-mask1-archive.jpg":0.667,"zone-villains-pre-rim11-archive.jpg":0.667,"zone-villains-rim-surround.jpg":1.5,"zone-villains.jpg":1.5,"zone-wins.jpg":0.814,"zone-workflow.jpg":1.5,"zone-to-earn.jpg":1.778,"zone-to-earn-desk.jpg":0.75,"zone-to-earn-gold.jpg":1.333,"zone-wins-hand.jpg":0.75};
   function tilePhotoFile(tile){
     var src = '';
     try {
@@ -44395,7 +44489,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var seen = {}, out = [];
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
-      'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1, 'she pursues':1, 'she-pursues':1, pursue:1, 'i will pursue':1, 'i pursue':1,
+      'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1, 'she pursues':1, 'she-pursues':1, pursue:1, 'i will pursue':1, 'i pursue':1, earn:1, 'i will earn':1, 'to earn':1, 'to-earn':1, 'i earn':1,
       executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, soul:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, 'feel it into being':1, 'aim-above-the-mark':1, 'to feel it into being':1, 'feel it into being':1, 'aim-above-the-mark':1, 'to feel it into being':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, seize:1, 'seize opportunities':1, 'scholarship application':1, 'to litigate':1, litigate:1, 'to recoup':1, recoup:1, 'to scholarship application':1, 'scholarship-application':1, 'to seize opportunities':1, 'seize-opportunities':1, curate:1, 'to love':1, 'to-love':1, tolove:1, 'to feel':1, 'to-feel':1, tofeel:1, feel:1, 'to channel':1, 'to-channel':1, tochannel:1, channel:1, 'to persevere':1, 'to-persevere':1, topersevere:1, persevere:1
     };
     function looksLikeTask(name){
@@ -44437,7 +44531,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       Object.keys(aliases).forEach(function(a){ seen[a] = 1; });
       out.push(display);
     }
-    var presetSecs=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to train','to pepperdine','to pursuits','I will pursue','to ignite','to potential','I resonate','to surrender yourself to Allah ﷻ','to envision','to become','to Ph.D','to navigate','to focus','to align','to strengths','to plan','to art | science','to self-esteem','to audacity','to politics','to win','to repeat 10,000 times','to aim above the mark','to feel it into being','to anticipate','to darkness','to detach','to travel','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to channel','to feel','to persevere','to love','to curate','to seize opportunities','to litigate','to recoup'];
+    var presetSecs=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to train','to pepperdine','I will master','I will achieve','to pursuits','I will pursue','to ignite','to potential','I resonate','to surrender yourself to Allah ﷻ','to envision','to become','to Ph.D','to navigate','to focus','to align','to strengths','to plan','to art | science','to self-esteem','to audacity','to politics','to win','to repeat 10,000 times','to aim above the mark','to feel it into being','to anticipate','to darkness','to detach','to travel','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to channel','to feel','to persevere','to love','to curate','to seize opportunities','to litigate','to recoup','I will earn'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
@@ -44642,7 +44736,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'grad school' || t === 'grad' || t === 'pepperdine' || t === 'enroll' || t === 'succeed' || f === 'grad' || f === 'grad-school' || f === 'pepperdine' || f === 'enroll' || f === 'succeed'){
       add('grad'); add('grad school'); add('grad-school'); add('pepperdine'); add('enroll'); add('succeed'); add('to succeed');
     }
-    if(t === 'achieve' || t === 'to achieve' || t === 'i will achieve' || t === 'i achieve' || f === 'to-achieve' || f === 'achieve'){
+    if(t === 'master' || t === 'to master' || t === 'i will master' || t === 'i master' || f === 'to-master' || f === 'master'){
+      add('master'); add('to master'); add('i will master'); add('i master'); add('to-master');
+    }
+    if(t === 'achieve' || t === 'to achieve' || t === 'i will achieve' || t === 'i achieve' || f === 'to-achieve'){
       add('achieve'); add('to achieve'); add('i will achieve'); add('i achieve'); add('to-achieve');
     }
     if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || t === 'itaqallah' || t === 'itaq-allah' || t === 'surrender to allah' || t === 'surrender-to-allah' || t === 'surrender yourself to allah' || t === 'surrender-yourself-to-allah' || t === 'surrender yourself to allah' || f === 'god-conscious' || f === 'awliya-allah' || f === 'awliya-allah-swt' || f === 'fear-allah' || f === 'itaq-allah' || f === 'surrender-to-allah'){
@@ -44738,6 +44835,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'finances' || t === 'abundance' || t === 'abundant' || t === 'receive' || t === 'ask'){ rec.title = 'to ask'; rec.focus = 'abundant'; }
     else if(t === 'lifestyle' || t === 'curated lifestyle' || t === 'curated-lifestyle'){ rec.title = 'to curated lifestyle'; rec.focus = 'curated-lifestyle'; }
     else if(t === 'grad school' || t === 'grad' || t === 'pepperdine' || t === 'enroll' || t === 'succeed'){ rec.title = 'to succeed'; rec.focus = 'pepperdine'; }
+    else if(t === 'master' || t === 'to master' || t === 'i will master' || t === 'i master' || t === 'to-master'){ rec.title = 'I will master'; rec.focus = 'to-master'; }
     else if(t === 'achieve' || t === 'to achieve' || t === 'i will achieve' || t === 'i achieve' || t === 'to-achieve'){ rec.title = 'I will achieve'; rec.focus = 'to-achieve'; }
     else if(t === 'god-conscious' || t === 'god conscious' || t === 'awliya allah' || t === 'awliya-allah' || t === 'awliya allah swt' || t === 'awliya-allah-swt' || t === 'awliyah allah swt' || t === 'fear allah' || t === 'fear-allah' || t === 'itaqallah' || t === 'itaq-allah' || t === 'surrender to allah' || t === 'surrender-to-allah' || t === 'surrender yourself to allah' || t === 'surrender-yourself-to-allah' || t.indexOf('surrender yourself to allah') === 0){ rec.title = 'to surrender yourself to Allah ﷻ'; rec.focus = 'itaq-allah'; }
     else if(t === 'executive' || t === 'ambition'){ rec.title = 'to ambition'; rec.focus = 'ambition'; }
@@ -44805,6 +44903,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(bare === 'body' || bare === 'gym' || bare === 'toned body' || bare === 'toned-body' || bare === 'athletic' || bare === 'fitness training' || bare === 'fitness-training' || bare === 'train') base = 'train';
     else if(bare === 'god-conscious' || bare === 'god conscious' || bare === 'awliya allah' || bare === 'awliya-allah' || bare === 'awliya allah swt' || bare === 'awliya-allah-swt' || bare === 'awliyah allah swt' || bare === 'fear allah' || bare === 'fear-allah' || bare === 'itaqallah' || bare === 'itaq-allah' || bare === 'surrender to allah' || bare === 'surrender-to-allah' || bare === 'surrender yourself to allah' || bare === 'surrender-yourself-to-allah' || low.indexOf('surrender yourself to allah') === 0) base = 'surrender yourself to Allah ﷻ';
     else if(bare === 'pepperdine' || bare === 'enroll' || bare === 'succeed') base = 'succeed';
+    else if(bare === 'master' || bare === 'to master') base = 'master';
     else if(bare === 'achieve' || bare === 'to achieve') base = 'achieve';
     else if(bare === 'future' || bare === 'future self' || bare === 'future-self' || bare === 'futureself' || bare === 'become') base = 'become';
     else if(bare === 'finances' || bare === 'abundance' || bare === 'abundant' || bare === 'receive' || bare === 'ask') base = 'ask';
@@ -46923,13 +47022,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'to-recoup' || f === 'recoup' || title.toLowerCase() === 'to recoup' || title.toLowerCase() === 'recoup') return 'manus-storage/zone-to-recoup.jpg?v=villa1';
     if(f === 'earn' || f === 'to-earn' || title.toLowerCase() === 'i will earn' || title.toLowerCase() === 'to earn' || title.toLowerCase() === 'i earn' || title.toLowerCase() === 'earn') return 'manus-storage/zone-to-earn-gold.jpg?v=earn3';
     if(f === 'she-pursues' || f === 'pursue' || title.toLowerCase() === 'she pursues' || title.toLowerCase() === 'she-pursues' || title.toLowerCase() === 'pursue' || title.toLowerCase() === 'i will pursue' || title.toLowerCase() === 'i pursue') return 'manus-storage/zone-she-pursues.jpg?v=pursue1';
-    if(f === 'to-achieve' || title.toLowerCase() === 'i will achieve' || title.toLowerCase() === 'to achieve' || title.toLowerCase() === 'i achieve' || title.toLowerCase() === 'to-achieve') return 'manus-storage/zone-to-achieve.jpg?v=dip1';
+    if(f === 'to-master' || f === 'master' || title.toLowerCase() === 'i will master' || title.toLowerCase() === 'to master' || title.toLowerCase() === 'i master' || title.toLowerCase() === 'master' || title.toLowerCase() === 'to-master') return 'manus-storage/zone-to-master.jpg?v=dip3';
+    if(f === 'to-achieve' || title.toLowerCase() === 'i will achieve' || title.toLowerCase() === 'to achieve' || title.toLowerCase() === 'i achieve' || title.toLowerCase() === 'to-achieve') return 'manus-storage/zone-to-achieve-license.jpg?v=lic2';
     if(f === 'pepperdine' || f === 'enroll' || title.toLowerCase() === 'pepperdine' || title.toLowerCase() === 'to succeed' || title.toLowerCase() === 'succeed' || title.toLowerCase() === 'i will succeed' || title.toLowerCase() === 'enroll') return 'manus-storage/zone-achieve-csol.jpg?v=csol2';
     if(f === 'itaq-allah' || f === 'god-conscious' || title.toLowerCase().indexOf('surrender yourself to allah') !== -1 || title.toLowerCase() === 'surrender yourself to allah ﷻ') return 'manus-storage/zone-god-conscious.jpg?v=remembrance1';
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
     if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-focus.jpg?v=chess1';
-    if(f === 'wins' || f === 'win' || title.toLowerCase() === 'i will win' || title.toLowerCase() === 'win' || title.toLowerCase() === 'to win') return 'manus-storage/zone-wins-hand.jpg?v=game3';
+    if(f === 'wins' || f === 'win' || title.toLowerCase() === 'i will win' || title.toLowerCase() === 'win' || title.toLowerCase() === 'to win') return 'manus-storage/zone-wins-hand.jpg?v=game6';
     if(f === 'seize-opportunities' || f === 'seize' || f === 'to-seize-opportunities' || title.toLowerCase() === 'seize' || title.toLowerCase() === 'seize opportunities' || title.toLowerCase() === 'to seize opportunities') return 'manus-storage/zone-seize-opportunities.jpg?v=seize4';
     if(f === 'workflow' || f === 'to-workflow' || f === 'start' || f === 'to-start' || f === 'navigate' || f === 'to-navigate' || title.toLowerCase() === 'workflow' || title.toLowerCase() === 'to workflow' || title.toLowerCase() === 'start' || title.toLowerCase() === 'to start' || title.toLowerCase() === 'to navigate' || title.toLowerCase() === 'navigate') return 'manus-storage/zone-plan.jpg?v=swap1';
     if(f === 'scholarship-application' || f === 'to-scholarship-application' || title.toLowerCase() === 'scholarship application' || title.toLowerCase() === 'to scholarship application' || title.toLowerCase() === 'scholarship-application') return 'manus-storage/zone-scholarship-application.jpg?v=app1';
@@ -48637,6 +48737,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase() === 'she pursues' || String(title).toLowerCase() === 'she-pursues' || String(title).toLowerCase() === 'pursue' || String(title).toLowerCase() === 'i will pursue' || String(title).toLowerCase() === 'i pursue' || focus === 'she-pursues' || focus === 'pursue'){ focus = 'she-pursues'; title = 'I will pursue'; }
     if(String(title).toLowerCase() === 'inner fire' || String(title).toLowerCase() === 'inner-fire' || String(title).toLowerCase() === 'ignite' || focus === 'inner-fire' || focus === 'ignite'){ focus = 'inner-fire'; title = 'ignite'; }
     if(String(title).toLowerCase() === 'pepperdine' || String(title).toLowerCase() === 'enroll' || String(title).toLowerCase() === 'succeed' || title === 'grad school' || title === 'grad' || title === 'grad-school' || focus === 'pepperdine' || focus === 'enroll' || focus === 'succeed' || focus === 'grad' || focus === 'grad-school'){ focus = 'pepperdine'; title = 'to succeed'; }
+    if(String(title).toLowerCase() === 'master' || String(title).toLowerCase() === 'to master' || String(title).toLowerCase() === 'i master' || String(title).toLowerCase() === 'i will master' || String(title).toLowerCase() === 'to-master' || focus === 'to-master' || focus === 'master'){ focus = 'to-master'; title = 'I will master'; }
     if(String(title).toLowerCase() === 'achieve' || String(title).toLowerCase() === 'to achieve' || String(title).toLowerCase() === 'i achieve' || String(title).toLowerCase() === 'i will achieve' || String(title).toLowerCase() === 'to-achieve' || focus === 'to-achieve'){ focus = 'to-achieve'; title = 'I will achieve'; }
     var aliases = sectionAliasSet(focus, title);
     var existing = [].slice.call(host.querySelectorAll('.vision-tile')).find(function(tile){
@@ -48658,7 +48759,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return;
     }
     var photo = hardwiredSectionPhoto(blk, title, focus);
-    var __tl = String(title||'').toLowerCase().replace(/^to\s+/, '');var __fl = String(focus||'').toLowerCase().replace(/^to-/, '');if(__tl === 'soul' || __tl === 'darkness' || __tl === 'claim' || __fl === 'claim' || __tl === 'tune into' || __tl === 'tune-into' || __fl === 'tune-into' || __fl === 'tune into' || __tl === 'self-actualize' || __tl === 'self actualize' || __fl === 'self-actualize' || __fl === 'self actualize'){
+    var __tl = String(title||'').toLowerCase().replace(/^to\s+/, '');var __fl = String(focus||'').toLowerCase().replace(/^to-/, '');if(__tl === 'soul' || __tl === 'darkness' || __tl === 'claim' || __fl === 'claim' || __tl === 'tune into' || __tl === 'tune-into' || __fl === 'tune-into' || __fl === 'tune into' || __tl === 'self-actualize' || __tl === 'self actualize' || __fl === 'self-actualize' || __fl === 'self actualize' || __tl === 'achieve' || __fl === 'achieve'){
       photo = '';
     } else if(!photo){
       photo = '';
@@ -51321,7 +51422,14 @@ function seedAug30SelectedCards(blk){
       pepperdine: { title: 'to succeed', focus: 'pepperdine' },
       Pepperdine: { title: 'to succeed', focus: 'pepperdine' },
       enroll: { title: 'to succeed', focus: 'pepperdine' },
-      achieve: { title: 'to succeed', focus: 'pepperdine' },
+      master: { title: 'I will master', focus: 'to-master' },
+      'to-master': { title: 'I will master', focus: 'to-master' },
+      'to master': { title: 'I will master', focus: 'to-master' },
+      'i will master': { title: 'I will master', focus: 'to-master' },
+      achieve: { title: 'I will achieve', focus: 'to-achieve' },
+      'to-achieve': { title: 'I will achieve', focus: 'to-achieve' },
+      'to achieve': { title: 'I will achieve', focus: 'to-achieve' },
+      'i will achieve': { title: 'I will achieve', focus: 'to-achieve' },
       succeed: { title: 'to succeed', focus: 'pepperdine' },
       earn: { title: 'I will earn', focus: 'earn' },
       'to-earn': { title: 'I will earn', focus: 'earn' },
@@ -62039,7 +62147,9 @@ html body .day-block.depth-four-era .overview-center-stack {
       title = String(title||'').replace(/\s+/g,' ').trim();
       focus = String(focus||'').toLowerCase();
       var t = title.toLowerCase();
-      if(focus === 'pepperdine' || focus === 'achieve' || focus === 'enroll' || t === 'to succeed' || t === 'achieve' || t === 'pepperdine') return 'manus-storage/zone-achieve-csol.jpg?v=csol2';
+      if(focus === 'to-master' || t === 'i will master' || t === 'to master' || t === 'i master' || t === 'master') return 'manus-storage/zone-to-master.jpg?v=dip3';
+      if(focus === 'to-achieve' || t === 'i will achieve' || t === 'to achieve' || t === 'i achieve') return 'manus-storage/zone-to-achieve-license.jpg?v=lic2';
+      if(focus === 'pepperdine' || focus === 'enroll' || t === 'to succeed' || t === 'succeed' || t === 'i will succeed' || t === 'pepperdine') return 'manus-storage/zone-achieve-csol.jpg?v=csol2';
       if(focus === 'itaq-allah' || focus === 'god-conscious' || t.indexOf('surrender yourself to allah') !== -1) return 'manus-storage/zone-god-conscious.jpg?v=remembrance1';
       try {
         if(typeof hardwiredSectionPhoto === 'function'){
@@ -62175,9 +62285,9 @@ html body .day-block.depth-four-era .overview-center-stack {
     } catch(e){}
   })();
 
-  (function migrationIWillWinV5(){
-    var MKEY = 'migration-i-will-win-v5';
-    var WANT = 'manus-storage/zone-wins-hand.jpg?v=game3';
+  (function migrationIWillWinV8(){
+    var MKEY = 'migration-i-will-win-v8';
+    var WANT = 'manus-storage/zone-wins-hand.jpg?v=game6';
     function isWin(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
@@ -62202,6 +62312,7 @@ html body .day-block.depth-four-era .overview-center-stack {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
         var next = raw.replace(/manus-storage\/zone-wins\.jpg(?:\?v=game2)?/g, WANT);
+        next = next.replace(/zone-wins-hand\.jpg\?v=game[345]/g, 'zone-wins-hand.jpg?v=game6');
         if(next !== raw) localStorage.setItem(k, next);
       });
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -62279,10 +62390,14 @@ html body .day-block.depth-four-era .overview-center-stack {
     'to glow up': 'manus-storage/zone-glow-up.jpg?v=glow6',
     'i glow up': 'manus-storage/zone-glow-up.jpg?v=glow6',
     'to i glow up': 'manus-storage/zone-glow-up.jpg?v=glow6',
-    wins: 'manus-storage/zone-wins-hand.jpg?v=game3',
-    win: 'manus-storage/zone-wins-hand.jpg?v=game3',
-    'i will win': 'manus-storage/zone-wins-hand.jpg?v=game3',
-    'to win': 'manus-storage/zone-wins-hand.jpg?v=game3'
+    wins: 'manus-storage/zone-wins-hand.jpg?v=game6',
+    win: 'manus-storage/zone-wins-hand.jpg?v=game6',
+    'i will win': 'manus-storage/zone-wins-hand.jpg?v=game6',
+    'to win': 'manus-storage/zone-wins-hand.jpg?v=game6',
+    'i will achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'to achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'to-achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'i achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2'
   };
   var REJECTED_SECTION_PHOTOS = [
     'zone-to-love-rings',
@@ -63442,15 +63557,12 @@ html body .day-block.vision-collage-day .vision-board.is-zoomed .vision-tile[dat
 }
 </style>
 <style id="page-edit-btn-bottom-v1">
-/* EDIT = page-bottom chrome (same principle as SYNC / SAVE / TODAY). Never day-card or margin. */
+/* EDIT / SYNC are leftover chrome — keep hidden. Do not restack them on first paint. */
 html body #editBtn.edit-toggle,
-html body #editBtn {
-  position: fixed !important;
-  bottom: 74px !important;
-  right: 14px !important;
-  left: auto !important;
-  top: auto !important;
-  z-index: 99999 !important;
+html body #editBtn,
+html body #sync-state-btn,
+html body #sync-btn {
+  display: none !important;
 }
 </style>
 <style id="zoom-section-chrome-v1">
@@ -63701,13 +63813,115 @@ html body > .vision-add-menu .vision-add-menu-opt:hover {
 html body > .zone-add-picker.zone-add-picker-flow,
 html body .day-block .zone-add-picker.zone-add-picker-flow {
   position: fixed !important;
+  left: auto !important;
   right: auto !important;
   top: auto !important;
+  bottom: auto !important;
+  display: flex !important;
   flex-direction: column !important;
-  width: min(280px, 92vw) !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  width: min(320px, 92vw) !important;
   max-width: min(320px, 92vw) !important;
+  max-height: min(62vh, 420px) !important;
+  overflow: auto !important;
   margin: 0 !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 248, 238, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(36,26,18,0.92), rgba(12,8,6,0.96)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,238,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.28),
+    0 18px 40px rgba(0,0,0,0.48) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  color: rgba(255,248,238,0.88) !important;
+  font-family: "Newsreader", Georgia, serif !important;
   z-index: 300020 !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-picker-label,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-picker-label {
+  margin: 2px 2px 0 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 15px !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  color: rgba(255,248,238,0.78) !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-picker-list,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-picker-list {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: 4px !important;
+  max-height: min(40vh, 260px) !important;
+  overflow: auto !important;
+  margin: 0 !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-picker-opt,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-picker-opt {
+  display: block !important;
+  width: 100% !important;
+  border: 1px solid rgba(255,248,238,0.14) !important;
+  background: rgba(255,248,238,0.08) !important;
+  text-align: left !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 15px !important;
+  font-style: italic !important;
+  line-height: 1.25 !important;
+  color: rgba(255,248,238,0.94) !important;
+  padding: 8px 11px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  text-transform: none !important;
+  white-space: normal !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-picker-opt:hover,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-picker-opt:hover {
+  background: rgba(255,248,238,0.18) !important;
+  border-color: rgba(255,248,238,0.28) !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-picker-new,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-picker-new {
+  display: flex !important;
+  gap: 6px !important;
+  width: 100% !important;
+  align-items: stretch !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-name-input,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-name-input {
+  flex: 1 !important;
+  min-width: 0 !important;
+  padding: 7px 10px !important;
+  border: 1px solid rgba(255,248,238,0.18) !important;
+  border-radius: 10px !important;
+  background: rgba(255,248,238,0.08) !important;
+  color: rgba(255,248,238,0.94) !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 14px !important;
+  outline: none !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-name-input::placeholder,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-name-input::placeholder {
+  color: rgba(255,248,238,0.42) !important;
+}
+html body > .zone-add-picker.zone-add-picker-flow .plus-picker-go,
+html body .day-block .zone-add-picker.zone-add-picker-flow .plus-picker-go {
+  border: 1px solid rgba(255,248,238,0.18) !important;
+  border-radius: 10px !important;
+  background: rgba(255,248,238,0.12) !important;
+  padding: 6px 12px !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: lowercase !important;
+  color: rgba(255,248,238,0.9) !important;
+  cursor: pointer !important;
 }
 </style>
 <style id="bismillah-header-restore-v1">
@@ -63809,6 +64023,78 @@ html body .vision-subsection.is-sub-dragging {
   z-index: 10050 !important;
   pointer-events: none !important;
   margin: 0 !important;
+}
+</style>
+<style id="collage-day-no-scroll-leak-v1">
+/* Collage days must not paint over the next day while scrolling.
+   Filled 800px stage crushed 5+ tile rows; today/flow overflow:visible
+   then let the next day’s glass chrome sit on the previous day. */
+html body .day-block.overview-era-day .vision-board.vision-board-filled:is(:has(.vision-hero-five), :has(.vision-hero-six), :has(.vision-hero-many)):not(.is-zoomed),
+html body .day-block.vision-collage-day .vision-board.vision-board-filled:is(:has(.vision-hero-five), :has(.vision-hero-six), :has(.vision-hero-many)):not(.is-zoomed) {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open),
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).today,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).today-block,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).flow-modern,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).fmt22 {
+  overflow: clip !important;
+  isolation: isolate;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open) .day-card,
+html body .day-block.overview-era-day.today-block.fmt22:not(.collapsed):not(.picker-open) .day-card,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open) .day-tasks,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open) .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)) {
+  overflow: clip !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) {
+  overflow: clip !important;
+}
+</style>
+<style id="prototypes-page-scroll-v1">
+/* Prototype is one tall collage. Only the document scrolls.
+   overflow:hidden on the day/board made those nodes scroll containers,
+   so the wheel died on the collage and never reached the page. */
+html.prototypes-page {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  height: auto !important;
+  max-height: none !important;
+}
+html.prototypes-page body {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100vh !important;
+}
+html.prototypes-page #page-bg-wrapper,
+html.prototypes-page .schedule-section,
+html.prototypes-page .timeline,
+html.prototypes-page #agendaBody,
+html.prototypes-page .agenda-body {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+html.prototypes-page #page-bg-wrapper {
+  padding-bottom: 160px !important;
+}
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day,
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .day-card,
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .day-tasks,
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)),
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-board:not(.is-zoomed),
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-hero {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+}
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-hero.vision-hero-many {
+  grid-auto-rows: minmax(210px, auto) !important;
 }
 </style>
 </html>
