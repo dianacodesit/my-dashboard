@@ -91,14 +91,20 @@ KNOWN_CARD_PHOTOS = {
     "inner-fire": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
-    "luscious hair": "manus-storage/card-luscious-hair.jpg?v=brown1",
-    "glass skin": "manus-storage/card-glass-skin.jpg?v=dew1",
-    "facial tone": "manus-storage/card-facial-tone.jpg?v=struct1",
+    "luscious hair": "manus-storage/card-luscious-hair-lux.jpg?v=lux1",
+    "glass skin": "manus-storage/card-glass-skin-cheek.jpg?v=cheek1",
+    "facial tone": "manus-storage/card-facial-tone-sculpt.jpg?v=sculpt1",
+    "facial structure": "manus-storage/card-facial-tone-sculpt.jpg?v=sculpt1",
     "aligned teeth": "manus-storage/card-aligned-teeth.jpg?v=glow4",
     "glow-up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "glow": "manus-storage/zone-glow-up.jpg?v=glow6",
     "she pursues": "manus-storage/zone-she-pursues.jpg?v=pursue1",
     "she-pursues": "manus-storage/zone-she-pursues.jpg?v=pursue1",
+    "pursue": "manus-storage/zone-she-pursues.jpg?v=pursue1",
+    "I will pursue": "manus-storage/zone-she-pursues.jpg?v=pursue1",
+    "i will pursue": "manus-storage/zone-she-pursues.jpg?v=pursue1",
+    "I pursue": "manus-storage/zone-she-pursues.jpg?v=pursue1",
+    "i pursue": "manus-storage/zone-she-pursues.jpg?v=pursue1",
     "to glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "i glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "I glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
@@ -224,10 +230,10 @@ KNOWN_CARD_PHOTOS = {
     "I curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "I will curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
     "to-curate": "manus-storage/zone-to-curate-select.jpg?v=select1",
-    "to love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
-    "i love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
-    "I love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
-    "I will love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
+    "to love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
+    "i love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
+    "I love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
+    "I will love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
     "to persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "i persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "I persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
@@ -249,8 +255,8 @@ KNOWN_CARD_PHOTOS = {
     "to-persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "topersevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
     "persevere": "manus-storage/zone-to-persevere-continue.jpg?v=go1",
-    "to-love": "manus-storage/zone-to-love-souls.jpg?v=souls2",
-    "tolove": "manus-storage/zone-to-love-souls.jpg?v=souls2",
+    "to-love": "manus-storage/zone-to-love-souls.jpg?v=souls3",
+    "tolove": "manus-storage/zone-to-love-souls.jpg?v=souls3",
 }
 # Forever-banned section photo URL substrings (candle / people / rejected conceptuals).
 # Never return these from /photo-for for soul, sorrow, darkness, abundance, attention.
@@ -329,7 +335,7 @@ REJECTED_SECTION_PHOTOS = (
     "abundance-grapes",
     "abundance-poppies",
     # prosperity gold bars (abundance-bg-wealth / prosperity-bg-gold-bars) is NOT banned — not wheat
-    # live prosperity page: prosperity-bg-money-magnet.jpg
+    # prosperity page photo deleted (was prosperity-bg-money-magnet.jpg) — leave empty
     # legacy fight-back coral tile — audacity uses finger photo only
     "zone-fight-back",
     # detach / start over — rope + old leaf + dawn road forever banned
@@ -529,6 +535,29 @@ def ensure_overview_day_block(html: str, date: str) -> str:
     if insert_at < 0:
         return html + "\n" + shell
     return html[:insert_at] + "\n" + shell + html[insert_at:]
+
+
+def ensure_day_on_disk(date: str, page: str = "") -> dict:
+    """Persist a missing vision-collage day shell into the page HTML."""
+    date = str(date or "").strip()
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        raise ValueError(f"invalid day date: {date}")
+    paths = [p for p in _overview_paths_for_page(page) if p.exists()]
+    if not paths:
+        raise ValueError("overview file not found")
+    written: list[str] = []
+    created = False
+    with SAVE_OVERVIEW_LOCK:
+        for path in paths:
+            html = path.read_text(encoding="utf-8")
+            new_html = ensure_overview_day_block(html, date)
+            if new_html != html:
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                path.write_text(new_html, encoding="utf-8")
+                created = True
+            written.append(path.name)
+    return {"ok": True, "date": date, "files": written, "created": created}
 
 
 TILE_RE = re.compile(
@@ -967,6 +996,98 @@ _VISION_CHECK_RE = re.compile(
 )
 
 
+def _check_label_title(chunk: str) -> str:
+    sm = re.search(r"<span[^>]*>(.*?)</span>", chunk or "", re.I | re.S)
+    raw = sm.group(1) if sm else ""
+    raw = re.sub(r"<[^>]+>", "", raw)
+    return re.sub(r"\s+", " ", raw).strip()
+
+
+def _mutate_vision_check(date: str, focus: str, title: str, rewriter, page: str = "") -> dict:
+    date = str(date or "").strip()
+    focus = str(focus or "").strip()
+    title = re.sub(r"\s+", " ", str(title or "")).strip()
+    if not date or not title:
+        raise ValueError("date and title required")
+    written: list[str] = []
+    warnings: list[str] = []
+    paths = _overview_paths_for_page(page) if page else OVERVIEW_FILES
+    with SAVE_OVERVIEW_LOCK:
+        for path in paths:
+            if not path.exists():
+                continue
+            try:
+                html = path.read_text(encoding="utf-8")
+                _, start, end = _day_block_bounds(html, date)
+                block = html[start:end]
+                span = _tile_span_for_focus(block, focus)
+                if not span:
+                    raise ValueError(f"section {focus or title} not found on {date}")
+                art_s, art_e = span
+                art = block[art_s:art_e]
+                new_art = rewriter(art, title)
+                if new_art == art:
+                    written.append(path.name)
+                    continue
+                new_block = block[:art_s] + new_art + block[art_e:]
+                new_html = html[:start] + new_block + html[end:]
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "task not baked")
+    return {
+        "ok": True,
+        "date": date,
+        "title": title,
+        "focus": focus,
+        "files": written,
+        "warnings": warnings,
+    }
+
+
+def remove_vision_check(date: str, focus: str, title: str, page: str = "") -> dict:
+    want = re.sub(r"\s+", " ", str(title or "")).strip().lower()
+
+    def rewriter(art: str, _title: str) -> str:
+        def drop(m):
+            return "" if _check_label_title(m.group(0)).lower() == want else m.group(0)
+        return _VISION_CHECK_RE.sub(drop, art)
+
+    return _mutate_vision_check(date, focus, title, rewriter, page)
+
+
+def rename_vision_check(date: str, focus: str, old: str, new: str, page: str = "") -> dict:
+    old_s = re.sub(r"\s+", " ", str(old or "")).strip()
+    new_s = re.sub(r"\s+", " ", str(new or "")).strip()
+    if not new_s:
+        return remove_vision_check(date, focus, old_s, page)
+    want = old_s.lower()
+
+    def rewriter(art: str, _title: str) -> str:
+        def swap(m):
+            chunk = m.group(0)
+            if _check_label_title(chunk).lower() != want:
+                return chunk
+            return re.sub(
+                r"(<span[^>]*>)(.*?)(</span>)",
+                lambda sm: sm.group(1) + _xml_escape(new_s) + sm.group(3),
+                chunk,
+                count=1,
+                flags=re.I | re.S,
+            )
+        return _VISION_CHECK_RE.sub(swap, art)
+
+    result = _mutate_vision_check(date, focus, old_s, rewriter, page)
+    result["title"] = new_s
+    result["old"] = old_s
+    return result
+
+
 def save_vision_check_order(date: str, focus: str, titles, page: str = "") -> dict:
     """Reorder vision-check labels inside a day's section tile."""
     date = str(date or "").strip()
@@ -1081,6 +1202,17 @@ def _safe_section_photo(photo: str) -> str:
     return photo
 
 
+def _bare_section_name(s: str) -> str:
+    t = re.sub(r"\s+", " ", str(s or "")).strip().lower()
+    t = re.sub(r"^to\s+", "", t)
+    t = re.sub(r"^i will\s+", "", t)
+    return t.replace("-", " ")
+
+
+def _is_fitness_subsection_name(title: str, focus: str = "") -> bool:
+    return _bare_section_name(title) in {"calisthenics", "inversions"} or _bare_section_name(focus) in {"calisthenics", "inversions"}
+
+
 def _normalize_section_recs(body: dict) -> list[dict]:
     raw: list = []
     sections = body.get("sections") if isinstance(body, dict) else None
@@ -1095,6 +1227,8 @@ def _normalize_section_recs(body: dict) -> list[dict]:
         focus_src = str(rec.get("focus") or title)
         focus = re.sub(r"[^a-z0-9.-]+", "-", focus_src.lower()).strip("-")[:48]
         if not title or not focus:
+            continue
+        if _is_fitness_subsection_name(title, focus):
             continue
         key = f"{focus}\n{title.lower()}"
         if key in seen:
@@ -1627,6 +1761,25 @@ class Handler(SimpleHTTPRequestHandler):
                     str((body or {}).get("title") or ""),
                 )
                 return self._json(200, result)
+            if path == "/remove-task":
+                body = self._read_json()
+                result = remove_vision_check(
+                    str((body or {}).get("date") or ""),
+                    str((body or {}).get("focus") or ""),
+                    str((body or {}).get("title") or ""),
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
+            if path == "/rename-task":
+                body = self._read_json()
+                result = rename_vision_check(
+                    str((body or {}).get("date") or ""),
+                    str((body or {}).get("focus") or ""),
+                    str((body or {}).get("old") or (body or {}).get("from") or ""),
+                    str((body or {}).get("title") or (body or {}).get("new") or ""),
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
             if path == "/save-task-order":
                 body = self._read_json()
                 result = save_vision_check_order(
@@ -1651,6 +1804,13 @@ class Handler(SimpleHTTPRequestHandler):
                 result = remove_vision_sections(
                     str((body or {}).get("date") or ""),
                     recs,
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
+            if path == "/ensure-day":
+                body = self._read_json()
+                result = ensure_day_on_disk(
+                    str((body or {}).get("date") or ""),
                     str((body or {}).get("page") or ""),
                 )
                 return self._json(200, result)

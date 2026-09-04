@@ -55,8 +55,111 @@
     return Math.max(4, Math.min(x, Math.max(4, W - w - 8)));
   }
 
+  function unwrapSoloRows(grid) {
+    if (!grid) return;
+    Array.from(grid.querySelectorAll(".grid-solo-row")).forEach(function (row) {
+      var parent = row.parentNode;
+      if (!parent) return;
+      Array.from(row.children).forEach(function (sec) {
+        parent.insertBefore(sec, row);
+      });
+      row.remove();
+    });
+  }
+
+  function clearColumnCard(card) {
+    if (!card) return;
+    card.classList.remove("is-column-card");
+  }
+
+  function applyColumnCard(card) {
+    if (!card) return;
+    card.classList.add("is-column-card");
+    card.style.position = "";
+    card.style.left = "";
+    card.style.top = "";
+    card.style.width = "";
+  }
+
+  function liftColumnCard(card, canvas) {
+    if (!card || !canvas) return;
+    var cr = card.getBoundingClientRect();
+    var pr = canvas.getBoundingClientRect();
+    card.classList.remove("is-column-card");
+    card.style.position = "absolute";
+    card.style.width = Math.max(160, cr.width) + "px";
+    card.style.left = (cr.left - pr.left) + "px";
+    card.style.top = (cr.top - pr.top) + "px";
+  }
+
+  function promoteFromSolo(canvas) {
+    var sec = canvas && canvas.closest(".grid-section");
+    if (!sec || !sec.classList.contains("is-solo")) return;
+    sec.classList.remove("is-solo");
+    var cards = queryCards(canvas);
+    var W = canvasWidth(canvas);
+    cards.forEach(function (card, i) {
+      clearColumnCard(card);
+      var abs = card.style.position === "absolute" && card.style.left;
+      if (!abs) {
+        card.style.position = "absolute";
+        card.style.width = Math.min(280, Math.max(200, W - 32)) + "px";
+        card.style.left = (16 + i * 36) + "px";
+        card.style.top = (10 + i * 20) + "px";
+      }
+    });
+  }
+
+  function applySoloMode(sec) {
+    var canvas = sec && sec.querySelector(":scope > .grid-section-cards");
+    var cards = canvas ? queryCards(canvas) : [];
+    var solo = cards.length === 1;
+    sec.classList.toggle("is-solo", solo);
+    if (solo) {
+      applyColumnCard(cards[0]);
+      canvas.style.height = "";
+      canvas.style.minHeight = "";
+    } else {
+      cards.forEach(clearColumnCard);
+    }
+  }
+
+  function packSoloRows(grid) {
+    if (!grid) return;
+    unwrapSoloRows(grid);
+    var kids = Array.from(grid.children);
+    var i = 0;
+    while (i < kids.length) {
+      var el = kids[i];
+      if (el.classList && el.classList.contains("grid-section") && el.classList.contains("is-solo")) {
+        var run = [el];
+        var j = i + 1;
+        while (j < kids.length && kids[j].classList && kids[j].classList.contains("grid-section") && kids[j].classList.contains("is-solo")) {
+          run.push(kids[j]);
+          j++;
+        }
+        var row = document.createElement("div");
+        row.className = "grid-solo-row";
+        grid.insertBefore(row, run[0]);
+        run.forEach(function (sec) { row.appendChild(sec); });
+        kids = Array.from(grid.children);
+        i = kids.indexOf(row) + 1;
+        continue;
+      }
+      i++;
+    }
+  }
+
+  function syncSoloColumns(grid) {
+    if (!grid) return;
+    unwrapSoloRows(grid);
+    Array.from(grid.querySelectorAll(":scope > .grid-section")).forEach(applySoloMode);
+    packSoloRows(grid);
+  }
+
   function unwrapPanes(grid) {
     if (!grid) return;
+    unwrapSoloRows(grid);
     Array.from(grid.querySelectorAll(":scope > .grid-section")).forEach(function (sec) {
       var cards = sec.querySelector(":scope > .grid-section-cards");
       var kids = [];
@@ -237,7 +340,7 @@
     var secs = loadSections();
     if (!secs || !Object.keys(secs).length) return;
     var byTitle = {};
-    Array.from(grid.querySelectorAll(":scope > .grid-section")).forEach(function (sec) {
+    Array.from(grid.querySelectorAll(".grid-section")).forEach(function (sec) {
       var canvas = sec.querySelector(":scope > .grid-section-cards");
       var title = sectionTitle(canvas);
       if (canvas && title) byTitle[title.toLowerCase()] = canvas;
@@ -328,6 +431,12 @@
       canvas.style.height = "0px";
       return;
     }
+    if (cards.length === 1) {
+      applyColumnCard(cards[0]);
+      canvas.style.height = "";
+      canvas.style.minHeight = "";
+      return;
+    }
     var W = canvasWidth(canvas);
     var rnd = rng(sectionSeed(canvas));
     var originX = 16 + Math.floor(rnd() * 28);
@@ -383,10 +492,11 @@
 
   function scatterAll(grid) {
     var saved = loadPos();
-    Array.from(grid.querySelectorAll(":scope > .grid-section > .grid-section-cards")).forEach(function (canvas) {
+    Array.from(grid.querySelectorAll(".grid-section > .grid-section-cards")).forEach(function (canvas) {
       scatterCanvas(canvas, saved);
     });
     savePos(saved);
+    syncSoloColumns(grid);
   }
 
   function sectionTitle(canvas) {
@@ -415,37 +525,52 @@
   // Section ownership by label midpoints — never by canvas height.
   // Growing a section while dragging used to push the next label down forever.
   function canvasAtPoint(grid, clientX, clientY) {
-    var sections = Array.from(grid.querySelectorAll(":scope > .grid-section"));
+    var sections = Array.from(grid.querySelectorAll(".grid-section"));
     if (!sections.length) return null;
-    var bands = sections.map(function (sec) {
-      var canvas = sec.querySelector(":scope > .grid-section-cards");
-      var label = sec.querySelector(".section-label");
-      var lr = label ? label.getBoundingClientRect() : sec.getBoundingClientRect();
-      var sr = sec.getBoundingClientRect();
-      return {
-        canvas: canvas,
-        mid: (lr.top + lr.bottom) / 2,
-        left: sr.left - 40,
-        right: sr.right + 40
-      };
-    }).filter(function (b) { return b.canvas; });
-
     var hit = null;
-    for (var i = 0; i < bands.length; i++) {
-      var b = bands[i];
-      if (clientX < b.left || clientX > b.right) continue;
-      var top = i === 0 ? -1e9 : (bands[i - 1].mid + b.mid) / 2;
-      var bottom = i === bands.length - 1 ? 1e9 : (b.mid + bands[i + 1].mid) / 2;
-      if (clientY >= top && clientY < bottom) {
-        hit = b.canvas;
-        break;
+    var bestArea = 1e15;
+    sections.forEach(function (sec) {
+      var canvas = sec.querySelector(":scope > .grid-section-cards");
+      if (!canvas) return;
+      var r = sec.getBoundingClientRect();
+      var padX = 22;
+      var padY = 28;
+      if (clientX >= r.left - padX && clientX <= r.right + padX &&
+          clientY >= r.top - padY && clientY <= r.bottom + padY) {
+        var area = Math.max(1, r.width * r.height);
+        if (area < bestArea) {
+          bestArea = area;
+          hit = canvas;
+        }
       }
-    }
-    return hit;
+    });
+    if (hit) return hit;
+    var nearest = null;
+    var nd = 1e12;
+    sections.forEach(function (sec) {
+      var canvas = sec.querySelector(":scope > .grid-section-cards");
+      if (!canvas) return;
+      var r = sec.getBoundingClientRect();
+      var cx = (r.left + r.right) / 2;
+      var cy = (r.top + r.bottom) / 2;
+      var d = Math.hypot(clientX - cx, clientY - cy);
+      if (d < nd) {
+        nd = d;
+        nearest = canvas;
+      }
+    });
+    return nearest;
   }
 
   function settleCanvas(canvas, pinnedEl) {
     if (!canvas) return;
+    var cards = queryCards(canvas);
+    if (cards.length <= 1) {
+      persistCanvas(canvas);
+      var gridSolo = canvas.closest(".icon-task-grid") || canvas.closest(".grid");
+      if (gridSolo) syncSoloColumns(gridSolo);
+      return;
+    }
     var W = canvasWidth(canvas);
     var nodes = readNodes(canvas);
     var k;
@@ -453,6 +578,8 @@
     applyNodes(nodes);
     persistCanvas(canvas);
     fitCanvas(canvas, nodes);
+    var grid = canvas.closest(".icon-task-grid") || canvas.closest(".grid");
+    if (grid) syncSoloColumns(grid);
   }
 
   function transferCard(card, fromCanvas, toCanvas, clientX, clientY, grabDx, grabDy) {
@@ -463,6 +590,7 @@
       fitCanvas(fromCanvas, readNodes(fromCanvas).filter(function (n) { return n.el !== card; }));
     }
     toCanvas.appendChild(card);
+    if (queryCards(toCanvas).length >= 2) promoteFromSolo(toCanvas);
     setCardSectionLabel(card, toCanvas);
     var crect = toCanvas.getBoundingClientRect();
     var x = clientX - crect.left - grabDx;
@@ -574,6 +702,8 @@
       if (!card || !grid.contains(card)) return;
       var canvas = card.closest(".grid-section-cards");
       if (!canvas) return;
+      var home = canvas.closest(".grid-section");
+      if (home && home.classList.contains("is-solo")) liftColumnCard(card, canvas);
       if (dragging) endDrag(null);
       var rect = card.getBoundingClientRect();
       dragging = {

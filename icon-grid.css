@@ -43,6 +43,59 @@ html body.icon-grid-page .grid.icon-task-grid .grid-section::before {
   display: none !important;
 }
 
+html body.icon-grid-page .grid.icon-task-grid .grid-solo-row {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px 20px;
+  width: 100%;
+  padding: 0 4px 12px;
+  box-sizing: border-box;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo {
+  flex: 1 1 240px;
+  max-width: 300px;
+  min-width: 220px;
+  padding: 0 0 12px !important;
+  margin: 0 !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .grid-section-cards {
+  min-height: 0 !important;
+  height: auto !important;
+  width: 100% !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .section-label,
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .grid-section-title {
+  padding: 22px 6px 10px !important;
+  margin: 0 0 8px !important;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .card,
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .grid-section-cards > .card {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  transform: none;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .card:hover,
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .grid-section-cards > .card:hover {
+  transform: translateY(-4px) !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .grid-section.is-solo .card.is-dragging {
+  position: absolute !important;
+  transform: none !important;
+}
+
 html body.icon-grid-page .grid.icon-task-grid .grid-section-cards {
   display: block !important;
   position: relative !important;
