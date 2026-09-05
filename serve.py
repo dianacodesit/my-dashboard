@@ -76,10 +76,10 @@ KNOWN_CARD_PHOTOS = {
     "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol2",
     "achieve": "",
-    "I will achieve": "manus-storage/zone-to-achieve-license.jpg?v=lic4",
-    "i will achieve": "manus-storage/zone-to-achieve-license.jpg?v=lic4",
-    "to achieve": "manus-storage/zone-to-achieve-license.jpg?v=lic4",
-    "to-achieve": "manus-storage/zone-to-achieve-license.jpg?v=lic4",
+    "I will achieve": "",
+    "i will achieve": "",
+    "to achieve": "",
+    "to-achieve": "",
     "I will master": "manus-storage/zone-to-master.jpg?v=dip3",
     "i will master": "manus-storage/zone-to-master.jpg?v=dip3",
     "to master": "manus-storage/zone-to-master.jpg?v=dip3",
@@ -128,11 +128,11 @@ KNOWN_CARD_PHOTOS = {
     "repeat 10,000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat 10000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat-10000-times": "manus-storage/zone-repetitions.jpg?v=cubes1",
-    "wins": "manus-storage/zone-wins-hand.jpg?v=game8",
-    "win": "manus-storage/zone-wins-hand.jpg?v=game8",
-    "I will win": "manus-storage/zone-wins-hand.jpg?v=game8",
-    "i will win": "manus-storage/zone-wins-hand.jpg?v=game8",
-    "I win": "manus-storage/zone-wins-hand.jpg?v=game8",
+    "wins": "manus-storage/zone-wins-hand.jpg?v=game12",
+    "win": "manus-storage/zone-wins-hand.jpg?v=game12",
+    "I will win": "manus-storage/zone-wins-hand.jpg?v=game12",
+    "i will win": "manus-storage/zone-wins-hand.jpg?v=game12",
+    "I win": "manus-storage/zone-wins-hand.jpg?v=game12",
     # abundance — approved money-tree (wheat/plenty2 forever banned)
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
@@ -161,6 +161,19 @@ KNOWN_CARD_PHOTOS = {
     "to-navigate": "manus-storage/zone-plan.jpg?v=swap1",
     "alignment": "manus-storage/zone-alignment.jpg?v=align1",
     "train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "fitness": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "trained": "manus-storage/zone-athletic-gym.jpg?v=gym1",
+    "academia": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "Deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "networking": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "I earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "i earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+
     "i train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "I train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "I will train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
@@ -221,15 +234,15 @@ KNOWN_CARD_PHOTOS = {
     "I will litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
     "to-litigate": "manus-storage/zone-to-litigate.jpg?v=court1",
-    "to recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "i recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "I recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "I will recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "I recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "I will recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "i recoup every dollar": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
-    "to-recoup": "manus-storage/zone-to-recoup.jpg?v=villa1",
+    "to recoup": "",
+    "i recoup": "",
+    "I recoup": "",
+    "I will recoup": "",
+    "I recoup every dollar": "",
+    "I will recoup every dollar": "",
+    "i recoup every dollar": "",
+    "recoup": "",
+    "to-recoup": "",
     "I will earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "i will earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "to earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
@@ -284,6 +297,10 @@ KNOWN_CARD_PHOTOS = {
 REJECTED_SECTION_PHOTOS = (
     "zone-to-feel-rain",
     "zone-to-feel-heart",
+    "zone-to-recoup.jpg",
+    # recoup villa moved to backgrounds (recoup-bg-villa) — not a section photo
+    "zone-to-achieve-license.jpg",
+    # achieve license moved to backgrounds (achieve-bg-license) — not a section photo
     "zone-to-love-rings",
     "zone-to-love-aurora",
     "zone-tune-into-field",
@@ -637,6 +654,15 @@ def _tile_aliases(key: str) -> set[str]:
         ("grad school", "pepperdine"),
         ("grad", "pepperdine"),
         ("enroll", "pepperdine"),
+        ("succeed", "pepperdine"),
+        ("succeeded", "pepperdine"),
+        ("academia", "academia"),
+        ("fitness", "fitness"),
+        ("networking", "networking"),
+        ("deen", "deen"),
+        ("trained", "fitness"),
+        ("earned", "networking"),
+        ("surrendered-to-allah", "deen"),
         ("master", "to-master"),
         ("god conscious", "god-conscious"),
         ("villain", "villains"),
@@ -1666,6 +1692,12 @@ def photo_for_name(name: str) -> dict:
                 stored[key] = approved
                 _save_photo_map(stored)
                 return {"ok": True, "src": approved, "cached": True}
+        # Empty string in KNOWN_CARD_PHOTOS = intentionally cleared (e.g. recoup villa → backgrounds).
+        if key in KNOWN_CARD_PHOTOS and not str(KNOWN_CARD_PHOTOS.get(key) or "").strip():
+            if key in stored:
+                stored.pop(key, None)
+                _save_photo_map(stored)
+            return {"ok": False, "error": "no photo", "cleared": True}
         cached = stored.get(key) or KNOWN_CARD_PHOTOS.get(key)
         if cached and _section_photo_rejected(str(cached)):
             stored.pop(key, None)
@@ -1719,6 +1751,74 @@ def photo_for_name(name: str) -> dict:
 
 _GZIP_CACHE: dict[str, tuple[tuple[str, float, int], bytes]] = {}
 _GZIP_LOCK = threading.Lock()
+_SLIM_CACHE: dict[str, tuple[tuple[str, float, int], bytes]] = {}
+_PROTO_KEEP_DATE = "2026-08-30"
+_DAY_BLOCK_RE = re.compile(r"<div\s+class=\"day-block\b", re.I)
+
+
+def _close_div_block(html: str, start: int) -> int:
+    """Return index after the matching </div> for the <div that starts at start."""
+    i = start
+    depth = 0
+    n = len(html)
+    while i < n:
+        if html.startswith("<div", i) and (i + 4 >= n or html[i + 4] in " \t\r\n/>"):
+            depth += 1
+            i += 4
+            continue
+        if html.startswith("</div>", i):
+            depth -= 1
+            i += 6
+            if depth <= 0:
+                return i
+            continue
+        i += 1
+    return n
+
+
+def _slim_prototype_html(html: str) -> str:
+    """Drop hidden day-blocks. Prototype only paints Aug 30 — parsing the rest is why it felt 3–5s."""
+    keep = f'data-date="{_PROTO_KEEP_DATE}"'
+    keep_sq = f"data-date='{_PROTO_KEEP_DATE}'"
+    out: list[str] = []
+    i = 0
+    n = len(html)
+    while True:
+        m = _DAY_BLOCK_RE.search(html, i)
+        if not m:
+            out.append(html[i:])
+            break
+        start = m.start()
+        out.append(html[i:start])
+        end = _close_div_block(html, start)
+        head = html[start:min(start + 480, end)]
+        if keep in head or keep_sq in head:
+            out.append(html[start:end])
+        i = end
+    return "".join(out)
+
+
+def _file_bytes_maybe_slim(path: str) -> bytes | None:
+    try:
+        st = os.stat(path)
+    except OSError:
+        return None
+    key = (path, st.st_mtime, st.st_size)
+    name = Path(path).name
+    if name == "prototype.html":
+        with _GZIP_LOCK:
+            hit = _SLIM_CACHE.get(path)
+            if hit and hit[0] == key:
+                return hit[1]
+        raw = Path(path).read_bytes()
+        try:
+            slim = _slim_prototype_html(raw.decode("utf-8")).encode("utf-8")
+        except Exception:
+            slim = raw
+        with _GZIP_LOCK:
+            _SLIM_CACHE[path] = (key, slim)
+        return slim
+    return Path(path).read_bytes()
 
 
 def _gzip_file(path: str) -> bytes | None:
@@ -1727,13 +1827,18 @@ def _gzip_file(path: str) -> bytes | None:
     except OSError:
         return None
     key = (path, st.st_mtime, st.st_size)
+    cache_path = path + ("#slim" if Path(path).name == "prototype.html" else "")
     with _GZIP_LOCK:
-        hit = _GZIP_CACHE.get(path)
+        hit = _GZIP_CACHE.get(cache_path)
         if hit and hit[0] == key:
             return hit[1]
-        compressed = gzip.compress(Path(path).read_bytes(), compresslevel=5)
-        _GZIP_CACHE[path] = (key, compressed)
-        return compressed
+    raw = _file_bytes_maybe_slim(path)
+    if raw is None:
+        return None
+    compressed = gzip.compress(raw, compresslevel=5)
+    with _GZIP_LOCK:
+        _GZIP_CACHE[cache_path] = (key, compressed)
+    return compressed
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -1877,6 +1982,28 @@ class Handler(SimpleHTTPRequestHandler):
             return super().send_head()
         ext = Path(path).suffix.lower()
         accept = self.headers.get("Accept-Encoding", "")
+        if Path(path).name == "prototype.html":
+            raw = _file_bytes_maybe_slim(path)
+            if raw is None:
+                self.send_error(404, "File not found")
+                return None
+            if "gzip" in accept:
+                body = _gzip_file(path)
+                if body is None:
+                    self.send_error(404, "File not found")
+                    return None
+                enc = True
+            else:
+                body = raw
+                enc = False
+            self.send_response(200)
+            self.send_header("Content-type", self.guess_type(path))
+            if enc:
+                self.send_header("Content-Encoding", "gzip")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Vary", "Accept-Encoding")
+            self.end_headers()
+            return BytesIO(body)
         if ext in {".html", ".js", ".css", ".json", ".svg", ".txt"} and "gzip" in accept:
             compressed = _gzip_file(path)
             if compressed is None:
