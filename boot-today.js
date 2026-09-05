@@ -13,9 +13,11 @@
 
     function jump() {
       var iso = isoNow();
-      var block = document.querySelector('.day-block[data-date="' + iso + '"]')
-        || document.querySelector('.day-block.today-block');
+      var block = document.querySelector('.day-block[data-date="' + iso + '"]');
       if (!block) return;
+      document.querySelectorAll('.day-block.today-block').forEach(function (b) {
+        if (b !== block) b.classList.remove('today-block');
+      });
       block.classList.add('today-block');
       block.classList.remove('collapsed', 'past');
       try { block.scrollIntoView({ behavior: 'instant', block: 'start' }); } catch (e) {

@@ -204,13 +204,89 @@
     grid.setAttribute("data-freeform", "1");
   }
 
+  function pairOverlap(a, b, pad) {
+    pad = pad == null ? 0 : pad;
+    var ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+    var oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+    return ox > pad && oy > pad;
+  }
+
   function overlaps(a, list, pad) {
     for (var i = 0; i < list.length; i++) {
-      var b = list[i];
-      if (a.x < b.x + b.w + pad && a.x + a.w + pad > b.x &&
-          a.y < b.y + b.h + pad && a.y + a.h + pad > b.y) return true;
+      if (pairOverlap(a, list[i], -(pad || 0))) return true;
     }
     return false;
+  }
+
+  function clusterHasOverlap(nodes, pad) {
+    if (!nodes || nodes.length < 2) return false;
+    pad = pad == null ? 1 : pad;
+    var i, j;
+    for (i = 0; i < nodes.length; i++) {
+      for (j = i + 1; j < nodes.length; j++) {
+        if (pairOverlap(nodes[i], nodes[j], pad)) return true;
+      }
+    }
+    return false;
+  }
+
+  function fitWidthForCanvas(W, n) {
+    var cols = n === 2 && W >= 520 ? 2 : (W >= 980 ? 3 : W >= 520 ? 2 : 1);
+    var gap = 20;
+    var pad = 16;
+    return Math.min(340, Math.max(200, Math.floor((W - pad * 2 - gap * Math.max(0, cols - 1)) / cols)));
+  }
+
+  function separateNodes(nodes, W, pad, pinnedEl) {
+    pad = pad == null ? GAP : pad;
+    var n = nodes.length;
+    if (n < 2) return;
+    var iter, i, j;
+    for (iter = 0; iter < 28; iter++) {
+      var moved = false;
+      for (i = 0; i < n; i++) {
+        for (j = i + 1; j < n; j++) {
+          var a = nodes[i];
+          var b = nodes[j];
+          var ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+          var oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+          var needX = ox + pad;
+          var needY = oy + pad;
+          if (needX <= 0 || needY <= 0) continue;
+          moved = true;
+          var aPin = a.el === pinnedEl;
+          var bPin = b.el === pinnedEl;
+          if (needX <= needY) {
+            var left = (a.x + a.w / 2) <= (b.x + b.w / 2);
+            var push = needX;
+            if (aPin) b.x += left ? push : -push;
+            else if (bPin) a.x += left ? -push : push;
+            else {
+              a.x += left ? -push / 2 : push / 2;
+              b.x += left ? push / 2 : -push / 2;
+            }
+          } else {
+            var above = (a.y + a.h / 2) <= (b.y + b.h / 2);
+            var pushY = needY;
+            if (aPin) b.y += above ? pushY : -pushY;
+            else if (bPin) a.y += above ? -pushY : pushY;
+            else {
+              a.y += above ? -pushY / 2 : pushY / 2;
+              b.y += above ? pushY / 2 : -pushY / 2;
+            }
+          }
+          if (!aPin) {
+            a.x = clampX(a.x, a.w, W);
+            a.y = Math.max(6, a.y);
+          }
+          if (!bPin) {
+            b.x = clampX(b.x, b.w, W);
+            b.y = Math.max(6, b.y);
+          }
+        }
+      }
+      if (!moved) return;
+    }
   }
 
   function sectionSeed(canvas) {
@@ -222,19 +298,16 @@
   function packTwoAcross(cards, W, saved) {
     var gap = 20;
     var pad = 16;
-    var avail = Math.max(280, W - pad * 2 - gap);
-    var w = Math.min(340, Math.max(220, Math.floor(avail / 2)));
-    if (W < 520) w = Math.min(w, W - 24);
+    var w = fitWidthForCanvas(W, 2);
+    var stacked = W < w * 2 + gap + pad * 2;
+    var yCursor = 10;
     cards.forEach(function (card, i) {
       clearColumnCard(card);
       var prev = saved && card.id ? saved[card.id] : null;
-      var rot = prev && typeof prev.r === "number" ? prev.r : 0;
-      var x = pad + i * (w + gap);
-      var y = 10;
-      if (W < 520) {
-        x = pad;
-        y = 10 + i * 8;
-      }
+      var rot = 0;
+      var h = Math.max(card.offsetHeight || 180, 140);
+      var x = stacked ? pad : (pad + i * (w + gap));
+      var y = stacked ? yCursor : 10;
       x = clampX(x, w, W);
       card.style.position = "absolute";
       card.style.width = w + "px";
@@ -242,6 +315,7 @@
       card.style.top = y + "px";
       card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
       if (saved && card.id) saved[card.id] = { x: x, y: y, r: rot, w: w };
+      if (stacked) yCursor += h + gap;
     });
   }
 
@@ -441,11 +515,18 @@
         var gapX = (a.w + b.w) / 2 + pad - Math.abs(dx);
         var gapY = (a.h + b.h) / 2 + pad - Math.abs(dy);
         if (gapX > 0 && gapY > 0) {
-          var push = Math.min(gapX, gapY) * 0.52;
-          vx[i] -= nx * push;
-          vy[i] -= ny * push;
-          vx[j] += nx * push;
-          vy[j] += ny * push;
+          /* Push on the shallow axis so cards slide apart, not through each other. */
+          if (gapX <= gapY) {
+            var sx = dx >= 0 ? 1 : -1;
+            var pushX = gapX * 0.62;
+            vx[i] -= sx * pushX;
+            vx[j] += sx * pushX;
+          } else {
+            var sy = dy >= 0 ? 1 : -1;
+            var pushY = gapY * 0.62;
+            vy[i] -= sy * pushY;
+            vy[j] += sy * pushY;
+          }
         } else if (attract) {
           var edgeGap = Math.max(
             Math.abs(dx) - (a.w + b.w) / 2,
@@ -526,7 +607,7 @@
       return;
     }
     var W = canvasWidth(canvas);
-    if (cards.length === 2 && W >= 520) {
+    if (cards.length === 2) {
       packTwoAcross(cards, W, saved);
       fitCanvas(canvas, readNodes(canvas));
       return;
@@ -556,7 +637,7 @@
       }
       x = clampX(x, w, W);
       var prev = saved && card.id ? saved[card.id] : null;
-      var rot = prev && typeof prev.r === "number" ? prev.r : 0;
+      var rot = 0;
       card.style.left = x + "px";
       card.style.top = y + "px";
       card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
@@ -607,7 +688,7 @@
       return;
     }
     var W = canvasWidth(canvas);
-    if (cards.length === 2 && (W >= 520 || savedPairIsStacked(cards, saved))) {
+    if (cards.length === 2) {
       packTwoAcross(cards, W, saved);
       fitCanvas(canvas, readNodes(canvas));
       return;
@@ -626,7 +707,9 @@
           });
         }
       });
-      if (probe.length === cards.length) holey = clusterHasHole(probe, W);
+      if (probe.length === cards.length) {
+        holey = clusterHasHole(probe, W) || clusterHasOverlap(probe, 1);
+      }
       if (holey || probe.length !== cards.length) {
         packCluster(canvas, saved);
         return;
@@ -643,6 +726,7 @@
       var crnd = rng(hash(id));
       var prev = saved[id];
       var w = prev && prev.w ? prev.w : (248 + Math.floor(crnd() * 56));
+      w = Math.min(w, fitWidthForCanvas(W, cards.length));
       if (W < 420) w = Math.min(w, W - 16);
       card.style.width = w + "px";
       card.style.position = "absolute";
@@ -673,7 +757,12 @@
       for (k = 0; k < 8; k++) stepForces(nodes, null, W, { pad: GAP, attract: true });
       pinCluster(nodes, originX, originY, W);
     } else {
-      for (k = 0; k < 4; k++) stepForces(nodes, null, W, { pad: 8, attract: false });
+      for (k = 0; k < 4; k++) stepForces(nodes, null, W, { pad: GAP, attract: false });
+    }
+    separateNodes(nodes, W, GAP, null);
+    if (clusterHasOverlap(nodes, 1)) {
+      packCluster(canvas, saved);
+      return;
     }
     applyNodes(nodes);
     nodes.forEach(function (n) {
@@ -766,7 +855,7 @@
       return;
     }
     var W = canvasWidth(canvas);
-    if (cards.length === 2 && W >= 520) {
+    if (cards.length === 2) {
       withSettleAnim(canvas, function () {
         packTwoAcross(cards, W, loadPos());
         persistCanvas(canvas);
@@ -788,6 +877,16 @@
     }
     var k;
     for (k = 0; k < 14; k++) stepForces(nodes, pinnedEl || null, W, { pad: GAP, attract: true });
+    separateNodes(nodes, W, GAP, pinnedEl || null);
+    if (clusterHasOverlap(nodes, 1)) {
+      withSettleAnim(canvas, function () {
+        packCluster(canvas, loadPos());
+        persistCanvas(canvas);
+      });
+      var gridFix = canvas.closest(".icon-task-grid") || canvas.closest(".grid");
+      if (gridFix) syncSoloColumns(gridFix);
+      return;
+    }
     applyNodes(nodes);
     persistCanvas(canvas);
     fitCanvas(canvas, nodes);
@@ -883,7 +982,8 @@
       if (canvas === dragging.originCanvas) {
         followPinned(nodes, pinned, dx, dy);
         var k;
-        for (k = 0; k < 5; k++) stepForces(nodes, pinned.el, W, { pad: 12, attract: false });
+        for (k = 0; k < 5; k++) stepForces(nodes, pinned.el, W, { pad: GAP, attract: false });
+        separateNodes(nodes, W, GAP, pinned.el);
       }
       applyNodes(nodes);
       fitCanvas(canvas, nodes, dragging.card);

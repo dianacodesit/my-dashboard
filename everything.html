@@ -18,13 +18,70 @@ This applies regardless of conversation context or recently edited days.
 <html lang="en">
 <head>
 
-<meta charset="utf-8"/><script src="boot-seed.js" defer></script><script src="boot-today.js?v=chrome4" defer></script>
+<meta charset="utf-8"/><script src="boot-seed.js" defer></script><script src="boot-today.js?v=chrome5" defer></script>
 <style id="btm-today-first">
 /* Do not hide days on load — that stalled the page. */
 </style>
 <script>
 try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (e) {}
-document.documentElement.classList.add('btm-collage-ready');
+document.documentElement.classList.add('btm-collage-hold');
+window.__revealCollage = function(){
+  try {
+    document.documentElement.classList.remove('btm-collage-hold');
+    document.documentElement.classList.add('btm-collage-ready');
+  } catch (e) {}
+};
+setTimeout(function(){ try { window.__revealCollage(); } catch (e) {} }, 900);
+window.__btmFlashLog = [];
+(function(){
+  function snap(){
+    try {
+      var exp = [];
+      document.querySelectorAll('.day-block[data-date]:not(.collapsed)').forEach(function(b){
+        var hero = b.querySelector('.vision-hero');
+        var n = hero ? hero.querySelectorAll(':scope > .vision-tile').length : 0;
+        exp.push(b.getAttribute('data-date') + ':' + n);
+      });
+      window.__btmFlashLog.push({
+        t: Math.round(performance.now()),
+        hold: document.documentElement.classList.contains('btm-collage-hold'),
+        exp: exp
+      });
+    } catch (e) {}
+  }
+  snap();
+  var n = 0;
+  var id = setInterval(function(){
+    snap();
+    n++;
+    if (n > 24) clearInterval(id);
+  }, 60);
+})();
+window.__btmFlashLog = [];
+(function(){
+  function snap(){
+    try {
+      var exp = [];
+      document.querySelectorAll('.day-block[data-date]:not(.collapsed)').forEach(function(b){
+        var hero = b.querySelector('.vision-hero');
+        var n = hero ? hero.querySelectorAll(':scope > .vision-tile').length : 0;
+        exp.push(b.getAttribute('data-date') + ':' + n);
+      });
+      window.__btmFlashLog.push({
+        t: Math.round(performance.now()),
+        hold: document.documentElement.classList.contains('btm-collage-hold'),
+        exp: exp
+      });
+    } catch (e) {}
+  }
+  snap();
+  var n = 0;
+  var id = setInterval(function(){
+    snap();
+    n++;
+    if (n > 24) clearInterval(id);
+  }, 60);
+})();
 </script>
 <script>
 window.__btmHtmlSaveArmed = false;
@@ -32,10 +89,18 @@ window.__armBtmHtmlSave = function(){ /* autosave writes HTML and snaps every op
 window.__isLiveDayBlock = function(blk){
   if(!blk) return false;
   try {
-    if(document.body && document.body.classList.contains('prototypes-page'))
+    if((document.body && document.body.classList.contains('prototypes-page'))
+      || document.documentElement.classList.contains('prototypes-page'))
       return blk.getAttribute('data-date') === '2026-08-30';
   } catch(e){}
-  if(blk.classList.contains('today-block')) return true;
+  var date = blk.getAttribute('data-date') || '';
+  var iso = '';
+  try {
+    var t = new Date();
+    var pad = function(n){ return String(n).padStart(2,'0'); };
+    iso = t.getFullYear() + '-' + pad(t.getMonth()+1) + '-' + pad(t.getDate());
+  } catch(eIso){}
+  if(date && iso && date === iso) return true;
   if(blk.getAttribute('data-btm-hydrated') === '1') return true;
   return false;
 };
@@ -53,14 +118,35 @@ html body .day-block.overview-era-day .vision-board {
   height: auto;
   box-sizing: border-box;
 }
+html.btm-collage-hold:not(.prototypes-page) body .day-block:is(.vision-collage-day, .overview-era-day):not(.collapsed) .vision-hero,
+html body .day-block.collage-booting .vision-hero {
+  visibility: hidden !important;
+}
 html body .day-block.vision-collage-day .vision-hero,
 html body .day-block.overview-era-day .vision-hero {
   display: grid !important;
   grid-template-columns: 1.35fr 1fr 1fr !important;
-  grid-template-rows: minmax(250px, 1.15fr) minmax(210px, 1fr) !important;
+  grid-template-rows: minmax(240px, auto) minmax(210px, auto) !important;
   gap: 0 !important;
-  flex: 1 1 auto !important;
+  flex: 0 0 auto !important;
+  height: auto !important;
   min-height: 0 !important;
+}
+/* 8 tiles need 4 tracks on first paint — the 2-row default auto-flows into a scramble. */
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-hero:has(> .vision-tile:nth-child(8)),
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-hero:has(> .vision-tile:nth-child(7)):not(:has(> .vision-tile:nth-child(8))) {
+  grid-template-rows: minmax(240px, auto) minmax(210px, auto) minmax(210px, auto) minmax(210px, auto) !important;
+  height: auto !important;
+  flex: 0 0 auto !important;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-hero:has(> .vision-tile:nth-child(9)) {
+  grid-template-rows: repeat(5, minmax(210px, auto)) !important;
+  height: auto !important;
+}
+/* First paint only: unplaced tiles stay invisible. After data-pack-sig, leave them
+   visible so Sortable can clear grid during a drag without the collage vanishing. */
+html body .day-block:is(.vision-collage-day, .overview-era-day):not(.collapsed) .vision-hero:not([data-pack-sig]) > .vision-tile:not([style*="grid-area"]):not([style*="grid-column"]) {
+  visibility: hidden !important;
 }
 html body .day-block.vision-collage-day .vision-tile,
 html body .day-block.overview-era-day .vision-tile {
@@ -13136,7 +13222,7 @@ window.__j22fnApply=run;
     'pepperdine':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'enroll':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'achieve':'manus-storage/zone-achieve-csol.jpg?v=csol2',
-    'I will achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'I will achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic4',
     'I will master':'manus-storage/zone-to-master.jpg?v=dip3',
     'i will master':'manus-storage/zone-to-master.jpg?v=dip3',
     'I master':'manus-storage/zone-to-master.jpg?v=dip3',
@@ -13148,10 +13234,10 @@ window.__j22fnApply=run;
     'succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'I succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'to succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
-    'i will achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
-    'I achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
-    'to achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
-    'to-achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic2',
+    'i will achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic4',
+    'I achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic4',
+    'to achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic4',
+    'to-achieve':'manus-storage/zone-to-achieve-license.jpg?v=lic4',
     'grad school':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'grad':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'pursuits':'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3',
@@ -13306,11 +13392,11 @@ window.__j22fnApply=run;
     'self esteem':'manus-storage/zone-self-esteem.jpg?v=se1',
     'audacity':'manus-storage/zone-audacity.jpg?v=finger1',
     'politics':'manus-storage/zone-politics.jpg?v=chess5',
-    'wins':'manus-storage/zone-wins-hand.jpg?v=game6',
-    'win':'manus-storage/zone-wins-hand.jpg?v=game6',
-    'I will win':'manus-storage/zone-wins-hand.jpg?v=game6',
-    'i will win':'manus-storage/zone-wins-hand.jpg?v=game6',
-    'I win':'manus-storage/zone-wins-hand.jpg?v=game6',
+    'wins':'manus-storage/zone-wins-hand.jpg?v=game8',
+    'win':'manus-storage/zone-wins-hand.jpg?v=game8',
+    'I will win':'manus-storage/zone-wins-hand.jpg?v=game8',
+    'i will win':'manus-storage/zone-wins-hand.jpg?v=game8',
+    'I win':'manus-storage/zone-wins-hand.jpg?v=game8',
     'repetitions':'manus-storage/zone-repetitions.jpg?v=cubes1',
     'repeat 10,000 times':'manus-storage/zone-repetitions.jpg?v=cubes1',
     'repeat 10000 times':'manus-storage/zone-repetitions.jpg?v=cubes1',
@@ -20105,7 +20191,7 @@ window.__j22fnApply=run;
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero"><article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --title-ink: rgba(210,186,150,0.94); --title-stroke: rgba(20,10,4,0.55); --title-shade: rgba(6,3,1,0.9); --title-shade-deep: rgba(6,3,1,0.55); --title-lip: rgba(255,246,230,0.55); --title-lip-soft: rgba(255,236,214,0.28); --title-well: rgba(0,0,0,0.45); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-card-weight="1" data-content-score="0"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-cursor-ref="e20695" data-carve="I will become">I will become</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins-hand.jpg?v=game6&quot;); --photo-ar: 0.75; --zoom-ar: 0.75; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins-hand.jpg?v=game8&quot;); --photo-ar: 0.75; --zoom-ar: 0.75; grid-area: 3 / 1 / 4 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="repetitions" style="--tile-photo: url(&quot;manus-storage/zone-repetitions.jpg?v=cubes1&quot;); --photo-ar: 0.5; --zoom-ar: 0.5; grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will repeat 10,000 times">I will repeat 10,000 times</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="aim-above-the-mark" style="--tile-photo: url(&quot;manus-storage/zone-intentions.jpg?v=aim1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 7 / 1 / 8 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will aim above the mark">I will aim above the mark</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="execute" style="--tile-photo: url(&quot;manus-storage/zone-execute-focus.jpg?v=chess1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will execute">I will execute</h3><div class="vision-tile-details"></div></article>
@@ -20149,7 +20235,7 @@ window.__j22fnApply=run;
 </div>
 </div></div></div></div></div>
 
-<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-03">
+<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era collapsed past" data-date="2026-09-03">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">sep 3 · thu</span></div>
@@ -20170,13 +20256,13 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-summit.jpg?v=summit1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e27655">I will persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 5 / 2 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up" data-cursor-ref="e27656">I will glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="luscious-hair" style="--sub-photo: none; --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="glass-skin" style="--sub-photo: none; --sx: 2%; --sy: 2%; --sw: 20%; --sr: -2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">glass skin</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="aligned-teeth" style="--sub-photo: none; --sx: 2%; --sy: 58%; --sw: 20%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">aligned teeth</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="facial-tone" style="--sub-photo: none; --sx: 78%; --sy: 58%; --sw: 20%; --sr: -2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">facial tone</h4></article></div></article>
 <article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url(&quot;manus-storage/zone-to-recoup.jpg?v=villa1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will recoup" data-cursor-ref="e27657">I will recoup</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon return QR codes</span></label></div></article><article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1'); --photo-ar: 1.778; --zoom-ar: 1.778; grid-area: 4 / 1 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Dr Betty</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>document translation into Arabic</span></label></div></article>
-<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game6');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game8');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url(&quot;manus-storage/zone-to-earn-gold.jpg?v=earn3&quot;); --photo-ar: 1.333; --zoom-ar: 1.333;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will earn">I will earn</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>remote jobs</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Handshake 'top applicant' jobs</span></label></div></article>
 <article class="vision-tile" data-focus="to-master" style="--tile-photo: url(&quot;manus-storage/zone-to-master.jpg?v=dip3&quot;); --photo-ar: 1.5; --zoom-ar: 1.5;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will master">I will master</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-achieve" style="--tile-photo: url(&quot;manus-storage/zone-to-achieve-license.jpg?v=lic2&quot;); --photo-ar: 1.333; --zoom-ar: 1.333;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will achieve">I will achieve</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-achieve" style="--tile-photo: url(&quot;manus-storage/zone-to-achieve-license.jpg?v=lic4&quot;); --photo-ar: 0.75; --zoom-ar: 0.75;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will achieve">I will achieve</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 
-<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era today-block" data-date="2026-09-04">
+<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era collapsed past" data-date="2026-09-04">
 <div class="day-dot"></div>
 <div class="day-card">
 <div class="day-card-header"><span class="day-date">sep 4 · fri</span></div>
@@ -20191,15 +20277,34 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
+<div class="vision-hero vision-hero-many" style="grid-template-columns: 1.35fr 1fr 1fr !important; grid-template-rows: minmax(240px, auto) minmax(210px, auto) minmax(210px, auto) minmax(210px, auto) !important; height: auto !important;">
+<article class="vision-tile" data-focus="to-master" style="--tile-photo: url(&quot;manus-storage/zone-to-master.jpg?v=dip3&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 4 / 1 / 5 / 2 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will master">I will master</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-achieve" style="--tile-photo: url(&quot;manus-storage/zone-to-achieve-license.jpg?v=lic4&quot;); --photo-ar: 0.75; --zoom-ar: 0.75; grid-area: 3 / 3 / 4 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will achieve">I will achieve</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6'); grid-area: 1 / 1 / 3 / 2 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up">I will glow up</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1'); grid-area: 4 / 2 / 5 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will surrender to Allah ﷻ">I will surrender to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url('manus-storage/zone-to-recoup.jpg?v=villa1'); grid-area: 3 / 1 / 4 / 3 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will recoup">I will recoup</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>AT&amp;T $850</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon return QR codes</span></label></div></article>
+<article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1'); grid-area: 2 / 3 / 3 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-achieve-csol.jpg?v=csol2'); grid-area: 1 / 2 / 2 / 4 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will succeed">I will succeed</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship application</span></label></div></article>
+<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game8'); grid-area: 2 / 2 / 3 / 3 !important;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
+</div>
+</div></div></div></div></div>
+
+<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era today-block" data-date="2026-09-05">
+<div class="day-dot"></div>
+<div class="day-card">
+<div class="day-card-header"><span class="day-date">sep 5 · sat</span></div>
+<div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits">overview</button>
+<button class="tv-pill" data-view="impulses">impulses</button>
+<button class="tv-pill" data-view="flow">flow</button>
+<button class="tv-pill" data-view="nodes">nodes</button>
+</div>
+<div class="day-tasks">
+<div class="tv-panel tv-pursuits active">
+<div class="vision-board" aria-label="vision collage">
+<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero">
-<article class="vision-tile" data-focus="to-master" style="--tile-photo: url(&quot;manus-storage/zone-to-master.jpg?v=dip3&quot;); --photo-ar: 1.5; --zoom-ar: 1.5;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will master">I will master</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-achieve" style="--tile-photo: url(&quot;manus-storage/zone-to-achieve-license.jpg?v=lic2&quot;); --photo-ar: 1.333; --zoom-ar: 1.333;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will achieve">I will achieve</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glow-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up">I will glow up</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will surrender to Allah ﷻ">I will surrender to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-recoup" style="--tile-photo: url('manus-storage/zone-to-recoup.jpg?v=villa1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will recoup">I will recoup</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>AT&amp;T $850</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon return QR codes</span></label></div></article>
-<article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-achieve-csol.jpg?v=csol2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will succeed">I will succeed</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship application</span></label></div></article>
-<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game6');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
 </div>
 </div></div></div></div></div>
 <script id="jump-today-as-soon-as-parsed">
@@ -20213,9 +20318,11 @@ window.__j22fnApply=run;
     };
     function jump(){
       var iso = isoNow();
-      var b = document.querySelector('.day-block[data-date="'+iso+'"]')
-        || document.querySelector('.day-block.today-block');
+      var b = document.querySelector('.day-block[data-date="'+iso+'"]');
       if (!b) return false;
+      document.querySelectorAll('.day-block.today-block').forEach(function(el){
+        if (el !== b) el.classList.remove('today-block');
+      });
       b.classList.add('today-block');
       b.classList.remove('collapsed','past');
       try { b.scrollIntoView({ behavior: 'instant', block: 'start' }); } catch(e){
@@ -24674,12 +24781,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     };
     const scrollToToday = () => {
       const iso = todayStr();
-      let block = document.querySelector(`.day-block[data-date="${iso}"]`)
-        || document.querySelector('.day-block.today-block');
+      let block = document.querySelector(`.day-block[data-date="${iso}"]`);
       if (!block) {
         try { ensureTodayCard(); } catch(e){}
-        block = document.querySelector(`.day-block[data-date="${iso}"]`)
-          || document.querySelector('.day-block.today-block');
+        block = document.querySelector(`.day-block[data-date="${iso}"]`);
       }
       document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
       jumpTodayViewport(block);
@@ -30090,7 +30195,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='self-esteem'||nl==='self esteem') src='manus-storage/zone-self-esteem.jpg?v=se1';
       else if(nl==='audacity') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='politics') src='manus-storage/zone-politics.jpg?v=chess5';
-      else if(nl==='wins'||nl==='win') src='manus-storage/zone-wins-hand.jpg?v=game6';
+      else if(nl==='wins'||nl==='win') src='manus-storage/zone-wins-hand.jpg?v=game8';
       else if(nl==='repetitions' || nl==='repeat 10,000 times' || nl==='repeat 10000 times' || nl==='repeat-10000-times') src='manus-storage/zone-repetitions.jpg?v=cubes1';
       else if(nl==='intentions' || nl==='set the mark' || nl==='set-the-mark' || nl==='aim-above-the-mark' || nl==='aim above the mark' || nl==='to aim above the mark' || nl==='i aim above the mark') src='manus-storage/zone-intentions.jpg?v=aim1';
       else if(nl==='feel it into being' || nl==='feel-it-into-being' || nl==='to feel it into being' || nl==='i feel it into being' || nl==='feel into being' || nl==='to feel into being' || nl==='i feel into being') src='';
@@ -30124,7 +30229,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='fight back'||nl==='remember who you are'||nl==='fight') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
       else if(nl==='i will master'||nl==='to master'||nl==='to-master'||nl==='i master'||nl==='master') src='manus-storage/zone-to-master.jpg?v=dip3';
-      else if(nl==='i will achieve'||nl==='to achieve'||nl==='to-achieve'||nl==='i achieve') src='manus-storage/zone-to-achieve-license.jpg?v=lic2';
+      else if(nl==='i will achieve'||nl==='to achieve'||nl==='to-achieve'||nl==='i achieve') src='manus-storage/zone-to-achieve-license.jpg?v=lic4';
       else if(nl==='pepperdine'||nl==='enroll'||nl==='succeed'||nl==='i will succeed'||nl==='grad school'||nl==='grad') src='manus-storage/zone-achieve-csol.jpg?v=csol2';
     }
     var sec=document.createElement('div');
@@ -43352,14 +43457,17 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     /* 7: closing 3-block — tall 1×2 left (square-friendly) + two stacked right. No full-width bar. */
     if(n === 7) return { columns:C, rows:autoRows(4), places:[[1,2,1,3],[2,4,1,2],[2,3,2,3],[3,4,2,3],[1,2,3,5],[2,4,3,4],[2,4,4,5]], squareSlot:4 };
     /* 8+: collage header, then zigzag 2+1 rows — never a row of three equal cells.
-       Odd leftover folds into tall+stack (not a 1×N ribbon). */
+       Odd leftover folds into tall+stack (not a 1×N ribbon). Never park one leftover
+       as a 3-col × 2-row closer — that made one tile ~3× a neighbor. */
     var places = [[1,2,1,3],[2,4,1,2],[2,3,2,3],[3,4,2,3]];
     var left = n - 4;
     var row = 3;
     var flip = 0;
     var reservedSquare = false;
     while(left > 0){
-      if(needSquare && !reservedSquare && left >= 3){
+      /* Square 3-block only when leftover after it stays even (incl. 0).
+         left===4/6 would orphan one tile into a giant full-width bar. */
+      if(needSquare && !reservedSquare && left >= 3 && (left % 2 === 1)){
         /* Extra 1-col × 2-row so glow-up stays square without stealing fitness. */
         places.push([1,2,row,row+2],[2,4,row,row+1],[2,4,row+1,row+2]);
         left -= 3;
@@ -43368,8 +43476,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         continue;
       }
       if(left === 1){
-        if(reservedSquare){
-          places.push([1,4,row,row+2]);
+        if(reservedSquare && places.length >= 7){
+          /* Undo the square 3-block + leftover; zigzag four even cells instead. */
+          places.pop();
+          places.pop();
+          places.pop();
+          reservedSquare = false;
+          row -= 2;
+          places.push([1,3,row,row+1],[3,4,row,row+1]);
+          places.push([1,2,row+1,row+2],[2,4,row+1,row+2]);
           left = 0;
           row += 2;
         } else if(places.length >= 6){
@@ -43381,7 +43496,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           left = 0;
           row += 2;
         } else {
-          /* Last resort: full width but TWO rows tall (never a 1-row skin strip). */
+          /* Dead for 8+ (n=5 is hardcoded). One cell, two rows — never a 1-row ribbon. */
           places.push([1,4,row,row+2]);
           left = 0;
           row += 2;
@@ -43701,6 +43816,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     tile.style.removeProperty('max-height');
   }
   function packNativeAspect(host, tiles){
+    /* Collage is a grid. Never paint the flex masonry — it was the load flash. */
+    return;
     if(!host || !tiles || !tiles.length) return;
     var vb = host.closest ? host.closest('.vision-board') : null;
     if(vb) vb.classList.add('vision-board-native-ar');
@@ -43797,8 +43914,43 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__photoArForTile = photoArForTile;
   window.__packNativeAspect = packNativeAspect;
 
+  var __packHold = 0;
+  window.__holdVisionPack = function(){ __packHold++; };
+  window.__flushVisionPack = function(blk){
+    __packHold = Math.max(0, (__packHold || 0) - 1);
+    if(__packHold !== 0) return;
+    if(blk){
+      try { syncHeroLayoutClass(blk); } catch(e){}
+    }
+  };
+  function applyBakedHostTracks(host, tiles){
+    if(!host) return;
+    var maxRow = 2;
+    (tiles || []).forEach(function(t){
+      var st = t.getAttribute('style') || '';
+      var area = st.match(/grid-area\s*:\s*(\d+)\s*\/\s*\d+\s*\/\s*(\d+)\s*\/\s*\d+/i);
+      if(area) maxRow = Math.max(maxRow, (parseInt(area[2], 10) || 1) - 1);
+      var row = st.match(/grid-row\s*:\s*(\d+)\s*\/\s*(\d+)/i);
+      if(row) maxRow = Math.max(maxRow, (parseInt(row[2], 10) || 1) - 1);
+      var end = st.match(/grid-row-end\s*:\s*(\d+)/i);
+      if(end) maxRow = Math.max(maxRow, (parseInt(end[1], 10) || 1) - 1);
+    });
+    var n = (tiles || []).length;
+    if(n >= 9) maxRow = Math.max(maxRow, 5);
+    else if(n >= 7) maxRow = Math.max(maxRow, 4);
+    else if(n >= 5) maxRow = Math.max(maxRow, 3);
+    var rows = [];
+    for(var i = 0; i < maxRow; i++) rows.push(i === 0 ? 'minmax(240px, auto)' : 'minmax(210px, auto)');
+    host.style.setProperty('grid-template-columns', n <= 1 ? '1fr' : (n === 2 ? '1fr 1fr' : '1.35fr 1fr 1fr'), 'important');
+    host.style.setProperty('grid-template-rows', rows.join(' '), 'important');
+    host.style.setProperty('height', 'auto', 'important');
+    host.style.setProperty('flex-grow', '0', 'important');
+    host.style.setProperty('flex-shrink', '0', 'important');
+    if(n >= 7) host.classList.add('vision-hero-many');
+  }
   function packVisionCollage(host){
     if(!host) return;
+    if(__packHold > 0) return;
     var vbEarly = host.closest ? host.closest('.vision-board') : null;
     if(vbEarly && vbEarly.classList.contains('is-zoomed')) return;
     try {
@@ -43817,8 +43969,19 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var packNames = tiles.map(function(t){
       return (t.getAttribute('data-focus') || '') + ':' + (((t.querySelector('.vision-tile-title') || {}).textContent || '')).replace(/\s+/g,' ').trim();
     }).join('|');
-    var packSig = n + '@' + packW + '#' + packNames;
+    var packSig = 'p5:' + n + '#' + packNames;
     if(host.getAttribute('data-pack-sig') === packSig) return;
+    /* Already stamped (baked HTML or a prior pack). Do not wipe — that flashes
+       the 2-row auto-flow scramble, then a second assignment. */
+    var alreadyPlaced = n >= 3 && tiles.every(function(t){
+      var st = t.getAttribute('style') || '';
+      return /grid-area\s*:/i.test(st) || /grid-column(?:-start)?\s*:/i.test(st);
+    });
+    if(alreadyPlaced){
+      try { applyBakedHostTracks(host, tiles); } catch(eTrk){}
+      host.setAttribute('data-pack-sig', packSig);
+      return;
+    }
     /* Always clear native-aspect flex leftovers — collage is a grid, not a masonry of photo boxes. */
     tiles.forEach(function(t){ try { clearNativePack(t); } catch(e){ try { clearVisionPack(t); } catch(e2){} } });
     try {
@@ -43835,7 +43998,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     host.style.removeProperty('grid-template-rows');
     var vb = host.closest ? host.closest('.vision-board') : null;
     if(vb && vb.classList.contains('is-zoomed')) return;
-    if(n <= 0) return;
+    if(n <= 0){
+      host.setAttribute('data-pack-sig', packSig);
+      return;
+    }
 
     /* Prefer fitness in the tall left collage slot (Aug 26 DNA). */
     var bodyTile = findBodyFitnessTile(tiles);
@@ -43980,6 +44146,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         syncHeroLayoutClass(blk);
       }catch(e){}
     });
+    try {
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ try { window.__revealCollage(); } catch(eRev){} });
+      });
+    } catch(eRaf){
+      try { window.__revealCollage(); } catch(eRev2){}
+    }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bootHeroLayouts);
   else bootHeroLayouts();
@@ -46616,13 +46789,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'earn' || f === 'to-earn' || title.toLowerCase() === 'i will earn' || title.toLowerCase() === 'to earn' || title.toLowerCase() === 'i earn' || title.toLowerCase() === 'earn') return 'manus-storage/zone-to-earn-gold.jpg?v=earn3';
     if(f === 'she-pursues' || f === 'pursue' || title.toLowerCase() === 'she pursues' || title.toLowerCase() === 'she-pursues' || title.toLowerCase() === 'pursue' || title.toLowerCase() === 'i will pursue' || title.toLowerCase() === 'i pursue') return 'manus-storage/zone-she-pursues.jpg?v=pursue1';
     if(f === 'to-master' || f === 'master' || title.toLowerCase() === 'i will master' || title.toLowerCase() === 'to master' || title.toLowerCase() === 'i master' || title.toLowerCase() === 'master' || title.toLowerCase() === 'to-master') return 'manus-storage/zone-to-master.jpg?v=dip3';
-    if(f === 'to-achieve' || title.toLowerCase() === 'i will achieve' || title.toLowerCase() === 'to achieve' || title.toLowerCase() === 'i achieve' || title.toLowerCase() === 'to-achieve') return 'manus-storage/zone-to-achieve-license.jpg?v=lic2';
+    if(f === 'to-achieve' || title.toLowerCase() === 'i will achieve' || title.toLowerCase() === 'to achieve' || title.toLowerCase() === 'i achieve' || title.toLowerCase() === 'to-achieve') return 'manus-storage/zone-to-achieve-license.jpg?v=lic4';
     if(f === 'pepperdine' || f === 'enroll' || title.toLowerCase() === 'pepperdine' || title.toLowerCase() === 'i will succeed' || title.toLowerCase() === 'succeed' || title.toLowerCase() === 'enroll' || (f === 'achieve' && title.toLowerCase() !== 'i will achieve' && title.toLowerCase() !== 'to achieve' && title.toLowerCase() !== 'i achieve' && title.toLowerCase() !== 'i will master')) return 'manus-storage/zone-achieve-csol.jpg?v=csol2';
     if(f === 'itaq-allah' || f === 'god-conscious' || title.toLowerCase().indexOf('surrender') !== -1 || title.toLowerCase() === 'surrender yourself to allah ﷻ') return 'manus-storage/zone-god-conscious.jpg?v=remembrance1';
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
     if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-focus.jpg?v=chess1';
-    if(f === 'wins' || f === 'win' || title.toLowerCase() === 'i will win' || title.toLowerCase() === 'win' || title.toLowerCase() === 'to win') return 'manus-storage/zone-wins-hand.jpg?v=game6';
+    if(f === 'wins' || f === 'win' || title.toLowerCase() === 'i will win' || title.toLowerCase() === 'win' || title.toLowerCase() === 'to win') return 'manus-storage/zone-wins-hand.jpg?v=game8';
     if(f === 'seize-opportunities' || f === 'seize' || f === 'to-seize-opportunities' || title.toLowerCase() === 'seize' || title.toLowerCase() === 'seize opportunities' || title.toLowerCase() === 'to seize opportunities' || title.toLowerCase() === 'i seize opportunities') return 'manus-storage/zone-seize-opportunities.jpg?v=seize4';
     if(f === 'workflow' || f === 'to-workflow' || f === 'start' || f === 'to-start' || f === 'navigate' || f === 'to-navigate' || title.toLowerCase() === 'workflow' || title.toLowerCase() === 'to workflow' || title.toLowerCase() === 'i workflow' || title.toLowerCase() === 'start' || title.toLowerCase() === 'to start' || title.toLowerCase() === 'i start' || title.toLowerCase() === 'to navigate' || title.toLowerCase() === 'i navigate' || title.toLowerCase() === 'navigate') return 'manus-storage/zone-plan.jpg?v=swap1';
     if(f === 'scholarship-application' || f === 'to-scholarship-application' || title.toLowerCase() === 'scholarship application' || title.toLowerCase() === 'to scholarship application' || title.toLowerCase() === 'i scholarship application' || title.toLowerCase() === 'scholarship-application') return 'manus-storage/zone-scholarship-application.jpg?v=app1';
@@ -55052,11 +55225,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__clearArchivedRemovalsOnHistoryDays = clearArchivedRemovalsOnHistoryDays;
 
   function boot(onlyBlk){
+    try { if(window.__holdVisionPack) window.__holdVisionPack(); } catch(eHold0){}
+    var bootHide = [];
+    try {
     try { if(window.__unnestSwallowedDays) window.__unnestSwallowedDays(); } catch(e){}
     try { if(!onlyBlk) clearArchivedRemovalsOnHistoryDays(); } catch(e){}
     document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
       if(onlyBlk && blk !== onlyBlk) return;
       if(!onlyBlk && window.__isLiveDayBlock && !window.__isLiveDayBlock(blk)) return;
+      try { blk.classList.add('collage-booting'); bootHide.push(blk); } catch(eBootH){}
       try { blk.setAttribute('data-btm-hydrated', '1'); } catch(eHyd){}
       var mig = migratePepperdineSection(blk);
       // Repair past days first (incl. Aug 26–27 collage) before overview-era work.
@@ -55158,6 +55335,18 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         try { saveMap(loadMap()); syncHeroLayoutClass(blk); syncDayShell(blk); scheduleHtmlSave(blk); } catch(e){}
       }
     });
+    } finally {
+      try { if(window.__flushVisionPack) window.__flushVisionPack(onlyBlk || null); } catch(eFlush){}
+      if(!onlyBlk){
+        document.querySelectorAll('.day-block.overview-era-day, .day-block.vision-collage-day').forEach(function(b){
+          try {
+            if(window.__isLiveDayBlock && !window.__isLiveDayBlock(b)) return;
+            syncHeroLayoutClass(b);
+          } catch(eAll){}
+        });
+      }
+      bootHide.forEach(function(b){ try { b.classList.remove('collage-booting'); } catch(eBh){} });
+    }
   }
 
   (function markBakedSep02StripDone(){
@@ -56305,6 +56494,11 @@ html body .day-block.overview-era-day .vision-board.vision-board-filled:not(.is-
   height: min(80vh, 800px) !important;
   max-height: none !important;
 }
+html body .day-block.overview-era-day .vision-board.vision-board-filled:not(.is-zoomed):has(.vision-tile:nth-child(5)) {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+}
 html body .day-block.overview-era-day .vision-board.vision-board-sparse:not(.is-zoomed) {
   min-height: 0 !important;
   height: auto !important;
@@ -56313,9 +56507,10 @@ html body .day-block.overview-era-day .vision-board.vision-board-sparse:not(.is-
 html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-hero {
   display: grid;
   grid-template-columns: 1.35fr 1fr 1fr;
-  grid-template-rows: minmax(250px, 1.15fr) minmax(210px, 1fr);
+  grid-template-rows: minmax(240px, auto) minmax(210px, auto);
   gap: 12px;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  height: auto;
   min-height: 0;
 }
 /* Overview-era collage packing — NEVER equal rows/columns.
@@ -56323,14 +56518,14 @@ html body .day-block:is([data-date="2026-08-20"], .vision-collage-day) .vision-h
 html body .day-block.overview-era-day .vision-hero {
   display: grid !important;
   grid-template-columns: 1.35fr 1fr 1fr !important;
-  grid-template-rows: minmax(250px, 1.15fr) minmax(210px, 1fr) !important;
+  grid-template-rows: minmax(240px, auto) minmax(210px, auto) !important;
   gap: 12px !important;
-  flex: 1 1 auto !important;
+  flex: 0 0 auto !important;
   width: 100% !important;
   max-width: none !important;
-  height: 100% !important;
+  height: auto !important;
   min-height: 0 !important;
-  align-content: stretch !important;
+  align-content: start !important;
 }
 /* Sept 1+ (and prototype page): tiles kiss — no gutters between section photos. */
 html body .day-block.collage-flush .vision-board:not(.is-zoomed),
@@ -58570,7 +58765,7 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
   display: none !important;
 }
 </style>
-<script src="icon-grid.js?v=crosssec1"></script>
+<script src="icon-grid.js?v=force2b"></script>
 <style id="vision-collage-glance-type-v2">
 /* HARD RULE: enlarge CARD/TASK text only. Section titles (.vision-tile-title) stay
    at approved small size (clamp 22–34 collage / 36px zoomed). Never bump sections
@@ -61523,9 +61718,9 @@ html body .day-block.depth-four-era .overview-center-stack {
     } catch(e){}
   })();
 
-  (function migrationIWillWinV8(){
-    var MKEY = 'migration-i-will-win-v8';
-    var WANT = 'manus-storage/zone-wins-hand.jpg?v=game6';
+  (function migrationIWillWinV10(){
+    var MKEY = 'migration-i-will-win-v10';
+    var WANT = 'manus-storage/zone-wins-hand.jpg?v=game8';
     function isWin(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
@@ -61550,7 +61745,7 @@ html body .day-block.depth-four-era .overview-center-stack {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
         var next = raw.replace(/manus-storage\/zone-wins\.jpg(?:\?v=game2)?/g, WANT);
-        next = next.replace(/zone-wins-hand\.jpg\?v=game[345]/g, 'zone-wins-hand.jpg?v=game6');
+        next = next.replace(/zone-wins-hand\.jpg\?v=game[34567]/g, 'zone-wins-hand.jpg?v=game8');
         if(next !== raw) localStorage.setItem(k, next);
       });
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -61573,9 +61768,9 @@ html body .day-block.depth-four-era .overview-center-stack {
 
   /* Diploma belongs to I will master. I will achieve is the CA psychology license. */
   (function migrationIWillMasterV1(){
-    var MKEY = 'migration-i-will-achieve-license-v2';
+    var MKEY = 'migration-i-will-achieve-license-v4';
     var MASTER_PHOTO = 'manus-storage/zone-to-master.jpg?v=dip3';
-    var ACHIEVE_PHOTO = 'manus-storage/zone-to-achieve-license.jpg?v=lic2';
+    var ACHIEVE_PHOTO = 'manus-storage/zone-to-achieve-license.jpg?v=lic4';
     function titleOf(tile){
       return ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
     }
@@ -61608,8 +61803,8 @@ html body .day-block.depth-four-era .overview-center-stack {
     function forceAchieveLicense(tile){
       tile.classList.remove('vision-tile-nophoto');
       tile.style.setProperty('--tile-photo', 'url("'+ACHIEVE_PHOTO+'")');
-      tile.style.setProperty('--photo-ar', '1.333');
-      tile.style.setProperty('--zoom-ar', '1.333');
+      tile.style.setProperty('--photo-ar', '0.75');
+      tile.style.setProperty('--zoom-ar', '0.75');
       var titleEl = tile.querySelector('.vision-tile-title');
       if(titleEl){
         titleEl.textContent = 'I will achieve';
@@ -61669,7 +61864,7 @@ html body .day-block.depth-four-era .overview-center-stack {
       ['btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
         var next = raw.replace(/manus-storage\/zone-to-achieve\.jpg(?:\?v=dip[12])?/g, MASTER_PHOTO);
-        next = next.replace(/zone-to-achieve-license\.jpg\?v=lic1/g, 'zone-to-achieve-license.jpg?v=lic2');
+        next = next.replace(/zone-to-achieve-license\.jpg\?v=lic[123]/g, 'zone-to-achieve-license.jpg?v=lic4');
         if(next !== raw) localStorage.setItem(k, next);
       });
       localStorage.setItem(MKEY, '1');
@@ -61685,7 +61880,7 @@ html body .day-block.depth-four-era .overview-center-stack {
       focus = String(focus||'').toLowerCase();
       var t = title.toLowerCase();
       if(focus === 'to-master' || t === 'i will master' || t === 'to master' || t === 'i master' || t === 'master') return 'manus-storage/zone-to-master.jpg?v=dip3';
-      if(focus === 'to-achieve' || t === 'i will achieve' || t === 'to achieve' || t === 'i achieve') return 'manus-storage/zone-to-achieve-license.jpg?v=lic2';
+      if(focus === 'to-achieve' || t === 'i will achieve' || t === 'to achieve' || t === 'i achieve') return 'manus-storage/zone-to-achieve-license.jpg?v=lic4';
       if(focus === 'pepperdine' || focus === 'enroll' || t === 'to succeed' || t === 'succeed' || t === 'i will succeed' || t === 'pepperdine') return 'manus-storage/zone-achieve-csol.jpg?v=csol2';
       if(focus === 'itaq-allah' || focus === 'god-conscious' || t.indexOf('surrender yourself to allah') !== -1) return 'manus-storage/zone-god-conscious.jpg?v=remembrance1';
       try {
@@ -61801,14 +61996,14 @@ html body .day-block.depth-four-era .overview-center-stack {
     'i glow up': 'manus-storage/zone-glow-up.jpg?v=glow6',
     'i will glow up': 'manus-storage/zone-glow-up.jpg?v=glow6',
     'to i glow up': 'manus-storage/zone-glow-up.jpg?v=glow6',
-    wins: 'manus-storage/zone-wins-hand.jpg?v=game6',
-    win: 'manus-storage/zone-wins-hand.jpg?v=game6',
-    'i will win': 'manus-storage/zone-wins-hand.jpg?v=game6',
-    'to win': 'manus-storage/zone-wins-hand.jpg?v=game6',
-    'i will achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2',
-    'to achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2',
-    'to-achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2',
-    'i achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic2'
+    wins: 'manus-storage/zone-wins-hand.jpg?v=game8',
+    win: 'manus-storage/zone-wins-hand.jpg?v=game8',
+    'i will win': 'manus-storage/zone-wins-hand.jpg?v=game8',
+    'to win': 'manus-storage/zone-wins-hand.jpg?v=game8',
+    'i will achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic4',
+    'to achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic4',
+    'to-achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic4',
+    'i achieve': 'manus-storage/zone-to-achieve-license.jpg?v=lic4'
   };
   var REJECTED_SECTION_PHOTOS = [
     'zone-to-love-rings',
@@ -62527,7 +62722,7 @@ html body .vision-tile[data-focus="win"] > .vision-tile-photo,
 html body .vision-tile.wins-copy-stack > .vision-tile-photo,
 html body.vision-zoom-open .vision-board.is-zoomed .vision-tile[data-focus="wins"].is-zoomed > .vision-tile-photo,
 html body > .vision-board.is-zoomed .vision-tile[data-focus="wins"].is-zoomed > .vision-tile-photo {
-  background-position: 50% 88% !important;
+  background-position: 50% 52% !important;
   background-size: cover !important;
 }
 html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile.wins-copy-stack[data-focus="wins"] > .vision-tile-title,
