@@ -169,8 +169,8 @@ html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card {
   filter: none;
   position: absolute !important;
   right: auto !important;
-  height: auto !important;
-  min-height: 0 !important;
+  height: auto;
+  min-height: 0;
   max-width: none !important;
   margin: 0 !important;
   border-radius: 6px !important;
@@ -182,6 +182,50 @@ html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card {
   transform: rotate(var(--card-rot, 0deg));
   transition: box-shadow 0.25s, opacity 0.4s;
   z-index: 1;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.is-sized,
+html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card.is-sized {
+  height: var(--card-h, auto) !important;
+  min-height: var(--card-h, 0) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.is-sized .card-visual {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 80px;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card > .card-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 22px;
+  height: 22px;
+  z-index: 12;
+  cursor: nwse-resize;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  touch-action: none;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card > .card-resize::before,
+html body.icon-grid-page .grid.icon-task-grid .card > .card-resize::after,
+html body.icon-grid-page .grid.icon-task-grid .card:hover > .card-resize::after,
+html body.icon-grid-page .grid.icon-task-grid .card.is-resizing > .card-resize::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  opacity: 0 !important;
 }
 
 html body.icon-grid-page .grid.icon-task-grid .card:hover,
@@ -196,6 +240,17 @@ html body.icon-grid-page .grid.icon-task-grid .card.is-dragging {
   z-index: 20 !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14) !important;
   transition: none !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.is-resizing {
+  cursor: nwse-resize;
+  z-index: 20 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14) !important;
+  transition: none !important;
+}
+
+html body.icon-grid-page .grid.icon-task-grid .card.is-resizing:hover {
+  transform: rotate(var(--card-rot, 0deg)) !important;
 }
 
 html body.icon-grid-page .grid.icon-task-grid .card.is-relating {

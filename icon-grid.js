@@ -74,11 +74,15 @@
 
   function applyColumnCard(card) {
     if (!card) return;
+    if (card.classList.contains("is-sized")) return;
     card.classList.add("is-column-card");
     card.style.position = "";
     card.style.left = "";
     card.style.top = "";
     card.style.width = "";
+    card.style.height = "";
+    card.style.minHeight = "";
+    card.style.removeProperty("--card-h");
   }
 
   function liftColumnCard(card, canvas) {
@@ -113,7 +117,7 @@
   function applySoloMode(sec) {
     var canvas = sec && sec.querySelector(":scope > .grid-section-cards");
     var cards = canvas ? queryCards(canvas) : [];
-    var solo = cards.length === 1;
+    var solo = cards.length === 1 && !cards[0].classList.contains("is-sized");
     sec.classList.toggle("is-solo", solo);
     if (solo) {
       applyColumnCard(cards[0]);
@@ -121,6 +125,9 @@
       canvas.style.minHeight = "";
     } else {
       cards.forEach(clearColumnCard);
+      if (cards.length === 1 && cards[0].classList.contains("is-sized")) {
+        fitCanvas(canvas, readNodes(canvas));
+      }
     }
   }
 
@@ -295,26 +302,49 @@
     return hash(label ? label.textContent : "section");
   }
 
+  function layoutSingleCard(canvas, card, saved) {
+    var one = saved && card.id ? saved[card.id] : null;
+    if (one && one.sized) {
+      clearColumnCard(card);
+      card.classList.add("is-sized");
+      card.style.position = "absolute";
+      applySavedCardSize(card, one);
+      card.style.left = (typeof one.x === "number" ? one.x : 16) + "px";
+      card.style.top = (typeof one.y === "number" ? one.y : 10) + "px";
+      if (typeof one.r === "number") card.style.setProperty("--card-rot", one.r.toFixed(2) + "deg");
+      fitCanvas(canvas, readNodes(canvas));
+      return;
+    }
+    applyColumnCard(card);
+    canvas.style.height = "";
+    canvas.style.minHeight = "";
+  }
+
   function packTwoAcross(cards, W, saved) {
     var gap = 20;
     var pad = 16;
-    var w = fitWidthForCanvas(W, 2);
-    var stacked = W < w * 2 + gap + pad * 2;
+    var packW = fitWidthForCanvas(W, 2);
+    var stacked = W < packW * 2 + gap + pad * 2;
     var yCursor = 10;
+    var firstW = packW;
     cards.forEach(function (card, i) {
       clearColumnCard(card);
       var prev = saved && card.id ? saved[card.id] : null;
       var rot = 0;
-      var h = Math.max(card.offsetHeight || 180, 140);
-      var x = stacked ? pad : (pad + i * (w + gap));
-      var y = stacked ? yCursor : 10;
-      x = clampX(x, w, W);
+      var w = (prev && prev.sized && prev.w) ? prev.w : packW;
+      w = Math.min(w, W - pad - 8);
+      applySavedCardSize(card, prev);
       card.style.position = "absolute";
       card.style.width = w + "px";
+      var h = Math.max(card.offsetHeight || 180, 140);
+      var x = stacked ? pad : (pad + (i === 0 ? 0 : firstW + gap));
+      var y = stacked ? yCursor : 10;
+      x = clampX(x, w, W);
       card.style.left = x + "px";
       card.style.top = y + "px";
       card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
-      if (saved && card.id) saved[card.id] = { x: x, y: y, r: rot, w: w };
+      if (saved && card.id) saved[card.id] = cardPosRecord(card, { x: x, y: y, r: rot, w: w, h: prev && prev.h ? prev.h : h, sized: !!(prev && prev.sized) });
+      if (i === 0) firstW = w;
       if (stacked) yCursor += h + gap;
     });
   }
@@ -433,18 +463,45 @@
     canvas.style.height = Math.max(160, maxB + 32) + "px";
   }
 
+  function cardPosRecord(card, extra) {
+    var prev = extra || {};
+    return {
+      x: typeof prev.x === "number" ? prev.x : (parseFloat(card.style.left) || 0),
+      y: typeof prev.y === "number" ? prev.y : (parseFloat(card.style.top) || 0),
+      r: typeof prev.r === "number" ? prev.r : (parseFloat((card.style.getPropertyValue("--card-rot") || "0").replace("deg", "")) || 0),
+      w: typeof prev.w === "number" ? prev.w : (parseFloat(card.style.width) || card.offsetWidth),
+      h: typeof prev.h === "number" ? prev.h : (parseFloat(card.style.height) || card.offsetHeight),
+      sized: prev.sized != null ? !!prev.sized : card.classList.contains("is-sized")
+    };
+  }
+
+  function applyUserSize(card, w, h) {
+    if (!card) return;
+    card.classList.add("is-sized");
+    card.style.width = w + "px";
+    card.style.height = h + "px";
+    card.style.minHeight = h + "px";
+    card.style.setProperty("--card-h", h + "px");
+  }
+
+  function applySavedCardSize(card, prev) {
+    if (!card || !prev) return;
+    if (prev.w) card.style.width = prev.w + "px";
+    if (prev.sized && prev.h) {
+      card.classList.add("is-sized");
+      card.style.height = prev.h + "px";
+      card.style.minHeight = prev.h + "px";
+      card.style.setProperty("--card-h", prev.h + "px");
+    }
+  }
+
   function persistCanvas(canvas) {
     var saved = loadPos();
     var secs = loadSections();
     var title = sectionTitle(canvas);
     queryCards(canvas).forEach(function (card) {
       if (!card.id) return;
-      saved[card.id] = {
-        x: parseFloat(card.style.left) || 0,
-        y: parseFloat(card.style.top) || 0,
-        r: parseFloat((card.style.getPropertyValue("--card-rot") || "0").replace("deg", "")) || 0,
-        w: parseFloat(card.style.width) || card.offsetWidth
-      };
+      saved[card.id] = cardPosRecord(card);
       if (title) secs[card.id] = title;
     });
     savePos(saved);
@@ -601,9 +658,7 @@
       return;
     }
     if (cards.length === 1) {
-      applyColumnCard(cards[0]);
-      canvas.style.height = "";
-      canvas.style.minHeight = "";
+      layoutSingleCard(canvas, cards[0], saved);
       return;
     }
     var W = canvasWidth(canvas);
@@ -620,14 +675,19 @@
     if (W < 420) w = Math.min(w, W - 24);
     ordered.forEach(function (card) {
       clearColumnCard(card);
+      var prev = saved && card.id ? saved[card.id] : null;
+      var cw = (prev && prev.sized && prev.w) ? prev.w : w;
+      cw = Math.min(cw, W - 24);
       card.style.position = "absolute";
-      card.style.width = w + "px";
+      card.style.width = cw + "px";
+      applySavedCardSize(card, prev);
     });
     var x = pad;
     var y = 10;
     var col = 0;
     var rowH = 0;
     ordered.forEach(function (card) {
+      var cw = card.offsetWidth || w;
       var h = Math.max(card.offsetHeight || 180, 140);
       if (col >= cols) {
         x = pad;
@@ -635,14 +695,14 @@
         col = 0;
         rowH = 0;
       }
-      x = clampX(x, w, W);
+      x = clampX(x, cw, W);
       var prev = saved && card.id ? saved[card.id] : null;
       var rot = 0;
       card.style.left = x + "px";
       card.style.top = y + "px";
       card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
-      if (saved && card.id) saved[card.id] = { x: x, y: y, r: rot, w: w };
-      x += w + gap;
+      if (saved && card.id) saved[card.id] = cardPosRecord(card, { x: x, y: y, r: rot, w: cw, h: prev && prev.h ? prev.h : h, sized: !!(prev && prev.sized) });
+      x += cw + gap;
       col += 1;
       rowH = Math.max(rowH, h);
     });
@@ -682,9 +742,7 @@
       return;
     }
     if (cards.length === 1) {
-      applyColumnCard(cards[0]);
-      canvas.style.height = "";
-      canvas.style.minHeight = "";
+      layoutSingleCard(canvas, cards[0], saved);
       return;
     }
     var W = canvasWidth(canvas);
@@ -730,6 +788,7 @@
       if (W < 420) w = Math.min(w, W - 16);
       card.style.width = w + "px";
       card.style.position = "absolute";
+      applySavedCardSize(card, prev);
       var h = Math.max(card.offsetHeight || 180, 140);
       var rot = prev && typeof prev.r === "number" ? prev.r : (crnd() * 6.4) - 2.8;
       var x, y;
@@ -747,7 +806,7 @@
       card.style.left = x + "px";
       card.style.top = y + "px";
       card.style.setProperty("--card-rot", rot.toFixed(2) + "deg");
-      saved[id] = { x: x, y: y, r: rot, w: w };
+      saved[id] = cardPosRecord(card, { x: x, y: y, r: rot, w: w, h: prev && prev.h ? prev.h : h, sized: !!(prev && prev.sized) });
       placed.push({ x: x, y: y, w: w, h: h });
     });
 
@@ -768,7 +827,7 @@
     nodes.forEach(function (n) {
       if (!n.el.id) return;
       var cur = saved[n.el.id] || {};
-      saved[n.el.id] = { x: n.x, y: n.y, r: cur.r || 0, w: cur.w || n.w };
+      saved[n.el.id] = cardPosRecord(n.el, { x: n.x, y: n.y, r: cur.r || 0, w: cur.w || n.w, h: cur.h || n.h, sized: !!cur.sized });
     });
     fitCanvas(canvas, nodes);
   }
@@ -1014,7 +1073,7 @@
 
     grid.addEventListener("pointerdown", function (e) {
       if (e.button && e.button !== 0) return;
-      if (e.target.closest("input, button, a, label, [contenteditable]")) return;
+      if (e.target.closest("input, button, a, label, [contenteditable], .card-resize")) return;
       var card = e.target.closest(".card");
       if (!card || !grid.contains(card)) return;
       var canvas = card.closest(".grid-section-cards");
@@ -1047,6 +1106,89 @@
     });
   }
 
+  function ensureResizeHandles(grid) {
+    if (!grid) return;
+    Array.from(grid.querySelectorAll(".card")).forEach(function (card) {
+      if (card.querySelector(":scope > .card-resize")) return;
+      var handle = document.createElement("div");
+      handle.className = "card-resize";
+      handle.setAttribute("aria-hidden", "true");
+      card.appendChild(handle);
+    });
+  }
+
+  function bindResize(grid) {
+    if (grid.getAttribute("data-resize") === "1") return;
+    grid.setAttribute("data-resize", "1");
+    var resizing = null;
+    var activePointerId = null;
+
+    function onMove(e) {
+      if (!resizing) return;
+      if (activePointerId != null && e.pointerId !== activePointerId) return;
+      e.preventDefault();
+      var canvas = resizing.canvas;
+      var W = canvasWidth(canvas);
+      var left = parseFloat(resizing.card.style.left) || 0;
+      var maxW = Math.max(160, W - left - 8);
+      var w = Math.max(160, Math.min(maxW, resizing.startW + (e.clientX - resizing.x)));
+      var h = Math.max(160, Math.min(720, resizing.startH + (e.clientY - resizing.y)));
+      applyUserSize(resizing.card, w, h);
+      var nodes = readNodes(canvas);
+      separateNodes(nodes, W, GAP, resizing.card);
+      applyNodes(nodes);
+      fitCanvas(canvas, readNodes(canvas));
+    }
+
+    function onEnd(e) {
+      if (!resizing) return;
+      if (e && activePointerId != null && e.pointerId !== activePointerId) return;
+      var card = resizing.card;
+      var canvas = resizing.canvas;
+      card.classList.remove("is-resizing");
+      persistCanvas(canvas);
+      fitCanvas(canvas, readNodes(canvas));
+      var gridHome = canvas.closest(".icon-task-grid") || canvas.closest(".grid") || grid;
+      if (gridHome) syncSoloColumns(gridHome);
+      resizing = null;
+      activePointerId = null;
+      document.removeEventListener("pointermove", onMove, true);
+      document.removeEventListener("pointerup", onEnd, true);
+      document.removeEventListener("pointercancel", onEnd, true);
+    }
+
+    grid.addEventListener("pointerdown", function (e) {
+      if (e.button && e.button !== 0) return;
+      var handle = e.target.closest(".card-resize");
+      if (!handle || !grid.contains(handle)) return;
+      var card = handle.closest(".card");
+      if (!card) return;
+      var canvas = card.closest(".grid-section-cards");
+      if (!canvas) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var home = canvas.closest(".grid-section");
+      if (home && home.classList.contains("is-solo")) {
+        liftColumnCard(card, canvas);
+        promoteFromSolo(canvas);
+      }
+      resizing = {
+        card: card,
+        canvas: canvas,
+        startW: card.offsetWidth,
+        startH: card.offsetHeight,
+        x: e.clientX,
+        y: e.clientY
+      };
+      activePointerId = e.pointerId;
+      card.classList.add("is-resizing");
+      card.style.zIndex = String(++zTop);
+      document.addEventListener("pointermove", onMove, true);
+      document.addEventListener("pointerup", onEnd, true);
+      document.addEventListener("pointercancel", onEnd, true);
+    }, true);
+  }
+
   function wrapGrid(grid) {
     if (!grid) return;
     if (!document.body.classList.contains("icon-grid-page")) return;
@@ -1062,7 +1204,9 @@
     applySavedSections(grid);
     forcePairedCards(grid);
     scatterAll(grid);
+    ensureResizeHandles(grid);
     bindDrag(grid);
+    bindResize(grid);
   }
 
   function run() {

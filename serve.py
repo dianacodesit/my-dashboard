@@ -128,11 +128,11 @@ KNOWN_CARD_PHOTOS = {
     "repeat 10,000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat 10000 times": "manus-storage/zone-repetitions.jpg?v=cubes1",
     "repeat-10000-times": "manus-storage/zone-repetitions.jpg?v=cubes1",
-    "wins": "manus-storage/zone-wins-hand.jpg?v=game12",
-    "win": "manus-storage/zone-wins-hand.jpg?v=game12",
-    "I will win": "manus-storage/zone-wins-hand.jpg?v=game12",
-    "i will win": "manus-storage/zone-wins-hand.jpg?v=game12",
-    "I win": "manus-storage/zone-wins-hand.jpg?v=game12",
+    "wins": "manus-storage/zone-wins-hand.jpg?v=game13",
+    "win": "manus-storage/zone-wins-hand.jpg?v=game13",
+    "I will win": "manus-storage/zone-wins-hand.jpg?v=game13",
+    "i will win": "manus-storage/zone-wins-hand.jpg?v=game13",
+    "I win": "manus-storage/zone-wins-hand.jpg?v=game13",
     # abundance — approved money-tree (wheat/plenty2 forever banned)
     "abundance": "manus-storage/zone-abundance-tree.jpg?v=tree1",
     "abundant": "manus-storage/zone-abundance-tree.jpg?v=tree1",
@@ -171,6 +171,10 @@ KNOWN_CARD_PHOTOS = {
     "deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "networking": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "strategist": "manus-storage/zone-strategist.jpg?v=strat1",
+    "a strategist": "manus-storage/zone-strategist.jpg?v=strat1",
+    "i am a strategist": "manus-storage/zone-strategist.jpg?v=strat1",
+    "i am strategist": "manus-storage/zone-strategist.jpg?v=strat1",
     "I earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "i earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
 
@@ -372,7 +376,7 @@ REJECTED_SECTION_PHOTOS = (
     "abundance-grapes",
     "abundance-poppies",
     # prosperity gold bars (abundance-bg-wealth / prosperity-bg-gold-bars) is NOT banned — not wheat
-    # prosperity page photo deleted (was prosperity-bg-money-magnet.jpg) — leave empty
+    # live prosperity page photo is prosperity-bg-freedom.jpg (user-supplied) — not money-magnet, not wheat
     # legacy fight-back coral tile — audacity uses finger photo only
     "zone-fight-back",
     # detach / start over — rope + old leaf + dawn road forever banned
