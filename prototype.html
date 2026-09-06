@@ -133,6 +133,27 @@ html body #enh-left-fab #enh-scroll-top {
     bottom: 16px !important;
   }
 }
+/* Quotes are zoom-only. Hide before late CSS or they FOUC as a full-card version. */
+html body .vision-tile-quote {
+  display: none !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-quote {
+  display: block !important;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-tile-title {
+  position: absolute !important;
+  left: 18px !important;
+  right: 18px !important;
+  bottom: 14px !important;
+  margin: 0 !important;
+  z-index: 16 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  color: #fff8ee !important;
+  pointer-events: none !important;
+}
 html body .day-block.collapsed {
   content-visibility: auto;
   contain-intrinsic-size: auto 56px;
@@ -9459,7 +9480,6 @@ html body .day-block.collapsed .vision-hero-six {
   window.__layoutVisionBoard = layoutAll;
   function boot(){
     layoutAll();
-    [400, 1000, 2200, 4000].forEach(function(ms){ setTimeout(layoutAll, ms); });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -13169,7 +13189,6 @@ var busy=false;
 function run(){ if(busy) return; busy=true; try{ apply(); }catch(e){} busy=false; }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
 window.addEventListener('load',run);
-[400,1500].forEach(function(ms){ setTimeout(run,ms); });
 if(window.MutationObserver){ var tm=null; new MutationObserver(function(){ if(busy) return; clearTimeout(tm); tm=setTimeout(run,300); }).observe(document.body,{childList:true,subtree:true}); }
 window.__j22fnApply=run;
 })();
@@ -13210,10 +13229,13 @@ window.__j22fnApply=run;
     'deen':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'networking':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
     'earned':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
-    'strategist':'manus-storage/zone-strategist.jpg?v=strat1',
-    'a strategist':'manus-storage/zone-strategist.jpg?v=strat1',
-    'i am a strategist':'manus-storage/zone-strategist.jpg?v=strat1',
-    'i am strategist':'manus-storage/zone-strategist.jpg?v=strat1',
+    'strategist':'manus-storage/zone-strategist.jpg?v=strat2',
+    'a strategist':'manus-storage/zone-strategist.jpg?v=strat2',
+    'i am a strategist':'manus-storage/zone-strategist.jpg?v=strat2',
+    'i am strategist':'manus-storage/zone-strategist.jpg?v=strat2',
+    'successful':'manus-storage/zone-successful.jpg?v=ok1',
+    'i am successful':'manus-storage/zone-successful.jpg?v=ok1',
+    'i successful':'manus-storage/zone-successful.jpg?v=ok1',
 
     'fitness-training':'manus-storage/zone-athletic-gym.jpg?v=gym1',
     'calisthenics':'manus-storage/zone-calisthenics.jpg?v=sec1',
@@ -13254,17 +13276,17 @@ window.__j22fnApply=run;
     'pepperdine':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'enroll':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'achieve':'manus-storage/zone-achieve-csol.jpg?v=csol2',
-    'I will achieve':'',
+    'I will achieve':'manus-storage/zone-achieving.jpg?v=done1',
     'I will master':'manus-storage/zone-to-master.jpg?v=dip3',
     'i will master':'manus-storage/zone-to-master.jpg?v=dip3',
     'I master':'manus-storage/zone-to-master.jpg?v=dip3',
     'to master':'manus-storage/zone-to-master.jpg?v=dip3',
     'to-master':'manus-storage/zone-to-master.jpg?v=dip3',
     'master':'manus-storage/zone-to-master.jpg?v=dip3',
-    'i will achieve':'',
-    'I achieve':'',
-    'to achieve':'',
-    'to-achieve':'',
+    'i will achieve':'manus-storage/zone-achieving.jpg?v=done1',
+    'I achieve':'manus-storage/zone-achieving.jpg?v=done1',
+    'to achieve':'manus-storage/zone-achieving.jpg?v=done1',
+    'to-achieve':'manus-storage/zone-achieving.jpg?v=done1',
     'succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'I will succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
     'to succeed':'manus-storage/zone-achieve-csol.jpg?v=csol2',
@@ -13335,9 +13357,9 @@ window.__j22fnApply=run;
     'to litigate':'manus-storage/zone-to-litigate.jpg?v=court1',
     'to-litigate':'manus-storage/zone-to-litigate.jpg?v=court1',
     'litigate':'manus-storage/zone-to-litigate.jpg?v=court1',
-    'to recoup':'',
-    'to-recoup':'',
-    'recoup':'',
+    'to recoup':'manus-storage/zone-recouping.jpg?v=back1',
+    'to-recoup':'manus-storage/zone-recouping.jpg?v=back1',
+    'recoup':'manus-storage/zone-recouping.jpg?v=back1',
     'I will earn':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
     'i will earn':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
     'to earn':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
@@ -13368,6 +13390,24 @@ window.__j22fnApply=run;
     'villains':'manus-storage/zone-villains.jpg?v=rim13',
     'villain':'manus-storage/zone-villains.jpg?v=rim13',
     'fight':'manus-storage/zone-audacity.jpg?v=finger1',
+    'fighting':'manus-storage/zone-audacity.jpg?v=finger1',
+    'i am fighting':'manus-storage/zone-audacity.jpg?v=finger1',
+    'i fighting':'manus-storage/zone-audacity.jpg?v=finger1',
+    'igniting':'manus-storage/zone-inner-fire.jpg?v=spark1',
+    'i am igniting':'manus-storage/zone-inner-fire.jpg?v=spark1',
+    'i igniting':'manus-storage/zone-inner-fire.jpg?v=spark1',
+    'aligning':'manus-storage/zone-alignment.jpg?v=align1',
+    'i am aligning':'manus-storage/zone-alignment.jpg?v=align1',
+    'i aligning':'manus-storage/zone-alignment.jpg?v=align1',
+    'channeling':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+    'i am channeling':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+    'i channeling':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+    'achieving':'manus-storage/zone-achieving.jpg?v=done1',
+    'i am achieving':'manus-storage/zone-achieving.jpg?v=done1',
+    'i achieving':'manus-storage/zone-achieving.jpg?v=done1',
+    'recouping':'manus-storage/zone-recouping.jpg?v=back1',
+    'i am recouping':'manus-storage/zone-recouping.jpg?v=back1',
+    'i recouping':'manus-storage/zone-recouping.jpg?v=back1',
     'remember who you are':'manus-storage/zone-audacity.jpg?v=finger1',
     'envision':'manus-storage/zone-future-self.jpg?v=swap1',
     'future':'manus-storage/zone-envision.jpg?v=swap1',
@@ -13458,6 +13498,7 @@ window.__j22fnApply=run;
     [/to[- ]?feel(?!\s*it\s*into)(?!\s*into\s*being)|\bto feel\b(?!\s*it)(?!\s*into)|sensation|embodied feeling/, ''],
     [/feel it into being|feel-it-into-being|to feel it into being|feel into being/, ''],
     [/curated\b|curated lifestyle|curated-lifestyle/, 'manus-storage/zone-curated-lifestyle.jpg?v=summer1'],
+    [/\bsuccessful\b|i am successful/, 'manus-storage/zone-successful.jpg?v=ok1'],
     [/pepperdine|\benroll\b|\bachieve\b|grad school|graduate school|\bgsep\b|\bgrad\b/, 'manus-storage/zone-achieve-csol.jpg?v=csol2'],
     [/she[- ]pursues|\bi will pursue\b|\bi pursue\b|\bpursue\b/, 'manus-storage/zone-she-pursues.jpg?v=pursue1'],
     [/\bpursuits?\b/, 'manus-storage/zone-pursuits-chase-threshold.jpg?v=chase3'],
@@ -13478,7 +13519,8 @@ window.__j22fnApply=run;
     [/\\bfocus\\b|deep work|attention|concentration/, 'manus-storage/zone-focus.jpg?v=lens1'],
     [/\balignment\b|aligned|true north|compass|coherence/, 'manus-storage/zone-alignment.jpg?v=align1'],
     [/\bstrengths?\b|strong|capability|soul.?fire/, 'manus-storage/zone-strengths.jpg?v=soul1'],
-    [/\bstrategist\b|i am a strategist/, 'manus-storage/zone-strategist.jpg?v=strat1'],
+    [/\bstrategist\b|i am a strategist/, 'manus-storage/zone-strategist.jpg?v=strat2'],
+    [/\bsuccessful\b|i am successful/, 'manus-storage/zone-successful.jpg?v=ok1'],
     [/\bplan\b|planning|blueprint|roadmap|strategy/, 'manus-storage/zone-workflow.jpg?v=swap1'],
     [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1'],
     [/self[- ]?esteem|selfworth|self-worth/, 'manus-storage/zone-self-esteem.jpg?v=se1'],
@@ -13583,7 +13625,10 @@ window.__j22fnApply=run;
     'curate':'warm',
     'strategist':'sage',
     'a strategist':'sage',
-    'i am a strategist':'sage'
+    'i am a strategist':'sage',
+    'successful':'sage',
+    'i am successful':'sage',
+    'i successful':'sage'
   };
   function resolveImg(name){
     var n=(name||'').trim().toLowerCase();
@@ -13648,7 +13693,9 @@ window.__j22fnApply=run;
     'shukr':'manus-storage/card-shukr.jpg?v=2',
     'calisthenics':'manus-storage/card-calisthenics.jpg?v=cal1',
     'inversions':'manus-storage/card-inversions-yoga.jpg?v=yoga1',
-    'istighfar':'manus-storage/sub-istighfar.jpg?v=ist1'
+    'istighfar':'manus-storage/sub-istighfar.jpg?v=ist1',
+    'fajr':'manus-storage/card-fajr.jpg?v=fajr1',
+    'fajr salah':'manus-storage/card-fajr.jpg?v=fajr1'
   };
   function resolveCardImg(name){
     var n=(name||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -13694,7 +13741,6 @@ window.__j22fnApply=run;
   function go(){ try{ normalizeSecCards(); }catch(e){} }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', go);
   else go();
-  [300,1000,2500].forEach(function(ms){ setTimeout(go, ms); });
 })();
 </script>
 <script>
@@ -16801,7 +16847,6 @@ window.__j22fnApply=run;
       setPhoto('.vision-tile[data-focus="plan"], .pursuit-zone[data-zone="plan"]', PL_IMG);
     }
     applySectionPhotoSwap();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySectionPhotoSwap, ms); });
     if(!localStorage.getItem('btm_swap_fs_env_wf_plan_v1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16826,7 +16871,6 @@ window.__j22fnApply=run;
       });
     }
     applyPepperDiploma();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyPepperDiploma, ms); });
   }catch(e){}
 
   try{
@@ -16837,7 +16881,6 @@ window.__j22fnApply=run;
       });
     }
     applyArtSciencePhoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyArtSciencePhoto, ms); });
   }catch(e){}
 
   try{
@@ -16848,7 +16891,6 @@ window.__j22fnApply=run;
       });
     }
     applySelfEsteemPhoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySelfEsteemPhoto, ms); });
   }catch(e){}
 
 
@@ -16862,7 +16904,6 @@ window.__j22fnApply=run;
       });
     }
     applyCuratedLifestylePhoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyCuratedLifestylePhoto, ms); });
     if(!localStorage.getItem('btm_curated_lifestyle_photo_summer1')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16891,7 +16932,6 @@ window.__j22fnApply=run;
     }
     applyAthleticPhoto();
     stripObsessedQuoteSep1();
-    [80, 400, 1200, 3000].forEach(function(ms){ setTimeout(function(){ applyAthleticPhoto(); stripObsessedQuoteSep1(); }, ms); });
     if(!localStorage.getItem('btm_athletic_photo_color2')){
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16922,7 +16962,6 @@ window.__j22fnApply=run;
     }
     applyDarknessBattlePhoto();
     window.__rewriteDarknessPhotosNow = applyDarknessBattlePhoto;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyDarknessBattlePhoto, ms); });
     {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw=localStorage.getItem(k); if(!raw) return;
@@ -16962,7 +17001,6 @@ window.__j22fnApply=run;
     }
     applySoulPhoto();
     window.__rewriteSoulPhotosNow = applySoulPhoto;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySoulPhoto, ms); });
     ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
       var raw=localStorage.getItem(k); if(!raw) return;
       var next=raw.replace(/manus-storage\/zone-soul(?:-[a-z0-9-]+)?\.jpg(\?v=[^"'\\s)]+)?/g, SOUL_PHOTO);
@@ -17660,40 +17698,116 @@ window.__j22fnApply=run;
     saveOverviewNodesMap(m);
   }
   var OVERVIEW_NODE_GAP=40;
+  function overviewNodesViewBox(grid){
+    var panel=grid && grid.closest('.tv-panel.tv-nodes');
+    var host=grid && grid.parentElement;
+    var card=grid && grid.closest('.day-card');
+    var w=((panel&&panel.clientWidth)||(host&&host.clientWidth)||(card&&card.clientWidth)||0);
+    if(w<80) w=Math.min(1100, Math.max(320, window.innerWidth-96));
+    var top=0;
+    try {
+      var el=panel||host||grid;
+      var r=el.getBoundingClientRect();
+      top=r.top||0;
+    } catch(eBox){}
+    var h=Math.max(280, Math.floor(window.innerHeight - top - 88));
+    return {w:w, h:h};
+  }
   function nextOverviewSlot(grid){
     var pad=28, gap=OVERVIEW_NODE_GAP, zw=220, zh=176;
     var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
     if(!zones.length) return {x:pad, y:pad, w:zw, h:zh};
-    var maxY=pad;
+    var box=overviewNodesViewBox(grid);
+    var maxRight=pad, maxY=pad;
     zones.forEach(function(z){
       var r=zoneRect(z);
-      maxY=Math.max(maxY, (r.y||0)+(r.h||0)+gap);
+      maxRight=Math.max(maxRight, (r.x||0)+(r.w||0));
+      maxY=Math.max(maxY, (r.y||0)+(r.h||0));
     });
-    // Keep new nodes near the top cluster — never inherit Aug 20 bottom Y.
-    if(maxY > 520) maxY=pad;
-    return {x:pad, y:maxY, w:zw, h:zh};
+    var stagger=(zones.length%3)*22;
+    var x=maxRight+gap, y=pad+stagger;
+    if(x+zw > box.w-pad){
+      x=pad+stagger;
+      y=Math.min(maxY+gap, Math.max(pad, box.h-zh-pad));
+    }
+    return {x:x, y:y, w:zw, h:zh};
+  }
+  /* Freeform only — never grid. Scale+translate the constellation so every node stays on-screen. */
+  function fitOverviewNodesInView(grid){
+    if(!grid) return;
+    var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
+    if(!zones.length) return;
+    var box=overviewNodesViewBox(grid);
+    var pad=20;
+    var rects=zones.map(zoneRect);
+    var minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+    rects.forEach(function(r){
+      minX=Math.min(minX, r.x||0);
+      minY=Math.min(minY, r.y||0);
+      maxX=Math.max(maxX, (r.x||0)+(r.w||0));
+      maxY=Math.max(maxY, (r.y||0)+(r.h||0));
+    });
+    var dx=pad-minX, dy=pad-minY;
+    var contentW=Math.max(1, maxX+dx-pad);
+    var contentH=Math.max(1, maxY+dy-pad);
+    var availW=Math.max(120, box.w-pad*2);
+    var availH=Math.max(120, box.h-pad*2);
+    var scale=Math.min(1, availW/contentW, availH/contentH);
+    zones.forEach(function(z, i){
+      var r=rects[i];
+      var nx=pad+((r.x||0)+dx-pad)*scale;
+      var ny=pad+((r.y||0)+dy-pad)*scale;
+      var nw=Math.max(140, Math.round((r.w||220)*scale));
+      var nh=Math.max(120, Math.round((r.h||176)*scale));
+      if(nx+nw > box.w-pad) nx=Math.max(pad, box.w-pad-nw);
+      if(ny+nh > box.h-pad) ny=Math.max(pad, box.h-pad-nh);
+      if(nx<pad) nx=pad;
+      if(ny<pad) ny=pad;
+      writeRect({el:z, id:z.getAttribute('data-zone'), x:Math.round(nx), y:Math.round(ny), w:nw, h:nh});
+    });
+  }
+  function overviewNodesLookLikeGrid(zones){
+    if(!zones || zones.length<4) return false;
+    var ys={}, xs={};
+    zones.forEach(function(z){
+      var r=zoneRect(z);
+      var yk=String(Math.round((r.y||0)/8)*8);
+      var xk=String(Math.round((r.x||0)/8)*8);
+      ys[yk]=(ys[yk]||0)+1;
+      xs[xk]=(xs[xk]||0)+1;
+    });
+    var rowHits=Object.keys(ys).filter(function(k){ return ys[k]>=3; }).length;
+    var colHits=Object.keys(xs).filter(function(k){ return xs[k]>=2; }).length;
+    return rowHits>=1 && colHits>=3;
+  }
+  function restoreOverviewFreeformLayout(grid){
+    if(!grid) return false;
+    var FREE={
+      'tuition-payment':{x:28,y:28,w:248,h:200},
+      'scholarship-application':{x:320,y:48,w:248,h:200},
+      'dr-betty':{x:640,y:24,w:248,h:200},
+      '6-qadaa-salah':{x:40,y:280,w:248,h:200},
+      'hanady':{x:420,y:300,w:248,h:200},
+      'document-translation-into-ar':{x:620,y:420,w:248,h:200},
+      'fall-2026-enrollment':{x:28,y:480,w:248,h:200}
+    };
+    var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
+    var hit=0;
+    zones.forEach(function(z){
+      var id=z.getAttribute('data-zone')||'';
+      var f=FREE[id];
+      if(!f) return;
+      writeRect({el:z, id:id, x:f.x, y:f.y, w:f.w, h:f.h});
+      hit++;
+    });
+    return hit>0;
   }
   function packOverviewNodesToTop(grid){
-    if(!grid) return;
-    var pad=28, gap=OVERVIEW_NODE_GAP, x=pad, y=pad, rowH=0, maxW=0;
-    var host=grid.parentElement;
-    var limit=((host&&host.clientWidth)||grid.clientWidth||720)-pad;
-    if(limit<280) limit=720;
-    [].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).forEach(function(z){
-      var r=zoneRect(z);
-      var w=Math.max(200, Math.min(r.w||220, 260));
-      var h=Math.max(168, Math.min(r.h||176, 220));
-      if(x+w>limit && x>pad){
-        x=pad;
-        y+=rowH+gap;
-        rowH=0;
-      }
-      writeRect({el:z, id:z.getAttribute('data-zone'), x:x, y:y, w:w, h:h});
-      x+=w+gap;
-      rowH=Math.max(rowH, h);
-      maxW=Math.max(maxW, x);
-    });
+    /* legacy name — freeform fit only, never a column grid */
+    fitOverviewNodesInView(grid);
   }
+  window.__packOverviewNodesToTop=packOverviewNodesToTop;
+  window.__fitOverviewNodesInView=fitOverviewNodesInView;
   function findCustomZoneByTitle(title){
     var want=String(title||'').trim().toLowerCase();
     if(!want) return null;
@@ -17834,12 +17948,11 @@ window.__j22fnApply=run;
         var id=z.getAttribute('data-zone')||'';
         if(id) wanted[id]=1;
       });
-      var tooLow=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone')).some(function(z){
-        return (zoneRect(z).y||0) > 420;
-      });
-      if(tooLow) packOverviewNodesToTop(grid);
-      // Always keep air between nodes — flush/touching rects break the nodes concept.
+      var zonesNow=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
+      if(overviewNodesLookLikeGrid(zonesNow)) restoreOverviewFreeformLayout(grid);
+      fitOverviewNodesInView(grid);
       resolveOverlaps(grid);
+      fitOverviewNodesInView(grid);
       persistOverviewNodesFromGrid(grid);
       ensureAug20EditChrome(grid);
       return;
@@ -17943,7 +18056,7 @@ window.__j22fnApply=run;
       if(!(blk && isOverviewEra(blk))) upsertCustomZone({id:id, title:title, img:img});
     }
     if(blk && isOverviewEra(blk)){
-      packOverviewNodesToTop(grid);
+      fitOverviewNodesInView(grid);
       persistOverviewNodesFromGrid(grid);
     } else {
       resolveOverlaps(grid);
@@ -18143,6 +18256,7 @@ window.__j22fnApply=run;
     var active=blk.querySelector('.tv-pill.active[data-view]');
     var view=active && active.getAttribute('data-view');
     blk.classList.toggle('view-nodes', view === 'nodes');
+    blk.classList.toggle('view-flowchart', view === 'flowchart');
     blk.classList.toggle('view-flow', view === 'flow');
     blk.classList.toggle('view-impulses', view === 'impulses');
     blk.classList.toggle('view-overview', view === 'pursuits');
@@ -18189,6 +18303,10 @@ window.__j22fnApply=run;
     applyAug20ZoneEdits(grid);
     ensureAug20EditChrome(grid);
     wireZoneDrag(grid);
+    if(panel && panel.style.display !== 'none'){
+      fitOverviewNodesInView(grid);
+      persistOverviewNodesFromGrid(grid);
+    }
     expandCanvas(grid);
     if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
   }
@@ -19291,7 +19409,6 @@ if(window.__j22addPins) setTimeout(window.__j22addPins, 50);
 function replayAdded(){ var seen={}; load().forEach(function(rec){ var nm=(rec.name||'').trim().toLowerCase(); if(!nm) return; var key=(rec.date||'')+'|'+(rec.section||'').toLowerCase()+'|'+nm; if(seen[key]) return; seen[key]=true; addRender(rec); }); }
 var busy=false; function go(){ if(window.__btmEditing||busy) return; busy=true; try{ replayAdded(); }catch(e){} busy=false; }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[600,1800].forEach(function(ms){ setTimeout(go,ms); });
 window.__j22addReplay=go;
 // Also load tasks from database and render them
 fetch('/api/trpc/tasks.list').then(function(r){return r.json();}).then(function(d){
@@ -19378,7 +19495,6 @@ setTimeout(function(){ var ti=ov.querySelector('.add-task-input'); if(ti) ti.foc
     });
   }
   function cleanup(){ cleanupEmptyJ22Items(); deduplicateItems(); }
-  [2200, 3500, 4500, 6000, 8000].forEach(function(ms){ setTimeout(cleanup, ms); });
   window.__cleanupEmptyJ22 = cleanup;
 })();
 </script>
@@ -19422,7 +19538,6 @@ dayTasks.appendChild(div);
 }
 function run(){ try{ ensureActions(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-[500,1600].forEach(function(ms){ setTimeout(run,ms); });
 if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(run,300); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -19552,7 +19667,6 @@ function initSortables(){
 }
 function run(){ try{ initSortables(); applyOrder(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-[800,2200,3600].forEach(function(ms){ setTimeout(run,ms); });
 if(window.MutationObserver){ var t=null; new MutationObserver(function(){ if(dragging||applying) return; clearTimeout(t); t=setTimeout(run,400); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -19576,7 +19690,6 @@ kids.forEach(function(c){ c.classList.toggle('fn-pair', pairs.indexOf(c)>-1); })
 }
 function go(){ try{ run(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[700,2200,3700].forEach(function(ms){ setTimeout(go,ms); });
 if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(go,450); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -19646,7 +19759,6 @@ document.addEventListener('input', function(e){
 }, true);
 function go(){ if(window.__btmEditing) return; try{ applyEdits(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[800,2400,3800].forEach(function(ms){ setTimeout(go,ms); });
 if(window.MutationObserver){ var tm=null; new MutationObserver(function(){ clearTimeout(tm); tm=setTimeout(go,500); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -19739,7 +19851,6 @@ if(xs){ e.preventDefault(); e.stopPropagation(); var sec=xs.closest('.j22-sectio
 }, true);
 function run(){ try{ ensureX(); applyDeletions(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
-[700,2300,3800].forEach(function(ms){ setTimeout(run,ms); });
 if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(run,450); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -19757,7 +19868,6 @@ document.addEventListener('change', function(e){ var cb=e.target; if(!cb.classLi
 document.addEventListener('click', function(e){ var cb=e.target; if(cb.classList&&cb.classList.contains('agenda-check')&&cb.closest('.day-block.fmt22')){ e.stopPropagation(); } }, true);
 function go(){ try{ apply(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[800,2400,3800].forEach(function(ms){ setTimeout(go,ms); });
 if(window.MutationObserver){ var t=null; new MutationObserver(function(){ clearTimeout(t); t=setTimeout(go,500); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -19781,7 +19891,6 @@ t.parentNode.insertBefore(sp, t);
 }
 function go(){ try{ run(); }catch(e){} }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
-[900,2500,3900].forEach(function(ms){ setTimeout(go,ms); });
 if(window.MutationObserver){ var tt=null; new MutationObserver(function(){ clearTimeout(tt); tt=setTimeout(go,550); }).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
@@ -20796,8 +20905,10 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="to-master" style="--tile-photo: url('manus-storage/zone-to-master.jpg?v=dip3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to master">to master</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-to-earn-gold.jpg?v=earn3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to earn">to earn</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="successful" style="--tile-photo: url('manus-storage/zone-successful.jpg?v=ok1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am successful">I am successful</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="strategist" style="--tile-photo: url('manus-storage/zone-strategist.jpg?v=strat2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am a strategist">I am a strategist</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
-<script src="boot-today.js"></script>
+<script src="boot-today.js?v=chrome9"></script>
 <div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-01">
 <div class="day-dot"></div>
 <div class="day-card">
@@ -24858,6 +24969,39 @@ document.addEventListener('DOMContentLoaded',()=>{
   (function(){
     const pad = n => String(n).padStart(2, '0');
     const todayStr = () => { const t = new Date(); return `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`; };
+    (function markFileDaysOnlyVersion(){
+      document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
+        var d = blk.getAttribute('data-date') || '';
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+        blk.setAttribute('data-file-day', '1');
+      });
+      window.__isFileDay = function(blkOrIso){
+        if(!blkOrIso) return false;
+        if(typeof blkOrIso === 'string'){
+          var el = document.querySelector('.day-block[data-date="'+blkOrIso+'"]');
+          return !!(el && (el.hasAttribute('data-file-day') || el.hasAttribute('data-baked-collage')));
+        }
+        return !!(blkOrIso.hasAttribute && (blkOrIso.hasAttribute('data-file-day') || blkOrIso.hasAttribute('data-baked-collage')));
+      };
+      window.__dropFileDayOverlays = function(){
+        var fileDates = {};
+        document.querySelectorAll('.day-block[data-file-day], .day-block[data-baked-collage]').forEach(function(blk){
+          var d = blk.getAttribute('data-date');
+          if(d) fileDates[d] = 1;
+        });
+        ['btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(key){
+          try {
+            var o = JSON.parse(localStorage.getItem(key)||'{}')||{};
+            var dirty = false;
+            Object.keys(o).forEach(function(k){
+              if(fileDates[k]){ delete o[k]; dirty = true; }
+            });
+            if(dirty) localStorage.setItem(key, JSON.stringify(o));
+          } catch(e){}
+        });
+      };
+      try { window.__dropFileDayOverlays(); } catch(eDrop){}
+    })();
     const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
     const wd = ['sun','mon','tue','wed','thu','fri','sat'];
     const parseIso = iso => { const p = String(iso||'').split('-').map(Number); return new Date(p[0], (p[1]||1)-1, p[2]||1); };
@@ -24923,7 +25067,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     };
     const saveShell = (iso, el) => {
       if (!iso || !el) return;
+      if (el.hasAttribute('data-file-day') || el.hasAttribute('data-baked-collage')) return;
       try {
+        if (document.body && document.body.classList.contains('vision-zoom-open')) return;
+        if (!el.querySelector('.vision-hero > .vision-tile')) return;
         // Never persist click-wiring flags — they survive outerHTML but listeners don't,
         // which left late-created days (Aug 29+) unable to expand after reload.
         el.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
@@ -24946,7 +25093,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if (yEl) saveShell(yIso, yEl);
     };
     let lastDay = todayStr();
-    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="impulses">impulses</button><button class="tv-pill" data-view="flow">flow</button><button class="tv-pill" data-view="nodes">nodes</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="vision-board" aria-label="vision collage"><button type="button" class="vision-zoom-out" hidden>all of today</button><p class="vision-hint">the day, wide — click a focus to go in</p><div class="vision-hero"></div></div></div><div class="tv-panel tv-impulses" style="display:none"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><div class="impulses-route-map"><div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"></div></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div></div></div>';
+    const emptyShellHtml = '<div class="day-dot"></div><div class="day-card"><div class="day-card-header"><span class="day-date"></span></div><div class="today-view-toggle"><button class="tv-pill active" data-view="pursuits">pursuits</button><button class="tv-pill" data-view="impulses">impulses</button><button class="tv-pill" data-view="flow">flow</button><button class="tv-pill" data-view="nodes">nodes</button><button class="tv-pill" data-view="flowchart">flowchart</button></div><div class="day-tasks"><div class="tv-panel tv-pursuits active"><div class="vision-board" aria-label="vision collage"><button type="button" class="vision-zoom-out" hidden>all of today</button><p class="vision-hint">the day, wide — click a focus to go in</p><div class="vision-hero"></div></div></div><div class="tv-panel tv-impulses" style="display:none"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><div class="impulses-route-map"><div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"></div></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div><div class="tv-panel tv-flowchart" style="display:none"><div class="flow-chart-card made-flow-host"><p class="made-flow-empty">click make flow, then tap cards, sections, or tasks</p></div></div></div></div>';
     const pickSrc = iso => {
       const days = Array.from(document.querySelectorAll('.day-block.fmt22[data-date]'));
       let src = null;
@@ -25109,6 +25256,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         const wrap = document.createElement('div');
         wrap.innerHTML = saved.trim();
         clone = wrap.firstElementChild;
+        if (clone && !clone.querySelector('.vision-hero > .vision-tile')) clone = null;
         if (clone) clone.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
       }
       if (!clone) {
@@ -25138,11 +25286,13 @@ document.addEventListener('DOMContentLoaded',()=>{
       }
       clone.classList.remove('past', 'featured-block', 'collapsed', 'zone-board-day', 'pursuit-board-day', 'today-block');
       clone.querySelectorAll('.sec-grid.pursuit-canvas').forEach(function(g){
+        if (g.closest('.tv-panel.tv-nodes')) return;
         g.classList.remove('pursuit-canvas', 'pursuit-categories');
         g.removeAttribute('data-zoned');
         g.querySelectorAll(':scope > .pursuit-zone').forEach(function(z){ z.remove(); });
       });
       clone.querySelectorAll('.pursuit-zoom-host').forEach(function(h){
+        if (h.closest('.tv-panel.tv-nodes')) return;
         var grid=h.querySelector('.sec-grid');
         if(grid && h.parentNode) h.parentNode.insertBefore(grid, h);
         h.remove();
@@ -30755,13 +30905,13 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='purpose') src='manus-storage/zone-purpose.jpg?v=compass1';
       else if(nl==='body'||nl==='gym'||nl==='toned body'||nl==='toned-body'||nl==='athletic'||nl==='fitness training'||nl==='fitness-training'||nl==='train') src='manus-storage/zone-athletic-gym.jpg?v=gym1';
       else if(nl==='calisthenics') src='manus-storage/zone-calisthenics.jpg?v=sec1';
-      else if(nl==='inner fire'||nl==='inner-fire'||nl==='ignite') src='manus-storage/zone-inner-fire.jpg?v=spark1';
+      else if(nl==='inner fire'||nl==='inner-fire'||nl==='ignite'||nl==='igniting'||nl==='i am igniting') src='manus-storage/zone-inner-fire.jpg?v=spark1';
       else if(nl==='potential') src='manus-storage/zone-potential.jpg?v=road1';
       else if(nl==='future'||nl==='future self'||nl==='future-self'||nl==='become') src='manus-storage/zone-envision.jpg?v=swap1';
       else if(nl==='phd'||nl==='ph.d'||nl==='ph-d') src='manus-storage/zone-phd.jpg?v=day1';
       else if(nl==='workflow' || nl==='to workflow' || nl==='start' || nl==='to start' || nl==='to-start' || nl==='navigate' || nl==='to navigate' || nl==='to-navigate') src='manus-storage/zone-plan.jpg?v=swap1';
       else if(nl==='focus') src='manus-storage/zone-focus.jpg?v=lens1';
-      else if(nl==='alignment'||nl==='align') src='manus-storage/zone-alignment.jpg?v=align1';
+      else if(nl==='alignment'||nl==='align'||nl==='aligning'||nl==='i am aligning') src='manus-storage/zone-alignment.jpg?v=align1';
       else if(nl==='strengths') src='manus-storage/zone-strengths.jpg?v=soul1';
       else if(nl==='soul') src='';
       else if(nl==='self-esteem'||nl==='self esteem') src='manus-storage/zone-self-esteem.jpg?v=se1';
@@ -30796,7 +30946,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='to feel' || nl==='to-feel' || nl==='tofeel' || nl==='feel') src='';
       else if(nl==='to channel' || nl==='to-channel' || nl==='tochannel' || nl==='channel') src='manus-storage/zone-to-channel-souls.jpg?v=souls1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
-      else if(nl==='fight back'||nl==='remember who you are'||nl==='fight') src='manus-storage/zone-audacity.jpg?v=finger1';
+      else if(nl==='fight back'||nl==='remember who you are'||nl==='fight'||nl==='fighting'||nl==='i am fighting') src='manus-storage/zone-audacity.jpg?v=finger1';
       else if(nl==='envision') src='manus-storage/zone-future-self.jpg?v=swap1';
     }
     var sec=document.createElement('div');
@@ -32606,6 +32756,9 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
       if(window.__renderImpulses) window.__renderImpulses(block);
     }
     if(view === 'nodes'){
+      if(window.__ensureNodesView) window.__ensureNodesView(block);
+      else if(window.__ensureNodesAndFlowchart) window.__ensureNodesAndFlowchart(block);
+      if(window.__ensureFlowchartView) window.__ensureFlowchartView(block);
       block.classList.remove('flow-picking');
       block.querySelectorAll('.flow-pick-on').forEach(function(el){
         el.classList.remove('flow-pick-on');
@@ -32620,7 +32773,12 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
         if(window.__drawAug20Web) window.__drawAug20Web(block);
       });
     }
+    if(view === 'flowchart'){
+      if(window.__ensureFlowchartView) window.__ensureFlowchartView(block);
+      else if(window.__ensureNodesAndFlowchart) window.__ensureNodesAndFlowchart(block);
+    }
     block.classList.toggle('view-nodes', view === 'nodes');
+    block.classList.toggle('view-flowchart', view === 'flowchart');
     block.classList.toggle('view-flow', view === 'flow');
     block.classList.toggle('view-impulses', view === 'impulses');
     block.classList.toggle('view-overview', view === 'pursuits');
@@ -32658,6 +32816,9 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
     document.querySelectorAll('.day-block .today-view-toggle').forEach(function(toggle){
       var block = toggle.closest('.day-block');
       if(!block) return;
+      if(window.__ensureImpulsesView && window.__wantsImpulsesView && window.__wantsImpulsesView(block)) window.__ensureImpulsesView(block);
+      if(window.__ensureNodesAndFlowchart) window.__ensureNodesAndFlowchart(block);
+      if(window.__ensureFlowchartView) window.__ensureFlowchartView(block);
       var active = block.querySelector('.tv-pill.active');
       switchView(block, (active && active.getAttribute('data-view')) || 'pursuits');
     });
@@ -33852,7 +34013,7 @@ body.enh-dark::selection { background: rgba(196,168,130,0.3); }
 .flow-tl-item.flow-tl-nest-target {
   background: rgba(180, 160, 120, 0.16);
   border-radius: 8px;
-  box-shadow: inset 3px 0 0 rgba(210, 185, 145, 0.85);
+  box-shadow: inset -4px 0 0 rgba(210, 185, 145, 0.9);
 }
 .flow-tl-item.flow-tl-nest-target .flow-tl-text {
   color: rgba(255, 250, 240, 1);
@@ -36505,7 +36666,6 @@ window.__refreshPinnedAgenda = function(){};
   window.__ensureGsepRetreat = ensure;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(ensure, 300); });
   else setTimeout(ensure, 300);
-  [800, 1600, 2800, 4500, 6000, 9000, 12000].forEach(function(ms){ setTimeout(ensure, ms); });
   setInterval(ensure, 4000);
 })();
 </script>
@@ -36724,7 +36884,6 @@ window.__refreshPinnedAgenda = function(){};
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(wireAll, 200); });
   else setTimeout(wireAll, 200);
-  [600, 1200, 2500, 4000].forEach(function(ms){ setTimeout(wireAll, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(wireAll, 350); }).observe(document.body,{childList:true,subtree:true});
@@ -37190,8 +37349,49 @@ window.__refreshPinnedAgenda = function(){};
       setDepth(node, Math.max(0, depthOf(node) + delta));
     });
   }
+  function eventPoint(oe){
+    if(!oe) return null;
+    if(oe.clientX != null && oe.clientY != null) return { x: oe.clientX, y: oe.clientY };
+    var t = (oe.touches && oe.touches[0]) || (oe.changedTouches && oe.changedTouches[0]);
+    if(t) return { x: t.clientX, y: t.clientY };
+    return null;
+  }
+  function wantsFlowNest(related, oe){
+    /* Indent only from the right third of a row. A vertical drag stays a sequence reorder. */
+    var pt = eventPoint(oe);
+    if(!related || !pt) return false;
+    var rect = related.getBoundingClientRect();
+    if(pt.y < rect.top || pt.y > rect.bottom) return false;
+    return pt.x >= rect.left + rect.width * 0.64;
+  }
+  function placeAsSequenceSibling(list, item){
+    if(!list || !item) return;
+    var prev = item.previousElementSibling;
+    while(prev && !(prev.classList && prev.classList.contains('flow-tl-item'))) prev = prev.previousElementSibling;
+    var block = collectSubtree(item);
+    var oldD = depthOf(item);
+    var want = prev ? depthOf(prev) : 0;
+    var delta = want - oldD;
+    block.forEach(function(node){
+      setDepth(node, Math.max(0, Math.min(5, depthOf(node) + delta)));
+    });
+    if(!prev) return;
+    /* Dropping just under a parent must not steal its remaining children. */
+    var n = block[block.length - 1].nextElementSibling;
+    var stolen = [];
+    while(n && n.classList && n.classList.contains('flow-tl-item') && depthOf(n) > want){
+      stolen.push(n);
+      n = n.nextElementSibling;
+    }
+    if(!stolen.length) return;
+    var insertBefore = n;
+    block.forEach(function(node){
+      if(insertBefore) list.insertBefore(node, insertBefore);
+      else list.appendChild(node);
+    });
+  }
   function sortableAlive(list){
-    return !!(list && list.__flowSortable && list.__flowSortable.el === list && list.__flowNestV === 4);
+    return !!(list && list.__flowSortable && list.__flowSortable.el === list && list.__flowNestV === 5);
   }
   function wireFlowList(list){
     if(!window.Sortable || !list) return;
@@ -37200,7 +37400,7 @@ window.__refreshPinnedAgenda = function(){};
       try{ list.__flowSortable.destroy(); }catch(err){}
       list.__flowSortable = null;
     }
-    list.__flowNestV = 4;
+    list.__flowNestV = 5;
     var card = list.closest('.flow-timeline-card');
     if(!list.__flowFocusGuard){
       list.__flowFocusGuard = 1;
@@ -37245,19 +37445,8 @@ window.__refreshPinnedAgenda = function(){};
           return true;
         }
         var oe = originalEvent || window.event;
-        var y = oe && (oe.clientY != null) ? oe.clientY : null;
-        var rect = related.getBoundingClientRect();
-        // Drop into the middle band of a row → nest under that item
-        if(y != null){
-          var mid = rect.top + rect.height / 2;
-          var band = Math.max(10, rect.height * 0.4);
-          if(Math.abs(y - mid) <= band){
-            // Nest under THIS step — each drop indents one level more (staircase)
-            setFlowNestTarget(list, related);
-            return true;
-          }
-        }
-        clearFlowNestHighlight(list);
+        if(wantsFlowNest(related, oe)) setFlowNestTarget(list, related);
+        else clearFlowNestHighlight(list);
         return true;
       },
       onEnd: function(evt){
@@ -37272,24 +37461,7 @@ window.__refreshPinnedAgenda = function(){};
         if(item && target && list.contains(target) && target !== item){
           nestItemUnder(list, item, target);
         } else if(item){
-          var prev = item.previousElementSibling;
-          var dItem = depthOf(item);
-          if(!prev){
-            // Top of list → root step
-            var block = collectSubtree(item);
-            var rootDelta = -dItem;
-            block.forEach(function(node){ setDepth(node, Math.max(0, depthOf(node) + rootDelta)); });
-          } else {
-            // Keep depth unless it became illegal vs previous sibling
-            var dPrev = depthOf(prev);
-            if(dItem > dPrev + 1){
-              // Cap: can only be one step deeper than previous
-              var block2 = collectSubtree(item);
-              var want = dPrev + 1;
-              var delta2 = want - dItem;
-              block2.forEach(function(node){ setDepth(node, Math.max(0, Math.min(5, depthOf(node) + delta2))); });
-            }
-          }
+          placeAsSequenceSibling(list, item);
         }
         renumber(list);
         if(card) persistFlow(card);
@@ -37301,7 +37473,6 @@ window.__refreshPinnedAgenda = function(){};
   }
   window.__flowTimelineDragging = function(){ return __flowDragging; };
   window.__initFlowTimelineSortable = initFlowTimelineSortable;
-  [400, 1000, 2000, 3500, 6000].forEach(function(ms){ setTimeout(initFlowTimelineSortable, ms); });
   // Keepalive: reattach if sync/restore orphaned Sortable (all days)
   setInterval(initFlowTimelineSortable, 2500);
   if(window.MutationObserver){
@@ -37344,7 +37515,6 @@ window.__refreshPinnedAgenda = function(){};
   }
   function go(){ try{ run(); }catch(e){} }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', go); else go();
-  [600,1600,3000].forEach(function(ms){ setTimeout(go, ms); });
 })();
 </script>
 <script>
@@ -37797,7 +37967,6 @@ window.__refreshPinnedAgenda = function(){};
     if(window.__ensureGsepRetreat) window.__ensureGsepRetreat();
   }
   /* Run at multiple intervals to catch all late-loading scripts */
-  [100, 500, 1000, 2000, 3000, 4000, 5000, 7000, 10000].forEach(function(ms){ setTimeout(run, ms); });
   window.addEventListener('load', function(){ setTimeout(run, 500); setTimeout(run, 2000); });
 })();
 </script>
@@ -38506,7 +38675,6 @@ window.__refreshPinnedAgenda = function(){};
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(tick, 400); });
   else setTimeout(tick, 400);
-  [1200, 2800, 5000].forEach(function(ms){ setTimeout(tick, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(tick, 500); }).observe(document.body,{childList:true,subtree:true});
@@ -39571,7 +39739,6 @@ html body .day-block.today-block .today-agenda-list {
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', lock);
   else lock();
-  [200,800,1600,3200].forEach(function(ms){ setTimeout(lock, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(lock, 80); }).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['src','style','class']});
@@ -41398,7 +41565,6 @@ html body .day-block[data-date="2026-08-20"] .sec-grid.zone-zoomed > .pursuit-zo
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
-  setTimeout(boot, 300);
 })();
 </script>
 <script id="dedupe-text-mom">
@@ -41685,7 +41851,6 @@ html body .day-block.fmt22 .sec-grid:not(.pursuit-canvas) > .sec-card > .del-x-s
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', prepAll);
   else prepAll();
-  [400,1200,2800].forEach(function(ms){ setTimeout(prepAll, ms); });
   if(window.MutationObserver){
     var t=null;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(prepAll, 350); }).observe(document.body,{childList:true,subtree:true});
@@ -41740,6 +41905,14 @@ html body .day-block.vision-collage-day:not(.view-nodes):not(.collapsed) .day-ca
 }
 html body .day-block.overview-era-day.view-nodes:not(.collapsed) .day-card > .make-flow-btn {
   display: flex !important;
+}
+html body .day-block.overview-era-day.view-nodes:not(.collapsed) .day-card,
+html body .day-block.vision-collage-day.view-nodes:not(.collapsed) .day-card,
+html body .day-block.overview-era-day.view-nodes:not(.collapsed) .day-tasks,
+html body .day-block.overview-era-day.view-nodes:not(.collapsed) .tv-panel.tv-nodes,
+html body .day-block.overview-era-day.view-nodes:not(.collapsed) .tv-panel.tv-nodes.active {
+  min-height: 0 !important;
+  height: auto !important;
 }
 /* Aug 28+ — compact empty nodes (beat vision-collage 420px rule; no flow purple) */
 html body .day-block.overview-era-day .tv-panel.tv-nodes.nodes-panel-empty,
@@ -42432,13 +42605,15 @@ html body .day-block[data-date="2026-08-20"] .today-view-toggle .tv-pill {
   box-sizing: border-box;
   padding: 18px 22px;
   border-radius: 16px;
-  background: rgba(250, 246, 238, 0.94);
-  border: 1.5px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 10px 26px rgba(20, 12, 8, 0.18);
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 8px 24px rgba(20, 12, 8, 0.12), inset 0 1px 0 rgba(255,255,255,0.22);
   font-family: "Newsreader", Georgia, serif;
   font-size: 18px;
   line-height: 1.35;
-  color: #2e2820;
+  color: #fff8ee;
   text-align: center;
 }
 .made-flow-col > .made-flow-node:first-child,
@@ -43365,17 +43540,13 @@ html body .day-block.flow-picking .vision-tile {
       } else {
         placeMakeFlowBtn(block);
       }
-      if (wantsNodesFlowchart(block) && !block.querySelector('.tv-panel.tv-nodes')) ensureNodesView(block);
-      if (wantsImpulsesView(block) && !block.querySelector('.tv-panel.tv-impulses')) ensureImpulsesView(block);
-      // Strip empty flowchart views (only keep when a chart exists)
+      if (wantsNodesFlowchart(block)) {
+        ensureNodesView(block);
+        ensureFlowchartView(block);
+      }
+      if (wantsImpulsesView(block)) ensureImpulsesView(block);
       var steps = all[date];
       var hasChart = !!(steps && steps.length);
-      if (!hasChart) {
-        var emptyPanel = block.querySelector('.tv-panel.tv-flowchart');
-        var emptyPill = block.querySelector('.tv-pill[data-view="flowchart"]');
-        if (emptyPanel && !emptyPanel.querySelector('.made-flow-diagram')) emptyPanel.remove();
-        if (emptyPill) emptyPill.remove();
-      }
       var wants = hasChart && isMakeFlowDay(block);
       if (!wants) return;
       var host = flowHost(block);
@@ -43457,14 +43628,6 @@ html body .day-block.flow-picking .vision-tile {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restore);
   else setTimeout(restore, 0);
-  if (window.MutationObserver) {
-    var t = null;
-    new MutationObserver(function(){
-      if (window.__btmMakeFlowRestoring) return;
-      clearTimeout(t);
-      t = setTimeout(restore, 400);
-    }).observe(document.body, { childList: true, subtree: true });
-  }
   window.__makeFlowFromSelect = true;
 })();
 </script>
@@ -43653,7 +43816,6 @@ html body .day-block.fmt22 .sec-card.shot-card .card-resize {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 50); });
   else setTimeout(boot, 50);
-  [400, 900, 2200, 4200].forEach(function(ms){ setTimeout(ensure, ms); });
   window.__aug25HandshakeGsaV2 = true;
 })();
 </script>
@@ -43776,7 +43938,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function saveMap(m){
     _mapCache = m || {};
-    try { localStorage.setItem(STORE, JSON.stringify(_mapCache)); } catch(e){}
+    try {
+      if(window.__isFileDay){
+        Object.keys(_mapCache).forEach(function(k){
+          if(window.__isFileDay(k)) delete _mapCache[k];
+        });
+      }
+      localStorage.setItem(STORE, JSON.stringify(_mapCache));
+    } catch(e){}
   }
   window.__overviewEditsMap = loadMap;
   window.__overviewEditsFlush = function(){ saveMap(loadMap()); };
@@ -43795,7 +43964,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var host = heroHost(blk);
     if(!host) return '';
     var clone = host.cloneNode(true);
-    clone.querySelectorAll('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-horizon, .vision-horizon-above, .vision-horizon-below').forEach(function(el){ el.remove(); });
+    clone.querySelectorAll('.vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check, .vision-horizon, .vision-horizon-above, .vision-horizon-below, .vision-task-sky').forEach(function(el){ el.remove(); });
     clone.querySelectorAll('.is-zoomed').forEach(function(el){ el.classList.remove('is-zoomed'); });
     return clone.innerHTML.replace(/\s+$/,'');
   }
@@ -44736,7 +44905,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       Object.keys(aliases).forEach(function(a){ seen[a] = 1; });
       out.push(display);
     }
-    var presetSecs=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to train','to pepperdine','I will master','I will achieve','to pursuits','I will pursue','to ignite','to potential','I resonate','to surrender yourself to Allah ﷻ','to envision','to become','to Ph.D','to navigate','to focus','to align','to strengths','to plan','to art | science','to self-esteem','to audacity','to politics','to win','to repeat 10,000 times','to aim above the mark','to feel it into being','to anticipate','to darkness','to detach','to travel','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to channel','to feel','to persevere','to love','to curate','to seize opportunities','to litigate','to recoup','I will earn','I am a strategist'];
+    var presetSecs=['to glow up','to curated lifestyle','to ask','to power','to purpose','to executive','to quantum','to train','to pepperdine','I will master','I will achieve','to pursuits','I will pursue','to ignite','to potential','I resonate','to surrender yourself to Allah ﷻ','to envision','to become','to Ph.D','to navigate','to focus','to align','to strengths','to plan','to art | science','to self-esteem','to audacity','to politics','to win','to repeat 10,000 times','to aim above the mark','to feel it into being','to anticipate','to darkness','to detach','to travel','to tune into','to self-actualize','to claim','to sabotage','to say thank you in advance','to execute','to channel','to feel','to persevere','to love','to curate','to seize opportunities','to litigate','to recoup','I will earn','I am a strategist','I am successful'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('villains');
     if(typeof plainLabelDay === 'function' && plainLabelDay(blk) && typeof SECTION_PLAIN === 'object' && SECTION_PLAIN){
       Object.keys(SECTION_PLAIN).forEach(function(k){
@@ -44988,6 +45157,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(t === 'strategist' || t === 'a strategist' || f === 'strategist' || f === 'a-strategist' || /strategist/.test(t) || /strategist/.test(f)){
       add('strategist'); add('a strategist'); add('i am a strategist'); add('i am strategist');
     }
+    if(t === 'successful' || t === 'i am successful' || f === 'successful' || /successful/.test(t) || /successful/.test(f)){
+      add('successful'); add('i am successful'); add('i successful');
+    }
     if(t === 'art | science' || t === 'art-science' || t === 'art/science' || t === 'art science' || f === 'art-science' || f === 'art-science'){
       add('art | science'); add('art-science'); add('art/science'); add('art science');
     }
@@ -45064,6 +45236,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'power | purpose' || t === 'power-purpose' || t === 'power/purpose'){ rec.title = 'to power'; rec.focus = 'power'; }
     else if(t === 'finances' || t === 'abundance' || t === 'abundant' || t === 'receive' || t === 'ask'){ rec.title = 'to ask'; rec.focus = 'abundant'; }
     else if(t === 'lifestyle' || t === 'curated lifestyle' || t === 'curated-lifestyle'){ rec.title = 'to curated lifestyle'; rec.focus = 'curated-lifestyle'; }
+    else if(t === 'successful' || t === 'i am successful' || t === 'i successful'){ rec.title = 'I am successful'; rec.focus = 'successful'; }
     else if(t === 'grad school' || t === 'grad' || t === 'pepperdine' || t === 'enroll' || t === 'succeed'){ rec.title = 'to succeed'; rec.focus = 'pepperdine'; }
     else if(t === 'master' || t === 'to master' || t === 'i will master' || t === 'i master' || t === 'to-master'){ rec.title = 'I will master'; rec.focus = 'to-master'; }
     else if(t === 'achieve' || t === 'to achieve' || t === 'i will achieve' || t === 'i achieve' || t === 'to-achieve'){ rec.title = 'I will achieve'; rec.focus = 'to-achieve'; }
@@ -45093,7 +45266,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else if(t === 'she pursues' || t === 'she-pursues' || t === 'pursue' || t === 'i will pursue' || t === 'i pursue'){ rec.title = 'I will pursue'; rec.focus = 'she-pursues'; }
     else if(t === 'start over' || t === 'start-over' || t === 'create again' || t === 'create-again' || t === 'travel'){ rec.title = 'to travel'; rec.focus = 'travel'; }
     else if(t === 'inner fire' || t === 'inner-fire' || t === 'ignite'){ rec.title = 'to ignite'; rec.focus = 'inner-fire'; }
-    else if(t === 'fitness' || t === 'academia' || t === 'networking' || t === 'deen' || t === 'strategist' || t === 'a strategist' || t === 'i am a strategist' || t === 'i am training' || t === 'i am a grad student' || t === 'i am networking' || t.indexOf('i am worshipping') === 0){
+    else if(t === 'fitness' || t === 'academia' || t === 'networking' || t === 'deen' || t === 'strategist' || t === 'a strategist' || t === 'i am a strategist' || t === 'successful' || t === 'i am successful' || t === 'i am training' || t === 'i am a grad student' || t === 'i am networking' || t.indexOf('i am worshipping') === 0){
       var pAdd = (typeof matchPlainSection === 'function') ? matchPlainSection(t, t) : null;
       rec.title = pAdd ? pAdd.title : (t === 'deen' ? 'Deen' : t);
       rec.focus = pAdd ? pAdd.focus : t;
@@ -45193,7 +45366,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     wins: { focus: 'wins', title: 'I am winning', photo: 'manus-storage/zone-wins-hand.jpg?v=game13' },
     become: { focus: 'become', title: 'I am becoming', photo: 'manus-storage/zone-envision.jpg?v=swap1' },
     persevere: { focus: 'to-persevere', title: 'I am persevering', photo: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1' },
-    strategist: { focus: 'strategist', title: 'I am a strategist', photo: 'manus-storage/zone-strategist.jpg?v=strat1' }
+    strategist: { focus: 'strategist', title: 'I am a strategist', photo: 'manus-storage/zone-strategist.jpg?v=strat2' },
+    successful: { focus: 'successful', title: 'I am successful', photo: 'manus-storage/zone-successful.jpg?v=ok1' }
   };
   function plainLabelDay(blk){
     var node = blk;
@@ -45213,6 +45387,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var bare = '';
     try { bare = presentLemma(bareSectionTitle(low)); } catch(e){ bare = low.replace(/^(to|i will|i)\s+/i, ''); }
     if(f === 'to-achieve' || bare === 'achieve' || /^i will achieve$/i.test(low) || /^to achieve$/i.test(low)) return null;
+    if(f === 'successful' || bare === 'successful' || /i am successful/i.test(low) || /^(i |to )?successful$/i.test(low)) return SECTION_PLAIN.successful;
     if(f === 'fitness' || f === 'trained' || f === 'train' || f === 'body' || f === 'gym' || f === 'athletic' || f === 'fitness-training' || f === 'toned-body'
       || bare === 'fitness' || bare === 'train' || bare === 'trained' || bare === 'training' || bare === 'body' || bare === 'gym' || bare === 'athletic' || bare === 'fitness training' || bare === 'fitness-training' || bare === 'toned body' || bare === 'toned-body'
       || /^(i will |i am |i |to )?(train|trained|training|fitness|fitness training)$/i.test(low)) return SECTION_PLAIN.fitness;
@@ -45269,7 +45444,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'seize opportunities':'I am seizing opportunities',litigate:'I am litigating',
       recoup:'I am recouping',achieve:'I am achieving',master:'I am mastering',
       villains:'I am facing the villains',house:'I am making a home',workflow:'I am navigating',
-      strategist:'I am a strategist','a strategist':'I am a strategist'
+      strategist:'I am a strategist','a strategist':'I am a strategist',
+      successful:'I am successful'
     };
     if(FIXED[bare]) return FIXED[bare];
     if(/^i am /i.test(s) && !/^i (am ){2,}/i.test(s)) return s;
@@ -45442,13 +45618,26 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       return true;
     });
   }
+  (function scrubHollowZoomShells(){
+    try {
+      var o = JSON.parse(localStorage.getItem('btm_day_shells_v1') || '{}') || {};
+      var dirty = false;
+      Object.keys(o).forEach(function(k){
+        if(String(o[k] || '').indexOf('vision-tile') < 0){ delete o[k]; dirty = true; }
+      });
+      if(dirty) localStorage.setItem('btm_day_shells_v1', JSON.stringify(o));
+    } catch(eHollow){}
+  })();
   function syncDayShell(blk){
     var k = dayKey(blk);
     if(!k || !blk) return;
+    if(window.__isFileDay && window.__isFileDay(blk)) return;
+    if(document.body && document.body.classList.contains('vision-zoom-open')) return;
+    if(!blk.querySelector('.vision-hero > .vision-tile')) return;
     try { if(typeof repairSwallowedVisionTiles==='function') repairSwallowedVisionTiles(blk);
       var o = JSON.parse(localStorage.getItem('btm_day_shells_v1') || '{}') || {};
       var clone = blk.cloneNode(true);
-      clone.querySelectorAll('.vision-horizon, .vision-horizon-above, .vision-horizon-below, .vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check').forEach(function(el){ try{ el.remove(); }catch(e){} });
+      clone.querySelectorAll('.vision-horizon, .vision-horizon-above, .vision-horizon-below, .vision-task-sky, .vision-tile-del, .vision-card-del, .vision-add-card, .vision-habit-check, .habit-check').forEach(function(el){ try{ el.remove(); }catch(e){} });
       clone.querySelectorAll('[data-wired]').forEach(function(n){ n.removeAttribute('data-wired'); });
       clone.querySelectorAll('.day-block').forEach(function(el){ try{ el.remove(); }catch(e){} });
       var shellHtml = clone.outerHTML;
@@ -45715,6 +45904,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function persistDay(blk, immediate){
     var k = dayKey(blk);
     if(!k) return;
+    if(window.__isFileDay && window.__isFileDay(blk)){
+      var zoomedFile = !!(document.body && document.body.classList.contains('vision-zoom-open'));
+      if(!zoomedFile){
+        try { syncHeroLayoutClass(blk); } catch(eLay){}
+        scheduleHtmlSave(blk, immediate);
+      }
+      return;
+    }
     // Snapshot live tiles + card homes into the overlay, then flush.
     // Never drop removedSections just because baked HTML still shows a tile.
     try { scrubUninvitedAutoSections(blk); } catch(e){}
@@ -45725,9 +45922,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     syncAddedChecksFromDom(blk);
     purgeConflictingAdds(dayData(blk));
     saveMap(loadMap());
-    syncHeroLayoutClass(blk);
-    syncDayShell(blk);
-    scheduleHtmlSave(blk, immediate);
+    /* Zoom reparents the board onto body — never pack/save a hollow day from that. */
+    var zoomedPersist = !!(document.body && document.body.classList.contains('vision-zoom-open'));
+    if(!zoomedPersist){
+      syncHeroLayoutClass(blk);
+      try { syncDayShell(blk); } catch(eSh){}
+      scheduleHtmlSave(blk, immediate);
+    }
   }
   function overviewSavePage(){
     try {
@@ -45889,6 +46090,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function heroHost(blk){
     var vb = blk && blk.querySelector('.tv-panel.tv-pursuits .vision-board');
+    if(!vb && document.body && document.body.classList.contains('vision-zoom-open')){
+      var portaled = document.body.querySelector(':scope > .vision-board.is-zoomed');
+      var home = portaled && portaled.__zoomHome && portaled.__zoomHome.parent;
+      if(portaled && home && home.closest && home.closest('.day-block') === blk) vb = portaled;
+    }
     if(!vb) return null;
     return vb.querySelector('.vision-hero') || vb.querySelector('.vision-more') || vb;
   }
@@ -46114,8 +46320,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     box.appendChild(makeSubsection(rec));
     if(asUser) markUserAddedSection(blk, tileFocus(tile), title);
     persistDay(blk);
-    /* Flip to subsections depth so the new nested piece is visible */
-    if(asUser && dayWantsDepthFour(blk)){
+    /* Unzoomed collage only: flip to subsections so the new piece is visible there.
+       Zoomed section already shows every layer — do not change depth. */
+    var zoomedSub = !!(tile.classList.contains('is-zoomed') || (document.body && document.body.classList.contains('vision-zoom-open')));
+    if(asUser && !zoomedSub && dayWantsDepthFour(blk)){
       try { setOverviewDepth(blk, 'subsections'); } catch(eSubDepth){}
     }
   }
@@ -46258,7 +46466,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     run();
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-    [80, 400, 1200].forEach(function(ms){ setTimeout(run, ms); });
   })();
 
   /* GLOW-UP-SUBSECTIONS-V1 */
@@ -46294,7 +46501,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
@@ -46700,7 +46906,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function clearHorizonChrome(tile){
     if(!tile) return;
     try { tile.classList.remove('horizon-armed'); } catch(eArm){}
-    [].slice.call(tile.querySelectorAll(':scope > .vision-horizon, :scope > .vision-horizon-above, :scope > .vision-horizon-below')).forEach(function(el){
+    [].slice.call(tile.querySelectorAll(':scope > .vision-horizon, :scope > .vision-horizon-above, :scope > .vision-horizon-below, :scope > .vision-task-sky')).forEach(function(el){
       try { el.remove(); } catch(e){}
     });
   }
@@ -46935,6 +47141,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     else { try { document.body.appendChild(modal); } catch(e){} }
   }
   function horizonTasksOn(tile, blk){
+    /* Zoomed section shows every layer — pins paint even when collage depth is sections/cards. */
+    if(tile && tile.classList.contains('is-zoomed')){
+      var vbZ = tile.closest('.vision-board');
+      if((vbZ && vbZ.classList.contains('is-zoomed')) || (document.body && document.body.classList.contains('vision-zoom-open'))) return true;
+    }
     if(blk && blk.classList.contains('overview-mode-tasks')) return true;
     if(document.body && document.body.classList.contains('overview-mode-tasks')) return true;
     if(document.documentElement && document.documentElement.classList.contains('overview-mode-tasks')) return true;
@@ -46993,7 +47204,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         (pDone ? done : open).push(plab);
       });
     }
-    /* Empty section (no checks, no cards) → no center line */
+    /* Empty section (no checks, no cards) → no horizon chrome */
     if(!open.length && !done.length){
       clearHorizonChrome(tile);
       return;
@@ -47003,9 +47214,113 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     tile.classList.add('horizon-armed');
     chrome.above.innerHTML = '';
     chrome.below.innerHTML = '';
-    done.forEach(function(el){ chrome.above.appendChild(el); });
+    done.forEach(function(el){ el.classList.add('is-done'); chrome.above.appendChild(el); });
     open.forEach(function(el){ chrome.below.appendChild(el); });
     bindHorizonTaskSortable(tile);
+    try { syncTaskConstellation(tile, open, done); } catch(eSky){}
+  }
+  function taskStarLayout(n){
+    var presets = [
+      [22,26],[48,18],[72,28],[82,52],[58,60],[34,64],[20,50],[74,74],[50,40],[86,32],[16,72],[64,22]
+    ];
+    var pts = [];
+    var i;
+    for(i = 0; i < n; i++){
+      if(presets[i]) pts.push({ x: presets[i][0], y: presets[i][1] });
+      else {
+        var a = (i * 2.4) % 6.28;
+        pts.push({ x: 50 + Math.cos(a) * 30, y: 48 + Math.sin(a) * 26 });
+      }
+    }
+    return pts;
+  }
+  function drawTaskFilaments(sky){
+    if(!sky) return;
+    [].slice.call(sky.querySelectorAll('.vision-task-filament')).forEach(function(svg){
+      try { svg.remove(); } catch(e){}
+    });
+    return;
+    var svg = sky.querySelector('.vision-task-filament');
+    if(!svg) return;
+    var w = sky.clientWidth || 1;
+    var h = sky.clientHeight || 1;
+    var stars = [].slice.call(sky.querySelectorAll('.vision-task-star.is-on'));
+    var onPts = stars.map(function(star){
+      return {
+        x: (parseFloat(star.style.left) || 0) / 100 * w,
+        y: (parseFloat(star.style.top) || 0) / 100 * h
+      };
+    });
+    var paths = [];
+    var linked = {};
+    function linkKey(a, b){ return a < b ? a + ':' + b : b + ':' + a; }
+    onPts.forEach(function(a, ai){
+      var dists = onPts.map(function(b, bi){
+        if(ai === bi) return { bi: bi, d: 1e9 };
+        var dx = a.x - b.x, dy = a.y - b.y;
+        return { bi: bi, d: dx * dx + dy * dy };
+      }).sort(function(u, v){ return u.d - v.d; });
+      var take = Math.min(2, dists.length);
+      var t;
+      for(t = 0; t < take; t++){
+        if(dists[t].d >= 1e9) continue;
+        var k = linkKey(ai, dists[t].bi);
+        if(linked[k]) continue;
+        linked[k] = 1;
+        var b = onPts[dists[t].bi];
+        var mx = (a.x + b.x) / 2;
+        var my = (a.y + b.y) / 2 - Math.max(10, h * 0.04);
+        paths.push('<path d="M '+a.x+' '+a.y+' Q '+mx+' '+my+' '+b.x+' '+b.y+'"/>');
+      }
+    });
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    svg.innerHTML = paths.join('');
+  }
+  function syncTaskConstellation(tile, open, done){
+    if(!tile) return;
+    var on = horizonTasksOn(tile, horizonDayBlock(tile));
+    if(!on || ((!open || !open.length) && (!done || !done.length))){
+      [].slice.call(tile.querySelectorAll(':scope > .vision-task-sky')).forEach(function(el){
+        try { el.remove(); } catch(e){}
+      });
+      return;
+    }
+    var sky = tile.querySelector(':scope > .vision-task-sky');
+    if(!sky){
+      sky = document.createElement('div');
+      sky.className = 'vision-task-sky';
+      sky.setAttribute('aria-hidden', 'false');
+      sky.innerHTML = '';
+      tile.appendChild(sky);
+    }
+    [].slice.call(sky.querySelectorAll('.vision-task-star')).forEach(function(el){ try { el.remove(); } catch(e){} });
+    var items = (open || []).concat(done || []);
+    var pts = taskStarLayout(items.length);
+    items.forEach(function(lab, i){
+      if(!lab) return;
+      var name = String(lab.getAttribute('data-hz-title') || ((lab.querySelector('span') || {}).textContent) || '').replace(/\s+/g, ' ').trim();
+      var isDone = !!(lab.classList.contains('is-done') || (lab.querySelector('input') && lab.querySelector('input').checked));
+      var star = document.createElement('button');
+      star.type = 'button';
+      star.className = 'vision-task-star' + (isDone ? ' is-off' : ' is-on');
+      star.style.left = pts[i].x + '%';
+      star.style.top = pts[i].y + '%';
+      star.title = name;
+      star.innerHTML = '<span class="vision-task-star-core" aria-hidden="true"></span><span class="vision-task-star-label"></span>';
+      star.querySelector('.vision-task-star-label').textContent = name;
+      function flip(ev){
+        if(ev){ ev.preventDefault(); ev.stopPropagation(); }
+        var inp = lab.querySelector('input');
+        if(!inp) return;
+        inp.checked = !inp.checked;
+        try { inp.dispatchEvent(new Event('change', { bubbles: true })); } catch(eCh){}
+      }
+      star.addEventListener('click', flip);
+      star.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+      sky.appendChild(star);
+    });
+    requestAnimationFrame(function(){ drawTaskFilaments(sky); });
+    setTimeout(function(){ drawTaskFilaments(sky); }, 60);
   }
   function horizonSourceNode(tile, lab){
     if(!tile || !lab) return null;
@@ -47167,7 +47482,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function syncHorizonBlock(blk){
     if(!blk) return;
-    [].slice.call(blk.querySelectorAll('.vision-tile')).forEach(syncHorizonTile);
+    var tiles = [].slice.call(blk.querySelectorAll('.vision-tile'));
+    var portaled = document.body && document.body.querySelector(':scope > .vision-board.is-zoomed');
+    if(portaled){
+      [].slice.call(portaled.querySelectorAll('.vision-tile')).forEach(function(t){
+        if(tiles.indexOf(t) < 0) tiles.push(t);
+      });
+    }
+    tiles.forEach(syncHorizonTile);
   }
   function addVisionCheck(tile, name, opts){
     name = String(name || '').replace(/\s+/g, ' ').trim();
@@ -47208,8 +47530,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       }
     } catch(eBake){}
     syncHorizonTile(tile);
-    /* Flip to tasks only for an intentional add on an open day — never on load/collapsed (FOUC). */
-    if(blk && dayWantsDepthFour(blk) && !blk.classList.contains('collapsed') && !(opts && (opts.quiet || opts.carryDest || opts.fromLoad))){
+    /* Flip to tasks only for an intentional add on an unzoomed open day — never on load/collapsed (FOUC), never while zoomed. */
+    var zoomedCheck = !!(tile.classList.contains('is-zoomed') || (document.body && document.body.classList.contains('vision-zoom-open')));
+    if(!zoomedCheck && blk && dayWantsDepthFour(blk) && !blk.classList.contains('collapsed') && !(opts && (opts.quiet || opts.carryDest || opts.fromLoad))){
       try { setOverviewDepth(blk, 'tasks'); } catch(eTaskDepth){}
     }
     return lab;
@@ -47273,10 +47596,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     run();
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-    [80, 400].forEach(function(ms){ setTimeout(run, ms); });
   })();
   (function copySept6SourceTasksAlways(){
     var WANT = {
+      deen: ['6 qadaa salah'],
       academia: [
         'tuition payment', 'scholarship application', 'fall 2026 enrollment',
         'Graduate Student Association · Top Applicant', 'Committee check-in', 'AERA', 'Handshake'
@@ -47295,7 +47618,14 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       try { data = (typeof dayData === 'function') ? dayData(blk) : null; } catch(eD){}
       if(data) data.addedChecks = data.addedChecks || [];
       Object.keys(WANT).forEach(function(focus){
-        var tile = blk.querySelector('.vision-hero > .vision-tile[data-focus="'+focus+'"]');
+        var host = null;
+        try { host = (typeof heroHost === 'function') ? heroHost(blk) : null; } catch(eH){}
+        var tile = (host && host.querySelector('.vision-tile[data-focus="'+focus+'"]'))
+          || blk.querySelector('.vision-hero > .vision-tile[data-focus="'+focus+'"]');
+        if(!tile){
+          var portaled = document.body && document.body.querySelector(':scope > .vision-board.is-zoomed');
+          tile = portaled && portaled.querySelector('.vision-tile[data-focus="'+focus+'"]');
+        }
         if(!tile) return;
         WANT[focus].forEach(function(title){
           try { addVisionCheck(tile, title, { quiet: true, force: true }); } catch(eAdd){}
@@ -47311,7 +47641,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     run();
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-    [120, 500].forEach(function(ms){ setTimeout(run, ms); });
   })();
   (function ensureSept6Strategist(){
     function run(){
@@ -47322,7 +47651,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     run();
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-    [120, 500].forEach(function(ms){ setTimeout(run, ms); });
+  })();
+  (function ensureSept6Successful(){
+    function run(){
+      var blk = document.querySelector('.day-block[data-date="2026-09-06"]');
+      if(!blk) return;
+      if(blk.querySelector('.vision-hero > .vision-tile[data-focus="successful"]')) return;
+      try { addTile(blk, 'I am successful', true); } catch(eAdd){}
+    }
+    run();
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   })();
   window.__setOverviewDepth = setOverviewDepth;
   window.__applyOverviewDepth = applyOverviewDepth;
@@ -47367,8 +47705,33 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var on = dm === mode || (sectionsOnly && (dm === 'sections' || dm === 'overview'));
       b.classList.toggle('is-on', on);
     });
+    try { syncZoomDepthStamp(blk); } catch(eZoomStamp){}
     try { syncHorizonBlock(blk); } catch(eHz){}
   }
+  function syncZoomDepthStamp(blk){
+    if(!blk) return;
+    if(!document.body.classList.contains('vision-zoom-open')) return;
+    var vb = document.body.querySelector(':scope > .vision-board.is-zoomed') || blk.querySelector('.vision-board.is-zoomed');
+    if(!vb) return;
+    var depth = 'sections';
+    if(blk.classList.contains('overview-mode-cards') || blk.classList.contains('overview-mode-details')) depth = 'cards';
+    else if(blk.classList.contains('overview-mode-tasks')) depth = 'tasks';
+    else if(blk.classList.contains('overview-mode-subsections')) depth = 'subsections';
+    vb.setAttribute('data-zoom-depth', depth);
+    var modeOn = {
+      'overview-mode-sections': depth === 'sections',
+      'overview-mode-overview': depth === 'sections',
+      'overview-mode-subsections': depth === 'subsections',
+      'overview-mode-cards': depth === 'cards',
+      'overview-mode-details': depth === 'cards',
+      'overview-mode-tasks': depth === 'tasks'
+    };
+    Object.keys(modeOn).forEach(function(c){
+      document.body.classList.toggle(c, !!modeOn[c]);
+      document.documentElement.classList.toggle(c, !!modeOn[c]);
+    });
+  }
+  window.__syncZoomDepthStamp = syncZoomDepthStamp;
   function setOverviewDepth(blk, mode){
     if(!blk) return;
     var four = dayWantsDepthFour(blk);
@@ -47780,11 +48143,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var low = title.toLowerCase();
     if(SECTION_PHOTO_NAMES[low]) return '';
     var cache = loadCardPhotoCache();
-    if(cache[low]) return cache[low];
     if(window.__cardImgFor){
       var hit = window.__cardImgFor(title);
       if(hit) return hit;
     }
+    if(cache[low]) return cache[low];
     return '';
   }
   function applyPolaroidSrc(pol, src, rec){
@@ -47872,6 +48235,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var blank = isBlankOrBrokenCardSrc(cur, img);
       var inherited = blank || !cur || /pursuit-pepperdine|zone-pepperdine-diploma|zone-pepperdine-malibu|pursuit-vibes/i.test(cur) || (tileSrc && cur.split('?')[0] === tileSrc.split('?')[0]);
       if(!blank && cur && /pursuit-vibes/i.test(cur) && low !== 'vibes') inherited = true;
+      if(!inherited && cur && /^https?:/i.test(cur) && window.__cardImgFor && window.__cardImgFor(title)) inherited = true;
+      if(!inherited && (low === 'fajr' || low === 'fajr salah') && !/card-fajr\.jpg/.test(cur)) inherited = true;
       if(!inherited){
         rememberCardPhoto(title, cur);
         return;
@@ -47891,6 +48256,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function hardwiredSectionPhoto(blk, title, focus){
     title = String(title||'').replace(/\s+/g,' ').trim();
     var f = String(focus || '').toLowerCase();
+    if(f === 'fighting' || f === 'fight' || title.toLowerCase() === 'i am fighting' || title.toLowerCase() === 'fighting' || title.toLowerCase() === 'i fighting' || title.toLowerCase() === 'i will fight') return 'manus-storage/zone-audacity.jpg?v=finger1';
+    if(f === 'igniting' || f === 'ignite' || f === 'inner-fire' || title.toLowerCase() === 'i am igniting' || title.toLowerCase() === 'igniting' || title.toLowerCase() === 'i igniting' || title.toLowerCase() === 'ignite' || title.toLowerCase() === 'inner fire') return 'manus-storage/zone-inner-fire.jpg?v=spark1';
+    if(f === 'aligning' || f === 'align' || f === 'alignment' || title.toLowerCase() === 'i am aligning' || title.toLowerCase() === 'aligning' || title.toLowerCase() === 'i aligning' || title.toLowerCase() === 'align' || title.toLowerCase() === 'alignment') return 'manus-storage/zone-alignment.jpg?v=align1';
+    if(f === 'channeling' || f === 'channel' || f === 'to-channel' || f === 'tochannel' || title.toLowerCase() === 'i am channeling' || title.toLowerCase() === 'channeling' || title.toLowerCase() === 'i channeling' || title.toLowerCase() === 'i channel' || title.toLowerCase() === 'to channel' || title.toLowerCase() === 'channel') return 'manus-storage/zone-to-channel-souls.jpg?v=souls1';
+    if(f === 'achieving' || f === 'to-achieve' || title.toLowerCase() === 'i am achieving' || title.toLowerCase() === 'achieving' || title.toLowerCase() === 'i achieving' || title.toLowerCase() === 'i will achieve' || title.toLowerCase() === 'to achieve' || title.toLowerCase() === 'i achieve' || title.toLowerCase() === 'to-achieve') return 'manus-storage/zone-achieving.jpg?v=done1';
+    if(f === 'recouping' || f === 'to-recoup' || f === 'recoup' || f === 'recouped' || /recoup/.test(title.toLowerCase())) return 'manus-storage/zone-recouping.jpg?v=back1';
     if(f === 'fitness' || title.toLowerCase() === 'fitness' || f === 'trained') return 'manus-storage/zone-athletic-gym.jpg?v=gym1';
     if(f === 'academia' || title.toLowerCase() === 'academia' || f === 'succeeded') return 'manus-storage/zone-achieve-csol.jpg?v=csol2';
     if(f === 'deen' || title.toLowerCase() === 'deen' || f === 'surrendered-to-allah') return 'manus-storage/zone-god-conscious.jpg?v=remembrance1';
@@ -47917,7 +48288,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
     if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-focus.jpg?v=chess1';
-    if(f === 'strategist' || f === 'a-strategist' || /strategist/.test(title.toLowerCase())) return 'manus-storage/zone-strategist.jpg?v=strat1';
+    if(f === 'strategist' || f === 'a-strategist' || /strategist/.test(title.toLowerCase())) return 'manus-storage/zone-strategist.jpg?v=strat2';
+    if(f === 'successful' || /successful/.test(title.toLowerCase())) return 'manus-storage/zone-successful.jpg?v=ok1';
     if(f === 'wins' || f === 'win' || title.toLowerCase() === 'i will win' || title.toLowerCase() === 'win' || title.toLowerCase() === 'to win') return 'manus-storage/zone-wins-hand.jpg?v=game13';
     if(f === 'seize-opportunities' || f === 'seize' || f === 'to-seize-opportunities' || title.toLowerCase() === 'seize' || title.toLowerCase() === 'seize opportunities' || title.toLowerCase() === 'to seize opportunities') return 'manus-storage/zone-seize-opportunities.jpg?v=seize4';
     if(f === 'workflow' || f === 'to-workflow' || f === 'start' || f === 'to-start' || f === 'navigate' || f === 'to-navigate' || title.toLowerCase() === 'workflow' || title.toLowerCase() === 'to workflow' || title.toLowerCase() === 'start' || title.toLowerCase() === 'to start' || title.toLowerCase() === 'to navigate' || title.toLowerCase() === 'navigate') return 'manus-storage/zone-plan.jpg?v=swap1';
@@ -48330,6 +48702,40 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     Object.keys(uniqPy).forEach(function(k){ if(uniqPy[k] > maxRow) maxRow = uniqPy[k]; });
     return maxRow >= 3;
   }
+  function subsectionPctBoxes(tile){
+    return [].slice.call((tile && tile.querySelectorAll('.vision-subsection')) || []).map(function(sub){
+      var sx = parseFloat(sub.style.getPropertyValue('--sx'));
+      var sy = parseFloat(sub.style.getPropertyValue('--sy'));
+      var sw = parseFloat(sub.style.getPropertyValue('--sw'));
+      if(!isFinite(sx)) sx = 10;
+      if(!isFinite(sy)) sy = 14;
+      if(!isFinite(sw)) sw = 32;
+      var sh = sw * 4 / 3;
+      return { l: sx, t: sy, r: sx + sw, b: sy + sh };
+    });
+  }
+  function pctBoxesOverlap(a, b, pad){
+    pad = pad == null ? 2 : pad;
+    return !(a.r + pad <= b.l || b.r + pad <= a.l || a.b + pad <= b.t || b.b + pad <= a.t);
+  }
+  function nudgeClearOfSubsections(tile, px, py, wPct, hPct){
+    var subs = subsectionPctBoxes(tile);
+    if(!subs.length) return { px: px, py: py };
+    var tries = [
+      { px: px, py: py },
+      { px: 58, py: 14 },
+      { px: 62, py: 46 },
+      { px: 36, py: 58 },
+      { px: 8, py: 56 }
+    ];
+    var i, box, hit;
+    for(i = 0; i < tries.length; i++){
+      box = { l: tries[i].px, t: tries[i].py, r: tries[i].px + wPct, b: tries[i].py + hPct };
+      hit = subs.some(function(s){ return pctBoxesOverlap(box, s, 3); });
+      if(!hit) return tries[i];
+    }
+    return { px: 58, py: 14 };
+  }
   /** Scatter cards freeform — absolute positions + slight rotation. Never grid rows. */
   function packTileCards(tile, opts){
     opts = opts || {};
@@ -48446,6 +48852,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var px = Math.max(marginX, Math.min(78, slot.px + jitterX));
       var py = Math.max(marginY, Math.min(78, slot.py + jitterY));
       py = clampPyClearOfTitle(tile, pol, py);
+      var clear = nudgeClearOfSubsections(tile, px, py, pwPct, (photoH / Math.max(th, 1)) * 100);
+      px = clear.px;
+      py = clear.py;
       var rot = slot.rot + ((h >> 8) % 7) - 3;
       if(!pol.classList.contains('vision-habit-card')){
         pol.style.removeProperty('height');
@@ -48497,7 +48906,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
   }
   window.__fillPackAllTiles = __fillPackAllTiles;
-  [40, 240, 800].forEach(function(ms){ setTimeout(__fillPackAllTiles, ms); });
   if(!window.__packFillResizeWired){
     window.__packFillResizeWired = 1;
     window.addEventListener('resize', function(){
@@ -49006,7 +49414,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__bootVisionTileSortables = bootVisionTileSortables;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(bootVisionTileSortables, 120); });
   else setTimeout(bootVisionTileSortables, 120);
-  [500, 1500, 3500].forEach(function(ms){ setTimeout(bootVisionTileSortables, ms); });
   if(window.MutationObserver && !window.__visionTileSortMo){
     window.__visionTileSortMo = new MutationObserver(function(){
       clearTimeout(window.__visionTileSortT);
@@ -49233,7 +49640,48 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     return true;
   }
   window.__forgetRestoredRemovedSections = forgetRestoredRemovedSections;
+  function ensureOverlayCardsLive(blk){
+    if(!blkOk(blk)) return;
+    var data = dayData(blk);
+    var host = heroHost(blk);
+    var vb = (host && host.closest && host.closest('.vision-board')) || (blk && blk.querySelector('.vision-board'));
+    if(!data || !vb) return;
+    (data.addedCards || []).forEach(function(rec){
+      if(!rec || !rec.sectionFocus || !rec.title) return;
+      if(isFreshDayBlk(blk) && isUninvitedAutoCard(blk, rec.title)) return;
+      var tile = tileByFocus(vb, rec.sectionFocus);
+      if(!tile) return;
+      var existing = findPolaroidByTitle(tile, rec.title);
+      if(existing){
+        try {
+          if(!existing.getAttribute('data-shot-src') && typeof assignCardPhotoAuto === 'function'){
+            assignCardPhotoAuto(existing, rec.title, rec, blk);
+          }
+        } catch(eA){}
+        return;
+      }
+      var det = tile.querySelector('.vision-tile-details');
+      if(!det){
+        det = document.createElement('div');
+        det.className = 'vision-tile-details';
+        tile.appendChild(det);
+      }
+      det.appendChild(makePolaroid(rec));
+      try { if(typeof ensurePolaroidChrome === 'function') ensurePolaroidChrome(det.lastElementChild); } catch(eCh){}
+      try { if(typeof assignCardPhotoAuto === 'function') assignCardPhotoAuto(det.lastElementChild, rec.title, rec, blk); } catch(eA2){}
+    });
+  }
+  window.__ensureOverlayCardsLive = ensureOverlayCardsLive;
+  (function restoreOverlayCardsAlways(){
+    function run(){
+      document.querySelectorAll('.day-block.overview-era-day[data-date], .day-block.vision-collage-day[data-date]').forEach(function(blk){
+        try { ensureOverlayCardsLive(blk); } catch(e){}
+      });
+    }
+    run();
+  })();
   function applyStoredEdits(blk){
+    if(window.__isFileDay && window.__isFileDay(blk)) return;
     if(!blkOk(blk)) return;
     var data = dayData(blk);
     if(!data) return;
@@ -49243,8 +49691,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     try { honorDayRemovedSections(blk); } catch(eHon){}
     try { scrubUninvitedAutoSections(blk); } catch(e){}
-    var vb = blk.querySelector('.tv-panel.tv-pursuits .vision-board');
     var host = heroHost(blk);
+    var vb = (host && host.closest && host.closest('.vision-board')) || (blk && blk.querySelector('.tv-panel.tv-pursuits .vision-board'));
     if(!vb || !host) return;
     var rem = {};
     var hist = (typeof isHistoryBoardDay === 'function') ? isHistoryBoardDay(blk) : ((dayKey(blk)||'') < '2026-09-01');
@@ -49669,6 +50117,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(String(title).toLowerCase() === 'pepperdine' || String(title).toLowerCase() === 'enroll' || String(title).toLowerCase() === 'succeed' || title === 'grad school' || title === 'grad' || title === 'grad-school' || focus === 'pepperdine' || focus === 'enroll' || focus === 'succeed' || focus === 'grad' || focus === 'grad-school'){ focus = 'pepperdine'; title = 'to succeed'; }
     if(String(title).toLowerCase() === 'master' || String(title).toLowerCase() === 'to master' || String(title).toLowerCase() === 'i master' || String(title).toLowerCase() === 'i will master' || String(title).toLowerCase() === 'to-master' || focus === 'to-master' || focus === 'master'){ focus = 'to-master'; title = 'I will master'; }
     if(String(title).toLowerCase() === 'achieve' || String(title).toLowerCase() === 'to achieve' || String(title).toLowerCase() === 'i achieve' || String(title).toLowerCase() === 'i will achieve' || String(title).toLowerCase() === 'to-achieve' || focus === 'to-achieve'){ focus = 'to-achieve'; title = 'I will achieve'; }
+    if(/successful/.test(String(title).toLowerCase()) || focus === 'successful'){ focus = 'successful'; title = 'I am successful'; }
     if(/strategist/.test(String(title).toLowerCase()) || focus === 'a-strategist' || focus === 'strategist'){ focus = 'strategist'; title = 'I am a strategist'; }
     if(typeof matchPlainSection === 'function' && typeof plainLabelDay === 'function' && plainLabelDay(blk)){
       var plainAdd = matchPlainSection(title, focus);
@@ -49756,8 +50205,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       sectionFocus: tileFocus(tile),
       title: title,
       src: src,
-      px: '6%',
-      py: '12%',
+      px: '58%',
+      py: '16%',
       shot: true
     };
     dayData(blk).addedCards.push(rec);
@@ -49766,11 +50215,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     assignCardPhotoAuto(det.lastElementChild, title, rec, blk);
     /* Place with auto gaps so new cards never land stacked on neighbors. */
     try{ packTileCards(tile, {force: true}); }catch(e){}
-    /* Flip to cards depth so the new polaroid is visible */
-    if(dayWantsDepthFour(blk)){
-      setOverviewDepth(blk, 'cards');
-    } else if(blk.classList.contains('overview-mode-overview')){
-      setOverviewDepth(blk, 'details');
+    /* Unzoomed collage only: flip to cards so the new polaroid is visible there.
+       Zoomed section already shows every layer — do not change depth. */
+    var zoomedNow = !!(tile.classList.contains('is-zoomed') || (document.body && document.body.classList.contains('vision-zoom-open')));
+    if(!zoomedNow){
+      if(dayWantsDepthFour(blk)){
+        setOverviewDepth(blk, 'cards');
+      } else if(blk.classList.contains('overview-mode-overview')){
+        setOverviewDepth(blk, 'details');
+      }
     }
     persistDay(blk);
   }
@@ -50770,6 +51223,44 @@ function seedAug30SelectedCards(blk){
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
   }
   try { migrateSmileSetCardPhoto(); } catch(e){}
+  function migrateFajrCardPhoto(){
+    var MKEY = 'migration-card-fajr-v1';
+    try { if(localStorage.getItem(MKEY)) return; } catch(e){}
+    var WANT = 'manus-storage/card-fajr.jpg?v=fajr1';
+    try {
+      var map = {};
+      try { map = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {}; } catch(e2){ map = {}; }
+      map['fajr'] = WANT;
+      map['fajr salah'] = WANT;
+      localStorage.setItem('btm_card_photos_v1', JSON.stringify(map));
+    } catch(e){}
+    if(window.__cardImgRemember){
+      window.__cardImgRemember('fajr', WANT);
+      window.__cardImgRemember('fajr salah', WANT);
+    }
+    document.querySelectorAll('.vision-polaroid, .vision-shot-card').forEach(function(el){
+      var span = el.querySelector('span');
+      var n = ((span && span.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase();
+      if(n !== 'fajr' && n !== 'fajr salah') return;
+      var img = el.querySelector('img');
+      if(img) img.src = WANT;
+      el.setAttribute('data-shot-src', WANT);
+      var tile = el.closest('.vision-tile');
+      var blk = el.closest('.day-block');
+      if(blk && typeof dayData === 'function'){
+        try {
+          (dayData(blk).addedCards || []).forEach(function(rec){
+            if(rec && String(rec.title||'').replace(/\s+/g,' ').trim().toLowerCase() === n) rec.src = WANT;
+          });
+        } catch(e3){}
+      }
+      if(tile){
+        try { packTileCards(tile, {force: true}); } catch(e4){}
+      }
+    });
+    try { localStorage.setItem(MKEY, '1'); } catch(e){}
+  }
+  try { migrateFajrCardPhoto(); } catch(e){}
   function migrateAbundanceCardPhotos(){
     var MKEY = 'migration-abundance-card-photos-v2';
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
@@ -51694,7 +52185,6 @@ function seedAug30SelectedCards(blk){
     window.__restoreFall2026EnrollmentNow = function(){ patchStores(); apply(); };
     patchStores();
     apply();
-    [80, 400, 1200, 2500].forEach(function(ms){ setTimeout(function(){ patchStores(); apply(); }, ms); });
   })();
 
 
@@ -52990,13 +53480,25 @@ function seedAug30SelectedCards(blk){
       tofeel: '',
       feel: '',
       persevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      recoup: '',
-    'to recoup': '',
-    'to-recoup': '',
-    'i recoup': '',
-    'i will recoup': '',
-    'i recouped': '',
-    recouped: '',
+      recoup: 'manus-storage/zone-recouping.jpg?v=back1',
+      recouping: 'manus-storage/zone-recouping.jpg?v=back1',
+      'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
+      achieving: 'manus-storage/zone-achieving.jpg?v=done1',
+      'i am achieving': 'manus-storage/zone-achieving.jpg?v=done1',
+      fighting: 'manus-storage/zone-audacity.jpg?v=finger1',
+      'i am fighting': 'manus-storage/zone-audacity.jpg?v=finger1',
+      igniting: 'manus-storage/zone-inner-fire.jpg?v=spark1',
+      'i am igniting': 'manus-storage/zone-inner-fire.jpg?v=spark1',
+      aligning: 'manus-storage/zone-alignment.jpg?v=align1',
+      'i am aligning': 'manus-storage/zone-alignment.jpg?v=align1',
+      channeling: 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+      'i am channeling': 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+    'to recoup': 'manus-storage/zone-recouping.jpg?v=back1',
+    'to-recoup': 'manus-storage/zone-recouping.jpg?v=back1',
+    'i recoup': 'manus-storage/zone-recouping.jpg?v=back1',
+    'i will recoup': 'manus-storage/zone-recouping.jpg?v=back1',
+    'i recouped': 'manus-storage/zone-recouping.jpg?v=back1',
+    recouped: 'manus-storage/zone-recouping.jpg?v=back1',
     earn: 'manus-storage/zone-to-earn-gold.jpg?v=earn3',
       'i will earn': 'manus-storage/zone-to-earn-gold.jpg?v=earn3',
       'to earn': 'manus-storage/zone-to-earn-gold.jpg?v=earn3',
@@ -53013,6 +53515,8 @@ function seedAug30SelectedCards(blk){
     }
     function applyAll(){
       document.querySelectorAll('.vision-tile').forEach(function(tile){
+        var day = tile.closest('.day-block');
+        if(day && window.__isFileDay && window.__isFileDay(day)) return;
         var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
         var f = (tile.getAttribute('data-focus')||'').toLowerCase();
         var key = null;
@@ -53023,7 +53527,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteConceptSectionPhotos = applyAll;
     try { applyAll(); } catch(e){}
-    [80, 400, 1200, 2800].forEach(function(ms){ setTimeout(applyAll, ms); });
     try {
       Object.keys(MAP).forEach(function(k){
         var WANT = MAP[k];
@@ -53238,7 +53741,6 @@ function seedAug30SelectedCards(blk){
     }
     applySoul();
     window.__rewriteSoulPhotosNow = applySoul;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySoul, ms); });
     if(localStorage.getItem(MKEY)) return;
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -53296,7 +53798,6 @@ function seedAug30SelectedCards(blk){
     }
     rewriteDarknessPhotosNow();
     window.__rewriteDarknessPhotosNow = rewriteDarknessPhotosNow;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(rewriteDarknessPhotosNow, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53350,7 +53851,6 @@ function seedAug30SelectedCards(blk){
     window.__rewriteSoulPhotosNow = applySoulDarknessNophoto;
     window.__rewriteDarknessPhotosNow = applySoulDarknessNophoto;
     applySoulDarknessNophoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applySoulDarknessNophoto, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53396,7 +53896,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteTuneClaimPhotosNow = applyTuneClaimNophoto;
     applyTuneClaimNophoto();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(applyTuneClaimNophoto, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53457,7 +53956,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteFourSectionPhotosNow = rewriteDom;
     rewriteDom();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(rewriteDom, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var RE = {
@@ -53525,7 +54023,6 @@ function seedAug30SelectedCards(blk){
     }
     rewriteSelfActualizeNow();
     window.__rewriteSelfActualizePhotosNow = rewriteSelfActualizeNow;
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(rewriteSelfActualizeNow, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53689,7 +54186,6 @@ function seedAug30SelectedCards(blk){
       localStorage.removeItem('migration-abundance-plenty-photo-v6');
     } catch(e){}
     try { localStorage.setItem(MKEY, '1'); } catch(e){}
-    [60, 300, 1200, 2800].forEach(function(ms){ setTimeout(rewriteAbundancePhotosNow, ms); });
   })();
 
 
@@ -53731,7 +54227,6 @@ function seedAug30SelectedCards(blk){
     }
     rewriteAbundanceTreeNow();
     window.__rewriteAbundanceTreePhotosNow = rewriteAbundanceTreeNow;
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(rewriteAbundanceTreeNow, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53774,7 +54269,6 @@ function seedAug30SelectedCards(blk){
     }
     apply();
     window.__rewriteAttentionPhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53814,7 +54308,6 @@ function seedAug30SelectedCards(blk){
     }
     apply();
     window.__rewriteRepetitionsPhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -53864,7 +54357,6 @@ function seedAug30SelectedCards(blk){
     }
     apply();
     window.__rewriteDetachStartOverPhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54132,7 +54624,6 @@ function seedAug30SelectedCards(blk){
     }
     apply();
     window.__rewriteExecuteCuratePhotosNow = apply;
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54175,7 +54666,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [60, 300, 1000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54215,7 +54705,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [60, 300, 1000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54276,7 +54765,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54345,7 +54833,6 @@ function seedAug30SelectedCards(blk){
       }
     }
     apply();
-    [120, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var m = JSON.parse(localStorage.getItem('btm_card_photos_v1') || '{}') || {};
       m['scholarship'] = APP;
@@ -54418,7 +54905,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54476,7 +54962,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -54527,7 +55012,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -54707,7 +55191,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -54769,7 +55252,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -54831,7 +55313,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -54878,7 +55359,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [120, 600, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
       ['to feel','feel','to-feel','tofeel'].forEach(function(k){ zp[k] = WANT; });
@@ -54943,7 +55423,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -54990,7 +55469,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [120, 600, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
       ['to persevere','persevere','to-persevere','topersevere'].forEach(function(k){ zp[k] = WANT; });
@@ -55042,7 +55520,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
@@ -55110,7 +55587,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
@@ -55279,7 +55755,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [120, 600, 1600].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -55349,7 +55824,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -55425,7 +55899,6 @@ function seedAug30SelectedCards(blk){
       } catch(e){}
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       var sep2 = edits['2026-09-02'] || { removedSections: [], addedSections: [], removedCards: [], addedCards: [] };
@@ -55473,7 +55946,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -55511,7 +55983,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -55554,7 +56025,6 @@ function seedAug30SelectedCards(blk){
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -55623,7 +56093,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteTuneSelfActualizeNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -55686,7 +56155,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteTravelPositanoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -55751,7 +56219,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteToLoveNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(!localStorage.getItem(MKEY)){
         ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -55798,7 +56265,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteToFeelNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -56151,7 +56617,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__rewriteToPersevereNophotoNow = apply;
     apply();
-    [80, 400, 1200, 2800, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(!localStorage.getItem(MKEY)){
         ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
@@ -56337,7 +56802,6 @@ function seedAug30SelectedCards(blk){
     }
     window.__dedupeToPrefixFocusClonesNow = applyAll;
     applyAll();
-    [50, 200, 600, 1200, 2500, 5000, 9000, 15000].forEach(function(ms){ setTimeout(applyAll, ms); });
     try {
       new MutationObserver(function(){
         clearTimeout(window.__dedupeAliasTimer);
@@ -56471,6 +56935,10 @@ function seedAug30SelectedCards(blk){
     try { if(window.__unnestSwallowedDays) window.__unnestSwallowedDays(); } catch(e){}
     try { clearArchivedRemovalsOnHistoryDays(); } catch(e){}
     document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
+      if(window.__isFileDay && window.__isFileDay(blk)){
+        try { if(blkOk(blk)) ensureOverviewEditChrome(blk); } catch(eChrome){}
+        return;
+      }
       var mig = migratePepperdineSection(blk);
       var era = blkOk(blk);
       var habits = habitBoardOk(blk);
@@ -56488,7 +56956,7 @@ function seedAug30SelectedCards(blk){
           if(heroHost(blk)) _overviewApplied[_dkApply] = 1;
           try { syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
         } else {
-          try { syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
+          try { ensureOverlayCardsLive(blk); syncAddedCardsFromDom(blk); saveMap(loadMap()); } catch(e){}
         }
         if(repairSwallowedVisionTiles(blk)) mig = true;
         mig = migratePepperdineSection(blk) || mig;
@@ -56568,7 +57036,6 @@ function seedAug30SelectedCards(blk){
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ boot(); paintKnownSubsections(); });
   else { boot(); paintKnownSubsections(); }
-  [400, 1400].forEach(function(ms){ setTimeout(function(){ boot(); paintKnownSubsections(); }, ms); });
   document.addEventListener('click', function(e){
     var vb = e.target.closest && e.target.closest('.day-block.overview-era-day .vision-board');
     if(vb) setTimeout(function(){
@@ -58672,8 +59139,13 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     }
     try { applyZoomPhotoFit(tile); } catch(e){}
     try { if (window.__syncZoomAddCard) window.__syncZoomAddCard(vb); } catch(e){}
-    /* Tasks depth: re-arm horizon after body reparent (closest(.day-block) would fail). */
-    try { if (typeof syncHorizonTile === 'function') syncHorizonTile(tile); } catch(eHz){}
+    /* Zoomed section shows every layer — paint pins even when collage depth is not tasks. */
+    try {
+      var syncHz = (typeof syncHorizonTile === 'function') ? syncHorizonTile : window.__syncHorizonTile;
+      if (typeof syncHz === 'function') {
+        vb.querySelectorAll('.vision-tile').forEach(function(t){ syncHz(t); });
+      }
+    } catch(eHz){}
     /* After zoom sizes apply, re-gap cards so 220px polaroids don't stack. */
     try {
       requestAnimationFrame(function(){
@@ -58684,6 +59156,10 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
               if(blk && typeof persistDay === 'function') persistDay(blk);
             }
           }catch(e){}
+          try {
+            var syncHz2 = (typeof syncHorizonTile === 'function') ? syncHorizonTile : window.__syncHorizonTile;
+            if (typeof syncHz2 === 'function') syncHz2(tile);
+          } catch(eHz2){}
         });
       });
     } catch(e){}
@@ -58829,7 +59305,6 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
   pinCollapse();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyLook, 80); });
   else setTimeout(applyLook, 80);
-  [400, 1200, 2400].forEach(function(ms){ setTimeout(applyLook, ms); });
 })();
 </script>
 <style id="aug20-nodes-edit-css">
@@ -59450,7 +59925,6 @@ html body .day-block svg.aug20-zone-web path.aug20-edge {
   function boot(){ draw(); }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 120); });
   else setTimeout(boot, 120);
-  [500, 1400, 2800].forEach(function(ms){ setTimeout(draw, ms); });
   document.addEventListener('pointerup', function(){ setTimeout(draw, 30); }, true);
 })();
 </script>
@@ -59918,7 +60392,6 @@ html body .day-block.fmt22.today-block.freeplace-day.fp-empty .make-flow-btn {
   function boot(){ layout(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
-  [200, 800, 2000].forEach(function(ms){ setTimeout(boot, ms); });
   window.__layoutFreeplaceDays = layout;
   var moT=null;
   try {
@@ -60519,7 +60992,9 @@ html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vis
 html body .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection,
 html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection {
   z-index: 12 !important;
-  max-width: min(280px, 28vw) !important;
+  width: 168px !important;
+  max-width: 168px !important;
+  max-height: 224px !important;
 }
 
 html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
@@ -60541,8 +61016,9 @@ html body .day-block:is(.vision-collage-day, .overview-era-day, [data-date="2026
 /* Keep glow nested prints in corners, fully on-screen, clear of centered title */
 html body .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection,
 html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection {
-  max-width: min(240px, 22vw) !important;
-  max-height: min(320px, 38vh) !important;
+  width: 168px !important;
+  max-width: 168px !important;
+  max-height: 224px !important;
   z-index: 12 !important;
 }
 html body .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
@@ -60728,9 +61204,10 @@ html body .vision-subsection-title {
   pointer-events: none;
 }
 html body .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection {
-  /* Cap % --sw so collage freeplace sizes don't dominate full-viewport zoom */
-  width: var(--sw, clamp(120px, 22%, 220px));
-  max-width: min(320px, 32%);
+  /* --sw is a collage-cell %; ignore it on full-viewport zoom or they explode */
+  width: 168px !important;
+  max-width: 168px !important;
+  max-height: 224px !important;
 }
 html body .day-block:is(.vision-collage-day, .overview-era-day).overview-mode-overview .vision-board:not(.is-zoomed) .vision-subsection {
   display: none !important;
@@ -62373,15 +62850,7 @@ html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zo
 html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-habit-check,
 html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .habit-check,
 html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-habit-badge,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-habit-status,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-polaroid,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-shot-card,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-card-del,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-pol-resize,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-habit-check,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .habit-check,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-habit-badge,
-html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-habit-status {
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-habit-status {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
@@ -62645,6 +63114,339 @@ html body:not(.overview-mode-tasks) > .vision-board.is-zoomed .vision-horizon-be
   display: none !important;
 }
 
+</style>
+<style id="tasks-constellation-v1">
+/* Tasks depth = carry-forward constellation on each section tile. Horizon stays in the DOM for wiring; it does not paint. Slabs stay gone. */
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile.horizon-armed > .vision-horizon,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile:has(> .vision-tile-details > :is(.vision-check, .vision-polaroid)) > .vision-horizon,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile.horizon-armed > .vision-horizon-above,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile.horizon-armed > .vision-horizon-below,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile:has(> .vision-tile-details > :is(.vision-check, .vision-polaroid)) > .vision-horizon-above,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile:has(> .vision-tile-details > :is(.vision-check, .vision-polaroid)) > .vision-horizon-below,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-horizon,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-horizon-above,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-horizon-below,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-horizon,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-horizon-above,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-horizon-below {
+  display: none !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+html body .vision-task-sky {
+  display: none;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile.horizon-armed > .vision-task-sky,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-task-sky,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-task-sky {
+  display: block !important;
+  position: absolute !important;
+  left: 8px !important;
+  right: 8px !important;
+  top: 10px !important;
+  bottom: 48px !important;
+  z-index: 6 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-filament,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-filament {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-filament path,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-filament path {
+  fill: none !important;
+  stroke: rgba(196,168,130,0.48) !important;
+  stroke-width: 1.1 !important;
+  filter: drop-shadow(0 0 5px rgba(196,168,130,0.45));
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star {
+  position: absolute !important;
+  width: max-content !important;
+  max-width: 42% !important;
+  transform: translate(-50%, -50%) !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 2 !important;
+  user-select: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star-core {
+  display: block !important;
+  width: 9px !important;
+  height: 9px !important;
+  margin: 0 auto 6px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 30%, #fffef8 0%, #e8d3b0 38%, rgba(196,168,130,0.2) 70%, transparent 100%) !important;
+  box-shadow:
+    0 0 10px rgba(255,248,238,0.85),
+    0 0 22px rgba(196,168,130,0.55),
+    0 0 40px rgba(196,168,130,0.28) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-on .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-on .vision-task-star-core {
+  transform: scale(1.18);
+  box-shadow:
+    0 0 12px rgba(255,248,238,0.95),
+    0 0 28px rgba(196,168,130,0.7),
+    0 0 52px rgba(196,168,130,0.4) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-off,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-off {
+  opacity: 0.3 !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-off .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-off .vision-task-star-core {
+  box-shadow: 0 0 6px rgba(255,248,238,0.25) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star-label,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star-label {
+  display: block !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: clamp(12px, 1.25vw, 16px) !important;
+  line-height: 1.2 !important;
+  color: rgba(255,248,238,0.92) !important;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.55) !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-core {
+  width: 11px !important;
+  height: 11px !important;
+  margin-bottom: 8px !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-label,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-label {
+  font-size: clamp(16px, 2vw, 24px) !important;
+  white-space: normal !important;
+  max-width: 180px !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile-title {
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-title {
+  font-size: 36px !important;
+}
+html body .day-block:not(.overview-mode-tasks) .vision-board:not(.is-zoomed) .vision-task-sky,
+html body:not(.overview-mode-tasks) > .vision-board:not(.is-zoomed) .vision-task-sky {
+  display: none !important;
+}
+</style>
+<style id="tasks-pins-glass-v1">
+/* Pins, not a web: gold dots + glass name chips. Filaments stay off. */
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-filament,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-filament,
+html body .vision-task-filament {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-above,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-below,
+html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-horizon,
+html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-horizon-above,
+html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-horizon-below {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-tile.horizon-armed > .vision-task-sky,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-task-sky,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed.horizon-armed > .vision-task-sky {
+  overflow: visible !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  max-width: min(46%, 280px) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star-core {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: #e8c9a0 !important;
+  box-shadow:
+    0 0 0 3px rgba(232,201,160,0.22),
+    0 0 14px rgba(232,201,160,0.5) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-on .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-on .vision-task-star-core {
+  transform: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star-label,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star-label {
+  display: block !important;
+  padding: 5px 11px 6px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,248,238,0.24) !important;
+  background: linear-gradient(180deg, rgba(255,248,238,0.20), rgba(16,11,8,0.46)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,238,0.16),
+    0 10px 22px rgba(0,0,0,0.30) !important;
+  backdrop-filter: blur(14px) saturate(1.25) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.25) !important;
+  color: #fff8ee !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.45) !important;
+  white-space: nowrap !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-core,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-core {
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-label,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-label {
+  font-size: clamp(16px, 2vw, 22px) !important;
+  white-space: nowrap !important;
+  max-width: 240px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+</style>
+<style id="zoom-shows-all-depths-v1">
+/* Zoomed section = every layer. Depth only filters the unzoomed collage. */
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
+html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body.vision-zoom-open.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
+html body > .vision-board.is-zoomed[data-zoom-depth] .vision-tile.is-zoomed .vision-polaroid,
+html body > .vision-board.is-zoomed[data-zoom-depth] .vision-tile.is-zoomed .vision-shot-card,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-subsections,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-tile-subsections,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* Checks are the task source — they paint as pins, not a raw list. */
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check {
+  display: none !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-subsections,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-subsections {
+  pointer-events: none !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-subsection {
+  pointer-events: auto !important;
+  width: 168px !important;
+  max-width: 168px !important;
+  max-height: 224px !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-task-sky,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-task-sky,
+html body:not(.overview-mode-tasks) > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-task-sky {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: absolute !important;
+  left: 8px !important;
+  right: 8px !important;
+  top: 10px !important;
+  bottom: 48px !important;
+  z-index: 16 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star {
+  position: absolute !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: max-content !important;
+  max-width: min(46%, 280px) !important;
+  transform: translate(-50%, -50%) !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 2 !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-core,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-core {
+  flex: 0 0 auto !important;
+  display: block !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  background: #e8c9a0 !important;
+  box-shadow:
+    0 0 0 3px rgba(232,201,160,0.22),
+    0 0 14px rgba(232,201,160,0.5) !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-label,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-label {
+  display: block !important;
+  padding: 5px 11px 6px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,248,238,0.24) !important;
+  background: linear-gradient(180deg, rgba(255,248,238,0.20), rgba(16,11,8,0.46)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,238,0.16),
+    0 10px 22px rgba(0,0,0,0.30) !important;
+  backdrop-filter: blur(14px) saturate(1.25) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.25) !important;
+  color: #fff8ee !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-size: clamp(16px, 2vw, 22px) !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.45) !important;
+  white-space: nowrap !important;
+  max-width: 240px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-above,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-below,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-above,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-horizon-below {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
 </style>
 <style id="glow-up-fill-cell-v1">
 /* Glow-up fills its grid cell. Never leave a hole under a forced 1:1 square. */
@@ -63085,7 +63887,6 @@ html body .day-block.depth-four-era .overview-center-stack {
     });
   }
   mute();
-  [0, 100, 400, 1200, 2500].forEach(function(ms){ setTimeout(mute, ms); });
 })();
 </script>
 
@@ -63151,7 +63952,6 @@ html body .day-block.depth-four-era .overview-center-stack {
     } catch(e){}
   }
   apply();
-  [60, 250, 900, 2200, 5000].forEach(function(ms){ setTimeout(apply, ms); });
   try {
     var t=0;
     new MutationObserver(function(){ clearTimeout(t); t=setTimeout(apply, 80); })
@@ -63187,7 +63987,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -63225,7 +64024,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200, 2500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
         var raw = localStorage.getItem(k); if(!raw) return;
@@ -63271,7 +64069,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [100, 500, 1500].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       ['btm_zone_photos_v1','btm_overview_edits_v1','btm_day_shells_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -63309,7 +64106,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
@@ -63354,7 +64150,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200, 2400].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       if(localStorage.getItem(MKEY)) return;
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
@@ -63527,7 +64322,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
       ['body','gym','train','i train','i will train','fitness training','fitness-training','athletic','toned body','toned-body'].forEach(function(k){ zp[k] = WANT; });
@@ -63564,7 +64358,6 @@ html body .day-block.depth-four-era .overview-center-stack {
       });
     }
     apply();
-    [80, 400, 1200].forEach(function(ms){ setTimeout(apply, ms); });
     try {
       var zp = JSON.parse(localStorage.getItem('btm_zone_photos_v1') || '{}') || {};
       ['to persevere','i persevere','i will persevere','to-persevere','topersevere','persevere'].forEach(function(k){ zp[k] = WANT; });
@@ -63623,7 +64416,6 @@ html body .day-block.depth-four-era .overview-center-stack {
     }
     window.__scrubVibeDefaultTiles = apply;
     apply();
-    [80, 400, 1200, 2500, 5000].forEach(function(ms){ setTimeout(apply, ms); });
     /* vibe scrub is one-shot + timeouts — do not poll every 2s on boot */
     try {
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
@@ -63778,7 +64570,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   })();
 
 
-    var MKEY = 'migration-rejected-section-photos-banlist-v22';
+    var MKEY = 'migration-rejected-section-photos-banlist-v24';
   var APPROVED = {
     soul: '',
     sorrow: '' /* distinct from soul — no approved photo (was soul-rose duplicate) */,
@@ -63838,14 +64630,30 @@ html body .day-block.depth-four-era .overview-center-stack {
     win: 'manus-storage/zone-wins-hand.jpg?v=game13',
     'i will win': 'manus-storage/zone-wins-hand.jpg?v=game13',
     'to win': 'manus-storage/zone-wins-hand.jpg?v=game13',
-    'i will achieve':'',
-    'to achieve':'',
-    'to-achieve':'',
-    'i achieve': '',
-    strategist: 'manus-storage/zone-strategist.jpg?v=strat1',
-    'a strategist': 'manus-storage/zone-strategist.jpg?v=strat1',
-    'i am a strategist': 'manus-storage/zone-strategist.jpg?v=strat1',
-    'i am strategist': 'manus-storage/zone-strategist.jpg?v=strat1'
+    'i will achieve':'manus-storage/zone-achieving.jpg?v=done1',
+    'to achieve':'manus-storage/zone-achieving.jpg?v=done1',
+    'to-achieve':'manus-storage/zone-achieving.jpg?v=done1',
+    'i achieve': 'manus-storage/zone-achieving.jpg?v=done1',
+    strategist: 'manus-storage/zone-strategist.jpg?v=strat2',
+    'a strategist': 'manus-storage/zone-strategist.jpg?v=strat2',
+    'i am a strategist': 'manus-storage/zone-strategist.jpg?v=strat2',
+    'i am strategist': 'manus-storage/zone-strategist.jpg?v=strat2',
+    successful: 'manus-storage/zone-successful.jpg?v=ok1',
+    'i am successful': 'manus-storage/zone-successful.jpg?v=ok1',
+    'i successful': 'manus-storage/zone-successful.jpg?v=ok1',
+    fighting: 'manus-storage/zone-audacity.jpg?v=finger1',
+    'i am fighting': 'manus-storage/zone-audacity.jpg?v=finger1',
+    'i fighting': 'manus-storage/zone-audacity.jpg?v=finger1',
+    igniting: 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    'i am igniting': 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    aligning: 'manus-storage/zone-alignment.jpg?v=align1',
+    'i am aligning': 'manus-storage/zone-alignment.jpg?v=align1',
+    channeling: 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+    'i am channeling': 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
+    achieving: 'manus-storage/zone-achieving.jpg?v=done1',
+    'i am achieving': 'manus-storage/zone-achieving.jpg?v=done1',
+    recouping: 'manus-storage/zone-recouping.jpg?v=back1',
+    'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
   };
   var REJECTED_SECTION_PHOTOS = [
     'zone-to-love-rings',
@@ -63896,6 +64704,7 @@ html body .day-block.depth-four-era .overview-center-stack {
     'zone-wins-hand.jpg?v=game11', 'zone-wins-hand-game11-hover', 'zone-wins-hand.jpg?v=game12', 'zone-wins-hand-game12-king',
     /* I will achieve — license moved to backgrounds; diploma/letterbox + all license section URLs banned */
     'zone-to-achieve-license.jpg', /* saved to achieve-bg-license — not a section photo */
+    'zone-to-achieve.jpg', /* diploma — never a section photo */
     'zone-to-achieve-license.jpg?v=lic1', 'zone-to-achieve-license.jpg?v=lic2', 'zone-to-achieve-license.jpg?v=lic3', 'zone-to-achieve-license.jpg?v=lic4', 'zone-to-achieve-license.jpg?v=lic5',
     'zone-to-achieve-license-lic1-diploma', 'zone-to-achieve-license-lic2-wall', 'zone-to-achieve-license-lic3-pocket', 'zone-to-achieve-license-lic4-diploma',
     /* glow-up — burnt-orange abstract gold crop + pale pink highlighter forever banned */
@@ -63941,12 +64750,13 @@ html body .day-block.depth-four-era .overview-center-stack {
       if(!key) return;
       var want = APPROVED[key];
       var cur = currentPhoto(tile);
+      var fileDay = tile.closest && window.__isFileDay && window.__isFileDay(tile.closest('.day-block'));
       /* Empty want (abundance after wheat rejection): only scrub banned URLs → nophoto; do not wipe a future NEW approved photo. */
       if(isBanned(cur)){
         forceWant(tile, want);
-      } else if(want && cur !== want){
+      } else if(!fileDay && want && cur !== want){
         forceWant(tile, want);
-      } else if(!want && cur && /zone-soul\.jpg|zone-darkness\.jpg|zone-abundance\.jpg|abundance-wheat|plenty2/i.test(cur) && !/zone-abundance-tree/i.test(cur)){
+      } else if(!fileDay && !want && cur && /zone-soul\.jpg|zone-darkness\.jpg|zone-abundance\.jpg|abundance-wheat|plenty2/i.test(cur) && !/zone-abundance-tree/i.test(cur)){
         forceWant(tile, '');
       }
     });
@@ -64002,7 +64812,6 @@ html body .day-block.depth-four-era .overview-center-stack {
   window.__isRejectedSectionPhoto = isBanned;
   window.__scrubRejectedSectionPhotos = applyAll;
   applyAll();
-  [40, 120, 400, 1000, 2500, 5000].forEach(function(ms){ setTimeout(applyAll, ms); });
   try {
     scrubStores();
     localStorage.setItem(MKEY, '1');
@@ -64040,7 +64849,6 @@ html body .day-block.depth-four-era .overview-center-stack {
   }
   function boot(){
     strip();
-    [80, 400, 1200, 2800].forEach(function(ms){ setTimeout(strip, ms); });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -64298,6 +65106,81 @@ html body .day-block.card-style-deboss-chip .vision-board:not(.is-zoomed) .visio
   font-size: 18px !important;
 }
 </style>
+<style id="cards-above-subsections-v1">
+/* Cards sit in front of subsections when both show (zoomed). Details used to be z 4 vs subsections 12. */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-details,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-details,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-details {
+  z-index: 20 !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid {
+  z-index: 21 !important;
+}
+</style>
+<style id="card-caption-no-plaque-v1">
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day).overview-mode-cards .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day).overview-mode-cards .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day, [data-date="2026-08-20"]) .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title) {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 8px 10px !important;
+  bottom: 8px !important;
+  color: #fff8ee !important;
+  -webkit-text-fill-color: #fff8ee !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.92),
+    0 2px 10px rgba(0, 0, 0, 0.7) !important;
+}
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day).overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body .day-block.card-style-deboss-chip:is(.overview-era-day, .vision-collage-day).overview-mode-cards .vision-board:not(.is-zoomed) .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title) {
+  padding: 0 6px 6px !important;
+  bottom: 6px !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid:not(.vision-habit-card) > span:not(.vision-habit-title),
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not(.vision-habit-card) > span:not(.vision-habit-title) {
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: 8px !important;
+  transform: translateX(-50%) !important;
+  display: block !important;
+  width: max-content !important;
+  max-width: calc(100% - 12px) !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 8px 8px !important;
+  margin: 0 !important;
+  color: #fff8ee !important;
+  -webkit-text-fill-color: #fff8ee !important;
+  font-family: "Cormorant Garamond", "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: 26px !important;
+  line-height: 1.12 !important;
+  letter-spacing: 0.03em !important;
+  text-align: center !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.92),
+    0 2px 10px rgba(0, 0, 0, 0.7) !important;
+}
+</style>
 
 
 <style id="vision-tile-title-letterpress-v3">/* muted — foil-emboss-v4 owns section titles */</style>
@@ -64412,9 +65295,6 @@ html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026
   }
   muteLegacy();
   hoist();
-  [0, 80, 250, 800, 1600, 3200].forEach(function(ms){
-    setTimeout(function(){ muteLegacy(); hoist(); }, ms);
-  });
 })();
 </script>
 <script id="vision-tile-title-letterpress-carve-stamp">
@@ -64427,7 +65307,6 @@ html body .day-block:is(.overview-era-day, .vision-collage-day, [data-date="2026
   }
   stamp();
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", stamp);
-  [80,400,1200].forEach(function(ms){ setTimeout(stamp, ms); });
   try { new MutationObserver(stamp).observe(document.documentElement, {childList:true, subtree:true}); } catch(e){}
 })();
 </script>
@@ -64859,62 +65738,7 @@ html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card:not
   object-fit: cover !important;
   aspect-ratio: auto !important;
 }
-/* Sections / overview zoom = clean section photo only (no polaroid / check takeover).
-   data-zoom-depth is stamped in openTile; bare view-overview maps to sections. */
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-polaroid,
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-shot-card,
-html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
-html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
-html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
-html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
-html body > .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-polaroid,
-html body > .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-shot-card {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-  max-width: 0 !important;
-  max-height: 0 !important;
-  overflow: hidden !important;
-}
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-check,
-html body.vision-zoom-open.overview-mode-sections .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check,
-html body.vision-zoom-open.overview-mode-overview .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check,
-html body > .vision-board.is-zoomed[data-zoom-depth="sections"] .vision-tile.is-zoomed .vision-check {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* Tasks zoom = horizon only — hide polaroids/cards (same body-reparent trap as sections). */
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-polaroid,
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-shot-card,
-html body.vision-zoom-open.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
-html body.vision-zoom-open.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
-html body > .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-polaroid,
-html body > .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-shot-card,
-html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid,
-html body.overview-mode-tasks > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-shot-card,
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-card-del,
-html body.vision-zoom-open.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-card-del,
-html body > .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-card-del {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-  max-width: 0 !important;
-  max-height: 0 !important;
-  overflow: hidden !important;
-}
-html body.vision-zoom-open .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-check,
-html body.vision-zoom-open.overview-mode-tasks .vision-board.is-zoomed .vision-tile.is-zoomed .vision-check,
-html body > .vision-board.is-zoomed[data-zoom-depth="tasks"] .vision-tile.is-zoomed .vision-check {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
+/* Zoomed section shows every depth. Do not hide polaroids / checks by data-zoom-depth. */
 
 </style>
 
@@ -64954,20 +65778,9 @@ html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile
 html body .day-block.vision-collage-day .vision-board:not(.is-zoomed) .vision-tile[data-focus="wins"] > .vision-tile-quote,
 html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile[data-focus="win"] > .vision-tile-quote,
 html body .day-block.vision-collage-day .vision-board:not(.is-zoomed) .vision-tile[data-focus="win"] > .vision-tile-quote {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 0.94 !important;
-  top: calc(50% + 10px) !important;
-  bottom: auto !important;
-  left: 50% !important;
-  right: auto !important;
-  transform: translateX(-50%) !important;
-  width: calc(100% - 40px) !important;
-  max-width: 22em !important;
-  text-align: center !important;
-  font-size: 13px !important;
-  line-height: 1.25 !important;
-  z-index: 19 !important;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.wins-copy-stack[data-focus="wins"].is-zoomed > .vision-tile-title,
 html body.vision-zoom-open .vision-board.is-zoomed .vision-tile[data-focus="wins"].is-zoomed > .vision-tile-title,
@@ -65181,7 +65994,6 @@ html body.vision-zoom-open > .overview-card-modal.is-zoom-modal .overview-card-p
   }
   parkEdit();
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', parkEdit);
-  [0, 80, 400, 1200].forEach(function(ms){ setTimeout(parkEdit, ms); });
 })();
 </script>
 <style id="vision-add-menu-anchor-v3">
@@ -65463,7 +66275,6 @@ html body #enh-left-fab #enh-scroll-top {
   }
   parkLeftFabs();
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', parkLeftFabs);
-  [0, 200, 800].forEach(function(ms){ setTimeout(parkLeftFabs, ms); });
 })();
 </script>
 <style id="vision-subsection-drag-v1">

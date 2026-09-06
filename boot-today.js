@@ -12,7 +12,15 @@
 
     var raf = 0;
     var obs = null;
-    var until = 0;
+    var done = false;
+
+    function stopWatching() {
+      done = true;
+      if (obs) {
+        try { obs.disconnect(); } catch (eD) {}
+        obs = null;
+      }
+    }
 
     function jump() {
       if (document.documentElement.classList.contains('prototypes-page')) return false;
@@ -33,14 +41,13 @@
         window.scrollTo(0, y);
       } catch (e3) {}
       window.__earlyTodayReady = true;
+      try { document.documentElement.classList.add('btm-collage-ready'); } catch (eRdy) {}
+      stopWatching();
       return true;
     }
 
     function schedule() {
-      if (until && Date.now() > until) {
-        if (obs) try { obs.disconnect(); } catch (eD) {}
-        return;
-      }
+      if (done) return;
       if (raf) return;
       raf = requestAnimationFrame(function () {
         raf = 0;
@@ -49,18 +56,14 @@
     }
 
     window.__scrollToToday = jump;
-    jump();
-    until = Date.now() + 6000;
+    if (jump()) return;
     try {
       obs = new MutationObserver(schedule);
       obs.observe(document.documentElement, { childList: true, subtree: true });
     } catch (eM) {}
     window.addEventListener('load', function () {
       jump();
-      setTimeout(function () {
-        until = 0;
-        if (obs) try { obs.disconnect(); } catch (eD) {}
-      }, 200);
+      stopWatching();
     }, { once: true });
   } catch (err) {}
 })();
