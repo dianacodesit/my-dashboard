@@ -73,6 +73,7 @@ KNOWN_CARD_PHOTOS = {
     "inversions": "manus-storage/card-inversions-yoga.jpg?v=yoga1",
     "istighfar": "manus-storage/sub-istighfar.jpg?v=ist1",
     "Istighfar": "manus-storage/sub-istighfar.jpg?v=ist1",
+    "istighfar 1000x": "manus-storage/sub-istighfar.jpg?v=ist1",
     "fajr": "manus-storage/card-fajr.jpg?v=fajr1",
     "fajr salah": "manus-storage/card-fajr.jpg?v=fajr1",
     "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol2",
@@ -193,14 +194,14 @@ KNOWN_CARD_PHOTOS = {
     "deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "networking": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "strategist": "manus-storage/zone-strategist.jpg?v=strat2",
-    "a strategist": "manus-storage/zone-strategist.jpg?v=strat2",
-    "i am a strategist": "manus-storage/zone-strategist.jpg?v=strat2",
-    "i am strategist": "manus-storage/zone-strategist.jpg?v=strat2",
-    "successful": "manus-storage/zone-successful.jpg?v=ok1",
-    "i am successful": "manus-storage/zone-successful.jpg?v=ok1",
-    "i successful": "manus-storage/zone-successful.jpg?v=ok1",
-    "I am successful": "manus-storage/zone-successful.jpg?v=ok1",
+    "strategist": "manus-storage/zone-strategist.jpg?v=strat3",
+    "a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
+    "i am a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
+    "i am strategist": "manus-storage/zone-strategist.jpg?v=strat3",
+    "successful": "manus-storage/zone-successful.jpg?v=ok2",
+    "i am successful": "manus-storage/zone-successful.jpg?v=ok2",
+    "i successful": "manus-storage/zone-successful.jpg?v=ok2",
+    "I am successful": "manus-storage/zone-successful.jpg?v=ok2",
     "I earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "i earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
 
@@ -402,7 +403,7 @@ REJECTED_SECTION_PHOTOS = (
     "abundance-grapes",
     "abundance-poppies",
     # prosperity gold bars (abundance-bg-wealth / prosperity-bg-gold-bars) is NOT banned — not wheat
-    # live prosperity page photo is prosperity-bg-freedom.jpg (user-supplied) — not money-magnet, not wheat
+    # prosperity-bg-freedom.jpg saved to backgrounds — not live on the prosperity page
     # legacy fight-back coral tile — audacity uses finger photo only
     "zone-fight-back",
     # detach / start over — rope + old leaf + dawn road forever banned
@@ -1292,7 +1293,7 @@ def _bare_section_name(s: str) -> str:
 
 
 def _is_fitness_subsection_name(title: str, focus: str = "") -> bool:
-    nested = {"calisthenics", "inversions", "istighfar", "to defeat the enemy", "defeat the enemy"}
+    nested = {"calisthenics", "inversions", "istighfar", "istighfar 1000x", "to defeat the enemy", "defeat the enemy"}
     return _bare_section_name(title) in nested or _bare_section_name(focus) in nested
 
 
