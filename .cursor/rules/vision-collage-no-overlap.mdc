@@ -1,27 +1,42 @@
 ---
-description: Vision collage must never overlap sections or leave empty grid holes
+description: Sep 7+ collage uses start-over / dashboard rooms; gold titles stay centered
 alwaysApply: true
 ---
 
-# Vision collage: no overlap, no empty cells
+# Vision collage packing
 
-Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage (Aug 26+ / `overview-era-day`).
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage days.
 
-## Never
+## Sep 7 onward (`noBannerPackDay` / `iso >= 2026-09-07` / `dash-mosaic-era`)
 
-- Sections (`.vision-tile`) **overlapping** each other in the collage
-- An **empty cell** in the collage grid (especially bottom-right dead space)
-- Relying only on CSS `:nth-child` packing for 7+ tiles — that breaks when count grows or non-tile siblings exist
-- A **fixed-height** collage stage that crushes rows so extra tiles spill on top of each other
-- `min-height: 220px` (or any fixed min-height) on `.vision-tile` in details/overview — it blows past grid tracks and overlaps neighbors
+Dashboard **room chrome** (`packDashMosaic`), but tiles stay **as square as possible**.
+
+- Equal columns (`1fr 1fr 1fr`, or `1fr 1fr` when 2 or 4 tiles)
+- `aspect-ratio: 1` — no dashboard landscape slabs, no tall Focus span
+- Tile chrome: 18px radius, glass edge — **no dark overlay** on the photo
+- Photos `cover` the tile (crop edges; no letterbox)
+- **Titles stay centered** in the current **gold foil** style — never bottom-left Cinzel
+- No scrap tilt
+- No 2-col × 1-row banners
+
+## Aug 26 – Aug 31
+
+Keep the **original gapped collage**: 12px gutters, 16px tile radius. Never apply flush (`gap: 0`) here.
+
+## Sep 1 – Sep 6 (`collage-flush` / `grid11`)
+
+Flush mosaic only — tiles kiss, no gutters. Do **not** push flush backward onto August.
+
+## Before Sep 7 packing
+
+Use existing `visionPackSpec`. Do **not** restyle past days into Sep 7 rooms.
 
 ## Always
 
-1. After adding / removing / reordering sections, call `syncHeroLayoutClass` → `packVisionCollage` so every tile gets an explicit `grid-column` / `grid-row`.
-2. Packing must cover **every** tile count (1–12+). Last row **spans** to fill remainder (no orphan empty corner).
-3. Board height is `min-height` + `height: auto` for five/six/many so the stage **grows** with rows.
-4. Do not reintroduce freeplace absolute section cards onto vision-collage days.
+1. `scrapCollageDay` stays false.
+2. After add/remove/reorder → `syncHeroLayoutClass` → `packVisionCollage`.
+3. Edit `everything.html` only (everything-page-only).
 
-## If you see overlap or a hole
+## If Sep 7+ titles go bottom-left white
 
-Fix the packer / layout immediately — do not wait to be reminded. Verify with a multi-tile count (8 and 9+), not just the happy path of 5.
+Put them back to centered gold foil. Do not ask.

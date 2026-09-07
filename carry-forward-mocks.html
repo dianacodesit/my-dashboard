@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>carry forward · new metaphors</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,300;1,400;1,500&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=carry1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #0c0a08;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 96px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 780px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.55);
+  }
+  .note {
+    max-width: 680px;
+    margin: 0 auto 22px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(244,239,230,0.62);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 14px;
+    max-width: 980px;
+  }
+  .tabs button {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.62);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,168,130,0.26);
+    border-radius: 999px;
+    padding: 8px 14px 7px;
+    cursor: pointer;
+  }
+  .tabs button[aria-pressed="true"] {
+    color: #1a140e;
+    background: #c4a882;
+    border-color: #c4a882;
+  }
+  .caption {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 18px;
+    min-height: 2.8em;
+    font-style: italic;
+    color: rgba(244,239,230,0.58);
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .stage {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .panel {
+    display: none;
+    border-radius: 22px;
+    border: 1px solid rgba(255,248,238,0.12);
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 18%, rgba(70,48,28,0.42), rgba(8,6,4,0.96) 70%),
+      #0a0806;
+    min-height: min(78vh, 760px);
+    padding: 28px 22px 20px;
+    flex-direction: column;
+    gap: 16px;
+  }
+  body[data-opt="river"] .panel-river,
+  body[data-opt="tickets"] .panel-tickets,
+  body[data-opt="lanterns"] .panel-lanterns,
+  body[data-opt="tide"] .panel-tide {
+    display: flex;
+  }
+
+  .cr-kicker {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.58;
+    font-family: "DM Mono", ui-monospace, monospace;
+  }
+  .cr-title {
+    margin: 0;
+    font-size: clamp(28px, 4.2vw, 42px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.08;
+    color: #fff8ee;
+  }
+  .cr-sub {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.7;
+    font-style: italic;
+    max-width: 34em;
+  }
+
+  /* ——— shared foot ——— */
+  .cr-foot-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .cr-dest {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .cr-dest-label {
+    font-size: 13px;
+    opacity: 0.55;
+    font-style: italic;
+  }
+  .cr-day {
+    border: 1px solid rgba(255,248,238,0.22);
+    background: transparent;
+    color: rgba(255,248,238,0.82);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font: italic 13px/1 "Newsreader", Georgia, serif;
+    cursor: pointer;
+  }
+  .cr-day.is-on {
+    background: rgba(255,248,238,0.92);
+    color: #2c2418;
+    border-color: transparent;
+    box-shadow: 0 0 16px rgba(196,168,130,0.28);
+  }
+  .cr-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 160px;
+  }
+  .cr-count {
+    font-size: 13px;
+    opacity: 0.65;
+    font-style: italic;
+  }
+  .cr-all {
+    border: 0;
+    background: transparent;
+    color: rgba(255,248,238,0.78);
+    cursor: pointer;
+    padding: 4px 0;
+    font: italic 14px/1 "Newsreader", Georgia, serif;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .cr-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .cr-cancel {
+    border: 0;
+    background: transparent;
+    color: rgba(255,248,238,0.55);
+    font: italic 14px/1 "Newsreader", Georgia, serif;
+    cursor: pointer;
+    padding: 8px 10px;
+  }
+  .cr-go {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 18px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #e8d3b0, #c4a882);
+    color: #2c2418;
+    font: italic 15px/1 "Newsreader", Georgia, serif;
+    box-shadow: 0 0 24px rgba(196,168,130,0.35);
+  }
+  .cr-go:disabled { opacity: 0.35; cursor: default; box-shadow: none; }
+
+  .item.is-off { opacity: 0.28; filter: saturate(0.4); }
+  .item { cursor: pointer; user-select: none; transition: opacity 0.25s, transform 0.25s, filter 0.25s; }
+  .item:focus-visible { outline: 1px solid rgba(196,168,130,0.6); outline-offset: 3px; }
+
+  /* ========== A · RIVER ========== */
+  .river-bed {
+    position: relative;
+    flex: 1;
+    min-height: 360px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,248,238,0.1);
+    background:
+      linear-gradient(180deg, rgba(18,14,10,0.2) 0%, transparent 30%, transparent 70%, rgba(8,6,4,0.55) 100%),
+      radial-gradient(ellipse 120% 60% at 50% 100%, rgba(40,56,72,0.35), transparent 55%),
+      radial-gradient(ellipse 80% 40% at 20% 80%, rgba(196,168,130,0.08), transparent 50%),
+      linear-gradient(185deg, #12100e 0%, #0e1218 45%, #0a1016 100%);
+  }
+  .river-flow {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    top: 38%;
+    height: 42%;
+    background:
+      linear-gradient(90deg,
+        transparent 0%,
+        rgba(196,168,130,0.06) 15%,
+        rgba(180,200,220,0.08) 40%,
+        rgba(196,168,130,0.07) 70%,
+        transparent 100%);
+    border-radius: 50%;
+    filter: blur(1px);
+    animation: river-shimmer 9s ease-in-out infinite;
+  }
+  .river-flow::before,
+  .river-flow::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(220,210,190,0.22), transparent);
+  }
+  .river-flow::before { top: 28%; }
+  .river-flow::after { bottom: 32%; opacity: 0.6; }
+  @keyframes river-shimmer {
+    0%, 100% { transform: translateX(-2%) scaleY(1); opacity: 0.85; }
+    50% { transform: translateX(2%) scaleY(1.05); opacity: 1; }
+  }
+  .river-shore-l,
+  .river-shore-r {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 18%;
+    pointer-events: none;
+  }
+  .river-shore-l {
+    left: 0;
+    background: linear-gradient(90deg, rgba(12,10,8,0.85), transparent);
+  }
+  .river-shore-r {
+    right: 0;
+    background: linear-gradient(270deg, rgba(12,10,8,0.9), transparent);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 14px;
+  }
+  .river-dest-mark {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(232,211,176,0.55);
+    pointer-events: none;
+  }
+  .river-bead {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: max-content;
+    max-width: 150px;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: center;
+    padding: 0;
+    font: inherit;
+  }
+  .river-bead .orb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fffef8, #e8d3b0 45%, rgba(196,168,130,0.15) 75%, transparent);
+    box-shadow:
+      0 0 12px rgba(255,248,238,0.75),
+      0 0 28px rgba(196,168,130,0.4),
+      0 8px 18px rgba(0,0,0,0.35);
+    animation: bead-bob 4.5s ease-in-out infinite;
+  }
+  .river-bead.is-on .orb {
+    transform: scale(1.2);
+    box-shadow:
+      0 0 16px rgba(255,248,238,0.95),
+      0 0 36px rgba(196,168,130,0.55);
+  }
+  .river-bead .wake {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 40px;
+    height: 1px;
+    transform: translateX(-20%);
+    background: linear-gradient(90deg, rgba(220,210,190,0.35), transparent);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .river-bead .sec {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,248,238,0.55);
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .river-bead .lab {
+    font-style: italic;
+    font-size: 13px;
+    color: #fff8ee;
+    background: rgba(10,8,6,0.55);
+    padding: 3px 8px;
+    border-radius: 8px;
+    max-width: 148px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  @keyframes bead-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  .river-bead:nth-child(3n) .orb { animation-delay: -1.2s; }
+  .river-bead:nth-child(3n+1) .orb { animation-delay: -2.4s; }
+  .river-bead:nth-child(3n+2) .orb { animation-delay: -0.6s; }
+
+  /* ========== B · TICKETS ========== */
+  .ticket-stage {
+    flex: 1;
+    min-height: 380px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+    align-items: stretch;
+  }
+  @media (max-width: 720px) {
+    .ticket-stage { grid-template-columns: 1fr; }
+  }
+  .ticket-deck {
+    position: relative;
+    border-radius: 16px;
+    border: 1px solid rgba(255,248,238,0.1);
+    background: rgba(255,248,238,0.02);
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+  }
+  .ticket-hint {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    right: 16px;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.5;
+    text-align: center;
+  }
+  .ticket-card {
+    position: relative;
+    width: min(280px, 86%);
+    aspect-ratio: 3 / 3.6;
+    border-radius: 4px 4px 10px 10px;
+    background:
+      linear-gradient(180deg, #f4ebe0 0%, #ebe0d2 100%);
+    color: #2a2218;
+    box-shadow:
+      0 18px 40px rgba(0,0,0,0.45),
+      0 2px 0 rgba(255,255,255,0.4) inset;
+    padding: 18px 16px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: grab;
+    transition: transform 0.35s ease, opacity 0.35s;
+    z-index: 3;
+  }
+  .ticket-card::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed rgba(42,34,24,0.18);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .ticket-card .t-sec {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(42,34,24,0.55);
+  }
+  .ticket-card .t-title {
+    font-family: "Cormorant Garamond", "Newsreader", serif;
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.15;
+    flex: 1;
+  }
+  .ticket-card .t-stamp {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(42,34,24,0.4);
+    border-top: 1px solid rgba(42,34,24,0.12);
+    padding-top: 10px;
+  }
+  .ticket-stack-shadow {
+    position: absolute;
+    width: min(280px, 86%);
+    aspect-ratio: 3 / 3.6;
+    border-radius: 4px 4px 10px 10px;
+    background: #d8cdc0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+  .ticket-stack-shadow.s1 { transform: translate(8px, 10px) rotate(2.5deg); z-index: 1; opacity: 0.7; }
+  .ticket-stack-shadow.s2 { transform: translate(-6px, 14px) rotate(-3deg); z-index: 0; opacity: 0.45; background: #c9beb0; }
+  .ticket-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    z-index: 4;
+  }
+  .ticket-controls button {
+    border: 1px solid rgba(255,248,238,0.22);
+    background: rgba(255,248,238,0.06);
+    color: #fff8ee;
+    border-radius: 999px;
+    padding: 9px 16px;
+    font: italic 14px/1 "Newsreader", Georgia, serif;
+    cursor: pointer;
+  }
+  .ticket-controls button.keep {
+    background: rgba(255,248,238,0.9);
+    color: #2c2418;
+    border-color: transparent;
+  }
+  .ticket-controls button:disabled { opacity: 0.3; cursor: default; }
+  .ticket-kept {
+    border-radius: 16px;
+    border: 1px solid rgba(255,248,238,0.1);
+    background: rgba(255,248,238,0.025);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 340px;
+    overflow: auto;
+  }
+  .ticket-kept h3 {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    font-weight: 400;
+  }
+  .kept-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+  .kept-chip {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(255,248,238,0.06);
+    border: 1px solid rgba(255,248,238,0.1);
+    cursor: pointer;
+  }
+  .kept-chip .sec {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    flex: 0 0 auto;
+  }
+  .kept-chip .lab {
+    font-style: italic;
+    font-size: 14px;
+    flex: 1;
+  }
+  .kept-empty {
+    margin: auto;
+    font-style: italic;
+    opacity: 0.4;
+    font-size: 14px;
+    text-align: center;
+  }
+  .ticket-card.is-flying-keep {
+    animation: fly-keep 0.55s ease forwards;
+  }
+  .ticket-card.is-flying-leave {
+    animation: fly-leave 0.45s ease forwards;
+  }
+  @keyframes fly-keep {
+    to { transform: translate(120%, -20%) rotate(8deg) scale(0.4); opacity: 0; }
+  }
+  @keyframes fly-leave {
+    to { transform: translate(-40%, 80%) rotate(-12deg) scale(0.5); opacity: 0; }
+  }
+
+  /* ========== C · LANTERNS ========== */
+  .lantern-sky {
+    position: relative;
+    flex: 1;
+    min-height: 380px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,248,238,0.1);
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(80,48,20,0.35), transparent 45%),
+      radial-gradient(1px 1px at 15% 20%, rgba(255,248,238,0.45), transparent 60%),
+      radial-gradient(1px 1px at 72% 28%, rgba(255,248,238,0.3), transparent 60%),
+      radial-gradient(1.5px 1.5px at 40% 12%, rgba(196,168,130,0.4), transparent 60%),
+      radial-gradient(1px 1px at 88% 48%, rgba(255,248,238,0.25), transparent 60%),
+      linear-gradient(180deg, #0a0806 0%, #14100c 55%, #1a120c 100%);
+    padding: 24px 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 8px 4px;
+  }
+  .lantern {
+    width: 118px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 6px 4px;
+    font: inherit;
+    cursor: pointer;
+  }
+  .lantern .cord {
+    width: 1px;
+    height: 18px;
+    background: linear-gradient(180deg, transparent, rgba(196,168,130,0.45));
+  }
+  .lantern .flame-wrap {
+    position: relative;
+    width: 36px;
+    height: 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .lantern .cage {
+    position: absolute;
+    bottom: 0;
+    width: 28px;
+    height: 34px;
+    border: 1px solid rgba(196,168,130,0.45);
+    border-radius: 4px 4px 8px 8px;
+    background: linear-gradient(180deg, rgba(196,168,130,0.12), rgba(40,24,12,0.35));
+    box-shadow: 0 0 20px rgba(196,168,130,0.15);
+  }
+  .lantern .flame {
+    position: relative;
+    z-index: 1;
+    width: 10px;
+    height: 16px;
+    margin-bottom: 14px;
+    border-radius: 50% 50% 40% 40%;
+    background: radial-gradient(circle at 40% 30%, #fff8ee, #e8b86a 50%, #c47830 100%);
+    box-shadow:
+      0 0 10px rgba(232,184,106,0.9),
+      0 0 24px rgba(196,120,48,0.55);
+    animation: flame-flicker 2.4s ease-in-out infinite;
+  }
+  .lantern.is-off .flame {
+    opacity: 0.15;
+    box-shadow: none;
+    animation: none;
+    filter: grayscale(1);
+  }
+  .lantern.is-off .cage {
+    border-color: rgba(255,248,238,0.15);
+    box-shadow: none;
+  }
+  .lantern .sec {
+    font-family: "DM Mono", monospace;
+    font-size: 7px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,248,238,0.45);
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lantern .lab {
+    font-style: italic;
+    font-size: 12px;
+    color: #fff8ee;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 110px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  }
+  @keyframes flame-flicker {
+    0%, 100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+    40% { transform: scaleY(1.08) scaleX(0.92); opacity: 0.92; }
+    70% { transform: scaleY(0.94) scaleX(1.05); opacity: 1; }
+  }
+  .lantern:nth-child(3n) .flame { animation-delay: -0.7s; }
+  .lantern:nth-child(4n) .flame { animation-delay: -1.4s; }
+  .lantern:nth-child(5n) .cord { height: 28px; }
+  .lantern:nth-child(7n) .cord { height: 12px; }
+
+  /* ========== D · TIDE ========== */
+  .tide-shore {
+    position: relative;
+    flex: 1;
+    min-height: 380px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,248,238,0.1);
+    background:
+      linear-gradient(180deg,
+        #0c1014 0%,
+        #121820 28%,
+        #1a2228 48%,
+        #2a2620 62%,
+        #3a3228 78%,
+        #2c261e 100%);
+  }
+  .tide-water {
+    position: absolute;
+    left: 0; right: 0;
+    top: 0;
+    height: 52%;
+    background:
+      radial-gradient(ellipse 100% 80% at 50% 100%, rgba(180,200,210,0.12), transparent 55%),
+      linear-gradient(180deg, #0a0e12, #141c22 70%, transparent);
+  }
+  .tide-foam {
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    top: 46%;
+    height: 28px;
+    background:
+      radial-gradient(ellipse 12% 100% at 10% 50%, rgba(240,235,220,0.35), transparent 70%),
+      radial-gradient(ellipse 18% 100% at 35% 60%, rgba(240,235,220,0.28), transparent 70%),
+      radial-gradient(ellipse 14% 100% at 58% 40%, rgba(240,235,220,0.32), transparent 70%),
+      radial-gradient(ellipse 16% 100% at 82% 55%, rgba(240,235,220,0.25), transparent 70%);
+    animation: tide-breathe 7s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes tide-breathe {
+    0%, 100% { transform: translateY(0); opacity: 0.7; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+  .tide-horizon-label {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(220,210,190,0.4);
+    z-index: 2;
+  }
+  .tide-shell {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+    max-width: 140px;
+    transform: translate(-50%, -50%);
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    text-align: center;
+    z-index: 3;
+  }
+  .tide-shell .mark {
+    width: 22px;
+    height: 16px;
+    border-radius: 50% 50% 45% 55% / 60% 55% 45% 40%;
+    background:
+      radial-gradient(circle at 35% 35%, #f0e6d4, #c4a882 55%, #8a7050 100%);
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.35),
+      0 0 12px rgba(196,168,130,0.25);
+  }
+  .tide-shell.is-on .mark {
+    box-shadow:
+      0 2px 10px rgba(0,0,0,0.4),
+      0 0 18px rgba(232,211,176,0.55);
+    transform: scale(1.15);
+  }
+  .tide-shell .sec {
+    font-family: "DM Mono", monospace;
+    font-size: 7px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,248,238,0.5);
+  }
+  .tide-shell .lab {
+    font-style: italic;
+    font-size: 12px;
+    color: #fff8ee;
+    background: rgba(10,8,6,0.5);
+    padding: 2px 7px;
+    border-radius: 7px;
+    max-width: 130px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .tide-shell.is-off .mark {
+    opacity: 0.35;
+    filter: grayscale(0.6);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(255,248,238,0.92);
+    color: #2c2418;
+    font-style: italic;
+    padding: 10px 18px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 50;
+    font-size: 14px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body data-opt="river">
+  <header class="hero">
+    <h1>carry forward · new metaphors</h1>
+    <p>mocks only · pick one · not wired yet</p>
+  </header>
+  <p class="note">The star grid no longer reads as a constellation. Tap through four different ways to keep unfinished work moving to another day.</p>
+
+  <div class="tabs" role="tablist" aria-label="carry metaphors">
+    <button type="button" data-opt="river" aria-pressed="true">river</button>
+    <button type="button" data-opt="tickets" aria-pressed="false">ticket stack</button>
+    <button type="button" data-opt="lanterns" aria-pressed="false">night lanterns</button>
+    <button type="button" data-opt="tide" aria-pressed="false">tide &amp; shore</button>
+  </div>
+  <p class="caption" id="cap">Unfinished tasks float as beads of light on a dark current. Tap a bead to keep or leave it; the stream carries what’s selected toward the day on the far shore.</p>
+
+  <div class="stage">
+    <!-- A · RIVER -->
+    <section class="panel panel-river" aria-label="river mock">
+      <p class="cr-kicker">carry forward</p>
+      <h2 class="cr-title">unfinished light</h2>
+      <p class="cr-sub">tap beads to keep or leave. the current carries what you keep to the day you choose.</p>
+      <div class="river-bed" id="river-bed">
+        <div class="river-flow" aria-hidden="true"></div>
+        <div class="river-shore-l" aria-hidden="true"></div>
+        <div class="river-shore-r" aria-hidden="true"><span class="river-dest-mark">today · sep 7</span></div>
+      </div>
+      <div class="cr-foot-row" data-panel="river">
+        <div class="cr-dest">
+          <span class="cr-dest-label">to</span>
+          <button type="button" class="cr-day is-on">today · sep 7 · mon</button>
+          <button type="button" class="cr-day">tomorrow</button>
+        </div>
+        <div class="cr-meta">
+          <span class="cr-count"><span class="n">0</span> tasks selected</span>
+          <button type="button" class="cr-all">unselect all</button>
+        </div>
+        <div class="cr-actions">
+          <button type="button" class="cr-cancel">cancel</button>
+          <button type="button" class="cr-go">carry forward</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- B · TICKETS -->
+    <section class="panel panel-tickets" aria-label="ticket stack mock">
+      <p class="cr-kicker">carry forward</p>
+      <h2 class="cr-title">unfinished tickets</h2>
+      <p class="cr-sub">flip each ticket — keep it for the day ahead, or leave it behind.</p>
+      <div class="ticket-stage">
+        <div class="ticket-deck">
+          <p class="ticket-hint"><span id="ticket-remain">12</span> left in the stack</p>
+          <div class="ticket-stack-shadow s2" aria-hidden="true"></div>
+          <div class="ticket-stack-shadow s1" aria-hidden="true"></div>
+          <div class="ticket-card" id="ticket-card" role="button" tabindex="0">
+            <div class="t-sec" id="t-sec">I am networking</div>
+            <div class="t-title" id="t-title">Handshake “top applicant” jobs</div>
+            <div class="t-stamp">unfinished · keep or leave</div>
+          </div>
+          <div class="ticket-controls">
+            <button type="button" id="ticket-leave">leave</button>
+            <button type="button" class="keep" id="ticket-keep">keep</button>
+          </div>
+        </div>
+        <aside class="ticket-kept">
+          <h3>going forward</h3>
+          <div class="kept-list" id="kept-list">
+            <p class="kept-empty" id="kept-empty">nothing kept yet</p>
+          </div>
+        </aside>
+      </div>
+      <div class="cr-foot-row" data-panel="tickets">
+        <div class="cr-dest">
+          <span class="cr-dest-label">to</span>
+          <button type="button" class="cr-day is-on">today · sep 7 · mon</button>
+          <button type="button" class="cr-day">tomorrow</button>
+        </div>
+        <div class="cr-meta">
+          <span class="cr-count"><span class="n">0</span> tasks selected</span>
+          <button type="button" class="cr-all">clear kept</button>
+        </div>
+        <div class="cr-actions">
+          <button type="button" class="cr-cancel">cancel</button>
+          <button type="button" class="cr-go">carry forward</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- C · LANTERNS -->
+    <section class="panel panel-lanterns" aria-label="lanterns mock">
+      <p class="cr-kicker">carry forward</p>
+      <h2 class="cr-title">lights that stay lit</h2>
+      <p class="cr-sub">tap a lantern to snuff or keep. only the ones still burning go with you.</p>
+      <div class="lantern-sky" id="lantern-sky"></div>
+      <div class="cr-foot-row" data-panel="lanterns">
+        <div class="cr-dest">
+          <span class="cr-dest-label">to</span>
+          <button type="button" class="cr-day is-on">today · sep 7 · mon</button>
+          <button type="button" class="cr-day">tomorrow</button>
+        </div>
+        <div class="cr-meta">
+          <span class="cr-count"><span class="n">0</span> tasks selected</span>
+          <button type="button" class="cr-all">unselect all</button>
+        </div>
+        <div class="cr-actions">
+          <button type="button" class="cr-cancel">cancel</button>
+          <button type="button" class="cr-go">carry forward</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- D · TIDE -->
+    <section class="panel panel-tide" aria-label="tide mock">
+      <p class="cr-kicker">carry forward</p>
+      <h2 class="cr-title">what the tide keeps</h2>
+      <p class="cr-sub">tap shells on the shore. what’s still marked rides the next tide to the day you choose.</p>
+      <div class="tide-shore" id="tide-shore">
+        <div class="tide-water" aria-hidden="true"></div>
+        <div class="tide-foam" aria-hidden="true"></div>
+        <div class="tide-horizon-label">toward today · sep 7</div>
+      </div>
+      <div class="cr-foot-row" data-panel="tide">
+        <div class="cr-dest">
+          <span class="cr-dest-label">to</span>
+          <button type="button" class="cr-day is-on">today · sep 7 · mon</button>
+          <button type="button" class="cr-day">tomorrow</button>
+        </div>
+        <div class="cr-meta">
+          <span class="cr-count"><span class="n">0</span> tasks selected</span>
+          <button type="button" class="cr-all">unselect all</button>
+        </div>
+        <div class="cr-actions">
+          <button type="button" class="cr-cancel">cancel</button>
+          <button type="button" class="cr-go">carry forward</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status">mock only — nothing carried</div>
+
+<script src="nav-shared.js?v=carry1"></script>
+<script>
+(function(){
+  var TASKS = [
+    { sec: "I am networking", title: "Handshake “top applicant” jobs" },
+    { sec: "I am a grad student", title: "tuition payment" },
+    { sec: "I am becoming", title: "6 qadaa salah" },
+    { sec: "I am networking", title: "Hanady" },
+    { sec: "I am a grad student", title: "scholarship application" },
+    { sec: "I am becoming", title: "document translation" },
+    { sec: "I am networking", title: "remote jobs" },
+    { sec: "I am training", title: "calisthenics session" },
+    { sec: "I am a grad student", title: "fall 2026 enrollment" },
+    { sec: "I am becoming", title: "Dr Betty" },
+    { sec: "I am networking", title: "committee check-in" },
+    { sec: "abundance", title: "refunds" }
+  ];
+
+  var caps = {
+    river: "Unfinished tasks float as beads of light on a dark current. Tap a bead to keep or leave it; the stream carries what’s selected toward the day on the far shore.",
+    tickets: "A stack of cream tickets — one unfinished thing each. Keep flips it into “going forward”; leave dismisses it. Carry only what you kept.",
+    lanterns: "Each unfinished task hangs as a small lantern. Tap to snuff the flame or leave it burning. Only lit lanterns travel with you.",
+    tide: "Shells on a dark shore. Tap to mark what the tide should take. Selected work rides out toward the horizon of the day you choose."
+  };
+
+  var cap = document.getElementById("cap");
+  document.querySelectorAll(".tabs button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var opt = btn.getAttribute("data-opt");
+      document.body.setAttribute("data-opt", opt);
+      document.querySelectorAll(".tabs button").forEach(function(b){
+        b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+      });
+      cap.textContent = caps[opt] || "";
+    });
+  });
+
+  /* ——— scatter helpers ——— */
+  function scatter(n, opts){
+    var pts = [];
+    var cols = opts.cols || 4;
+    var rows = Math.ceil(n / cols);
+    for (var i = 0; i < n; i++){
+      var c = i % cols;
+      var r = Math.floor(i / cols);
+      var jx = (Math.sin(i * 2.7) * 0.5 + 0.5);
+      var jy = (Math.cos(i * 1.9) * 0.5 + 0.5);
+      var x = opts.x0 + (c + 0.35 + jx * 0.45) / cols * opts.w;
+      var y = opts.y0 + (r + 0.25 + jy * 0.5) / rows * opts.h;
+      pts.push({ x: x, y: y });
+    }
+    return pts;
+  }
+
+  /* ——— RIVER ——— */
+  var riverBed = document.getElementById("river-bed");
+  var riverPts = scatter(TASKS.length, { cols: 4, x0: 12, y0: 18, w: 68, h: 62 });
+  TASKS.forEach(function(t, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "river-bead item is-on";
+    b.style.left = riverPts[i].x + "%";
+    b.style.top = riverPts[i].y + "%";
+    b.innerHTML = '<span class="wake" aria-hidden="true"></span><span class="orb" aria-hidden="true"></span><span class="sec"></span><span class="lab"></span>';
+    b.querySelector(".sec").textContent = t.sec;
+    b.querySelector(".lab").textContent = t.title;
+    b.setAttribute("aria-pressed", "true");
+    b.addEventListener("click", function(){ toggleItem(b, "river"); });
+    riverBed.appendChild(b);
+  });
+
+  /* ——— LANTERNS ——— */
+  var sky = document.getElementById("lantern-sky");
+  TASKS.forEach(function(t){
+    var el = document.createElement("button");
+    el.type = "button";
+    el.className = "lantern item is-on";
+    el.innerHTML = '<span class="cord" aria-hidden="true"></span><span class="flame-wrap" aria-hidden="true"><span class="cage"></span><span class="flame"></span></span><span class="sec"></span><span class="lab"></span>';
+    el.querySelector(".sec").textContent = t.sec;
+    el.querySelector(".lab").textContent = t.title;
+    el.setAttribute("aria-pressed", "true");
+    el.addEventListener("click", function(){ toggleItem(el, "lanterns"); });
+    sky.appendChild(el);
+  });
+
+  /* ——— TIDE ——— */
+  var shore = document.getElementById("tide-shore");
+  var tidePts = scatter(TASKS.length, { cols: 4, x0: 10, y0: 52, w: 80, h: 40 });
+  TASKS.forEach(function(t, i){
+    var el = document.createElement("button");
+    el.type = "button";
+    el.className = "tide-shell item is-on";
+    el.style.left = tidePts[i].x + "%";
+    el.style.top = tidePts[i].y + "%";
+    el.innerHTML = '<span class="mark" aria-hidden="true"></span><span class="sec"></span><span class="lab"></span>';
+    el.querySelector(".sec").textContent = t.sec;
+    el.querySelector(".lab").textContent = t.title;
+    el.setAttribute("aria-pressed", "true");
+    el.addEventListener("click", function(){ toggleItem(el, "tide"); });
+    shore.appendChild(el);
+  });
+
+  function panelRoot(name){
+    return document.querySelector('.cr-foot-row[data-panel="' + name + '"]');
+  }
+  function countOn(name){
+    if (name === "tickets") return kept.length;
+    return document.querySelectorAll(
+      name === "river" ? ".river-bead.is-on" :
+      name === "lanterns" ? ".lantern.is-on" :
+      ".tide-shell.is-on"
+    ).length;
+  }
+  function refreshCount(name){
+    var root = panelRoot(name);
+    if (!root) return;
+    var n = countOn(name);
+    root.querySelector(".n").textContent = String(n);
+    root.querySelector(".cr-go").disabled = n === 0;
+  }
+  function toggleItem(el, name){
+    var on = el.classList.toggle("is-on");
+    el.classList.toggle("is-off", !on);
+    el.setAttribute("aria-pressed", on ? "true" : "false");
+    refreshCount(name);
+  }
+
+  ["river","lanterns","tide"].forEach(function(name){
+    refreshCount(name);
+    var root = panelRoot(name);
+    root.querySelector(".cr-all").addEventListener("click", function(){
+      var sel = name === "river" ? ".river-bead" : name === "lanterns" ? ".lantern" : ".tide-shell";
+      document.querySelectorAll(sel).forEach(function(el){
+        el.classList.remove("is-on");
+        el.classList.add("is-off");
+        el.setAttribute("aria-pressed", "false");
+      });
+      refreshCount(name);
+    });
+    root.querySelector(".cr-go").addEventListener("click", function(){ flashToast(); });
+    root.querySelector(".cr-cancel").addEventListener("click", function(){ flashToast("closed — mock only"); });
+    root.querySelectorAll(".cr-day").forEach(function(d){
+      d.addEventListener("click", function(){
+        root.querySelectorAll(".cr-day").forEach(function(x){ x.classList.remove("is-on"); });
+        d.classList.add("is-on");
+        var mark = document.querySelector(".river-dest-mark");
+        var hor = document.querySelector(".tide-horizon-label");
+        var label = d.textContent.replace(/\s*·\s*mon\s*$/,"");
+        if (mark && name === "river") mark.textContent = label;
+        if (hor && name === "tide") hor.textContent = "toward " + label;
+      });
+    });
+  });
+
+  /* ——— TICKETS ——— */
+  var deck = TASKS.slice();
+  var kept = [];
+  var card = document.getElementById("ticket-card");
+  var tSec = document.getElementById("t-sec");
+  var tTitle = document.getElementById("t-title");
+  var remain = document.getElementById("ticket-remain");
+  var keptList = document.getElementById("kept-list");
+  var keptEmpty = document.getElementById("kept-empty");
+  var busy = false;
+
+  function showTop(){
+    if (!deck.length){
+      card.style.visibility = "hidden";
+      document.getElementById("ticket-keep").disabled = true;
+      document.getElementById("ticket-leave").disabled = true;
+      remain.textContent = "0";
+      return;
+    }
+    card.style.visibility = "visible";
+    card.classList.remove("is-flying-keep", "is-flying-leave");
+    document.getElementById("ticket-keep").disabled = false;
+    document.getElementById("ticket-leave").disabled = false;
+    tSec.textContent = deck[0].sec;
+    tTitle.textContent = deck[0].title;
+    remain.textContent = String(deck.length);
+  }
+  function renderKept(){
+    keptList.querySelectorAll(".kept-chip").forEach(function(n){ n.remove(); });
+    keptEmpty.style.display = kept.length ? "none" : "block";
+    kept.forEach(function(t, idx){
+      var chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "kept-chip";
+      chip.innerHTML = '<span class="sec"></span><span class="lab"></span>';
+      chip.querySelector(".sec").textContent = t.sec;
+      chip.querySelector(".lab").textContent = t.title;
+      chip.title = "remove from kept";
+      chip.addEventListener("click", function(){
+        kept.splice(idx, 1);
+        deck.push(t);
+        renderKept();
+        showTop();
+        refreshCount("tickets");
+      });
+      keptList.appendChild(chip);
+    });
+    refreshCount("tickets");
+  }
+  function flip(keep){
+    if (busy || !deck.length) return;
+    busy = true;
+    card.classList.add(keep ? "is-flying-keep" : "is-flying-leave");
+    setTimeout(function(){
+      var t = deck.shift();
+      if (keep) kept.push(t);
+      busy = false;
+      showTop();
+      renderKept();
+    }, 420);
+  }
+  document.getElementById("ticket-keep").addEventListener("click", function(){ flip(true); });
+  document.getElementById("ticket-leave").addEventListener("click", function(){ flip(false); });
+  card.addEventListener("click", function(){ flip(true); });
+  card.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(true); }
+  });
+
+  var tRoot = panelRoot("tickets");
+  tRoot.querySelector(".cr-all").addEventListener("click", function(){
+    deck = TASKS.slice();
+    kept = [];
+    showTop();
+    renderKept();
+  });
+  tRoot.querySelector(".cr-go").addEventListener("click", function(){ flashToast(); });
+  tRoot.querySelector(".cr-cancel").addEventListener("click", function(){ flashToast("closed — mock only"); });
+  tRoot.querySelectorAll(".cr-day").forEach(function(d){
+    d.addEventListener("click", function(){
+      tRoot.querySelectorAll(".cr-day").forEach(function(x){ x.classList.remove("is-on"); });
+      d.classList.add("is-on");
+    });
+  });
+  showTop();
+  renderKept();
+
+  var toast = document.getElementById("toast");
+  var toastTimer;
+  function flashToast(msg){
+    toast.textContent = msg || "mock only — nothing carried";
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 1600);
+  }
+
+  /* deep-link ?opt= or #mock- */
+  var q = new URLSearchParams(location.search).get("opt");
+  var hash = (location.hash || "").replace(/^#mock-?/, "");
+  var start = q || hash;
+  if (start && caps[start]) {
+    document.body.setAttribute("data-opt", start);
+    document.querySelectorAll(".tabs button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.getAttribute("data-opt") === start ? "true" : "false");
+    });
+    cap.textContent = caps[start];
+  }
+})();
+</script>
+</body>
+</html>

@@ -76,8 +76,8 @@ KNOWN_CARD_PHOTOS = {
     "istighfar 1000x": "manus-storage/sub-istighfar.jpg?v=ist1",
     "fajr": "manus-storage/card-fajr.jpg?v=fajr1",
     "fajr salah": "manus-storage/card-fajr.jpg?v=fajr1",
-    "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "achieve": "manus-storage/zone-achieving.jpg?v=done1",
     "I will achieve": "manus-storage/zone-achieving.jpg?v=done1",
     "i will achieve": "manus-storage/zone-achieving.jpg?v=done1",
@@ -88,12 +88,12 @@ KNOWN_CARD_PHOTOS = {
     "to master": "manus-storage/zone-to-master.jpg?v=dip3",
     "to-master": "manus-storage/zone-to-master.jpg?v=dip3",
     "master": "manus-storage/zone-to-master.jpg?v=dip3",
-    "I will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "grad school": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "grad": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "I will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "grad school": "manus-storage/zone-grad-student.jpg?v=grad1",
+    "grad": "manus-storage/zone-grad-student.jpg?v=grad1",
     "soul": "",
     # sorrow is NOT soul — distinct focus; no approved photo (was soul-rose duplicate)
     "sorrow": "",
@@ -190,13 +190,19 @@ KNOWN_CARD_PHOTOS = {
     "train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "fitness": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "trained": "manus-storage/zone-athletic-gym.jpg?v=gym1",
-    "academia": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol7",
-    "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "academia": "manus-storage/zone-grad-student.jpg?v=grad1",
+    "I am a grad student": "manus-storage/zone-grad-student.jpg?v=grad1",
+    "i am a grad student": "manus-storage/zone-grad-student.jpg?v=grad1",
+    "a grad student": "manus-storage/zone-grad-student.jpg?v=grad1",
+    "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
+    "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "Deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "networking": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "networking": "manus-storage/zone-networking.jpg?v=net1",
+    "I am networking": "manus-storage/zone-networking.jpg?v=net1",
+    "i am networking": "manus-storage/zone-networking.jpg?v=net1",
+    "am networking": "manus-storage/zone-networking.jpg?v=net1",
     "earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
     "strategist": "manus-storage/zone-strategist.jpg?v=strat3",
     "a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
@@ -1304,6 +1310,127 @@ def _is_fitness_subsection_name(title: str, focus: str = "") -> bool:
     return _bare_section_name(title) in nested or _bare_section_name(focus) in nested
 
 
+def _div_span(block: str, start: int) -> tuple[int, int]:
+    i = start
+    depth = 0
+    while i < len(block):
+        nxt_open = block.find("<div", i)
+        nxt_close = block.find("</div>", i)
+        if nxt_close < 0:
+            raise ValueError("unclosed div")
+        if nxt_open >= 0 and nxt_open < nxt_close:
+            depth += 1
+            i = nxt_open + 4
+        else:
+            depth -= 1
+            end = nxt_close + len("</div>")
+            if depth == 0:
+                return start, end
+            i = end
+    raise ValueError("unclosed div")
+
+
+def _polaroid_span_for_card(tile_html: str, title: str) -> tuple[int, int] | None:
+    want = re.sub(r"\s+", " ", str(title or "")).strip().lower()
+    if not want:
+        return None
+    for m in re.finditer(r"<div\b(?=[^>]*\bvision-polaroid\b)[^>]*>", tile_html, re.I):
+        try:
+            start, end = _div_span(tile_html, m.start())
+        except ValueError:
+            continue
+        chunk = tile_html[start:end]
+        sm = re.search(r"<span>([^<]*)</span>", chunk, re.I)
+        got = re.sub(r"\s+", " ", (sm.group(1) if sm else "")).strip().lower()
+        if got == want:
+            return start, end
+    return None
+
+
+def _normalize_card_recs(body: dict) -> list[dict]:
+    raw: list = []
+    cards = body.get("cards") if isinstance(body, dict) else None
+    if isinstance(cards, list):
+        raw.extend(item for item in cards if isinstance(item, dict))
+    elif isinstance(body, dict) and body.get("title"):
+        raw.append(body)
+    out: list[dict] = []
+    seen: set[str] = set()
+    for rec in raw:
+        title = re.sub(r"\s+", " ", str(rec.get("title") or "")).strip()[:80]
+        focus = re.sub(r"[^a-z0-9.-]+", "-", str(rec.get("focus") or rec.get("sectionFocus") or "").lower()).strip("-")[:48]
+        if not title:
+            continue
+        key = f"{focus}\n{title.lower()}"
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({"focus": focus, "title": title})
+    return out
+
+
+def remove_vision_cards(date: str, recs: list, page: str) -> dict:
+    """Cut specific vision polaroids out of one day's collage. One file, one write."""
+    date = str(date or "").strip()
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+        raise ValueError(f"invalid overview date: {date}")
+    if not recs:
+        raise ValueError("card required")
+    paths = [p for p in _overview_paths_for_page(page) if p.exists()]
+    if not paths:
+        raise ValueError("overview file not found")
+    written: list[str] = []
+    warnings: list[str] = []
+    removed: list[str] = []
+    with SAVE_OVERVIEW_LOCK:
+        for path in paths:
+            try:
+                html = path.read_text(encoding="utf-8")
+                start_inner, end_inner = _vision_hero_span(html, date)
+                inner = html[start_inner:end_inner]
+                cut = 0
+                for rec in recs:
+                    tile_span = _tile_span_for_section(inner, rec.get("focus") or "", "")
+                    if not tile_span:
+                        continue
+                    ts, te = tile_span
+                    tile = inner[ts:te]
+                    pol = _polaroid_span_for_card(tile, rec.get("title") or "")
+                    if not pol:
+                        continue
+                    ps, pe = pol
+                    while pe < len(tile) and tile[pe] in " \t\r\n":
+                        pe += 1
+                    inner = inner[:ts] + tile[:ps] + tile[pe:] + inner[te:]
+                    cut += 1
+                    removed.append(rec.get("title") or "")
+                if not cut:
+                    written.append(path.name)
+                    continue
+                new_html = html[:start_inner] + inner + html[end_inner:]
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if len(html) > 500_000 and len(new_html) < 500_000:
+                    raise ValueError(
+                        f"refusing save: {path.name} would shrink from {len(html)} to {len(new_html)}"
+                    )
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "card not removed")
+    return {
+        "ok": True,
+        "date": date,
+        "page": "prototype" if paths[0].name == "prototype.html" else "everything",
+        "removed": removed,
+        "files": written,
+        "warnings": warnings,
+    }
+
+
 def _normalize_section_recs(body: dict) -> list[dict]:
     raw: list = []
     sections = body.get("sections") if isinstance(body, dict) else None
@@ -2035,6 +2162,15 @@ class Handler(SimpleHTTPRequestHandler):
                 body = self._read_json()
                 recs = _normalize_section_recs(body if isinstance(body, dict) else {})
                 result = remove_vision_sections(
+                    str((body or {}).get("date") or ""),
+                    recs,
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
+            if path == "/remove-card":
+                body = self._read_json()
+                recs = _normalize_card_recs(body if isinstance(body, dict) else {})
+                result = remove_vision_cards(
                     str((body or {}).get("date") or ""),
                     recs,
                     str((body or {}).get("page") or ""),
