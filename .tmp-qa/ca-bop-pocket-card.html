@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CA BOP pocket license</title>
+<style>
+  html, body {
+    margin: 0;
+    width: 1600px;
+    height: 1200px;
+    overflow: hidden;
+    background: #f4f1ea;
+  }
+  .stage {
+    position: relative;
+    width: 1600px;
+    height: 1200px;
+    background:
+      radial-gradient(ellipse at 50% 42%, #fffcf6 0%, #f3eee4 70%, #ebe4d6 100%);
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .055;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .card {
+    position: absolute;
+    left: 90px;
+    top: 168px;
+    width: 1420px;
+    height: 864px;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.9) inset,
+      0 18px 40px rgba(40,28,12,.12),
+      0 2px 0 rgba(40,28,12,.06);
+    box-sizing: border-box;
+    padding: 42px 48px 36px;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .brand {
+    width: 620px;
+    height: 136px;
+  }
+  .brand img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left top;
+  }
+  .addr {
+    text-align: right;
+    font-size: 20px;
+    line-height: 1.35;
+    color: #111;
+    padding-top: 6px;
+    letter-spacing: .01em;
+  }
+  .title {
+    margin: 78px 0 0;
+    text-align: center;
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: .12em;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    margin: 38px 8px 0;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  .name-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 118px;
+    min-height: 168px;
+  }
+  .name {
+    font-size: 54px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    padding: 0 8px 18px;
+  }
+  .seal {
+    width: 168px;
+    height: 168px;
+    object-fit: contain;
+    filter: grayscale(1) contrast(.85) brightness(.95);
+    opacity: .55;
+    margin-right: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="card">
+      <div class="top">
+        <div class="brand">
+          <img src="psych_logo_color.svg" alt="">
+        </div>
+        <div class="addr">
+          1625 N Market Blvd, Suite N-215<br>
+          Sacramento, CA 95834<br>
+          (916) 574-7720<br>
+          Toll-Free (866) 503-3221<br>
+          www.psychology.ca.gov
+        </div>
+      </div>
+      <div class="title">PSYCHOLOGIST</div>
+      <div class="meta">
+        <div>LICENSE #: PSY</div>
+        <div>EXPIRATION: 06/30/2030</div>
+      </div>
+      <div class="name-row">
+        <div class="name">DIANA JUNDI</div>
+        <img class="seal" src="ca-great-seal.png" alt="">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

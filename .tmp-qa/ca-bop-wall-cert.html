@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CA BOP wall certificate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(255,248,230,.4), transparent 58%),
+      linear-gradient(180deg, #f4ead2 0%, #efe2c4 48%, #e6d4af 100%);
+  }
+  .stage {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(120,90,40,.018) 3px, rgba(120,90,40,.018) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(90,70,30,.012) 5px, rgba(90,70,30,.012) 6px),
+      radial-gradient(ellipse at 50% 38%, rgba(255,248,230,.35), transparent 55%),
+      linear-gradient(180deg, #f7f0de 0%, #f3e8cc 55%, #efe0be 100%);
+  }
+  .rule {
+    position: absolute;
+    inset: 1.4%;
+    border: 2px solid #1d2a4a;
+  }
+  .rule::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid #c4a45a;
+  }
+  .inner {
+    position: absolute;
+    inset: 5.2% 6% 16%;
+    text-align: center;
+    color: #1a2744;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .state {
+    font-family: Cinzel, Times, serif;
+    font-weight: 700;
+    font-size: clamp(18px, 3.4vw, 30px);
+    letter-spacing: .36em;
+    margin: 0 0 8px;
+  }
+  .dept {
+    font-family: Cinzel, Times, serif;
+    font-weight: 600;
+    font-size: clamp(11px, 1.8vw, 16px);
+    letter-spacing: .2em;
+    margin: 0 0 6px;
+  }
+  .board {
+    font-family: Cinzel, Times, serif;
+    font-weight: 700;
+    font-size: clamp(14px, 2.4vw, 21px);
+    letter-spacing: .26em;
+    margin: 0 0 22px;
+  }
+  .seal {
+    width: min(28vw, 168px);
+    height: min(28vw, 168px);
+    margin: 0 auto 22px;
+    display: block;
+  }
+  .certify {
+    font-family: "Cormorant Garamond", Times, serif;
+    font-style: italic;
+    font-size: clamp(16px, 2.4vw, 22px);
+    margin: 0 0 10px;
+  }
+  .name {
+    font-family: "Cormorant Garamond", Times, serif;
+    font-weight: 700;
+    font-size: clamp(36px, 7.4vw, 68px);
+    letter-spacing: .04em;
+    margin: 0 0 12px;
+    line-height: .95;
+  }
+  .body {
+    font-family: "Cormorant Garamond", Times, serif;
+    font-size: clamp(15px, 2.3vw, 21px);
+    margin: 0;
+  }
+  .title {
+    font-family: Cinzel, Times, serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3.6vw, 32px);
+    letter-spacing: .3em;
+    margin: 12px 0 10px;
+  }
+  .fields {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 92%;
+    margin: 28px 0 0;
+    text-align: left;
+  }
+  .field { flex: 1; }
+  .field label {
+    display: block;
+    font-family: Cinzel, Times, serif;
+    font-size: clamp(9px, 1.3vw, 12px);
+    letter-spacing: .14em;
+    color: #3a4560;
+    margin-bottom: 6px;
+  }
+  .field .val {
+    font-family: "Cormorant Garamond", Times, serif;
+    font-size: clamp(15px, 2.3vw, 22px);
+    font-weight: 600;
+    border-bottom: 1px solid #1d2a4a;
+    padding: 0 0 4px 2px;
+    min-height: 28px;
+  }
+  .foot {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 3.8%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .foil {
+    width: min(16vw, 88px);
+    height: min(16vw, 88px);
+    filter: sepia(1) saturate(2.4) hue-rotate(6deg) brightness(.92);
+    opacity: .92;
+    display: block;
+  }
+  .addr {
+    font-family: "Cormorant Garamond", Times, serif;
+    font-size: clamp(11px, 1.5vw, 14px);
+    letter-spacing: .03em;
+    color: #3a4560;
+    margin-top: 8px;
+    max-width: 28ch;
+  }
+  .sigs {
+    display: flex;
+    gap: min(5vw, 48px);
+  }
+  .sig {
+    width: min(28vw, 200px);
+    text-align: center;
+  }
+  .sig svg { display: block; width: 100%; height: 40px; }
+  .sig .line { border-top: 1px solid #1d2a4a; padding-top: 4px; }
+  .sig .role {
+    font-family: Cinzel, Times, serif;
+    font-size: clamp(9px, 1.3vw, 12px);
+    letter-spacing: .12em;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="rule"></div>
+    <div class="inner">
+      <p class="state">STATE OF CALIFORNIA</p>
+      <p class="dept">DEPARTMENT OF CONSUMER AFFAIRS</p>
+      <p class="board">BOARD OF PSYCHOLOGY</p>
+      <img class="seal" src="ca-great-seal.png" alt="">
+      <p class="certify">This is to certify that</p>
+      <p class="name">DIANA JUNDI</p>
+      <p class="body">is licensed to practice as a</p>
+      <p class="title">PSYCHOLOGIST</p>
+      <p class="body">in the State of California</p>
+      <div class="fields">
+        <div class="field">
+          <label>LICENSE TYPE</label>
+          <div class="val">Psychologist</div>
+        </div>
+        <div class="field">
+          <label>DATE ISSUED</label>
+          <div class="val">June 15, 2028</div>
+        </div>
+        <div class="field">
+          <label>EXPIRATION DATE</label>
+          <div class="val">June 30, 2030</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <div>
+        <img class="foil" src="ca-great-seal.png" alt="">
+        <div class="addr">1625 North Market Blvd., Suite N-215, Sacramento, California 95834</div>
+      </div>
+      <div class="sigs">
+        <div class="sig">
+          <svg viewBox="0 0 200 44" fill="none" stroke="#1a2744" stroke-width="1.15" stroke-linecap="round">
+            <path d="M6 29 C 18 11, 32 36, 48 20 C 58 10, 70 34, 86 22 C 102 8, 118 31, 140 18 C 158 8, 176 28, 194 16"/>
+            <path d="M42 26 C 70 24, 110 24, 168 22" stroke-width="0.7"/>
+          </svg>
+          <div class="line role">Executive Officer</div>
+        </div>
+        <div class="sig">
+          <svg viewBox="0 0 200 44" fill="none" stroke="#1a2744" stroke-width="1.2" stroke-linecap="round">
+            <path d="M8 32 C 22 6, 40 38, 58 14 C 72 2, 84 36, 108 20 C 128 6, 146 34, 172 18 C 182 12, 190 22, 196 20"/>
+            <path d="M54 18 C 60 28, 66 12, 72 24" stroke-width="0.85"/>
+          </svg>
+          <div class="line role">President</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
