@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>overview tasks · six ways · pick by looking</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500;1,600&amp;family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,300;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=ovtask1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    background: #120e0b;
+    min-height: 100vh;
+    padding: 52px 16px 88px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+  .bg {
+    position: fixed;
+    inset: 0;
+    background: url("manus-storage/_339ab459.jpg") center / cover no-repeat;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 10, 8, 0.32);
+  }
+  .wrap { position: relative; z-index: 1; }
+
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.62);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 680px;
+    margin: 0 auto 16px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.62);
+    font-size: 1.04rem;
+    line-height: 1.5;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 12px;
+    max-width: 980px;
+  }
+  .tabs button {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.62);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,168,130,0.26);
+    border-radius: 999px;
+    padding: 8px 14px 7px;
+    cursor: pointer;
+  }
+  .tabs button[aria-pressed="true"] {
+    color: #1a140e;
+    background: #c4a882;
+    border-color: #c4a882;
+  }
+  .caption {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 16px;
+    min-height: 2.6em;
+    font-style: italic;
+    color: rgba(244,239,230,0.58);
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .picked {
+    display: none;
+    text-align: center;
+    margin: -4px auto 14px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .day {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 18px 18px 22px;
+    border-radius: 20px;
+    background: rgba(35, 28, 38, 0.42);
+    border: 1px solid rgba(255,248,238,0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .day-date {
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,248,238,0.78);
+    margin-bottom: 12px;
+  }
+  .pills {
+    display: flex;
+    width: fit-content;
+    margin: 0 auto 16px;
+    padding: 4px;
+    gap: 4px;
+    border-radius: 999px;
+    background: rgba(18,12,10,0.35);
+    border: 1px solid rgba(255,248,238,0.12);
+  }
+  .pills span {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: rgba(255,248,238,0.5);
+    padding: 6px 14px;
+  }
+  .pills span.on {
+    background: #fff8ee;
+    color: #1a140e;
+    border-radius: 999px;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .tile {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 18px;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(255,248,238,0.22);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+  .tile-photo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+  .t-grad .tile-photo { background-image: url("manus-storage/zone-grad-student.jpg?v=grad1"); }
+  .t-train .tile-photo { background-image: url("manus-storage/zone-athletic-gym.jpg?v=gym1"); background-position: 40% center; }
+  .t-win .tile-photo { background-image: url("manus-storage/zone-wins-hand.jpg?v=game13"); }
+
+  .tile-title {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 8;
+    margin: 0;
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(20px, 2.2vw, 30px);
+    letter-spacing: 0.03em;
+    line-height: 1.12;
+    background-image: linear-gradient(185deg, #f7efe4 0%, #e4d2b4 18%, #c4a882 40%, #8f7858 58%, #c4a882 78%, #efe6d4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #c4a882;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.72))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16);
+    pointer-events: none;
+  }
+
+  .x {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,168,130,0.55);
+    background: rgba(255,252,248,0.94);
+    color: #5a4634;
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .task:hover .x,
+  .task:focus-within .x { opacity: 1; pointer-events: auto; }
+
+  /* layers hidden by default */
+  .plate, .reveal, .inventory, .halo, .next, .ribbon { display: none; }
+
+  /* ——— PLATE ——— */
+  body[data-opt="plate"] .plate {
+    display: flex;
+    position: absolute;
+    left: 14px; right: 14px;
+    bottom: 54%;
+    z-index: 5;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-align: center;
+  }
+  body[data-opt="plate"] .plate .task {
+    position: relative;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.5vw, 20px);
+    color: #f3e6d0;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+    cursor: pointer;
+  }
+  body[data-opt="plate"] .plate .task.is-done { opacity: 0.38; }
+  body[data-opt="plate"] .tile-title { top: 62%; }
+
+  /* ——— REVEAL ——— */
+  body[data-opt="reveal"] .reveal { display: block; }
+  body[data-opt="reveal"] .pin {
+    position: absolute;
+    z-index: 5;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  body[data-opt="reveal"] .pin i {
+    display: block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #f0d7b0;
+    box-shadow: 0 0 0 3px rgba(240,215,176,0.28), 0 0 16px rgba(232,201,160,0.65);
+  }
+  body[data-opt="reveal"] .pin .name {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-style: italic;
+    font-size: 15px;
+    color: #fff8ee;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    opacity: 0;
+    pointer-events: none;
+  }
+  body[data-opt="reveal"] .pin:hover .name,
+  body[data-opt="reveal"] .pin:focus .name { opacity: 1; }
+  body[data-opt="reveal"] .pin.is-done i { opacity: 0.35; box-shadow: none; }
+
+  /* ——— INVENTORY ——— */
+  body[data-opt="inventory"] .inventory {
+    display: flex;
+    position: absolute;
+    left: 12px; top: 12px; right: 28%;
+    z-index: 5;
+    flex-direction: column;
+    gap: 5px;
+  }
+  body[data-opt="inventory"] .inventory .task {
+    position: relative;
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 6px;
+    align-items: baseline;
+    cursor: pointer;
+  }
+  body[data-opt="inventory"] .inventory .n {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: rgba(240,215,176,0.75);
+  }
+  body[data-opt="inventory"] .inventory .name {
+    font-style: italic;
+    font-size: clamp(13px, 1.25vw, 16px);
+    color: #fff8ee;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  }
+  body[data-opt="inventory"] .inventory .task.is-done { opacity: 0.4; }
+
+  /* ——— HALO ——— */
+  body[data-opt="halo"] .halo { display: block; }
+  body[data-opt="halo"] .halo .task {
+    position: absolute;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(13px, 1.3vw, 17px);
+    color: #fff8ee;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.65);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  body[data-opt="halo"] .halo .task.is-done { opacity: 0.35; }
+  body[data-opt="halo"] .h1 { left: 50%; top: 22%; }
+  body[data-opt="halo"] .h2 { left: 18%; top: 38%; }
+  body[data-opt="halo"] .h3 { left: 82%; top: 38%; }
+  body[data-opt="halo"] .h4 { left: 22%; top: 70%; }
+  body[data-opt="halo"] .h5 { left: 78%; top: 70%; }
+
+  /* ——— NEXT ——— */
+  body[data-opt="next"] .next { display: block; }
+  body[data-opt="next"] .next-line {
+    position: absolute;
+    left: 14px; right: 14px;
+    top: 64%;
+    z-index: 5;
+    text-align: center;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(16px, 1.7vw, 22px);
+    color: #fff8ee;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  }
+  body[data-opt="next"] .count {
+    position: absolute;
+    top: 12px; right: 12px;
+    z-index: 6;
+    min-width: 28px; height: 28px;
+    padding: 0 8px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Italiana", serif;
+    font-size: 15px;
+    color: #2a2218;
+    background: radial-gradient(circle at 32% 28%, #f3e6d0, #c4a882 70%);
+    box-shadow: inset 0 1px 0 rgba(255,248,238,0.5);
+  }
+  body[data-opt="next"] .tile-title { top: 48%; }
+
+  /* ——— RIBBON ——— */
+  body[data-opt="ribbon"] .ribbon {
+    display: flex;
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 42%;
+    z-index: 5;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 12px 16px 14px;
+    background: linear-gradient(90deg, rgba(255,248,238,0.10) 0%, rgba(255,248,238,0.03) 62%, transparent 100%);
+    border-right: 1px solid rgba(255,248,238,0.08);
+  }
+  body[data-opt="ribbon"] .ribbon .task {
+    position: relative;
+    font-style: italic;
+    font-size: clamp(13px, 1.25vw, 16px);
+    color: #fff8ee;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+    cursor: pointer;
+  }
+  body[data-opt="ribbon"] .ribbon .task.is-done { opacity: 0.38; }
+
+  .hint {
+    margin-top: 14px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,180,150,0.45);
+  }
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 26px;
+    color: rgba(247,239,228,0.7);
+    text-decoration: none;
+    font-style: italic;
+  }
+</style>
+</head>
+<body data-opt="plate">
+<div class="bg" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="hero">
+    <h1>overview tasks</h1>
+    <p>on the collage · six ways · hover a task for the × · click to mark done</p>
+  </header>
+  <p class="note">Not the scattered gold dots with names floating on the photo. Section titles stay the centered foil stamp.</p>
+  <div class="tabs" role="tablist">
+    <button type="button" aria-pressed="true" data-tab="plate">plate</button>
+    <button type="button" aria-pressed="false" data-tab="reveal">reveal</button>
+    <button type="button" aria-pressed="false" data-tab="inventory">inventory</button>
+    <button type="button" aria-pressed="false" data-tab="halo">halo</button>
+    <button type="button" aria-pressed="false" data-tab="next">next</button>
+    <button type="button" aria-pressed="false" data-tab="ribbon">ribbon</button>
+  </div>
+  <p class="caption" id="caption">Tasks sit as a gold caption stack above the title — like tasting notes on a plate. No dots.</p>
+  <p class="picked" id="picked"></p>
+
+  <div class="day">
+    <div class="day-date">SEP 7 · MON</div>
+    <div class="pills"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+    <div class="board">
+
+      <article class="tile t-grad">
+        <div class="tile-photo"></div>
+        <h3 class="tile-title">I am a grad student</h3>
+        <div class="plate">
+          <div class="task"><span>scholarship application</span><button class="x" type="button">×</button></div>
+          <div class="task"><span>tuition payment</span><button class="x" type="button">×</button></div>
+          <div class="task"><span>fall 2026 enrollment</span><button class="x" type="button">×</button></div>
+        </div>
+        <div class="reveal">
+          <button class="pin" style="left:28%;top:28%"><i></i><span class="name">scholarship application</span></button>
+          <button class="pin" style="left:62%;top:34%"><i></i><span class="name">tuition payment</span></button>
+          <button class="pin" style="left:44%;top:72%"><i></i><span class="name">fall 2026 enrollment</span></button>
+        </div>
+        <div class="inventory">
+          <div class="task"><span class="n">01</span><span class="name">scholarship application</span><button class="x" type="button">×</button></div>
+          <div class="task"><span class="n">02</span><span class="name">tuition payment</span><button class="x" type="button">×</button></div>
+          <div class="task"><span class="n">03</span><span class="name">fall 2026 enrollment</span><button class="x" type="button">×</button></div>
+        </div>
+        <div class="halo">
+          <div class="task h1">scholarship application<button class="x" type="button">×</button></div>
+          <div class="task h2">tuition payment<button class="x" type="button">×</button></div>
+          <div class="task h3">fall 2026 enrollment<button class="x" type="button">×</button></div>
+        </div>
+        <div class="next">
+          <div class="count">3</div>
+          <div class="next-line task">scholarship application<button class="x" type="button">×</button></div>
+        </div>
+        <div class="ribbon">
+          <div class="task">scholarship application<button class="x" type="button">×</button></div>
+          <div class="task">tuition payment<button class="x" type="button">×</button></div>
+          <div class="task">fall 2026 enrollment<button class="x" type="button">×</button></div>
+        </div>
+      </article>
+
+      <article class="tile t-train">
+        <div class="tile-photo"></div>
+        <h3 class="tile-title">I am training</h3>
+        <div class="plate">
+          <div class="task"><span>yoga clothes from Amazon</span><button class="x" type="button">×</button></div>
+        </div>
+        <div class="reveal">
+          <button class="pin" style="left:58%;top:30%"><i></i><span class="name">yoga clothes from Amazon</span></button>
+        </div>
+        <div class="inventory">
+          <div class="task"><span class="n">01</span><span class="name">yoga clothes from Amazon</span><button class="x" type="button">×</button></div>
+        </div>
+        <div class="halo">
+          <div class="task h1">yoga clothes from Amazon<button class="x" type="button">×</button></div>
+        </div>
+        <div class="next">
+          <div class="count">1</div>
+          <div class="next-line task">yoga clothes from Amazon<button class="x" type="button">×</button></div>
+        </div>
+        <div class="ribbon">
+          <div class="task">yoga clothes from Amazon<button class="x" type="button">×</button></div>
+        </div>
+      </article>
+
+      <article class="tile t-win">
+        <div class="tile-photo"></div>
+        <h3 class="tile-title">I am winning</h3>
+        <div class="plate">
+          <div class="task"><span>Amazon QR return codes</span><button class="x" type="button">×</button></div>
+          <div class="task"><span>re: Manus restoration issue</span><button class="x" type="button">×</button></div>
+        </div>
+        <div class="reveal">
+          <button class="pin" style="left:30%;top:32%"><i></i><span class="name">Amazon QR return codes</span></button>
+          <button class="pin" style="left:68%;top:70%"><i></i><span class="name">re: Manus restoration issue</span></button>
+        </div>
+        <div class="inventory">
+          <div class="task"><span class="n">01</span><span class="name">Amazon QR return codes</span><button class="x" type="button">×</button></div>
+          <div class="task"><span class="n">02</span><span class="name">re: Manus restoration issue</span><button class="x" type="button">×</button></div>
+        </div>
+        <div class="halo">
+          <div class="task h1">Amazon QR return codes<button class="x" type="button">×</button></div>
+          <div class="task h5">re: Manus restoration issue<button class="x" type="button">×</button></div>
+        </div>
+        <div class="next">
+          <div class="count">2</div>
+          <div class="next-line task">Amazon QR return codes<button class="x" type="button">×</button></div>
+        </div>
+        <div class="ribbon">
+          <div class="task">Amazon QR return codes<button class="x" type="button">×</button></div>
+          <div class="task">re: Manus restoration issue<button class="x" type="button">×</button></div>
+        </div>
+      </article>
+
+    </div>
+    <p class="hint">section titles stay the foil stamp · tasks change · no dark bars · no slabs</p>
+  </div>
+  <a class="back" href="everything.html">← back to everything</a>
+</div>
+<script src="nav-shared.js?v=ovtask1"></script>
+<script>
+(function () {
+  var CAP = {
+    plate: "Tasks sit as a gold caption stack above the title — like tasting notes on a plate. No dots.",
+    reveal: "Only pinheads on the photo. Hover a pin to read the name. The picture stays the picture.",
+    inventory: "A museum label in the corner. Tiny 01 02 03. The title stays the center stamp.",
+    halo: "Names orbit the title. No lines between them. The foil stays the sun.",
+    next: "One next task under the title. A gold count for how many remain.",
+    ribbon: "A thin glass ribbon on the left. Tasks as a vertical list. Title stays center."
+  };
+  var tabs = document.querySelectorAll(".tabs button");
+  var caption = document.getElementById("caption");
+  var picked = document.getElementById("picked");
+
+  function show(id) {
+    document.body.setAttribute("data-opt", id);
+    tabs.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-tab") === id ? "true" : "false");
+    });
+    caption.textContent = CAP[id] || "";
+    picked.classList.add("on");
+    picked.textContent = "looking at · " + id;
+    try { localStorage.setItem("btm_overview_task_format_v1", id); } catch (e) {}
+  }
+
+  tabs.forEach(function (b) {
+    b.addEventListener("click", function () { show(b.getAttribute("data-tab")); });
+  });
+
+  document.querySelector(".board").addEventListener("click", function (e) {
+    var x = e.target.closest(".x");
+    if (x) {
+      e.preventDefault();
+      e.stopPropagation();
+      var row = x.closest(".task");
+      if (row) row.remove();
+      return;
+    }
+    var task = e.target.closest(".task, .pin");
+    if (!task) return;
+    task.classList.toggle("is-done");
+  });
+
+  var start = "plate";
+  try {
+    var q = new URLSearchParams(location.search).get("v");
+    if (q && CAP[q]) start = q;
+  } catch (e2) {}
+  show(start);
+})();
+</script>
+</body>
+</html>

@@ -35,6 +35,13 @@ SAVE_OVERVIEW_LOCK = threading.Lock()
 PHOTO_LOCK = threading.Lock()
 PHOTO_MAP = ROOT / "manus-storage" / "card-photos.json"
 STORAGE = ROOT / "manus-storage"
+
+
+def archive_stale_cards(payload):
+    """Do not write leftover overlay copies. Those were previous page versions."""
+    return {"ok": True, "skipped": True, "written": []}
+
+
 KNOWN_CARD_PHOTOS = {
     "induction": "manus-storage/card-induction.jpg",
     "cleanse": "manus-storage/card-cleanse.jpg",
@@ -92,8 +99,8 @@ KNOWN_CARD_PHOTOS = {
     "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol11",
-    "grad school": "manus-storage/zone-grad-student.jpg?v=grad2",
-    "grad": "manus-storage/zone-grad-student.jpg?v=grad2",
+    "grad school": "manus-storage/zone-grad-student.jpg?v=grad4",
+    "grad": "manus-storage/zone-grad-student.jpg?v=grad4",
     "soul": "",
     # sorrow is NOT soul — distinct focus; no approved photo (was soul-rose duplicate)
     "sorrow": "",
@@ -192,12 +199,12 @@ KNOWN_CARD_PHOTOS = {
     "train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "fitness": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "trained": "manus-storage/zone-athletic-gym.jpg?v=gym1",
-    "academia": "manus-storage/zone-grad-student.jpg?v=grad2",
-    "I am a grad student": "manus-storage/zone-grad-student.jpg?v=grad2",
-    "i am a grad student": "manus-storage/zone-grad-student.jpg?v=grad2",
-    "I am pursuing my Ph.D": "manus-storage/zone-grad-student.jpg?v=grad2",
-    "i am pursuing my ph.d": "manus-storage/zone-grad-student.jpg?v=grad2",
-    "a grad student": "manus-storage/zone-grad-student.jpg?v=grad2",
+    "academia": "manus-storage/zone-grad-student.jpg?v=grad4",
+    "I am a grad student": "manus-storage/zone-grad-student.jpg?v=grad4",
+    "i am a grad student": "manus-storage/zone-grad-student.jpg?v=grad4",
+    "I am pursuing my Ph.D": "manus-storage/zone-grad-student.jpg?v=grad4",
+    "i am pursuing my ph.d": "manus-storage/zone-grad-student.jpg?v=grad4",
+    "a grad student": "manus-storage/zone-grad-student.jpg?v=grad4",
     "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
@@ -207,7 +214,11 @@ KNOWN_CARD_PHOTOS = {
     "I am networking": "manus-storage/zone-networking.jpg?v=net1",
     "i am networking": "manus-storage/zone-networking.jpg?v=net1",
     "am networking": "manus-storage/zone-networking.jpg?v=net1",
-    "earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "earned": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "earning": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "I am earning": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "i am earning": "manus-storage/zone-earn-money.jpg?v=earn4",
     "strategist": "manus-storage/zone-strategist.jpg?v=strat3",
     "a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
     "i am a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
@@ -240,8 +251,8 @@ KNOWN_CARD_PHOTOS = {
     "gratitude": "manus-storage/zone-practicing-gratitude.jpg?v=grat1",
     "i successful": "manus-storage/zone-successful.jpg?v=ok2",
     "I am successful": "manus-storage/zone-successful.jpg?v=ok2",
-    "I earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "i earned": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "I earned": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "i earned": "manus-storage/zone-earn-money.jpg?v=earn4",
 
     "i train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "I train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
@@ -312,13 +323,13 @@ KNOWN_CARD_PHOTOS = {
     "i recoup every dollar": "manus-storage/zone-recouping.jpg?v=back1",
     "recoup": "manus-storage/zone-recouping.jpg?v=back1",
     "to-recoup": "manus-storage/zone-recouping.jpg?v=back1",
-    "I will earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "i will earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "to earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "i earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "I earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
-    "to-earn": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
+    "I will earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "i will earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "to earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "i earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "I earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "earn": "manus-storage/zone-earn-money.jpg?v=earn4",
+    "to-earn": "manus-storage/zone-earn-money.jpg?v=earn4",
     "to scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "i scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "I scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
@@ -471,6 +482,10 @@ REJECTED_SECTION_PHOTOS = (
     "zone-curate-create",
     "zone-curate-create.jpg?v=create1",
     "/archive/zone-curate-create-paint",
+    # I will earn — pay stub + sunset laptop desk forever banned; live is gold coins/bar
+    "zone-to-earn.jpg?v=earn1",
+    "zone-to-earn.jpg",
+    "zone-to-earn-gold.jpg",
 )
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
@@ -736,7 +751,8 @@ def _tile_aliases(key: str) -> set[str]:
         ("networking", "networking"),
         ("deen", "deen"),
         ("trained", "fitness"),
-        ("earned", "networking"),
+        ("earning", "earn"),
+        ("i am earning", "earn"),
         ("surrendered-to-allah", "deen"),
         ("master", "to-master"),
         ("god conscious", "god-conscious"),
@@ -1899,6 +1915,7 @@ def _photo_alias_keys(name: str) -> list[str]:
         "becoming": "become",
         "persevering": "to persevere",
         "networking": "networking",
+        "earning": "earn",
     }
     lemma = iam_lemma.get(bare) or iam_lemma.get(bare.replace(" ", "-"))
     if lemma:
@@ -2225,6 +2242,9 @@ class Handler(SimpleHTTPRequestHandler):
                 if length:
                     self.rfile.read(length)
                 return self._json(200, {"ok": True, "ignored": True})
+            if path == "/archive-stale-cards":
+                body = self._read_json()
+                return self._json(200, archive_stale_cards(body if isinstance(body, dict) else {}))
             return self._json(404, {"ok": False, "error": "not found"})
         except Exception as e:  # noqa: BLE001
             return self._json(500, {"ok": False, "error": str(e)})

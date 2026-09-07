@@ -52,6 +52,9 @@ html.prototypes-page .jul-rail-fixed {
 html body .day-block:is(.vision-collage-day, .overview-era-day):not(.collapsed) .vision-hero:not([data-pack-sig]) > .vision-tile:not([style*="grid-area"]):not([style*="grid-column"]) {
   visibility: hidden !important;
 }
+html.prototypes-page .vision-hero > .vision-tile {
+  visibility: visible !important;
+}
 /* Card photos must never paint at intrinsic size before late polaroid CSS parses. */
 .vision-polaroid, .vision-shot-card {
   overflow: hidden;
@@ -10245,6 +10248,33 @@ html body.prototypes-page .day-block[data-date="2026-08-30"] .day-card-header,
 html body.prototypes-page .day-block[data-date="2026-08-30"] .overview-pursuits-label,
 html body.prototypes-page .day-block[data-date="2026-08-30"] .vision-hint {
   display: none !important;
+}
+/* carry | + stay on the visible pill row — never the hidden date header. */
+html body.prototypes-page .day-block[data-date="2026-08-30"] .tv-toggle-row,
+html body.prototypes-page .day-block[data-date="2026-08-30"] .overview-toggle-row {
+  display: grid !important;
+  visibility: visible !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+html body.prototypes-page .day-block[data-date="2026-08-30"] .overview-right-tools,
+html body.prototypes-page .day-block[data-date="2026-08-30"].overview-era-day .overview-right-tools,
+html body.prototypes-page .day-block[data-date="2026-08-30"].overview-era-day.view-overview .overview-right-tools {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+html body.prototypes-page .day-block[data-date="2026-08-30"] .overview-add-section,
+html body.prototypes-page .day-block[data-date="2026-08-30"] .overview-carry-forward {
+  display: inline-flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
 }
 html body.prototypes-page .day-block[data-date="2026-08-30"] .day-card,
 html body.prototypes-page .day-block[data-date="2026-08-30"].fmt22 .day-card,
@@ -48906,9 +48936,29 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       tools.insertBefore(depth, tools.firstChild);
     }
 
-    /* Park view pills + carry/+ on the date header line (open overview-era days). */
+    /* Park view pills + carry/+ on the date header line (open overview-era days).
+       Prototype hides that header — keep chrome on the visible pill row. */
+    var protoPage = !!(document.documentElement.classList.contains('prototypes-page') || (document.body && document.body.classList.contains('prototypes-page')));
     var hdr = card.querySelector('.day-card-header');
-    if(hdr && typeof isOverviewEra === 'function' && isOverviewEra(blk)){
+    if(protoPage){
+      if(hdr){
+        var parkedTools = hdr.querySelector(':scope > .overview-right-tools');
+        var parkedCenter = hdr.querySelector(':scope > .overview-center-stack');
+        var parkedTog = hdr.querySelector(':scope > .today-view-toggle');
+        if(parkedCenter && row && parkedCenter.parentNode !== row){
+          row.insertBefore(parkedCenter, row.firstChild);
+        }
+        if(parkedTog){
+          if(center && parkedTog.parentNode !== center) center.appendChild(parkedTog);
+          else if(row && parkedTog.parentNode !== row && parkedTog.parentNode !== center) row.insertBefore(parkedTog, tools || null);
+        }
+        if(parkedTools && row && parkedTools.parentNode !== row) row.appendChild(parkedTools);
+      }
+      if(row){
+        row.style.removeProperty('display');
+        row.removeAttribute('aria-hidden');
+      }
+    } else if(hdr && typeof isOverviewEra === 'function' && isOverviewEra(blk)){
       hdr.classList.add('day-header-chrome');
       /* Strip leftover day-count so the 3-col header stays one line (carry/+ stay up). */
       [].slice.call(hdr.querySelectorAll(':scope > .day-count')).forEach(function(el){ try{ el.remove(); }catch(e){} });
@@ -48938,6 +48988,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     applyOverviewDepth(blk);
     return row;
   }
+  window.ensureToggleRow = ensureToggleRow;
   function ensureTileChrome(tile){
     if(!tile || tile.querySelector(':scope > .vision-tile-del')) return;
     var d = document.createElement('button');
@@ -61885,7 +61936,7 @@ html body .day-block.fmt22 .sec-card.shot-card .card-body {
     if (window.__scrubOrphanRouteOverlays) try { window.__scrubOrphanRouteOverlays(); } catch (e) {}
     if (window.__setupRouteOverlays) try { window.__setupRouteOverlays(); } catch (e) {}
     kept.forEach(function(keep){
-      keep.classList.add('overview-era-day', 'vision-collage-day', 'make-flow-day');
+      keep.classList.add('overview-era-day', 'vision-collage-day', 'make-flow-day', 'view-overview');
       keep.classList.remove('collapsed', 'past', 'today-block');
       var panel = keep.querySelector('.tv-panel.tv-nodes');
       if (panel) {
@@ -63304,10 +63355,27 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   function ensureCarryControl(blk){
     if (!eraOk(blk)) return;
     ensureCss();
-    if (typeof ensureToggleRow === 'function') {
-      try { ensureToggleRow(blk); } catch(e){}
+    var makeRow = (typeof ensureToggleRow === 'function' && ensureToggleRow) || window.ensureToggleRow;
+    if (typeof makeRow === 'function') {
+      try { makeRow(blk); } catch(e){}
     }
     var tools = blk.querySelector('.overview-right-tools');
+    if (!tools) {
+      var card = blk.querySelector('.day-card');
+      var tog = card && card.querySelector('.today-view-toggle');
+      var row = (tog && tog.closest('.tv-toggle-row')) || (card && card.querySelector('.tv-toggle-row'));
+      if (!row && card && tog) {
+        row = document.createElement('div');
+        row.className = 'tv-toggle-row overview-toggle-row';
+        tog.parentNode.insertBefore(row, tog);
+        row.appendChild(tog);
+      }
+      if (row) {
+        tools = document.createElement('div');
+        tools.className = 'overview-right-tools';
+        row.appendChild(tools);
+      }
+    }
     if (!tools) return;
     var btn = tools.querySelector('.overview-carry-forward');
     if (!btn) {
@@ -63720,8 +63788,9 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
 
   // Patch ensureToggleRow to keep button present
   function patchToggle(){
-    if (typeof ensureToggleRow !== 'function' || ensureToggleRow.__crPatched) return;
-    var orig = ensureToggleRow;
+    var fn = (typeof ensureToggleRow === 'function' && ensureToggleRow) || window.ensureToggleRow;
+    if (typeof fn !== 'function' || fn.__crPatched) return;
+    var orig = fn;
     ensureToggleRow = function(blk){
       var row = orig.apply(this, arguments);
       try { ensureCarryControl(blk); } catch(e){}
@@ -67756,7 +67825,9 @@ html.prototypes-page .agenda-body {
 html.prototypes-page #page-bg-wrapper {
   padding-bottom: 160px !important;
 }
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"],
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day,
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day:not(.collapsed):not(.picker-open),
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .day-card,
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .day-tasks,
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)),
@@ -67771,7 +67842,7 @@ html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vis
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-hero.vision-hero-many {
   grid-auto-rows: minmax(210px, auto) !important;
 }
-
+</style>
 <style id="vision-collage-mosaic-v1">
 /* Vision collage = packed asymmetric grid. Tiles kiss. Never equal 2×2 / 3-col flex boxes. */
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) .vision-hero,

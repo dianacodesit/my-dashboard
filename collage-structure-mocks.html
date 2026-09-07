@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>collage structure · look</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&amp;family=Newsreader:ital,opsz,wght@6..72,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=collage1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #120e0b;
+    color: #f7efe4;
+    padding: 72px 18px 80px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 4.6vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-style: italic;
+    color: rgba(247,239,228,0.58);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .tabs {
+    position: sticky;
+    top: 12px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 22px auto 18px;
+  }
+  .tabs button {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.55);
+    background: rgba(255,248,238,0.05);
+    border: 1px solid rgba(255,248,238,0.12);
+    border-radius: 999px;
+    padding: 9px 16px;
+    cursor: pointer;
+  }
+  .tabs button.on {
+    color: #120e0b;
+    background: #e4d2b4;
+    border-color: #e4d2b4;
+  }
+  .board-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .board {
+    display: none;
+    height: min(78vh, 820px);
+    background: rgba(20,14,10,0.45);
+    overflow: hidden;
+  }
+  .board.on { display: grid; }
+  .now {
+    grid-template-columns: 1.15fr 1fr 0.62fr 1.15fr;
+    grid-template-rows: 1.05fr 0.72fr 0.82fr 0.78fr;
+    gap: 0;
+  }
+  .now .t-academia { grid-area: 1 / 1 / 2 / 2; }
+  .now .t-fitness { grid-area: 1 / 2 / 2 / 3; }
+  .now .t-fighting { grid-area: 1 / 3 / 3 / 4; }
+  .now .t-networking { grid-area: 1 / 4 / 2 / 5; }
+  .now .t-pursuing { grid-area: 2 / 4 / 3 / 5; }
+  .now .t-glowing-up { grid-area: 2 / 1 / 5 / 2; }
+  .now .t-deen { grid-area: 2 / 2 / 3 / 3; }
+  .now .t-wins { grid-area: 3 / 2 / 5 / 3; }
+  .now .t-financially-abundant { grid-area: 3 / 3 / 4 / 4; }
+  .now .t-successful { grid-area: 4 / 3 / 5 / 4; }
+  .now .t-healthy { grid-area: 3 / 4 / 5 / 5; }
+
+  .air {
+    grid-template-columns: 1.28fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 0.92fr 0.92fr;
+    gap: 12px;
+    padding: 12px;
+  }
+  .air .t-academia { grid-area: 1 / 1 / 3 / 2; }
+  .air .t-fitness { grid-area: 1 / 2 / 2 / 3; }
+  .air .t-fighting { grid-area: 1 / 3 / 2 / 4; }
+  .air .t-glowing-up { grid-area: 2 / 2 / 3 / 3; }
+  .air .t-deen { grid-area: 2 / 3 / 3 / 4; }
+  .air .t-wins { grid-area: 3 / 1 / 4 / 2; }
+  .air .t-networking { grid-area: 3 / 2 / 4 / 3; }
+  .air .t-pursuing { grid-area: 3 / 3 / 4 / 4; }
+  .air .t-financially-abundant { grid-area: 4 / 1 / 5 / 2; }
+  .air .t-successful { grid-area: 4 / 2 / 5 / 3; }
+  .air .t-healthy { grid-area: 4 / 3 / 5 / 4; }
+  .air .tile { border-radius: 14px; }
+
+  .spread {
+    grid-template-columns: 1.35fr 1.35fr 1fr 1fr;
+    grid-template-rows: 1.18fr 1.18fr 0.88fr 0.88fr;
+    gap: 3px;
+  }
+  .spread .t-academia { grid-area: 1 / 1 / 3 / 3; }
+  .spread .t-fitness { grid-area: 1 / 3 / 2 / 5; }
+  .spread .t-glowing-up { grid-area: 2 / 3 / 3 / 5; }
+  .spread .t-deen { grid-area: 3 / 1 / 4 / 2; }
+  .spread .t-wins { grid-area: 3 / 2 / 4 / 3; }
+  .spread .t-fighting { grid-area: 3 / 3 / 4 / 4; }
+  .spread .t-networking { grid-area: 3 / 4 / 4 / 5; }
+  .spread .t-pursuing { grid-area: 4 / 1 / 5 / 2; }
+  .spread .t-financially-abundant { grid-area: 4 / 2 / 5 / 3; }
+  .spread .t-successful { grid-area: 4 / 3 / 5 / 4; }
+  .spread .t-healthy { grid-area: 4 / 4 / 5 / 5; }
+
+  .even {
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    grid-template-rows: 1.08fr 1fr 1fr;
+    gap: 0;
+  }
+  .even .t-academia { grid-area: 1 / 1 / 2 / 3; }
+  .even .t-fitness { grid-area: 1 / 3 / 2 / 4; }
+  .even .t-glowing-up { grid-area: 1 / 4 / 2 / 5; }
+  .even .t-deen { grid-area: 2 / 1 / 3 / 2; }
+  .even .t-wins { grid-area: 2 / 2 / 3 / 3; }
+  .even .t-fighting { grid-area: 2 / 3 / 3 / 4; }
+  .even .t-networking { grid-area: 2 / 4 / 3 / 5; }
+  .even .t-pursuing { grid-area: 3 / 1 / 4 / 2; }
+  .even .t-financially-abundant { grid-area: 3 / 2 / 4 / 3; }
+  .even .t-successful { grid-area: 3 / 3 / 4 / 4; }
+  .even .t-healthy { grid-area: 3 / 4 / 4 / 5; }
+
+  .tile {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+    background: #1a1410;
+  }
+  .now .tile, .even .tile {
+    box-shadow: inset 0 0 0 1px rgba(14,8,4,0.5), inset 0 0 0 2px rgba(236,204,150,0.28);
+  }
+  .photo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+  .tile.nophoto .photo {
+    background: linear-gradient(160deg, #2a221c, #14100d);
+  }
+  .title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 28px);
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(16px, 1.7vw, 26px);
+    letter-spacing: 0.03em;
+    line-height: 1.12;
+    background-image: linear-gradient(185deg, #f7efe4 0%, #e4d2b4 18%, #c4a882 40%, #8f7858 58%, #c4a882 78%, #efe6d4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #c4a882;
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.72))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .cap {
+    max-width: 720px;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.42);
+  }
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 28px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>today, four ways</h1>
+  <p>same sections. the structure is what changes.</p>
+</div>
+<div class="tabs">
+  <button type="button" data-show="now" class="on">now</button>
+  <button type="button" data-show="air">air</button>
+  <button type="button" data-show="spread">spread</button>
+  <button type="button" data-show="even">even</button>
+</div>
+<div class="board-wrap">
+  <div class="board now on" id="now"></div>
+  <div class="board air" id="air"></div>
+  <div class="board spread" id="spread"></div>
+  <div class="board even" id="even"></div>
+  <p class="cap" id="cap">now · the current packed puzzle</p>
+</div>
+<a class="back" href="/everything.html">back to the board</a>
+<script>
+(function(){
+  var tiles = [
+    {id:'academia', t:'I am a grad student', src:'manus-storage/zone-grad-student.jpg?v=grad1'},
+    {id:'fitness', t:'I am training', src:'manus-storage/zone-athletic-gym.jpg?v=gym1'},
+    {id:'glowing-up', t:'I am glowing up', src:'manus-storage/zone-glow-up.jpg?v=glow7'},
+    {id:'deen', t:'I am worshipping Allah ﷻ', src:'manus-storage/zone-god-conscious.jpg?v=remembrance1'},
+    {id:'wins', t:'I am winning', src:'manus-storage/zone-wins-hand.jpg?v=game13'},
+    {id:'fighting', t:'I am fighting', src:'manus-storage/zone-audacity.jpg?v=finger1'},
+    {id:'networking', t:'I am networking', src:'manus-storage/zone-networking.jpg?v=net1'},
+    {id:'pursuing', t:'I am pursuing', src:'manus-storage/zone-she-pursues.jpg?v=pursue1'},
+    {id:'financially-abundant', t:'I am financially abundant', src:'manus-storage/zone-abundance-tree.jpg?v=tree1'},
+    {id:'successful', t:'I am successful', src:'manus-storage/zone-successful.jpg?v=ok2'},
+    {id:'healthy', t:'I am healthy', src:''}
+  ];
+  function paint(host){
+    host.innerHTML = tiles.map(function(x){
+      var photo = x.src
+        ? 'style="background-image:url(\'' + x.src + '\')"'
+        : '';
+      return '<article class="tile t-' + x.id + (x.src ? '' : ' nophoto') + '">' +
+        '<div class="photo" ' + photo + '></div>' +
+        '<h3 class="title">' + x.t + '</h3></article>';
+    }).join('');
+  }
+  ['now','air','spread','even'].forEach(function(id){
+    paint(document.getElementById(id));
+  });
+  var caps = {
+    now: 'now · the current packed puzzle',
+    air: 'air · gutters, rounded rooms, fuller tiles get more space',
+    spread: 'spread · one large room, the rest composed around it',
+    even: 'even · flush rooms, closer in size, no skinny leftover strips'
+  };
+  var tabs = [].slice.call(document.querySelectorAll('.tabs button'));
+  var boards = [].slice.call(document.querySelectorAll('.board'));
+  var cap = document.getElementById('cap');
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-show');
+      tabs.forEach(function(b){ b.classList.toggle('on', b === btn); });
+      boards.forEach(function(b){ b.classList.toggle('on', b.id === id); });
+      cap.textContent = caps[id] || '';
+    });
+  });
+})();
+</script>
+</body>
+</html>

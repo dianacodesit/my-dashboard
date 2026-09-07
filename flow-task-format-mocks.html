@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>task format · six ways · pick by looking</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;6..72,500;1,300;1,400;1,500&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=taskfmt1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    background: #120e0b;
+    padding: 56px 18px 100px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+  .bg {
+    position: fixed;
+    inset: 0;
+    background: url("manus-storage/_339ab459.jpg") center / cover no-repeat;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 12, 10, 0.28);
+  }
+  .wrap { position: relative; z-index: 1; }
+
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.62);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 640px;
+    margin: 0 auto 18px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.62);
+    font-size: 1.04rem;
+    line-height: 1.5;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 14px;
+    max-width: 920px;
+  }
+  .tabs button {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.62);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,168,130,0.26);
+    border-radius: 999px;
+    padding: 8px 14px 7px;
+    cursor: pointer;
+  }
+  .tabs button[aria-pressed="true"] {
+    color: #1a140e;
+    background: #c4a882;
+    border-color: #c4a882;
+  }
+  .caption {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 16px;
+    min-height: 2.6em;
+    font-style: italic;
+    color: rgba(244,239,230,0.58);
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .picked {
+    display: none;
+    text-align: center;
+    margin: -6px auto 16px;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .stage {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .day {
+    background: rgba(35, 28, 38, 0.45);
+    border-radius: 20px;
+    border: 1px solid rgba(255,248,238,0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 22px 22px 28px;
+    box-shadow: 0 18px 48px rgba(0,0,0,0.28);
+  }
+  .day-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .day-date {
+    font-family: "Newsreader", serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,248,238,0.82);
+  }
+  .pills {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    width: fit-content;
+    margin: 0 auto 22px;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(18,12,10,0.35);
+    border: 1px solid rgba(255,248,238,0.12);
+  }
+  .pills span {
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: rgba(255,248,238,0.55);
+    padding: 6px 14px;
+  }
+  .pills span.on {
+    background: #fff8ee;
+    color: #1a140e;
+    border-radius: 999px;
+  }
+
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  .x {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,168,130,0.55);
+    background: rgba(255,252,248,0.94);
+    color: rgba(80,64,48,0.82);
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .row:hover .x,
+  .row:focus-within .x { opacity: 1; pointer-events: auto; }
+
+  /* ——— A Field ——— */
+  .field-list { display: flex; flex-direction: column; gap: 10px; }
+  .field-list .row {
+    position: relative;
+    padding: 16px 20px 14px;
+    border-radius: 14px;
+    background: rgba(255,248,238,0.06);
+    border: 1px solid rgba(255,248,238,0.14);
+    cursor: pointer;
+  }
+  .field-list .stamp {
+    font-family: "Italiana", serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: #c4a882;
+    margin-bottom: 4px;
+  }
+  .field-list .name {
+    font-size: 1.22rem;
+    color: rgba(255,250,240,0.94);
+  }
+  .field-list .sec {
+    display: block;
+    margin-top: 3px;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: rgba(200,180,150,0.55);
+  }
+  .field-list .row.done { opacity: 0.48; }
+  .field-list .row.done .stamp { color: #e8c9a0; }
+  .field-list .row.rest {
+    text-align: center;
+    background: transparent;
+    border-style: dashed;
+    padding: 10px;
+  }
+  .field-list .row.rest .name {
+    font-style: italic;
+    letter-spacing: 0.12em;
+    color: rgba(200,180,150,0.7);
+    font-size: 1rem;
+  }
+
+  /* ——— B Ledger ——— */
+  .ledger-list {
+    background: linear-gradient(180deg, rgba(248,236,214,0.12), rgba(40,28,24,0.15));
+    border: 1px solid rgba(196,168,130,0.28);
+    border-radius: 4px;
+    padding: 8px 0 4px;
+    box-shadow: inset 0 0 0 1px rgba(255,248,238,0.04);
+  }
+  .ledger-list .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    padding: 11px 28px 10px 16px;
+    border-bottom: 1px solid rgba(196,168,130,0.18);
+    cursor: pointer;
+  }
+  .ledger-list .row:last-child { border-bottom: 0; }
+  .ledger-list .num {
+    font-family: "DM Mono", monospace;
+    font-size: 0.72rem;
+    color: rgba(196,168,130,0.7);
+  }
+  .ledger-list .name {
+    font-size: 1.12rem;
+    color: rgba(255,250,240,0.92);
+  }
+  .ledger-list .sec {
+    font-family: "DM Mono", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(196,168,130,0.5);
+  }
+  .ledger-list .row.done .name {
+    text-decoration: line-through;
+    text-decoration-color: rgba(196,168,130,0.55);
+    color: rgba(200,180,150,0.5);
+  }
+  .ledger-list .row.rest {
+    display: block;
+    text-align: center;
+    font-style: italic;
+    letter-spacing: 0.18em;
+    color: rgba(200,180,150,0.55);
+    padding: 8px;
+  }
+
+  /* ——— C Tickets ——— */
+  .ticket-list { display: flex; flex-direction: column; gap: 12px; }
+  .ticket-list .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    min-height: 72px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255,248,238,0.07);
+    border: 1px solid rgba(255,248,238,0.16);
+    cursor: pointer;
+  }
+  .ticket-list .stub {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 8px;
+    background: rgba(196,168,130,0.16);
+    border-right: 2px dashed rgba(255,248,238,0.22);
+    text-align: center;
+  }
+  .ticket-list .stub .num {
+    font-family: "Italiana", serif;
+    font-size: 1.15rem;
+    color: #e8c9a0;
+  }
+  .ticket-list .stub .sec {
+    font-size: 0.68rem;
+    font-style: italic;
+    color: rgba(255,248,238,0.55);
+    line-height: 1.25;
+  }
+  .ticket-list .body {
+    display: flex;
+    align-items: center;
+    padding: 14px 22px 14px 18px;
+    font-size: 1.2rem;
+    color: rgba(255,250,240,0.94);
+  }
+  .ticket-list .row.done { opacity: 0.45; filter: grayscale(0.2); }
+  .ticket-list .row.rest {
+    display: block;
+    text-align: center;
+    background: transparent;
+    border: 0;
+    min-height: 0;
+    padding: 4px;
+    font-style: italic;
+    letter-spacing: 0.16em;
+    color: rgba(200,180,150,0.6);
+  }
+
+  /* ——— D Pins ——— */
+  .pin-list { display: flex; flex-direction: column; gap: 18px; padding: 8px 8px 4px 6px; }
+  .pin-group .gsec {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: rgba(200,180,150,0.5);
+    margin: 0 0 8px 22px;
+  }
+  .pin-list .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 2px 8px 2px 2px;
+    cursor: pointer;
+  }
+  .pin-list .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #e8c9a0;
+    box-shadow: 0 0 0 3px rgba(232,201,160,0.22), 0 0 14px rgba(232,201,160,0.45);
+    flex: none;
+  }
+  .pin-list .chip {
+    padding: 7px 14px 6px;
+    border-radius: 999px;
+    background: rgba(18,12,10,0.42);
+    border: 1px solid rgba(255,248,238,0.18);
+    backdrop-filter: blur(8px);
+    font-size: 1.08rem;
+    color: #fff8ee;
+  }
+  .pin-list .row.done { opacity: 0.4; }
+  .pin-list .row.done .dot { background: rgba(232,201,160,0.35); box-shadow: none; }
+  .pin-list .row.rest {
+    margin: 4px 0 4px 22px;
+    font-style: italic;
+    letter-spacing: 0.16em;
+    color: rgba(200,180,150,0.55);
+    font-size: 0.92rem;
+  }
+
+  /* ——— E Verse ——— */
+  .verse-list { padding: 6px 8px 0 4px; }
+  .verse-list .gsec {
+    font-family: "Italiana", serif;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+    font-size: 0.78rem;
+    color: #c4a882;
+    margin: 18px 0 8px;
+  }
+  .verse-list .gsec:first-child { margin-top: 0; }
+  .verse-list .row {
+    position: relative;
+    padding: 8px 28px 8px 0;
+    cursor: pointer;
+  }
+  .verse-list .name {
+    font-family: "Cormorant Garamond", "Newsreader", serif;
+    font-style: italic;
+    font-size: 1.42rem;
+    line-height: 1.35;
+    color: rgba(255,250,240,0.92);
+  }
+  .verse-list .row.done .name {
+    color: rgba(200,180,150,0.42);
+  }
+  .verse-list .row.done .name::before {
+    content: "∗ ";
+    color: #c4a882;
+    font-style: normal;
+  }
+  .verse-list .row.rest {
+    text-align: center;
+    padding: 14px 0;
+    letter-spacing: 0.28em;
+    font-style: italic;
+    color: rgba(200,180,150,0.45);
+    font-size: 0.85rem;
+  }
+  .verse-list .x { top: 6px; right: 0; }
+
+  /* ——— F Seals ——— */
+  .seal-list { display: flex; flex-direction: column; gap: 14px; }
+  .seal-list .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 10px 6px 2px;
+    cursor: pointer;
+  }
+  .seal-list .seal {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: "Italiana", serif;
+    font-size: 0.95rem;
+    color: #2a2218;
+    background:
+      radial-gradient(circle at 32% 28%, #f3e6d0 0%, #c4a882 42%, #8f7858 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,248,238,0.55),
+      0 2px 8px rgba(0,0,0,0.25);
+  }
+  .seal-list .name {
+    font-size: 1.22rem;
+    font-style: italic;
+    color: rgba(255,250,240,0.94);
+  }
+  .seal-list .sec {
+    display: block;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: rgba(200,180,150,0.5);
+    margin-top: 2px;
+  }
+  .seal-list .row.done .seal {
+    background: radial-gradient(circle at 32% 28%, #d8c4a4 0%, #7a6850 80%);
+    color: rgba(255,248,238,0.7);
+  }
+  .seal-list .row.done .name { color: rgba(200,180,150,0.5); }
+  .seal-list .row.rest {
+    justify-content: center;
+    font-style: italic;
+    letter-spacing: 0.16em;
+    color: rgba(200,180,150,0.55);
+  }
+
+  .hint {
+    margin-top: 18px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,180,150,0.45);
+  }
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 28px;
+    color: rgba(247,239,228,0.7);
+    text-decoration: none;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="hero">
+    <h1>task format</h1>
+    <p>six ways · hover a row for the × · click a row to mark done · click a tab to stay with it</p>
+  </header>
+  <p class="note">Not the numbered rail with a checkbox and an × after it. Each one treats the row as a field of its own.</p>
+  <div class="tabs" role="tablist">
+    <button type="button" aria-pressed="true" data-tab="field">field</button>
+    <button type="button" aria-pressed="false" data-tab="ledger">ledger</button>
+    <button type="button" aria-pressed="false" data-tab="tickets">tickets</button>
+    <button type="button" aria-pressed="false" data-tab="pins">pins</button>
+    <button type="button" aria-pressed="false" data-tab="verse">verse</button>
+    <button type="button" aria-pressed="false" data-tab="seals">seals</button>
+  </div>
+  <p class="caption" id="caption">Each task is its own glass room. Number as a stamp. × lives on the room’s top-right, only on hover.</p>
+  <p class="picked" id="picked"></p>
+
+  <div class="stage">
+    <div class="day">
+      <div class="day-head"><span class="day-date">SEP 6 · SUN</span></div>
+      <div class="pills" aria-hidden="true">
+        <span>overview</span><span>impulses</span><span class="on">priority</span><span>nodes</span><span>flow</span>
+      </div>
+
+      <div class="panel on" data-panel="field">
+        <div class="field-list">
+          <div class="row done"><span class="stamp">01</span><div class="name">salah qadaa Fajr + Dhuhr</div><span class="sec">I am worshipping Allah</span><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><span class="stamp">02</span><div class="name">Hanady M.</div><span class="sec">I am networking</span><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row rest"><div class="name">rest</div></div>
+          <div class="row"><span class="stamp">03</span><div class="name">scholarship application</div><span class="sec">I am a grad student</span><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><span class="stamp">04</span><div class="name">tuition payment</div><span class="sec">I am a grad student</span><button class="x" type="button" aria-label="remove">×</button></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="ledger">
+        <div class="ledger-list">
+          <div class="row done"><span class="num">01</span><span class="name">salah qadaa Fajr + Dhuhr</span><span class="sec">worship</span><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><span class="num">02</span><span class="name">Hanady M.</span><span class="sec">network</span><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row rest">rest</div>
+          <div class="row"><span class="num">03</span><span class="name">scholarship application</span><span class="sec">grad</span><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><span class="num">04</span><span class="name">tuition payment</span><span class="sec">grad</span><button class="x" type="button" aria-label="remove">×</button></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="tickets">
+        <div class="ticket-list">
+          <div class="row done"><div class="stub"><span class="num">01</span><span class="sec">worship</span></div><div class="body">salah qadaa Fajr + Dhuhr</div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><div class="stub"><span class="num">02</span><span class="sec">network</span></div><div class="body">Hanady M.</div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row rest">rest</div>
+          <div class="row"><div class="stub"><span class="num">03</span><span class="sec">grad student</span></div><div class="body">scholarship application</div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><div class="stub"><span class="num">04</span><span class="sec">grad student</span></div><div class="body">tuition payment</div><button class="x" type="button" aria-label="remove">×</button></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="pins">
+        <div class="pin-list">
+          <div class="pin-group">
+            <div class="gsec">I am worshipping Allah</div>
+            <div class="row done"><span class="dot"></span><span class="chip">salah qadaa Fajr + Dhuhr</span><button class="x" type="button" aria-label="remove">×</button></div>
+          </div>
+          <div class="pin-group">
+            <div class="gsec">I am networking</div>
+            <div class="row"><span class="dot"></span><span class="chip">Hanady M.</span><button class="x" type="button" aria-label="remove">×</button></div>
+          </div>
+          <div class="row rest">rest</div>
+          <div class="pin-group">
+            <div class="gsec">I am a grad student</div>
+            <div class="row"><span class="dot"></span><span class="chip">scholarship application</span><button class="x" type="button" aria-label="remove">×</button></div>
+            <div class="row"><span class="dot"></span><span class="chip">tuition payment</span><button class="x" type="button" aria-label="remove">×</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="verse">
+        <div class="verse-list">
+          <div class="gsec">I am worshipping Allah</div>
+          <div class="row done"><div class="name">salah qadaa Fajr + Dhuhr</div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="gsec">I am networking</div>
+          <div class="row"><div class="name">Hanady M.</div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row rest">rest</div>
+          <div class="gsec">I am a grad student</div>
+          <div class="row"><div class="name">scholarship application</div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><div class="name">tuition payment</div><button class="x" type="button" aria-label="remove">×</button></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="seals">
+        <div class="seal-list">
+          <div class="row done"><span class="seal">01</span><div><div class="name">salah qadaa Fajr + Dhuhr</div><span class="sec">I am worshipping Allah</span></div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><span class="seal">02</span><div><div class="name">Hanady M.</div><span class="sec">I am networking</span></div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row rest">rest</div>
+          <div class="row"><span class="seal">03</span><div><div class="name">scholarship application</div><span class="sec">I am a grad student</span></div><button class="x" type="button" aria-label="remove">×</button></div>
+          <div class="row"><span class="seal">04</span><div><div class="name">tuition payment</div><span class="sec">I am a grad student</span></div><button class="x" type="button" aria-label="remove">×</button></div>
+        </div>
+      </div>
+
+      <p class="hint">hover a task · × is the field corner · never beside a check</p>
+    </div>
+  </div>
+  <a class="back" href="everything.html">← back to everything</a>
+</div>
+<script src="nav-shared.js?v=taskfmt1"></script>
+<script>
+(function () {
+  var CAP = {
+    field: "Each task is its own glass room. Number as a stamp. × lives on the room’s top-right, only on hover.",
+    ledger: "A hotel book. Hairline rules. Tiny running labels. Done is a gold strike. × in the margin on hover.",
+    tickets: "Torn stubs. Section lives in the stub; the task is the ticket. × is a punch in the ticket corner.",
+    pins: "Same language as collage tasks: gold dots and glass chips, grouped by section. No checkboxes.",
+    verse: "A manuscript. Section as a gold heading; the task is a line of verse. Done gets a gold asterisk.",
+    seals: "Wax-seal numbers. The seal is how you mark done — no circle checkbox. × hangs off the row corner."
+  };
+  var tabs = document.querySelectorAll(".tabs button");
+  var panels = document.querySelectorAll(".panel");
+  var caption = document.getElementById("caption");
+  var picked = document.getElementById("picked");
+
+  function show(id) {
+    tabs.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-tab") === id ? "true" : "false"); });
+    panels.forEach(function (p) { p.classList.toggle("on", p.getAttribute("data-panel") === id); });
+    caption.textContent = CAP[id] || "";
+    try { localStorage.setItem("btm_task_format_pick_v1", id); } catch (e) {}
+    picked.classList.add("on");
+    picked.textContent = "looking at · " + id;
+  }
+
+  tabs.forEach(function (b) {
+    b.addEventListener("click", function () { show(b.getAttribute("data-tab")); });
+  });
+
+  document.querySelector(".day").addEventListener("click", function (e) {
+    var x = e.target.closest(".x");
+    if (x) { e.preventDefault(); e.stopPropagation(); x.closest(".row").remove(); return; }
+    var row = e.target.closest(".row");
+    if (!row || row.classList.contains("rest")) return;
+    row.classList.toggle("done");
+  });
+
+  var start = "field";
+  try {
+    var q = new URLSearchParams(location.search).get("v");
+    if (q && CAP[q]) start = q;
+  } catch (e2) {}
+  show(start);
+})();
+</script>
+</body>
+</html>

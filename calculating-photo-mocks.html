@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>calculating · look</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0..72,300;0..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=calcmock1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #120e0b;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 18px 96px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.58);
+    line-height: 1.75;
+  }
+  .note {
+    max-width: 640px;
+    margin: 0 auto 28px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.55);
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (min-width: 900px) {
+    .grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .panel {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    font: inherit;
+  }
+  .tile {
+    position: relative;
+    min-height: 420px;
+    border-radius: 14px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .tile h3 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 86%;
+    text-align: center;
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(22px, 2.4vw, 32px);
+    font-weight: 600;
+    color: #e8d3b0;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+    pointer-events: none;
+  }
+  .cap {
+    margin-top: 10px;
+    padding: 0 4px;
+  }
+  .cap strong {
+    display: block;
+    font-family: "Italiana", serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .cap span {
+    display: block;
+    margin-top: 4px;
+    font-style: italic;
+    color: rgba(247,239,228,0.55);
+    font-size: 0.98rem;
+    line-height: 1.4;
+  }
+  .panel.is-on .tile {
+    outline: 2px solid rgba(201,168,114,0.7);
+    outline-offset: 3px;
+  }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: 22px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+  .back {
+    display: block;
+    margin: 36px auto 0;
+    text-align: center;
+    color: rgba(247,239,228,0.55);
+    font-size: 0.95rem;
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>I am calculating</h1>
+    <p>same office · no blur · pick by looking</p>
+  </div>
+  <p class="note">You get the stance. You don’t get a face that isn’t yours.</p>
+  <div class="grid">
+    <button type="button" class="panel" data-pick="now">
+      <div class="tile" style="background-image:url('manus-storage/zone-strategist.jpg?v=strat3')"></div>
+      <div class="cap">
+        <strong>now</strong>
+        <span>profile is still a face</span>
+      </div>
+    </button>
+    <button type="button" class="panel" data-pick="behind">
+      <div class="tile" style="background-image:url('manus-storage/zone-strategist-behind.jpg?v=back1')"></div>
+      <div class="cap">
+        <strong>A · from behind</strong>
+        <span>bun, blazer, mug, city — no nose, no jaw</span>
+      </div>
+    </button>
+    <button type="button" class="panel" data-pick="shadow">
+      <div class="tile" style="background-image:url('manus-storage/zone-strategist-shadow.jpg?v=shad1')"></div>
+      <div class="cap">
+        <strong>B · face in shadow</strong>
+        <span>same stance, hair and outline only</span>
+      </div>
+    </button>
+  </div>
+  <p class="picked" id="picked"></p>
+  <a class="back" href="everything.html">← back to everything</a>
+</main>
+<script src="nav-shared.js?v=calcmock1"></script>
+<script>
+  var labels = {
+    now: 'now — current photo',
+    behind: 'A — from behind',
+    shadow: 'B — face in shadow'
+  };
+  document.querySelectorAll('.panel').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.panel').forEach(function(b){ b.classList.remove('is-on'); });
+      btn.classList.add('is-on');
+      var el = document.getElementById('picked');
+      el.textContent = 'looking at ' + labels[btn.getAttribute('data-pick')];
+      el.classList.add('on');
+    });
+  });
+</script>
+</body>
+</html>

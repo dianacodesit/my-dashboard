@@ -79,6 +79,8 @@
     { href: 'task-display-options.html', label: 'task display options', group: 'design' },
     { href: 'tasks-glance-mocks.html', label: 'tasks · first glance', group: 'design' },
     { href: 'tasks-display-mocks.html', label: 'tasks · other ways', group: 'design' },
+    { href: 'flow-task-format-mocks.html', label: 'task format · six ways', group: 'design' },
+    { href: 'overview-task-format-mocks.html', label: 'overview tasks · six ways', group: 'design' },
     { href: 'arrows.html', label: 'arrow formations', group: 'design' },
     { href: 'transitions.html', label: 'transition styles', group: 'design' }
   ];
