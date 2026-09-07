@@ -9,15 +9,20 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage d
 
 ## Sep 7 onward (`noBannerPackDay` / `iso >= 2026-09-07` / `dash-mosaic-era`)
 
-Dashboard **room chrome** (`packDashMosaic`), but tiles stay **as square as possible**.
+Dashboard **room chrome** (`packDashMosaic`). Follow **only** what Diana stated:
 
-- Equal columns (`1fr 1fr 1fr`, or `1fr 1fr` when 2 or 4 tiles)
-- `aspect-ratio: 1` — no dashboard landscape slabs, no tall Focus span
-- Tile chrome: 18px radius, glass edge — **no dark overlay** on the photo
+- **Air + spread together:** gutters, rounded rooms, fuller tiles get more space, **and** one large room with the rest composed around it
+- The fullest section is the large room. The others sit beside and below it
+- **Widths and heights both fill the board and both follow content** (`tileContentScore`)
+- Tiles stay **relatively proportional** to one another
+- Base size is **0.8** of the old equal-size tiles; fuller sections grow from there. Do not shrink empties below that base
+- Rectangles when that fits. Do **not** force squares. Do **not** force the same height. Do **not** invent a column count
+- Fill the board — no empty strip, no leftover hole. Gutters between tiles (not drawn borders, not overlap). Do **not** stuff a tile into a leftover sliver
+- No dark overlay on the photo
 - Photos `cover` the tile (crop edges; no letterbox)
 - **Titles stay centered** in the current **gold foil** style — never bottom-left Cinzel
 - No scrap tilt
-- No 2-col × 1-row banners
+- Re-pack when a task / subsection / card is added or removed
 
 ## Aug 26 – Aug 31
 
@@ -40,3 +45,13 @@ Use existing `visionPackSpec`. Do **not** restyle past days into Sep 7 rooms.
 ## If Sep 7+ titles go bottom-left white
 
 Put them back to centered gold foil. Do not ask.
+
+## Past-day titles stay baked
+
+Never rewrite section titles on days before today. If a pass already rewrote history (I will… / past tense / I am… on the wrong era), restore **every** affected day from the baked map — not only Sept 5 and 6. Do not ask.
+
+**Forbidden:** auto-flip titles when a day is no longer today (`I will succeed` → `I succeeded`). That rewriter is deleted. Do not restore `pastTenseDay` / `toPastSectionTitle` / load-time chrome title rewrites. Sept 5 past tense stays because Diana asked for those words — not because midnight flipped them.
+
+**Do not push Sep 6 style backward.** Centered gold foil started on **Sept 6**. Aug 26–Sep 5 stay **white Newsreader, bottom-left**. Restore those days to exactly that — never restyle them to centered gold foil.
+
+**Section picker list is I am.** `sectionPresets` / `presetSecs` is a hardcoded **I am…** list. Do not put **I will…** back in that list. Do not add a runtime rewriter to convert I will → I am for the picker. Change the list. Skip leftover I will harvests; do not rewrite them.

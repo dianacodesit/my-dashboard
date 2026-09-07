@@ -1,0 +1,34 @@
+# New days start empty
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage / overview-era days.
+
+## Behavior
+
+Every **new day** (today and future) is a fresh start: **no sections auto-added**.
+
+Sections appear only when Diana:
+
+- uses **+** to add a section, or
+- clicks **carry** to bring unfinished work forward, or
+- explicitly asks to seed a specific section onto a day
+
+## Never
+
+- `addTile` from boot migrations, habit helpers, or “ensure X exists” on today/future
+- Creating Pepperdine / Awliya / fitness / calisthenics / villains / glow up just because a past day had them
+- `ensureHabitsOnBoard` creating a missing section to house induction (or any habit)
+- `demotePepperdineCardSections` inventing Pepperdine + committee/GSA on an empty day
+- Cloning yesterday’s collage onto a newly created day shell
+
+## Always
+
+1. New day shells (`ensureDayCard` + `emptyShellHtml`) start with an empty `.vision-hero`.
+2. Habit cards (induction, etc.) attach only after she has added that section herself.
+3. Historical seed functions stay **date-gated** to the original day (e.g. Aug 30 only) — never `d >= '2026-08-30'` that creates tiles on every later day.
+4. Keep `everything.html` and `prototype.html` in sync.
+5. Past days are history — do not strip sections she already had.
+6. `+` and **carry** mark sections/cards as user-added. Auto-seed leftovers (fitness training, Awliya, calisthenics, villains, Psi Chi/Handshake/committee/GSA cards) on **today + future** must be scrubbed on boot and persist — even if shells or `btm_overview_edits_v1` restore them. Do not put those in `removedSections` (she can still add them via +).
+
+## If a new day shows up pre-filled
+
+Stop the auto-seed. Scrub uninvited auto-seeded sections on **today/future** only. Keep sections she added via + or carry. Do not rewrite past days.

@@ -1,0 +1,84 @@
+---
+description: Sections depth shows sections only — four layers never conflated
+alwaysApply: true
+---
+
+# Depth layers: four distinct layers
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage / overview-era days from **Aug 26 onward** (`everything.html` + `prototype.html`). Depth four (sections · subsections · cards · tasks) applies to those days — never the legacy overview/details cluster.
+
+## Four layers (never conflate)
+
+1. **Sections** — collage tiles (`.vision-tile`): fitness training, abundance, Pepperdine, audacity…
+2. **Subsections** — nested inside a section only (`.vision-subsection` / `.vision-tile-subsections`), e.g. calisthenics under fitness training. **Not** polaroids. **Not** collage tiles.
+3. **Cards** — polaroid-style items (`.vision-polaroid` / `.vision-shot-card`): tuition, refunds, EnhanCV… Keep the UI label **cards** until Diana renames them. Do **not** call them subsections.
+4. **Tasks** — carry-forward **pins** on each section tile (gold dots + glass name chips). **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and `.vision-check` items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` paints `.vision-task-sky`. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web.
+
+## Depth toggle (re-click overview → vertical popup to the left)
+
+**View pills** (center): overview · impulses · priority · nodes · flow — which *mode* of the day you’re in. Labels only: `data-view="flow"` shows **priority**; `data-view="flowchart"` shows **flow**. Do not put the word *flowchart* on a pill.
+
+**View pill bar never crowds.** Grow when a label is added. Do not leave five words in the four-pill 325px bar (that is how they jam). Floors: **3 → 280px · 4 → 325px · 5 → 406px** (325 × 5/4 — same per-label room as four pills, not extra gap). Bar is `fit-content` + `gap` — pills are `flex: 0 0 auto` with horizontal padding, not equal columns that squash `priority`. If a sixth view is added, the bar grows with the word. Keep `everything.html` + `prototype.html` in sync. If labels look jammed, widen immediately — do not ask.
+
+**Depth** (sections · subsections · cards · tasks): how deep into the collage you’re looking. Persist `btm_day_overview_mode_v1`; map old `details` → `cards`; map `overview` ↔ `sections` (same layer). **Default is tasks** (pins on the collage). Do not force sections on load.
+
+When already on **overview**, press **overview again** to open a vertical glass popup **to the left** of that pill (`.depth-menu-open` + `.depth-overview-popup`). Pick a layer; click outside / Escape / pick closes it. Right tools stay **carry | +** only — no always-on four-pill depth cluster.
+
+Do **not** put depth as a second row / hairline underline menu *under* the center pills. The popup is beside overview, not below the cluster.
+
+**Zoomed section:** every layer shows together (section photo + subsections + cards + task pins). Depth does **not** filter the zoomed view. Do **not** flip depth when adding a card/subsection while zoomed.
+
+| Mode (UI / storage) | Class | Unzoomed collage shows |
+|------|--------|-------------------------|
+| **sections** (legacy `overview`) | `.overview-mode-sections` + `.overview-mode-overview` | Sections only — no subsections, cards, or tasks |
+| **subsections** | `.overview-mode-subsections` | Nested subsections; hide cards and tasks |
+| **cards** | `.overview-mode-cards` (+ legacy `.overview-mode-details`) | Cards (polaroids); hide subsections and tasks |
+| **tasks** | `.overview-mode-tasks` | Pins on tiles (gold dots + glass labels, no filaments) — hide polaroids / subsections / horizon paint; arm `.horizon-armed` via `syncHorizonTile` + `syncTaskConstellation` (`tasks-constellation-v1` + `tasks-pins-glass-v1`) |
+
+## Never
+
+- Treat polaroids / cards as subsections (or vice versa)
+- Rename the cards layer to “subsections” in UI copy
+- Show polaroids in **tasks** depth (tasks = pins, not cards)
+- Restore **slabs** after Diana rejected them (`tasks-slabs-v1`)
+- Restore **filaments** / connecting web after Diana rejected them
+- `display: block` on `.vision-polaroid` / `.vision-shot-card` under `.overview-mode-overview` / `.overview-mode-sections` + `:not(.is-zoomed)`
+- Show subsections on sections mode (sections = clean collage)
+- Put calisthenics / inversions as `.vision-polaroid` or their own `.vision-tile`
+- Put depth as a second row or underline menu *under* the center view pills
+- Leave an always-visible four-pill depth cluster on the right (depth is the overview-reclick popup)
+- Reintroduce overview · details as the only depth options on Aug 26+ days
+- Hide cards, subsections, or task pins inside a **zoomed** section because collage depth is sections/cards/tasks. Zoomed = all layers.
+
+## Always
+
+1. High-specificity hide rules for sections mode (polaroids, subsections, tasks, habit chrome)
+2. Keep `everything.html` and `prototype.html` in sync
+3. Adding a **card** from the **unzoomed** collage in sections mode may flip depth to **cards** so it is visible on the board. Never flip depth while a section is zoomed — zoom already shows every layer.
+4. Modal stays **add a card** / **custom card name** (separate from any add-subsection flow)
+5. Depth popup only while overview is active (re-click overview); hide it on impulses / flow / nodes
+6. In tasks depth, `+` on a tile prompts **add a task** (constellation star / check), not a polaroid card
+
+## If cards reappear in sections mode
+
+Fix the CSS immediately. Sections depth = clean sections.
+
+## If polaroids reappear in tasks mode
+
+Restore pins (`tasks-constellation-v1` + `tasks-pins-glass-v1` + `syncTaskConstellation`): hide polaroids, paint gold dots + glass labels. Do not ask permission.
+
+## If slabs come back in tasks mode
+
+Remove `tasks-slabs-v1`. Keep pins. Do not ask permission.
+
+## If filaments come back in tasks mode
+
+Hide / remove `.vision-task-filament`. Keep gold dots + glass labels. Do not ask permission.
+
+## If the painted horizon line comes back in tasks mode
+
+Hide `.vision-horizon` / above / below. Keep pins. Do not ask permission.
+
+## If depth becomes a second row under the center pills
+
+Put it back as a vertical popup to the **left** of the overview pill (re-click overview). Do not ask permission.
