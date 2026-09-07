@@ -76,8 +76,8 @@ KNOWN_CARD_PHOTOS = {
     "istighfar 1000x": "manus-storage/sub-istighfar.jpg?v=ist1",
     "fajr": "manus-storage/card-fajr.jpg?v=fajr1",
     "fajr salah": "manus-storage/card-fajr.jpg?v=fajr1",
-    "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "pepperdine": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "enroll": "manus-storage/zone-achieve-csol.jpg?v=csol7",
     "achieve": "manus-storage/zone-achieving.jpg?v=done1",
     "I will achieve": "manus-storage/zone-achieving.jpg?v=done1",
     "i will achieve": "manus-storage/zone-achieving.jpg?v=done1",
@@ -88,12 +88,12 @@ KNOWN_CARD_PHOTOS = {
     "to master": "manus-storage/zone-to-master.jpg?v=dip3",
     "to-master": "manus-storage/zone-to-master.jpg?v=dip3",
     "master": "manus-storage/zone-to-master.jpg?v=dip3",
-    "I will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "grad school": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "grad": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "I will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "i will succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "to succeed": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "grad school": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "grad": "manus-storage/zone-achieve-csol.jpg?v=csol7",
     "soul": "",
     # sorrow is NOT soul — distinct focus; no approved photo (was soul-rose duplicate)
     "sorrow": "",
@@ -104,6 +104,10 @@ KNOWN_CARD_PHOTOS = {
     "ignite": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "igniting": "manus-storage/zone-inner-fire.jpg?v=spark1",
     "glow up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "glowing up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "glowing-up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "i am glowing up": "manus-storage/zone-glow-up.jpg?v=glow6",
+    "I am glowing up": "manus-storage/zone-glow-up.jpg?v=glow6",
     "luscious hair": "",
     "glass skin": "",
     "facial tone": "",
@@ -186,10 +190,10 @@ KNOWN_CARD_PHOTOS = {
     "train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "fitness": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "trained": "manus-storage/zone-athletic-gym.jpg?v=gym1",
-    "academia": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol2",
-    "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol2",
+    "academia": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol7",
+    "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol7",
     "Deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
     "networking": "manus-storage/zone-to-earn-gold.jpg?v=earn3",
@@ -198,6 +202,9 @@ KNOWN_CARD_PHOTOS = {
     "a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
     "i am a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
     "i am strategist": "manus-storage/zone-strategist.jpg?v=strat3",
+    "calculating": "manus-storage/zone-strategist.jpg?v=strat3",
+    "i am calculating": "manus-storage/zone-strategist.jpg?v=strat3",
+    "I am calculating": "manus-storage/zone-strategist.jpg?v=strat3",
     "successful": "manus-storage/zone-successful.jpg?v=ok2",
     "i am successful": "manus-storage/zone-successful.jpg?v=ok2",
     "i successful": "manus-storage/zone-successful.jpg?v=ok2",
@@ -1700,10 +1707,66 @@ def _approved_section_photo(key: str) -> str | None:
     return str(KNOWN_CARD_PHOTOS.get(key) or "")
 
 
+def _photo_alias_keys(name: str) -> list[str]:
+    raw = " ".join(str(name or "").replace("\u2011", "-").split()).strip().lower()
+    keys: list[str] = []
+
+    def add(k: str) -> None:
+        k = " ".join(str(k or "").split()).strip()
+        if k and k not in keys:
+            keys.append(k)
+
+    add(raw)
+    bare = raw
+    for prefix in ("i will ", "i am ", "to ", "i ", "am "):
+        if bare.startswith(prefix):
+            bare = bare[len(prefix) :]
+            break
+    if bare.startswith("am "):
+        bare = bare[3:]
+    add(bare)
+    add(bare.replace(" ", "-"))
+    iam_lemma = {
+        "glowing up": "glow up",
+        "glowing-up": "glow up",
+        "calculating": "strategist",
+        "a grad student": "academia",
+        "training": "train",
+        "worshipping allah": "deen",
+        "fighting": "audacity",
+        "pursuing": "pursue",
+        "igniting": "ignite",
+        "aligning": "align",
+        "channeling": "channel",
+        "recouping": "recoup",
+        "achieving": "achieve",
+        "winning": "wins",
+        "becoming": "become",
+        "persevering": "to persevere",
+        "networking": "networking",
+    }
+    lemma = iam_lemma.get(bare) or iam_lemma.get(bare.replace(" ", "-"))
+    if lemma:
+        add(lemma)
+        add(lemma.replace(" ", "-"))
+    parts = bare.split()
+    if parts and parts[0].endswith("ing") and len(parts[0]) > 4:
+        stem = parts[0][:-3]
+        rest = " ".join(parts[1:])
+        add(f"{stem} {rest}".strip())
+        add(f"{stem}e {rest}".strip())
+    return keys
+
+
 def photo_for_name(name: str) -> dict:
-    key = " ".join(str(name or "").replace("\u2011", "-").split()).strip().lower()
-    if not key:
+    raw = " ".join(str(name or "").replace("\u2011", "-").split()).strip().lower()
+    if not raw:
         return {"ok": False, "error": "empty"}
+    key = raw
+    for cand in _photo_alias_keys(raw):
+        if cand in KNOWN_CARD_PHOTOS or cand in CONCEPTUAL_SECTION_KEYS:
+            key = cand
+            break
     with PHOTO_LOCK:
         approved = _approved_section_photo(key)
         stored = _load_photo_map()
