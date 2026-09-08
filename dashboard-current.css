@@ -1,0 +1,683 @@
+/* btm-today-first */
+html, body, .day-block, .day-card, .vision-hero, .vision-tile {
+  overflow-anchor: none;
+}
+html body .day-block.collapsed:not(.today-block) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 56px;
+}
+
+/* no-card-flash */
+/* Never hide #page-bg-wrapper — that stuck both pages on the mountain. */
+html body .day-block.vision-collage-day .vision-board,
+html body .day-block.overview-era-day .vision-board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  box-sizing: border-box;
+}
+html body .day-block.vision-collage-day:not(.scrap-collage-era) .vision-hero:not(.vision-hero-dashmosaic),
+html body .day-block.overview-era-day:not(.scrap-collage-era) .vision-hero:not(.vision-hero-dashmosaic) {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start !important;
+  column-count: auto !important;
+  column-fill: unset !important;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+html body .day-block.collage-flush .vision-hero:not(.vision-hero-dashmosaic) {
+  gap: 0 !important;
+  column-gap: 0 !important;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-board:not(.is-zoomed) .vision-hero:not(.vision-hero-scrap):not(.vision-hero-origphoto):not(.vision-hero-dashmosaic) > .vision-tile {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  break-inside: auto !important;
+  margin: 0 !important;
+  flex: unset !important;
+}
+/* 8 tiles need 4 tracks on first paint — the 2-row default auto-flows into a scramble. */
+html body .day-block:is(.vision-collage-day, .overview-era-day):not(.scrap-collage-era) .vision-hero:has(> .vision-tile:nth-child(2)):not(:has(> .vision-tile:nth-child(3))) {
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: minmax(300px, 340px) !important;
+  height: auto !important;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day):not(.scrap-collage-era) .vision-hero:has(> .vision-tile:nth-child(8)),
+html body .day-block:is(.vision-collage-day, .overview-era-day):not(.scrap-collage-era) .vision-hero:has(> .vision-tile:nth-child(7)):not(:has(> .vision-tile:nth-child(8))) {
+  grid-template-rows: minmax(240px, auto) minmax(210px, auto) minmax(210px, auto) minmax(210px, auto) !important;
+  height: auto !important;
+  flex: 0 0 auto !important;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day):not(.scrap-collage-era) .vision-hero:has(> .vision-tile:nth-child(9)) {
+  grid-template-rows: minmax(240px, auto) minmax(210px, auto) minmax(210px, auto) minmax(210px, auto) !important;
+  height: auto !important;
+}
+/* Unmoded four-era days paint as sections — do not wait for late depth JS. */
+html body .day-block.depth-four-era:not(.overview-mode-cards):not(.overview-mode-details):not(.overview-mode-subsections):not(.overview-mode-tasks) .vision-board:not(.is-zoomed) .vision-polaroid,
+html body .day-block.depth-four-era:not(.overview-mode-cards):not(.overview-mode-details):not(.overview-mode-subsections):not(.overview-mode-tasks) .vision-board:not(.is-zoomed) .vision-shot-card,
+html body .day-block.depth-four-era:not(.overview-mode-cards):not(.overview-mode-details):not(.overview-mode-subsections):not(.overview-mode-tasks) .vision-board:not(.is-zoomed) .vision-tile-subsections,
+html body .day-block.depth-four-era:not(.overview-mode-cards):not(.overview-mode-details):not(.overview-mode-subsections):not(.overview-mode-tasks) .vision-board:not(.is-zoomed) .vision-check {
+  display: none !important;
+}
+html body .day-block.vision-collage-day .vision-tile,
+html body .day-block.overview-era-day .vision-tile {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+html body .day-block.vision-collage-day .vision-tile-photo,
+html body .day-block.overview-era-day .vision-tile-photo {
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: var(--tile-photo) !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+html body .day-block.depth-four-era .overview-depth-toggle {
+  display: none !important;
+}
+/* Card photos must never paint at intrinsic size before late polaroid CSS parses. */
+.vision-polaroid, .vision-shot-card {
+  overflow: hidden;
+  max-width: 200px;
+  max-height: 240px;
+}
+.vision-polaroid img, .vision-shot-card img,
+img[src*="card-fall-2026-enrollment"] {
+  max-width: 160px;
+  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.shot-lightbox img,
+.shot-lightbox img[src*="card-fall-2026-enrollment"] {
+  max-width: min(1200px, 96vw);
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+#page-bg-img[src*="card-fall-2026-enrollment"],
+#page-bg-img[src*="card-tuition"] {
+  display: none !important;
+}
+/* First paint = current chrome. Do not wait for end-of-file CSS/JS. */
+html body #editBtn,
+html body #editBtn.edit-toggle,
+html body #sync-state-btn,
+html body #sync-btn,
+html body #exportBtn,
+html body .editing-badge {
+  display: none !important;
+}
+html body #enh-left-fab {
+  position: fixed !important;
+  left: 24px !important;
+  bottom: 24px !important;
+  top: auto !important;
+  right: auto !important;
+  z-index: 99990 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  pointer-events: none !important;
+}
+html body #enh-left-fab #enh-jump-today,
+html body #enh-left-fab #enh-scroll-top {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: auto !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+}
+html body #enh-left-fab #enh-jump-today {
+  height: 36px !important;
+  padding: 0 14px !important;
+  border: none !important;
+  border-radius: 18px !important;
+  background: rgba(138,158,133,0.9) !important;
+  color: #fff !important;
+  font-family: 'DM Mono', monospace, sans-serif !important;
+  font-size: 9px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 2px 12px rgba(138,158,133,0.3) !important;
+}
+html body #enh-left-fab #enh-scroll-top {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(245,240,232,0.9) !important;
+  border: 1px solid rgba(196,168,130,0.4) !important;
+  color: #2A2A25 !important;
+  font-size: 18px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+}
+@media (max-width: 768px) {
+  html body #enh-left-fab {
+    left: 16px !important;
+    bottom: 16px !important;
+  }
+}
+html body #enh-zoom-move {
+  display: none !important;
+}
+html body.vision-zoom-open #enh-left-fab #enh-jump-today,
+html body.vision-zoom-open #enh-left-fab #enh-scroll-top {
+  display: none !important;
+}
+html body.vision-zoom-open #enh-left-fab #enh-zoom-move {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: auto !important;
+  height: 36px !important;
+  padding: 0 16px !important;
+  border: 1px solid rgba(255, 248, 238, 0.22) !important;
+  border-radius: 18px !important;
+  background: rgba(16, 11, 8, 0.55) !important;
+  color: #f3e6c8 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 16px !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  cursor: pointer !important;
+}
+html body.vision-zoom-open.zoom-move-on #enh-left-fab #enh-zoom-move {
+  background: #fff8ee !important;
+  color: #2a2218 !important;
+  border-color: transparent !important;
+}
+/* Quotes are zoom-only. Hide before the late CSS file finishes or they
+   paint as a full-card “version” on the glass (FOUC). */
+html body .vision-tile-quote {
+  display: none !important;
+}
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-quote {
+  display: block !important;
+}
+html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 36px) !important;
+  max-width: calc(100% - 36px) !important;
+  margin: 0 !important;
+  z-index: 16 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+}
+html body .day-block.dash-mosaic-era .vision-hero.vision-hero-dashmosaic .vision-tile > .vision-tile-title {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 36px) !important;
+  margin: 0 !important;
+  z-index: 16 !important;
+  text-align: center !important;
+  font-family: "Playfair Display", "Gilda Display", Georgia, serif !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.12 !important;
+  color: #c4a882 !important;
+  pointer-events: none !important;
+}
+/* Skip paint for collapsed days (headers only). Do not hide them. */
+html body .day-block.collapsed {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 56px;
+}
+/* Never smooth-scroll the whole board — that crawls April → today. */
+html { scroll-behavior: auto !important; }
+
+/* overview-depth-view-gate-v1 */
+/* Depth = right pill cluster while overview is active. Never a second row under center pills. */
+html body .day-block:not(.view-overview) .overview-depth-toggle,
+html body .day-block .overview-depth-toggle[hidden] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era .overview-center-stack {
+  gap: 0 !important;
+}
+
+/* vision-tile-title-foil-emboss-v4 */
+/* Raised champagne-foil stamp. Sep 6+ only. Earlier collage days stay
+   white Newsreader, bottom-left — do not push foil backward. */
+html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title,
+html body .day-block[data-date="2026-09-06"] article.vision-tile > h3.vision-tile-title,
+html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title,
+html body .day-block.dash-mosaic-era article.vision-tile > h3.vision-tile-title,
+html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] .vision-tile > .vision-tile-title,
+html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] article.vision-tile > h3.vision-tile-title,
+html body .day-block[data-date="2026-09-06"] .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
+html body .day-block.dash-mosaic-era .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed > h3.vision-tile-title,
+html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title,
+html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed > h3.vision-tile-title {
+  font-family: "Playfair Display", "Gilda Display", Georgia, "Times New Roman", serif !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.12 !important;
+  position: absolute !important;
+  z-index: 16 !important;
+  background-image: linear-gradient(185deg,
+    #f7efe4 0%,
+    #e4d2b4 18%,
+    #c4a882 40%,
+    #8f7858 58%,
+    #c4a882 78%,
+    #efe6d4 100%) !important;
+  background-size: 100% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: #c4a882 !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0 !important;
+  paint-order: fill !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+  filter:
+    drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.72))
+    drop-shadow(0 1px 0 #3a3228)
+    drop-shadow(0 2px 0 #241c16) !important;
+  text-shadow: none !important;
+}
+html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title,
+html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title,
+html body .day-block[data-title-era="foil"] .vision-tile > .vision-tile-title {
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+}
+html body .day-block[data-date="2026-09-06"] .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
+html body .day-block.dash-mosaic-era .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed > h3.vision-tile-title,
+html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title,
+html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed > h3.vision-tile-title {
+  font-size: 36px !important;
+}
+html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title::before,
+html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title::before,
+html body .day-block[data-title-era="foil"] .vision-tile > .vision-tile-title::before,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title::before,
+html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title::before {
+  content: attr(data-carve) !important;
+  position: absolute !important;
+  left: 1px !important;
+  right: -1px !important;
+  top: 2px !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: inherit !important;
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  color: #2a241c !important;
+  -webkit-text-fill-color: #2a241c !important;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  filter: none !important;
+  text-shadow: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 0.92 !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title::after,
+html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title::after,
+html body .day-block[data-title-era="foil"] .vision-tile > .vision-tile-title::after,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title::after,
+html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title::after {
+  content: none !important;
+}
+
+/* pre-sep6-title-restore */
+/* Aug 26–Sep 5 were white Newsreader, bottom-left. Centered gold foil started Sep 6. */
+html body .day-block:is(.vision-collage-day, .overview-era-day):is(
+  [data-date="2026-08-26"],
+  [data-date="2026-08-27"],
+  [data-date="2026-08-28"],
+  [data-date="2026-08-29"],
+  [data-date="2026-08-30"],
+  [data-date="2026-08-31"],
+  [data-date="2026-09-01"],
+  [data-date="2026-09-02"],
+  [data-date="2026-09-03"],
+  [data-date="2026-09-04"],
+  [data-date="2026-09-05"]
+) .vision-tile > .vision-tile-title,
+html body .day-block[data-title-era="pre-foil"] .vision-tile > .vision-tile-title,
+html body .vision-board[data-title-era="pre-foil"] .vision-tile > .vision-tile-title {
+  position: absolute !important;
+  top: auto !important;
+  left: 18px !important;
+  right: 48px !important;
+  bottom: 14px !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  transform: none !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  z-index: 16 !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.15 !important;
+  color: #fff8ee !important;
+  -webkit-text-fill-color: #fff8ee !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  filter: none !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 12px rgba(0, 0, 0, 0.7),
+    0 6px 28px rgba(0, 0, 0, 0.55) !important;
+  pointer-events: none !important;
+}
+html body .day-block[data-title-era="pre-foil"] .vision-tile > .vision-tile-title::before,
+html body .vision-board[data-title-era="pre-foil"] .vision-tile > .vision-tile-title::before,
+html body .day-block[data-title-era="pre-foil"] .vision-tile > .vision-tile-title::after,
+html body .vision-board[data-title-era="pre-foil"] .vision-tile > .vision-tile-title::after {
+  content: none !important;
+  display: none !important;
+}
+html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title {
+  transform: translate(-50%, -50%) !important;
+}
+
+/* constellation-rollover-current */
+html body .day-block.overview-era-day .overview-carry-forward,
+html body .day-block.vision-collage-day .overview-carry-forward {
+  border: 1px solid rgba(255,248,238,0.28) !important;
+  background: rgba(20,14,10,0.22) !important;
+  color: rgba(255,248,238,0.78) !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  padding: 7px 12px !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  letter-spacing: 0.02em;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+html body .day-block .overview-carry-forward:hover {
+  background: rgba(255,248,238,0.14) !important;
+  color: #fff8ee !important;
+  border-color: rgba(255,248,238,0.48) !important;
+}
+html body .day-block .overview-carry-forward.is-armed {
+  color: #2c2418 !important;
+  background: rgba(255,248,238,0.92) !important;
+  border-color: transparent !important;
+}
+#constellation-rollover {
+  position: fixed; inset: 0; z-index: 200050;
+  display: none; align-items: center; justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 28%, rgba(70,48,28,0.5), rgba(8,6,4,0.92) 68%),
+    #0a0806;
+  color: #fff8ee;
+  font-family: "Newsreader", Georgia, serif;
+}
+#constellation-rollover.is-open { display: flex; }
+#constellation-rollover .cr-shell {
+  width: min(920px, 94vw); max-height: 94vh;
+  display: flex; flex-direction: column; gap: 18px;
+  padding: 28px 24px 22px; box-sizing: border-box;
+  overflow-y: auto;
+}
+#constellation-rollover .cr-kicker {
+  margin: 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  opacity: 0.62; font-family: "DM Mono", ui-monospace, monospace; font-style: normal;
+}
+#constellation-rollover .cr-title {
+  margin: 0; font-size: clamp(28px, 4vw, 42px); font-weight: 400; font-style: italic;
+  line-height: 1.1;
+}
+#constellation-rollover .cr-sub {
+  margin: 0; font-size: 15px; opacity: 0.72; font-style: italic;
+}
+#constellation-rollover .cr-sky {
+  position: relative; flex: 1; min-height: 380px; margin: 8px 0 4px;
+  border-radius: 22px; overflow: hidden;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,248,238,0.55), transparent 60%),
+    radial-gradient(1px 1px at 28% 68%, rgba(255,248,238,0.4), transparent 60%),
+    radial-gradient(1.5px 1.5px at 46% 18%, rgba(196,168,130,0.55), transparent 60%),
+    radial-gradient(1px 1px at 62% 74%, rgba(255,248,238,0.35), transparent 60%),
+    radial-gradient(1.5px 1.5px at 78% 36%, rgba(255,248,238,0.5), transparent 60%),
+    radial-gradient(1px 1px at 88% 58%, rgba(196,168,130,0.4), transparent 60%),
+    radial-gradient(1px 1px at 8% 48%, rgba(255,248,238,0.3), transparent 60%),
+    radial-gradient(circle at 20% 30%, rgba(196,168,130,0.14), transparent 42%),
+    radial-gradient(circle at 78% 55%, rgba(255,248,238,0.06), transparent 40%),
+    rgba(255,248,238,0.025);
+  border: 1px solid rgba(255,248,238,0.12);
+}
+#constellation-rollover .cr-star {
+  position: absolute; width: max-content; max-width: 168px;
+  cursor: pointer; user-select: none; border: 0; background: transparent; padding: 2px 4px;
+  color: inherit; text-align: center;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease, opacity 0.25s, filter 0.25s;
+  z-index: 2;
+}
+#constellation-rollover .cr-star-core {
+  display: block; width: 10px; height: 10px; margin: 0 auto 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fffef8 0%, #e8d3b0 38%, rgba(196,168,130,0.2) 70%, transparent 100%);
+  box-shadow:
+    0 0 10px rgba(255,248,238,0.85),
+    0 0 22px rgba(196,168,130,0.55),
+    0 0 40px rgba(196,168,130,0.28);
+  transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s;
+}
+#constellation-rollover .cr-star.is-on .cr-star-core {
+  transform: scale(1.25);
+  box-shadow:
+    0 0 12px rgba(255,248,238,0.95),
+    0 0 28px rgba(196,168,130,0.7),
+    0 0 52px rgba(196,168,130,0.4);
+}
+#constellation-rollover .cr-star.is-on {
+  filter: none;
+  transform: translate(-50%, -50%) scale(1.04);
+}
+#constellation-rollover .cr-star.is-off { opacity: 0.28; }
+#constellation-rollover .cr-star.is-off .cr-star-core {
+  box-shadow: 0 0 6px rgba(255,248,238,0.25);
+  opacity: 0.55;
+}
+#constellation-rollover .cr-star-label {
+  display: block; font-size: 14px; line-height: 1.2;
+  color: #fff8ee; font-style: italic; text-align: center;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+  max-width: 160px; padding: 3px 7px; border-radius: 7px;
+  background: rgba(10,8,6,0.62);
+  overflow-wrap: anywhere; word-break: break-word;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+#constellation-rollover .cr-star-sec {
+  display: block; margin: 0 auto 4px;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,248,238,0.7); white-space: nowrap;
+  font-family: "DM Mono", ui-monospace, monospace; font-style: normal;
+  max-width: 160px; overflow: hidden; text-overflow: ellipsis;
+  padding: 1px 6px; border-radius: 999px;
+  background: rgba(10,8,6,0.5);
+}
+#constellation-rollover .cr-filament {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+}
+#constellation-rollover .cr-filament path {
+  fill: none; stroke: rgba(196,168,130,0.48); stroke-width: 1.1;
+  filter: drop-shadow(0 0 5px rgba(196,168,130,0.45));
+}
+#constellation-rollover .cr-dest {
+  display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px 12px; align-items: center;
+  position: relative; z-index: 5;
+}
+#constellation-rollover .cr-dest-label {
+  font-size: 12px; opacity: 0.55; margin-right: 2px; font-style: italic;
+}
+#constellation-rollover .cr-dest-picker {
+  position: relative; display: inline-flex; flex-direction: column; align-items: stretch;
+  max-width: min(100%, 340px);
+}
+#constellation-rollover .cr-day {
+  border: 1px solid rgba(255,248,238,0.22); background: transparent;
+  color: rgba(255,248,238,0.78); border-radius: 999px; padding: 7px 12px;
+  font: italic 13px/1 "Newsreader", Georgia, serif; cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+#constellation-rollover .cr-day:hover {
+  border-color: rgba(255,248,238,0.42); color: #fff8ee;
+}
+#constellation-rollover .cr-day.is-on {
+  background: rgba(255,248,238,0.92); color: #2c2418; border-color: transparent;
+  box-shadow: 0 0 16px rgba(196,168,130,0.28);
+}
+#constellation-rollover .cr-day-trigger {
+  display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
+  text-align: left;
+}
+#constellation-rollover .cr-day-trigger-label {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;
+}
+#constellation-rollover .cr-day-caret {
+  opacity: 0.55; font-style: normal; font-size: 11px; line-height: 1;
+  flex: 0 0 auto;
+}
+#constellation-rollover .cr-dest-picker.is-open .cr-day-caret {
+  transform: rotate(180deg);
+}
+#constellation-rollover .cr-day-menu {
+  display: none; position: absolute; left: 0; right: auto; top: calc(100% + 8px);
+  min-width: 240px; max-width: 320px; max-height: min(42vh, 280px); overflow-y: auto;
+  padding: 8px; border-radius: 16px;
+  border: 1px solid rgba(255,248,238,0.18);
+  background: rgba(18,12,10,0.94);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.42);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  z-index: 20;
+  scrollbar-width: thin; scrollbar-color: rgba(196,168,130,0.45) transparent;
+}
+#constellation-rollover .cr-day-menu.is-open { display: flex; flex-direction: column; gap: 4px; }
+#constellation-rollover .cr-day-option {
+  border: 0; background: transparent; color: rgba(255,248,238,0.82);
+  border-radius: 999px; padding: 8px 12px; text-align: left; cursor: pointer;
+  font: italic 13px/1.15 "Newsreader", Georgia, serif;
+  transition: background 0.15s, color 0.15s;
+}
+#constellation-rollover .cr-day-option:hover {
+  background: rgba(255,248,238,0.12); color: #fff8ee;
+}
+#constellation-rollover .cr-day-option.is-on {
+  background: rgba(255,248,238,0.92); color: #2c2418;
+}
+#constellation-rollover .cr-day-option-custom {
+  margin-top: 4px; opacity: 0.78;
+  border-top: 1px solid rgba(255,248,238,0.12); border-radius: 0 0 12px 12px;
+  padding-top: 10px;
+}
+#constellation-rollover .cr-date-wrap {
+  display: none; align-items: center; gap: 8px; flex-wrap: wrap;
+  width: 100%; margin-top: 2px;
+}
+#constellation-rollover .cr-date-wrap.is-open { display: flex; }
+#constellation-rollover .cr-date-input {
+  border: 1px solid rgba(255,248,238,0.22); background: rgba(255,248,238,0.06);
+  color: #fff8ee; border-radius: 999px; padding: 7px 12px;
+  font: italic 13px/1 "Newsreader", Georgia, serif; cursor: pointer;
+  color-scheme: dark;
+}
+#constellation-rollover .cr-date-input:focus {
+  outline: none; border-color: rgba(196,168,130,0.55);
+  box-shadow: 0 0 12px rgba(196,168,130,0.22);
+}
+#constellation-rollover .cr-date-apply {
+  font-size: 12px !important; opacity: 0.92;
+}
+#constellation-rollover .cr-foot {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center; flex-wrap: wrap;
+}
+#constellation-rollover .cr-count {
+  font-size: 13px; opacity: 0.65; font-style: italic;
+}
+#constellation-rollover .cr-all {
+  margin-right: auto; border: 0; background: transparent;
+  color: rgba(255,248,238,0.78); cursor: pointer; padding: 8px 4px;
+  font: italic 14px/1 "Newsreader", Georgia, serif;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+#constellation-rollover .cr-all:hover { color: #fff8ee; }
+#constellation-rollover .cr-cancel {
+  border: 0; background: transparent; color: rgba(255,248,238,0.55);
+  font: italic 14px/1 "Newsreader", Georgia, serif; cursor: pointer; padding: 8px 10px;
+}
+#constellation-rollover .cr-go {
+  border: 0; border-radius: 999px; padding: 10px 18px; cursor: pointer;
+  background: linear-gradient(135deg, #e8d3b0, #c4a882); color: #2c2418;
+  font: italic 15px/1 "Newsreader", Georgia, serif;
+  box-shadow: 0 0 24px rgba(196,168,130,0.35);
+}
+#constellation-rollover .cr-go:disabled { opacity: 0.35; cursor: default; box-shadow: none; }
+#constellation-rollover.is-launching .cr-star.is-on {
+  animation: cr-drift 0.7s ease forwards;
+}
+@keyframes cr-drift {
+  to { transform: translate(40vw, -30vh) scale(0.2); opacity: 0; }
+}
