@@ -1,0 +1,30 @@
+---
+description: Day-specific dashboard changes apply only from their target day forward
+alwaysApply: true
+---
+
+# Day-forward only — historical days are immutable
+
+Hard rule for Diana's dashboard (`/Users/diana/my-dashboard`).
+
+## Required boundary
+
+- Any feature, layout, styling, behavior, migration, or content change requested for a day applies to **that date and later only**.
+- Every earlier day is historical and must remain exactly as it was.
+- Determine the target date before editing and gate the change with an explicit ISO-date boundary such as `iso >= '2026-09-07'`.
+- Scope CSS with the target-day class/date boundary; never use an unbounded selector that reaches earlier days.
+- Scope migrations, defaults, storage rewrites, and auto-generated chrome to the same date boundary.
+
+## Never
+
+- Push today's design or behavior backward onto past days.
+- Rewrite, repack, rename, re-style, or re-seed historical days while implementing a current-day feature.
+- Treat a shared collage class as permission to alter every day carrying that class.
+
+## Verification
+
+- Check the target day still has the feature.
+- Check the immediately previous day does **not** have it.
+- If a regression already touched past days, restore those days only as an explicit rollback; do not expand the new feature backward.
+
+Only Diana's explicit request to change a named historical day overrides this rule.

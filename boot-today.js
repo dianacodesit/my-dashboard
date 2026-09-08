@@ -64,9 +64,6 @@
     [80, 220, 500, 900, 1400].forEach(function (ms) {
       setTimeout(pinTodayCard, ms);
     });
-    setTimeout(function () {
-      try { if (typeof window.__settleTodayBoard === 'function') window.__settleTodayBoard(); } catch (eS) {}
-    }, 700);
     window.addEventListener('wheel', releasePin, { passive: true, once: true });
     window.addEventListener('touchmove', releasePin, { passive: true, once: true });
     window.addEventListener('keydown', function (e) {

@@ -3,9 +3,258 @@
 (function () {
   var POS_KEY = "grids_freeform_pos_v3";
   var SEC_KEY = "grids_card_section_v1";
+  var CUSTOM_KEY = "grids_custom_content_v1";
   var zTop = 6;
   var GAP = 16;
   var FOLLOW_R = 780;
+
+  function loadCustom() {
+    try {
+      var data = JSON.parse(localStorage.getItem(CUSTOM_KEY) || "{}") || {};
+      return {
+        sections: Array.isArray(data.sections) ? data.sections : [],
+        cards: Array.isArray(data.cards) ? data.cards : []
+      };
+    } catch (e) {
+      return { sections: [], cards: [] };
+    }
+  }
+
+  function saveCustom(data) {
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(data || {})); } catch (e) {}
+  }
+
+  function uid(prefix) {
+    return String(prefix || "grid") + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  function clean(value) {
+    return String(value || "").replace(/\s+/g, " ").trim();
+  }
+
+  function sectionByTitle(grid, title) {
+    var wanted = clean(title).toLowerCase();
+    return Array.from(grid.querySelectorAll(".grid-section")).find(function (sec) {
+      var label = sec.querySelector(":scope > .section-label");
+      return clean(label && label.textContent).toLowerCase() === wanted;
+    }) || null;
+  }
+
+  function makeSection(grid, rec) {
+    if (!grid || !rec || !clean(rec.title)) return null;
+    var existing = sectionByTitle(grid, rec.title);
+    if (existing) return existing;
+    var sec = document.createElement("div");
+    sec.className = "grid-section";
+    sec.setAttribute("data-custom-section", rec.id || "");
+    var label = document.createElement("div");
+    label.className = "section-label";
+    label.textContent = clean(rec.title);
+    var canvas = document.createElement("div");
+    canvas.className = "grid-section-cards";
+    sec.appendChild(label);
+    sec.appendChild(canvas);
+    grid.appendChild(sec);
+    return sec;
+  }
+
+  function makeCard(rec) {
+    var card = document.createElement("div");
+    card.className = "card";
+    card.id = rec.id;
+    card.setAttribute("data-custom-card", "1");
+
+    var visual = document.createElement("div");
+    visual.className = "card-visual theme-warm";
+    var done = document.createElement("button");
+    done.type = "button";
+    done.className = "done-check";
+    done.setAttribute("aria-label", "mark card done");
+    done.innerHTML = '<svg class="checkmark" fill="none" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></polyline></svg>';
+    done.addEventListener("click", function () {
+      done.classList.toggle("checked");
+      card.classList.toggle("done");
+    });
+    visual.appendChild(done);
+    if (clean(rec.photo)) {
+      var img = document.createElement("img");
+      img.className = "card-photo";
+      img.src = clean(rec.photo);
+      img.alt = clean(rec.title);
+      visual.appendChild(img);
+    } else {
+      visual.classList.add("grid-card-visual-empty");
+    }
+
+    var body = document.createElement("div");
+    body.className = "card-body";
+    var num = document.createElement("p");
+    num.className = "task-num";
+    num.textContent = clean(rec.label) || clean(rec.section);
+    var title = document.createElement("p");
+    title.className = "task-title";
+    title.textContent = clean(rec.title);
+    body.appendChild(num);
+    body.appendChild(title);
+    if (clean(rec.task)) {
+      var desc = document.createElement("p");
+      desc.className = "task-desc";
+      var task = document.createElement("label");
+      task.className = "subtask";
+      task.appendChild(document.createTextNode(clean(rec.task)));
+      var check = document.createElement("input");
+      check.type = "checkbox";
+      check.addEventListener("change", function () {
+        task.classList.toggle("done-subtask", check.checked);
+      });
+      task.appendChild(check);
+      desc.appendChild(task);
+      body.appendChild(desc);
+    }
+    if (clean(rec.goal) || clean(rec.target)) {
+      var meta = document.createElement("div");
+      meta.className = "task-meta";
+      if (clean(rec.goal)) {
+        var goal = document.createElement("span");
+        goal.className = "task-goal";
+        goal.textContent = clean(rec.goal);
+        meta.appendChild(goal);
+      }
+      if (clean(rec.target)) {
+        var target = document.createElement("span");
+        target.className = "task-target";
+        target.textContent = clean(rec.target);
+        meta.appendChild(target);
+      }
+      body.appendChild(meta);
+    }
+    card.appendChild(visual);
+    card.appendChild(body);
+    return card;
+  }
+
+  function hydrateCustom(grid) {
+    if (!grid || grid.getAttribute("data-custom-hydrated") === "1") return;
+    var data = loadCustom();
+    data.sections.forEach(function (rec) { makeSection(grid, rec); });
+    data.cards.forEach(function (rec) {
+      if (document.getElementById(rec.id)) return;
+      var sec = sectionByTitle(grid, rec.section) || makeSection(grid, {
+        id: uid("section"),
+        title: rec.section
+      });
+      var canvas = sec && sec.querySelector(":scope > .grid-section-cards");
+      if (canvas) canvas.appendChild(makeCard(rec));
+    });
+    grid.setAttribute("data-custom-hydrated", "1");
+  }
+
+  function sectionNames(grid) {
+    return Array.from(grid.querySelectorAll(".grid-section .section-label"))
+      .map(function (el) { return clean(el.textContent); })
+      .filter(Boolean);
+  }
+
+  function openAddDialog(kind, grid) {
+    var dialog = document.getElementById("grid-add-dialog");
+    if (!dialog) return;
+    var form = dialog.querySelector("form");
+    form.reset();
+    dialog.setAttribute("data-kind", kind);
+    dialog.querySelector(".grid-dialog-title").textContent = kind === "section" ? "add a section" : "add a card";
+    dialog.querySelector(".grid-card-fields").hidden = kind === "section";
+    dialog.querySelector('[name="sectionTitle"]').hidden = kind !== "section";
+    var select = dialog.querySelector('[name="section"]');
+    select.innerHTML = "";
+    sectionNames(grid).forEach(function (name) {
+      var option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      select.appendChild(option);
+    });
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
+    window.setTimeout(function () {
+      var first = kind === "section" ? dialog.querySelector('[name="sectionTitle"]') : dialog.querySelector('[name="title"]');
+      if (first) first.focus();
+    }, 0);
+  }
+
+  function ensureAddControls(grid) {
+    if (!grid || document.getElementById("grid-add-tools")) return;
+    var tools = document.createElement("div");
+    tools.id = "grid-add-tools";
+    tools.className = "grid-add-tools";
+    tools.innerHTML = '<button type="button" data-add-grid="section">+ section</button><button type="button" data-add-grid="card">+ card</button>';
+    document.body.appendChild(tools);
+
+    var dialog = document.createElement("dialog");
+    dialog.id = "grid-add-dialog";
+    dialog.className = "grid-add-dialog";
+    dialog.innerHTML =
+      '<form method="dialog">' +
+        '<button class="grid-dialog-close" type="button" aria-label="close">×</button>' +
+        '<p class="grid-dialog-title">add a section</p>' +
+        '<input name="sectionTitle" placeholder="section name" autocomplete="off">' +
+        '<div class="grid-card-fields">' +
+          '<label>section<select name="section"></select></label>' +
+          '<input name="title" placeholder="card name" autocomplete="off">' +
+          '<input name="label" placeholder="small label (optional)" autocomplete="off">' +
+          '<input name="task" placeholder="first task (optional)" autocomplete="off">' +
+          '<input name="goal" placeholder="goal (optional)" autocomplete="off">' +
+          '<input name="target" placeholder="target (optional)" autocomplete="off">' +
+          '<input name="photo" placeholder="photo URL (optional)" autocomplete="off">' +
+        '</div>' +
+        '<button class="grid-dialog-save" type="submit">add</button>' +
+      '</form>';
+    document.body.appendChild(dialog);
+
+    tools.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-add-grid]");
+      if (btn) openAddDialog(btn.getAttribute("data-add-grid"), grid);
+    });
+    dialog.querySelector(".grid-dialog-close").addEventListener("click", function () { dialog.close(); });
+    dialog.addEventListener("click", function (e) {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var data = loadCustom();
+      var kind = dialog.getAttribute("data-kind");
+      if (kind === "section") {
+        var sectionTitle = clean(dialog.querySelector('[name="sectionTitle"]').value);
+        if (!sectionTitle) return;
+        var sectionRec = { id: uid("section"), title: sectionTitle };
+        data.sections.push(sectionRec);
+        makeSection(grid, sectionRec);
+      } else {
+        var title = clean(dialog.querySelector('[name="title"]').value);
+        var section = clean(dialog.querySelector('[name="section"]').value);
+        if (!title || !section) return;
+        var cardRec = {
+          id: uid("card"),
+          section: section,
+          title: title,
+          label: clean(dialog.querySelector('[name="label"]').value),
+          task: clean(dialog.querySelector('[name="task"]').value),
+          goal: clean(dialog.querySelector('[name="goal"]').value),
+          target: clean(dialog.querySelector('[name="target"]').value),
+          photo: clean(dialog.querySelector('[name="photo"]').value)
+        };
+        data.cards.push(cardRec);
+        var sec = sectionByTitle(grid, section);
+        var canvas = sec && sec.querySelector(":scope > .grid-section-cards");
+        if (canvas) {
+          canvas.appendChild(makeCard(cardRec));
+          ensureResizeHandles(grid);
+          scatterCanvas(canvas, loadPos());
+        }
+      }
+      saveCustom(data);
+      syncSoloColumns(grid);
+      dialog.close();
+    });
+  }
 
   function hash(s) {
     var h = 2166136261;
@@ -238,7 +487,7 @@
   }
 
   function fitWidthForCanvas(W, n) {
-    var cols = n === 2 && W >= 520 ? 2 : (W >= 980 ? 3 : W >= 520 ? 2 : 1);
+    var cols = n === 2 && W >= 520 ? 2 : (W >= 780 ? 3 : W >= 520 ? 2 : 1);
     var gap = 20;
     var pad = 16;
     return Math.min(340, Math.max(200, Math.floor((W - pad * 2 - gap * Math.max(0, cols - 1)) / cols)));
@@ -486,7 +735,9 @@
 
   function applySavedCardSize(card, prev) {
     if (!card || !prev) return;
-    if (prev.w) card.style.width = prev.w + "px";
+    /* Only explicit user resizes lock width. Responsive pack widths must be
+       free to change when the viewport gains another column. */
+    if (prev.sized && prev.w) card.style.width = prev.w + "px";
     if (prev.sized && prev.h) {
       card.classList.add("is-sized");
       card.style.height = prev.h + "px";
@@ -668,7 +919,7 @@
       return;
     }
     var ordered = visualSort(cards);
-    var cols = W >= 980 ? 3 : W >= 520 ? 2 : 1;
+    var cols = W >= 780 ? 3 : W >= 520 ? 2 : 1;
     var gap = 20;
     var pad = 16;
     var w = Math.min(340, Math.max(220, Math.floor((W - pad * 2 - gap * (cols - 1)) / cols)));
@@ -754,8 +1005,13 @@
     if (cards.length >= 3) {
       var probe = [];
       var holey = false;
+      var targetWidth = fitWidthForCanvas(W, cards.length);
+      var staleTwoColumnWidth = false;
       cards.forEach(function (card) {
         var prev = saved && card.id ? saved[card.id] : null;
+        if (W >= 780 && prev && !prev.sized && (prev.w || 0) > targetWidth + 1) {
+          staleTwoColumnWidth = true;
+        }
         if (prev && typeof prev.x === "number" && typeof prev.y === "number") {
           probe.push({
             x: prev.x,
@@ -768,7 +1024,7 @@
       if (probe.length === cards.length) {
         holey = clusterHasHole(probe, W) || clusterHasOverlap(probe, 1);
       }
-      if (holey || probe.length !== cards.length) {
+      if (holey || staleTwoColumnWidth || probe.length !== cards.length) {
         packCluster(canvas, saved);
         return;
       }
@@ -1201,12 +1457,14 @@
       host.appendChild(grid);
     }
     wrapIntoSections(grid);
+    hydrateCustom(grid);
     applySavedSections(grid);
     forcePairedCards(grid);
     scatterAll(grid);
     ensureResizeHandles(grid);
     bindDrag(grid);
     bindResize(grid);
+    ensureAddControls(grid);
   }
 
   function run() {

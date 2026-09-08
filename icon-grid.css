@@ -442,6 +442,132 @@ body.icon-grid-page header .page-note {
   text-shadow: 0 1px 8px rgba(12, 8, 4, 0.7);
 }
 
+html body.icon-grid-page .grid-add-tools {
+  position: fixed;
+  right: 24px;
+  top: 22px;
+  z-index: 60;
+  display: flex;
+  gap: 8px;
+}
+
+html body.icon-grid-page .grid-add-tools button {
+  border: 1px solid rgba(246, 234, 216, 0.34);
+  border-radius: 999px;
+  background: rgba(20, 14, 10, 0.52);
+  color: #f6ead8;
+  padding: 8px 14px;
+  font: 9px/1 "DM Mono", monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html body.icon-grid-page .grid-add-tools button:hover {
+  background: rgba(20, 14, 10, 0.72);
+  border-color: rgba(246, 234, 216, 0.62);
+}
+
+html body.icon-grid-page .grid-add-dialog {
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid rgba(246, 234, 216, 0.3);
+  border-radius: 18px;
+  background: rgba(24, 17, 12, 0.9);
+  color: #f6ead8;
+  padding: 0;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+html body.icon-grid-page .grid-add-dialog::backdrop {
+  background: rgba(10, 7, 5, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+html body.icon-grid-page .grid-add-dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+
+html body.icon-grid-page .grid-dialog-title {
+  margin: 0 0 6px;
+  font: italic 28px/1.1 "Newsreader", serif;
+}
+
+html body.icon-grid-page .grid-dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: 0;
+  background: transparent;
+  color: rgba(246, 234, 216, 0.72);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+html body.icon-grid-page .grid-card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+html body.icon-grid-page .grid-card-fields[hidden],
+html body.icon-grid-page .grid-add-dialog input[hidden] {
+  display: none !important;
+}
+
+html body.icon-grid-page .grid-add-dialog input,
+html body.icon-grid-page .grid-add-dialog select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 0;
+  border-bottom: 1px solid rgba(246, 234, 216, 0.28);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: #f6ead8;
+  padding: 9px 2px;
+  font: 14px "Newsreader", serif;
+}
+
+html body.icon-grid-page .grid-add-dialog label {
+  color: rgba(246, 234, 216, 0.54);
+  font: 8px "DM Mono", monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+html body.icon-grid-page .grid-add-dialog select {
+  margin-top: 4px;
+}
+
+html body.icon-grid-page .grid-dialog-save {
+  align-self: flex-end;
+  border: 1px solid rgba(246, 234, 216, 0.34);
+  border-radius: 999px;
+  background: rgba(246, 234, 216, 0.1);
+  color: #f6ead8;
+  padding: 9px 18px;
+  font: 9px "DM Mono", monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+html body.icon-grid-page .grid-card-visual-empty::after {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border: 1px solid rgba(196, 168, 130, 0.25);
+  border-radius: 50%;
+  box-shadow: 0 0 38px rgba(196, 168, 130, 0.16);
+}
+
 @media (max-width: 720px) {
   html body.icon-grid-page #icon-grid-host {
     padding: 8px 8px 40px;
@@ -449,5 +575,9 @@ body.icon-grid-page header .page-note {
   html body.icon-grid-page .grid.icon-task-grid .card,
   html body.icon-grid-page .grid.icon-task-grid .grid-section-cards > .card {
     max-width: calc(100% - 16px);
+  }
+  html body.icon-grid-page .grid-add-tools {
+    right: 12px;
+    top: 12px;
   }
 }

@@ -7,6 +7,8 @@ alwaysApply: true
 
 Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage days.
 
+This file lives here — `/Users/diana/my-dashboard/.cursor/rules/vision-collage-no-overlap.mdc`. When the packing rule changes, write it **here**. Do not leave the update only in task-dashboard.
+
 ## Sep 7 onward (`noBannerPackDay` / `iso >= 2026-09-07` / `dash-mosaic-era`)
 
 Dashboard **room chrome** (`packDashMosaic`). Follow **only** what Diana stated:
@@ -41,16 +43,19 @@ Use existing `visionPackSpec`. Do **not** restyle past days into Sep 7 rooms.
 1. `scrapCollageDay` stays false.
 2. After add/remove/reorder → `syncHeroLayoutClass` → `packVisionCollage`.
 3. Edit `everything.html` only (everything-page-only).
+4. Keep this rule in my-dashboard. task-dashboard may mirror it; my-dashboard is the copy that counts.
 
 ## If Sep 7+ titles go bottom-left white
 
 Put them back to centered gold foil. Do not ask.
 
-## Past-day titles stay baked
+## No runtime rewriter — across the board
 
-Never rewrite section titles on days before today. If a pass already rewrote history (I will… / past tense / I am… on the wrong era), restore **every** affected day from the baked map — not only Sept 5 and 6. Do not ask.
+Titles stay as written. No JavaScript on load, chrome-sync, midnight, or carry may change section names (`I will…` → `I am…`, `I will succeed` → `I succeeded`, `i` → `I`, `to …` prefix, plain-label maps). If a word needs to change, change the baked HTML or the hardcoded picker list. Do not add a rewriter.
 
-**Forbidden:** auto-flip titles when a day is no longer today (`I will succeed` → `I succeeded`). That rewriter is deleted. Do not restore `pastTenseDay` / `toPastSectionTitle` / load-time chrome title rewrites. Sept 5 past tense stays because Diana asked for those words — not because midnight flipped them.
+**Forbidden:** `pastTenseDay` / `toPastSectionTitle` / `titledForBlock` mutations / `forceAll` title migrations / load-time chrome title rewrites. Do not restore them.
+
+Past-day titles stay baked. If a pass already rewrote history, restore **every** affected day from the baked map — not only Sept 5 and 6. Do not ask. Sept 5 past tense stays because Diana asked for those words — not because midnight flipped them.
 
 **Do not push Sep 6 style backward.** Centered gold foil started on **Sept 6**. Aug 26–Sep 5 stay **white Newsreader, bottom-left**. Restore those days to exactly that — never restyle them to centered gold foil.
 

@@ -10604,10 +10604,11 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
 })();
 </script>
 <script>
-// Checkbox state persistence via localStorage
-// Keyed by data-date + label text + position-within-day so collisions are rare
+// Checkbox state persistence: stable semantic browser backup + durable HTML bake.
+// Never key by DOM position: collage reordering changes checkbox indexes.
 (function(){
-  var STORAGE_KEY = 'taskboard-checkbox-state-v1';
+  var LEGACY_KEY = 'taskboard-checkbox-state-v1';
+  var STORAGE_KEY = 'taskboard-checkbox-state-v2';
 
   function loadState(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
@@ -10616,64 +10617,91 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
   function saveState(s){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) {}
   }
-  function getKey(input){
+  function taskMeta(input){
     var dayBlock = input.closest('[data-date]');
     var date = dayBlock ? dayBlock.dataset.date : 'global';
+    var task = input.closest('.vision-check, .vision-horizon-task');
+    var tile = input.closest('.vision-tile');
+    var focus = (tile && tile.getAttribute('data-focus')) || '';
+    var span = task && task.querySelector('span');
+    var text = ((task && task.getAttribute('data-hz-title')) || (span && span.textContent) || '').trim().replace(/\s+/g,' ');
+    if(task && text) return {
+      date: date,
+      focus: focus,
+      title: text,
+      key: date + '|' + focus.toLowerCase() + '|' + text.toLowerCase()
+    };
     var labelEl = input.closest('label, .day-task-item, .flow-step, .day-task-text');
-    var text = ((labelEl ? labelEl.textContent : input.value || '') || '').trim().replace(/\s+/g,' ').slice(0, 80);
-    // Tiebreaker: index within day-block (or document)
-    var scope = dayBlock || document;
-    var all = scope.querySelectorAll('input[type="checkbox"]');
-    var idx = 0;
-    for (var i = 0; i < all.length; i++) { if (all[i] === input) { idx = i; break; } }
-    return date + '|' + text + '|' + idx;
+    text = ((labelEl ? labelEl.textContent : input.value || '') || '').trim().replace(/\s+/g,' ').slice(0, 120);
+    return { date: date, focus: '', title: text, key: date + '||' + text.toLowerCase() };
+  }
+  function legacyByDateTitle(){
+    var out = {};
+    try {
+      var old = JSON.parse(localStorage.getItem(LEGACY_KEY) || '{}') || {};
+      Object.keys(old).forEach(function(k){
+        var first = k.indexOf('|');
+        var last = k.lastIndexOf('|');
+        if(first < 0 || last <= first) return;
+        var date = k.slice(0, first);
+        var title = k.slice(first + 1, last).trim().replace(/\s+/g, ' ').toLowerCase();
+        if(title && title !== 'on') out[date + '|' + title] = !!old[k];
+      });
+    } catch(e){}
+    return out;
+  }
+  function bakeStatus(meta, checked){
+    if(!meta || !meta.date || !meta.focus || !meta.title) return;
+    try {
+      fetch('/set-task-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: meta.date,
+          focus: meta.focus,
+          title: meta.title,
+          checked: !!checked,
+          page: (document.documentElement.classList.contains('prototypes-page') ||
+            (document.body && document.body.classList.contains('prototypes-page'))) ? 'prototype' : 'everything'
+        })
+      }).catch(function(){});
+    } catch(e){}
   }
 
   document.addEventListener('DOMContentLoaded', function(){
     var state = loadState();
+    var legacy = legacyByDateTitle();
 
-    // Restore saved checkbox states
+    // HTML is authoritative. V2/legacy state only recovers older unbaked changes.
     document.querySelectorAll('input[type="checkbox"]').forEach(function(input){
-      var k = getKey(input);
-      if (Object.prototype.hasOwnProperty.call(state, k)) {
-        var want = !!state[k];
+      var meta = taskMeta(input);
+      var k = meta.key;
+      var legacyKey = meta.date + '|' + meta.title.toLowerCase();
+      var hasV2 = Object.prototype.hasOwnProperty.call(state, k);
+      var hasLegacy = Object.prototype.hasOwnProperty.call(legacy, legacyKey);
+      if (hasV2 || hasLegacy) {
+        var want = hasV2 ? !!state[k] : !!legacy[legacyKey];
+        state[k] = want;
         if (input.checked !== want) {
           input.checked = want;
-          // Fire change so existing onchange handlers (e.g. flow-step done class) run
           input.dispatchEvent(new Event('change', { bubbles: true }));
         }
       }
     });
+    saveState(state);
 
     // Save state on any checkbox change
     document.addEventListener('change', function(e){
       var t = e.target;
       if (t && t.tagName === 'INPUT' && t.type === 'checkbox') {
+        var meta = taskMeta(t);
         var s = loadState();
-        s[getKey(t)] = !!t.checked;
+        s[meta.key] = !!t.checked;
         saveState(s);
-        scheduleServerSync();
+        // Horizon pins mirror a source .vision-check; bake only that source event.
+        if(t.closest('.vision-check')) bakeStatus(meta, t.checked);
       }
     });
-
-    // Debounced POST to /save so the HTML file on disk also persists checks
-    var syncTimer = null;
-    function scheduleServerSync(){
-      if (syncTimer) clearTimeout(syncTimer);
-      syncTimer = setTimeout(function(){
-        syncTimer = null;
-        var current = loadState();
-        try {
-          fetch('/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ states: current })
-          }).catch(function(){});  // silent on network errors
-        } catch(e){}
-      }, 600);
-    }
-    // Expose so the reorder script can also trigger a sync if needed
-    window.__taskboardServerSync = scheduleServerSync;
   });
 })();
 </script>
@@ -13307,12 +13335,12 @@ window.__j22fnApply=run;
     'deen':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
     'networking':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
     'earned':'manus-storage/zone-to-earn-gold.jpg?v=earn3',
-    'strategist':'manus-storage/zone-strategist.jpg?v=strat3',
-    'a strategist':'manus-storage/zone-strategist.jpg?v=strat3',
-    'i am a strategist':'manus-storage/zone-strategist.jpg?v=strat3',
-    'i am strategist':'manus-storage/zone-strategist.jpg?v=strat3',
-    'calculating':'manus-storage/zone-strategist.jpg?v=strat3',
-    'i am calculating':'manus-storage/zone-strategist.jpg?v=strat3',
+    'strategist':'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'a strategist':'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'i am a strategist':'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'i am strategist':'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'calculating':'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'i am calculating':'manus-storage/zone-strategist-behind.jpg?v=back2',
     'successful':'manus-storage/zone-successful.jpg?v=ok2',
     'i am successful':'manus-storage/zone-successful.jpg?v=ok2',
     'i successful':'manus-storage/zone-successful.jpg?v=ok2',
@@ -13599,7 +13627,7 @@ window.__j22fnApply=run;
     [/\\bfocus\\b|deep work|attention|concentration/, 'manus-storage/zone-focus.jpg?v=lens1'],
     [/\balignment\b|aligned|true north|compass|coherence/, 'manus-storage/zone-alignment.jpg?v=align1'],
     [/\bstrengths?\b|strong|capability|soul.?fire/, 'manus-storage/zone-strengths.jpg?v=soul1'],
-    [/\bstrategist\b|i am a strategist|i am calculating|\bcalculating\b/, 'manus-storage/zone-strategist.jpg?v=strat3'],
+    [/\bstrategist\b|i am a strategist|i am calculating|\bcalculating\b/, 'manus-storage/zone-strategist-behind.jpg?v=back2'],
     [/\bsuccessful\b|i am successful/, 'manus-storage/zone-successful.jpg?v=ok2'],
     [/\bplan\b|planning|blueprint|roadmap|strategy/, 'manus-storage/zone-workflow.jpg?v=swap1'],
     [/art\s*[|\/]\s*science|\bart-science\b/, 'manus-storage/zone-art-science.jpg?v=as1'],
@@ -21087,9 +21115,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="to-master" style="--tile-photo: url('manus-storage/zone-to-master.jpg?v=dip3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to master">to master</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-to-earn-gold.jpg?v=earn3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to earn">to earn</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="successful" style="--tile-photo: url('manus-storage/zone-successful.jpg?v=ok2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am successful">I am successful</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="strategist" style="--tile-photo: url('manus-storage/zone-strategist.jpg?v=strat3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am calculating">I am calculating</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="claim" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to claim">to claim</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile vision-tile-nophoto" data-focus="to-feel" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel">to feel</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="strategist" style="--tile-photo: url('manus-storage/zone-strategist-behind.jpg?v=back2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am calculating">I am calculating</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 <script src="boot-today.js?v=chrome13"></script>
 <div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-01">
@@ -45123,6 +45149,61 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var blk = host.closest ? host.closest('.day-block[data-date="2026-08-30"]') : null;
     return !!blk;
   }
+  function protoViewportAvail(host){
+    var viewH = window.innerHeight || 800;
+    var top = 88;
+    try {
+      var blk = host && host.closest ? host.closest('.day-block') : null;
+      var bar = blk && (blk.querySelector('.overview-toggle-row') || blk.querySelector('.tv-toggle-row') || blk.querySelector('.overview-center-stack'));
+      if(bar){
+        var r = bar.getBoundingClientRect();
+        if(r.bottom > 40 && r.bottom < viewH * 0.45) top = Math.round(r.bottom);
+      }
+    } catch(eTop){}
+    return Math.round(Math.max(420, viewH - top - 36));
+  }
+  function protoPlaceRowCount(places){
+    var maxEnd = 1;
+    (places || []).forEach(function(p){ if(p && p[3] > maxEnd) maxEnd = p[3]; });
+    return Math.max(1, maxEnd - 1);
+  }
+  function protoDenseFitSpec(n, cols, rows){
+    var places = [];
+    var i = 0;
+    for(var r = 1; r <= rows && i < n; r++){
+      var left = n - i;
+      var inRow = (r === rows) ? left : Math.min(cols, left);
+      for(var c = 0; c < inRow; c++){
+        var x0, x1;
+        if(inRow === cols){
+          x0 = c + 1;
+          x1 = c + 2;
+        } else {
+          x0 = Math.round(c * cols / inRow) + 1;
+          x1 = Math.round((c + 1) * cols / inRow) + 1;
+          if(x1 <= x0) x1 = x0 + 1;
+        }
+        places.push([x0, x1, r, r + 1]);
+      }
+      i += inRow;
+    }
+    var colFr = [], rowFr = [];
+    for(var k = 0; k < cols; k++) colFr.push('1fr');
+    for(var k2 = 0; k2 < rows; k2++) rowFr.push('1fr');
+    return { columns: colFr.join(' '), rows: rowFr.join(' '), places: places };
+  }
+  function protoFitSpecToViewport(spec, n, availH){
+    if(!spec || !spec.places || !n || !(availH > 0)) return spec;
+    var nRows = protoPlaceRowCount(spec.places);
+    if(nRows > 0 && availH / nRows >= 132) return spec;
+    var minRow = 160;
+    var maxRows = Math.max(3, Math.floor(availH / minRow));
+    var cols = Math.ceil(n / maxRows);
+    if(cols < 3) cols = 3;
+    if(cols > 6) cols = 6;
+    var rows = Math.ceil(n / cols);
+    return protoDenseFitSpec(n, cols, rows);
+  }
   function setTileGridPlace(tile, p){
     if(!tile || !p || p.length < 4) return;
     tile.style.removeProperty('grid-area');
@@ -45729,7 +45810,15 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var packTasks = tiles.map(function(t){ return tileTaskCount(t); }).join(',');
     var packW = 0;
     try { packW = Math.round(host.clientWidth || host.getBoundingClientRect().width || 0); } catch(eW){}
-    var packSig = 'grid9:' + n + '#' + packNames + '@t' + packTasks;
+    var protoFit = false;
+    var protoH = 0;
+    try {
+      if(typeof isProtoAug30CollageHost === 'function' && isProtoAug30CollageHost(host)){
+        protoFit = true;
+        protoH = protoViewportAvail(host);
+      }
+    } catch(ePF){}
+    var packSig = 'grid9:' + n + '#' + packNames + '@t' + packTasks + (protoFit ? ('@vh' + protoH) : '');
     if(host.getAttribute('data-pack-sig') === packSig) return;
     tiles.forEach(function(t){ try { clearNativePack(t); } catch(eClr){} });
     if(n <= 0){
@@ -45742,6 +45831,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         return typeof isBodyFitnessTile === 'function' && isBodyFitnessTile(t);
       }));
     } catch(eSpec){}
+    if(protoFit && spec){
+      try { spec = protoFitSpecToViewport(spec, n, protoH); } catch(eFit){}
+    }
     if(!spec || !spec.places){
       host.setAttribute('data-pack-sig', packSig);
       return;
@@ -45756,13 +45848,28 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     host.style.setProperty('display', 'grid', 'important');
     host.style.setProperty('grid-template-columns', spec.columns, 'important');
     host.style.setProperty('grid-template-rows', spec.rows, 'important');
-    host.style.setProperty('gap', '0px', 'important');
-    host.style.setProperty('column-gap', '0px', 'important');
-    host.style.setProperty('row-gap', '0px', 'important');
+    host.style.setProperty('gap', protoFit ? '12px' : '0px', 'important');
+    host.style.setProperty('column-gap', protoFit ? '12px' : '0px', 'important');
+    host.style.setProperty('row-gap', protoFit ? '12px' : '0px', 'important');
     host.style.removeProperty('flex-wrap');
     host.style.removeProperty('align-content');
     host.style.removeProperty('align-items');
     host.style.removeProperty('justify-content');
+    if(protoFit && protoH > 0){
+      var frN = protoPlaceRowCount(spec.places);
+      var frs = [];
+      for(var ri = 0; ri < frN; ri++) frs.push('1fr');
+      host.style.setProperty('grid-template-rows', frs.join(' '), 'important');
+      host.style.setProperty('height', protoH + 'px', 'important');
+      host.style.setProperty('min-height', protoH + 'px', 'important');
+      host.style.setProperty('max-height', protoH + 'px', 'important');
+      host.style.setProperty('overflow', 'hidden', 'important');
+    } else {
+      host.style.removeProperty('height');
+      host.style.removeProperty('min-height');
+      host.style.removeProperty('max-height');
+      host.style.removeProperty('overflow');
+    }
     tiles.forEach(function(t, i){
       if(!t || !spec.places[i]) return;
       try { clearNativePack(t); } catch(eT){}
@@ -46406,7 +46513,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     wins: { focus: 'wins', title: 'I am winning', photo: 'manus-storage/zone-wins-hand.jpg?v=game13' },
     become: { focus: 'become', title: 'I am becoming', photo: 'manus-storage/zone-envision.jpg?v=swap1' },
     persevere: { focus: 'to-persevere', title: 'I am persevering', photo: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1' },
-    strategist: { focus: 'strategist', title: 'I am calculating', photo: 'manus-storage/zone-strategist.jpg?v=strat3' },
+    strategist: { focus: 'strategist', title: 'I am calculating', photo: 'manus-storage/zone-strategist-behind.jpg?v=back2' },
     successful: { focus: 'successful', title: 'I am successful', photo: 'manus-storage/zone-successful.jpg?v=ok2' }
   };
   function plainLabelDay(blk){
@@ -47959,6 +48066,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     lab.className = 'vision-horizon-task';
     if(meta && meta.kind) lab.setAttribute('data-hz-kind', meta.kind);
     if(meta && meta.title) lab.setAttribute('data-hz-title', meta.title);
+    if(meta && isFinite(meta.order)) lab.setAttribute('data-hz-order', String(meta.order));
     var inp = document.createElement('input');
     inp.type = 'checkbox';
     inp.className = 'agenda-check';
@@ -48217,6 +48325,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var open = [];
     var done = [];
     var checkNames = {};
+    var sourceOrder = 0;
     var hidden = horizonHiddenTitles(blk, tile);
     if(det){
       [].slice.call(det.querySelectorAll(':scope > .vision-check span')).forEach(function(sp){
@@ -48230,7 +48339,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           if(!name || hidden[name.toLowerCase()]) return;
         var cb = src.querySelector('input.agenda-check, input[type="checkbox"]');
         var isDone = !!(cb && cb.checked);
-        var lab = makeHorizonTaskLabel(name, isDone, { kind: 'check', title: name });
+        var lab = makeHorizonTaskLabel(name, isDone, { kind: 'check', title: name, order: sourceOrder++ });
         lab.addEventListener('change', function(){
           if(cb){
             cb.checked = lab.querySelector('input').checked;
@@ -48247,7 +48356,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         var pname = ((pspan && pspan.textContent) || '').replace(/\s+/g, ' ').trim();
         if(!pname || checkNames[pname.toLowerCase()] || hidden[pname.toLowerCase()]) return;
         var pDone = isHorizonCardDone(blk, tile, pname);
-        var plab = makeHorizonTaskLabel(pname, pDone, { kind: 'card', title: pname });
+        var plab = makeHorizonTaskLabel(pname, pDone, { kind: 'card', title: pname, order: sourceOrder++ });
         plab.addEventListener('change', function(){
           var now = !!(plab.querySelector('input') && plab.querySelector('input').checked);
           setHorizonCardDone(blk, tile, pname, now);
@@ -48328,6 +48437,40 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
     svg.innerHTML = paths.join('');
   }
+  function fitPinToUnzoomedTile(tile, x, y, index, total, name){
+    var blk = horizonDayBlock(tile);
+    var iso = (blk && blk.getAttribute('data-date')) || '';
+    if(iso < '2026-09-07') return { x: x, y: y };
+    var title = tile && tile.querySelector(':scope > .vision-tile-title');
+    if(!title) return { x: x, y: y };
+    var tr = tile.getBoundingClientRect();
+    var rr = title.getBoundingClientRect();
+    if(!(tr.width > 8 && tr.height > 8 && rr.width > 2 && rr.height > 2)) return { x: x, y: y };
+    var labelPx = Math.min(Math.max(58, String(name || '').length * 8.4 + 26), Math.max(74, tr.width - 16));
+    var halfW = Math.min(44, labelPx / tr.width * 50);
+    var halfH = Math.max(5, Math.min(14, 22 / tr.height * 100));
+    x = Math.max(5 + halfW, Math.min(95 - halfW, x));
+    var titleBox = {
+      l: (rr.left - tr.left) / tr.width * 100 - 2.5,
+      r: (rr.right - tr.left) / tr.width * 100 + 2.5,
+      t: (rr.top - tr.top) / tr.height * 100 - 3,
+      b: (rr.bottom - tr.top) / tr.height * 100 + 3
+    };
+    var hits = x + halfW > titleBox.l && x - halfW < titleBox.r
+      && y + halfH > titleBox.t && y - halfH < titleBox.b;
+    if(!hits) return { x: x, y: y };
+    var above = titleBox.t - halfH - 3;
+    var below = titleBox.b + halfH + 3;
+    var canAbove = above >= 8;
+    var canBelow = below <= 92;
+    if(canAbove && canBelow){
+      if(y < (titleBox.t + titleBox.b) / 2) y = above;
+      else if(y > (titleBox.t + titleBox.b) / 2) y = below;
+      else y = (Number(index || 0) % 2) ? below : above;
+    } else if(canAbove) y = above;
+    else if(canBelow) y = below;
+    return { x: x, y: Math.max(8, Math.min(92, y)) };
+  }
   function syncTaskConstellation(tile, open, done){
     if(!tile) return;
     var on = horizonTasksOn(tile, horizonDayBlock(tile));
@@ -48346,7 +48489,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       tile.appendChild(sky);
     }
     [].slice.call(sky.querySelectorAll('.vision-task-star')).forEach(function(el){ try { el.remove(); } catch(e){} });
-    var items = (open || []).concat(done || []);
+    /* Completion must not reorder pins or stack several tasks in one spot. */
+    var items = (open || []).concat(done || []).sort(function(a, b){
+      return Number(a.getAttribute('data-hz-order') || 0) - Number(b.getAttribute('data-hz-order') || 0);
+    });
     var pts = taskStarLayout(items.length);
     items.forEach(function(lab, i){
       if(!lab) return;
@@ -48366,6 +48512,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           pinY = savedPin.y;
         }
       } catch(ePin){}
+      var zoomed = !!(tile.closest('.vision-board.is-zoomed') && tile.classList.contains('is-zoomed'));
+      if(!zoomed){
+        var fitted = fitPinToUnzoomedTile(tile, pinX, pinY, i, items.length, name);
+        pinX = fitted.x;
+        pinY = fitted.y;
+      }
       star.style.left = pinX + '%';
       star.style.top = pinY + '%';
       star.title = name;
@@ -48687,14 +48839,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       deen: ['6 qadaa salah'],
       academia: [
         'tuition payment', 'scholarship application', 'fall 2026 enrollment',
-        'Graduate Student Association · Top Applicant', 'Committee check-in', 'AERA', 'Handshake'
+        'Committee check-in', 'AERA', 'Handshake', 'Graduate Student Association · Top Applicant'
       ],
       networking: [
-        'Hanady', 'remote jobs', "Handshake 'top applicant' jobs",
-        'refunds', 'EnhanCV', 'Amazon QR return codes', 'capital blueprint',
-        'Neighbor payment', 're: Manus restoration issue'
+        'remote jobs', "Handshake 'top applicant' jobs",
+        'refunds', 'EnhanCV', 'Amazon QR return codes',
+        're: Manus restoration issue', 'Hanady', 'Superhuman'
       ],
-      become: ['Dr Betty', 'document translation into Arabic']
+      become: ['Dr Betty', 'document translation into Arabic'],
+      strategist: ['Neighbor payment'],
+      aligning: ['capital blueprint']
     };
     function run(){
       var blk = document.querySelector('.day-block[data-date="2026-09-06"]');
@@ -48726,6 +48880,56 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     run();
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  })();
+  (function restoreSept6SabrShukrCards(){
+    var WANT = [
+      { title: 'sabr', src: 'manus-storage/card-sabr.jpg?v=3', px: '3.5%', py: '5.0%' },
+      { title: 'shukr', src: 'manus-storage/card-shukr.jpg?v=2', px: '72.0%', py: '5.0%' }
+    ];
+    function run(){
+      var blk = document.querySelector('.day-block[data-date="2026-09-06"]');
+      var tile = blk && blk.querySelector('.vision-tile[data-focus="deen"]');
+      var details = tile && tile.querySelector(':scope > .vision-tile-details');
+      if(!details) return;
+      try {
+        var data = dayData(blk);
+        data.addedCards = data.addedCards || [];
+        data.removedCards = (data.removedCards || []).filter(function(rec){
+          var t = String((rec && rec.title) || '').replace(/\s+/g,' ').trim().toLowerCase();
+          var f = String((rec && rec.sectionFocus) || '').toLowerCase();
+          return !((t === 'sabr' || t === 'shukr') && (!f || f === 'deen'));
+        });
+        WANT.forEach(function(w){
+          if(!data.addedCards.some(function(rec){
+            return String((rec && rec.title) || '').toLowerCase() === w.title
+              && String((rec && rec.sectionFocus) || '').toLowerCase() === 'deen';
+          })){
+            data.addedCards.push({ sectionFocus: 'deen', title: w.title, src: w.src, px: w.px, py: w.py });
+          }
+        });
+        saveMap(loadMap());
+      } catch(eData){}
+      WANT.forEach(function(w){
+        var exists = [].slice.call(details.querySelectorAll(':scope > .vision-polaroid')).some(function(pol){
+          var sp = pol.querySelector(':scope > span:not(.vision-card-headline)');
+          return String((sp && sp.textContent) || '').replace(/\s+/g,' ').trim().toLowerCase() === w.title;
+        });
+        if(exists) return;
+        var pol = document.createElement('div');
+        pol.className = 'vision-polaroid vision-shot-card';
+        pol.setAttribute('data-shot-src', w.src);
+        pol.style.setProperty('--px', w.px);
+        pol.style.setProperty('--py', w.py);
+        pol.innerHTML = '<img alt="" src="' + w.src + '"><span>' + w.title + '</span><div class="vision-pol-resize" title="drag to resize"></div>';
+        details.insertBefore(pol, details.firstChild);
+      });
+      try { wirePolaroidInteract(); } catch(eWire){}
+      try { syncHorizonTile(tile); } catch(eHz){}
+    }
+    window.__restoreSept6SabrShukrCards = run;
+    run();
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+    setTimeout(run, 300);
   })();
   (function ensureSept6Strategist(){
     function run(){
@@ -49383,7 +49587,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'detach' || title.toLowerCase() === 'detach') return 'manus-storage/zone-detach-silhouette-woman.jpg?v=woman1';
     if(f === 'start-over' || f === 'start over' || f === 'create-again' || f === 'create again' || f === 'travel' || f === 'to-travel' || title.toLowerCase() === 'start over' || title.toLowerCase() === 'create again' || title.toLowerCase() === 'create-again' || title.toLowerCase() === 'travel' || title.toLowerCase() === 'to travel') return 'manus-storage/zone-start-over-positano.jpg?v=travel1';
     if(f === 'self-actualize' || f === 'to-self-actualize' || title.toLowerCase() === 'self-actualize' || title.toLowerCase() === 'self actualize' || title.toLowerCase() === 'to self-actualize') return '';
-    if(f === 'claim' || title.toLowerCase() === 'claim' || title.toLowerCase() === 'to claim' || f === 'to-claim') return '';
+    if(f === 'claim' || f === 'claiming' || title.toLowerCase() === 'claim' || title.toLowerCase() === 'claiming' || title.toLowerCase() === 'to claim' || title.toLowerCase() === 'i claim' || title.toLowerCase() === 'i am claiming' || f === 'to-claim') return dayKey(blk) >= '2026-09-07' ? 'manus-storage/zone-claiming-envelope.jpg?v=claim1' : '';
     if(f === 'to-litigate' || f === 'litigate' || title.toLowerCase() === 'to litigate' || title.toLowerCase() === 'litigate') return 'manus-storage/zone-to-litigate.jpg?v=court1';
     if(f === 'to-recoup' || f === 'recoup' || title.toLowerCase() === 'to recoup' || title.toLowerCase() === 'recoup') return '';
     if(f === 'earn' || f === 'earned' || f === 'networking' || f === 'to-earn' || title.toLowerCase() === 'i will earn' || title.toLowerCase() === 'i earned' || title.toLowerCase() === 'to earn' || title.toLowerCase() === 'i earn' || title.toLowerCase() === 'earn' || title.toLowerCase() === 'networking') return 'manus-storage/zone-to-earn-gold.jpg?v=earn3';
@@ -49395,7 +49599,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'sabotage' || title.toLowerCase() === 'sabotage') return 'manus-storage/zone-sabotage.jpg?v=1';
     if(f === 'say-thank-you-in-advance' || title.toLowerCase() === 'say thank you in advance') return 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1';
     if(f === 'execute' || title.toLowerCase() === 'execute') return 'manus-storage/zone-execute-focus.jpg?v=chess1';
-    if(f === 'strategist' || f === 'a-strategist' || /strategist/.test(title.toLowerCase())) return 'manus-storage/zone-strategist.jpg?v=strat3';
+    if(f === 'strategist' || f === 'a-strategist' || /strategist/.test(title.toLowerCase())) return 'manus-storage/zone-strategist-behind.jpg?v=back2';
     if(f === 'successful' || /successful/.test(title.toLowerCase())) return 'manus-storage/zone-successful.jpg?v=ok2';
     if(f === 'wins' || f === 'win' || title.toLowerCase() === 'i will win' || title.toLowerCase() === 'win' || title.toLowerCase() === 'to win') return 'manus-storage/zone-wins-hand.jpg?v=game13';
     if(f === 'seize-opportunities' || f === 'seize' || f === 'to-seize-opportunities' || title.toLowerCase() === 'seize' || title.toLowerCase() === 'seize opportunities' || title.toLowerCase() === 'to seize opportunities') return 'manus-storage/zone-seize-opportunities.jpg?v=seize4';
@@ -55257,10 +55461,12 @@ function seedAug30SelectedCards(blk){
   })();
 
   (function migrationTuneClaimNophotoV1(){
-    /* claim stays nophoto; tune into = vibrational/energy frequency field (NOT a radio) (see migration-four-section-photos-v1) */
+    /* Historical claim tiles stay nophoto; Sep 7+ claiming has its own approved photograph below. */
     var MKEY = 'migration-tune-claim-nophoto-v1';
     var CLAIM_RE = /manus-storage\/zone-claim\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isClearedSection(tile){
+      var blk = tile.closest && tile.closest('.day-block[data-date]');
+      if(blk && (blk.getAttribute('data-date') || '') >= '2026-09-07') return false;
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').toLowerCase();
       return t === 'claim' || f === 'claim';
@@ -55284,6 +55490,7 @@ function seedAug30SelectedCards(blk){
       });
       var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
       Object.keys(edits).forEach(function(day){
+        if(day >= '2026-09-07') return;
         var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
         d.addedSections.forEach(function(rec){
           if(!rec) return;
@@ -55295,6 +55502,48 @@ function seedAug30SelectedCards(blk){
       localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
       localStorage.setItem(MKEY, '1');
     } catch(e){}
+  })();
+
+  (function applyClaimingPhotoFromSept7(){
+    var WANT = 'manus-storage/zone-claiming-envelope.jpg?v=claim1';
+    function isClaiming(tile){
+      var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+      var f = (tile.getAttribute('data-focus')||'').replace(/\s+/g,'-').toLowerCase();
+      return f === 'claim' || f === 'claiming' || f === 'to-claim'
+        || t === 'claim' || t === 'claiming' || t === 'to claim'
+        || t === 'i claim' || t === 'i am claiming';
+    }
+    function run(){
+      document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
+        var iso = blk.getAttribute('data-date') || '';
+        if(iso < '2026-09-07') return;
+        blk.querySelectorAll('.vision-tile').forEach(function(tile){
+          if(!isClaiming(tile)) return;
+          tile.classList.remove('vision-tile-nophoto');
+          tile.style.setProperty('--tile-photo', 'url("' + WANT + '")');
+        });
+      });
+      try {
+        var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
+        var changed = false;
+        Object.keys(edits).forEach(function(day){
+          if(day < '2026-09-07') return;
+          var d = edits[day]; if(!d || !Array.isArray(d.addedSections)) return;
+          d.addedSections.forEach(function(rec){
+            if(!rec) return;
+            var t = String(rec.title||'').replace(/\s+/g,' ').trim().toLowerCase();
+            var f = String(rec.focus||'').replace(/\s+/g,'-').toLowerCase();
+            if(f === 'claim' || f === 'claiming' || f === 'to-claim' || t === 'i am claiming'){
+              if(rec.photo !== WANT){ rec.photo = WANT; changed = true; }
+            }
+          });
+        });
+        if(changed) localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      } catch(e){}
+    }
+    window.__applyClaimingPhotoFromSept7 = run;
+    run();
+    setTimeout(run, 0);
   })();
 
   (function migrationFourSectionPhotosV1(){
@@ -59056,19 +59305,31 @@ html body .day-block.overview-era-day .day-card-header.day-header-chrome .tv-pil
   padding: 8px 16px !important;
 }
 html body .day-block.overview-era-day.view-overview .overview-add-section {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: 28px !important;
   height: 28px !important;
-  margin: 0 2px 0 0 !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 28px !important;
+  align-self: center !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
   padding: 0 !important;
   border: 1px solid rgba(255,255,255,0.42) !important;
   border-radius: 50% !important;
   background: rgba(245,240,233,0.22) !important;
   color: rgba(255,255,255,0.92) !important;
   font-family: "DM Mono", monospace !important;
-  font-size: 18px !important;
-  line-height: 1 !important;
+  font-size: 20px !important;
+  line-height: 0 !important;
   cursor: pointer !important;
   z-index: 9 !important;
+  transform: none !important;
 }
 html body .day-block.overview-era-day.view-overview .overview-add-section:hover {
   background: rgba(255,255,255,0.28) !important;
@@ -60524,6 +60785,10 @@ html body .day-block.vision-collage-day[data-date="2026-08-28"] .vision-polaroid
     if (host) {
       host.style.removeProperty('grid-template-columns');
       host.style.removeProperty('grid-template-rows');
+      host.style.removeProperty('height');
+      host.style.removeProperty('min-height');
+      host.style.removeProperty('max-height');
+      host.style.removeProperty('overflow');
       if (host.__tileSortable) {
         try { host.__tileSortable.destroy(); } catch (e) {}
         host.__tileSortable = null;
@@ -66006,12 +66271,12 @@ html body .day-block.depth-four-era .overview-center-stack {
     'to achieve':'manus-storage/zone-achieving.jpg?v=done1',
     'to-achieve':'manus-storage/zone-achieving.jpg?v=done1',
     'i achieve': 'manus-storage/zone-achieving.jpg?v=done1',
-    strategist: 'manus-storage/zone-strategist.jpg?v=strat3',
-    'a strategist': 'manus-storage/zone-strategist.jpg?v=strat3',
-    'i am a strategist': 'manus-storage/zone-strategist.jpg?v=strat3',
-    'i am strategist': 'manus-storage/zone-strategist.jpg?v=strat3',
-    calculating: 'manus-storage/zone-strategist.jpg?v=strat3',
-    'i am calculating': 'manus-storage/zone-strategist.jpg?v=strat3',
+    strategist: 'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'a strategist': 'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'i am a strategist': 'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'i am strategist': 'manus-storage/zone-strategist-behind.jpg?v=back2',
+    calculating: 'manus-storage/zone-strategist-behind.jpg?v=back2',
+    'i am calculating': 'manus-storage/zone-strategist-behind.jpg?v=back2',
     successful: 'manus-storage/zone-successful.jpg?v=ok2',
     'i am successful': 'manus-storage/zone-successful.jpg?v=ok2',
     'i successful': 'manus-storage/zone-successful.jpg?v=ok2',
@@ -67825,7 +68090,8 @@ html.prototypes-page .agenda-body {
   max-height: none !important;
 }
 html.prototypes-page #page-bg-wrapper {
-  padding-bottom: 160px !important;
+  padding-bottom: 28px !important;
+  min-height: 100vh !important;
 }
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"],
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day,
@@ -67833,16 +68099,68 @@ html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vis
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .day-card,
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .day-tasks,
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)),
-html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-board:not(.is-zoomed),
-html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-hero {
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-board:not(.is-zoomed) {
   overflow: visible !important;
   height: auto !important;
   max-height: none !important;
   min-height: 0 !important;
   flex: 0 0 auto !important;
 }
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-hero,
 html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"].vision-collage-day.overview-era-day .vision-hero.vision-hero-many {
-  grid-auto-rows: minmax(210px, auto) !important;
+  overflow: hidden !important;
+  grid-auto-rows: unset !important;
+}
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"] .vision-board.is-zoomed .vision-hero,
+html.prototypes-page body.prototypes-page .day-block[data-date="2026-08-30"] .vision-board.is-zoomed .vision-hero.vision-hero-many {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+}
+html.prototypes-page .day-block[data-date="2026-08-30"] .overview-right-tools,
+html.prototypes-page .day-block[data-date="2026-08-30"].overview-era-day .overview-right-tools,
+html.prototypes-page .day-block[data-date="2026-08-30"].overview-era-day.view-overview .overview-right-tools {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  width: auto !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+}
+html.prototypes-page .day-block[data-date="2026-08-30"] .overview-add-section,
+html.prototypes-page .day-block[data-date="2026-08-30"].overview-era-day.view-overview .overview-add-section,
+html.prototypes-page body .day-block[data-date="2026-08-30"] .overview-right-tools .overview-add-section {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 28px !important;
+  align-self: center !important;
+  justify-self: center !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  line-height: 0 !important;
+  font-size: 20px !important;
+  overflow: visible !important;
+  transform: none !important;
+}
+html.prototypes-page .day-block[data-date="2026-08-30"] .overview-carry-forward {
+  flex: 0 0 auto !important;
+  height: 28px !important;
+  box-sizing: border-box !important;
 }
 </style>
 <style id="vision-collage-mosaic-v1">

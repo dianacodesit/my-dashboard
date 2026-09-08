@@ -12,11 +12,13 @@ as no-op 200s so the UI does not spam console errors.
 
 from __future__ import annotations
 
+import errno
 import gzip
 import json
 import os
 import re
 import subprocess
+import sys
 import threading
 from io import BytesIO
 from datetime import datetime, timezone
@@ -219,13 +221,13 @@ KNOWN_CARD_PHOTOS = {
     "earning": "manus-storage/zone-earn-hands.jpg?v=earn7",
     "I am earning": "manus-storage/zone-earn-hands.jpg?v=earn7",
     "i am earning": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "strategist": "manus-storage/zone-strategist.jpg?v=strat3",
-    "a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
-    "i am a strategist": "manus-storage/zone-strategist.jpg?v=strat3",
-    "i am strategist": "manus-storage/zone-strategist.jpg?v=strat3",
-    "calculating": "manus-storage/zone-strategist.jpg?v=strat3",
-    "i am calculating": "manus-storage/zone-strategist.jpg?v=strat3",
-    "I am calculating": "manus-storage/zone-strategist.jpg?v=strat3",
+    "strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
+    "a strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
+    "i am a strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
+    "i am strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
+    "calculating": "manus-storage/zone-strategist-behind.jpg?v=back2",
+    "i am calculating": "manus-storage/zone-strategist-behind.jpg?v=back2",
+    "I am calculating": "manus-storage/zone-strategist-behind.jpg?v=back2",
     "successful": "manus-storage/zone-successful.jpg?v=ok2",
     "i am successful": "manus-storage/zone-successful.jpg?v=ok2",
     "healthy": "",
@@ -1225,6 +1227,39 @@ def rename_vision_check(date: str, focus: str, old: str, new: str, page: str = "
     return result
 
 
+def set_vision_check_status(
+    date: str, focus: str, title: str, checked: bool, page: str = ""
+) -> dict:
+    """Persist a task's completion directly on its source checkbox in HTML."""
+    want = re.sub(r"\s+", " ", str(title or "")).strip().lower()
+    is_checked = bool(checked)
+
+    def rewriter(art: str, _title: str) -> str:
+        def update(m):
+            chunk = m.group(0)
+            if _check_label_title(chunk).lower() != want:
+                return chunk
+            input_match = re.search(r"<input\b[^>]*>", chunk, re.I)
+            if not input_match:
+                return chunk
+            input_tag = input_match.group(0)
+            input_tag = re.sub(
+                r"\schecked(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^\s>]+))?",
+                "",
+                input_tag,
+                flags=re.I,
+            )
+            if is_checked:
+                input_tag = input_tag[:-1].rstrip() + ' checked="checked">'
+            return chunk[: input_match.start()] + input_tag + chunk[input_match.end() :]
+
+        return _VISION_CHECK_RE.sub(update, art)
+
+    result = _mutate_vision_check(date, focus, title, rewriter, page)
+    result["checked"] = is_checked
+    return result
+
+
 def save_vision_check_order(date: str, focus: str, titles, page: str = "") -> dict:
     """Reorder vision-check labels inside a day's section tile."""
     date = str(date or "").strip()
@@ -1868,10 +1903,17 @@ CONCEPTUAL_SECTION_KEYS = frozenset({
     "centered", "i am centered",
 })
 
+DATED_SECTION_PHOTOS = {
+    "claim": ("2026-09-07", "manus-storage/zone-claiming-envelope.jpg?v=claim1"),
+}
 
-def _approved_section_photo(key: str) -> str | None:
+
+def _approved_section_photo(key: str, date: str = "") -> str | None:
     if key not in CONCEPTUAL_SECTION_KEYS:
         return None
+    dated = DATED_SECTION_PHOTOS.get(key)
+    if dated and str(date or "") >= dated[0]:
+        return dated[1]
     # Empty string means intentionally cleared (no approved photo yet).
     if key not in KNOWN_CARD_PHOTOS:
         return None
@@ -1930,7 +1972,7 @@ def _photo_alias_keys(name: str) -> list[str]:
     return keys
 
 
-def photo_for_name(name: str) -> dict:
+def photo_for_name(name: str, date: str = "") -> dict:
     raw = " ".join(str(name or "").replace("\u2011", "-").split()).strip().lower()
     if not raw:
         return {"ok": False, "error": "empty"}
@@ -1940,7 +1982,7 @@ def photo_for_name(name: str) -> dict:
             key = cand
             break
     with PHOTO_LOCK:
-        approved = _approved_section_photo(key)
+        approved = _approved_section_photo(key, date)
         stored = _load_photo_map()
         # Conceptual sections always use the approved zone URL — never card-* auto-fetch.
         # Skip blackness usability (darkness void is intentionally near-black).
@@ -2135,8 +2177,9 @@ class Handler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path == "/photo-for":
             name = unquote((parse_qs(parsed.query).get("name") or [""])[0])
+            date = unquote((parse_qs(parsed.query).get("date") or [""])[0])
             try:
-                return self._json(200, photo_for_name(name))
+                return self._json(200, photo_for_name(name, date))
             except Exception as e:  # noqa: BLE001
                 return self._json(500, {"ok": False, "error": str(e)})
         return super().do_GET()
@@ -2147,7 +2190,8 @@ class Handler(SimpleHTTPRequestHandler):
             if path == "/photo-for":
                 body = self._read_json()
                 name = body.get("name") if isinstance(body, dict) else ""
-                return self._json(200, photo_for_name(str(name or "")))
+                date = body.get("date") if isinstance(body, dict) else ""
+                return self._json(200, photo_for_name(str(name or ""), str(date or "")))
             if path == "/bake":
                 body = self._read_json()
                 data = body.get("data") if isinstance(body, dict) else None
@@ -2182,6 +2226,16 @@ class Handler(SimpleHTTPRequestHandler):
                     str((body or {}).get("focus") or ""),
                     str((body or {}).get("old") or (body or {}).get("from") or ""),
                     str((body or {}).get("title") or (body or {}).get("new") or ""),
+                    str((body or {}).get("page") or ""),
+                )
+                return self._json(200, result)
+            if path == "/set-task-status":
+                body = self._read_json()
+                result = set_vision_check_status(
+                    str((body or {}).get("date") or ""),
+                    str((body or {}).get("focus") or ""),
+                    str((body or {}).get("title") or ""),
+                    bool((body or {}).get("checked")),
                     str((body or {}).get("page") or ""),
                 )
                 return self._json(200, result)
@@ -2312,7 +2366,13 @@ def main():
     os.chdir(ROOT)
     for name in ("everything.html", "prototype.html"):
         _gzip_file(str(ROOT / name))
-    httpd = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
+    try:
+        httpd = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
+    except OSError as e:
+        if getattr(e, "errno", None) == errno.EADDRINUSE:
+            print(f"port {PORT} already in use — leaving the live server", flush=True)
+            return
+        raise
     print(f"dashboard server on http://127.0.0.1:{PORT}/", flush=True)
     print("POST /bake to persist localStorage into GitHub", flush=True)
     print("POST /brain-dump to write thoughts into brain-dump.html", flush=True)
