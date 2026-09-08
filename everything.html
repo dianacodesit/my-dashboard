@@ -19,56 +19,6 @@ This applies regardless of conversation context or recently edited days.
 <head>
 
 <meta charset="utf-8"/>
-<style id="everything-stable-first-paint">
-/*
- * This file contains years of baked markup and later override layers. Never
- * expose those intermediate versions while the document is still parsing.
- * The opaque curtain is removed once, after DOM hydration has settled.
- */
-html {
-  background: #1a1511 url('manus-storage/_339ab459.jpg') center / cover fixed no-repeat;
-}
-html:not(.everything-ui-settled)::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 2147483647;
-  display: block;
-  background: #1a1511 url('manus-storage/_339ab459.jpg') center / cover no-repeat;
-  pointer-events: auto;
-}
-html:not(.everything-ui-settled) body {
-  overflow: hidden !important;
-  visibility: hidden !important;
-}
-html.everything-ui-settled::before {
-  display: none !important;
-}
-</style>
-<script id="everything-stable-first-paint-js">
-(function(){
-  var shown = false;
-  function revealFinalUI(){
-    if(shown) return;
-    shown = true;
-    document.documentElement.classList.add('everything-ui-settled');
-  }
-  function afterHydration(){
-    setTimeout(function(){
-      requestAnimationFrame(function(){
-        requestAnimationFrame(revealFinalUI);
-      });
-    }, 1900);
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', afterHydration, { once: true });
-  } else {
-    afterHydration();
-  }
-  /* Never let slow or broken images hold the dashboard behind the curtain. */
-  setTimeout(revealFinalUI, 4000);
-})();
-</script>
 <script src="boot-seed.js" defer></script><script src="boot-today.js?v=chrome15"></script>
 <style id="btm-today-first">
 html, body, .day-block, .day-card, .vision-hero, .vision-tile {
@@ -20983,33 +20933,39 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="executing" style="--tile-photo: url('manus-storage/zone-execute-focus.jpg?v=chess1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am executing">I am executing</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="claiming" style="--tile-photo: url('manus-storage/zone-claiming-envelope.jpg?v=claim1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am claiming">I am claiming</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url('manus-storage/zone-envision.jpg?v=swap1');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title" data-carve="I am becoming">I am becoming</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 34%; --py: 32%;"><input class="agenda-check" type="checkbox"><span>Dr Betty</span></label><label class="vision-check" style="--px: 62%; --py: 58%;"><input class="agenda-check" type="checkbox"><span>document translation into Arabic</span></label></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="healthy" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am healthy">I am healthy</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="financially-abundant" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am financially abundant">I am financially abundant</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="practicing-gratitude" style="--tile-photo: url('manus-storage/zone-practicing-gratitude.jpg?v=grat1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am practicing gratitude">I am practicing gratitude</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="fit" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am fit">I am fit</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="centered" style="--tile-photo: url('manus-storage/zone-centered.jpg?v=center1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am centered">I am centered</h3><div class="vision-tile-details"></div></article>
 </div>
 </div></div></div></div></div>
 
-<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era dash-mosaic-era overview-mode-tasks today-block" data-date="2026-09-08">
+<div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era dash-mosaic-era overview-mode-tasks today-block today flow-modern view-overview has-day-margin" data-date="2026-09-08" data-title-era="foil" data-file-day="1" data-ui-baked="1">
 <div class="day-dot"></div>
 <div class="day-card">
-<div class="day-card-header"><span class="day-date">sep 8 · tue</span></div>
-<div class="today-view-toggle">
-<button class="tv-pill active" data-view="pursuits">overview</button>
+<div class="day-card-header day-header-chrome"><span class="day-date">sep 8 · tue</span><div class="overview-center-stack"><div class="overview-depth-toggle depth-glass-overlay depth-overview-popup" role="tablist" aria-label="sections, subsections, cards, or tasks"><button type="button" class="overview-depth-opt" data-mode="sections">sections</button><button type="button" class="overview-depth-opt" data-mode="subsections">subsections</button><button type="button" class="overview-depth-opt" data-mode="cards">cards</button><button type="button" class="overview-depth-opt is-on" data-mode="tasks">tasks</button></div><div class="today-view-toggle">
+<button class="tv-pill active" data-view="pursuits" aria-haspopup="true" aria-expanded="false">overview</button>
 <button class="tv-pill" data-view="impulses">impulses</button>
-<button class="tv-pill" data-view="flow">flow</button>
-<button class="tv-pill" data-view="nodes">nodes</button>
-</div>
+<button class="tv-pill" data-view="flow">priority</button>
+<button class="tv-pill" data-view="nodes">nodes</button><button type="button" class="tv-pill" data-view="flowchart">flow</button>
+</div></div><div class="overview-right-tools"><div class="vision-layout-control"><button type="button" class="vision-layout-button" aria-label="customize collage layout">layout</button><div class="vision-layout-panel" hidden=""><p>large rooms</p><div class="vision-layout-options" data-layout-field="big"><button type="button" data-layout-value="1" class="active">1</button><button type="button" data-layout-value="2">2</button></div><p>side stack</p><div class="vision-layout-options" data-layout-field="side"><button type="button" data-layout-value="2">2</button><button type="button" data-layout-value="3" class="active">3</button><button type="button" data-layout-value="4">4</button><button type="button" data-layout-value="5">5</button></div></div></div><button type="button" class="overview-carry-forward is-armed" aria-label="carry unfinished forward" title="2 open — carry forward">carry</button><button type="button" class="overview-add-section" aria-label="add section">+</button></div></div>
+<div class="tv-toggle-row overview-toggle-row" aria-hidden="true" style="display: none;"></div>
 <div class="day-tasks">
-<div class="tv-panel tv-pursuits active">
-<div class="vision-board" aria-label="vision collage">
-<button type="button" class="vision-zoom-out" hidden>all of today</button>
+<div class="tv-panel tv-pursuits active" style="opacity: 1; transform: none; filter: none;">
+<div class="vision-board vision-board-dashmosaic vision-board-filled" aria-label="vision collage" data-title-era="foil">
+<button type="button" class="vision-zoom-out" hidden="">all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero">
-<article class="vision-tile" data-focus="fitness" style="--tile-photo: url('manus-storage/zone-athletic-gym.jpg?v=gym1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am training">I am training</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="glowing-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="i am glowing up">i am glowing up</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="deen" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am worshipping Allah ﷻ">I am worshipping Allah ﷻ</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game13');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am winning">I am winning</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="academia" style="--tile-photo: url('manus-storage/zone-grad-student.jpg?v=grad4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="networking" style="--tile-photo: url('manus-storage/zone-networking.jpg?v=net1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am networking">I am networking</h3><div class="vision-tile-details"></div></article>
-</div>
-</div></div></div></div></div>
+<div class="vision-hero vision-hero-dashmosaic vision-hero-six" data-pack-sig="dash20stable:6#deen:I am worshipping Allah ﷻ|fitness:I am training|glowing-up:i am glowing up|wins:I am winning|academia:I am pursuing my Ph.D|networking:I am networking@c2,2,0,0,3,2@w1838@h965" style="display: block !important; position: relative !important; width: 100% !important; box-sizing: border-box !important; padding: 0px !important; height: 965px !important; min-height: 965px !important; max-height: 965px !important; gap: 0px !important;">
+
+
+
+
+
+
+<article class="vision-tile vision-tile-dashmosaic vision-tile-dash-hero" data-focus="deen" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1'); position: absolute !important; left: 12px !important; top: 12px !important; width: 701px !important; height: 797px !important; z-index: 12 !important;" data-dash-span="5" data-dash-score="2" data-section-id="s:deen"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am worshipping Allah ﷻ">I am worshipping Allah ﷻ</h3><div class="vision-tile-subsections vision-sub-film"><div class="film-sprockets top" aria-hidden="true"></div><div class="film-frames"><article class="vision-subsection vision-subsection-nophoto" data-sub="defeat-the-enemy" data-frame="01" style="--sub-photo: none; --sx: 58%; --sy: 52%; --sw: 36%; --sr: -2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title"><span class="film-num">01</span>defeat the enemy</h4><button type="button" class="film-cut" aria-label="delete">×</button></article><article class="vision-subsection" data-sub="istighfar-1000x" data-frame="02" style="--sub-photo: url(&quot;manus-storage/sub-istighfar.jpg?v=ist1&quot;); --sx: 6%; --sy: 62%; --sw: 28%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title"><span class="film-num">02</span>istighfar 1000x</h4><button type="button" class="film-cut" aria-label="delete">×</button></article><button type="button" class="film-add-slot" aria-label="add subsection">+</button></div><div class="film-sprockets bottom" aria-hidden="true"></div></div><div class="vision-tile-details"></div><div class="vision-tile-resize" data-edge="n" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="s" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="e" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="w" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="se" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="sw" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="ne" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="nw" aria-hidden="true"></div><button type="button" class="vision-photo-reframe" aria-label="reframe photo">reframe</button><button type="button" class="vision-tile-del" aria-label="delete section">×</button><button type="button" class="vision-add-card" aria-label="add subsection, card, or task" title="add"><span>+</span></button></article><article class="vision-tile vision-tile-dashmosaic" data-focus="fitness" style="--tile-photo: url(&quot;manus-storage/zone-athletic-gym.jpg?v=gym1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; position: absolute !important; left: 725px !important; top: 12px !important; width: 1101px !important; height: 376px !important; z-index: 10 !important;" data-dash-span="5" data-dash-score="2" data-section-id="s:fitness"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am training">I am training</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div><div class="vision-tile-details"></div><div class="vision-tile-resize" data-edge="n" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="s" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="e" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="w" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="se" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="sw" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="ne" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="nw" aria-hidden="true"></div><button type="button" class="vision-photo-reframe" aria-label="reframe photo">reframe</button><button type="button" class="vision-tile-del" aria-label="delete section">×</button><button type="button" class="vision-add-card" aria-label="add subsection, card, task, or fitness class" title="add"><span>+</span></button></article><article class="vision-tile vision-tile-dashmosaic" data-focus="glowing-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6'); position: absolute !important; left: 725px !important; top: 400px !important; width: 1101px !important; height: 226px !important; z-index: 11 !important;" data-dash-span="4" data-dash-score="0" data-section-id="s:glowing-up"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="i am glowing up">i am glowing up</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="luscious-hair" style="--sub-photo: none; --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="glass-skin" style="--sub-photo: none; --sx: 2%; --sy: 2%; --sw: 20%; --sr: -2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">glass skin</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="aligned-teeth" style="--sub-photo: none; --sx: 2%; --sy: 58%; --sw: 20%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">aligned teeth</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="facial-tone" style="--sub-photo: none; --sx: 78%; --sy: 58%; --sw: 20%; --sr: -2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">facial tone</h4></article></div><div class="vision-tile-details"></div><div class="vision-tile-resize" data-edge="n" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="s" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="e" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="w" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="se" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="sw" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="ne" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="nw" aria-hidden="true"></div><button type="button" class="vision-photo-reframe" aria-label="reframe photo">reframe</button><button type="button" class="vision-tile-del" aria-label="delete section">×</button><button type="button" class="vision-add-card" aria-label="add subsection, card, or task" title="add"><span>+</span></button></article><article class="vision-tile wins-copy-stack vision-tile-dashmosaic" data-focus="wins" style="--tile-photo: url(&quot;manus-storage/zone-wins-hand.jpg?v=game13&quot;); --photo-ar: 0.75; --zoom-ar: 0.75; position: absolute !important; left: 725px !important; top: 638px !important; width: 1101px !important; height: 171px !important; z-index: 12 !important;" data-dash-span="4" data-dash-score="0" data-section-id="s:wins"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I am winning">I am winning</h3><div class="vision-tile-details"></div><div class="vision-tile-resize" data-edge="n" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="s" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="e" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="w" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="se" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="sw" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="ne" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="nw" aria-hidden="true"></div><button type="button" class="vision-photo-reframe" aria-label="reframe photo">reframe</button><button type="button" class="vision-tile-del" aria-label="delete section">×</button><button type="button" class="vision-add-card" aria-label="add subsection, card, or task" title="add"><span>+</span></button></article><article class="vision-tile horizon-armed vision-tile-dashmosaic" data-focus="academia" style="--tile-photo: url(&quot;manus-storage/zone-grad-student.jpg?v=grad4&quot;); position: absolute !important; left: 12px !important; top: 821px !important; width: 902px !important; height: 132px !important; z-index: 13 !important;" data-dash-span="6" data-dash-score="3" data-section-id="s:academia"><div class="vision-tile-photo"></div><div class="vision-horizon" aria-hidden="true"></div><div class="vision-horizon-above"></div><div class="vision-horizon-below"><label class="vision-horizon-task" data-hz-kind="card" data-hz-title="fall 2026 enrollment" data-hz-order="0"><input type="checkbox" class="agenda-check"><span>fall 2026 enrollment</span><button type="button" class="vision-horizon-del" aria-label="delete task">×</button></label></div><h3 class="vision-tile-title" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3><div class="vision-tile-subsections vision-sub-film"><div class="film-sprockets top" aria-hidden="true"></div><div class="film-frames"><article class="vision-subsection vision-subsection-nophoto" data-sub="classes" data-frame="01" style="--sub-photo: none;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title"><span class="film-num">01</span>classes</h4><button type="button" class="film-cut" aria-label="delete">×</button></article><article class="vision-subsection vision-subsection-nophoto" data-sub="registration" data-frame="02" style="--sub-photo: none;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title"><span class="film-num">02</span>registration</h4><button type="button" class="film-cut" aria-label="delete">×</button></article><article class="vision-subsection vision-subsection-nophoto" data-sub="financial-aid-scholarships" data-frame="03" style="--sub-photo: none;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title"><span class="film-num">03</span>financial aid &amp; scholarships</h4><button type="button" class="film-cut" aria-label="delete">×</button></article><article class="vision-subsection vision-subsection-nophoto" data-sub="coursework" data-frame="04" style="--sub-photo: none;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title"><span class="film-num">04</span>coursework</h4><button type="button" class="film-cut" aria-label="delete">×</button></article><button type="button" class="film-add-slot" aria-label="add subsection">+</button></div><div class="film-sprockets bottom" aria-hidden="true"></div></div><div class="vision-tile-details"><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><button type="button" class="vision-card-del" aria-label="delete card">×</button><div class="vision-pol-resize" title="drag to resize"></div></div></div><div class="vision-tile-resize" data-edge="n" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="s" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="e" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="w" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="se" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="sw" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="ne" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="nw" aria-hidden="true"></div><button type="button" class="vision-photo-reframe" aria-label="reframe photo">reframe</button><div class="vision-task-sky" aria-hidden="false"><button type="button" class="vision-task-star is-on" title="fall 2026 enrollment" style="left: 22%; top: 15.6%; --beam-i: 0;"><span class="vision-task-star-core" aria-hidden="true"></span><span class="vision-task-star-label"><span class="vision-task-star-name">fall 2026 enrollment</span><span class="vision-task-star-del" role="button" aria-label="delete task">×</span></span><span class="task-steps-inline" aria-hidden="true" style="--fill: 0; opacity: 0;"><span class="task-steps-inline-fill"></span></span></button></div><button type="button" class="vision-tile-del" aria-label="delete section">×</button><button type="button" class="vision-add-card" aria-label="add subsection, card, or task" title="add"><span>+</span></button></article><article class="vision-tile horizon-armed vision-tile-dashmosaic" data-focus="networking" style="--tile-photo: url(&quot;manus-storage/zone-networking.jpg?v=net1&quot;); --photo-ar: 1.333; --zoom-ar: 1.333; position: absolute !important; left: 926px !important; top: 821px !important; width: 900px !important; height: 132px !important; z-index: 14 !important;" data-dash-span="5" data-dash-score="2" data-section-id="s:networking"><div class="vision-tile-photo"></div><div class="vision-horizon" aria-hidden="true"></div><div class="vision-horizon-above"></div><div class="vision-horizon-below"><label class="vision-horizon-task" data-hz-kind="check" data-hz-title="Hanady" data-hz-order="0"><input type="checkbox" class="agenda-check"><span>Hanady</span><button type="button" class="vision-horizon-del" aria-label="delete task">×</button></label></div><h3 class="vision-tile-title" data-carve="I am networking">I am networking</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Hanady</span></label></div><div class="vision-tile-resize" data-edge="n" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="s" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="e" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="w" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="se" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="sw" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="ne" aria-hidden="true"></div><div class="vision-tile-resize" data-edge="nw" aria-hidden="true"></div><button type="button" class="vision-photo-reframe" aria-label="reframe photo">reframe</button><div class="vision-task-sky" aria-hidden="false"><button type="button" class="vision-task-star is-on" title="Hanady" style="left: 22%; top: 15.5765%; --beam-i: 0;"><span class="vision-task-star-core" aria-hidden="true"></span><span class="vision-task-star-label"><span class="vision-task-star-name">Hanady</span><span class="vision-task-star-del" role="button" aria-label="delete task">×</span></span><span class="task-steps-inline" aria-hidden="true" style="--fill: 0; opacity: 0;"><span class="task-steps-inline-fill"></span></span></button></div><button type="button" class="vision-tile-del" aria-label="delete section">×</button><button type="button" class="vision-add-card" aria-label="add subsection, card, or task" title="add"><span>+</span></button></article><svg class="overview-section-web" aria-hidden="true" viewBox="0 0 1838 965" width="1838" height="965"><defs class="overview-edge-defs"><filter id="overviewFilamentGlow-20260908" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.6" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs></svg></div>
+<div class="overview-web-bar"><button type="button" class="overview-link-btn">connect</button><span class="overview-link-hint">click two sections to link them · click a filament to remove it</span></div></div><div class="day-margin has-tasks"><ul class="day-margin-list"><li class="day-margin-item" style="position: relative;"><span class="day-margin-t" contenteditable="true" spellcheck="false">Committee check-in</span><button type="button" class="day-margin-promote" aria-label="promote to card" title="promote to a section card">↑ card</button><button type="button" class="day-margin-del" aria-label="delete task">×</button></li></ul><input class="day-margin-whisper" type="text" placeholder="write in the margin…" autocomplete="off" spellcheck="false"></div></div><div class="tv-panel tv-impulses" style="display: none;"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"><button type="button" class="impulses-keep">keep</button></div><div class="impulses-route-map"><div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"><p class="impulses-empty">nothing captured yet</p></div></div></div></div><button class="rollover-btn" type="button" title="Move all unchecked tasks to the next day" data-rollover-date="2026-09-08" style="visibility: visible !important;">↻ roll over remaining</button><div class="tv-panel tv-nodes" style="display: none;"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="pursuit-zoom-host" style="background: none; width: 100%; max-width: 100%; min-width: 0px; overflow: auto; --board-scale: 1; height: 86px;"><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1" style="background: none; --canvas-w: 422px; --canvas-h: 86px; --board-scale: 1; width: 422px; height: 86px; min-height: 86px;"><div class="pursuit-zone pursuit-zone-hanady" data-zone="hanady" data-custom-zone="1" style="--zone-photo: url(&quot;manus-storage/pursuit-vibes_e645a2da.jpg&quot;); background-image: none; --ff-x: 20px; --ff-y: 20px; --zone-w: 80px; --zone-h: 30px; left: 20px !important; top: 20px !important; width: 80px !important; height: 30px !important;"><span class="node-filament-dot" aria-hidden="true"></span><div class="pursuit-zone-head"><p class="pursuit-zone-title">hanady</p><button type="button" class="zone-del" aria-label="delete node">×</button><span class="task-steps-inline" aria-hidden="true" style="--fill: 0; opacity: 0;"><span class="task-steps-inline-fill"></span></span></div><div class="pursuit-zone-grid" data-zone="hanady"></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" aria-label="add pursuit card" data-zone="hanady"><span>+</span></button><div class="zone-resize"></div></div><div class="pursuit-zone pursuit-zone-fall-2026-enrollment" data-zone="fall-2026-enrollment" data-custom-zone="1" style="--zone-photo: url(&quot;manus-storage/card-fall-2026-enrollment.jpg?v=1&quot;); background-image: none; --ff-x: 174px; --ff-y: 20px; --zone-w: 80px; --zone-h: 30px; left: 174px !important; top: 20px !important; width: 80px !important; height: 30px !important;"><span class="node-filament-dot" aria-hidden="true"></span><div class="pursuit-zone-head"><p class="pursuit-zone-title">fall 2026 enrollment</p><button type="button" class="zone-del" aria-label="delete node">×</button><span class="task-steps-inline" aria-hidden="true" style="--fill: 0; opacity: 0;"><span class="task-steps-inline-fill"></span></span></div><div class="pursuit-zone-grid" data-zone="fall-2026-enrollment"></div><div class="zone-oneoffs"></div><button type="button" class="add-pursuit-slot" aria-label="add pursuit card" data-zone="fall-2026-enrollment"><span>+</span></button><div class="zone-resize"></div></div></div></div></div><div class="tv-panel tv-flowchart" style="display: none;"></div></div><button type="button" class="make-flow-btn" title="Click, then tap cards, sections, or tasks in order">make flow</button></div></div>
+
 
 <div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-09">
 <div class="day-dot"></div>
@@ -32928,6 +32884,9 @@ html body #julRail.rail-open {
     document.querySelectorAll('.day-block .today-view-toggle').forEach(function(toggle){
       var block = toggle.closest('.day-block');
       if(!block) return;
+      /* Final Sep 8+ markup is authored in its live state. Do not rebuild the
+         visible day on load; view-specific setup still runs when a pill is clicked. */
+      if(block.getAttribute('data-ui-baked') === '1') return;
       if(window.__ensureImpulsesView && window.__wantsImpulsesView && window.__wantsImpulsesView(block)) window.__ensureImpulsesView(block);
       if(window.__ensureNodesAndFlowchart) window.__ensureNodesAndFlowchart(block);
       if(window.__ensureFlowchartView) window.__ensureFlowchartView(block);
@@ -32935,6 +32894,7 @@ html body #julRail.rail-open {
       switchView(block, (active && active.getAttribute('data-view')) || 'pursuits');
     });
     document.querySelectorAll('.day-block.fmt22[data-date]').forEach(function(block){
+      if(block.getAttribute('data-ui-baked') === '1') return;
       if(window.__syncOverviewEraChrome) window.__syncOverviewEraChrome(block);
     });
   }
@@ -50145,12 +50105,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var loose = [].slice.call(box.querySelectorAll(':scope > .vision-subsection'));
     var already = [].slice.call(frames.querySelectorAll(':scope > .vision-subsection'));
     var subs = already.concat(loose.filter(function(sub){ return already.indexOf(sub) < 0; }));
-    box.insertBefore(top, box.firstChild);
+    if(box.firstElementChild !== top) box.insertBefore(top, box.firstChild);
     if(top.nextSibling !== frames) box.insertBefore(frames, top.nextSibling);
     subs.forEach(function(sub, i){
-      frames.appendChild(sub);
+      var at = frames.children[i];
+      if(at !== sub) frames.insertBefore(sub, at || null);
       var n = String(i + 1).padStart(2, '0');
-      sub.setAttribute('data-frame', n);
+      if(sub.getAttribute('data-frame') !== n) sub.setAttribute('data-frame', n);
       var titleEl = sub.querySelector('.vision-subsection-title');
       if(titleEl){
         var num = titleEl.querySelector('.film-num');
@@ -50159,7 +50120,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           num.className = 'film-num';
           titleEl.insertBefore(num, titleEl.firstChild);
         }
-        num.textContent = n;
+        if(num.textContent !== n) num.textContent = n;
       }
       var cut = sub.querySelector(':scope > .film-cut');
       if(!cut){
@@ -50186,7 +50147,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         sub.appendChild(cut);
       }
     });
-    frames.appendChild(add);
+    if(add.parentNode !== frames || add.nextElementSibling) frames.appendChild(add);
     if(frames.nextSibling !== bot) box.insertBefore(bot, frames.nextSibling);
   }
   window.__styleAcademiaFilm = styleAcademiaFilm;
@@ -72944,21 +72905,12 @@ html body .vision-task-star > .task-steps-inline .task-steps-inline-fill {
     if(e.key === 'Escape') closeMenu();
   });
   function bootTaskNodesFromSept6(){
-    document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
-      var iso = blk.getAttribute('data-date') || '';
-      if(!iso || iso < '2026-09-06') return;
-      try { if(window.__syncTaskNodesFromDay) window.__syncTaskNodesFromDay(blk); } catch(eS){}
-      if(iso >= '2026-09-08'){
-        try { if(window.__ensureOverviewNodesGrid) window.__ensureOverviewNodesGrid(blk); } catch(eFit){}
-      }
-    });
+    /* Nodes are built when the nodes view opens. Rebuilding every hidden
+       nodes panel four times during page load caused late refresh churn. */
     paintInlineTracks();
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootTaskNodesFromSept6);
   else bootTaskNodesFromSept6();
-  setTimeout(bootTaskNodesFromSept6, 400);
-  setTimeout(bootTaskNodesFromSept6, 900);
-  setTimeout(bootTaskNodesFromSept6, 1600);
 })();
 </script>
 <style id="zoom-hover-del-v2">
