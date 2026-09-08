@@ -810,12 +810,8 @@ def unswallow_hero_inner(inner: str) -> str:
     return text
 
 
-# Titles Diana archived that a restore/merge must never put back on Aug 30.
-AUG30_ARCHIVED_EXTRAS = {
-    "pursuits", "power", "purpose", "phd", "ph.d", "ph-d", "focus",
-    "strengths", "plan", "envision", "fight back", "fight-back", "remember who you are", "fight",
-    "villains", "potential", "ambition",
-}
+# Aug 30 is historical. Archiving a section later must not rewrite that past day.
+AUG30_ARCHIVED_EXTRAS: set[str] = set()
 
 
 def _drop_key_set(items) -> set[str]:
@@ -952,7 +948,6 @@ def save_overview_hero(date: str, hero_html: str, removed_sections=None, archive
     if date == "2026-08-30":
         drop_keys = sorted(AUG30_ARCHIVED_EXTRAS | _drop_key_set(archived_sections))
     # History days: never honor ordinary removed lists from a live tab.
-    # Aug 30 archived extras are banned from merge so a restorer cannot resurrect them.
     if date and date < "2026-09-01":
         removed_sections = list(drop_keys) if drop_keys else None
     hero_html = unswallow_hero_inner(hero_html)
@@ -1421,6 +1416,86 @@ def _polaroid_span_for_card(tile_html: str, title: str) -> tuple[int, int] | Non
         if got == want:
             return start, end
     return None
+
+
+def _task_subsection_open_tag(tag: str, subsection: str) -> str:
+    clean = re.sub(r"\sdata-subsection=(?:\"[^\"]*\"|'[^']*')", "", tag, flags=re.I)
+    if not subsection:
+        return clean
+    return clean[:-1] + f' data-subsection="{_xml_escape(subsection)}">'
+
+
+def categorize_vision_task(date: str, focus: str, title: str, subsection: str, page: str = "") -> dict:
+    """Persist a task/card's subsection assignment in the baked day markup."""
+    date = str(date or "").strip()
+    focus = str(focus or "").strip()
+    title = re.sub(r"\s+", " ", str(title or "")).strip()
+    subsection = re.sub(r"[^a-z0-9.-]+", "-", str(subsection or "").lower()).strip("-")[:80]
+    if not date or not focus or not title:
+        raise ValueError("date, focus, and title required")
+    written: list[str] = []
+    warnings: list[str] = []
+    with SAVE_OVERVIEW_LOCK:
+        for path in _overview_paths_for_page(page):
+            if not path.exists():
+                continue
+            try:
+                html = path.read_text(encoding="utf-8")
+                _, start, end = _day_block_bounds(html, date)
+                block = html[start:end]
+                tile_span = _tile_span_for_focus(block, focus)
+                if not tile_span:
+                    raise ValueError(f"section {focus} not found on {date}")
+                ts, te = tile_span
+                tile = block[ts:te]
+                changed = False
+
+                def rewrite_check(match):
+                    nonlocal changed
+                    chunk = match.group(0)
+                    if changed or _check_label_title(chunk).lower() != title.lower():
+                        return chunk
+                    opening = re.match(r"<label\b[^>]*>", chunk, re.I)
+                    if not opening:
+                        return chunk
+                    changed = True
+                    tag = _task_subsection_open_tag(opening.group(0), subsection)
+                    return tag + chunk[opening.end():]
+
+                new_tile = _VISION_CHECK_RE.sub(rewrite_check, tile)
+                if not changed:
+                    pol_span = _polaroid_span_for_card(tile, title)
+                    if pol_span:
+                        ps, pe = pol_span
+                        pol = tile[ps:pe]
+                        opening = re.match(r"<div\b[^>]*>", pol, re.I)
+                        if opening:
+                            tag = _task_subsection_open_tag(opening.group(0), subsection)
+                            new_pol = tag + pol[opening.end():]
+                            new_tile = tile[:ps] + new_pol + tile[pe:]
+                            changed = True
+                if not changed:
+                    raise ValueError(f"task or card {title} not found in {focus}")
+                new_block = block[:ts] + new_tile + block[te:]
+                new_html = html[:start] + new_block + html[end:]
+                if "<!DOCTYPE" not in new_html[:80]:
+                    raise ValueError(f"refusing save: {path.name} lost its document shell")
+                if new_html != html:
+                    path.write_text(new_html, encoding="utf-8")
+                written.append(path.name)
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(f"{path.name}: {exc}")
+    if not written:
+        raise ValueError(warnings[0] if warnings else "subsection assignment not baked")
+    return {
+        "ok": True,
+        "date": date,
+        "focus": focus,
+        "title": title,
+        "subsection": subsection,
+        "files": written,
+        "warnings": warnings,
+    }
 
 
 def _normalize_card_recs(body: dict) -> list[dict]:
@@ -2208,6 +2283,16 @@ class Handler(SimpleHTTPRequestHandler):
                     str((body or {}).get("date") or ""),
                     str((body or {}).get("focus") or ""),
                     str((body or {}).get("title") or ""),
+                )
+                return self._json(200, result)
+            if path == "/categorize-task":
+                body = self._read_json()
+                result = categorize_vision_task(
+                    str((body or {}).get("date") or ""),
+                    str((body or {}).get("focus") or ""),
+                    str((body or {}).get("title") or ""),
+                    str((body or {}).get("subsection") or ""),
+                    str((body or {}).get("page") or ""),
                 )
                 return self._json(200, result)
             if path == "/remove-task":

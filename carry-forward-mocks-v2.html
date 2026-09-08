@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>carry forward · new directions</title>
+<link rel="stylesheet" href="dashboard-current-fonts.css"/>
+<link rel="stylesheet" href="nav-shared.css?v=carry-new2"/>
+<style>
+*{box-sizing:border-box}
+:root{--cream:#f5ead8;--ink:#17110c;--gold:#d7b97e;--line:rgba(245,234,216,.16)}
+html,body{margin:0;min-height:100%;background:#0b0907;color:var(--cream)}
+body{padding:32px 18px 70px;font-family:"Newsreader",Georgia,serif;background:
+radial-gradient(circle at 85% 4%,rgba(155,111,61,.17),transparent 28%),
+linear-gradient(145deg,#0c0a08,#070605 72%)}
+body #hamburger-menu span{background:#f3e6d0}
+.intro{max-width:1160px;margin:auto;text-align:center}
+.eyebrow,.micro{font:400 8px/1.3 "DM Mono",monospace;letter-spacing:.23em;text-transform:uppercase}
+.eyebrow{color:rgba(245,234,216,.46)}
+h1{margin:8px 0 5px;font:italic 400 clamp(32px,5vw,58px)/1 "Bodoni Moda","Playfair Display",serif}
+.intro>p{margin:0;color:rgba(245,234,216,.58);font-style:italic}
+.tabs{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:22px auto 17px}
+.tabs button{border:1px solid rgba(245,234,216,.18);border-radius:999px;background:rgba(255,255,255,.025);color:rgba(245,234,216,.54);padding:9px 14px;font:400 8px/1 "DM Mono",monospace;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--cream);color:#241a11;border-color:var(--cream);box-shadow:0 0 28px rgba(215,185,126,.2)}
+.stage{max-width:1160px;margin:auto}
+.panel{display:none;min-height:720px;border:1px solid rgba(245,234,216,.12);border-radius:26px;overflow:hidden;background:#0e0b09;box-shadow:0 35px 100px rgba(0,0,0,.48)}
+body[data-view=carbon] .carbon,body[data-view=margin] .margin,body[data-view=curtain] .curtain,body[data-view=echo] .echo{display:flex;flex-direction:column}
+.panel-head{display:flex;justify-content:space-between;gap:28px;padding:25px 28px 16px;align-items:flex-start}
+.panel-head h2{margin:4px 0 4px;font:italic 400 clamp(27px,4vw,43px)/1 "Bodoni Moda","Playfair Display",serif}
+.panel-head p{max-width:650px;margin:0;color:rgba(245,234,216,.57);font-style:italic}
+.panel-no{color:rgba(215,185,126,.56);text-align:right;white-space:nowrap}
+.scene{position:relative;flex:1;min-height:520px;margin:0 20px;border:1px solid rgba(245,234,216,.08);border-radius:20px;overflow:hidden}
+.foot{display:flex;align-items:center;gap:12px;padding:17px 26px 21px;flex-wrap:wrap}
+.date{border:1px solid rgba(245,234,216,.18);border-radius:999px;background:rgba(255,255,255,.04);color:var(--cream);padding:9px 14px;font:italic 14px/1 "Newsreader",serif}
+.count{margin-left:auto;color:rgba(245,234,216,.5);font-style:italic}
+.quiet,.commit{border:0;cursor:pointer;font:italic 14px/1 "Newsreader",serif}
+.quiet{background:none;color:rgba(245,234,216,.5);text-decoration:underline;text-underline-offset:3px}
+.commit{border-radius:999px;padding:11px 19px;background:linear-gradient(135deg,#f2e2c8,#caa46a);color:#2d2012;box-shadow:0 0 28px rgba(215,185,126,.25)}
+.toast{position:fixed;left:50%;bottom:22px;z-index:90;transform:translate(-50%,18px);opacity:0;padding:10px 17px;border-radius:999px;background:var(--cream);color:#21170f;font-style:italic;transition:.24s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.pick{cursor:pointer}
+
+/* 01 — carbon transfer: tomorrow is physically printed from today */
+.carbon-scene{background:radial-gradient(circle at 50% 45%,rgba(151,103,53,.12),transparent 45%),#100d0a}
+.sheet{position:absolute;width:min(57%,590px);height:82%;top:9%;border-radius:4px;padding:29px 31px;color:#2d251c;box-shadow:0 30px 70px rgba(0,0,0,.48);transition:transform .6s cubic-bezier(.22,.8,.25,1)}
+.sheet.today{left:8%;z-index:3;background:#eee3d1;transform:rotate(-2deg)}
+.sheet.tomorrow{right:8%;z-index:2;background:#cfc1aa;transform:translate(19%,5%) rotate(3deg);filter:saturate(.72)}
+.carbon-scene.pressed .today{transform:translate(-7%,-2%) rotate(-5deg)}
+.carbon-scene.pressed .tomorrow{transform:translate(3%,0) rotate(1deg);filter:none}
+.sheet-head{display:flex;justify-content:space-between;border-bottom:1px solid rgba(45,37,28,.24);padding-bottom:12px;margin-bottom:15px}
+.sheet-head b{font:400 9px/1 "DM Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+.sheet-head em{font-size:18px}
+.ink-task{display:block;width:100%;border:0;border-bottom:1px solid rgba(45,37,28,.11);background:none;padding:10px 2px;text-align:left;color:#33281e;font:italic 17px/1.1 "Newsreader",serif;cursor:pointer;transition:.2s}
+.ink-task:before{content:"";display:inline-block;width:8px;height:8px;border:1px solid #735e47;border-radius:50%;margin-right:10px}
+.ink-task.on{font-weight:600}.ink-task.on:before{background:#8d6b41;box-shadow:0 0 0 3px rgba(141,107,65,.14)}
+.imprint{opacity:.13;filter:blur(.45px);transform:translateX(-6px);transition:.35s}
+.imprint.on{opacity:.82;filter:none;transform:none}
+.press-mark{position:absolute;left:50%;top:50%;z-index:6;transform:translate(-50%,-50%) scale(.4);opacity:0;width:160px;height:160px;border:1px solid rgba(83,55,29,.42);border-radius:50%;display:grid;place-items:center;color:#6c5034;font:400 8px/1.4 "DM Mono",monospace;letter-spacing:.18em;text-align:center;text-transform:uppercase;pointer-events:none}
+.carbon-scene.pressed .press-mark{animation:stamp .8s ease-out}
+@keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}35%{opacity:.9;transform:translate(-50%,-50%) scale(.9)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.03)}}
+
+/* 02 — living margin: the margin grows into tomorrow */
+.margin-scene{background:linear-gradient(90deg,#15100c 0 76%,#251b12 76% 100%)}
+.margin-day{position:absolute;inset:0 24% 0 0;padding:28px 32px}
+.margin-date{font:italic 31px/1 "Bodoni Moda",serif}
+.margin-copy{margin-top:6px;color:rgba(245,234,216,.42);font-style:italic}
+.margin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:25px}
+.margin-task{position:relative;border:1px solid rgba(245,234,216,.11);border-radius:12px;background:rgba(255,255,255,.025);color:var(--cream);padding:13px 14px;text-align:left;font:italic 15px/1.1 "Newsreader",serif;cursor:pointer;transition:.36s}
+.margin-task.on{transform:translateX(18px);border-color:rgba(215,185,126,.55);background:rgba(215,185,126,.08)}
+.margin-task.on:after{content:"→";position:absolute;right:-18px;color:var(--gold)}
+.future-margin{position:absolute;right:0;top:0;bottom:0;width:24%;padding:27px 18px;border-left:1px solid rgba(215,185,126,.3);background:linear-gradient(150deg,rgba(142,97,51,.3),rgba(18,13,9,.86));transition:width .55s cubic-bezier(.22,.8,.25,1)}
+.margin-scene.preview .future-margin{width:42%}
+.future-margin h3{margin:4px 0 16px;font:italic 26px/1 "Bodoni Moda",serif}
+.margin-ghost{display:block;padding:8px 0;border-bottom:1px solid rgba(245,234,216,.09);font-size:13px;font-style:italic;opacity:.16;transform:translateX(-16px);transition:.35s}
+.margin-ghost.on{opacity:.9;transform:none}
+.margin-note{position:absolute;right:17px;bottom:17px;color:rgba(245,234,216,.38)}
+
+/* 03 — curtain close: only selected work slips through the moving opening */
+.curtain-scene{background:#15100c}
+.curtain-back{position:absolute;inset:0;padding:38px;background:radial-gradient(circle at 50% 45%,rgba(219,181,122,.22),transparent 38%),linear-gradient(145deg,#322316,#120d09)}
+.curtain-back h3{margin:0;text-align:center;font:italic 40px/1 "Bodoni Moda",serif;color:#f6e7ce}
+.landing{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;max-width:680px;margin:32px auto}
+.landed{padding:9px 12px;border:1px solid rgba(245,234,216,.22);border-radius:999px;background:rgba(255,255,255,.06);font-style:italic;opacity:.12;transform:translateY(20px);transition:.4s}
+.landed.on{opacity:1;transform:none}
+.curtain-leaf{position:absolute;top:0;bottom:0;width:51%;z-index:3;background:
+linear-gradient(90deg,rgba(255,255,255,.025),transparent 15% 85%,rgba(0,0,0,.22)),
+repeating-linear-gradient(90deg,#241910 0 18px,#1b130d 19px 38px);box-shadow:0 0 50px rgba(0,0,0,.65);transition:transform .85s cubic-bezier(.65,0,.2,1)}
+.curtain-leaf.left{left:0}.curtain-leaf.right{right:0;transform:none}
+.curtain-scene.open .curtain-leaf.left{transform:translateX(-72%)}.curtain-scene.open .curtain-leaf.right{transform:translateX(72%)}
+.curtain-source{position:absolute;inset:13% 12%;z-index:5;display:flex;align-content:center;justify-content:center;flex-wrap:wrap;gap:9px;transition:.45s}
+.curtain-scene.open .curtain-source{opacity:0;transform:scale(.92);pointer-events:none}
+.curtain-task{border:1px solid rgba(245,234,216,.18);border-radius:999px;background:rgba(8,6,5,.7);color:rgba(245,234,216,.5);padding:10px 13px;font:italic 14px/1 "Newsreader",serif;cursor:pointer}
+.curtain-task.on{color:#fff1d7;border-color:var(--gold);box-shadow:0 0 18px rgba(215,185,126,.2)}
+.curtain-instruction{position:absolute;left:50%;bottom:17px;z-index:6;transform:translateX(-50%);color:rgba(245,234,216,.45);font-style:italic;white-space:nowrap}
+
+/* 04 — afterimage: selected language develops sharply in tomorrow */
+.echo-scene{background:linear-gradient(105deg,#0e0b09 0 57%,#18110b 57% 100%)}
+.echo-source{position:absolute;inset:0 43% 0 0;padding:34px}
+.echo-source h3,.echo-future h3{margin:0 0 20px;font:italic 31px/1 "Bodoni Moda",serif}
+.echo-task{display:block;position:relative;width:100%;border:0;background:none;color:rgba(245,234,216,.42);padding:9px 0;text-align:left;font:italic clamp(17px,2.3vw,30px)/1 "Bodoni Moda",serif;cursor:pointer;transition:.35s}
+.echo-task.on{color:#f6e7ce;transform:translateX(8px)}
+.echo-task.on:after{content:attr(data-name);position:absolute;left:100%;top:9px;width:80%;color:rgba(215,185,126,.18);filter:blur(1px);transform:skewX(-16deg);pointer-events:none}
+.echo-future{position:absolute;inset:0 0 0 57%;padding:34px;background:radial-gradient(circle at 45% 50%,rgba(215,185,126,.12),transparent 44%)}
+.developed{display:block;min-height:35px;margin:4px 0;color:transparent;font:italic clamp(16px,2vw,26px)/1 "Bodoni Moda",serif;transition:.5s}
+.developed.on{color:#e8c992;text-shadow:0 0 20px rgba(215,185,126,.24)}
+.echo-seam{position:absolute;left:57%;top:7%;bottom:7%;width:1px;background:linear-gradient(transparent,rgba(215,185,126,.58),transparent);box-shadow:0 0 25px rgba(215,185,126,.22)}
+
+@media(max-width:760px){
+body{padding-left:7px;padding-right:7px}.panel{min-height:790px}.panel-head{padding:21px 17px}.panel-no{display:none}.scene{margin:0 8px}.sheet{width:78%;height:78%}.sheet.today{left:4%}.sheet.tomorrow{right:4%}.margin-list{grid-template-columns:1fr}.margin-day{right:31%;padding:23px 18px}.future-margin{width:31%}.echo-source{right:48%;padding:22px 13px}.echo-future{left:52%;padding:22px 13px}.echo-seam{left:52%}.count{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body data-view="carbon">
+<header class="intro">
+  <div class="eyebrow">carry forward · second study</div>
+  <h1>tomorrow inherits, differently</h1>
+  <p>Four new systems with no constellation, orbit, galaxy, or celestial framing.</p>
+</header>
+<nav class="tabs" aria-label="new carry-forward directions">
+  <button data-view="carbon" aria-pressed="true">carbon transfer</button>
+  <button data-view="margin" aria-pressed="false">living margin</button>
+  <button data-view="curtain" aria-pressed="false">curtain close</button>
+  <button data-view="echo" aria-pressed="false">afterimage</button>
+</nav>
+<main class="stage">
+  <section class="panel carbon">
+    <header class="panel-head"><div><span class="micro">printmaking · tactile</span><h2>carbon transfer</h2><p>Tomorrow is made by pressing selected unfinished lines through today. History stays intact; only the chosen ink transfers.</p></div><span class="panel-no micro">direction 01</span></header>
+    <div class="scene carbon-scene"><article class="sheet tomorrow"><div class="sheet-head"><b>new impression</b><em>sep 9 · wed</em></div><div class="carbon-output"></div></article><article class="sheet today"><div class="sheet-head"><b>source sheet</b><em>sep 8 · tue</em></div><div class="carbon-input"></div></article><div class="press-mark">pressed into<br/>tomorrow</div></div>
+    <footer class="foot" data-kind="carbon"><button class="date">tomorrow · sep 9⌄</button><span class="count"></span><button class="quiet all">clear</button><button class="quiet cancel">cancel</button><button class="commit">press tomorrow</button></footer>
+  </section>
+  <section class="panel margin">
+    <header class="panel-head"><div><span class="micro">dashboard-native · expandable</span><h2>the living margin</h2><p>Tomorrow begins as the right margin of today. Chosen work crosses into it; confirming expands that margin into the next full day.</p></div><span class="panel-no micro">direction 02</span></header>
+    <div class="scene margin-scene"><div class="margin-day"><div class="margin-date">sep 8 · tue</div><div class="margin-copy">tap what tomorrow should inherit</div><div class="margin-list"></div></div><aside class="future-margin"><span class="micro">tomorrow’s margin</span><h3>sep 9</h3><div class="margin-output"></div><span class="margin-note micro">grows into the next day</span></aside></div>
+    <footer class="foot" data-kind="margin"><button class="date">tomorrow · sep 9⌄</button><span class="count"></span><button class="quiet all">clear</button><button class="quiet cancel">cancel</button><button class="commit">open tomorrow</button></footer>
+  </section>
+  <section class="panel curtain">
+    <header class="panel-head"><div><span class="micro">closure · reveal</span><h2>curtain close</h2><p>The current day closes. Selected tasks pass through the opening and are already waiting on the revealed day behind it.</p></div><span class="panel-no micro">direction 03</span></header>
+    <div class="scene curtain-scene"><div class="curtain-back"><h3>sep 9 · wed</h3><div class="landing"></div></div><div class="curtain-leaf left"></div><div class="curtain-leaf right"></div><div class="curtain-source"></div><div class="curtain-instruction">choose the work, then close today</div></div>
+    <footer class="foot" data-kind="curtain"><button class="date">tomorrow · sep 9⌄</button><span class="count"></span><button class="quiet all">clear</button><button class="quiet cancel">cancel</button><button class="commit">close today</button></footer>
+  </section>
+  <section class="panel echo">
+    <header class="panel-head"><div><span class="micro">typographic · atmospheric</span><h2>afterimage</h2><p>Unfinished language leaves an afterimage across the day boundary. Chosen lines develop from faint memory into tomorrow’s sharp type.</p></div><span class="panel-no micro">direction 04</span></header>
+    <div class="scene echo-scene"><section class="echo-source"><h3>today</h3><div class="echo-input"></div></section><div class="echo-seam"></div><section class="echo-future"><span class="micro">developing into</span><h3>tomorrow</h3><div class="echo-output"></div></section></div>
+    <footer class="foot" data-kind="echo"><button class="date">tomorrow · sep 9⌄</button><span class="count"></span><button class="quiet all">clear</button><button class="quiet cancel">cancel</button><button class="commit">develop tomorrow</button></footer>
+  </section>
+</main>
+<div class="toast">visual mock only · nothing was carried</div>
+<script src="nav-shared.js?v=carry-new2"></script>
+<script>
+(function(){
+  var names=["fall 2026 enrollment","scholarship application","Committee check-in","tuition payment","document translation into Arabic","6 qadaa salah","capital blueprint","coursework"];
+  var selected=names.map(function(_,i){return i<5});
+  var toast=document.querySelector(".toast"),timer;
+  function ping(s){toast.textContent=s||"visual mock only · nothing was carried";toast.classList.add("on");clearTimeout(timer);timer=setTimeout(function(){toast.classList.remove("on")},1500)}
+  function el(tag,cls,text){var n=document.createElement(tag);n.className=cls||"";n.textContent=text||"";return n}
+  function count(){document.querySelectorAll(".foot").forEach(function(f){f.querySelector(".count").textContent=selected.filter(Boolean).length+" selected"})}
+  function render(){
+    var ci=document.querySelector(".carbon-input"),co=document.querySelector(".carbon-output");ci.innerHTML="";co.innerHTML="";
+    var ml=document.querySelector(".margin-list"),mo=document.querySelector(".margin-output");ml.innerHTML="";mo.innerHTML="";
+    var cs=document.querySelector(".curtain-source"),land=document.querySelector(".landing");cs.innerHTML="";land.innerHTML="";
+    var ei=document.querySelector(".echo-input"),eo=document.querySelector(".echo-output");ei.innerHTML="";eo.innerHTML="";
+    names.forEach(function(name,i){
+      var a=el("button","ink-task pick"+(selected[i]?" on":""),name);a.onclick=function(){selected[i]=!selected[i];render()};ci.appendChild(a);
+      var ai=el("div","ink-task imprint"+(selected[i]?" on":""),name);co.appendChild(ai);
+      var b=el("button","margin-task pick"+(selected[i]?" on":""),name);b.onclick=a.onclick;ml.appendChild(b);
+      var bi=el("span","margin-ghost"+(selected[i]?" on":""),name);mo.appendChild(bi);
+      var c=el("button","curtain-task pick"+(selected[i]?" on":""),name);c.onclick=a.onclick;cs.appendChild(c);
+      var ci2=el("span","landed"+(selected[i]?" on":""),name);land.appendChild(ci2);
+      var d=el("button","echo-task pick"+(selected[i]?" on":""),name);d.dataset.name=name;d.onclick=a.onclick;ei.appendChild(d);
+      var di=el("span","developed"+(selected[i]?" on":""),name);eo.appendChild(di);
+    });count()
+  }
+  document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){document.body.dataset.view=b.dataset.view;document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))})}});
+  document.querySelectorAll(".all").forEach(function(b){b.onclick=function(){selected=selected.map(function(){return false});render()}});
+  document.querySelectorAll(".cancel").forEach(function(b){b.onclick=function(){ping("closed · visual mock only")}});
+  document.querySelector('.foot[data-kind="carbon"] .commit').onclick=function(){var s=document.querySelector(".carbon-scene");s.classList.remove("pressed");void s.offsetWidth;s.classList.add("pressed");ping("tomorrow printed · visual mock only")};
+  document.querySelector('.foot[data-kind="margin"] .commit').onclick=function(){document.querySelector(".margin-scene").classList.toggle("preview");ping("tomorrow opened · visual mock only")};
+  document.querySelector('.foot[data-kind="curtain"] .commit').onclick=function(){document.querySelector(".curtain-scene").classList.toggle("open");ping("day closed · visual mock only")};
+  document.querySelector('.foot[data-kind="echo"] .commit').onclick=function(){document.querySelector(".echo-scene").animate([{filter:"brightness(1)"},{filter:"brightness(1.18)"},{filter:"brightness(1)"}],{duration:650});ping("tomorrow developed · visual mock only")};
+  render();
+  var opt=new URLSearchParams(location.search).get("opt");if(["carbon","margin","curtain","echo"].indexOf(opt)>=0)document.querySelector('.tabs button[data-view="'+opt+'"]').click();
+})();
+</script>
+</body>
+</html>
