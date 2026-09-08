@@ -1768,6 +1768,7 @@ body.editing .add-task-here-btn { display: block; }
     transition: opacity 0.2s ease;
   }
   .task-detail-overlay.hidden {
+    display: none !important;
     opacity: 0;
     pointer-events: none;
   }
@@ -13478,9 +13479,9 @@ window.__j22fnApply=run;
     'to curate':'manus-storage/zone-to-curate-select.jpg?v=select1',
     'to-curate':'manus-storage/zone-to-curate-select.jpg?v=select1',
     'to love':'manus-storage/zone-to-love-souls.jpg?v=souls3',
-    'to persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i will persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+    'to persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i will persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
     'to feel':'',
     'to-feel':'',
     'tofeel':'',
@@ -13489,9 +13490,9 @@ window.__j22fnApply=run;
     'to-channel':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
     'tochannel':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
     'channel':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
-    'to-persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'topersevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+    'to-persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'topersevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
     'to-love':'manus-storage/zone-to-love-souls.jpg?v=souls3',
     'tolove':'manus-storage/zone-to-love-souls.jpg?v=souls3',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
@@ -15599,7 +15600,12 @@ window.__j22fnApply=run;
     });
     grid.addEventListener('pointerdown', function(e){
       if(e.target.closest('.day-block.nodes-linking')) return;
-      if(e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
+      var downZone=e.target.closest('.pursuit-zone');
+      var freeTaskNode=!!(downZone && downZone.closest('.tv-panel.tv-nodes') && (function(){
+        var b=downZone.closest('.day-block');
+        return b && (b.getAttribute('data-date')||'') >= '2026-09-08';
+      })());
+      if(!freeTaskNode && e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
         window.__ffMoved=false;
         return;
       }
@@ -15783,6 +15789,10 @@ window.__j22fnApply=run;
       var startX=e.clientX, startY=e.clientY;
       var ox=start.x, oy=start.y, ow=start.w, oh=start.h;
       var resizing=!!handle;
+      var freeTaskNode=!!(zone.closest('.tv-panel.tv-nodes') && (function(){
+        var b=zone.closest('.day-block');
+        return b && (b.getAttribute('data-date')||'') >= '2026-09-08';
+      })());
       window.__ffMoved=false;
       var captured=false;
       function move(ev){
@@ -15801,7 +15811,13 @@ window.__j22fnApply=run;
           writeRect({el:zone, id:id, x:ox, y:oy, w:ow+dx, h:oh+dy});
           layoutZonePieces(zone, 'fit');
         } else {
-          writeRect({el:zone, id:id, x:ox+dx, y:oy+dy, w:ow, h:oh});
+          var nx=ox+dx, ny=oy+dy;
+          if(freeTaskNode){
+            var bounds=overviewNodesViewBox(grid);
+            nx=Math.max(0, Math.min(Math.max(0, bounds.w-ow), nx));
+            ny=Math.max(0, Math.min(Math.max(0, bounds.h-oh), ny));
+          }
+          writeRect({el:zone, id:id, x:nx, y:ny, w:ow, h:oh});
         }
         if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
       }
@@ -15819,7 +15835,7 @@ window.__j22fnApply=run;
         }
         readPos(zone, id);
         if(resizing) layoutZonePieces(zone, 'fit');
-        resolveOverlaps(grid, id);
+        if(!freeTaskNode) resolveOverlaps(grid, id);
       }
       document.addEventListener('pointermove', move, true);
       document.addEventListener('pointerup', up, true);
@@ -17867,7 +17883,8 @@ window.__j22fnApply=run;
     var panel=grid && grid.closest('.tv-panel.tv-nodes');
     var host=grid && grid.parentElement;
     var card=grid && grid.closest('.day-card');
-    var w=((panel&&panel.clientWidth)||(host&&host.clientWidth)||(card&&card.clientWidth)||0);
+    /* The panel may be inverse-scaled; the canvas is the real draggable viewport. */
+    var w=((grid&&grid.clientWidth)||(panel&&panel.clientWidth)||(host&&host.clientWidth)||(card&&card.clientWidth)||0);
     if(w<80) w=Math.min(1100, Math.max(320, window.innerWidth-96));
     var top=0;
     try {
@@ -17921,7 +17938,7 @@ window.__j22fnApply=run;
     });
   }
   window.__fitOverviewNodesToWords=fitOverviewNodesToWords;
-  /* Freeform only — never grid. Scale+translate the constellation so every node stays on-screen. */
+  /* Freeform only — never grid. Preserve user sizes and clamp every node inside the viewport. */
   function fitOverviewNodesInView(grid){
     if(!grid) return;
     var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
@@ -17936,18 +17953,16 @@ window.__j22fnApply=run;
       maxX=Math.max(maxX, (r.x||0)+(r.w||0));
       maxY=Math.max(maxY, (r.y||0)+(r.h||0));
     });
-    var dx=pad-minX, dy=pad-minY;
-    var contentW=Math.max(1, maxX+dx-pad);
-    var contentH=Math.max(1, maxY+dy-pad);
-    var availW=Math.max(120, box.w-pad*2);
-    var availH=Math.max(120, box.h-pad*2);
-    var scale=Math.min(1, availW/contentW, availH/contentH);
+    var blk=grid.closest('.day-block');
+    var freelyPlaced=!!(blk && (blk.getAttribute('data-date')||'') >= '2026-09-08');
+    var dx=freelyPlaced ? 0 : pad-minX;
+    var dy=freelyPlaced ? 0 : pad-minY;
     zones.forEach(function(z, i){
       var r=rects[i];
-      var nx=pad+((r.x||0)+dx-pad)*scale;
-      var ny=pad+((r.y||0)+dy-pad)*scale;
-      var nw=Math.max(72, Math.round((r.w||168)*scale));
-      var nh=Math.max(36, Math.round((r.h||40)*scale));
+      var nx=(r.x||0)+dx;
+      var ny=(r.y||0)+dy;
+      var nw=Math.min(Math.max(72, Math.round(r.w||168)), Math.max(72, box.w-pad*2));
+      var nh=Math.min(Math.max(30, Math.round(r.h||40)), Math.max(30, box.h-pad*2));
       if(nx+nw > box.w-pad) nx=Math.max(pad, box.w-pad-nw);
       if(ny+nh > box.h-pad) ny=Math.max(pad, box.h-pad-nh);
       if(nx<pad) nx=pad;
@@ -18496,6 +18511,33 @@ window.__j22fnApply=run;
     }
     if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
   }
+  function wireOverviewNodesViewportFit(blk, panel, grid){
+    var iso=blk && (blk.getAttribute('data-date')||'');
+    if(!grid || !panel || iso < '2026-09-08' || grid.__nodesViewportFitWired) return;
+    grid.__nodesViewportFitWired=true;
+    var lastW=0, raf=0;
+    function fitAfterResize(){
+      var w=Math.round(panel.getBoundingClientRect().width||0);
+      if(w<80 || w===lastW) return;
+      lastW=w;
+      if(raf) cancelAnimationFrame(raf);
+      raf=requestAnimationFrame(function(){
+        raf=requestAnimationFrame(function(){
+          fitOverviewNodesToWords(grid);
+          fitOverviewNodesInView(grid);
+          persistOverviewNodesFromGrid(grid);
+          if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
+        });
+      });
+    }
+    if(window.ResizeObserver){
+      var ro=new ResizeObserver(fitAfterResize);
+      ro.observe(panel);
+      grid.__nodesViewportFitObserver=ro;
+    }
+    fitAfterResize();
+  }
+  window.__wireOverviewNodesViewportFit=wireOverviewNodesViewportFit;
   function ensureOverviewNodesGrid(blk){
     if(!blk || !isOverviewEra(blk)) return;
     var panel=blk.querySelector('.tv-panel.tv-nodes');
@@ -18511,6 +18553,7 @@ window.__j22fnApply=run;
     applyAug20ZoneEdits(grid);
     ensureAug20EditChrome(grid);
     wireZoneDrag(grid);
+    wireOverviewNodesViewportFit(blk, panel, grid);
     if(panel && panel.style.display !== 'none'){
       fitOverviewNodesToWords(grid);
       fitOverviewNodesInView(grid);
@@ -21107,7 +21150,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="seize-opportunities" style="--tile-photo: url('manus-storage/zone-seize-opportunities.jpg?v=seize4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to seize opportunities">to seize opportunities</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="to-litigate" style="--tile-photo: url('manus-storage/zone-to-litigate.jpg?v=court1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to litigate">to litigate</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="to-recoup" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to recoup every dollar">to recoup every dollar</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url('manus-storage/zone-to-persevere-summit.jpg?v=summit1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to persevere">to persevere</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url('manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to persevere">to persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="to-channel" style="--tile-photo: url('manus-storage/zone-to-channel-souls.jpg?v=souls1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to channel">to channel</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="aim-above-the-mark" style="--tile-photo: url('manus-storage/zone-intentions.jpg?v=aim1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to aim above the mark">to aim above the mark</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="feel-it-into-being" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel it into being">to feel it into being</h3><div class="vision-tile-details"></div></article>
@@ -21116,6 +21159,8 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-to-earn-gold.jpg?v=earn3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to earn">to earn</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="successful" style="--tile-photo: url('manus-storage/zone-successful.jpg?v=ok2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am successful">I am successful</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="strategist" style="--tile-photo: url('manus-storage/zone-strategist-behind.jpg?v=back2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am calculating">I am calculating</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="to-feel" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to feel">to feel</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-nophoto" data-focus="claim" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="to claim">to claim</h3><div class="vision-tile-details"></div></article>
 </div></div></div></div></div></div>
 <script src="boot-today.js?v=chrome13"></script>
 <div class="day-block fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-01">
@@ -21165,7 +21210,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero"><article class="vision-tile" data-focus="to-persevere" style="--photo-ar: 0.666; --zoom-ar: 0.666; --tile-photo: url(&quot;manus-storage/zone-to-persevere-summit.jpg?v=summit1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e26731">I will persevere</h3><div class="vision-tile-details"></div></article>
+<div class="vision-hero"><article class="vision-tile" data-focus="to-persevere" style="--photo-ar: 0.666; --zoom-ar: 0.666; --tile-photo: url(&quot;manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e26731">I will persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will become" data-cursor-ref="e24011">I will become</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 5 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up" data-cursor-ref="e24012">I will glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="luscious-hair" style="--sub-photo: none; --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
 <article class="vision-tile" data-focus="navigate" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 2 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will navigate" data-cursor-ref="e24017">I will navigate</h3><div class="vision-tile-details"></div></article>
@@ -21196,7 +21241,7 @@ if(hdr){ /* pop-out disabled: native expand/collapse */ }
 <div class="vision-hero"><article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-achieve-csol.jpg?v=csol3'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will succeed" data-cursor-ref="e27651">I will succeed</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship application</span></label><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 2 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will surrender to Allah ﷻ" data-cursor-ref="e27652">I will surrender to Allah ﷻ</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic-gym.jpg?v=gym1'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 3 / 2 / 4 / 4 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will train" data-cursor-ref="e27654">I will train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article></div></article>
-<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-summit.jpg?v=summit1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e27655">I will persevere</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e27655">I will persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up" data-cursor-ref="e27656">I will glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="luscious-hair" style="--sub-photo: none; --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="to-recoup" style="--tile-photo: none; --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will recoup every dollar" data-cursor-ref="e27657">I will recoup every dollar</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon return QR codes</span></label></div></article><article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1'); --photo-ar: 1.778; --zoom-ar: 1.778; grid-area: 4 / 1 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>connect w/ Dr Betty</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>documenr translation into Arabic</span></label></div></article>
 </div>
@@ -31139,7 +31184,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='earn' || nl==='to earn' || nl==='i earn' || nl==='i will earn' || nl==='to-earn') src='manus-storage/zone-to-earn-gold.jpg?v=earn3';
       else if(nl==='curate' || nl==='to curate' || nl==='to-curate') src='manus-storage/zone-to-curate-select.jpg?v=select1';
       else if(nl==='to love' || nl==='to-love' || nl==='tolove') src='manus-storage/zone-to-love-souls.jpg?v=souls3';
-      else if(nl==='to persevere' || nl==='i persevere' || nl==='i will persevere' || nl==='to-persevere' || nl==='topersevere' || nl==='persevere') src='manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+      else if(nl==='to persevere' || nl==='i persevere' || nl==='i will persevere' || nl==='to-persevere' || nl==='topersevere' || nl==='persevere') src='manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
       else if(nl==='to feel' || nl==='to-feel' || nl==='tofeel' || nl==='feel') src='';
       else if(nl==='to channel' || nl==='to-channel' || nl==='tochannel' || nl==='channel') src='manus-storage/zone-to-channel-souls.jpg?v=souls1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -35337,11 +35382,17 @@ window.__refreshPinnedAgenda = function(){};
 <style id="task-detail-modal">
 .task-modal-overlay {
   position: fixed; inset: 0; z-index: 100000;
-  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none; transition: opacity 0.2s;
 }
-.task-modal-overlay.open { opacity: 1; pointer-events: all; }
+.task-modal-overlay.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
 .task-modal {
   background: #2a2723; border-radius: 16px;
   width: 90%; max-width: 420px; max-height: 80vh;
@@ -46512,7 +46563,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     networking: { focus: 'networking', title: 'I am networking', photo: 'manus-storage/zone-to-earn-gold.jpg?v=earn3' },
     wins: { focus: 'wins', title: 'I am winning', photo: 'manus-storage/zone-wins-hand.jpg?v=game13' },
     become: { focus: 'become', title: 'I am becoming', photo: 'manus-storage/zone-envision.jpg?v=swap1' },
-    persevere: { focus: 'to-persevere', title: 'I am persevering', photo: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1' },
+    persevere: { focus: 'to-persevere', title: 'I am persevering', photo: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1' },
     strategist: { focus: 'strategist', title: 'I am calculating', photo: 'manus-storage/zone-strategist-behind.jpg?v=back2' },
     successful: { focus: 'successful', title: 'I am successful', photo: 'manus-storage/zone-successful.jpg?v=ok2' }
   };
@@ -49607,7 +49658,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'scholarship-application' || f === 'to-scholarship-application' || title.toLowerCase() === 'scholarship application' || title.toLowerCase() === 'to scholarship application' || title.toLowerCase() === 'scholarship-application') return 'manus-storage/zone-scholarship-application.jpg?v=app1';
     if(f === 'curate' || f === 'to-curate' || title.toLowerCase() === 'curate' || title.toLowerCase() === 'to curate') return 'manus-storage/zone-to-curate-select.jpg?v=select1';
     if(f === 'to-love' || f === 'tolove' || title.toLowerCase() === 'to love' || title.toLowerCase() === 'tolove') return 'manus-storage/zone-to-love-souls.jpg?v=souls3';
-    if(f === 'to-persevere' || f === 'topersevere' || f === 'persevere' || title.toLowerCase() === 'to persevere' || title.toLowerCase() === 'i persevere' || title.toLowerCase() === 'i will persevere' || title.toLowerCase() === 'topersevere' || title.toLowerCase() === 'persevere') return 'manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+    if(f === 'to-persevere' || f === 'topersevere' || f === 'persevere' || title.toLowerCase() === 'to persevere' || title.toLowerCase() === 'i persevere' || title.toLowerCase() === 'i will persevere' || title.toLowerCase() === 'topersevere' || title.toLowerCase() === 'persevere') return 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
     if(f === 'to-feel' || f === 'tofeel' || f === 'feel' || title.toLowerCase() === 'to feel' || title.toLowerCase() === 'tofeel' || title.toLowerCase() === 'feel') return '';
     if(f === 'to-channel' || f === 'tochannel' || f === 'channel' || title.toLowerCase() === 'to channel' || title.toLowerCase() === 'tochannel' || title.toLowerCase() === 'channel') return 'manus-storage/zone-to-channel-souls.jpg?v=souls1';
     if(f === 'intentions' || f === 'set-the-mark' || f === 'aim-above-the-mark' || title.toLowerCase() === 'intentions' || title.toLowerCase() === 'set the mark' || title.toLowerCase() === 'set-the-mark' || title.toLowerCase() === 'aim-above-the-mark' || title.toLowerCase() === 'aim above the mark' || title.toLowerCase() === 'to aim above the mark') return 'manus-storage/zone-intentions.jpg?v=aim1';
@@ -51524,6 +51575,19 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function isGloballyArchivedSection(focusOrTitle){
     var k = String(focusOrTitle || '').toLowerCase().trim();
     if(!k) return false;
+    var presentIdentity = null;
+    if(k === 'claiming' || k === 'i am claiming') presentIdentity = { focus: 'claiming', title: 'i am claiming' };
+    else if(k === 'executing' || k === 'i am executing') presentIdentity = { focus: 'executing', title: 'i am executing' };
+    else if(k === 'become' || k === 'becoming' || k === 'i am becoming') presentIdentity = { focus: 'become', title: 'i am becoming' };
+    else if(k === 'to-persevere' || k === 'persevering' || k === 'i am persevering') presentIdentity = { focus: 'to-persevere', title: 'i am persevering' };
+    if(presentIdentity){
+      return loadArchivedSections().some(function(it){
+        if(!it) return false;
+        var f = String(it.focus || '').toLowerCase().trim();
+        var t = String(it.title || '').toLowerCase().trim();
+        return f === presentIdentity.focus || t === presentIdentity.title;
+      });
+    }
     var set = archivedSectionFocusSet();
     if(set[k] || set[slug(k)]) return true;
     try {
@@ -51549,8 +51613,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       [].slice.call(blk.querySelectorAll('.vision-tile')).forEach(function(tile){
         var focus = tileFocus(tile);
         var title = ((tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim();
-        var aliases = sectionAliasSet(focus, title);
-        var hit = Object.keys(aliases).some(function(a){ return set[a]; }) || set[String(focus||'').toLowerCase()] || set[String(title||'').toLowerCase()];
+        var hit = isGloballyArchivedSection(focus) || isGloballyArchivedSection(title);
         if(!hit) return;
         deleteTile(tile);
         changed = true;
@@ -53889,6 +53952,9 @@ function seedAug30SelectedCards(blk){
   function migrateUnarchiveSep02CarrySections(){
     /* Sep1 archives blocked the Sep2 impulse set — unarchive carry-over sections Diana expects on Sep 2. */
     var MKEY = 'migration-unarchive-sep02-carry-sections-v1';
+    /* Archived sections are user-controlled. Past-day carry must not alter the archive. */
+    try { localStorage.setItem(MKEY, '1'); } catch(eStop){}
+    return;
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     var CARRY = {
       'intentions':1,'set the mark':1,'set-the-mark':1,'feel it into being':1,'aim-above-the-mark':1,'to feel it into being':1,'attention':1,'anticipate':1,'darkness':1,'soul':1,'audacity':1,'fight':1,
@@ -55050,11 +55116,11 @@ function seedAug30SelectedCards(blk){
       repetitions: 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'repeat 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'to love': 'manus-storage/zone-to-love-souls.jpg?v=souls3',
-      'to persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      'i persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      'i will persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      'to-persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      topersevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+      'to persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+      'i persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+      'i will persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+      'to-persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+      topersevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
       'to feel': '',
       'to channel': 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
       'to-channel': 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
@@ -55063,7 +55129,7 @@ function seedAug30SelectedCards(blk){
       'to-feel': '',
       tofeel: '',
       feel: '',
-      persevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+      persevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
       recoup: 'manus-storage/zone-recouping.jpg?v=back1',
       recouping: 'manus-storage/zone-recouping.jpg?v=back1',
       'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
@@ -59277,7 +59343,7 @@ html body .day-block.overview-era-day .day-card-header.day-header-chrome .today-
   min-width: 325px !important;
   max-width: min(720px, 96%) !important;
   flex-shrink: 0 !important;
-  justify-content: center !important;
+  justify-content: space-between !important;
   gap: 6px !important;
 }
 html body .day-block.overview-era-day .overview-toggle-row .today-view-toggle:has(.tv-pill:nth-child(5)),
@@ -59302,7 +59368,7 @@ html body .day-block.overview-era-day .day-card-header.day-header-chrome .tv-pil
   flex: 0 0 auto !important;
   min-width: min-content !important;
   text-align: center !important;
-  padding: 8px 16px !important;
+  padding: 8px 10px !important;
 }
 html body .day-block.overview-era-day.view-overview .overview-add-section {
   display: inline-flex !important;
@@ -64321,7 +64387,7 @@ html body .day-block.depth-four-era:not(.collapsed) .day-card-header.day-header-
   min-width: 325px !important;
   max-width: min(720px, 96%) !important;
   flex-shrink: 0 !important;
-  justify-content: center !important;
+  justify-content: space-between !important;
   gap: 6px !important;
 }
 html body .day-block.overview-era-day:not(.collapsed) .day-card-header.day-header-chrome .overview-center-stack .today-view-toggle:has(.tv-pill:nth-child(5)),
@@ -64344,7 +64410,7 @@ html body .day-block.depth-four-era:not(.collapsed) .day-card-header.day-header-
   flex: 0 0 auto !important;
   min-width: min-content !important;
   text-align: center !important;
-  padding: 8px 16px !important;
+  padding: 8px 10px !important;
 }
 
 html body .day-block.depth-four-era.view-overview .overview-right-tools {
@@ -65764,7 +65830,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   (function migrationLovePerseverePhotosV1(){
     var MKEY = 'migration-love-persevere-photos-v3';
     var LOVE = 'manus-storage/zone-to-love-souls.jpg?v=souls3';
-    var PERS = 'manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+    var PERS = 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
     function normTitle(tile){
       return ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
     }
@@ -65975,7 +66041,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   /* I will persevere — Diana's summit silhouette. Always apply so continue/nophoto cannot win. */
   (function migrationPersevereSummitV1(){
     var MKEY = 'migration-persevere-summit-v1';
-    var WANT = 'manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+    var WANT = 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
     var OLD = /manus-storage\/zone-to-persevere-(?:continue|resolve|peaks)\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isPers(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -66240,12 +66306,12 @@ html body .day-block.depth-four-era .overview-center-stack {
     'to-feel': '',
     tofeel: '',
     feel: '',
-    'to persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i will persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'to-persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    topersevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    persevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+    'to persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i will persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'to-persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    topersevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    persevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
     earn: 'manus-storage/zone-to-earn-gold.jpg?v=earn3',
     'i will earn': 'manus-storage/zone-to-earn-gold.jpg?v=earn3',
     'to earn': 'manus-storage/zone-to-earn-gold.jpg?v=earn3',
@@ -67876,7 +67942,7 @@ html body .day-card-overlay .dco-bismillah {
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  animation: allah-shimmer 4s linear infinite !important;
+  animation: none !important;
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)) drop-shadow(0 0 16px rgba(244,217,122,0.4)) !important;
 }
 </style>
@@ -68939,6 +69005,125 @@ html body.zoom-move-on .vision-check.is-move-picked {
       cancel();
     }
   });
+})();
+</script>
+<style id="sep8-fullpage-day-css">
+html body.day-fullpage-open {
+  overflow: hidden !important;
+}
+html body .day-block.day-fullpage-active {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 199000 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(27, 18, 14, 0.34) !important;
+  isolation: isolate !important;
+}
+html body .day-block.day-fullpage-active > .day-dot {
+  display: none !important;
+}
+html body .day-block.day-fullpage-active > .day-card {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
+}
+html body .day-block.day-fullpage-active .day-card-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 500 !important;
+}
+html body .day-fullpage-close {
+  appearance: none !important;
+  position: absolute !important;
+  top: 14px !important;
+  right: 18px !important;
+  z-index: 700 !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 248, 238, 0.42) !important;
+  border-radius: 50% !important;
+  background: rgba(20, 13, 10, 0.5) !important;
+  color: #fff8ee !important;
+  font: 300 22px/30px "DM Mono", monospace !important;
+  cursor: pointer !important;
+}
+</style>
+<script id="sep8-fullpage-day-js">
+(function(){
+  if(window.__sep8FullpageDayWired) return;
+  window.__sep8FullpageDayWired=1;
+  var active=null;
+  function eligible(blk){
+    var iso=blk && (blk.getAttribute('data-date')||'');
+    return !!(iso && iso >= '2026-09-08' && /^\d{4}-\d{2}-\d{2}$/.test(iso));
+  }
+  function closeDay(){
+    if(!active) return;
+    var blk=active.blk;
+    blk.classList.remove('day-fullpage-active');
+    if(active.wasCollapsed) blk.classList.add('collapsed');
+    document.body.classList.remove('day-fullpage-open');
+    var close=blk.querySelector('.day-fullpage-close');
+    if(close) close.remove();
+    active=null;
+  }
+  function openDay(blk){
+    if(!eligible(blk)) return;
+    if(active && active.blk===blk) return;
+    closeDay();
+    var wasCollapsed=blk.classList.contains('collapsed');
+    blk.classList.remove('collapsed');
+    blk.classList.add('day-fullpage-active');
+    document.body.classList.add('day-fullpage-open');
+    var close=document.createElement('button');
+    close.type='button';
+    close.className='day-fullpage-close';
+    close.setAttribute('aria-label','close full-page day');
+    close.textContent='×';
+    var header=blk.querySelector('.day-card-header');
+    (header||blk).appendChild(close);
+    active={blk:blk,wasCollapsed:wasCollapsed};
+    try { if(window.__bootOverviewDay) window.__bootOverviewDay(blk); } catch(e){}
+    try { if(window.__syncHeroLayoutClass) window.__syncHeroLayoutClass(blk); } catch(e){}
+    requestAnimationFrame(function(){
+      try { if(window.__syncHeroLayoutClass) window.__syncHeroLayoutClass(blk); } catch(e){}
+    });
+  }
+  document.addEventListener('click',function(e){
+    var close=e.target.closest && e.target.closest('.day-fullpage-close');
+    if(close){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      closeDay();
+      return;
+    }
+    var header=e.target.closest && e.target.closest('.day-card-header');
+    var blk=header && header.closest('.day-block');
+    if(!header || !eligible(blk)) return;
+    if(e.target.closest('input, button, a, .overview-center-stack, .overview-right-tools, .today-view-toggle, .tv-pill')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    openDay(blk);
+  },true);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && active) closeDay();
+  });
+  window.__openFullpageDay=openDay;
+  window.__closeFullpageDay=closeDay;
 })();
 </script>
 </html>

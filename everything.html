@@ -18,7 +18,58 @@ This applies regardless of conversation context or recently edited days.
 <html lang="en">
 <head>
 
-<meta charset="utf-8"/><script src="boot-seed.js" defer></script><script src="boot-today.js?v=chrome15"></script>
+<meta charset="utf-8"/>
+<style id="everything-stable-first-paint">
+/*
+ * This file contains years of baked markup and later override layers. Never
+ * expose those intermediate versions while the document is still parsing.
+ * The opaque curtain is removed once, after DOM hydration has settled.
+ */
+html {
+  background: #1a1511 url('manus-storage/_339ab459.jpg') center / cover fixed no-repeat;
+}
+html:not(.everything-ui-settled)::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: block;
+  background: #1a1511 url('manus-storage/_339ab459.jpg') center / cover no-repeat;
+  pointer-events: auto;
+}
+html:not(.everything-ui-settled) body {
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+html.everything-ui-settled::before {
+  display: none !important;
+}
+</style>
+<script id="everything-stable-first-paint-js">
+(function(){
+  var shown = false;
+  function revealFinalUI(){
+    if(shown) return;
+    shown = true;
+    document.documentElement.classList.add('everything-ui-settled');
+  }
+  function afterHydration(){
+    setTimeout(function(){
+      requestAnimationFrame(function(){
+        requestAnimationFrame(revealFinalUI);
+      });
+    }, 1900);
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', afterHydration, { once: true });
+  } else {
+    afterHydration();
+  }
+  /* Never let slow or broken images hold the dashboard behind the curtain. */
+  setTimeout(revealFinalUI, 4000);
+})();
+</script>
+<script src="boot-seed.js" defer></script><script src="boot-today.js?v=chrome15"></script>
 <style id="btm-today-first">
 html, body, .day-block, .day-card, .vision-hero, .vision-tile {
   overflow-anchor: none;
@@ -1908,6 +1959,7 @@ body.editing .add-task-here-btn { display: block; }
     transition: opacity 0.2s ease;
   }
   .task-detail-overlay.hidden {
+    display: none !important;
     opacity: 0;
     pointer-events: none;
   }
@@ -13496,9 +13548,9 @@ window.__j22fnApply=run;
     'to-curate':'manus-storage/zone-to-curate-select.jpg?v=select1',
     'to love':'manus-storage/zone-to-love-souls.jpg?v=souls3',
     'i love':'manus-storage/zone-to-love-souls.jpg?v=souls3',
-    'to persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i will persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+    'to persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i will persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
     'to feel':'',
     'i feel':'',
     'to-feel':'',
@@ -13509,9 +13561,9 @@ window.__j22fnApply=run;
     'to-channel':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
     'tochannel':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
     'channel':'manus-storage/zone-to-channel-souls.jpg?v=souls1',
-    'to-persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'topersevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'persevere':'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+    'to-persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'topersevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'persevere':'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
     'to-love':'manus-storage/zone-to-love-souls.jpg?v=souls3',
     'tolove':'manus-storage/zone-to-love-souls.jpg?v=souls3',
     'fear allah ﷻ':'manus-storage/zone-god-conscious.jpg?v=remembrance1',
@@ -15676,7 +15728,12 @@ window.__j22fnApply=run;
     });
     grid.addEventListener('pointerdown', function(e){
       if(e.target.closest('.day-block.nodes-linking')) return;
-      if(e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
+      var downZone=e.target.closest('.pursuit-zone');
+      var freeTaskNode=!!(downZone && downZone.closest('.tv-panel.tv-nodes') && (function(){
+        var b=downZone.closest('.day-block');
+        return b && (b.getAttribute('data-date')||'') >= '2026-09-08';
+      })());
+      if(!freeTaskNode && e.target.closest('.pursuit-zone-head, .pursuit-zone-title') && !e.target.closest('.pursuit-zone.zone-collapsed')){
         window.__ffMoved=false;
         return;
       }
@@ -15860,6 +15917,10 @@ window.__j22fnApply=run;
       var startX=e.clientX, startY=e.clientY;
       var ox=start.x, oy=start.y, ow=start.w, oh=start.h;
       var resizing=!!handle;
+      var freeTaskNode=!!(zone.closest('.tv-panel.tv-nodes') && (function(){
+        var b=zone.closest('.day-block');
+        return b && (b.getAttribute('data-date')||'') >= '2026-09-08';
+      })());
       window.__ffMoved=false;
       var captured=false;
       function move(ev){
@@ -15878,7 +15939,13 @@ window.__j22fnApply=run;
           writeRect({el:zone, id:id, x:ox, y:oy, w:ow+dx, h:oh+dy});
           layoutZonePieces(zone, 'fit');
         } else {
-          writeRect({el:zone, id:id, x:ox+dx, y:oy+dy, w:ow, h:oh});
+          var nx=ox+dx, ny=oy+dy;
+          if(freeTaskNode){
+            var bounds=overviewNodesViewBox(grid);
+            nx=Math.max(0, Math.min(Math.max(0, bounds.w-ow), nx));
+            ny=Math.max(0, Math.min(Math.max(0, bounds.h-oh), ny));
+          }
+          writeRect({el:zone, id:id, x:nx, y:ny, w:ow, h:oh});
         }
         if(typeof window.__drawAug20Web==='function') window.__drawAug20Web();
       }
@@ -15896,7 +15963,7 @@ window.__j22fnApply=run;
         }
         readPos(zone, id);
         if(resizing) layoutZonePieces(zone, 'fit');
-        resolveOverlaps(grid, id);
+        if(!freeTaskNode) resolveOverlaps(grid, id);
       }
       document.addEventListener('pointermove', move, true);
       document.addEventListener('pointerup', up, true);
@@ -17958,7 +18025,8 @@ window.__j22fnApply=run;
     var panel=grid && grid.closest('.tv-panel.tv-nodes');
     var host=grid && grid.parentElement;
     var card=grid && grid.closest('.day-card');
-    var w=((panel&&panel.clientWidth)||(host&&host.clientWidth)||(card&&card.clientWidth)||0);
+    /* The panel may be inverse-scaled; the canvas is the real draggable viewport. */
+    var w=((grid&&grid.clientWidth)||(panel&&panel.clientWidth)||(host&&host.clientWidth)||(card&&card.clientWidth)||0);
     if(w<80) w=Math.min(1100, Math.max(320, window.innerWidth-96));
     var top=0;
     try {
@@ -18012,7 +18080,7 @@ window.__j22fnApply=run;
     });
   }
   window.__fitOverviewNodesToWords=fitOverviewNodesToWords;
-  /* Freeform only — never grid. Scale+translate the constellation so every node stays on-screen. */
+  /* Freeform only — never grid. Preserve user sizes and clamp every node inside the viewport. */
   function fitOverviewNodesInView(grid){
     if(!grid) return;
     var zones=[].slice.call(grid.querySelectorAll(':scope > .pursuit-zone'));
@@ -18027,18 +18095,16 @@ window.__j22fnApply=run;
       maxX=Math.max(maxX, (r.x||0)+(r.w||0));
       maxY=Math.max(maxY, (r.y||0)+(r.h||0));
     });
-    var dx=pad-minX, dy=pad-minY;
-    var contentW=Math.max(1, maxX+dx-pad);
-    var contentH=Math.max(1, maxY+dy-pad);
-    var availW=Math.max(120, box.w-pad*2);
-    var availH=Math.max(120, box.h-pad*2);
-    var scale=Math.min(1, availW/contentW, availH/contentH);
+    var blk=grid.closest('.day-block');
+    var freelyPlaced=!!(blk && (blk.getAttribute('data-date')||'') >= '2026-09-08');
+    var dx=freelyPlaced ? 0 : pad-minX;
+    var dy=freelyPlaced ? 0 : pad-minY;
     zones.forEach(function(z, i){
       var r=rects[i];
-      var nx=pad+((r.x||0)+dx-pad)*scale;
-      var ny=pad+((r.y||0)+dy-pad)*scale;
-      var nw=Math.max(72, Math.round((r.w||168)*scale));
-      var nh=Math.max(36, Math.round((r.h||40)*scale));
+      var nx=(r.x||0)+dx;
+      var ny=(r.y||0)+dy;
+      var nw=Math.min(Math.max(72, Math.round(r.w||168)), Math.max(72, box.w-pad*2));
+      var nh=Math.min(Math.max(30, Math.round(r.h||40)), Math.max(30, box.h-pad*2));
       if(nx+nw > box.w-pad) nx=Math.max(pad, box.w-pad-nw);
       if(ny+nh > box.h-pad) ny=Math.max(pad, box.h-pad-nh);
       if(nx<pad) nx=pad;
@@ -18639,6 +18705,33 @@ window.__j22fnApply=run;
     }
     if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
   }
+  function wireOverviewNodesViewportFit(blk, panel, grid){
+    var iso=blk && (blk.getAttribute('data-date')||'');
+    if(!grid || !panel || iso < '2026-09-08' || grid.__nodesViewportFitWired) return;
+    grid.__nodesViewportFitWired=true;
+    var lastW=0, raf=0;
+    function fitAfterResize(){
+      var w=Math.round(panel.getBoundingClientRect().width||0);
+      if(w<80 || w===lastW) return;
+      lastW=w;
+      if(raf) cancelAnimationFrame(raf);
+      raf=requestAnimationFrame(function(){
+        raf=requestAnimationFrame(function(){
+          fitOverviewNodesToWords(grid);
+          fitOverviewNodesInView(grid);
+          persistOverviewNodesFromGrid(grid);
+          if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
+        });
+      });
+    }
+    if(window.ResizeObserver){
+      var ro=new ResizeObserver(fitAfterResize);
+      ro.observe(panel);
+      grid.__nodesViewportFitObserver=ro;
+    }
+    fitAfterResize();
+  }
+  window.__wireOverviewNodesViewportFit=wireOverviewNodesViewportFit;
   function ensureOverviewNodesGrid(blk){
     if(!blk || !isOverviewEra(blk)) return;
     var panel=blk.querySelector('.tv-panel.tv-nodes');
@@ -18655,6 +18748,7 @@ window.__j22fnApply=run;
     try { syncTaskNodesFromDay(blk); } catch(eSeed){}
     ensureAug20EditChrome(grid);
     wireZoneDrag(grid);
+    wireOverviewNodesViewportFit(blk, panel, grid);
     if(panel && panel.style.display !== 'none'){
       fitOverviewNodesToWords(grid);
       fitOverviewNodesInView(grid);
@@ -20717,7 +20811,7 @@ window.__j22fnApply=run;
 <div class="vision-board" aria-label="vision collage">
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
-<div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="to-persevere" style="--photo-ar: 0.666; --zoom-ar: 0.666; --tile-photo: url(&quot;manus-storage/zone-to-persevere-summit.jpg?v=summit1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e26731">I will persevere</h3><div class="vision-tile-details"></div></article>
+<div class="vision-hero vision-hero-many"><article class="vision-tile" data-focus="to-persevere" style="--photo-ar: 0.666; --zoom-ar: 0.666; --tile-photo: url(&quot;manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1&quot;); grid-area: 5 / 1 / 6 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e26731">I will persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url(&quot;manus-storage/zone-envision.jpg?v=swap1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will become" data-cursor-ref="e24011">I will become</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 5 / 2 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up" data-cursor-ref="e24012">I will glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="luscious-hair" style="--sub-photo: none; --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article></div></article>
 <article class="vision-tile" data-focus="navigate" style="--tile-photo: url('manus-storage/zone-plan.jpg?v=swap1'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 2 / 4 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will navigate" data-cursor-ref="e24017">I will navigate</h3><div class="vision-tile-details"></div></article>
@@ -20752,7 +20846,7 @@ window.__j22fnApply=run;
 <div class="vision-hero"><article class="vision-tile" data-focus="pepperdine" style="--tile-photo: url('manus-storage/zone-achieve-csol.jpg?v=csol12'); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 1 / 2 / 2 / 4 !important;" data-content-score="4" data-card-weight="3"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will succeed" data-cursor-ref="e27651">I will succeed</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>tuition payment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>fall 2026 enrollment</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>scholarship application</span></label><div class="vision-polaroid vision-shot-card" data-shot-src="manus-storage/card-fall-2026-enrollment.jpg?v=1" style="--px: 28%; --py: 12%; --pw: 126px; width: 126px;"><img alt="" src="manus-storage/card-fall-2026-enrollment.jpg?v=1"><span>fall 2026 enrollment</span><div class="vision-pol-resize" title="drag to resize"></div></div></div></article>
 <article class="vision-tile" data-focus="itaq-allah" style="--tile-photo: url(&quot;manus-storage/zone-god-conscious.jpg?v=remembrance1&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 4 / 2 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will surrender to Allah ﷻ" data-cursor-ref="e27652">I will surrender to Allah ﷻ</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="istighfar" style="--sub-photo: url(&quot;manus-storage/sub-istighfar.jpg?v=ist1&quot;); --sx: 8%; --sy: 6%; --sw: 32%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">istighfar 1000x</h4></article></div><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-body vision-tile-tall" data-focus="body" style="--tile-photo: url('manus-storage/zone-athletic-gym.jpg?v=gym1'); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 1 / 1 / 3 / 2 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will train" data-cursor-ref="e27654">I will train</h3><div class="vision-tile-subsections"><article class="vision-subsection" data-sub="calisthenics" style="--sub-photo: url(&quot;manus-storage/card-calisthenics.jpg?v=cal1&quot;); --sx: 56%; --sy: 6%; --sw: 36%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">calisthenics</h4></article><article class="vision-subsection" data-sub="inversions" style="--sub-photo: url(&quot;manus-storage/card-inversions-yoga.jpg?v=yoga1&quot;); --sx: 8%; --sy: 52%; --sw: 34%; --sr: -3deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">inversions</h4></article></div></article>
-<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-summit.jpg?v=summit1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e27655">I will persevere</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url(&quot;manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1&quot;); --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 2 / 3 / 3 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will persevere" data-cursor-ref="e27655">I will persevere</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glow-up" style="--tile-photo: url(&quot;manus-storage/zone-glow-up.jpg?v=glow6&quot;); --photo-ar: 1.5; --zoom-ar: 1.5; grid-area: 3 / 1 / 5 / 2 !important;" data-content-score="1" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will glow up" data-cursor-ref="e27656">I will glow up</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="luscious-hair" style="--sub-photo: none; --sx: 78%; --sy: 2%; --sw: 20%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">luscious hair</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="glass-skin" style="--sub-photo: none; --sx: 2%; --sy: 2%; --sw: 20%; --sr: -2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">glass skin</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="aligned-teeth" style="--sub-photo: none; --sx: 2%; --sy: 58%; --sw: 20%; --sr: 2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">aligned teeth</h4></article><article class="vision-subsection vision-subsection-nophoto" data-sub="facial-tone" style="--sub-photo: none; --sx: 78%; --sy: 58%; --sw: 20%; --sr: -2.5deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">facial tone</h4></article></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="to-recoup" style="--tile-photo: none; --photo-ar: 0.666; --zoom-ar: 0.666; grid-area: 2 / 3 / 3 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will recoup" data-cursor-ref="e27657">I will recoup</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Amazon return QR codes</span></label></div></article><article class="vision-tile" data-focus="she-pursues" style="--tile-photo: url('manus-storage/zone-she-pursues.jpg?v=pursue1'); --photo-ar: 1.778; --zoom-ar: 1.778; grid-area: 4 / 1 / 5 / 4 !important;" data-content-score="0" data-card-weight="1"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I will pursue">I will pursue</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>Dr Betty</span></label><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>document translation into Arabic</span></label></div></article>
 <article class="vision-tile wins-copy-stack" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game13');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">She remembered who she was and the game changed.</p><h3 class="vision-tile-title" data-carve="I will win">I will win</h3><div class="vision-tile-details"></div></article>
@@ -20885,6 +20979,10 @@ window.__j22fnApply=run;
 <article class="vision-tile" data-focus="fighting" style="--tile-photo: url('manus-storage/zone-audacity.jpg?v=finger1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am giving 'em hell">I am giving 'em hell</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="strategist" style="--tile-photo: url('manus-storage/zone-strategist-behind.jpg?v=back2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am calculating">I am calculating</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-earn-hands.jpg?v=earn7'); --photo-ar: 0.75; --zoom-ar: 0.75;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am earning">I am earning</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url('manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am persevering">I am persevering</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="executing" style="--tile-photo: url('manus-storage/zone-execute-focus.jpg?v=chess1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am executing">I am executing</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="claiming" style="--tile-photo: url('manus-storage/zone-claiming-envelope.jpg?v=claim1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am claiming">I am claiming</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url('manus-storage/zone-envision.jpg?v=swap1');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title" data-carve="I am becoming">I am becoming</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 34%; --py: 32%;"><input class="agenda-check" type="checkbox"><span>Dr Betty</span></label><label class="vision-check" style="--px: 62%; --py: 58%;"><input class="agenda-check" type="checkbox"><span>document translation into Arabic</span></label></div></article>
 </div>
 </div></div></div></div></div>
 
@@ -20904,8 +21002,12 @@ window.__j22fnApply=run;
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero">
-<article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-earn-hands.jpg?v=earn7');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am earning">I am earning</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="ask" style="--tile-photo: url('manus-storage/zone-abundance-tree.jpg?v=tree1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am asking">I am asking</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="fitness" style="--tile-photo: url('manus-storage/zone-athletic-gym.jpg?v=gym1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am training">I am training</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glowing-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="i am glowing up">i am glowing up</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="deen" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am worshipping Allah ﷻ">I am worshipping Allah ﷻ</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game13');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am winning">I am winning</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="academia" style="--tile-photo: url('manus-storage/zone-grad-student.jpg?v=grad4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="networking" style="--tile-photo: url('manus-storage/zone-networking.jpg?v=net1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am networking">I am networking</h3><div class="vision-tile-details"></div></article>
 </div>
 </div></div></div></div></div>
 
@@ -30921,7 +31023,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
       else if(nl==='earn' || nl==='to earn' || nl==='i earn' || nl==='i will earn' || nl==='to-earn' || nl==='earning' || nl==='i am earning') src='manus-storage/zone-earn-hands.jpg?v=earn7';
       else if(nl==='curate' || nl==='to curate' || nl==='i curate' || nl==='to-curate') src='manus-storage/zone-to-curate-select.jpg?v=select1';
       else if(nl==='to love' || nl==='i love' || nl==='to-love' || nl==='tolove') src='manus-storage/zone-to-love-souls.jpg?v=souls3';
-      else if(nl==='to persevere' || nl==='i persevere' || nl==='i will persevere' || nl==='to-persevere' || nl==='topersevere' || nl==='persevere') src='manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+      else if(nl==='to persevere' || nl==='i persevere' || nl==='i will persevere' || nl==='to-persevere' || nl==='topersevere' || nl==='persevere') src='manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
       else if(nl==='to feel' || nl==='i feel' || nl==='to-feel' || nl==='tofeel' || nl==='feel') src='';
       else if(nl==='to channel' || nl==='i channel' || nl==='to-channel' || nl==='tochannel' || nl==='channel' || nl==='channeling' || nl==='i am channeling') src='manus-storage/zone-to-channel-souls.jpg?v=souls1';
       else if(nl==='villains'||nl==='villain') src='manus-storage/zone-villains.jpg?v=rim13';
@@ -32010,7 +32112,7 @@ body {
 .progress-fill {
   background: linear-gradient(90deg, var(--sage), #A6C49F, var(--sage)) !important;
   background-size: 200% auto;
-  animation: enh-progressShimmer 3s ease infinite;
+  animation: none !important;
   box-shadow: 0 0 8px rgba(138,158,133,0.3);
 }
 @keyframes enh-progressShimmer {
@@ -32031,7 +32133,7 @@ body {
 /* Day dot pulse animation for today */
 .day-block.today .day-dot,
 .day-block.today-block .day-dot {
-  animation: enh-todayPulse 2.5s ease-in-out infinite;
+  animation: none !important;
 }
 @keyframes enh-todayPulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(138,158,133,0.4); }
@@ -35298,11 +35400,17 @@ window.__refreshPinnedAgenda = function(){};
 <style id="task-detail-modal">
 .task-modal-overlay {
   position: fixed; inset: 0; z-index: 100000;
-  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none; transition: opacity 0.2s;
 }
-.task-modal-overlay.open { opacity: 1; pointer-events: all; }
+.task-modal-overlay.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
 .task-modal {
   background: #2a2723; border-radius: 16px;
   width: 90%; max-width: 420px; max-height: 80vh;
@@ -46181,6 +46289,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     try{ if(typeof ensureAug20EditChrome==='function') ensureAug20EditChrome(grid); }catch(err){}
     try{ if(typeof wireZoneDrag==='function') wireZoneDrag(grid); }catch(err){}
     try{ if(typeof window.__fitOverviewNodesToWords==='function') window.__fitOverviewNodesToWords(grid); }catch(err){}
+    try{ if(typeof window.__fitOverviewNodesInView==='function') window.__fitOverviewNodesInView(grid); }catch(err){}
+    try{ if(window.__wireOverviewNodesViewportFit) window.__wireOverviewNodesViewportFit(blk, panel, grid); }catch(err){}
     try{ if(typeof persistOverviewNodesFromGrid==='function') persistOverviewNodesFromGrid(grid); }catch(err){}
     try{ if(typeof expandCanvas==='function') expandCanvas(grid); }catch(err){}
     if(typeof window.__drawAug20Web==='function') window.__drawAug20Web(blk);
@@ -47372,6 +47482,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     };
     patchMosaicRoomStore(blk, { photoPositions: positions });
   }
+  function readMosaicStageHeight(blk){
+    var rec = readMosaicRoomStore(blk) || {};
+    var h = parseFloat(rec.stageHeight);
+    return h > 0 ? h : 0;
+  }
+  function writeMosaicStageHeight(blk, h){
+    h = Math.max(280, Math.round(parseFloat(h) || 0));
+    patchMosaicRoomStore(blk, { stageHeight: h });
+    return h;
+  }
   function applyMosaicPhotoPosition(blk, tile){
     if(!blk || !tile) return;
     var pos = readMosaicPhotoPositions(blk)[mosaicTileKey(tile)];
@@ -47713,7 +47833,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function ensureMosaicLayoutControl(host, blk){
     if(!host || !blk) return;
-    var control = host.querySelector(':scope > .vision-layout-control');
+    var tools = blk.querySelector('.overview-right-tools');
+    if(!tools && typeof ensureToggleRow === 'function'){
+      try { ensureToggleRow(blk); } catch(eTools){}
+      tools = blk.querySelector('.overview-right-tools');
+    }
+    if(!tools) return;
+    var control = blk.querySelector('.vision-layout-control');
     if(!control){
       control = document.createElement('div');
       control.className = 'vision-layout-control';
@@ -47723,7 +47849,6 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
           '<p>large rooms</p><div class="vision-layout-options" data-layout-field="big"></div>' +
           '<p>side stack</p><div class="vision-layout-options" data-layout-field="side"></div>' +
         '</div>';
-      host.appendChild(control);
       var button = control.querySelector('.vision-layout-button');
       var panel = control.querySelector('.vision-layout-panel');
       button.addEventListener('click', function(ev){
@@ -47746,6 +47871,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         packDashMosaic(host, [].slice.call(host.querySelectorAll(':scope > .vision-tile')));
         try { persistDay(blk); } catch(eSave){}
       });
+    }
+    /* Header order is layout | carry | +. Never place layout over a tile. */
+    var carry = tools.querySelector('.overview-carry-forward');
+    var add = tools.querySelector('.overview-add-section');
+    var before = carry || add || tools.firstElementChild;
+    if(control.parentNode !== tools || control.nextElementSibling !== before){
+      tools.insertBefore(control, before || null);
     }
     var cfg = readMosaicLayoutConfig(blk);
     var bigHost = control.querySelector('[data-layout-field="big"]');
@@ -47806,7 +47938,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(hrDash.height > 8) chromeH = Math.round(hrDash.height);
       }
     } catch(eChrome){}
-    var packH = Math.round(Math.max(520, viewH - chromeH - 18));
+    var savedStageH = readMosaicStageHeight(blk);
+    var packH = savedStageH > 0
+      ? Math.round(Math.max(280, savedStageH))
+      : Math.round(Math.max(520, viewH - chromeH - 18));
     host.__dashPackH = packH;
     var gutter = 12;
     var inset = 12;
@@ -48023,7 +48158,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var origArs = tiles.map(function(t){ return (Math.round(photoArForTile(t) * 1000) / 1000); }).join(',');
     var flushPack = !!(!noBanner && _blk && _blk.classList.contains('collage-flush'));
     var packContent = tiles.map(function(t){ return tileContentScore(t); }).join(',');
-    var fillH = Math.round(Math.max(520, (window.innerHeight || 800) - 160));
+    var savedPackH = 0;
+    try { savedPackH = readMosaicStageHeight(_blk); } catch(eSavedH){}
+    var fillH = savedPackH > 0
+      ? Math.round(savedPackH)
+      : Math.round(Math.max(520, (window.innerHeight || 800) - 160));
     var packSig = (noBanner ? ('dash20stable:' + n + '#' + packNames + '@c' + packContent + '@w' + packW + '@h' + fillH) : ((flushPack ? 'grid11:' : 'grid12:') + n + '#' + packNames + '@t' + packTasks));
     if(host.getAttribute('data-pack-sig') === packSig) return;
     tiles.forEach(function(t){ try { clearNativePack(t); } catch(eClr){} });
@@ -48314,12 +48453,13 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     }
     var presetSecs=['I am glowing up','I am living a curated lifestyle','I am asking','I am in my power','I am living my purpose','I am in my ambition','I am in the quantum','I am training','I am pursuing my Ph.D','I am mastering','I am achieving','I am pursuing','I am igniting','I am in my potential','I am resonating with other souls','I am worshipping Allah ﷻ','I am envisioning','I am becoming','I am navigating','I am focusing','I am aligning','I am in my strengths','I am planning','I am in spirit','I am in art | science','I am in my self-esteem',"I am giving 'em hell",'I am in politics','I am winning','I am repeating 10,000 times','I am aiming above the mark','I am feeling it into being','I am anticipating','I am facing the darkness','I am detaching','I am traveling','I am tuning into','I am self-actualizing','I am claiming','I am facing sabotage','I am saying thank you in advance','I am executing','I am channeling','I am feeling','I am persevering','I am loving','I am curating','I am seizing opportunities','I am litigating','I am recouping','I am earning','I am calculating','I am successful'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('I am facing the villains');
+    /* Explicit picker copy wins before legacy aliases such as "I am a grad student". */
+    presetSecs.forEach(push);
     if(typeof plainLabelDay === 'function' && plainLabelDay(blk) && typeof SECTION_PLAIN === 'object' && SECTION_PLAIN){
       Object.keys(SECTION_PLAIN).forEach(function(k){
         if(SECTION_PLAIN[k] && SECTION_PLAIN[k].title) push(SECTION_PLAIN[k].title);
       });
     }
-    presetSecs.forEach(push);
     document.querySelectorAll('.day-block.vision-collage-day .vision-tile-title, .day-block.overview-era-day .vision-tile-title').forEach(function(el){
       var t = String(el.textContent || '').replace(/\s+/g, ' ').trim();
       if(KNOWN[t.toLowerCase()] || t.toLowerCase() === 'lifestyle') push(t);
@@ -48743,7 +48883,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     networking: { focus: 'networking', title: 'I am networking', photo: 'manus-storage/zone-networking.jpg?v=net1' },
     wins: { focus: 'wins', title: 'I am winning', photo: 'manus-storage/zone-wins-hand.jpg?v=game13' },
     become: { focus: 'become', title: 'I am becoming', photo: 'manus-storage/zone-envision.jpg?v=swap1' },
-    persevere: { focus: 'to-persevere', title: 'I am persevering', photo: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1' },
+    persevere: { focus: 'to-persevere', title: 'I am persevering', photo: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1' },
     strategist: { focus: 'strategist', title: 'I am calculating', photo: 'manus-storage/zone-strategist-behind.jpg?v=back2' },
     successful: { focus: 'successful', title: 'I am successful', photo: 'manus-storage/zone-successful.jpg?v=ok2' },
     healthy: { focus: 'healthy', title: 'I am healthy', photo: '' },
@@ -51635,6 +51775,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     run();
   })();
   (function restoreSept7Calculating(){
+    /* Archived sections are user-controlled. Never unarchive or re-seed one on load. */
+    return;
     var MKEY = 'migration-restore-sep7-calculating-v2';
     function keepRemoved(x){
       var s = String(x || '').toLowerCase();
@@ -51695,6 +51837,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     run();
   })();
   (function restoreSept7Successful(){
+    /* Archived sections are user-controlled. Never unarchive or re-seed one on load. */
+    return;
     var START = '2026-09-07';
     var MKEY = 'migration-restore-sep7-successful-v1';
     function isSuccessful(value){
@@ -52476,7 +52620,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'scholarship-application' || f === 'to-scholarship-application' || title.toLowerCase() === 'scholarship application' || title.toLowerCase() === 'to scholarship application' || title.toLowerCase() === 'i scholarship application' || title.toLowerCase() === 'scholarship-application') return 'manus-storage/zone-scholarship-application.jpg?v=app1';
     if(f === 'curate' || f === 'to-curate' || title.toLowerCase() === 'curate' || title.toLowerCase() === 'to curate' || title.toLowerCase() === 'i curate') return 'manus-storage/zone-to-curate-select.jpg?v=select1';
     if(f === 'to-love' || f === 'tolove' || title.toLowerCase() === 'to love' || title.toLowerCase() === 'i love' || title.toLowerCase() === 'tolove') return 'manus-storage/zone-to-love-souls.jpg?v=souls3';
-    if(f === 'to-persevere' || f === 'topersevere' || f === 'persevere' || title.toLowerCase() === 'to persevere' || title.toLowerCase() === 'i persevere' || title.toLowerCase() === 'i will persevere' || title.toLowerCase() === 'topersevere' || title.toLowerCase() === 'persevere') return 'manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+    if(f === 'to-persevere' || f === 'topersevere' || f === 'persevere' || title.toLowerCase() === 'to persevere' || title.toLowerCase() === 'i persevere' || title.toLowerCase() === 'i will persevere' || title.toLowerCase() === 'topersevere' || title.toLowerCase() === 'persevere') return 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
     if(f === 'to-feel' || f === 'tofeel' || f === 'feel' || title.toLowerCase() === 'to feel' || title.toLowerCase() === 'i feel' || title.toLowerCase() === 'tofeel' || title.toLowerCase() === 'feel') return '';
     if(f === 'to-channel' || f === 'tochannel' || f === 'channel' || title.toLowerCase() === 'to channel' || title.toLowerCase() === 'i channel' || title.toLowerCase() === 'tochannel' || title.toLowerCase() === 'channel') return 'manus-storage/zone-to-channel-souls.jpg?v=souls1';
     if(f === 'intentions' || f === 'set-the-mark' || f === 'aim-above-the-mark' || title.toLowerCase() === 'intentions' || title.toLowerCase() === 'set the mark' || title.toLowerCase() === 'set-the-mark' || title.toLowerCase() === 'aim-above-the-mark' || title.toLowerCase() === 'aim above the mark' || title.toLowerCase() === 'to aim above the mark' || title.toLowerCase() === 'i aim above the mark') return 'manus-storage/zone-intentions.jpg?v=aim1';
@@ -53810,6 +53954,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         side: Object.assign({}, st.slices.side),
         below: Object.assign({}, st.slices.below)
       };
+      if(st.doStage){
+        var nextStageH = st.packH + (/s/.test(st.edge) ? dy : -dy);
+        writeMosaicStageHeight(st.blk, clamp(nextStageH, 280, 2400));
+      }
       if(st.doSide){
         var newSide = st.sideW;
         if(st.isHero) newSide = st.innerW - 12 - (st.selfW + (/e/.test(st.edge) ? dx : -dx));
@@ -53897,8 +54045,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       var splitB = 0;
       var doSide = /[ew]/.test(edge) && (isHero || sideI >= 0);
       var doBelow = /[ns]/.test(edge) && (isHero || lastSide || belowI >= 0);
+      var touchesStageBottom = Math.abs(r.bottom - hr.bottom) <= 18;
+      var doStage = (/s/.test(edge) && touchesStageBottom)
+        || (!band.below.length && /[ns]/.test(edge));
       var doSideSplit = !doBelow && sideI >= 0 && /[ns]/.test(edge);
       var doBelowSplit = !doSide && belowI >= 0 && /[ew]/.test(edge);
+      if(doStage) doBelow = false;
       if(doSideSplit){
         splitI = /s/.test(edge) ? sideI : sideI - 1;
         if(splitI >= 0 && band.side[splitI]) splitA = band.side[splitI].getBoundingClientRect().height;
@@ -53911,7 +54063,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         if(splitI >= 0 && band.below[splitI + 1]) splitB = band.below[splitI + 1].getBoundingClientRect().width;
         if(splitI < 0 || !band.below[splitI + 1]) doBelowSplit = false;
       }
-      if(!(doSide || doBelow || doSideSplit || doBelowSplit)) return;
+      if(!(doSide || doBelow || doStage || doSideSplit || doBelowSplit)) return;
       e.preventDefault();
       e.stopPropagation();
       var heroR = band.hero ? band.hero.getBoundingClientRect() : r;
@@ -53925,8 +54077,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
         heroH: heroR.height,
         sideW: sideR ? sideR.width : innerW * 0.34,
         belowH: belowR ? belowR.height : innerH * 0.30,
+        packH: parseFloat(host.style.height) || hr.height,
         band: band, isHero: isHero, lastSide: lastSide,
-        doSide: doSide, doBelow: doBelow, doSideSplit: doSideSplit, doBelowSplit: doBelowSplit,
+        doSide: doSide, doBelow: doBelow, doStage: doStage, doSideSplit: doSideSplit, doBelowSplit: doBelowSplit,
         splitI: splitI, splitA: splitA, splitB: splitB,
         slices: liveSlices(host, band, innerW, innerH),
         active: false
@@ -54281,7 +54434,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     document.addEventListener('pointerdown', function(e){
       if(e.button != null && e.button !== 0) return;
       if(document.body.classList.contains('zoom-move-on')) return;
-      if(e.target.closest && e.target.closest('.vision-task-star-del, .vision-card-del, .vision-tile-del, .vision-task-star-name, .vision-task-star-label, .vision-task-star-name.is-editing, .flow-tl-opt-pop')) return;
+      if(e.target.closest && e.target.closest('.vision-task-star-del, .vision-card-del, .vision-tile-del, .vision-task-star-name.is-editing, .flow-tl-opt-pop')) return;
       var star = e.target.closest('.vision-task-star');
       if(!star) return;
       var tile = star.closest('.vision-tile');
@@ -55066,8 +55219,50 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function isGloballyArchivedSection(focusOrTitle){
     var k = String(focusOrTitle || '').toLowerCase().trim();
     if(!k) return false;
+    /*
+     * Present-tense sections are their own identities. An older archived
+     * "claim" or "envision" must never silently archive the newer
+     * "I am claiming" or "I am becoming" section.
+     */
+    var presentIdentity = null;
+    if(k === 'claiming' || k === 'i am claiming') presentIdentity = { focus: 'claiming', title: 'i am claiming' };
+    else if(k === 'executing' || k === 'i am executing') presentIdentity = { focus: 'executing', title: 'i am executing' };
+    else if(k === 'become' || k === 'becoming' || k === 'i am becoming') presentIdentity = { focus: 'become', title: 'i am becoming' };
+    else if(k === 'to-persevere' || k === 'persevering' || k === 'i am persevering') presentIdentity = { focus: 'to-persevere', title: 'i am persevering' };
+    if(presentIdentity){
+      return loadArchivedSections().some(function(it){
+        if(!it) return false;
+        var f = String(it.focus || '').toLowerCase().trim();
+        var t = String(it.title || '').toLowerCase().trim();
+        return f === presentIdentity.focus || t === presentIdentity.title;
+      });
+    }
     var set = archivedSectionFocusSet();
-    if(set[k] || set[slug(k)]) return true;
+    var probes = [k, slug(k)];
+    var phrase = k.replace(/^i am\s+/, '').trim();
+    probes.push(phrase, slug(phrase));
+    [
+      /^in my\s+/, /^in the\s+/, /^in\s+/, /^living my\s+/,
+      /^living a\s+/, /^facing the\s+/, /^facing\s+/
+    ].forEach(function(re){
+      var p = phrase.replace(re, '').trim();
+      if(p !== phrase) probes.push(p, slug(p));
+    });
+    var canonical = {
+      'glowing up':'glow up', 'asking':'ask', 'training':'fitness',
+      'achieving':'achieve', 'igniting':'ignite', 'envisioning':'envision',
+      'becoming':'become', 'navigating':'workflow', 'focusing':'focus',
+      'aligning':'align', 'planning':'plan', 'winning':'wins',
+      'anticipating':'attention', 'detaching':'detach', 'traveling':'travel',
+      'tuning into':'tune-into', 'self-actualizing':'self-actualize',
+      'claiming':'claim', 'executing':'execute', 'channeling':'to-channel',
+      'feeling':'to-feel', 'persevering':'to-persevere', 'loving':'to-love',
+      'curating':'curate', 'seizing opportunities':'seize-opportunities',
+      'litigating':'litigate', 'recouping':'recoup', 'earning':'earn',
+      "giving 'em hell":'fighting'
+    };
+    if(canonical[phrase]) probes.push(canonical[phrase], slug(canonical[phrase]));
+    if(probes.some(function(p){ return !!set[p]; })) return true;
     try {
       var aliases = sectionAliasSet(k, k);
       return Object.keys(aliases).some(function(a){ return set[a]; });
@@ -55091,8 +55286,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       [].slice.call(blk.querySelectorAll('.vision-tile')).forEach(function(tile){
         var focus = tileFocus(tile);
         var title = ((tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim();
-        var aliases = sectionAliasSet(focus, title);
-        var hit = Object.keys(aliases).some(function(a){ return set[a]; }) || set[String(focus||'').toLowerCase()] || set[String(title||'').toLowerCase()];
+        var hit = isGloballyArchivedSection(focus) || isGloballyArchivedSection(title);
         if(!hit) return;
         deleteTile(tile);
         changed = true;
@@ -55135,6 +55329,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__scrubArchivedSectionsEverywhere = scrubArchivedSectionsEverywhere;
   window.__isGloballyArchivedSection = isGloballyArchivedSection;
   (function unarchiveEarnSection(){
+    /* Archived sections are user-controlled. Never remove archive records on load. */
+    return;
     function isEarnName(s){
       var x = String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
       return x === 'earn' || x === 'earned' || x === 'earning' || x === 'to earn' || x === 'to-earn' || x === 'i earn' || x === 'i will earn' || x === 'i am earning';
@@ -55322,7 +55518,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       focus = 'practicing-gratitude';
       title = 'I am practicing gratitude';
     }
-    if(focus === 'pursuing' || /i am pursuing/.test(String(title).toLowerCase()) || String(title).toLowerCase() === 'pursuing'){
+    if(focus === 'pursuing' || /^i am pursuing$/.test(String(title).toLowerCase()) || String(title).toLowerCase() === 'pursuing'){
       focus = 'pursuing';
       title = 'I am pursuing';
     }
@@ -57628,6 +57824,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   function migrateUnarchiveSep02CarrySections(){
     /* Sep1 archives blocked the Sep2 impulse set — unarchive carry-over sections Diana expects on Sep 2. */
     var MKEY = 'migration-unarchive-sep02-carry-sections-v1';
+    /* Archived sections are user-controlled. Past-day carry must not alter the archive. */
+    try { localStorage.setItem(MKEY, '1'); } catch(eStop){}
+    return;
     try { if(localStorage.getItem(MKEY)) return; } catch(e){}
     var CARRY = {
       'intentions':1,'set the mark':1,'set-the-mark':1,'feel it into being':1,'aim-above-the-mark':1,'to feel it into being':1,'attention':1,'anticipate':1,'darkness':1,'soul':1,'audacity':1,'fight':1,
@@ -58536,11 +58735,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'repeat 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
       'to love': 'manus-storage/zone-to-love-souls.jpg?v=souls3',
     'i love': 'manus-storage/zone-to-love-souls.jpg?v=souls3',
-      'to persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i will persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      'to-persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-      topersevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+      'to persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i will persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+      'to-persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+      topersevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
       'to feel': '',
     'i feel': '',
       'to channel': 'manus-storage/zone-to-channel-souls.jpg?v=souls1',
@@ -58551,7 +58750,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       'to-feel': '',
       tofeel: '',
       feel: '',
-      persevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+      persevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
       recoup: 'manus-storage/zone-recouping.jpg?v=back1',
       recouping: 'manus-storage/zone-recouping.jpg?v=back1',
       'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
@@ -63397,7 +63596,7 @@ html body .day-block.overview-era-day .day-card-header.day-header-chrome .today-
   min-width: 325px !important;
   max-width: min(720px, 96%) !important;
   flex-shrink: 0 !important;
-  justify-content: center !important;
+  justify-content: space-between !important;
   align-items: center !important;
   height: auto !important;
   gap: 2px !important;
@@ -63424,7 +63623,7 @@ html body .day-block.overview-era-day .day-card-header.day-header-chrome .tv-pil
   flex: 0 0 auto !important;
   min-width: min-content !important;
   text-align: center !important;
-  padding: 8px 16px !important;
+  padding: 8px 10px !important;
   font-size: 9px !important;
   letter-spacing: 0.16em !important;
   line-height: 1 !important;
@@ -68218,7 +68417,7 @@ html body .day-block.depth-four-era:not(.collapsed) .day-card-header.day-header-
   min-width: 325px !important;
   max-width: min(720px, 96%) !important;
   flex-shrink: 0 !important;
-  justify-content: center !important;
+  justify-content: space-between !important;
   align-items: center !important;
   height: auto !important;
   gap: 2px !important;
@@ -68243,7 +68442,7 @@ html body .day-block.depth-four-era:not(.collapsed) .day-card-header.day-header-
   flex: 0 0 auto !important;
   min-width: min-content !important;
   text-align: center !important;
-  padding: 8px 16px !important;
+  padding: 8px 10px !important;
   font-size: 9px !important;
   letter-spacing: 0.16em !important;
   line-height: 1 !important;
@@ -69017,8 +69216,7 @@ html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star-cor
     inset 0 -2px 3px rgba(90, 58, 22, 0.38),
     0 0 8px rgba(255, 248, 238, 0.85),
     0 0 20px rgba(196, 168, 130, 0.5) !important;
-  animation: gold-orb-beam 2.6s ease-in-out infinite !important;
-  animation-delay: calc(var(--beam-i, 0) * -0.32s) !important;
+  animation: none !important;
 }
 html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-on .vision-task-star-core::before,
 html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-on .vision-task-star-core::before,
@@ -69034,8 +69232,7 @@ html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star.is-
   border: 1px solid rgba(255, 236, 200, 0.55) !important;
   box-shadow: 0 0 10px rgba(232, 201, 154, 0.45) !important;
   pointer-events: none !important;
-  animation: gold-halo-out 2.6s ease-out infinite !important;
-  animation-delay: calc(var(--beam-i, 0) * -0.32s) !important;
+  animation: none !important;
 }
 html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-on .vision-task-star-core::after,
 html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-on .vision-task-star-core::after,
@@ -69065,8 +69262,7 @@ html body > .vision-board.is-zoomed .vision-tile.is-zoomed .vision-task-star.is-
   ) !important;
   filter: blur(0.6px) !important;
   pointer-events: none !important;
-  animation: gold-sheen-spin 7.5s linear infinite !important;
-  animation-delay: calc(var(--beam-i, 0) * -0.9s) !important;
+  animation: none !important;
 }
 html body .day-block.depth-four-era.overview-mode-tasks .vision-task-star.is-off .vision-task-star-core,
 html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-off .vision-task-star-core {
@@ -69948,7 +70144,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   (function migrationLovePerseverePhotosV1(){
     var MKEY = 'migration-love-persevere-photos-v3';
     var LOVE = 'manus-storage/zone-to-love-souls.jpg?v=souls3';
-    var PERS = 'manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+    var PERS = 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
     function normTitle(tile){
       return ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
     }
@@ -70020,7 +70216,7 @@ html body .day-block.depth-four-era .overview-center-stack {
   /* I will persevere — Diana's summit silhouette. Always apply so continue/nophoto cannot win. */
   (function migrationPersevereSummitV1(){
     var MKEY = 'migration-persevere-summit-v1';
-    var WANT = 'manus-storage/zone-to-persevere-summit.jpg?v=summit1';
+    var WANT = 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1';
     var OLD = /manus-storage\/zone-to-persevere-(?:continue|resolve|peaks)\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isPers(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -70395,12 +70591,12 @@ html body .day-block.depth-four-era .overview-center-stack {
     'to-feel': '',
     tofeel: '',
     feel: '',
-    'to persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'i will persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    'to-persevere': 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    topersevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
-    persevere: 'manus-storage/zone-to-persevere-summit.jpg?v=summit1',
+    'to persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i will persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'to-persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    topersevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    persevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
     networking: 'manus-storage/zone-networking.jpg?v=net1',
     'i am networking': 'manus-storage/zone-networking.jpg?v=net1',
     'am networking': 'manus-storage/zone-networking.jpg?v=net1',
@@ -71765,7 +71961,7 @@ html body .day-card-overlay .dco-bismillah {
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  animation: allah-shimmer 4s linear infinite !important;
+  animation: none !important;
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)) drop-shadow(0 0 16px rgba(244,217,122,0.4)) !important;
 }
 </style>
@@ -71893,15 +72089,14 @@ html body .day-block.dash-mosaic-era .vision-board:not(.is-zoomed) .vision-hero.
   background-position: var(--photo-x, 50%) var(--photo-y, 50%) !important;
 }
 html body .vision-layout-control {
-  position: absolute !important;
-  top: 20px !important;
-  right: 20px !important;
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
   z-index: 100 !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 150ms ease !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  flex: 0 0 auto !important;
 }
-html body .vision-hero-dashmosaic:hover > .vision-layout-control,
 html body .vision-layout-control:is(:hover, :focus-within, .is-open) {
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -71999,6 +72194,7 @@ html body .vision-tile.is-reframing > .vision-tile-photo:active {
   cursor: grabbing !important;
 }
 html body .vision-board.is-zoomed .vision-layout-control,
+html body .day-block:has(.vision-board.is-zoomed) .overview-right-tools .vision-layout-control,
 html body .vision-board.is-zoomed .vision-photo-reframe {
   display: none !important;
 }
@@ -72752,6 +72948,9 @@ html body .vision-task-star > .task-steps-inline .task-steps-inline-fill {
       var iso = blk.getAttribute('data-date') || '';
       if(!iso || iso < '2026-09-06') return;
       try { if(window.__syncTaskNodesFromDay) window.__syncTaskNodesFromDay(blk); } catch(eS){}
+      if(iso >= '2026-09-08'){
+        try { if(window.__ensureOverviewNodesGrid) window.__ensureOverviewNodesGrid(blk); } catch(eFit){}
+      }
     });
     paintInlineTracks();
   }
@@ -72759,6 +72958,7 @@ html body .vision-task-star > .task-steps-inline .task-steps-inline-fill {
   else bootTaskNodesFromSept6();
   setTimeout(bootTaskNodesFromSept6, 400);
   setTimeout(bootTaskNodesFromSept6, 900);
+  setTimeout(bootTaskNodesFromSept6, 1600);
 })();
 </script>
 <style id="zoom-hover-del-v2">
@@ -74101,6 +74301,14 @@ html body .day-block:is(.vision-collage-day, .overview-era-day) .overview-link-h
   letter-spacing: 0.05em;
   color: rgba(255, 248, 238, 0.62);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.14s ease;
+}
+html body .day-block:is(.vision-collage-day, .overview-era-day) .overview-link-btn:hover + .overview-link-hint,
+html body .day-block:is(.vision-collage-day, .overview-era-day) .overview-link-btn:focus-visible + .overview-link-hint {
+  opacity: 1;
+  visibility: visible;
 }
 html body .day-block.overview-linking .vision-board:not(.is-zoomed) .vision-tile {
   cursor: crosshair !important;
@@ -74509,6 +74717,220 @@ html body .day-block:is(.vision-collage-day, .overview-era-day) svg.overview-sec
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 180); });
   else setTimeout(boot, 180);
+})();
+</script>
+<style id="sep8-fullpage-day-css">
+html body.day-fullpage-open {
+  overflow: hidden !important;
+}
+html body .day-block.day-fullpage-active {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 199000 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(27, 18, 14, 0.34) !important;
+  isolation: isolate !important;
+}
+html body .day-block.day-fullpage-active > .day-dot {
+  display: none !important;
+}
+html body .day-block.day-fullpage-active > .day-card {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
+}
+html body .day-block.day-fullpage-active .day-card-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 500 !important;
+}
+html body .day-fullpage-close {
+  appearance: none !important;
+  position: absolute !important;
+  top: 14px !important;
+  right: 18px !important;
+  z-index: 700 !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 248, 238, 0.42) !important;
+  border-radius: 50% !important;
+  background: rgba(20, 13, 10, 0.5) !important;
+  color: #fff8ee !important;
+  font: 300 22px/30px "DM Mono", monospace !important;
+  cursor: pointer !important;
+}
+</style>
+<script id="sep8-fullpage-day-js">
+(function(){
+  if(window.__sep8FullpageDayWired) return;
+  window.__sep8FullpageDayWired=1;
+  var active=null;
+  function eligible(blk){
+    var iso=blk && (blk.getAttribute('data-date')||'');
+    return !!(iso && iso >= '2026-09-08' && /^\d{4}-\d{2}-\d{2}$/.test(iso));
+  }
+  function closeDay(){
+    if(!active) return;
+    var blk=active.blk;
+    blk.classList.remove('day-fullpage-active');
+    if(active.wasCollapsed) blk.classList.add('collapsed');
+    document.body.classList.remove('day-fullpage-open');
+    var close=blk.querySelector('.day-fullpage-close');
+    if(close) close.remove();
+    active=null;
+  }
+  function openDay(blk){
+    if(!eligible(blk)) return;
+    if(active && active.blk===blk) return;
+    closeDay();
+    var wasCollapsed=blk.classList.contains('collapsed');
+    blk.classList.remove('collapsed');
+    blk.classList.add('day-fullpage-active');
+    document.body.classList.add('day-fullpage-open');
+    var close=document.createElement('button');
+    close.type='button';
+    close.className='day-fullpage-close';
+    close.setAttribute('aria-label','close full-page day');
+    close.textContent='×';
+    var header=blk.querySelector('.day-card-header');
+    (header||blk).appendChild(close);
+    active={blk:blk,wasCollapsed:wasCollapsed};
+    try { if(window.__bootOverviewDay) window.__bootOverviewDay(blk); } catch(e){}
+    try { if(window.__syncHeroLayoutClass) window.__syncHeroLayoutClass(blk); } catch(e){}
+    requestAnimationFrame(function(){
+      try { if(window.__syncHeroLayoutClass) window.__syncHeroLayoutClass(blk); } catch(e){}
+    });
+  }
+  document.addEventListener('click',function(e){
+    var close=e.target.closest && e.target.closest('.day-fullpage-close');
+    if(close){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      closeDay();
+      return;
+    }
+    var header=e.target.closest && e.target.closest('.day-card-header');
+    var blk=header && header.closest('.day-block');
+    if(!header || !eligible(blk)) return;
+    if(e.target.closest('input, button, a, .overview-center-stack, .overview-right-tools, .today-view-toggle, .tv-pill')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    openDay(blk);
+  },true);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && active) closeDay();
+  });
+  window.__openFullpageDay=openDay;
+  window.__closeFullpageDay=closeDay;
+})();
+</script>
+<script id="repair-unauthorized-sep7-archives-v2">
+(function(){
+  var MKEY='repair-unauthorized-sep7-archives-v2';
+  try { if(localStorage.getItem(MKEY)) return; } catch(e){}
+  var specs=[
+    {focus:'to-persevere',title:'I am persevering',photo:'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1'},
+    {focus:'executing',title:'I am executing',photo:'manus-storage/zone-execute-focus.jpg?v=chess1'},
+    {focus:'claiming',title:'I am claiming',photo:'manus-storage/zone-claiming-envelope.jpg?v=claim1'},
+    {focus:'become',title:'I am becoming',photo:'manus-storage/zone-envision.jpg?v=swap1'}
+  ];
+  var exactTitles={};
+  specs.forEach(function(s){ exactTitles[s.title.toLowerCase()]=1; });
+  try {
+    var arch=JSON.parse(localStorage.getItem('btm_archived_sections_v1')||'[]')||[];
+    arch=arch.filter(function(it){
+      return !(it && exactTitles[String(it.title||'').replace(/\s+/g,' ').trim().toLowerCase()]);
+    });
+    localStorage.setItem('btm_archived_sections_v1',JSON.stringify(arch));
+  } catch(eA){}
+  try {
+    var edits=JSON.parse(localStorage.getItem('btm_overview_edits_v1')||'{}')||{};
+    ['2026-09-07','2026-09-08'].forEach(function(iso){
+      var d=edits[iso]||{};
+      d.removedSections=(d.removedSections||[]).filter(function(x){
+        var k=String(x||'').replace(/\s+/g,' ').trim().toLowerCase();
+        return !exactTitles[k] && k!=='to-persevere' && k!=='executing' && k!=='claiming' && k!=='become';
+      });
+      if(iso==='2026-09-07'){
+        d.addedSections=d.addedSections||[];
+        d.sectionOrder=d.sectionOrder||[];
+        specs.forEach(function(s){
+          d.addedSections=d.addedSections.filter(function(x){
+            return !(x && (String(x.focus||'').toLowerCase()===s.focus || String(x.title||'').toLowerCase()===s.title.toLowerCase()));
+          });
+          d.addedSections.push({focus:s.focus,title:s.title,photo:s.photo});
+          if(d.sectionOrder.indexOf(s.focus)<0) d.sectionOrder.push(s.focus);
+        });
+        d.addedChecks=d.addedChecks||[];
+        [
+          {sectionFocus:'become',title:'Dr Betty',checked:false},
+          {sectionFocus:'become',title:'document translation into Arabic',checked:false}
+        ].forEach(function(rec){
+          var exists=d.addedChecks.some(function(x){
+            return x && String(x.sectionFocus||'').toLowerCase()==='become' && String(x.title||'').toLowerCase()===rec.title.toLowerCase();
+          });
+          if(!exists) d.addedChecks.push(rec);
+        });
+      }
+      edits[iso]=d;
+    });
+    localStorage.setItem('btm_overview_edits_v1',JSON.stringify(edits));
+  } catch(eE){}
+  function restoreDom(){
+    var blk=document.querySelector('.day-block[data-date="2026-09-07"]');
+    if(!blk) return;
+    var live=null;
+    try { live=window.__dayData && window.__dayData(blk); } catch(eLive){}
+    if(live){
+      live.removedSections=(live.removedSections||[]).filter(function(x){
+        var k=String(x||'').replace(/\s+/g,' ').trim().toLowerCase();
+        return !exactTitles[k] && k!=='to-persevere' && k!=='executing' && k!=='claiming' && k!=='become';
+      });
+      live.addedSections=live.addedSections||[];
+      live.sectionOrder=live.sectionOrder||[];
+      specs.forEach(function(s){
+        live.addedSections=live.addedSections.filter(function(x){
+          return !(x && (String(x.focus||'').toLowerCase()===s.focus || String(x.title||'').toLowerCase()===s.title.toLowerCase()));
+        });
+        live.addedSections.push({focus:s.focus,title:s.title,photo:s.photo});
+        if(live.sectionOrder.indexOf(s.focus)<0) live.sectionOrder.push(s.focus);
+      });
+    }
+    specs.forEach(function(s){
+      var tile=blk.querySelector('.vision-tile[data-focus="'+s.focus+'"]');
+      if(!tile && window.__addTile){
+        try { tile=window.__addTile(blk,s.title,true,true); } catch(eAdd){}
+      }
+      if(!tile) return;
+      tile.setAttribute('data-focus',s.focus);
+      tile.classList.remove('vision-tile-nophoto');
+      tile.style.setProperty('--tile-photo','url("'+s.photo+'")');
+      var title=tile.querySelector('.vision-tile-title');
+      if(title){ title.textContent=s.title; title.setAttribute('data-carve',s.title); }
+      if(s.focus==='become' && window.__addVisionCheck){
+        try { window.__addVisionCheck(tile,'Dr Betty',{quiet:true,force:true}); } catch(e1){}
+        try { window.__addVisionCheck(tile,'document translation into Arabic',{quiet:true,force:true}); } catch(e2){}
+      }
+    });
+    try { if(window.__syncHeroLayoutClass) window.__syncHeroLayoutClass(blk); } catch(eL){}
+    try { if(window.__persistDay) window.__persistDay(blk,true); } catch(eP){}
+  }
+  restoreDom();
+  try { localStorage.setItem(MKEY,'1'); } catch(eM){}
 })();
 </script>
 </html>
