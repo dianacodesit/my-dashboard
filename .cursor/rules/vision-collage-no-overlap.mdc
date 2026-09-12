@@ -19,7 +19,8 @@ Dashboard **room chrome** (`packDashMosaic`). Follow **only** what Diana stated:
 - Tiles stay **relatively proportional** to one another
 - Base size is **0.8** of the old equal-size tiles; fuller sections grow from there. Do not shrink empties below that base
 - Rectangles when that fits. Do **not** force squares. Do **not** force the same height. Do **not** invent a column count
-- Fill the board when there are **3+** sections — no empty strip, no leftover hole. Gutters between tiles (not drawn borders, not overlap). Do **not** stuff a tile into a leftover sliver
+- Fill the board when there are **3+** sections — no empty strip, no leftover hole. Gutters between tiles (not drawn borders, **never overlap**). Do **not** stuff a tile into a leftover sliver
+- **Rooms tessellate the board (force-style interdependence):** guillotine bipartition (`tessellateDashRooms`) — gaps and overlaps are **impossible by construction**. Freeform absolute `mosaicLayout` is retired. Resize updates area weights, then re-tessellates.
 - No dark overlay on the photo
 - Photos `cover` the tile (crop edges; no letterbox)
 - **Titles stay centered** in the current **gold foil** style — never bottom-left Cinzel

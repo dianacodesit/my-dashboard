@@ -51642,16 +51642,16 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var k = String(focusOrTitle || '').toLowerCase().trim();
     if(!k) return false;
     var presentIdentity = null;
-    if(k === 'claiming' || k === 'i am claiming') presentIdentity = { focus: 'claiming', title: 'i am claiming' };
-    else if(k === 'executing' || k === 'i am executing') presentIdentity = { focus: 'executing', title: 'i am executing' };
-    else if(k === 'become' || k === 'becoming' || k === 'i am becoming') presentIdentity = { focus: 'become', title: 'i am becoming' };
-    else if(k === 'to-persevere' || k === 'persevering' || k === 'i am persevering') presentIdentity = { focus: 'to-persevere', title: 'i am persevering' };
+    if(k === 'claiming' || k === 'i am claiming') presentIdentity = { focus: 'claiming', title: 'I am claiming' };
+    else if(k === 'executing' || k === 'i am executing') presentIdentity = { focus: 'executing', title: 'I am executing' };
+    else if(k === 'become' || k === 'becoming' || k === 'i am becoming') presentIdentity = { focus: 'become', title: 'I am becoming' };
+    else if(k === 'to-persevere' || k === 'persevering' || k === 'i am persevering') presentIdentity = { focus: 'to-persevere', title: 'I am persevering' };
     if(presentIdentity){
       return loadArchivedSections().some(function(it){
         if(!it) return false;
         var f = String(it.focus || '').toLowerCase().trim();
         var t = String(it.title || '').toLowerCase().trim();
-        return f === presentIdentity.focus || t === presentIdentity.title;
+        return f === presentIdentity.focus || t === String(presentIdentity.title || '').toLowerCase();
       });
     }
     var set = archivedSectionFocusSet();
