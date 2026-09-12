@@ -1,0 +1,17 @@
+{
+  "name": "my-dashboard",
+  "install": "python3 --version",
+  "terminals": [
+    {
+      "name": "dashboard-server",
+      "command": "PORT=8765 python3 serve.py",
+      "description": "Static dashboard server (serve.py). Serves dashboard.html, everything.html, brain-dump.html, etc. on port 8765 and exposes the /bake, /brain-dump, /save, and /move-cards POST endpoints."
+    }
+  ],
+  "ports": [
+    {
+      "name": "dashboard",
+      "port": 8765
+    }
+  ]
+}
