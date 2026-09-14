@@ -464,13 +464,16 @@ html body .day-block .overview-carry-forward.is-armed {
   border-color: transparent !important;
 }
 #constellation-rollover {
-  position: fixed; inset: 0; z-index: 200050;
+  /* Above full-page day lock (2147483000) — otherwise carry paints behind
+     the transparent full-page plate: black bleeds through, stars unclickable. */
+  position: fixed; inset: 0; z-index: 2147483646;
   display: none; align-items: center; justify-content: center;
   background:
     radial-gradient(ellipse at 50% 28%, rgba(70,48,28,0.5), rgba(8,6,4,0.92) 68%),
     #0a0806;
   color: #fff8ee;
   font-family: "Newsreader", Georgia, serif;
+  pointer-events: auto;
 }
 #constellation-rollover.is-open { display: flex; }
 #constellation-rollover .cr-shell {

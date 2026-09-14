@@ -216,11 +216,11 @@ KNOWN_CARD_PHOTOS = {
     "I am networking": "manus-storage/zone-networking.jpg?v=net1",
     "i am networking": "manus-storage/zone-networking.jpg?v=net1",
     "am networking": "manus-storage/zone-networking.jpg?v=net1",
-    "earned": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "earning": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "I am earning": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "i am earning": "manus-storage/zone-earn-hands.jpg?v=earn7",
+    "earned": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "earning": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "I am earning": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "i am earning": "manus-storage/zone-earn-hands.jpg?v=earn10",
     "strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
     "a strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
     "i am a strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
@@ -253,8 +253,8 @@ KNOWN_CARD_PHOTOS = {
     "gratitude": "manus-storage/zone-practicing-gratitude.jpg?v=grat1",
     "i successful": "manus-storage/zone-successful.jpg?v=ok2",
     "I am successful": "manus-storage/zone-successful.jpg?v=ok2",
-    "I earned": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "i earned": "manus-storage/zone-earn-hands.jpg?v=earn7",
+    "I earned": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "i earned": "manus-storage/zone-earn-hands.jpg?v=earn10",
 
     "i train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "I train": "manus-storage/zone-athletic-gym.jpg?v=gym1",
@@ -325,13 +325,13 @@ KNOWN_CARD_PHOTOS = {
     "i recoup every dollar": "manus-storage/zone-recouping.jpg?v=back1",
     "recoup": "manus-storage/zone-recouping.jpg?v=back1",
     "to-recoup": "manus-storage/zone-recouping.jpg?v=back1",
-    "I will earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "i will earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "to earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "i earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "I earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
-    "to-earn": "manus-storage/zone-earn-hands.jpg?v=earn7",
+    "I will earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "i will earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "to earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "i earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "I earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
+    "to-earn": "manus-storage/zone-earn-hands.jpg?v=earn10",
     "to scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "i scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
     "I scholarship application": "manus-storage/zone-scholarship-application.jpg?v=app1",
@@ -1979,7 +1979,7 @@ CONCEPTUAL_SECTION_KEYS = frozenset({
 })
 
 DATED_SECTION_PHOTOS = {
-    "claim": ("2026-09-07", "manus-storage/zone-claiming-envelope.jpg?v=claim1"),
+    "claim": ("2026-09-07", "manus-storage/zone-claiming-seat.jpg?v=claim5"),
 }
 
 

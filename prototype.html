@@ -49704,7 +49704,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'detach' || title.toLowerCase() === 'detach') return 'manus-storage/zone-detach-silhouette-woman.jpg?v=woman1';
     if(f === 'start-over' || f === 'start over' || f === 'create-again' || f === 'create again' || f === 'travel' || f === 'to-travel' || title.toLowerCase() === 'start over' || title.toLowerCase() === 'create again' || title.toLowerCase() === 'create-again' || title.toLowerCase() === 'travel' || title.toLowerCase() === 'to travel') return 'manus-storage/zone-start-over-positano.jpg?v=travel1';
     if(f === 'self-actualize' || f === 'to-self-actualize' || title.toLowerCase() === 'self-actualize' || title.toLowerCase() === 'self actualize' || title.toLowerCase() === 'to self-actualize') return '';
-    if(f === 'claim' || f === 'claiming' || title.toLowerCase() === 'claim' || title.toLowerCase() === 'claiming' || title.toLowerCase() === 'to claim' || title.toLowerCase() === 'i claim' || title.toLowerCase() === 'i am claiming' || f === 'to-claim') return dayKey(blk) >= '2026-09-07' ? 'manus-storage/zone-claiming-envelope.jpg?v=claim1' : '';
+    if(f === 'claim' || f === 'claiming' || title.toLowerCase() === 'claim' || title.toLowerCase() === 'claiming' || title.toLowerCase() === 'to claim' || title.toLowerCase() === 'i claim' || title.toLowerCase() === 'i am claiming' || f === 'to-claim') return dayKey(blk) >= '2026-09-07' ? 'manus-storage/zone-claiming-seat.jpg?v=claim5' : '';
     if(f === 'to-litigate' || f === 'litigate' || title.toLowerCase() === 'to litigate' || title.toLowerCase() === 'litigate') return 'manus-storage/zone-to-litigate.jpg?v=court1';
     if(f === 'to-recoup' || f === 'recoup' || title.toLowerCase() === 'to recoup' || title.toLowerCase() === 'recoup') return '';
     if(f === 'earn' || f === 'earned' || f === 'networking' || f === 'to-earn' || title.toLowerCase() === 'i will earn' || title.toLowerCase() === 'i earned' || title.toLowerCase() === 'to earn' || title.toLowerCase() === 'i earn' || title.toLowerCase() === 'earn' || title.toLowerCase() === 'networking') return 'manus-storage/zone-to-earn-gold.jpg?v=earn3';
@@ -55198,6 +55198,12 @@ function seedAug30SelectedCards(blk){
       recoup: 'manus-storage/zone-recouping.jpg?v=back1',
       recouping: 'manus-storage/zone-recouping.jpg?v=back1',
       'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
+      claiming: 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+      'i am claiming': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+      claim: 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+      'to claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+      'to-claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+      'i claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
       achieving: 'manus-storage/zone-achieving.jpg?v=done1',
       'i am achieving': 'manus-storage/zone-achieving.jpg?v=done1',
       fighting: 'manus-storage/zone-audacity.jpg?v=finger1',
@@ -55636,7 +55642,8 @@ function seedAug30SelectedCards(blk){
   })();
 
   (function applyClaimingPhotoFromSept7(){
-    var WANT = 'manus-storage/zone-claiming-envelope.jpg?v=claim1';
+    var WANT = 'manus-storage/zone-claiming-seat.jpg?v=claim5';
+    var OLD_RE = /manus-storage\/zone-claiming-(?:envelope|safe)\.jpg(?:\?v=[^"'?\s;)]*)?/g;
     function isClaiming(tile){
       var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
       var f = (tile.getAttribute('data-focus')||'').replace(/\s+/g,'-').toLowerCase();
@@ -55655,6 +55662,11 @@ function seedAug30SelectedCards(blk){
         });
       });
       try {
+        ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+          var raw = localStorage.getItem(k); if(!raw) return;
+          var next = raw.replace(OLD_RE, WANT);
+          if(next !== raw) localStorage.setItem(k, next);
+        });
         var edits = JSON.parse(localStorage.getItem('btm_overview_edits_v1') || '{}') || {};
         var changed = false;
         Object.keys(edits).forEach(function(day){
@@ -55670,6 +55682,7 @@ function seedAug30SelectedCards(blk){
           });
         });
         if(changed) localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+        localStorage.setItem('migration-claiming-seat-claim5-v1', '1');
       } catch(e){}
     }
     window.__applyClaimingPhotoFromSept7 = run;
@@ -66445,6 +66458,12 @@ html body .day-block.depth-four-era .overview-center-stack {
     'i am achieving': 'manus-storage/zone-achieving.jpg?v=done1',
     recouping: 'manus-storage/zone-recouping.jpg?v=back1',
     'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
+    claiming: 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+    'i am claiming': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+    claim: 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+    'to claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+    'to-claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+    'i claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
   };
   var REJECTED_SECTION_PHOTOS = [
     'zone-to-love-rings',
@@ -66503,7 +66522,10 @@ html body .day-block.depth-four-era .overview-center-stack {
     /* strategist — empty-office regen (woman removed) forever banned; keep her upload */
     'zone-strategist.jpg?v=strat2', 'zone-strategist-empty-office',
     /* successful — daytime champagne coupe forever banned */
-    'zone-successful.jpg?v=ok1', 'zone-successful-champagne'
+    'zone-successful.jpg?v=ok1', 'zone-successful-champagne',
+    /* claiming — red cash envelope + lockbox gravel forever banned; live is woman silhouette in her seat (claim5) */
+    'zone-claiming-envelope', 'zone-claiming-envelope-banned', '/archive/zone-claiming-envelope',
+    'zone-claiming-safe', 'zone-claiming-safe-banned', '/archive/zone-claiming-safe'
   ];
   function isBanned(url){
     var s = String(url || '').toLowerCase();

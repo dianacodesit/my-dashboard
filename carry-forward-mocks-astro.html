@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>carry forward · more astronomy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&amp;family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,300;1,400&amp;family=Playfair+Display:ital,wght@0,500;1,500&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=carry-astro1"/>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#070605;color:#f8efe3}
+body{
+  font-family:"Newsreader",Georgia,serif;
+  padding:36px 16px 72px;
+  background:
+    radial-gradient(circle at 78% 8%,rgba(140,96,52,.2),transparent 30%),
+    radial-gradient(circle at 12% 88%,rgba(70,52,38,.16),transparent 34%),
+    #070605;
+}
+body #hamburger-menu span{background:#f3e6d0}
+.intro{max-width:1100px;margin:0 auto 18px;text-align:center}
+.eyebrow{font:300 9px/1.2 "DM Mono",monospace;letter-spacing:.28em;text-transform:uppercase;color:rgba(248,239,227,.48)}
+h1{margin:8px 0 6px;font:italic 500 clamp(30px,4.2vw,54px)/1.05 "Playfair Display",serif}
+.intro p{margin:0 auto;max-width:720px;font-size:16px;font-style:italic;color:rgba(248,239,227,.62)}
+.note{margin:10px auto 0;max-width:720px;font:300 10px/1.5 "DM Mono",monospace;letter-spacing:.08em;color:rgba(248,239,227,.38)}
+.tabs{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:22px auto 16px;max-width:980px}
+.tabs button{
+  border:1px solid rgba(226,199,159,.2);border-radius:999px;background:rgba(255,255,255,.025);
+  color:rgba(248,239,227,.55);padding:9px 13px 8px;font:300 8px/1 "DM Mono",monospace;
+  letter-spacing:.14em;text-transform:uppercase;cursor:pointer
+}
+.tabs button[aria-pressed=true]{
+  background:#e5d1b1;color:#211910;border-color:#e5d1b1;
+  box-shadow:0 0 22px rgba(202,169,121,.28)
+}
+.stage{max-width:1120px;margin:auto}
+.panel{
+  display:none;min-height:760px;border:1px solid rgba(248,239,227,.12);border-radius:26px;
+  overflow:hidden;background:rgba(11,9,7,.82);box-shadow:0 35px 90px rgba(0,0,0,.45)
+}
+body[data-view=meteor] .meteor,
+body[data-view=ecliptic] .ecliptic,
+body[data-view=lunar] .lunar,
+body[data-view=comet] .comet,
+body[data-view=aurora] .aurora{display:flex;flex-direction:column}
+.panel-head{padding:24px 28px 14px;display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.panel-kicker{margin:0 0 6px;font:300 9px/1 "DM Mono",monospace;letter-spacing:.24em;text-transform:uppercase;color:rgba(248,239,227,.44)}
+.panel h2{margin:0;font:italic 500 clamp(26px,3.4vw,40px)/1.06 "Playfair Display",serif}
+.panel-desc{margin:8px 0 0;max-width:580px;font-style:italic;color:rgba(248,239,227,.58)}
+.direction{font:300 8px/1.45 "DM Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:rgba(229,209,177,.58);text-align:right;white-space:nowrap}
+.canvas{position:relative;flex:1;min-height:540px;margin:0 20px;border:1px solid rgba(248,239,227,.08);border-radius:20px;overflow:hidden}
+.foot{display:flex;align-items:center;gap:12px;padding:16px 26px 20px;flex-wrap:wrap}
+.to{font-style:italic;color:rgba(248,239,227,.48)}
+.date{border:0;border-radius:999px;background:#f3e7d4;color:#2c2115;padding:9px 15px;font:italic 14px/1 "Newsreader",serif}
+.count{margin-left:auto;font-style:italic;color:rgba(248,239,227,.55)}
+.all,.cancel{border:0;background:none;color:rgba(248,239,227,.52);font:italic 14px/1 "Newsreader",serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.go{
+  border:0;border-radius:999px;background:linear-gradient(135deg,#f0dfc2,#caa878);color:#2b2014;
+  padding:11px 20px;font:italic 15px/1 "Newsreader",serif;box-shadow:0 0 28px rgba(202,168,120,.3);cursor:pointer
+}
+.go:disabled{opacity:.3;box-shadow:none}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,18px);opacity:0;
+  background:#f1e3ce;color:#241a10;padding:10px 18px;border-radius:999px;font-style:italic;
+  transition:.25s;pointer-events:none;z-index:80
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.tag{
+  position:absolute;font:300 8px/1 "DM Mono",monospace;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(248,239,227,.36);z-index:2
+}
+
+/* ── 01 meteor shower ── */
+.meteor-field{
+  background:
+    radial-gradient(1px 1px at 8% 18%,#cbb89a,transparent 70%),
+    radial-gradient(1px 1px at 22% 42%,#8f806d,transparent 70%),
+    radial-gradient(1.5px 1.5px at 41% 14%,#e2cda8,transparent 70%),
+    radial-gradient(1px 1px at 63% 28%,#9a8772,transparent 70%),
+    radial-gradient(1px 1px at 81% 11%,#d6c0a0,transparent 70%),
+    radial-gradient(1px 1px at 92% 48%,#7f7162,transparent 70%),
+    radial-gradient(circle at 70% 80%,rgba(196,150,90,.14),transparent 28%),
+    #090807;
+}
+.meteor-horizon{
+  position:absolute;left:0;right:0;bottom:0;height:28%;
+  background:linear-gradient(transparent,rgba(28,18,10,.55) 40%,rgba(18,12,8,.92));
+  pointer-events:none;z-index:1
+}
+.meteor-dawn{
+  position:absolute;right:8%;bottom:18%;width:70px;height:70px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#fff8ec,#e2c18a 28%,#9a6a38 55%,transparent 72%);
+  box-shadow:0 0 40px rgba(210,160,95,.45),0 0 100px rgba(150,100,50,.2);
+  z-index:2;animation:dawnPulse 3.6s ease-in-out infinite
+}
+@keyframes dawnPulse{50%{filter:brightness(1.18);transform:scale(1.06)}}
+.meteor-label-dawn{right:7%;bottom:10%}
+.meteor-label-night{left:4%;top:5%}
+.meteor-task{
+  position:absolute;transform:translate(-50%,-50%);border:0;background:none;color:#f8efe3;
+  padding:0;cursor:pointer;text-align:left;z-index:4
+}
+.meteor-task .streak{
+  position:absolute;left:-42px;top:50%;width:48px;height:2px;transform:translateY(-50%) rotate(-28deg);
+  background:linear-gradient(90deg,transparent,rgba(255,240,210,.85));
+  box-shadow:0 0 10px rgba(232,200,140,.55);opacity:.85;pointer-events:none
+}
+.meteor-task .head{
+  display:block;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#e8cfaa 48%,#8f6841);
+  box-shadow:0 0 12px #fff8,0 0 26px #c79d6477
+}
+.meteor-task .name{display:block;margin-top:8px;max-width:150px;font-size:13px;font-style:italic;line-height:1.12;text-shadow:0 1px 8px #000}
+.meteor-task .sec{display:block;margin-top:3px;font:300 6px/1 "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,239,227,.34)}
+.meteor-task.off{opacity:.16}.meteor-task.off .streak,.meteor-task.off .head{box-shadow:none;opacity:.35}
+.meteor-task.on .streak{animation:streakFlash 2.8s ease-in-out infinite}
+@keyframes streakFlash{50%{opacity:1;filter:brightness(1.3)}}
+
+/* ── 02 ecliptic band ── */
+.ecliptic-field{
+  background:
+    radial-gradient(ellipse 90% 28% at 50% 58%,rgba(210,170,110,.1),transparent 70%),
+    radial-gradient(1px 1px at 14% 20%,#b9a78c,transparent 70%),
+    radial-gradient(1px 1px at 78% 16%,#8d7c68,transparent 70%),
+    #0a0908;
+}
+.ecliptic-band{
+  position:absolute;left:-6%;right:-6%;top:52%;height:56px;
+  transform:rotate(-11deg);transform-origin:50% 50%;
+  background:linear-gradient(180deg,transparent,rgba(230,200,150,.08),rgba(230,200,150,.16),rgba(230,200,150,.08),transparent);
+  border-top:1px solid rgba(230,200,150,.18);
+  border-bottom:1px solid rgba(230,200,150,.1);
+  box-shadow:0 0 40px rgba(200,160,100,.12);
+  pointer-events:none;z-index:1
+}
+.ecliptic-sun{
+  position:absolute;right:7%;top:42%;width:64px;height:64px;border-radius:50%;z-index:3;
+  background:radial-gradient(circle at 40% 35%,#fff9ef,#e4c08a 30%,#a06e3a 58%,#1a120c 72%);
+  box-shadow:0 0 34px rgba(220,170,110,.5);animation:dawnPulse 3.2s ease-in-out infinite
+}
+.ecliptic-task{
+  position:absolute;transform:translate(-50%,-50%);border:0;background:none;color:#f8efe3;
+  cursor:pointer;padding:0;z-index:4;text-align:center
+}
+.ecliptic-task .bead{
+  display:block;margin:0 auto;width:11px;height:11px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff9ed,#d9b77f 48%,#6b4828);
+  box-shadow:0 0 14px rgba(238,205,156,.65)
+}
+.ecliptic-task .name{display:block;margin-top:7px;max-width:130px;font-size:12px;font-style:italic;line-height:1.1;text-shadow:0 1px 8px #000}
+.ecliptic-task .sec{display:block;margin-top:3px;font:300 6px/1 "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,239,227,.32)}
+.ecliptic-task.off{opacity:.15;filter:grayscale(1)}
+.ecliptic-task.on .bead{animation:planetPulse 2.6s ease-in-out infinite}
+@keyframes planetPulse{50%{transform:scale(1.18);box-shadow:0 0 22px rgba(255,224,178,.9)}}
+
+/* ── 03 lunar transit ── */
+.lunar-field{
+  background:
+    radial-gradient(circle at 18% 30%,rgba(180,160,140,.08),transparent 24%),
+    radial-gradient(1px 1px at 30% 18%,#c2b094,transparent 70%),
+    radial-gradient(1px 1px at 70% 22%,#8a7a68,transparent 70%),
+    radial-gradient(1px 1px at 55% 70%,#a9957c,transparent 70%),
+    linear-gradient(180deg,#0c0a08 0%,#090807 55%,#14100c 100%);
+}
+.lunar-path{
+  position:absolute;left:6%;right:6%;top:18%;height:52%;
+  border:1px dashed rgba(230,205,165,.16);border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  border-bottom:0;pointer-events:none;z-index:1
+}
+.lunar-moon{
+  position:absolute;left:12%;top:22%;width:78px;height:78px;border-radius:50%;z-index:5;
+  background:
+    radial-gradient(circle at 32% 30%,#f7efe2,#d8c7ad 35%,#9e8b72 70%,#5a4c3c 100%);
+  box-shadow:0 0 28px rgba(230,210,180,.35),inset -14px -8px 24px rgba(40,30,22,.35);
+  transition:left 1.1s cubic-bezier(.22,.8,.25,1), top 1.1s cubic-bezier(.22,.8,.25,1)
+}
+.lunar-field.is-carrying .lunar-moon{left:78%;top:26%}
+.lunar-crate{
+  position:absolute;left:50%;bottom:10%;transform:translateX(-50%);
+  width:min(88%,720px);display:flex;flex-wrap:wrap;gap:8px;justify-content:center;z-index:4
+}
+.lunar-chip{
+  border:1px solid rgba(248,239,227,.14);border-radius:999px;background:rgba(255,255,255,.03);
+  color:#f8efe3;padding:8px 12px;font:italic 13px/1 "Newsreader",serif;cursor:pointer;
+  transition:.25s
+}
+.lunar-chip.on{
+  border-color:rgba(230,200,150,.55);background:rgba(230,200,150,.1);
+  box-shadow:0 0 18px rgba(200,160,100,.18)
+}
+.lunar-chip.off{opacity:.22}
+.lunar-hint{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-style:italic;color:rgba(248,239,227,.4);font-size:13px;z-index:2;pointer-events:none}
+
+/* ── 04 comet wake ── */
+.comet-field{
+  background:
+    radial-gradient(circle at 82% 48%,rgba(225,180,120,.16),transparent 16%),
+    radial-gradient(1px 1px at 10% 20%,#cbb89a,transparent 70%),
+    radial-gradient(1px 1px at 28% 66%,#8c7d6c,transparent 70%),
+    radial-gradient(1px 1px at 48% 18%,#b7a58e,transparent 70%),
+    #090807;
+}
+.comet-core{
+  position:absolute;right:9%;top:46%;width:58px;height:58px;border-radius:50%;z-index:3;
+  background:radial-gradient(circle at 38% 34%,#fffaf0,#e6c994 22%,#9d7141 48%,transparent 72%);
+  box-shadow:0 0 30px #d5ac7288,0 0 80px #b27b3f44;animation:dawnPulse 3.4s ease-in-out infinite
+}
+.comet-task{
+  position:absolute;transform:translate(-50%,-50%);border:0;background:none;color:#f8efe3;
+  padding:0;cursor:pointer;text-align:left;z-index:4
+}
+.comet-task .wake{
+  position:absolute;right:-8px;top:50%;height:2px;transform:translateY(-50%);
+  background:linear-gradient(90deg,rgba(255,235,200,.05),rgba(236,200,140,.75));
+  box-shadow:0 0 12px rgba(220,180,120,.4);pointer-events:none;opacity:0;transition:opacity .3s
+}
+.comet-task.on .wake{opacity:1}
+.comet-task .dot{
+  display:block;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#e7cfaa 46%,#8f6841);
+  box-shadow:0 0 10px #fff8,0 0 24px #c79d6477
+}
+.comet-task .name{display:block;margin-top:8px;max-width:148px;font-size:13px;font-style:italic;line-height:1.12;text-shadow:0 1px 8px #000}
+.comet-task .sec{display:block;margin-top:3px;font:300 6px/1 "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,239,227,.34)}
+.comet-task.off{opacity:.16}
+
+/* ── 05 aurora veil ── */
+.aurora-field{
+  background:
+    radial-gradient(ellipse 70% 45% at 30% 35%,rgba(150,180,140,.12),transparent 60%),
+    radial-gradient(ellipse 55% 40% at 70% 40%,rgba(210,170,110,.14),transparent 55%),
+    radial-gradient(1px 1px at 18% 70%,#a8957c,transparent 70%),
+    radial-gradient(1px 1px at 86% 22%,#cbb89a,transparent 70%),
+    #080706;
+}
+.aurora-veil{
+  position:absolute;inset:8% 4% 28% 4%;pointer-events:none;z-index:1;overflow:hidden;border-radius:18px
+}
+.aurora-veil span{
+  position:absolute;top:0;bottom:0;width:18%;
+  background:linear-gradient(180deg,transparent,rgba(190,210,170,.12),rgba(220,180,120,.1),transparent);
+  filter:blur(18px);animation:veilDrift 7s ease-in-out infinite alternate
+}
+.aurora-veil span:nth-child(1){left:8%;animation-delay:0s}
+.aurora-veil span:nth-child(2){left:28%;animation-delay:.6s;width:22%}
+.aurora-veil span:nth-child(3){left:52%;animation-delay:1.1s}
+.aurora-veil span:nth-child(4){left:72%;animation-delay:.3s;width:20%}
+@keyframes veilDrift{from{transform:translateY(8%) skewX(-4deg)}to{transform:translateY(-10%) skewX(3deg)}}
+.aurora-day{
+  position:absolute;right:6%;bottom:12%;padding:10px 14px;border-radius:14px;z-index:3;
+  border:1px solid rgba(248,239,227,.16);background:rgba(20,14,10,.55);
+  backdrop-filter:blur(8px);font:300 8px/1.5 "DM Mono",monospace;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(248,239,227,.7)
+}
+.aurora-day strong{display:block;margin-top:4px;font:italic 400 18px/1 "Newsreader",serif;letter-spacing:0;text-transform:none;color:#f8efe3}
+.aurora-task{
+  position:absolute;transform:translate(-50%,-50%);border:0;background:none;color:#f8efe3;
+  cursor:pointer;padding:0;z-index:4;text-align:center
+}
+.aurora-task .ember{
+  display:block;margin:0 auto 7px;width:8px;height:8px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#e8d3b0 40%,rgba(196,168,130,.2) 72%,transparent);
+  box-shadow:0 0 14px rgba(255,248,238,.8),0 0 28px rgba(196,168,130,.45)
+}
+.aurora-task .name{display:block;max-width:140px;font-size:12px;font-style:italic;line-height:1.1;text-shadow:0 1px 8px #000}
+.aurora-task .sec{display:block;margin-top:3px;font:300 6px/1 "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,239,227,.32)}
+.aurora-task.off{opacity:.14}
+.aurora-task.on .ember{animation:planetPulse 2.8s ease-in-out infinite}
+
+@media(max-width:760px){
+  body{padding-left:8px;padding-right:8px}
+  .panel{min-height:820px}
+  .panel-head{padding:20px 16px}
+  .direction{display:none}
+  .canvas{margin:0 10px;min-height:480px}
+  .meteor-task .name,.comet-task .name{max-width:110px;font-size:11px}
+  .count{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body data-view="meteor">
+<header class="intro">
+  <div class="eyebrow">carry forward · astronomy only · new set</div>
+  <h1>five more skies</h1>
+  <p>Not stellar migration, gravity transfer, or the time fold. Fresh astronomy metaphors for unfinished light moving into tomorrow.</p>
+  <p class="note">tap stars / chips to keep or leave · mock only · nothing is carried</p>
+</header>
+<nav class="tabs" aria-label="astronomy directions">
+  <button data-view="meteor" aria-pressed="true">meteor shower</button>
+  <button data-view="ecliptic" aria-pressed="false">ecliptic road</button>
+  <button data-view="lunar" aria-pressed="false">lunar transit</button>
+  <button data-view="comet" aria-pressed="false">comet wake</button>
+  <button data-view="aurora" aria-pressed="false">aurora veil</button>
+</nav>
+<main class="stage">
+  <section class="panel meteor">
+    <div class="panel-head">
+      <div>
+        <p class="panel-kicker">direction 01 · shower</p>
+        <h2>meteor shower</h2>
+        <p class="panel-desc">Unfinished tasks fall as meteors toward tomorrow’s dawn. Dim one to leave it in the night; lit streaks keep their path into the day.</p>
+      </div>
+      <div class="direction">night sky<br/>→ dawn</div>
+    </div>
+    <div class="canvas meteor-field">
+      <span class="tag meteor-label-night">sep 12 · unfinished</span>
+      <span class="tag meteor-label-dawn">sep 15 · arrival</span>
+      <div class="meteor-horizon"></div>
+      <div class="meteor-dawn" aria-hidden="true"></div>
+    </div>
+    <div class="foot" data-kind="meteor"><span class="to">to</span><button type="button" class="date">today · sep 15 · tue⌄</button><span class="count"></span><button type="button" class="all">unselect all</button><button type="button" class="cancel">cancel</button><button type="button" class="go">carry forward</button></div>
+  </section>
+
+  <section class="panel ecliptic">
+    <div class="panel-head">
+      <div>
+        <p class="panel-kicker">direction 02 · solar path</p>
+        <h2>ecliptic road</h2>
+        <p class="panel-desc">Tasks sit on the sun’s road across the sky. Selected beads ride the band toward tomorrow; deselected ones fall off the path into dark.</p>
+      </div>
+      <div class="direction">along the<br/>ecliptic</div>
+    </div>
+    <div class="canvas ecliptic-field">
+      <span class="tag" style="left:4%;top:6%">source night</span>
+      <span class="tag" style="right:5%;top:8%;color:rgba(239,213,174,.7)">tomorrow · sun</span>
+      <div class="ecliptic-band" aria-hidden="true"></div>
+      <div class="ecliptic-sun" aria-hidden="true"></div>
+    </div>
+    <div class="foot" data-kind="ecliptic"><span class="to">to</span><button type="button" class="date">today · sep 15 · tue⌄</button><span class="count"></span><button type="button" class="all">unselect all</button><button type="button" class="cancel">cancel</button><button type="button" class="go">carry forward</button></div>
+  </section>
+
+  <section class="panel lunar">
+    <div class="panel-head">
+      <div>
+        <p class="panel-kicker">direction 03 · moon ferry</p>
+        <h2>lunar transit</h2>
+        <p class="panel-desc">The moon ferries unfinished light across the arc of night. Tap chips to load them; carry sends the moon toward the next dawn.</p>
+      </div>
+      <div class="direction">load the moon<br/>· transit</div>
+    </div>
+    <div class="canvas lunar-field">
+      <span class="tag" style="left:5%;top:6%">waxing · load</span>
+      <span class="tag" style="right:5%;top:6%">dawn · unload</span>
+      <div class="lunar-path" aria-hidden="true"></div>
+      <div class="lunar-moon" aria-hidden="true"></div>
+      <p class="lunar-hint">tap chips to load · then carry forward</p>
+      <div class="lunar-crate"></div>
+    </div>
+    <div class="foot" data-kind="lunar"><span class="to">to</span><button type="button" class="date">today · sep 15 · tue⌄</button><span class="count"></span><button type="button" class="all">unload all</button><button type="button" class="cancel">cancel</button><button type="button" class="go">carry forward</button></div>
+  </section>
+
+  <section class="panel comet">
+    <div class="panel-head">
+      <div>
+        <p class="panel-kicker">direction 04 · long wake</p>
+        <h2>comet wake</h2>
+        <p class="panel-desc">Each selected task trails a wake toward the destination day. Deselected stars keep their quiet place; lit ones join the comet’s haul.</p>
+      </div>
+      <div class="direction">wakes converge<br/>on tomorrow</div>
+    </div>
+    <div class="canvas comet-field">
+      <span class="tag" style="left:4%;top:5%">field of work</span>
+      <span class="tag" style="right:5%;top:6%;color:rgba(239,213,174,.72)">nucleus · tomorrow</span>
+      <div class="comet-core" aria-hidden="true"></div>
+    </div>
+    <div class="foot" data-kind="comet"><span class="to">to</span><button type="button" class="date">today · sep 15 · tue⌄</button><span class="count"></span><button type="button" class="all">unselect all</button><button type="button" class="cancel">cancel</button><button type="button" class="go">carry forward</button></div>
+  </section>
+
+  <section class="panel aurora">
+    <div class="panel-head">
+      <div>
+        <p class="panel-kicker">direction 05 · northern light</p>
+        <h2>aurora veil</h2>
+        <p class="panel-desc">Unfinished tasks hang as embers in the aurora. Selected light stays in the veil and drifts with it into tomorrow’s pocket.</p>
+      </div>
+      <div class="direction">veil holds<br/>what you keep</div>
+    </div>
+    <div class="canvas aurora-field">
+      <div class="aurora-veil" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="aurora-day">carrying into<strong>sep 15 · tue</strong></div>
+    </div>
+    <div class="foot" data-kind="aurora"><span class="to">to</span><button type="button" class="date">today · sep 15 · tue⌄</button><span class="count"></span><button type="button" class="all">unselect all</button><button type="button" class="cancel">cancel</button><button type="button" class="go">carry forward</button></div>
+  </section>
+</main>
+<div class="toast">mock only · nothing carried</div>
+<script src="nav-shared.js?v=carry-astro1"></script>
+<script>
+(function(){
+  var TASKS=[
+    ["I am pursuing my Ph.D","tuition payment"],
+    ["I am pursuing my Ph.D","fall 2026 enrollment"],
+    ["I am pursuing my Ph.D","scholarship application"],
+    ["I am networking","Hanady"],
+    ["I am networking","Handshake top applicant"],
+    ["I am networking","EnhanCV"],
+    ["I am glowing up","aligned teeth"],
+    ["I am glowing up","glass skin"],
+    ["I am worshipping Allah ﷻ","6 qadaa salah"],
+    ["I am claiming","Committee check-in"],
+    ["I am earning","capital blueprint"],
+    ["I am winning","document translation"]
+  ].map(function(x,i){return{id:i,sec:x[0],name:x[1],on:true}});
+
+  var meteorPos=[[14,18],[28,12],[41,24],[55,14],[68,22],[82,16],[18,38],[33,44],[48,36],[62,48],[76,40],[88,34]];
+  var eclipticPos=[[10,62],[18,58],[27,54],[36,51],[45,49],[54,48],[63,49],[72,52],[80,56],[88,61],[22,68],[70,66]];
+  var cometPos=[[12,24],[24,16],[36,30],[48,18],[20,48],[34,56],[46,44],[58,62],[18,72],[40,78],[52,70],[66,40]];
+  var auroraPos=[[16,28],[30,22],[44,34],[58,20],[72,30],[22,48],[38,52],[54,46],[68,54],[28,70],[46,68],[62,72]];
+
+  var toast=document.querySelector(".toast"), timer;
+  function ping(msg){
+    toast.textContent=msg||"mock only · nothing carried";
+    toast.classList.add("on");
+    clearTimeout(timer);
+    timer=setTimeout(function(){toast.classList.remove("on")},1600);
+  }
+
+  document.querySelectorAll(".tabs button").forEach(function(b){
+    b.onclick=function(){
+      document.body.dataset.view=b.dataset.view;
+      document.querySelectorAll(".tabs button").forEach(function(x){
+        x.setAttribute("aria-pressed", x===b ? "true" : "false");
+      });
+      document.querySelector(".lunar-field").classList.remove("is-carrying");
+    };
+  });
+
+  function refresh(kind){
+    var foot=document.querySelector('.foot[data-kind="'+kind+'"]');
+    var n=TASKS.filter(function(t){return t.on}).length;
+    foot.querySelector(".count").textContent=n+" task"+(n===1?"":"s")+" selected";
+    foot.querySelector(".go").disabled=!n;
+    var all=foot.querySelector(".all");
+    if(kind==="lunar") all.textContent=n ? "unload all" : "load all";
+    else all.textContent=(n===TASKS.length) ? "unselect all" : "select all";
+  }
+
+  function syncButtons(){
+    document.querySelectorAll(".meteor-task").forEach(function(el,i){
+      el.classList.toggle("off", !TASKS[i].on);
+      el.classList.toggle("on", !!TASKS[i].on);
+    });
+    document.querySelectorAll(".ecliptic-task").forEach(function(el,i){
+      el.classList.toggle("off", !TASKS[i].on);
+      el.classList.toggle("on", !!TASKS[i].on);
+    });
+    document.querySelectorAll(".comet-task").forEach(function(el,i){
+      el.classList.toggle("off", !TASKS[i].on);
+      el.classList.toggle("on", !!TASKS[i].on);
+      var wake=el.querySelector(".wake");
+      if(wake){
+        var p=cometPos[i];
+        var dx=Math.max(40, (82-p[0])*7.2);
+        wake.style.width=dx+"px";
+      }
+    });
+    document.querySelectorAll(".aurora-task").forEach(function(el,i){
+      el.classList.toggle("off", !TASKS[i].on);
+      el.classList.toggle("on", !!TASKS[i].on);
+    });
+    document.querySelectorAll(".lunar-chip").forEach(function(el,i){
+      el.classList.toggle("on", !!TASKS[i].on);
+      el.classList.toggle("off", !TASKS[i].on);
+    });
+    ["meteor","ecliptic","lunar","comet","aurora"].forEach(refresh);
+  }
+
+  var meteorField=document.querySelector(".meteor-field");
+  TASKS.forEach(function(t,i){
+    var b=document.createElement("button");
+    var p=meteorPos[i];
+    b.type="button";
+    b.className="meteor-task on";
+    b.style.left=p[0]+"%";
+    b.style.top=p[1]+"%";
+    b.innerHTML='<span class="streak" aria-hidden="true"></span><span class="head" aria-hidden="true"></span><span class="name"></span><span class="sec"></span>';
+    b.querySelector(".name").textContent=t.name;
+    b.querySelector(".sec").textContent=t.sec;
+    b.onclick=function(){ t.on=!t.on; syncButtons(); };
+    meteorField.appendChild(b);
+  });
+
+  var eclipticField=document.querySelector(".ecliptic-field");
+  TASKS.forEach(function(t,i){
+    var b=document.createElement("button");
+    var p=eclipticPos[i];
+    b.type="button";
+    b.className="ecliptic-task on";
+    b.style.left=p[0]+"%";
+    b.style.top=p[1]+"%";
+    b.innerHTML='<span class="bead" aria-hidden="true"></span><span class="name"></span><span class="sec"></span>';
+    b.querySelector(".name").textContent=t.name;
+    b.querySelector(".sec").textContent=t.sec;
+    b.onclick=function(){ t.on=!t.on; syncButtons(); };
+    eclipticField.appendChild(b);
+  });
+
+  var lunarCrate=document.querySelector(".lunar-crate");
+  TASKS.forEach(function(t,i){
+    var b=document.createElement("button");
+    b.type="button";
+    b.className="lunar-chip on";
+    b.textContent=t.name;
+    b.title=t.sec;
+    b.onclick=function(){ t.on=!t.on; syncButtons(); };
+    lunarCrate.appendChild(b);
+  });
+
+  var cometField=document.querySelector(".comet-field");
+  TASKS.forEach(function(t,i){
+    var b=document.createElement("button");
+    var p=cometPos[i];
+    b.type="button";
+    b.className="comet-task on";
+    b.style.left=p[0]+"%";
+    b.style.top=p[1]+"%";
+    b.innerHTML='<span class="wake" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="name"></span><span class="sec"></span>';
+    b.querySelector(".name").textContent=t.name;
+    b.querySelector(".sec").textContent=t.sec;
+    b.onclick=function(){ t.on=!t.on; syncButtons(); };
+    cometField.appendChild(b);
+  });
+
+  var auroraField=document.querySelector(".aurora-field");
+  TASKS.forEach(function(t,i){
+    var b=document.createElement("button");
+    var p=auroraPos[i];
+    b.type="button";
+    b.className="aurora-task on";
+    b.style.left=p[0]+"%";
+    b.style.top=p[1]+"%";
+    b.innerHTML='<span class="ember" aria-hidden="true"></span><span class="name"></span><span class="sec"></span>';
+    b.querySelector(".name").textContent=t.name;
+    b.querySelector(".sec").textContent=t.sec;
+    b.onclick=function(){ t.on=!t.on; syncButtons(); };
+    auroraField.appendChild(b);
+  });
+
+  document.querySelectorAll(".foot").forEach(function(f){
+    var kind=f.dataset.kind;
+    f.querySelector(".all").onclick=function(){
+      var n=TASKS.filter(function(t){return t.on}).length;
+      var next=n!==TASKS.length;
+      TASKS.forEach(function(t){ t.on=next; });
+      syncButtons();
+    };
+    f.querySelector(".cancel").onclick=function(){ ping("closed · mock only"); };
+    f.querySelector(".go").onclick=function(){
+      if(kind==="lunar"){
+        document.querySelector(".lunar-field").classList.add("is-carrying");
+        ping("moon in transit · mock only");
+        return;
+      }
+      ping("sky preview · nothing carried");
+    };
+  });
+
+  syncButtons();
+  var start=new URLSearchParams(location.search).get("opt");
+  if(["meteor","ecliptic","lunar","comet","aurora"].indexOf(start)>=0){
+    document.querySelector('.tabs button[data-view="'+start+'"]').click();
+  }
+})();
+</script>
+</body>
+</html>
