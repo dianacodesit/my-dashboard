@@ -6,6 +6,17 @@ html body .day-block.collapsed:not(.today-block) {
   content-visibility: auto;
   contain-intrinsic-size: auto 56px;
 }
+/* Hide the April→today flash while boot-today pins the real day mid-parse. */
+html.btm-today-hold #agendaBody,
+html.btm-today-hold .timeline {
+  opacity: 0 !important;
+}
+html.btm-today-pinned #agendaBody,
+html.btm-today-pinned .timeline,
+html:not(.btm-today-hold) #agendaBody,
+html:not(.btm-today-hold) .timeline {
+  opacity: 1 !important;
+}
 
 /* no-card-flash */
 /* Never hide #page-bg-wrapper — that stuck both pages on the mountain. */
@@ -496,78 +507,94 @@ html body .day-block .overview-carry-forward.is-armed {
 #constellation-rollover .cr-sky {
   position: relative; flex: 1; min-height: 380px; margin: 8px 0 4px;
   border-radius: 22px; overflow: hidden;
+  /* comet wake sky — field of work left, nucleus glow right */
   background:
-    radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,248,238,0.55), transparent 60%),
-    radial-gradient(1px 1px at 28% 68%, rgba(255,248,238,0.4), transparent 60%),
-    radial-gradient(1.5px 1.5px at 46% 18%, rgba(196,168,130,0.55), transparent 60%),
-    radial-gradient(1px 1px at 62% 74%, rgba(255,248,238,0.35), transparent 60%),
-    radial-gradient(1.5px 1.5px at 78% 36%, rgba(255,248,238,0.5), transparent 60%),
-    radial-gradient(1px 1px at 88% 58%, rgba(196,168,130,0.4), transparent 60%),
-    radial-gradient(1px 1px at 8% 48%, rgba(255,248,238,0.3), transparent 60%),
-    radial-gradient(circle at 20% 30%, rgba(196,168,130,0.14), transparent 42%),
-    radial-gradient(circle at 78% 55%, rgba(255,248,238,0.06), transparent 40%),
-    rgba(255,248,238,0.025);
+    radial-gradient(circle at 82% 48%, rgba(225,180,120,0.16), transparent 16%),
+    radial-gradient(1px 1px at 10% 20%, #cbb89a, transparent 70%),
+    radial-gradient(1px 1px at 28% 66%, #8c7d6c, transparent 70%),
+    radial-gradient(1px 1px at 48% 18%, #b7a58e, transparent 70%),
+    radial-gradient(1px 1px at 18% 44%, rgba(255,248,238,0.35), transparent 70%),
+    radial-gradient(1px 1px at 62% 72%, rgba(196,168,130,0.4), transparent 70%),
+    #090807;
   border: 1px solid rgba(255,248,238,0.12);
+}
+#constellation-rollover .cr-sky-tag {
+  position: absolute; z-index: 2;
+  font: 300 8px/1 "DM Mono", ui-monospace, monospace;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(248,239,227,0.36); pointer-events: none;
+}
+#constellation-rollover .cr-sky-tag.is-field { left: 4%; top: 5%; }
+#constellation-rollover .cr-sky-tag.is-nucleus {
+  right: 5%; top: 6%; color: rgba(239,213,174,0.72);
+}
+#constellation-rollover .cr-comet-core {
+  position: absolute; right: 9%; top: 46%; width: 58px; height: 58px;
+  border-radius: 50%; z-index: 3; pointer-events: none;
+  background: radial-gradient(circle at 38% 34%, #fffaf0, #e6c994 22%, #9d7141 48%, transparent 72%);
+  box-shadow: 0 0 30px #d5ac7288, 0 0 80px #b27b3f44;
+  animation: cr-comet-pulse 3.4s ease-in-out infinite;
+}
+@keyframes cr-comet-pulse {
+  50% { filter: brightness(1.18); transform: scale(1.06); }
 }
 #constellation-rollover .cr-star {
   position: absolute; width: max-content; max-width: 168px;
   cursor: pointer; user-select: none; border: 0; background: transparent; padding: 2px 4px;
-  color: inherit; text-align: center;
+  color: inherit; text-align: left;
   transform: translate(-50%, -50%);
   transition: transform 0.25s ease, opacity 0.25s, filter 0.25s;
-  z-index: 2;
+  z-index: 4;
 }
+#constellation-rollover .cr-wake {
+  position: absolute; left: 4px; top: 4px; height: 2px; width: 0;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, rgba(255,235,200,0.92), rgba(236,200,140,0.55), transparent);
+  box-shadow: 0 0 12px rgba(220,180,120,0.4);
+  pointer-events: none; opacity: 0; z-index: 0;
+  transition: opacity 0.3s ease, width 0.25s ease;
+}
+#constellation-rollover .cr-star.is-on .cr-wake { opacity: 1; }
 #constellation-rollover .cr-star-core {
-  display: block; width: 10px; height: 10px; margin: 0 auto 8px;
+  position: relative; z-index: 1;
+  display: block; width: 9px; height: 9px; margin: 0 0 8px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fffef8 0%, #e8d3b0 38%, rgba(196,168,130,0.2) 70%, transparent 100%);
-  box-shadow:
-    0 0 10px rgba(255,248,238,0.85),
-    0 0 22px rgba(196,168,130,0.55),
-    0 0 40px rgba(196,168,130,0.28);
+  background: radial-gradient(circle at 35% 30%, #fff, #e7cfaa 46%, #8f6841);
+  box-shadow: 0 0 10px #fff8, 0 0 24px #c79d6477;
   transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s;
 }
 #constellation-rollover .cr-star.is-on .cr-star-core {
-  transform: scale(1.25);
-  box-shadow:
-    0 0 12px rgba(255,248,238,0.95),
-    0 0 28px rgba(196,168,130,0.7),
-    0 0 52px rgba(196,168,130,0.4);
+  transform: scale(1.15);
+  box-shadow: 0 0 12px #fff, 0 0 28px #c79d64aa;
 }
 #constellation-rollover .cr-star.is-on {
   filter: none;
-  transform: translate(-50%, -50%) scale(1.04);
+  transform: translate(-50%, -50%);
 }
-#constellation-rollover .cr-star.is-off { opacity: 0.28; }
+#constellation-rollover .cr-star.is-off { opacity: 0.16; }
 #constellation-rollover .cr-star.is-off .cr-star-core {
-  box-shadow: 0 0 6px rgba(255,248,238,0.25);
-  opacity: 0.55;
+  box-shadow: none; opacity: 0.55;
 }
+#constellation-rollover .cr-star.is-off .cr-wake { opacity: 0 !important; }
 #constellation-rollover .cr-star-label {
-  display: block; font-size: 14px; line-height: 1.2;
-  color: #fff8ee; font-style: italic; text-align: center;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.7);
-  max-width: 160px; padding: 3px 7px; border-radius: 7px;
-  background: rgba(10,8,6,0.62);
+  display: block; font-size: 13px; line-height: 1.12;
+  color: #f8efe3; font-style: italic; text-align: left;
+  text-shadow: 0 1px 8px #000;
+  max-width: 148px;
   overflow-wrap: anywhere; word-break: break-word;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
   overflow: hidden;
 }
 #constellation-rollover .cr-star-sec {
-  display: block; margin: 0 auto 4px;
-  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(255,248,238,0.7); white-space: nowrap;
+  display: block; margin-top: 3px;
+  font-size: 6px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(248,239,227,0.34); white-space: nowrap;
   font-family: "DM Mono", ui-monospace, monospace; font-style: normal;
-  max-width: 160px; overflow: hidden; text-overflow: ellipsis;
-  padding: 1px 6px; border-radius: 999px;
-  background: rgba(10,8,6,0.5);
+  max-width: 148px; overflow: hidden; text-overflow: ellipsis;
+  padding: 0; background: none;
 }
 #constellation-rollover .cr-filament {
-  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
-}
-#constellation-rollover .cr-filament path {
-  fill: none; stroke: rgba(196,168,130,0.48); stroke-width: 1.1;
-  filter: drop-shadow(0 0 5px rgba(196,168,130,0.45));
+  display: none !important; /* comet wake — no constellation web */
 }
 #constellation-rollover .cr-dest {
   display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px 12px; align-items: center;
@@ -679,8 +706,18 @@ html body .day-block .overview-carry-forward.is-armed {
 }
 #constellation-rollover .cr-go:disabled { opacity: 0.35; cursor: default; box-shadow: none; }
 #constellation-rollover.is-launching .cr-star.is-on {
-  animation: cr-drift 0.7s ease forwards;
+  animation: cr-comet-haul 0.72s ease forwards;
 }
-@keyframes cr-drift {
-  to { transform: translate(40vw, -30vh) scale(0.2); opacity: 0; }
+#constellation-rollover.is-launching .cr-star.is-on .cr-wake {
+  opacity: 1;
+  filter: brightness(1.35);
+}
+#constellation-rollover.is-launching .cr-comet-core {
+  animation: cr-comet-pulse 0.6s ease-in-out infinite, cr-comet-bright 0.72s ease forwards;
+}
+@keyframes cr-comet-haul {
+  to { transform: translate(28vw, -4vh) scale(0.18); opacity: 0; }
+}
+@keyframes cr-comet-bright {
+  to { filter: brightness(1.45); box-shadow: 0 0 48px #e6c994cc, 0 0 110px #b27b3f88; }
 }

@@ -1,10 +1,12 @@
-/* Land on the top of today's frosted card. Re-pin while the collage packs.
-   Never wipe localStorage — that deleted adds and caused a second paint. */
+/* Land on today as soon as that day-block exists in the DOM — during HTML
+   parse, not after the rest of the 70k-line page finishes. Never wait for
+   collage tiles / packing. Never wipe localStorage. */
 (function () {
   try {
     if (document.documentElement.classList.contains('prototypes-page')) return;
     try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (eR) {}
     try { document.documentElement.style.setProperty('overflow-anchor', 'none'); } catch (eA) {}
+    try { document.documentElement.classList.add('btm-today-hold'); } catch (eH) {}
 
     var pad = function (n) { return String(n).padStart(2, '0'); };
     var isoNow = function () {
@@ -12,62 +14,108 @@
       return t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate());
     };
 
-    var pinUntil = Date.now() + 1800;
+    var pinnedOnce = false;
+    var pinUntil = Date.now() + 1200;
     var userMoved = false;
+    var mo = null;
 
-    function heroReady(block) {
-      if (!block) return false;
-      var hero = block.querySelector('.vision-hero');
-      if (!hero) return false;
-      return !!hero.querySelector(':scope > .vision-tile');
+    function releaseHold() {
+      try {
+        document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
+        document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready');
+      } catch (e) {}
     }
 
     function pinTodayCard() {
       if (document.documentElement.classList.contains('prototypes-page')) return false;
       if (document.body && document.body.classList.contains('prototypes-page')) return false;
       if (userMoved && Date.now() > pinUntil) return false;
+
       var iso = isoNow();
       var block = document.querySelector('.day-block[data-date="' + iso + '"]')
         || document.querySelector('.day-block.today-block');
-      if (!heroReady(block)) return false;
+      /* Jump on the day shell itself — do NOT wait for .vision-tile / pack. */
+      if (!block) return false;
+
       document.querySelectorAll('.day-block.today-block').forEach(function (b) {
         if (b !== block) b.classList.remove('today-block');
       });
       block.classList.add('today-block');
       block.classList.remove('collapsed', 'past');
+
       var card = block.querySelector('.day-card') || block;
       var y = Math.max(0, Math.round(card.getBoundingClientRect().top + (window.scrollY || 0) - 20));
       try { window.scrollTo(0, y); } catch (e3) {}
       try { document.documentElement.scrollTop = y; } catch (e4) {}
+      try { if (document.body) document.body.scrollTop = y; } catch (e5) {}
+
       window.__earlyTodayReady = true;
-      try { document.documentElement.classList.add('btm-collage-ready'); } catch (eRdy) {}
+      releaseHold();
+      pinnedOnce = true;
       return true;
     }
 
     function releasePin() {
       userMoved = true;
       pinUntil = 0;
+      releaseHold();
     }
 
     window.__pinTodayCard = pinTodayCard;
     window.__scrollToToday = function () {
       userMoved = false;
-      pinUntil = Date.now() + 800;
+      pinUntil = Date.now() + 600;
       return pinTodayCard();
     };
 
+    /* Catch today the moment the parser inserts it (mid-document). */
+    try {
+      mo = new MutationObserver(function () {
+        if (pinTodayCard() && pinnedOnce && Date.now() > pinUntil - 200) {
+          /* keep re-pinning briefly while layout settles */
+        }
+      });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+    } catch (eMo) {}
+
     pinTodayCard();
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () { pinTodayCard(); }, { once: true });
+      document.addEventListener('DOMContentLoaded', function () {
+        pinTodayCard();
+        releaseHold();
+      }, { once: true });
+    } else {
+      pinTodayCard();
+      releaseHold();
     }
-    window.addEventListener('load', function () { pinTodayCard(); }, { once: true });
-    [80, 220, 500, 900, 1400].forEach(function (ms) {
-      setTimeout(pinTodayCard, ms);
+
+    window.addEventListener('load', function () {
+      pinTodayCard();
+      releaseHold();
+      try { if (mo) mo.disconnect(); } catch (eD) {}
+    }, { once: true });
+
+    /* Short settle passes only — no multi-second cascade. */
+    [0, 50, 150, 400].forEach(function (ms) {
+      setTimeout(function () {
+        pinTodayCard();
+        if (ms >= 400) releaseHold();
+      }, ms);
     });
+
+    /* Safety: never leave the rail invisible if today is missing. */
+    setTimeout(releaseHold, 1600);
+
     window.addEventListener('wheel', releasePin, { passive: true, once: true });
     window.addEventListener('touchmove', releasePin, { passive: true, once: true });
     window.addEventListener('keydown', function (e) {
       if (e.key === 'PageDown' || e.key === 'PageUp' || e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Home' || e.key === 'End' || e.key === ' ') releasePin();
     }, { passive: true });
-  } catch (err) {}
+  } catch (err) {
+    try {
+      document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
+      document.documentElement.classList.add('btm-collage-ready');
+    } catch (e2) {}
+  }
 })();

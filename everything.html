@@ -20,10 +20,10 @@ This applies regardless of conversation context or recently edited days.
 
 <meta charset="utf-8"/>
 <link rel="stylesheet" href="dashboard-current-fonts.css?v=1"/>
-<link rel="stylesheet" href="dashboard-current.css?v=carry-fp1"/>
+<link rel="stylesheet" href="dashboard-current.css?v=today-fast2"/>
 <script>
-try { document.documentElement.classList.add('btm-collage-ready'); } catch (eReady) {}
 try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (e) {}
+try { document.documentElement.classList.add('btm-today-hold'); } catch (eHold) {}
 window.__btmHtmlSaveArmed = false;
 window.__armBtmHtmlSave = function(){ /* autosave writes HTML and snaps every open page back to April */ };
 window.__isFileDay = function(blkOrIso){
@@ -56,6 +56,7 @@ window.__isLiveDayBlock = function(blk){
   return !!(date && iso && date === iso);
 };
 </script>
+<script src="boot-today.js?v=today-fast2"></script>
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
@@ -20824,8 +20825,11 @@ low-step').classList.toggle('done', this.checked)" type="checkbox"/><span class=
 <button type="button" class="vision-zoom-out" hidden>all of today</button>
 <p class="vision-hint">the day, wide — click a focus to go in</p>
 <div class="vision-hero">
+<article class="vision-tile" data-focus="deen" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am worshipping Allah ﷻ">I am worshipping Allah ﷻ</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="academia" style="--tile-photo: url('manus-storage/zone-grad-student.jpg?v=grad4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3><div class="vision-tile-details"></div></article>
 </div>
 </div><div class="tv-panel tv-impulses" style="display:none"><div class="impulses-shell"><p class="impulses-hint">raw thoughts for this day — dump now, sort later</p><div class="impulses-add"><input class="impulses-input" type="text" placeholder="an impulse…" autocomplete="off"/><button type="button" class="impulses-keep">keep</button></div><div class="impulses-route-map"><div class="flow-section-toggle impulses-route-header">impulses</div><div class="flow-route impulses-flow-route"></div></div></div></div><div class="tv-panel tv-flow" style="display:none"><div class="flow-chart-card"><p class="flow-title">flow</p></div></div><div class="tv-panel tv-nodes" style="display:none"><div class="nodes-edit-bar"><button type="button" class="nodes-add-btn">+ node</button><button type="button" class="nodes-link-btn">connect</button><span class="nodes-edit-hint">click two nodes to link them · click a filament to remove it</span></div><div class="sec-grid freeform pursuit-canvas pursuit-categories" data-zoned="1"></div></div><div class="tv-panel tv-flowchart" style="display:none"><div class="flow-chart-card made-flow-host"><p class="made-flow-empty">click make flow, then tap cards, sections, or tasks</p></div></div></div></div></div></div>
+<script>try{if(window.__pinTodayCard)window.__pinTodayCard();}catch(e){}</script>
 
 <div class="day-block view-overview fmt22 vision-collage-day overview-era-day card-style-deboss-chip make-flow-day collage-flush depth-four-era" data-date="2026-09-19" data-title-era="foil">
 <div class="day-dot"></div>
@@ -55544,7 +55548,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       box.style.left = 'auto';
       box.style.bottom = 'auto';
       box.style.position = 'fixed';
-      box.style.zIndex = '100000';
+      box.style.setProperty('z-index', '2147483644', 'important');
     } catch(ePos){}
     // Sections first — this is what the header + is for.
     var picks = [];
@@ -59290,7 +59294,9 @@ html body .overview-add-picker.overview-add-picker-fixed {
   right: var(--picker-right, 24px) !important;
   left: auto !important;
   bottom: auto !important;
-  z-index: 100000 !important;
+  /* Above full-page day lock (2147483000) — otherwise mosaic tile bottoms
+     paint through the glass and read as a faint full-width hairline. */
+  z-index: 2147483644 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
@@ -63013,7 +63019,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
   }
 
   function starLayout(n){
-    /* Even grid — every name gets its own cell. */
+    /* Comet wake: keep tasks in the left field so wakes trail toward the nucleus. */
     var pts = [];
     if (n <= 0) return pts;
     var cols = n <= 6 ? 3 : n <= 12 ? 4 : 5;
@@ -63023,8 +63029,8 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       var left = n - i;
       var inRow = (r === rows - 1) ? left : Math.min(cols, left);
       for (var c = 0; c < inRow && i < n; c++){
-        var x = 8 + 84 * (inRow === 1 ? 0.5 : (c + 0.5) / inRow);
-        var y = 10 + 80 * (rows === 1 ? 0.5 : (r + 0.5) / rows);
+        var x = 7 + 58 * (inRow === 1 ? 0.5 : (c + 0.5) / inRow);
+        var y = 12 + 76 * (rows === 1 ? 0.5 : (r + 0.5) / rows);
         pts.push({ x: x, y: y });
         i++;
       }
@@ -63308,10 +63314,15 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     ov.className = 'is-open';
     ov.innerHTML = [
       '<div class="cr-shell">',
-      '  <p class="cr-kicker">carry forward</p>',
+      '  <p class="cr-kicker">carry forward · comet wake</p>',
       '  <h2 class="cr-title">unfinished light</h2>',
-      '  <p class="cr-sub">tap stars to keep or leave. unfinished tasks glide to the day you choose.</p>',
-      '  <div class="cr-sky"><svg class="cr-filament" aria-hidden="true"></svg></div>',
+      '  <p class="cr-sub">tap stars to keep or leave. lit ones trail a wake into the day you choose.</p>',
+      '  <div class="cr-sky cr-sky--comet">',
+      '    <span class="cr-sky-tag is-field">field of work</span>',
+      '    <span class="cr-sky-tag is-nucleus">nucleus · tomorrow</span>',
+      '    <div class="cr-comet-core" aria-hidden="true"></div>',
+      '    <svg class="cr-filament" aria-hidden="true"></svg>',
+      '  </div>',
       '  <div class="cr-dest"><span class="cr-dest-label">to</span></div>',
       '  <div class="cr-foot">',
       '    <span class="cr-count"></span>',
@@ -63325,11 +63336,11 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     try { ov.style.setProperty('z-index', '2147483646', 'important'); } catch(eZ){}
 
     var sky = ov.querySelector('.cr-sky');
-    var svg = ov.querySelector('.cr-filament');
     var destWrap = ov.querySelector('.cr-dest');
     var countEl = ov.querySelector('.cr-count');
     var allBtn = ov.querySelector('.cr-all');
     var goBtn = ov.querySelector('.cr-go');
+    var nucleusTag = ov.querySelector('.cr-sky-tag.is-nucleus');
     var rowGuess = Math.ceil(items.length / (items.length <= 12 ? 4 : 5));
     sky.style.flex = '0 0 auto';
     sky.style.height = Math.max(420, rowGuess * 128) + 'px';
@@ -63338,7 +63349,11 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     items.forEach(function(it, i){ selected[i] = true; });
     var destChoices = futureDestinations(fromDate);
     var destDate = destChoices[0] ? destChoices[0].date : nextIso(fromDate);
-    buildDestPicker(destWrap, fromDate, function(iso){ destDate = iso; });
+    buildDestPicker(destWrap, fromDate, function(iso){
+      destDate = iso;
+      if (nucleusTag) nucleusTag.textContent = 'nucleus · ' + (destToastLabel(iso) || 'tomorrow');
+    });
+    if (nucleusTag) nucleusTag.textContent = 'nucleus · ' + (destToastLabel(destDate) || 'tomorrow');
 
     var pts = starLayout(items.length);
     var stars = [];
@@ -63348,7 +63363,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       star.className = 'cr-star is-on';
       star.style.left = pts[i].x + '%';
       star.style.top = pts[i].y + '%';
-      star.innerHTML = '<span class="cr-star-sec"></span><span class="cr-star-core" aria-hidden="true"></span><span class="cr-star-label"></span>';
+      star.innerHTML = '<span class="cr-wake" aria-hidden="true"></span><span class="cr-star-core" aria-hidden="true"></span><span class="cr-star-label"></span><span class="cr-star-sec"></span>';
       star.querySelector('.cr-star-sec').textContent = it.sectionTitle || it.sectionFocus || 'task';
       star.querySelector('.cr-star-label').textContent = it.title;
       star.title = it.title;
@@ -63357,7 +63372,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
         star.classList.toggle('is-on', !!selected[i]);
         star.classList.toggle('is-off', !selected[i]);
         syncCount();
-        drawFilaments();
+        syncWakes();
       });
       sky.appendChild(star);
       stars.push(star);
@@ -63370,7 +63385,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
         stars[i].classList.toggle('is-off', !on);
       });
       syncCount();
-      drawFilaments();
+      syncWakes();
     }
     function syncCount(){
       var n = Object.keys(selected).filter(function(k){ return selected[k]; }).length;
@@ -63417,48 +63432,31 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
         if (!moved) break;
       }
       boxes.forEach(function(b){
-        b.x = Math.max(b.hw + 6, Math.min(w - b.hw - 6, b.x));
+        /* Keep stars in the left field — leave room for the nucleus. */
+        b.x = Math.max(b.hw + 6, Math.min(w * 0.68 - b.hw, b.x));
         b.y = Math.max(b.hh + 6, Math.min(h - b.hh - 6, b.y));
         b.el.style.left = (b.x / w * 100) + '%';
         b.el.style.top = (b.y / h * 100) + '%';
       });
     }
-    function drawFilaments(){
+    function syncWakes(){
       var w = sky.clientWidth || 1, h = sky.clientHeight || 1;
-      var paths = [];
-      var onPts = [];
+      var nx = w * 0.82, ny = h * 0.48;
       stars.forEach(function(star, i){
-        if (!selected[i]) return;
-        onPts.push({
-          x: (parseFloat(star.style.left)||0)/100*w,
-          y: (parseFloat(star.style.top)||0)/100*h,
-          i: i
-        });
-      });
-      /* Constellation web: each star to its two nearest neighbors */
-      var linked = {};
-      function linkKey(a, b){ return a < b ? a+':'+b : b+':'+a; }
-      onPts.forEach(function(a, ai){
-        var dists = onPts.map(function(b, bi){
-          if (ai === bi) return { bi: bi, d: 1e9 };
-          var dx = a.x - b.x, dy = a.y - b.y;
-          return { bi: bi, d: dx*dx + dy*dy };
-        }).sort(function(u,v){ return u.d - v.d; });
-        var take = Math.min(2, dists.length);
-        var t;
-        for (t = 0; t < take; t++) {
-          if (dists[t].d >= 1e9) continue;
-          var b = onPts[dists[t].bi];
-          var k = linkKey(ai, dists[t].bi);
-          if (linked[k]) continue;
-          linked[k] = 1;
-          var mx = (a.x + b.x) / 2;
-          var my = (a.y + b.y) / 2 - 18;
-          paths.push('<path d="M '+a.x+' '+a.y+' Q '+mx+' '+my+' '+b.x+' '+b.y+'"/>');
+        var wake = star.querySelector('.cr-wake');
+        if (!wake) return;
+        if (!selected[i]){
+          wake.style.width = '0px';
+          return;
         }
+        var sx = (parseFloat(star.style.left) || 0) / 100 * w;
+        var sy = (parseFloat(star.style.top) || 0) / 100 * h;
+        var dx = nx - sx, dy = ny - sy;
+        var len = Math.max(40, Math.sqrt(dx * dx + dy * dy) - 36);
+        var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        wake.style.width = Math.round(len) + 'px';
+        wake.style.transform = 'rotate(' + ang + 'deg)';
       });
-      svg.setAttribute('viewBox', '0 0 '+w+' '+h);
-      svg.innerHTML = paths.join('');
     }
     syncCount();
     if (allBtn) allBtn.onclick = function(){
@@ -63467,7 +63465,7 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
     };
     function onSkyResize(){
       separateStars();
-      drawFilaments();
+      syncWakes();
     }
     setTimeout(onSkyResize, 40);
     window.addEventListener('resize', onSkyResize);
@@ -69993,7 +69991,8 @@ html body.day-fullpage-open .day-fullpage-close {
   position: fixed !important;
   top: 14px !important;
   right: 18px !important;
-  z-index: 200030 !important;
+  /* Above day lock (2147483000) — earlier 200030 left the X unclickable under the plate */
+  z-index: 2147483645 !important;
   width: 32px !important;
   height: 32px !important;
   padding: 0 !important;
@@ -70003,6 +70002,7 @@ html body.day-fullpage-open .day-fullpage-close {
   color: #fff8ee !important;
   font: 300 22px/30px "DM Mono", monospace !important;
   cursor: pointer !important;
+  pointer-events: auto !important;
 }
 </style>
 
