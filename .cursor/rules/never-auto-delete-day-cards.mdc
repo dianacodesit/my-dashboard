@@ -1,0 +1,23 @@
+---
+description: Never auto-delete day cards from the everything board
+alwaysApply: true
+---
+
+# Never auto-delete day cards
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) everything page.
+
+## Never
+
+- Runtime scrub that `remove()`s `.day-block` nodes because they look “empty”
+- `scrubEmptyDayCards` / `isDayCompletelyEmpty` boot that deletes past days
+- Deleting day shells from `btm_day_shells_v1` as a cleanup pass
+- Stripping baked day cards from `everything.html` without an explicit user ask to delete **that** day
+
+## Empty days
+
+If Diana wants empty past days gone, she must name it. Do not invent a background scrub.
+
+## If days disappear from the rail
+
+Disable the scrub immediately and hard-reload so baked days return. Do not ask permission.

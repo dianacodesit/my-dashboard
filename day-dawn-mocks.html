@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>new day · fold designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&amp;family=Newsreader:ital,opsz,wght@0,400;0,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Playfair+Display:ital,wght@0,500;1,500&amp;display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100%;
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7f4ec;
+    background: #0c0a08;
+  }
+  /* Same page photo as everything.html — full-bleed cover, no cream stage */
+  #page-bg-img {
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0; pointer-events: none;
+  }
+  .page {
+    position: relative; z-index: 1;
+    max-width: 920px; margin: 0 auto;
+    padding: 28px 18px 140px;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 18px 16px;
+    background: transparent;
+    border: 0;
+  }
+  .hero .eyebrow {
+    font-family: "DM Mono", monospace;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(247,244,236,0.55); margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-weight: 400; font-style: italic;
+    font-size: clamp(28px, 4.2vw, 40px);
+    color: #f7f4ec;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.55);
+  }
+  .hero p {
+    margin: 10px auto 0; max-width: 540px;
+    font-size: 15px; line-height: 1.45;
+    color: rgba(247,244,236,0.72); font-style: italic;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.5);
+  }
+  .hero .warn {
+    margin-top: 14px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(232,201,154,0.85);
+  }
+
+  .rail {
+    display: flex; flex-direction: column; gap: 28px;
+  }
+
+  /* Option frame = hairline only. Mountain shows through. No cream slab. */
+  .opt {
+    border-radius: 16px;
+    border: 1px solid rgba(255,248,238,0.22);
+    background: rgba(12, 8, 6, 0.22);
+    backdrop-filter: blur(8px) saturate(1.05);
+    -webkit-backdrop-filter: blur(8px) saturate(1.05);
+    overflow: visible;
+    box-shadow: none;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  .opt:hover {
+    border-color: rgba(232,201,154,0.55);
+    background: rgba(12, 8, 6, 0.32);
+  }
+  .opt.is-picked {
+    border-color: rgba(232,201,154,0.95);
+    background: rgba(12, 8, 6, 0.4);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35);
+  }
+  .opt header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 16px 4px;
+  }
+  .opt .num {
+    font-family: "DM Mono", monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(232,201,154,0.8);
+  }
+  .opt h2 {
+    flex: 1;
+    font-size: 22px; font-weight: 400; font-style: italic;
+    color: #f7f4ec;
+    text-shadow: 0 1px 14px rgba(0,0,0,0.45);
+  }
+  .opt .pick-btn {
+    appearance: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.28);
+    background: rgba(0,0,0,0.35);
+    font-family: "DM Mono", monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #f7f4ec;
+    cursor: pointer;
+  }
+  .opt.is-picked .pick-btn {
+    background: rgba(232,201,154,0.92);
+    color: #1c140e;
+    border-color: rgba(232,201,154,0.95);
+  }
+  .opt .blurb {
+    padding: 0 16px 14px;
+    font-size: 14px; line-height: 1.4;
+    color: rgba(247,244,236,0.58); font-style: italic;
+  }
+
+  .stage {
+    margin: 0 12px 16px;
+    padding: 0;
+    border-radius: 14px;
+    overflow: visible;
+    background: transparent;
+  }
+
+  /* Collapsed today = live rail chrome feel — dark glass, not white */
+  .fake-day {
+    border-radius: 14px 14px 0 0;
+    background: rgba(18, 12, 8, 0.42);
+    border: 1px solid rgba(255,248,238,0.16);
+    border-bottom: 1px solid rgba(255,248,238,0.1);
+    padding: 14px 16px;
+    font-family: "Cinzel", serif;
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(247,244,236,0.82);
+  }
+  .fake-day em {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic; font-size: 12px; letter-spacing: 0;
+    text-transform: none; opacity: 0.65; margin-left: 10px;
+    color: rgba(247,244,236,0.7);
+  }
+
+  /* ——— A: glass flap ——— */
+  .a-fold {
+    appearance: none; width: 100%;
+    display: flex; align-items: baseline; gap: 14px;
+    min-height: 52px; padding: 16px 18px 16px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(232,201,154,0.55);
+    border-radius: 0 0 14px 14px;
+    background: linear-gradient(180deg, rgba(28,18,12,0.45), rgba(6,4,3,0.62));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    clip-path: polygon(0 10px, 100% 0, 100% 100%, 0 100%);
+    color: inherit; cursor: pointer; text-align: left;
+  }
+  .a-fold .date {
+    font-family: "Cinzel", serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: #f3e6c8; opacity: 0.95;
+  }
+  .a-fold .whisper {
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 13px;
+    color: rgba(243,230,200,0.78);
+  }
+  .a-fold .more { margin-left: auto; letter-spacing: 0.18em; color: rgba(243,230,200,0.5); }
+
+  /* ——— B: hairline ——— */
+  .b-fold {
+    appearance: none; width: 100%;
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 8px 14px; border: 0;
+    background: transparent;
+    border-top: 1px solid rgba(247,244,236,0.35);
+    border-radius: 0 0 14px 14px;
+    color: inherit; cursor: pointer; text-align: left;
+  }
+  .b-fold .date {
+    font-family: "Cinzel", serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,244,236,0.88);
+  }
+  .b-fold .whisper {
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 14px;
+    color: rgba(247,244,236,0.58);
+  }
+  .b-fold .more {
+    margin-left: auto; font-size: 11px; letter-spacing: 0.2em;
+    color: rgba(247,244,236,0.4);
+  }
+
+  /* ——— C: sealed ——— */
+  .c-fold {
+    appearance: none; width: 100%;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 28px 18px 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    border-top: 1px solid rgba(232,201,154,0.4);
+    border-radius: 0 0 16px 16px;
+    background: linear-gradient(180deg, rgba(20,12,8,0.25), rgba(8,6,4,0.5));
+    box-shadow: inset 0 1px 0 rgba(255,248,238,0.08);
+    color: inherit; cursor: pointer;
+  }
+  .c-fold .seal {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid rgba(168,130,70,0.55);
+    background: radial-gradient(circle at 35% 30%, #f3e6c8, #a8895a 70%);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    margin-top: -44px;
+  }
+  .c-fold .date {
+    font-family: "Cinzel", serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: #f7f4ec;
+  }
+  .c-fold .whisper {
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 13px;
+    color: rgba(247,244,236,0.58);
+  }
+
+  /* ——— D: capsule ——— */
+  .d-wrap {
+    display: flex; justify-content: center;
+    padding: 18px 0 16px;
+    background: transparent;
+    border-radius: 0 0 14px 14px;
+    border: 1px solid rgba(255,248,238,0.12);
+    border-top: 0;
+  }
+  .d-fold {
+    appearance: none;
+    display: inline-flex; align-items: baseline; gap: 12px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.28);
+    background: rgba(12, 8, 6, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+    color: inherit; cursor: pointer;
+  }
+  .d-fold .date {
+    font-family: "Cinzel", serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: #f7f4ec;
+  }
+  .d-fold .whisper {
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 13px;
+    color: rgba(247,244,236,0.6);
+  }
+  .d-fold .more { letter-spacing: 0.16em; color: rgba(247,244,236,0.4); font-size: 12px; }
+
+  /* ——— E: under-tab ——— */
+  .e-wrap {
+    display: flex; justify-content: center;
+    padding: 0 0 8px;
+  }
+  .e-fold {
+    appearance: none;
+    display: flex; align-items: baseline; gap: 10px;
+    min-width: 220px; padding: 10px 22px 14px;
+    border: 1px solid rgba(255,248,238,0.2);
+    border-top: 0;
+    border-radius: 0 0 18px 18px;
+    background: rgba(12, 8, 6, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    color: inherit; cursor: pointer;
+  }
+  .e-fold .date {
+    font-family: "Cinzel", serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: #f7f4ec;
+  }
+  .e-fold .whisper {
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 13px;
+    color: rgba(247,244,236,0.58);
+  }
+
+  /* ——— F: horizon ——— */
+  .f-fold {
+    appearance: none; width: 100%;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px;
+    padding: 20px 12px 16px; border: 0;
+    background: transparent;
+    border-radius: 0 0 14px 14px;
+    color: inherit; cursor: pointer;
+  }
+  .f-fold .line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(247,244,236,0.4));
+  }
+  .f-fold .line.r {
+    background: linear-gradient(90deg, rgba(247,244,236,0.4), transparent);
+  }
+  .f-fold .mid { text-align: center; }
+  .f-fold .date {
+    display: block;
+    font-family: "Playfair Display", "Newsreader", Georgia, serif;
+    font-style: italic; font-size: 18px; font-weight: 500;
+    color: #f7f4ec;
+    text-shadow: 0 1px 16px rgba(0,0,0,0.5);
+  }
+  .f-fold .whisper {
+    display: block; margin-top: 2px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(247,244,236,0.5);
+  }
+
+  .picked {
+    position: sticky; bottom: 14px; z-index: 30;
+    margin: 24px auto 0; max-width: 560px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,248,238,0.22);
+    background: rgba(12, 8, 6, 0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(247,244,236,0.78);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+  .picked strong { color: #e8c99a; font-weight: 400; letter-spacing: 0.18em; }
+</style>
+</head>
+<body>
+  <img id="page-bg-img" src="manus-storage/_339ab459.jpg" alt=""/>
+  <div class="page">
+    <div class="hero">
+      <div class="eyebrow">design preview · day dawn</div>
+      <h1>new day fold</h1>
+      <p>This is the strip under today on the everything rail — not a section photo. Same mountain page background as the live board.</p>
+      <div class="warn">tap a card · or the Pick button · then tell me the letter (A–F)</div>
+    </div>
+
+    <div class="rail">
+      <article class="opt" data-pick="A" data-name="glass flap (current)">
+        <header>
+          <span class="num">A · current</span>
+          <h2>glass flap</h2>
+          <button type="button" class="pick-btn">pick A</button>
+        </header>
+        <p class="blurb">what you have now — clipped glass under the last day.</p>
+        <div class="stage">
+          <div class="fake-day">sep 20 · sun<em>today (collapsed)</em></div>
+          <button type="button" class="a-fold">
+            <span class="date">sep 21 · mon</span>
+            <span class="whisper">tomorrow</span>
+            <span class="more">···</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="opt" data-pick="B" data-name="hairline">
+        <header>
+          <span class="num">B</span>
+          <h2>hairline</h2>
+          <button type="button" class="pick-btn">pick B</button>
+        </header>
+        <p class="blurb">almost nothing — a rule + the date. quiet.</p>
+        <div class="stage">
+          <div class="fake-day">sep 20 · sun<em>today (collapsed)</em></div>
+          <button type="button" class="b-fold">
+            <span class="date">sep 21 · mon</span>
+            <span class="whisper">tomorrow</span>
+            <span class="more">···</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="opt" data-pick="C" data-name="sealed">
+        <header>
+          <span class="num">C</span>
+          <h2>sealed</h2>
+          <button type="button" class="pick-btn">pick C</button>
+        </header>
+        <p class="blurb">wax-seal flap — the day stays closed until you open it.</p>
+        <div class="stage">
+          <div class="fake-day">sep 20 · sun<em>today (collapsed)</em></div>
+          <button type="button" class="c-fold">
+            <span class="seal" aria-hidden="true"></span>
+            <span class="date">sep 21 · mon</span>
+            <span class="whisper">tomorrow</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="opt" data-pick="D" data-name="capsule">
+        <header>
+          <span class="num">D</span>
+          <h2>capsule</h2>
+          <button type="button" class="pick-btn">pick D</button>
+        </header>
+        <p class="blurb">centered pill floating under today.</p>
+        <div class="stage">
+          <div class="fake-day">sep 20 · sun<em>today (collapsed)</em></div>
+          <div class="d-wrap">
+            <button type="button" class="d-fold">
+              <span class="date">sep 21 · mon</span>
+              <span class="whisper">tomorrow</span>
+              <span class="more">···</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="opt" data-pick="E" data-name="under-tab">
+        <header>
+          <span class="num">E</span>
+          <h2>under-tab</h2>
+          <button type="button" class="pick-btn">pick E</button>
+        </header>
+        <p class="blurb">small tab peeking from under today — like a file folder.</p>
+        <div class="stage">
+          <div class="fake-day">sep 20 · sun<em>today (collapsed)</em></div>
+          <div class="e-wrap">
+            <button type="button" class="e-fold">
+              <span class="date">sep 21 · mon</span>
+              <span class="whisper">tomorrow</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="opt" data-pick="F" data-name="horizon">
+        <header>
+          <span class="num">F</span>
+          <h2>horizon</h2>
+          <button type="button" class="pick-btn">pick F</button>
+        </header>
+        <p class="blurb">date on a soft line — wide and quiet.</p>
+        <div class="stage">
+          <div class="fake-day">sep 20 · sun<em>today (collapsed)</em></div>
+          <button type="button" class="f-fold">
+            <span class="line"></span>
+            <span class="mid">
+              <span class="date">sep 21 · mon</span>
+              <span class="whisper">tomorrow</span>
+            </span>
+            <span class="line r"></span>
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <div class="picked" id="picked">tap Pick A–F · then reply with that letter</div>
+  </div>
+  <script>
+    (function(){
+      var picked = document.getElementById('picked');
+      function choose(opt){
+        document.querySelectorAll('.opt').forEach(function(o){
+          o.classList.remove('is-picked');
+          var b = o.querySelector('.pick-btn');
+          if(b) b.textContent = 'pick ' + o.getAttribute('data-pick');
+        });
+        opt.classList.add('is-picked');
+        var letter = opt.getAttribute('data-pick');
+        var name = opt.getAttribute('data-name');
+        var btn = opt.querySelector('.pick-btn');
+        if(btn) btn.textContent = 'selected';
+        picked.innerHTML = 'selected <strong>' + letter + '</strong> · ' + name + ' · reply “' + letter + '” and I’ll wire it live';
+        try { localStorage.setItem('btm_day_dawn_mock_pick', letter); } catch(e){}
+      }
+      document.querySelectorAll('.opt').forEach(function(opt){
+        opt.addEventListener('click', function(e){
+          e.preventDefault();
+          choose(opt);
+        });
+      });
+      try {
+        var prev = localStorage.getItem('btm_day_dawn_mock_pick');
+        if(prev){
+          var el = document.querySelector('.opt[data-pick="' + prev + '"]');
+          if(el) choose(el);
+        }
+      } catch(e){}
+    })();
+  </script>
+</body>
+</html>

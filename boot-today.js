@@ -18,12 +18,32 @@
     var pinUntil = Date.now() + 1200;
     var userMoved = false;
     var mo = null;
+    var collapsePassDone = false;
+    var pinScheduled = false;
 
     function releaseHold() {
       try {
         document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
         document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready');
       } catch (e) {}
+    }
+
+    function collapseOthers(iso, block) {
+      if (collapsePassDone) return;
+      try {
+        document.querySelectorAll('.day-block[data-date]').forEach(function (b) {
+          if (b === block) return;
+          var d = b.getAttribute('data-date') || '';
+          if (d === 'doha' || d === 'archive' || b.classList.contains('archive-block')) {
+            if (!b.classList.contains('collapsed')) b.classList.add('collapsed');
+            return;
+          }
+          if (/^\d{4}-\d{2}-\d{2}$/.test(d) && d !== iso) {
+            if (!b.classList.contains('collapsed')) b.classList.add('collapsed');
+          }
+        });
+        collapsePassDone = true;
+      } catch (eCol) {}
     }
 
     function pinTodayCard() {
@@ -43,6 +63,9 @@
       block.classList.add('today-block');
       block.classList.remove('collapsed', 'past');
 
+      /* One pass only — never thrash classList on every MutationObserver tick. */
+      collapseOthers(iso, block);
+
       var card = block.querySelector('.day-card') || block;
       var y = Math.max(0, Math.round(card.getBoundingClientRect().top + (window.scrollY || 0) - 20));
       try { window.scrollTo(0, y); } catch (e3) {}
@@ -55,6 +78,20 @@
       return true;
     }
 
+    function schedulePin() {
+      if (pinScheduled) return;
+      pinScheduled = true;
+      try {
+        requestAnimationFrame(function () {
+          pinScheduled = false;
+          pinTodayCard();
+        });
+      } catch (eRaf) {
+        pinScheduled = false;
+        pinTodayCard();
+      }
+    }
+
     function releasePin() {
       userMoved = true;
       pinUntil = 0;
@@ -65,15 +102,14 @@
     window.__scrollToToday = function () {
       userMoved = false;
       pinUntil = Date.now() + 600;
+      collapsePassDone = false;
       return pinTodayCard();
     };
 
     /* Catch today the moment the parser inserts it (mid-document). */
     try {
       mo = new MutationObserver(function () {
-        if (pinTodayCard() && pinnedOnce && Date.now() > pinUntil - 200) {
-          /* keep re-pinning briefly while layout settles */
-        }
+        schedulePin();
       });
       mo.observe(document.documentElement, { childList: true, subtree: true });
     } catch (eMo) {}
@@ -84,6 +120,7 @@
       document.addEventListener('DOMContentLoaded', function () {
         pinTodayCard();
         releaseHold();
+        try { if (mo) mo.disconnect(); } catch (eD0) {}
       }, { once: true });
     } else {
       pinTodayCard();
@@ -100,12 +137,18 @@
     [0, 50, 150, 400].forEach(function (ms) {
       setTimeout(function () {
         pinTodayCard();
-        if (ms >= 400) releaseHold();
+        if (ms >= 400) {
+          releaseHold();
+          try { if (mo) mo.disconnect(); } catch (eD2) {}
+        }
       }, ms);
     });
 
     /* Safety: never leave the rail invisible if today is missing. */
-    setTimeout(releaseHold, 1600);
+    setTimeout(function () {
+      releaseHold();
+      try { if (mo) mo.disconnect(); } catch (eD3) {}
+    }, 1600);
 
     window.addEventListener('wheel', releasePin, { passive: true, once: true });
     window.addEventListener('touchmove', releasePin, { passive: true, once: true });

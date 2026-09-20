@@ -1,5 +1,5 @@
 ---
-description: Sep 7+ collage uses start-over / dashboard rooms; gold titles stay centered
+description: Sep 18+ VISION COLLAGE = photo-shaped mosaic that KISSES (no gutters); never equal 2×3; never dash rooms
 alwaysApply: true
 ---
 
@@ -9,43 +9,58 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage d
 
 This file lives here — `/Users/diana/my-dashboard/.cursor/rules/vision-collage-no-overlap.mdc`. When the packing rule changes, write it **here**. Do not leave the update only in task-dashboard.
 
-## Sep 7 onward (`noBannerPackDay` / `iso >= 2026-09-07` / `dash-mosaic-era`)
+## Goal name
 
-Dashboard **room chrome** (`packDashMosaic`). Follow **only** what Diana stated:
+Call it **vision collage**. Do **not** call it grid collage, equal 2×3, rooms, “air collage”, or “Sep 18 flat”.
 
-- **Air + spread together:** gutters, rounded rooms, fuller tiles get more space, **and** one large room with the rest composed around it
-- The fullest section is the large room. The others sit beside and below it
-- **Widths and heights both fill the board and both follow content** (`tileContentScore`)
-- Tiles stay **relatively proportional** to one another
-- Base size is **0.8** of the old equal-size tiles; fuller sections grow from there. Do not shrink empties below that base
-- Rectangles when that fits. Do **not** force squares. Do **not** force the same height. Do **not** invent a column count
-- Fill the board when there are **3+** sections — no empty strip, no leftover hole. Gutters between tiles (not drawn borders, **never overlap**). Do **not** stuff a tile into a leftover sliver
-- **Rooms tessellate the board (force-style interdependence):** guillotine bipartition (`tessellateDashRooms`) — gaps and overlaps are **impossible by construction**. Freeform absolute `mosaicLayout` is retired. Resize updates area weights, then re-tessellates.
-- No dark overlay on the photo
+## What VISION COLLAGE is (Sep 18+)
+
+**Photo-shaped tiles packed as a mosaic** — asymmetric `visionPackSpec` (glow-up / fitness tall slots when those sections exist). Tiles **kiss** — **gap: 0**. No gutters / “air” between sections. Gold foil centered titles. **layout · carry · +** intact.
+
+- Pack via `visionPackSpec(n, needSquare, hasTallBody, false)` — magazine / mosaic places, **not** the equal-cell `noBanner` branch
+- **Never** 12px (or any) gutters on Sep 18+ — gaps were never authorized
+- Fuller sections grow with content / tasks; empties stay at a base size
+- Fill the board when there are **3+** sections — no empty strip, no leftover hole
+- **Never overlap**
 - Photos `cover` the tile (crop edges; no letterbox)
-- **Titles stay centered** in the current **gold foil** style — never bottom-left Cinzel
-- No scrap tilt
-- Re-pack when a task / subsection / card is added or removed
-- **1–2 sections: condensed height — NEVER full-viewport tall.** Cap the mosaic stage (~half viewport / ~0.4× width). Do not force `min-height: 100vh` or solo-fill. Photos still `cover` the shorter rooms. `vision-hero-dash-solo` may still mark a single section; it does **not** mean stretch-to-fill.
+- Keep tile resize + photo reframe (glyph stays invisible)
+
+## NEVER on Sep 18+ (hard bans)
+
+- **Gaps / gutters / “air”** between tiles
+- **Equal-cell 2×3 / flat grid** — that is **grid collage**, rejected
+- Locking “equal 2×3” as if it were vision collage
+- `packDashMosaic` / `tessellateDashRooms` / `dash-mosaic-era`
+- “Balanced zigzag” / `airBalanced` that forces all landscape row-strips
+- Stripping **layout**, day-count badges, resize, or reframe
+
+## Sep 7 – Sep 17 only (`noBannerPackDay` / `dash-mosaic-era`)
+
+Historical dashboard **room** packing stays on these days only — do not push it forward onto Sep 18+.
 
 ## Aug 26 – Aug 31
 
-Keep the **original gapped collage**: 12px gutters, 16px tile radius. Never apply flush (`gap: 0`) here.
+Original gapped collage: 12px gutters, 16px tile radius. Leave history alone — do not rewrite past days to kiss.
 
 ## Sep 1 – Sep 6 (`collage-flush` / `grid11`)
 
-Flush mosaic only — tiles kiss, no gutters. Do **not** push flush backward onto August.
-
-## Before Sep 7 packing
-
-Use existing `visionPackSpec`. Do **not** restyle past days into Sep 7 rooms.
+Flush collage — tiles kiss, no gutters. Sep 18+ also kisses, but keeps mosaic (asymmetric) pack, not equal cells.
 
 ## Always
 
 1. `scrapCollageDay` stays false.
 2. After add/remove/reorder → `syncHeroLayoutClass` → `packVisionCollage`.
 3. Edit `everything.html` only (everything-page-only).
-4. Keep this rule in my-dashboard. task-dashboard may mirror it; my-dashboard is the copy that counts.
+4. my-dashboard is the copy that counts; task-dashboard may mirror.
+5. Changes apply **that day forward** — do not rewrite past days.
+
+## If Sep 18+ shows gutters / gaps / “air”
+
+Force `gap: 0` + mosaic `visionPackSpec` + `vision-collage-gap`. Keep layout / carry / +. Do not ask.
+
+## If Sep 18+ looks like equal 2×3 boxes OR neat mosaic rooms
+
+Restore magazine `visionPackSpec` (glow-up square / fitness tall) with **gap 0**. Do not ask.
 
 ## If Sep 7+ titles go bottom-left white
 
@@ -53,12 +68,4 @@ Put them back to centered gold foil. Do not ask.
 
 ## No runtime rewriter — across the board
 
-Titles stay as written. No JavaScript on load, chrome-sync, midnight, or carry may change section names (`I will…` → `I am…`, `I will succeed` → `I succeeded`, `i` → `I`, `to …` prefix, plain-label maps). If a word needs to change, change the baked HTML or the hardcoded picker list. Do not add a rewriter.
-
-**Forbidden:** `pastTenseDay` / `toPastSectionTitle` / `titledForBlock` mutations / `forceAll` title migrations / load-time chrome title rewrites. Do not restore them.
-
-Past-day titles stay baked. If a pass already rewrote history, restore **every** affected day from the baked map — not only Sept 5 and 6. Do not ask. Sept 5 past tense stays because Diana asked for those words — not because midnight flipped them.
-
-**Do not push Sep 6 style backward.** Centered gold foil started on **Sept 6**. Aug 26–Sep 5 stay **white Newsreader, bottom-left**. Restore those days to exactly that — never restyle them to centered gold foil.
-
-**Section picker list is I am.** `sectionPresets` / `presetSecs` is a hardcoded **I am…** list. Do not put **I will…** back in that list. Do not add a runtime rewriter to convert I will → I am for the picker. Change the list. Skip leftover I will harvests; do not rewrite them.
+Titles stay as written. No JS may rewrite section names on load. Past-day titles stay baked. Centered gold foil starts **Sept 6** — Aug 26–Sep 5 stay white Newsreader bottom-left. Section picker list is **I am…** — change the list, do not add a rewriter.

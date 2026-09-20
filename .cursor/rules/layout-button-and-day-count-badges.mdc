@@ -1,0 +1,36 @@
+---
+description: Never strip layout button or collapsed open-task number badges
+alwaysApply: true
+---
+
+# Layout button + open-task badges stay
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) overview-era / vision collage days.
+
+## Layout button
+
+- **layout** sits in `.overview-right-tools` **before** **carry** and **+**
+- Wired by `ensureMosaicLayoutControl` from `ensureToggleRow` and from packing (`packVisionCollage` / `packDashMosaic`)
+- Required from **Sep 16 onward** (including Sep 18+ / `vision-air-collage`)
+
+### Never
+
+- `display: none` on `.vision-layout-control` for `vision-air-collage`
+- Removing `.vision-layout-control` in the air-collage pack path
+- Shipping Sep 18+ without **layout** before **carry**
+
+## Open-task number badges
+
+- Collapsed day cards with unfinished tasks show a **`.day-count`** badge on the **right**, same row as the date
+- Count via `collectOpenItems` / `injectDayCounts` (vision checks + day tasks)
+- Expanded days hide the badge so carry/+ stay on one chrome line
+
+### Never
+
+- Blanket `display: none` on `.day-count` for all overview-era / Sep dates
+- Early-return in `injectDayCounts` that strips collage-day badges
+- Stripping `.day-count` from collapsed headers in `ensureToggleRow`
+
+## If either is missing again
+
+Restore immediately. Do not ask permission. Do not “simplify chrome” by deleting them.

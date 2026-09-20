@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>task pins · design options</title>
+<title>task pins · outside the box</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,400;0,500;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Bodoni+Moda:ital,opsz,wght@0,400;1,400&amp;display=swap" rel="stylesheet"/>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,70 +12,36 @@
     font-family: "Newsreader", Georgia, serif;
     color: #f7f4ec;
     background:
-      linear-gradient(180deg, rgba(12,8,6,0.55), rgba(12,8,6,0.72)),
+      linear-gradient(180deg, rgba(12,8,6,0.58), rgba(12,8,6,0.78)),
       url("manus-storage/zone-grad-student.jpg?v=grad4") center/cover fixed;
   }
-  .page {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 42px 20px 80px;
-  }
-  .hero {
-    text-align: center;
-    margin-bottom: 28px;
-  }
+  .page { max-width: 1220px; margin: 0 auto; padding: 40px 18px 90px; }
+  .hero { text-align: center; margin-bottom: 26px; }
   .hero .eyebrow {
     font-family: "DM Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(232, 211, 176, 0.72);
-    margin-bottom: 10px;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(232,211,176,0.72); margin-bottom: 10px;
   }
   .hero h1 {
-    font-weight: 400;
-    font-style: italic;
+    font-weight: 400; font-style: italic;
     font-size: clamp(28px, 4.5vw, 42px);
-    letter-spacing: 0.01em;
   }
   .hero p {
+    margin: 12px auto 0; max-width: 580px;
+    font-size: 15px; line-height: 1.45;
+    color: rgba(247,244,236,0.62); font-style: italic;
+  }
+  .hint {
     margin-top: 12px;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 15px;
-    line-height: 1.45;
-    color: rgba(247, 244, 236, 0.62);
-    font-style: italic;
-  }
-  .now {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,248,238,0.18);
-    background: rgba(20,13,10,0.42);
     font-family: "DM Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(247,244,236,0.7);
-  }
-  .now i {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #fffef8 0%, #e8d3b0 38%, rgba(196,168,130,0.2) 70%, transparent 100%);
-    box-shadow: 0 0 10px rgba(255,248,238,0.85), 0 0 22px rgba(196,168,130,0.55);
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(232,211,176,0.78);
   }
   .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 22px;
+    display: grid; grid-template-columns: 1fr; gap: 20px;
   }
-  @media (min-width: 900px) {
-    .grid { grid-template-columns: 1fr 1fr; }
-  }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+
   .opt {
     border-radius: 18px;
     border: 1px solid rgba(255,248,238,0.16);
@@ -86,178 +52,221 @@
     box-shadow: 0 18px 40px rgba(0,0,0,0.28);
   }
   .opt header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 16px 12px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding: 14px 16px 10px;
     border-bottom: 1px solid rgba(255,248,238,0.08);
   }
   .opt .num {
     font-family: "DM Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
     color: rgba(232,211,176,0.85);
   }
-  .opt h2 {
-    font-size: 18px;
-    font-weight: 400;
-    font-style: italic;
+  .opt h2 { font-size: 18px; font-weight: 400; font-style: italic; }
+  .opt .ref {
+    padding: 0 16px 8px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(232,211,176,0.45);
   }
   .opt .blurb {
     padding: 0 16px 12px;
-    font-size: 13px;
-    line-height: 1.4;
-    color: rgba(247,244,236,0.55);
-    font-style: italic;
+    font-size: 13px; line-height: 1.4;
+    color: rgba(247,244,236,0.55); font-style: italic;
   }
   .stage {
-    position: relative;
-    height: 220px;
-    margin: 0 12px 12px;
-    border-radius: 14px;
-    overflow: hidden;
-    background:
-      url("manus-storage/zone-grad-student.jpg?v=grad4") center/cover;
+    position: relative; height: 230px;
+    margin: 0 12px 12px; border-radius: 14px; overflow: hidden;
+    background: url("manus-storage/zone-grad-student.jpg?v=grad4") center/cover;
   }
   .stage::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22));
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.24));
     pointer-events: none;
   }
   .stage .title {
-    position: absolute;
-    left: 50%;
-    top: 54%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+    position: absolute; left: 50%; top: 54%;
+    transform: translate(-50%, -50%); z-index: 1;
     font-family: "Bodoni Moda", "Newsreader", Georgia, serif;
-    font-size: clamp(22px, 3vw, 28px);
-    font-weight: 400;
-    color: #f7f4ec;
-    text-shadow:
-      0 1px 0 rgba(255,246,230,0.35),
-      0 2px 18px rgba(0,0,0,0.55);
-    white-space: nowrap;
-    pointer-events: none;
+    font-size: clamp(22px, 3vw, 28px); font-weight: 400; color: #f7f4ec;
+    text-shadow: 0 1px 0 rgba(255,246,230,0.35), 0 2px 18px rgba(0,0,0,0.55);
+    white-space: nowrap; pointer-events: none;
   }
+
+  /* shared: name only on hover */
   .pin {
-    position: absolute;
-    z-index: 2;
+    position: absolute; z-index: 3;
     transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    border: 0;
-    background: transparent;
-    color: #fff8ee;
-    cursor: default;
-    max-width: 46%;
+    display: flex; align-items: center; gap: 8px;
+    border: 0; background: transparent; color: #fff8ee;
+    cursor: default; padding: 12px; margin: -12px;
   }
   .pin .name {
     font-family: "Bodoni Moda", "Newsreader", Georgia, serif;
-    font-size: 15px;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
+    font-size: 15px; font-weight: 400; white-space: nowrap;
     text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+    opacity: 0; transform: translateX(-3px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: none;
+  }
+  .pin:hover .name, .pin:focus-within .name {
+    opacity: 1; transform: translateX(0); pointer-events: auto;
   }
 
-  /* A — current gold orb */
-  .a .core {
-    width: 12px; height: 12px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #fffef8 0%, #e8d3b0 38%, rgba(196,168,130,0.2) 70%, transparent 100%);
-    box-shadow: 0 0 10px rgba(255,248,238,0.85), 0 0 22px rgba(196,168,130,0.55), 0 0 40px rgba(196,168,130,0.28);
+  /* K — museum accession number (gallery wall labels) */
+  .k .core {
+    font-family: "DM Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em;
+    color: rgba(255,248,238,0.92);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(255,248,238,0.55);
   }
 
-  /* B — glass chip (matches layout / carry / connect) */
-  .b { flex-direction: row; gap: 0; }
-  .b .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 12px 7px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,248,238,0.28);
-    background: rgba(20,13,10,0.42);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 0 rgba(255,248,238,0.12);
-  }
-  .b .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(232,211,176,0.92);
-    box-shadow: none;
-  }
-  .b .name { text-shadow: none; font-size: 14px; }
-
-  /* C — flat pearl (no glow ball) */
-  .c .core {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: rgba(247,244,236,0.92);
-    border: 1px solid rgba(255,248,238,0.55);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  /* L — Linear-style issue chip */
+  .l .core {
+    font-family: "DM Mono", monospace;
+    font-size: 10px; letter-spacing: 0.06em;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: rgba(12,10,8,0.55);
+    border: 1px solid rgba(255,248,238,0.22);
+    color: rgba(247,244,236,0.88);
+    backdrop-filter: blur(8px);
   }
 
-  /* D — foil tick / dash above name */
-  .d .core {
-    width: 18px; height: 2px; border-radius: 2px;
-    background: linear-gradient(90deg, transparent, rgba(232,211,176,0.95), transparent);
-    box-shadow: 0 0 8px rgba(232,211,176,0.35);
+  /* M — Figma/Miro numbered comment bubble */
+  .m .core {
+    width: 22px; height: 22px;
+    border-radius: 50% 50% 50% 4px;
+    background: rgba(255,248,238,0.95);
+    color: #1a120e;
+    font-family: "DM Mono", monospace;
+    font-size: 11px; font-weight: 500;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    transform: rotate(-8deg);
   }
 
-  /* E — hollow champagne ring */
-  .e .core {
-    width: 11px; height: 11px; border-radius: 50%;
-    background: transparent;
-    border: 1.5px solid rgba(232,211,176,0.88);
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
-  }
-
-  /* F — name only (no marker) */
-  .f .core { display: none; }
-  .f .name {
-    padding: 4px 2px;
-    color: rgba(255,248,238,0.96);
+  /* N — monogram initial (editorial) */
+  .n .core {
+    font-family: "Bodoni Moda", Georgia, serif;
+    font-size: 18px; font-style: italic;
+    color: rgba(255,248,238,0.95);
     text-shadow:
-      0 1px 0 rgba(255,246,230,0.25),
-      0 2px 14px rgba(0,0,0,0.65);
+      0 0 1px rgba(255,246,230,0.4),
+      0 2px 10px rgba(0,0,0,0.55);
+    line-height: 1;
   }
 
-  /* G — embossed glass disc (flat, like UI chrome) */
-  .g .core {
-    width: 11px; height: 11px; border-radius: 50%;
-    background: rgba(255,248,238,0.14);
-    border: 1px solid rgba(255,248,238,0.42);
-    backdrop-filter: blur(6px);
-    box-shadow: inset 0 1px 0 rgba(255,248,238,0.35);
+  /* O — light spill / hotspot (no hard shape) */
+  .o .core {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,248,230,0.42) 0%, rgba(255,248,230,0.08) 45%, transparent 70%);
+    filter: blur(0.2px);
+  }
+  .o:hover .core {
+    background: radial-gradient(circle, rgba(255,248,230,0.55) 0%, rgba(255,248,230,0.12) 48%, transparent 72%);
   }
 
-  /* H — cream comma / pause mark */
-  .h .core {
-    width: 5px; height: 5px; border-radius: 50% 50% 50% 0;
-    transform: rotate(-40deg);
-    background: rgba(247,244,236,0.9);
+  /* P — edge ribbon tab (bookmark peek) */
+  .p {
+    transform: none;
+    left: auto !important;
+    margin: 0; padding: 0;
+    flex-direction: row-reverse;
+  }
+  .p .core {
+    width: 18px; height: 34px;
+    background: linear-gradient(180deg, rgba(247,244,236,0.92), rgba(220,200,165,0.88));
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+    box-shadow: -2px 2px 8px rgba(0,0,0,0.35);
+  }
+  .p .name {
+    background: rgba(12,8,6,0.55);
+    padding: 4px 8px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Q — Things-style hollow check */
+  .q .core {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1.5px solid rgba(255,248,238,0.85);
+    background: transparent;
     box-shadow: 0 1px 3px rgba(0,0,0,0.35);
-    margin-bottom: 2px;
+  }
+
+  /* R — photo under-caption tick (film strip index) */
+  .r { flex-direction: column; align-items: center; gap: 4px; }
+  .r .core {
+    font-family: "DM Mono", monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    color: rgba(255,248,238,0.7);
+  }
+  .r .core::before {
+    content: "";
+    display: block;
+    width: 1px; height: 14px;
+    margin: 0 auto 4px;
+    background: linear-gradient(180deg, transparent, rgba(255,248,238,0.85));
+  }
+  .r .name { transform: translateY(4px); }
+  .r:hover .name { transform: translateY(0); }
+
+  /* S — Arc-like soft pill seed (status, not orb) */
+  .s .core {
+    height: 8px; width: 18px;
+    border-radius: 999px;
+    background: rgba(255,248,238,0.78);
+    border: 1px solid rgba(255,248,238,0.35);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+
+  /* T — folded dog-ear corner */
+  .t { transform: none; margin: 0; padding: 0; }
+  .t .core {
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 22px 22px 0;
+    border-color: transparent rgba(247,244,236,0.92) transparent transparent;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+  }
+  .t .name {
+    position: absolute; top: 26px; right: 0;
+    background: rgba(12,8,6,0.5);
+    padding: 3px 8px; border-radius: 6px;
+  }
+
+  /* U — constellation glyph (single ★, not a web) */
+  .u .core {
+    font-size: 13px; line-height: 1;
+    color: rgba(255,248,238,0.9);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.55);
+    transform: scale(0.95);
+  }
+
+  /* V — progressive underline only (no mark object) */
+  .v .core {
+    width: 16px; height: 2px;
+    border-radius: 2px;
+    background: rgba(255,248,238,0.35);
+    transition: width 0.2s ease, background 0.2s ease;
+  }
+  .v:hover .core {
+    width: 42px;
+    background: linear-gradient(90deg, rgba(232,211,176,0.95), rgba(255,248,238,0.4));
   }
 
   .foot {
-    margin-top: 34px;
-    text-align: center;
+    margin-top: 34px; text-align: center;
     font-family: "DM Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
     color: rgba(247,244,236,0.45);
   }
   .foot a {
-    color: rgba(232,211,176,0.9);
-    text-decoration: none;
+    color: rgba(232,211,176,0.9); text-decoration: none;
     border-bottom: 1px solid rgba(232,211,176,0.35);
   }
 </style>
@@ -265,103 +274,157 @@
 <body>
   <div class="page">
     <div class="hero">
-      <div class="eyebrow">tasks depth · pin mark</div>
-      <h1>how should a task sit on the photo?</h1>
-      <p>Same collage, eight markers. Current gold orbs vs quieter marks that belong with the frosted pills and foil type.</p>
-      <div class="now"><i></i> now · glowing gold orb</div>
+      <div class="eyebrow">tasks depth · round 3 · outside the box</div>
+      <h1>borrowed from other worlds</h1>
+      <p>Not circles, diamonds, or dashes. Patterns from museum walls, Linear, Figma comments, Things checkboxes, film indexes, and editorial monograms. Hover any mark — name appears.</p>
+      <div class="hint">hover each mark · pick a letter</div>
     </div>
 
     <div class="grid">
       <article class="opt">
-        <header><span class="num">A · current</span><h2>gold orb</h2></header>
-        <p class="blurb">Radial glow sphere — reads like a 3D ball on flat glass.</p>
+        <header><span class="num">K</span><h2>museum number</h2></header>
+        <p class="ref">gallery wall labels · MoMA / Whitney</p>
+        <p class="blurb">Tiny accession index. The photo stays clean; the number is the only clue.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin a" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin a" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin a" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin k" style="left:28%; top:28%"><span class="core">01</span><span class="name">committee check-in</span></div>
+          <div class="pin k" style="left:58%; top:22%"><span class="core">02</span><span class="name">fall enrollment</span></div>
+          <div class="pin k" style="left:78%; top:38%"><span class="core">03</span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">B</span><h2>glass chip</h2></header>
-        <p class="blurb">Same language as layout · carry · connect — frosted pill, tiny pearl.</p>
+        <header><span class="num">L</span><h2>issue chip</h2></header>
+        <p class="ref">Linear · Raycast · engineering trackers</p>
+        <p class="blurb">Monospace ID chip — T·01 — glass, not a glowing ball.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin b" style="left:30%; top:28%"><span class="chip"><span class="dot"></span><span class="name">committee check-in</span></span></div>
-          <div class="pin b" style="left:62%; top:22%"><span class="chip"><span class="dot"></span><span class="name">fall enrollment</span></span></div>
-          <div class="pin b" style="left:78%; top:40%"><span class="chip"><span class="dot"></span><span class="name">tuition</span></span></div>
+          <div class="pin l" style="left:28%; top:28%"><span class="core">T·01</span><span class="name">committee check-in</span></div>
+          <div class="pin l" style="left:58%; top:22%"><span class="core">T·02</span><span class="name">fall enrollment</span></div>
+          <div class="pin l" style="left:78%; top:38%"><span class="core">T·03</span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">C</span><h2>flat pearl</h2></header>
-        <p class="blurb">Keep a pin point, drop the glow ball — matte cream disc.</p>
+        <header><span class="num">M</span><h2>comment pin</h2></header>
+        <p class="ref">Figma · Miro · FigJam</p>
+        <p class="blurb">Numbered speech-pin — collaboration mark, cream not gold.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin c" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin c" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin c" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin m" style="left:28%; top:28%"><span class="core">1</span><span class="name">committee check-in</span></div>
+          <div class="pin m" style="left:58%; top:22%"><span class="core">2</span><span class="name">fall enrollment</span></div>
+          <div class="pin m" style="left:78%; top:38%"><span class="core">3</span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">D</span><h2>foil dash</h2></header>
-        <p class="blurb">Champagne hairline above the name — same foil as section titles.</p>
+        <header><span class="num">N</span><h2>monogram</h2></header>
+        <p class="ref">editorial mastheads · Vogue folios</p>
+        <p class="blurb">Just the first letter in Bodoni — typography is the pin.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin d" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin d" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin d" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin n" style="left:28%; top:28%"><span class="core">c</span><span class="name">committee check-in</span></div>
+          <div class="pin n" style="left:58%; top:22%"><span class="core">f</span><span class="name">fall enrollment</span></div>
+          <div class="pin n" style="left:78%; top:38%"><span class="core">t</span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">E</span><h2>hollow ring</h2></header>
-        <p class="blurb">Outline only — light as a filament point, no fill glow.</p>
+        <header><span class="num">O</span><h2>light spill</h2></header>
+        <p class="ref">Lightroom hotspots · photo inspection</p>
+        <p class="blurb">No object at all — a soft brightening of the photo where the task lives.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin e" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin e" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin e" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin o" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
+          <div class="pin o" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
+          <div class="pin o" style="left:78%; top:38%"><span class="core"></span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">F</span><h2>name only</h2></header>
-        <p class="blurb">No mark at all — just floating Bodoni on the photo.</p>
+        <header><span class="num">P</span><h2>ribbon tab</h2></header>
+        <p class="ref">physical books · planner bookmarks</p>
+        <p class="blurb">Tasks peek from the tile edge like a bookmark ribbon.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin f" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin f" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin f" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin p" style="right:0; top:22%"><span class="core"></span><span class="name">committee check-in</span></div>
+          <div class="pin p" style="right:0; top:48%"><span class="core"></span><span class="name">fall enrollment</span></div>
+          <div class="pin p" style="right:0; top:72%"><span class="core"></span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">G</span><h2>embossed glass</h2></header>
-        <p class="blurb">Frosted disc with a thin rim — like a pressed seal on glass.</p>
+        <header><span class="num">Q</span><h2>hollow check</h2></header>
+        <p class="ref">Things 3 · Apple Reminders</p>
+        <p class="blurb">Empty checkbox outline — task-shaped, not jewelry.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin g" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin g" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin g" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin q" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
+          <div class="pin q" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
+          <div class="pin q" style="left:78%; top:38%"><span class="core"></span><span class="name">tuition</span></div>
         </div>
       </article>
 
       <article class="opt">
-        <header><span class="num">H</span><h2>soft comma</h2></header>
-        <p class="blurb">Tiny cream pause-mark — quieter than a circle, still a point.</p>
+        <header><span class="num">R</span><h2>film index</h2></header>
+        <p class="ref">contact sheets · frame numbers</p>
+        <p class="blurb">A hairline drop + frame code. Photographic, not decorative.</p>
         <div class="stage">
           <div class="title">I am pursuing my Ph.D</div>
-          <div class="pin h" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
-          <div class="pin h" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
-          <div class="pin h" style="left:78%; top:36%"><span class="core"></span><span class="name">tuition</span></div>
+          <div class="pin r" style="left:28%; top:28%"><span class="core">A1</span><span class="name">committee check-in</span></div>
+          <div class="pin r" style="left:58%; top:22%"><span class="core">A2</span><span class="name">fall enrollment</span></div>
+          <div class="pin r" style="left:78%; top:38%"><span class="core">A3</span><span class="name">tuition</span></div>
+        </div>
+      </article>
+
+      <article class="opt">
+        <header><span class="num">S</span><h2>status seed</h2></header>
+        <p class="ref">Arc spaces · Capsule status pills</p>
+        <p class="blurb">Tiny horizontal capsule — a seed, not a sphere.</p>
+        <div class="stage">
+          <div class="title">I am pursuing my Ph.D</div>
+          <div class="pin s" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
+          <div class="pin s" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
+          <div class="pin s" style="left:78%; top:38%"><span class="core"></span><span class="name">tuition</span></div>
+        </div>
+      </article>
+
+      <article class="opt">
+        <header><span class="num">T</span><h2>dog-ear</h2></header>
+        <p class="ref">folded paper · reading apps</p>
+        <p class="blurb">Corner fold on the photo — the page knows something is marked.</p>
+        <div class="stage">
+          <div class="title">I am pursuing my Ph.D</div>
+          <div class="pin t" style="right:0; top:0"><span class="core"></span><span class="name">3 open</span></div>
+        </div>
+      </article>
+
+      <article class="opt">
+        <header><span class="num">U</span><h2>single star</h2></header>
+        <p class="ref">iOS favorites · map bookmarks</p>
+        <p class="blurb">One typographic ★ — not a glowing orb, not a filament web.</p>
+        <div class="stage">
+          <div class="title">I am pursuing my Ph.D</div>
+          <div class="pin u" style="left:28%; top:28%"><span class="core">★</span><span class="name">committee check-in</span></div>
+          <div class="pin u" style="left:58%; top:22%"><span class="core">★</span><span class="name">fall enrollment</span></div>
+          <div class="pin u" style="left:78%; top:38%"><span class="core">★</span><span class="name">tuition</span></div>
+        </div>
+      </article>
+
+      <article class="opt">
+        <header><span class="num">V</span><h2>growing underline</h2></header>
+        <p class="ref">web annotations · Hypothesis</p>
+        <p class="blurb">Almost invisible dash; on hover it lengthens into the name’s underline.</p>
+        <div class="stage">
+          <div class="title">I am pursuing my Ph.D</div>
+          <div class="pin v" style="left:28%; top:28%"><span class="core"></span><span class="name">committee check-in</span></div>
+          <div class="pin v" style="left:58%; top:22%"><span class="core"></span><span class="name">fall enrollment</span></div>
+          <div class="pin v" style="left:78%; top:38%"><span class="core"></span><span class="name">tuition</span></div>
         </div>
       </article>
     </div>
 
-    <p class="foot">pick a letter · <a href="everything.html">back to everything</a></p>
+    <p class="foot">round 3 · hover · pick a letter · <a href="everything.html">back to everything</a></p>
   </div>
 </body>
 </html>
