@@ -1,0 +1,33 @@
+---
+description: Never change anything Diana did not specifically ask for
+alwaysApply: true
+---
+
+# Only what she specifically asks for
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) and any work in this repo.
+
+## Never
+
+- Make changes she did **not** specifically ask for
+- “While I’m here” fixes, drive-by refactors, extra polish, cleanup, renames, or rewrites
+- Expanding scope beyond the exact request (other days, other pages, other features)
+- Inventing follow-up improvements and shipping them unasked
+- Touching files unrelated to the named ask
+
+## Always
+
+1. Do **only** what she named — the bug, the photo, the day, the button, the copy
+2. If a complaint names a specific wrong thing, fix **that** thing (see `no-permission-ask-on-complaints`) — still do not pile on extras
+3. If something adjacent looks broken but she didn’t ask, **leave it** unless she says to fix it
+4. Prefer the smallest diff that satisfies the ask
+
+## Exceptions (narrow)
+
+- She explicitly says to fix related breakage / “and anything else like it” / “everywhere”
+- A hard existing rule requires an immediate paired fix (e.g. sync `everything.html` + `prototype.html` when that rule says so for the thing she asked to change)
+- Safety / data-loss prevention required to complete the ask she already made
+
+## If you already over-scoped
+
+Stop. Revert the unasked parts. Ship only what she asked.
