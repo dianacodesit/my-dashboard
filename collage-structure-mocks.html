@@ -3,141 +3,186 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>collage structure · look</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&amp;family=Newsreader:ital,opsz,wght@6..72,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css?v=collage1"/>
+<title>collage structure · A–F</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;family=Cinzel:wght@500&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=struct3"/>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { min-height: 100%; }
   body {
     font-family: "Newsreader", Georgia, serif;
-    background: #120e0b;
     color: #f7efe4;
-    padding: 72px 18px 80px;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(18,12,8,0.48), rgba(12,8,6,0.82)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #1a1210;
   }
   body #hamburger-menu span { background: #f3e6d0; }
-  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+
+  .hero { text-align: center; max-width: 820px; margin: 0 auto 8px; }
   .hero h1 {
     font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
     font-weight: 400;
-    font-size: clamp(28px, 4.6vw, 42px);
     color: #fff8ee;
   }
   .hero p {
-    margin-top: 10px;
+    margin-top: 12px;
     font-style: italic;
-    color: rgba(247,239,228,0.58);
-    font-size: 1.05rem;
-    line-height: 1.5;
+    font-size: 1.08rem;
+    line-height: 1.55;
+    color: rgba(247,239,228,0.62);
   }
-  .tabs {
-    position: sticky;
-    top: 12px;
-    z-index: 40;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 22px auto 18px;
-  }
-  .tabs button {
+  .hero .rule {
+    margin-top: 10px;
     font-family: "DM Mono", monospace;
     font-size: 10px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(247,239,228,0.55);
-    background: rgba(255,248,238,0.05);
-    border: 1px solid rgba(255,248,238,0.12);
-    border-radius: 999px;
-    padding: 9px 16px;
-    cursor: pointer;
+    color: rgba(232,201,154,0.7);
+    font-style: normal;
   }
-  .tabs button.on {
-    color: #120e0b;
-    background: #e4d2b4;
-    border-color: #e4d2b4;
-  }
-  .board-wrap {
-    max-width: 1180px;
-    margin: 0 auto;
-  }
-  .board {
+  .picked {
     display: none;
-    height: min(78vh, 820px);
-    background: rgba(20,14,10,0.45);
+    max-width: 640px;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px auto 28px;
+    max-width: 820px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover { color: #e8c99a; border-color: rgba(232,201,154,0.4); }
+
+  .panel {
+    max-width: 1100px;
+    margin: 0 auto 42px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.5);
+    backdrop-filter: blur(8px);
     overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   }
-  .board.on { display: grid; }
-  .now {
-    grid-template-columns: 1.15fr 1fr 0.62fr 1.15fr;
-    grid-template-rows: 1.05fr 0.72fr 0.82fr 0.78fr;
-    gap: 0;
+  .panel:hover {
+    border-color: rgba(232,201,154,0.45);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
   }
-  .now .t-academia { grid-area: 1 / 1 / 2 / 2; }
-  .now .t-fitness { grid-area: 1 / 2 / 2 / 3; }
-  .now .t-fighting { grid-area: 1 / 3 / 3 / 4; }
-  .now .t-networking { grid-area: 1 / 4 / 2 / 5; }
-  .now .t-pursuing { grid-area: 2 / 4 / 3 / 5; }
-  .now .t-glowing-up { grid-area: 2 / 1 / 5 / 2; }
-  .now .t-deen { grid-area: 2 / 2 / 3 / 3; }
-  .now .t-wins { grid-area: 3 / 2 / 5 / 3; }
-  .now .t-financially-abundant { grid-area: 3 / 3 / 4 / 4; }
-  .now .t-successful { grid-area: 4 / 3 / 5 / 4; }
-  .now .t-healthy { grid-area: 3 / 4 / 5 / 5; }
-
-  .air {
-    grid-template-columns: 1.28fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 0.92fr 0.92fr;
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.85);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35), 0 22px 56px rgba(0,0,0,0.42);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
     gap: 12px;
-    padding: 12px;
+    padding: 14px 18px 6px;
   }
-  .air .t-academia { grid-area: 1 / 1 / 3 / 2; }
-  .air .t-fitness { grid-area: 1 / 2 / 2 / 3; }
-  .air .t-fighting { grid-area: 1 / 3 / 2 / 4; }
-  .air .t-glowing-up { grid-area: 2 / 2 / 3 / 3; }
-  .air .t-deen { grid-area: 2 / 3 / 3 / 4; }
-  .air .t-wins { grid-area: 3 / 1 / 4 / 2; }
-  .air .t-networking { grid-area: 3 / 2 / 4 / 3; }
-  .air .t-pursuing { grid-area: 3 / 3 / 4 / 4; }
-  .air .t-financially-abundant { grid-area: 4 / 1 / 5 / 2; }
-  .air .t-successful { grid-area: 4 / 2 / 5 / 3; }
-  .air .t-healthy { grid-area: 4 / 3 / 5 / 4; }
-  .air .tile { border-radius: 14px; }
-
-  .spread {
-    grid-template-columns: 1.35fr 1.35fr 1fr 1fr;
-    grid-template-rows: 1.18fr 1.18fr 0.88fr 0.88fr;
-    gap: 3px;
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.35rem;
+    color: rgba(255,248,238,0.92);
   }
-  .spread .t-academia { grid-area: 1 / 1 / 3 / 3; }
-  .spread .t-fitness { grid-area: 1 / 3 / 2 / 5; }
-  .spread .t-glowing-up { grid-area: 2 / 3 / 3 / 5; }
-  .spread .t-deen { grid-area: 3 / 1 / 4 / 2; }
-  .spread .t-wins { grid-area: 3 / 2 / 4 / 3; }
-  .spread .t-fighting { grid-area: 3 / 3 / 4 / 4; }
-  .spread .t-networking { grid-area: 3 / 4 / 4 / 5; }
-  .spread .t-pursuing { grid-area: 4 / 1 / 5 / 2; }
-  .spread .t-financially-abundant { grid-area: 4 / 2 / 5 / 3; }
-  .spread .t-successful { grid-area: 4 / 3 / 5 / 4; }
-  .spread .t-healthy { grid-area: 4 / 4 / 5 / 5; }
-
-  .even {
-    grid-template-columns: 1.2fr 1fr 1fr 1fr;
-    grid-template-rows: 1.08fr 1fr 1fr;
-    gap: 0;
+  .panel-head .letter em {
+    font-style: normal;
+    color: #e8c99a;
+    margin-right: 10px;
   }
-  .even .t-academia { grid-area: 1 / 1 / 2 / 3; }
-  .even .t-fitness { grid-area: 1 / 3 / 2 / 4; }
-  .even .t-glowing-up { grid-area: 1 / 4 / 2 / 5; }
-  .even .t-deen { grid-area: 2 / 1 / 3 / 2; }
-  .even .t-wins { grid-area: 2 / 2 / 3 / 3; }
-  .even .t-fighting { grid-area: 2 / 3 / 3 / 4; }
-  .even .t-networking { grid-area: 2 / 4 / 3 / 5; }
-  .even .t-pursuing { grid-area: 3 / 1 / 4 / 2; }
-  .even .t-financially-abundant { grid-area: 3 / 2 / 4 / 3; }
-  .even .t-successful { grid-area: 3 / 3 / 4 / 4; }
-  .even .t-healthy { grid-area: 3 / 4 / 4 / 5; }
+  .panel-head .tag {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.48);
+  }
+  .blurb {
+    padding: 0 18px 14px;
+    font-style: italic;
+    font-size: 1.02rem;
+    color: rgba(247,239,228,0.58);
+    line-height: 1.45;
+  }
 
+  .stage {
+    margin: 0 14px 16px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #0a0705;
+  }
+  .chrome {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: baseline;
+    gap: 12px;
+    padding: 12px 14px 10px;
+    background: rgba(20,12,8,0.35);
+  }
+  .chrome .date {
+    font-family: "Cinzel", serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(243,230,200,0.85);
+  }
+  .chrome .views {
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .chrome .views span {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(255,248,238,0.45);
+  }
+  .chrome .views span.on { color: #e8c99a; }
+  .chrome .tools {
+    justify-self: end;
+    display: flex;
+    gap: 14px;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(255,248,238,0.5);
+  }
+
+  .collage {
+    display: grid;
+    width: 100%;
+    min-height: 520px;
+    background: #060403;
+  }
   .tile {
     position: relative;
     overflow: hidden;
@@ -145,10 +190,7 @@
     min-height: 0;
     background: #1a1410;
   }
-  .now .tile, .even .tile {
-    box-shadow: inset 0 0 0 1px rgba(14,8,4,0.5), inset 0 0 0 2px rgba(236,204,150,0.28);
-  }
-  .photo {
+  .tile .photo {
     position: absolute;
     inset: 0;
     background-size: cover;
@@ -157,116 +199,314 @@
   .tile.nophoto .photo {
     background: linear-gradient(160deg, #2a221c, #14100d);
   }
-  .title {
+
+  /* LIVE Sep 6+ foil titles — same lock as everything.html */
+  .tile .vision-tile-title {
     position: absolute;
+    z-index: 16;
     top: 50%;
     left: 50%;
+    right: auto;
+    bottom: auto;
     transform: translate(-50%, -50%);
-    width: calc(100% - 28px);
+    width: calc(100% - 48px);
+    margin: 0;
     text-align: center;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "Playfair Display", "Gilda Display", Georgia, "Times New Roman", serif;
     font-style: italic;
     font-weight: 500;
-    font-size: clamp(16px, 1.7vw, 26px);
+    font-size: clamp(22px, 2.6vw, 34px);
     letter-spacing: 0.03em;
     line-height: 1.12;
-    background-image: linear-gradient(185deg, #f7efe4 0%, #e4d2b4 18%, #c4a882 40%, #8f7858 58%, #c4a882 78%, #efe6d4 100%);
+    background-image: linear-gradient(185deg,
+      #e8d4b0 0%,
+      #d4b888 16%,
+      #c4a882 36%,
+      #8f7858 54%,
+      #b89568 72%,
+      #d8c49a 100%);
+    background-size: 100% 100%;
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
     color: #c4a882;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
     filter:
-      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.72))
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
       drop-shadow(0 1px 0 #3a3228)
       drop-shadow(0 2px 0 #241c16);
     pointer-events: none;
-    z-index: 2;
+    isolation: isolate;
   }
-  .cap {
-    max-width: 720px;
-    margin: 14px auto 0;
-    text-align: center;
-    font-family: "DM Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(247,239,228,0.42);
-  }
-  .back {
+  .tile .vision-tile-title::before {
+    content: attr(data-carve);
+    position: absolute;
+    left: 1px;
+    right: -1px;
+    top: 2px;
     display: block;
+    width: 100%;
+    text-align: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    color: #2a241c;
+    -webkit-text-fill-color: #2a241c;
+    background: none;
+    filter: none;
+    opacity: 0.92;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* —— A kiss mosaic (current Sep 18+ system) —— */
+  .struct-a {
+    gap: 0;
+    grid-template-columns: 1.05fr 1.35fr 0.95fr;
+    grid-template-rows: 1.2fr 0.95fr 1fr;
+  }
+  .struct-a .t1 { grid-row: 1 / 3; }
+  .struct-a .t2 { grid-column: 2 / 4; }
+  .struct-a .t3 { grid-column: 2; }
+  .struct-a .t4 { grid-column: 3; }
+  .struct-a .t5 { grid-column: 1 / 3; }
+  .struct-a .t6 { grid-column: 3; }
+
+  /* —— B air magazine (gutters + soft rooms) —— */
+  .struct-b {
+    gap: 12px;
+    padding: 12px;
+    grid-template-columns: 1.1fr 1.2fr 1fr;
+    grid-template-rows: 1.2fr 1fr 1fr;
+  }
+  .struct-b .tile { border-radius: 14px; }
+  .struct-b .t1 { grid-row: 1 / 3; }
+  .struct-b .t2 { grid-column: 2 / 4; }
+  .struct-b .t3 { grid-column: 2; }
+  .struct-b .t4 { grid-column: 3; }
+  .struct-b .t5 { grid-column: 1 / 3; }
+  .struct-b .t6 { grid-column: 3; }
+
+  /* —— C rooms / tessellate (Sep 7–17 board fill) —— */
+  .struct-c {
+    gap: 0;
+    grid-template-columns: 1.2fr 1fr 0.85fr 1.1fr;
+    grid-template-rows: 1.1fr 0.85fr 0.95fr 0.9fr;
+  }
+  .struct-c .t1 { grid-area: 1 / 1 / 3 / 2; }
+  .struct-c .t2 { grid-area: 1 / 2 / 2 / 4; }
+  .struct-c .t3 { grid-area: 1 / 4 / 2 / 5; }
+  .struct-c .t4 { grid-area: 2 / 2 / 3 / 3; }
+  .struct-c .t5 { grid-area: 2 / 3 / 4 / 5; }
+  .struct-c .t6 { grid-area: 3 / 1 / 5 / 3; }
+  .struct-c .tile {
+    box-shadow: inset 0 0 0 1px rgba(14,8,4,0.45), inset 0 0 0 2px rgba(236,204,150,0.22);
+  }
+
+  /* —— D spread — one dominant section, rest composed around it —— */
+  .struct-d {
+    gap: 0;
+    grid-template-columns: 1.55fr 1fr 1fr;
+    grid-template-rows: 1.25fr 1fr 1fr;
+  }
+  .struct-d .t1 { grid-area: 1 / 1 / 4 / 2; }
+  .struct-d .t2 { grid-area: 1 / 2 / 2 / 4; }
+  .struct-d .t3 { grid-area: 2 / 2 / 3 / 3; }
+  .struct-d .t4 { grid-area: 2 / 3 / 3 / 4; }
+  .struct-d .t5 { grid-area: 3 / 2 / 4 / 3; }
+  .struct-d .t6 { grid-area: 3 / 3 / 4 / 4; }
+
+  /* —— E bands — equal-height horizontal strips —— */
+  .struct-e {
+    gap: 0;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  .struct-e .t1 { grid-column: 1; grid-row: 1; }
+  .struct-e .t2 { grid-column: 2; grid-row: 1; }
+  .struct-e .t3 { grid-column: 3; grid-row: 1; }
+  .struct-e .t4 { grid-column: 1; grid-row: 2; }
+  .struct-e .t5 { grid-column: 2; grid-row: 2; }
+  .struct-e .t6 { grid-column: 3; grid-row: 2; }
+
+  /* —— F flush even — closer sizes, no leftover skinny strips —— */
+  .struct-f {
+    gap: 0;
+    grid-template-columns: 1.15fr 1fr 1fr 1fr;
+    grid-template-rows: 1.05fr 1fr 1fr;
+  }
+  .struct-f .t1 { grid-area: 1 / 1 / 2 / 3; }
+  .struct-f .t2 { grid-area: 1 / 3 / 2 / 4; }
+  .struct-f .t3 { grid-area: 1 / 4 / 2 / 5; }
+  .struct-f .t4 { grid-area: 2 / 1 / 3 / 2; }
+  .struct-f .t5 { grid-area: 2 / 2 / 3 / 4; }
+  .struct-f .t6 { grid-area: 2 / 4 / 4 / 5; }
+  /* reuse t1–t6 only — hide extras via missing nodes */
+
+  .foot {
+    max-width: 720px;
+    margin: 28px auto 0;
     text-align: center;
-    margin-top: 28px;
     font-family: "DM Mono", monospace;
     font-size: 10px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #c9a872;
-    text-decoration: none;
+    color: rgba(247,239,228,0.4);
+    line-height: 1.8;
   }
+  .foot a { color: #c9a872; text-decoration: none; border-bottom: 1px solid rgba(201,168,114,0.35); }
 </style>
 </head>
 <body>
 <div class="hero">
-  <h1>today, four ways</h1>
-  <p>same sections. the structure is what changes.</p>
+  <h1>collage structure</h1>
+  <p>Not which tile goes where. How the collage is built — kiss vs air, rooms vs bands, one hero vs even weight.</p>
+  <p class="rule">same six sections · live gold-foil titles · click the letter</p>
 </div>
-<div class="tabs">
-  <button type="button" data-show="now" class="on">now</button>
-  <button type="button" data-show="air">air</button>
-  <button type="button" data-show="spread">spread</button>
-  <button type="button" data-show="even">even</button>
-</div>
-<div class="board-wrap">
-  <div class="board now on" id="now"></div>
-  <div class="board air" id="air"></div>
-  <div class="board spread" id="spread"></div>
-  <div class="board even" id="even"></div>
-  <p class="cap" id="cap">now · the current packed puzzle</p>
-</div>
-<a class="back" href="/everything.html">back to the board</a>
+<p class="picked" id="picked"></p>
+
+<nav class="jump">
+  <a href="#A">A kiss</a>
+  <a href="#B">B air</a>
+  <a href="#C">C rooms</a>
+  <a href="#D">D spread</a>
+  <a href="#E">E bands</a>
+  <a href="#F">F even</a>
+</nav>
+
+<section class="panel" id="A" data-pick="A" data-name="A · kiss mosaic">
+  <div class="panel-head">
+    <div class="letter"><em>A</em>kiss mosaic</div>
+    <div class="tag">current system · Sep 18+</div>
+  </div>
+  <p class="blurb">Tiles kiss (gap 0). Asymmetric magazine weights. Photos cover. This is vision collage as it ships now.</p>
+  <div class="stage">
+    <div class="chrome">
+      <div class="date">sep 20 · sun</div>
+      <div class="views"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+      <div class="tools"><span>layout</span><span>carry</span><span>+</span></div>
+    </div>
+    <div class="collage struct-a" data-board></div>
+  </div>
+</section>
+
+<section class="panel" id="B" data-pick="B" data-name="B · air magazine">
+  <div class="panel-head">
+    <div class="letter"><em>B</em>air magazine</div>
+    <div class="tag">gutters · Aug 26 lineage</div>
+  </div>
+  <p class="blurb">Same magazine weights, but 12px air between sections and soft corners. The collage breathes as separate rooms.</p>
+  <div class="stage">
+    <div class="chrome">
+      <div class="date">sep 20 · sun</div>
+      <div class="views"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+      <div class="tools"><span>layout</span><span>carry</span><span>+</span></div>
+    </div>
+    <div class="collage struct-b" data-board></div>
+  </div>
+</section>
+
+<section class="panel" id="C" data-pick="C" data-name="C · rooms">
+  <div class="panel-head">
+    <div class="letter"><em>C</em>rooms</div>
+    <div class="tag">tessellate · Sep 7–17</div>
+  </div>
+  <p class="blurb">Board fills as interlocking rooms — no leftover hole, no gutters. Tessellated mosaic, not a magazine strip.</p>
+  <div class="stage">
+    <div class="chrome">
+      <div class="date">sep 20 · sun</div>
+      <div class="views"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+      <div class="tools"><span>layout</span><span>carry</span><span>+</span></div>
+    </div>
+    <div class="collage struct-c" data-board></div>
+  </div>
+</section>
+
+<section class="panel" id="D" data-pick="D" data-name="D · spread">
+  <div class="panel-head">
+    <div class="letter"><em>D</em>spread</div>
+    <div class="tag">one dominant section</div>
+  </div>
+  <p class="blurb">One section owns the board. Everything else composes around that hero room.</p>
+  <div class="stage">
+    <div class="chrome">
+      <div class="date">sep 20 · sun</div>
+      <div class="views"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+      <div class="tools"><span>layout</span><span>carry</span><span>+</span></div>
+    </div>
+    <div class="collage struct-d" data-board></div>
+  </div>
+</section>
+
+<section class="panel" id="E" data-pick="E" data-name="E · bands">
+  <div class="panel-head">
+    <div class="letter"><em>E</em>bands</div>
+    <div class="tag">equal-height rows</div>
+  </div>
+  <p class="blurb">Horizontal bands of equal height. Readable as rows — not a magazine collage.</p>
+  <div class="stage">
+    <div class="chrome">
+      <div class="date">sep 20 · sun</div>
+      <div class="views"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+      <div class="tools"><span>layout</span><span>carry</span><span>+</span></div>
+    </div>
+    <div class="collage struct-e" data-board></div>
+  </div>
+</section>
+
+<section class="panel" id="F" data-pick="F" data-name="F · even flush">
+  <div class="panel-head">
+    <div class="letter"><em>F</em>even flush</div>
+    <div class="tag">closer sizes · no skinny leftovers</div>
+  </div>
+  <p class="blurb">Flush kiss, but rooms stay closer in size — no tall leftover strip eating the board.</p>
+  <div class="stage">
+    <div class="chrome">
+      <div class="date">sep 20 · sun</div>
+      <div class="views"><span class="on">overview</span><span>impulses</span><span>priority</span><span>nodes</span><span>flow</span></div>
+      <div class="tools"><span>layout</span><span>carry</span><span>+</span></div>
+    </div>
+    <div class="collage struct-f" data-board></div>
+  </div>
+</section>
+
+<p class="foot">
+  Reply with the letter ·
+  <a href="/everything.html">back to the board</a>
+</p>
+
 <script>
 (function(){
   var tiles = [
-    {id:'academia', t:'I am a grad student', src:'manus-storage/zone-grad-student.jpg?v=grad1'},
-    {id:'fitness', t:'I am training', src:'manus-storage/zone-athletic-gym.jpg?v=gym1'},
-    {id:'glowing-up', t:'I am glowing up', src:'manus-storage/zone-glow-up.jpg?v=glow7'},
-    {id:'deen', t:'I am worshipping Allah ﷻ', src:'manus-storage/zone-god-conscious.jpg?v=remembrance1'},
-    {id:'wins', t:'I am winning', src:'manus-storage/zone-wins-hand.jpg?v=game13'},
-    {id:'fighting', t:'I am fighting', src:'manus-storage/zone-audacity.jpg?v=finger1'},
-    {id:'networking', t:'I am networking', src:'manus-storage/zone-networking.jpg?v=net1'},
-    {id:'pursuing', t:'I am pursuing', src:'manus-storage/zone-she-pursues.jpg?v=pursue1'},
-    {id:'financially-abundant', t:'I am financially abundant', src:'manus-storage/zone-abundance-tree.jpg?v=tree1'},
-    {id:'successful', t:'I am successful', src:'manus-storage/zone-successful.jpg?v=ok2'},
-    {id:'healthy', t:'I am healthy', src:''}
+    { cls:'t1', title:'I am glowing up', src:'manus-storage/zone-glow-up.jpg?v=glow6' },
+    { cls:'t2', title:'I am pursuing my Ph.D', src:'manus-storage/zone-grad-student.jpg?v=grad4' },
+    { cls:'t3', title:'I am earning', src:'manus-storage/zone-earn-hands.jpg?v=earn10' },
+    { cls:'t4', title:'I am litigating', src:'manus-storage/zone-to-litigate.jpg?v=court1' },
+    { cls:'t5', title:'I am worshipping Allah ﷻ', src:'manus-storage/zone-god-conscious.jpg?v=remembrance1' },
+    { cls:'t6', title:'I am winning', src:'manus-storage/zone-wins-hand.jpg?v=game13' }
   ];
   function paint(host){
     host.innerHTML = tiles.map(function(x){
       var photo = x.src
         ? 'style="background-image:url(\'' + x.src + '\')"'
         : '';
-      return '<article class="tile t-' + x.id + (x.src ? '' : ' nophoto') + '">' +
+      var safe = x.title.replace(/"/g, '&quot;');
+      return '<article class="tile ' + x.cls + (x.src ? '' : ' nophoto') + '">' +
         '<div class="photo" ' + photo + '></div>' +
-        '<h3 class="title">' + x.t + '</h3></article>';
+        '<h3 class="vision-tile-title" data-carve="' + safe + '">' + x.title + '</h3>' +
+        '</article>';
     }).join('');
   }
-  ['now','air','spread','even'].forEach(function(id){
-    paint(document.getElementById(id));
-  });
-  var caps = {
-    now: 'now · the current packed puzzle',
-    air: 'air · gutters, rounded rooms, fuller tiles get more space',
-    spread: 'spread · one large room, the rest composed around it',
-    even: 'even · flush rooms, closer in size, no skinny leftover strips'
-  };
-  var tabs = [].slice.call(document.querySelectorAll('.tabs button'));
-  var boards = [].slice.call(document.querySelectorAll('.board'));
-  var cap = document.getElementById('cap');
-  tabs.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var id = btn.getAttribute('data-show');
-      tabs.forEach(function(b){ b.classList.toggle('on', b === btn); });
-      boards.forEach(function(b){ b.classList.toggle('on', b.id === id); });
-      cap.textContent = caps[id] || '';
+  document.querySelectorAll('[data-board]').forEach(paint);
+
+  var picked = document.getElementById('picked');
+  document.querySelectorAll('.panel').forEach(function(panel){
+    panel.addEventListener('click', function(){
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('is-picked'); });
+      panel.classList.add('is-picked');
+      picked.textContent = 'picked · ' + (panel.getAttribute('data-name') || '');
+      picked.classList.add('on');
+      try { history.replaceState(null, '', '#' + panel.id); } catch(e){}
     });
   });
 })();

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>task attention · eight new marks</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,700&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=attn1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.55), rgba(10,7,5,0.88)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 820px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+    font-style: normal;
+  }
+  .picked {
+    display: none;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px auto 24px;
+    max-width: 980px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover, .jump a.on { color: #e8c99a; border-color: rgba(232,201,154,0.45); }
+
+  .grid {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  @media (min-width: 960px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .panel {
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.5);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .panel:hover {
+    border-color: rgba(232,201,154,0.45);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.85);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35), 0 22px 56px rgba(0,0,0,0.42);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px 4px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.25rem;
+    color: rgba(255,248,238,0.92);
+  }
+  .panel-head .letter em {
+    font-style: normal;
+    color: #e8c99a;
+    margin-right: 8px;
+  }
+  .panel-head .hint {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.42);
+  }
+  .panel-desc {
+    padding: 0 16px 10px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.52);
+    line-height: 1.4;
+  }
+
+  .stage {
+    position: relative;
+    margin: 0 12px 12px;
+    height: 320px;
+    border-radius: 14px;
+    overflow: hidden;
+    background:
+      url("manus-storage/zone-grad-student.jpg?v=grad4") center / cover no-repeat;
+    box-shadow:
+      inset 0 0 0 1px rgba(232,201,154,0.22),
+      0 10px 28px rgba(0,0,0,0.35);
+  }
+  .stage .title {
+    position: absolute;
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(22px, 2.8vw, 32px);
+    background-image: linear-gradient(185deg, #e8d4b0, #c4a882 40%, #8f7858 55%, #d8c49a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 0 rgba(36,28,22,0.45));
+    z-index: 2;
+  }
+
+  .pick-row { padding: 0 16px 16px; }
+  .pick-row button {
+    width: 100%;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(232,201,154,0.35);
+    background: rgba(232,201,154,0.1);
+    color: #e8c99a;
+    cursor: pointer;
+  }
+  .pick-row button:hover { background: rgba(232,201,154,0.18); }
+
+  /* ========== A · dog-ear fold ========== */
+  .mark-dogear {
+    position: absolute;
+    right: 0; top: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 78px 78px 0;
+    border-color: transparent #f3ebe0 transparent transparent;
+    filter: drop-shadow(-4px 6px 10px rgba(0,0,0,0.35));
+    z-index: 5;
+    animation: dogPulse 2.4s ease-in-out infinite;
+  }
+  .mark-dogear::before {
+    content: "";
+    position: absolute;
+    right: -78px; top: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 39px 39px 0 0;
+    border-color: #c9b79a transparent transparent transparent;
+  }
+  .mark-dogear .peek {
+    position: absolute;
+    right: -72px; top: 28px;
+    width: 64px;
+    font-family: "Caveat", cursive;
+    font-size: 15px;
+    line-height: 1.15;
+    color: #3a2a1c;
+    transform: rotate(42deg);
+    transform-origin: left top;
+  }
+  @keyframes dogPulse {
+    0%, 100% { filter: drop-shadow(-4px 6px 10px rgba(0,0,0,0.35)); }
+    50% { filter: drop-shadow(-4px 8px 16px rgba(180,40,40,0.35)); }
+  }
+
+  /* ========== B · cracked wax seal ========== */
+  .mark-wax {
+    position: absolute;
+    right: 18px; bottom: 18px;
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #c45a4a, #8b1e1e 55%, #5a1010 100%);
+    box-shadow:
+      0 0 0 3px rgba(90,20,20,0.5),
+      0 10px 22px rgba(0,0,0,0.45),
+      inset 0 2px 4px rgba(255,200,180,0.25);
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    animation: waxBeat 1.8s ease-in-out infinite;
+  }
+  .mark-wax span {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: #f6e4d0;
+    text-align: center;
+    line-height: 1.05;
+    text-shadow: 0 1px 0 rgba(40,0,0,0.45);
+  }
+  .mark-wax::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(246,228,208,0.35);
+    pointer-events: none;
+  }
+  .mark-wax .crack {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      linear-gradient(125deg, transparent 46%, rgba(20,0,0,0.55) 48%, transparent 50%),
+      linear-gradient(40deg, transparent 55%, rgba(20,0,0,0.4) 57%, transparent 59%);
+    pointer-events: none;
+  }
+  @keyframes waxBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  /* ========== C · silk ribbon ========== */
+  .mark-ribbon {
+    position: absolute;
+    top: -6px; left: 22px;
+    width: 34px;
+    height: 118px;
+    z-index: 5;
+    filter: drop-shadow(2px 6px 8px rgba(0,0,0,0.4));
+  }
+  .mark-ribbon .band {
+    position: absolute;
+    inset: 0 0 22px 0;
+    background: linear-gradient(90deg, #6b1c1c, #a83232 40%, #7a2222 70%, #4a1010);
+    border-radius: 2px 2px 0 0;
+  }
+  .mark-ribbon .band::before {
+    content: "OPEN";
+    position: absolute;
+    left: 50%; top: 42%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    color: rgba(255,236,220,0.9);
+    white-space: nowrap;
+  }
+  .mark-ribbon .tail {
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-top: 22px solid #7a2222;
+  }
+  .mark-ribbon .fringe {
+    position: absolute;
+    left: 50%; top: 14px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .mark-ribbon .fringe i {
+    display: block;
+    width: 14px; height: 2px;
+    background: rgba(255,236,220,0.75);
+    border-radius: 1px;
+  }
+
+  /* ========== D · overdue rubber stamp ========== */
+  .mark-stamp {
+    position: absolute;
+    right: 14px; top: 16px;
+    z-index: 5;
+    padding: 8px 12px 7px;
+    border: 3px double rgba(160, 28, 28, 0.85);
+    border-radius: 4px;
+    color: rgba(170, 32, 32, 0.92);
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: rgba(255, 248, 238, 0.06);
+    transform: rotate(12deg);
+    box-shadow: 0 0 0 1px rgba(160,28,28,0.25);
+    animation: stampFlash 2.2s steps(1, end) infinite;
+  }
+  .mark-stamp b {
+    display: block;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  @keyframes stampFlash {
+    0%, 70%, 100% { opacity: 0.92; filter: none; }
+    75% { opacity: 1; filter: drop-shadow(0 0 8px rgba(180,40,40,0.55)); }
+  }
+
+  /* ========== E · breathing rim ========== */
+  .mark-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 4;
+    box-shadow:
+      inset 0 0 0 3px rgba(232, 201, 154, 0.0),
+      inset 0 0 28px rgba(180, 40, 40, 0.0);
+    animation: rimBreathe 2s ease-in-out infinite;
+  }
+  .mark-rim .chip {
+    position: absolute;
+    top: 12px; left: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(12,8,6,0.72);
+    border: 1px solid rgba(232,201,154,0.45);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #e8c99a;
+    backdrop-filter: blur(6px);
+  }
+  @keyframes rimBreathe {
+    0%, 100% {
+      box-shadow:
+        inset 0 0 0 2px rgba(200, 60, 50, 0.35),
+        inset 0 0 22px rgba(180, 40, 40, 0.12);
+    }
+    50% {
+      box-shadow:
+        inset 0 0 0 4px rgba(220, 80, 60, 0.75),
+        inset 0 0 40px rgba(180, 40, 40, 0.32);
+    }
+  }
+
+  /* ========== F · torn ticket stub ========== */
+  .mark-ticket {
+    position: absolute;
+    left: 14px; bottom: 14px;
+    width: 108px;
+    padding: 10px 10px 12px;
+    background: #f4ebe0;
+    color: #2c2218;
+    z-index: 5;
+    transform: rotate(-6deg);
+    filter: drop-shadow(0 8px 14px rgba(0,0,0,0.4));
+    clip-path: polygon(
+      0 0, 100% 0, 100% 78%,
+      96% 80%, 100% 82%, 96% 84%, 100% 86%, 96% 88%, 100% 90%,
+      96% 92%, 100% 94%, 96% 96%, 100% 98%, 100% 100%, 0 100%
+    );
+  }
+  .mark-ticket::before {
+    content: "";
+    position: absolute;
+    left: 8px; right: 8px; top: 34px;
+    border-top: 1.5px dashed rgba(44,34,24,0.35);
+  }
+  .mark-ticket .lab {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+  .mark-ticket .big {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1;
+    margin: 4px 0 10px;
+  }
+  .mark-ticket .sub {
+    font-family: "Caveat", cursive;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  /* ========== G · ink tally ========== */
+  .mark-tally {
+    position: absolute;
+    left: 16px; top: 14px;
+    z-index: 5;
+    padding: 8px 12px 10px;
+    background: rgba(12,8,6,0.45);
+    border: 1px solid rgba(255,248,238,0.12);
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+  }
+  .mark-tally .slashes {
+    font-family: "Caveat", cursive;
+    font-size: 34px;
+    letter-spacing: -0.04em;
+    color: #f2e6d4;
+    line-height: 1;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.35);
+  }
+  .mark-tally .cap {
+    margin-top: 2px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.8);
+  }
+
+  /* ========== H · clipped index card ========== */
+  .mark-card {
+    position: absolute;
+    right: -4px; top: 28px;
+    width: 132px;
+    padding: 14px 12px 12px;
+    background: linear-gradient(180deg, #fff8ee, #efe4d4);
+    color: #2a2118;
+    z-index: 5;
+    transform: rotate(7deg);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 12px 24px rgba(0,0,0,0.4);
+    border-radius: 2px;
+  }
+  .mark-card .clip {
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    width: 28px; height: 18px;
+    border: 2.5px solid #9aa3ad;
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(180deg, #d7dde4, #aeb6c0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  }
+  .mark-card .clip::after {
+    content: "";
+    position: absolute;
+    left: 4px; right: 4px; bottom: -3px;
+    height: 6px;
+    background: #c5ccd4;
+    border-radius: 0 0 2px 2px;
+  }
+  .mark-card .lab {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+  .mark-card ul {
+    list-style: none;
+    margin-top: 6px;
+    font-family: "Caveat", cursive;
+    font-size: 16px;
+    line-height: 1.25;
+  }
+  .mark-card ul li::before {
+    content: "☐ ";
+    opacity: 0.7;
+  }
+
+  /* Shared: resting mark · hover reveals full task names (same idea as pin hover) */
+  .hover-names {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%) translateY(6px);
+    z-index: 8;
+    min-width: 168px;
+    max-width: 78%;
+    padding: 10px 14px 11px;
+    border-radius: 12px;
+    background: rgba(12, 8, 6, 0.78);
+    border: 1px solid rgba(232, 201, 154, 0.42);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  }
+  .hover-names .hn-lab {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(232, 201, 154, 0.7);
+    margin-bottom: 6px;
+  }
+  .hover-names ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .hover-names li {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #f7efe4;
+    padding: 2px 0;
+  }
+  .hover-names li + li {
+    border-top: 1px solid rgba(255, 248, 238, 0.08);
+  }
+  .stage:hover .hover-names,
+  .stage:focus-within .hover-names {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .stage .hover-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    z-index: 3;
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247, 239, 228, 0.38);
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  .stage:hover .hover-hint {
+    opacity: 0;
+  }
+
+  /* H: card shows count at rest; full checklist only on hover */
+  .mark-card ul.rest-hide {
+    display: none;
+  }
+  .stage:hover .mark-card ul.rest-hide {
+    display: block;
+  }
+  .mark-card .rest-count {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    margin-top: 4px;
+    line-height: 1;
+  }
+  .stage:hover .mark-card .rest-count {
+    display: none;
+  }
+
+  /* F: ticket count at rest; names move to hover panel */
+  .mark-ticket .sub { display: none; }
+</style>
+</head>
+<body>
+<script src="nav-shared.js?v=attn2"></script>
+
+<div class="hero">
+  <h1>task attention</h1>
+  <p>Attention mark at rest. <em>Hover the section</em> for full task names — same as the old pins.</p>
+  <div class="rule">live · E breathing rim · rest = grab attention · hover = every open task by name</div>
+  <div class="picked on" id="picked">picked · E · breathing rim</div>
+</div>
+
+<nav class="jump">
+  <a href="#a">A dog-ear</a>
+  <a href="#b">B wax seal</a>
+  <a href="#c">C ribbon</a>
+  <a href="#d">D stamp</a>
+  <a href="#e">E breathing rim</a>
+  <a href="#f">F ticket</a>
+  <a href="#g">G ink tally</a>
+  <a href="#h">H clipped card</a>
+</nav>
+
+<div class="grid">
+
+  <section class="panel" id="a" data-letter="A" data-name="dog-ear fold">
+    <div class="panel-head">
+      <div class="letter"><em>A</em> dog-ear fold</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">Corner peels at rest. Hover to read every open task by name.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-dogear"><div class="peek">open</div></div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="A">this is it · A</button></div>
+  </section>
+
+  <section class="panel" id="b" data-letter="B" data-name="cracked wax seal">
+    <div class="panel-head">
+      <div class="letter"><em>B</em> cracked wax seal</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">Pulsing seal at rest. Hover for the full open-task list.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-wax"><span>still<br/>open</span><div class="crack"></div></div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="B">this is it · B</button></div>
+  </section>
+
+  <section class="panel" id="c" data-letter="C" data-name="silk ribbon">
+    <div class="panel-head">
+      <div class="letter"><em>C</em> silk ribbon</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">Ribbon marks unfinished work. Hover for every task name.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-ribbon">
+        <div class="band"></div>
+        <div class="fringe"><i></i><i></i><i></i></div>
+        <div class="tail"></div>
+      </div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="C">this is it · C</button></div>
+  </section>
+
+  <section class="panel" id="d" data-letter="D" data-name="overdue stamp">
+    <div class="panel-head">
+      <div class="letter"><em>D</em> overdue stamp</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">DUE stamp grabs the eye. Hover for the names behind it.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-stamp">due<br/><b>open</b></div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="D">this is it · D</button></div>
+  </section>
+
+  <section class="panel" id="e" data-letter="E" data-name="breathing rim">
+    <div class="panel-head">
+      <div class="letter"><em>E</em> breathing rim</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">The rim pulses at rest. Hover the section for full task names.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-rim"><div class="chip">work open</div></div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="E">this is it · E</button></div>
+  </section>
+
+  <section class="panel" id="f" data-letter="F" data-name="torn ticket">
+    <div class="panel-head">
+      <div class="letter"><em>F</em> torn ticket</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">Stub shows a count at rest. Hover for each task by name.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-ticket">
+        <div class="lab">admit one · open</div>
+        <div class="big">3</div>
+      </div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="F">this is it · F</button></div>
+  </section>
+
+  <section class="panel" id="g" data-letter="G" data-name="ink tally">
+    <div class="panel-head">
+      <div class="letter"><em>G</em> ink tally</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">Ink slashes at rest. Hover for the full names.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-tally">
+        <div class="slashes">IIII</div>
+        <div class="cap">still open</div>
+      </div>
+      <div class="hover-hint">hover for names</div>
+      <div class="hover-names">
+        <div class="hn-lab">open on this section</div>
+        <ul>
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="G">this is it · G</button></div>
+  </section>
+
+  <section class="panel" id="h" data-letter="H" data-name="clipped index card">
+    <div class="panel-head">
+      <div class="letter"><em>H</em> clipped index card</div>
+      <div class="hint">rest · hover for names</div>
+    </div>
+    <p class="panel-desc">Clipped card shows a count at rest. Hover expands the checklist with full names.</p>
+    <div class="stage" tabindex="0">
+      <div class="title">I am pursuing my Ph.D</div>
+      <div class="mark-card">
+        <div class="clip" aria-hidden="true"></div>
+        <div class="lab">open on this section</div>
+        <div class="rest-count">3</div>
+        <ul class="rest-hide">
+          <li>proposal draft</li>
+          <li>committee note</li>
+          <li>reading list</li>
+        </ul>
+      </div>
+      <div class="hover-hint">hover for names</div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="H">this is it · H</button></div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var picked = document.getElementById('picked');
+  function setPick(letter) {
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.toggle('is-picked', p.getAttribute('data-letter') === letter);
+    });
+    document.querySelectorAll('.jump a').forEach(function (a) {
+      a.classList.toggle('on', a.getAttribute('href') === '#' + letter.toLowerCase());
+    });
+    var panel = document.getElementById(letter.toLowerCase());
+    var name = panel ? panel.getAttribute('data-name') : '';
+    picked.textContent = 'picked · ' + letter + ' · ' + name;
+    picked.classList.add('on');
+    try { localStorage.setItem('btm_task_attention_pick_v1', letter); } catch (e) {}
+  }
+  document.querySelectorAll('[data-pick]').forEach(function (btn) {
+    btn.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      setPick(btn.getAttribute('data-pick'));
+    });
+  });
+  document.querySelectorAll('.panel').forEach(function (p) {
+    p.addEventListener('click', function (ev) {
+      if (ev.target.closest('button, a')) return;
+      setPick(p.getAttribute('data-letter'));
+    });
+  });
+  try {
+    localStorage.setItem('btm_task_attention_pick_v1', 'E');
+    setPick('E');
+  } catch (e) {
+    setPick('E');
+  }
+})();
+</script>
+</body>
+</html>

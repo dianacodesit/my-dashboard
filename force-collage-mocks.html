@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>force collage · six distinct packs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=force5"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 100px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.55), rgba(10,7,5,0.88)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 6px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+    font-style: normal;
+  }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px auto 26px;
+    max-width: 960px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover, .jump a.on {
+    color: #e8c99a;
+    border-color: rgba(232,201,154,0.45);
+  }
+
+  .panel {
+    max-width: 1320px;
+    margin: 0 auto 40px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.52);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.85);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35), 0 22px 56px rgba(0,0,0,0.42);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px 4px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.3rem;
+    color: rgba(255,248,238,0.92);
+  }
+  .panel-head .letter em {
+    font-style: normal;
+    color: #e8c99a;
+    margin-right: 10px;
+  }
+  .panel-head .hint {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+  }
+  .panel-desc {
+    padding: 0 18px 10px;
+    font-style: italic;
+    font-size: 0.98rem;
+    color: rgba(247,239,228,0.55);
+    line-height: 1.45;
+  }
+  .stage-wrap {
+    position: relative;
+    margin: 0 10px 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(42,32,26,0.9), rgba(10,7,5,0.96));
+    border: 1px solid rgba(255,248,238,0.1);
+    box-shadow: inset 0 1px 0 rgba(255,248,238,0.04);
+  }
+  .stage {
+    position: relative;
+    width: 100%;
+    height: min(78vh, 740px);
+    touch-action: none;
+    user-select: none;
+  }
+  .stage svg.links {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .stage svg.links path {
+    fill: none;
+    stroke: rgba(232, 201, 154, 0.22);
+    stroke-width: 1.25;
+  }
+  /* C — loud Obsidian filaments */
+  .stage[data-mode="graph"] svg.links path {
+    stroke: rgba(232, 201, 154, 0.72);
+    stroke-width: 2.25;
+    filter: drop-shadow(0 0 6px rgba(232,201,154,0.45));
+  }
+  .stage[data-mode="graph"] svg.links circle {
+    fill: rgba(232, 201, 154, 0.9);
+    stroke: rgba(18, 12, 10, 0.6);
+    stroke-width: 1;
+  }
+  /* D — only hub spokes */
+  .stage[data-mode="orbit"] svg.links path {
+    stroke: rgba(232, 201, 154, 0.55);
+    stroke-width: 1.75;
+    stroke-dasharray: 5 7;
+  }
+  /* A — whisper springs */
+  .stage[data-mode="soft"] svg.links path {
+    stroke: rgba(232, 201, 154, 0.18);
+    stroke-width: 1;
+  }
+
+  .node {
+    position: absolute;
+    z-index: 2;
+    border: 0;
+    padding: 0;
+    cursor: grab;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #1a1210 center / cover no-repeat;
+    transform: translate(-50%, -50%);
+    will-change: left, top, width, height;
+    box-shadow:
+      0 0 0 1px rgba(232, 201, 154, 0.28),
+      0 0 0 2px rgba(18, 12, 10, 0.55),
+      0 10px 28px rgba(0, 0, 0, 0.38);
+  }
+  .node::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 248, 238, 0.14),
+      inset 0 0 0 1px rgba(255, 248, 238, 0.06);
+  }
+  .node:active { cursor: grabbing; }
+  .node.is-drag {
+    box-shadow:
+      0 0 0 1px rgba(232, 201, 154, 0.55),
+      0 0 0 2px rgba(18, 12, 10, 0.5),
+      0 18px 40px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+  }
+  .node .foil {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 28px);
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(18px, 2.2vw, 30px);
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    background-image: linear-gradient(185deg, #e8d4b0, #c4a882 40%, #8f7858 55%, #d8c49a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 0 rgba(36,28,22,0.4));
+  }
+  .node .kill {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 3;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(12,8,6,0.55);
+    color: rgba(255,248,238,0.85);
+    font-size: 16px;
+    line-height: 28px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .node:hover .kill { opacity: 1; }
+
+  /* ——— MODE LOOKS (readable at a glance) ——— */
+  /* A: scattered, tilted, airy */
+  .stage[data-mode="soft"] .node {
+    border-radius: 18px;
+    box-shadow:
+      0 0 0 1px rgba(232, 201, 154, 0.22),
+      0 14px 36px rgba(0, 0, 0, 0.42);
+  }
+  /* B: flush kiss — sharp pack, no air */
+  .stage[data-mode="tight"] .node {
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px rgba(232, 201, 154, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+  .stage[data-mode="tight"] {
+    background: #0a0705;
+  }
+  /* C: smaller graph cards + loud web */
+  .stage[data-mode="graph"] {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(48,36,28,0.95), rgba(8,6,5,0.98));
+  }
+  .stage[data-mode="graph"] .node {
+    border-radius: 12px;
+    box-shadow:
+      0 0 0 1px rgba(232, 201, 154, 0.5),
+      0 8px 22px rgba(0, 0, 0, 0.5);
+  }
+  /* D: hub dominant */
+  .stage[data-mode="orbit"] .node.is-hub {
+    border-radius: 20px;
+    box-shadow:
+      0 0 0 2px rgba(232, 201, 154, 0.55),
+      0 18px 48px rgba(0, 0, 0, 0.55);
+    z-index: 4;
+  }
+  .stage[data-mode="orbit"] .node:not(.is-hub) {
+    border-radius: 14px;
+    opacity: 0.96;
+  }
+  /* E: round bubbles */
+  .stage[data-mode="bubble"] .node {
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 2px rgba(232, 201, 154, 0.35),
+      0 12px 32px rgba(0, 0, 0, 0.45);
+  }
+  .stage[data-mode="bubble"] .node .foil {
+    font-size: clamp(14px, 1.8vw, 22px);
+    width: 70%;
+  }
+  .stage[data-mode="bubble"] .node .kill {
+    top: 14%;
+    right: 14%;
+  }
+  /* F: crisp magazine grid */
+  .stage[data-mode="lattice"] .node {
+    border-radius: 10px;
+    box-shadow:
+      0 0 0 1px rgba(232, 201, 154, 0.32),
+      0 6px 18px rgba(0, 0, 0, 0.32);
+  }
+
+  .tools {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0 18px 14px;
+  }
+  .tools button {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(255,248,238,0.06);
+    color: rgba(247,239,228,0.75);
+    cursor: pointer;
+  }
+  .tools button:hover {
+    color: #e8c99a;
+    border-color: rgba(232,201,154,0.4);
+  }
+  .pick-row { padding: 0 18px 16px; }
+  .pick-row button.pick {
+    width: 100%;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(232,201,154,0.35);
+    background: rgba(232,201,154,0.1);
+    color: #e8c99a;
+    cursor: pointer;
+  }
+  .pick-row button.pick:hover { background: rgba(232,201,154,0.18); }
+</style>
+</head>
+<body>
+<script src="nav-shared.js?v=force5"></script>
+
+<div class="hero">
+  <h1>force collage</h1>
+  <p>Six packs that look different at rest — not six labels on the same collage. Drag · × · shake · reset.</p>
+  <div class="rule">A airy · B kiss flush · C filament graph · D hub orbit · E round bubbles · F grid</div>
+  <div class="picked" id="picked">picked · —</div>
+</div>
+
+<nav class="jump" id="jump">
+  <a href="#a">A soft spring</a>
+  <a href="#b">B tight magnet</a>
+  <a href="#c">C graph web</a>
+  <a href="#d">D orbit settle</a>
+  <a href="#e">E bubble collide</a>
+  <a href="#f">F lattice spring</a>
+</nav>
+
+<section class="panel" id="a" data-letter="A" data-name="soft spring">
+  <div class="panel-head">
+    <div class="letter"><em>A</em> soft spring</div>
+    <div class="hint">scattered · big air · slight tilt</div>
+  </div>
+  <p class="panel-desc">Loose constellation with breathing room between tiles. Soft pull — they drift, never pack flush.</p>
+  <div class="stage-wrap"><div class="stage" data-mode="soft"></div></div>
+  <div class="tools">
+    <button type="button" data-act="reset">reset</button>
+    <button type="button" data-act="shake">shake</button>
+  </div>
+  <div class="pick-row"><button type="button" class="pick" data-pick="A">this is it · A</button></div>
+</section>
+
+<section class="panel" id="b" data-letter="B" data-name="tight magnet">
+  <div class="panel-head">
+    <div class="letter"><em>B</em> tight magnet</div>
+    <div class="hint">kiss flush · zero gutters</div>
+  </div>
+  <p class="panel-desc">Magazine kiss. Tiles touch edge-to-edge, fill the stage — delete one and the rest snap shut.</p>
+  <div class="stage-wrap"><div class="stage" data-mode="tight"></div></div>
+  <div class="tools">
+    <button type="button" data-act="reset">reset</button>
+    <button type="button" data-act="shake">shake</button>
+  </div>
+  <div class="pick-row"><button type="button" class="pick" data-pick="B">this is it · B</button></div>
+</section>
+
+<section class="panel" id="c" data-letter="C" data-name="graph web">
+  <div class="panel-head">
+    <div class="letter"><em>C</em> graph web</div>
+    <div class="hint">smaller cards · loud filaments</div>
+  </div>
+  <p class="panel-desc">Obsidian graph: smaller photo cards in open space with bright champagne filaments between every pair.</p>
+  <div class="stage-wrap"><div class="stage" data-mode="graph"></div></div>
+  <div class="tools">
+    <button type="button" data-act="reset">reset</button>
+    <button type="button" data-act="shake">shake</button>
+  </div>
+  <div class="pick-row"><button type="button" class="pick" data-pick="C">this is it · C</button></div>
+</section>
+
+<section class="panel" id="d" data-letter="D" data-name="orbit settle">
+  <div class="panel-head">
+    <div class="letter"><em>D</em> orbit settle</div>
+    <div class="hint">one huge hub · three satellites</div>
+  </div>
+  <p class="panel-desc">One oversized focus in the center. The other three orbit as smaller satellites on dashed spokes.</p>
+  <div class="stage-wrap"><div class="stage" data-mode="orbit"></div></div>
+  <div class="tools">
+    <button type="button" data-act="reset">reset</button>
+    <button type="button" data-act="shake">shake</button>
+  </div>
+  <div class="pick-row"><button type="button" class="pick" data-pick="D">this is it · D</button></div>
+</section>
+
+<section class="panel" id="e" data-letter="E" data-name="bubble collide">
+  <div class="panel-head">
+    <div class="letter"><em>E</em> bubble collide</div>
+    <div class="hint">round discs · bounce gaps</div>
+  </div>
+  <p class="panel-desc">Circular photo bubbles. They attract to center and bounce apart — never rectangular collage.</p>
+  <div class="stage-wrap"><div class="stage" data-mode="bubble"></div></div>
+  <div class="tools">
+    <button type="button" data-act="reset">reset</button>
+    <button type="button" data-act="shake">shake</button>
+  </div>
+  <div class="pick-row"><button type="button" class="pick" data-pick="E">this is it · E</button></div>
+</section>
+
+<section class="panel" id="f" data-letter="F" data-name="lattice spring">
+  <div class="panel-head">
+    <div class="letter"><em>F</em> lattice spring</div>
+    <div class="hint">perfect 2×2 · spring home</div>
+  </div>
+  <p class="panel-desc">Equal 2×2 magazine cells. Drag warps the lattice; release and every tile springs back to its cell.</p>
+  <div class="stage-wrap"><div class="stage" data-mode="lattice"></div></div>
+  <div class="tools">
+    <button type="button" data-act="reset">reset</button>
+    <button type="button" data-act="shake">shake</button>
+  </div>
+  <div class="pick-row"><button type="button" class="pick" data-pick="F">this is it · F</button></div>
+</section>
+
+<script>
+(function () {
+  var SEED_META = [
+    { id: 'glow', title: 'I am glowing up', photo: 'manus-storage/zone-glow-up.jpg?v=glow6' },
+    { id: 'phd', title: 'I am pursuing my Ph.D', photo: 'manus-storage/zone-achieve-csol.jpg?v=csol12' },
+    { id: 'earn', title: 'I am earning', photo: 'manus-storage/zone-earn-hands.jpg?v=earn39' },
+    { id: 'litigate', title: 'I am litigating', photo: 'manus-storage/zone-to-litigate.jpg?v=court1' }
+  ];
+
+  /* Each mode owns layout + physics so rest states cannot converge. */
+  var MODES = {
+    soft: {
+      link: 'whisper', kLink: 0.004, kCenter: 0.0002, damp: 0.93, pad: 72, collide: 1.08,
+      layout: 'scatter'
+    },
+    tight: {
+      link: false, kLink: 0.08, kCenter: 0.01, damp: 0.78, pad: 0, collide: 1.0,
+      layout: 'kiss'
+    },
+    graph: {
+      link: 'loud', kLink: 0.018, kCenter: 0.002, damp: 0.88, pad: 56, collide: 1.08,
+      layout: 'graph'
+    },
+    orbit: {
+      link: 'spokes', kLink: 0.01, kCenter: 0.003, damp: 0.86, pad: 28, collide: 1.05,
+      layout: 'hub'
+    },
+    bubble: {
+      link: false, kLink: 0.01, kCenter: 0.006, damp: 0.84, pad: 28, collide: 1.12,
+      layout: 'bubbles'
+    },
+    lattice: {
+      link: false, kLink: 0.0, kCenter: 0.0, damp: 0.84, pad: 12, collide: 1.0,
+      layout: 'lattice'
+    }
+  };
+
+  function Stage(el) {
+    this.el = el;
+    this.mode = el.getAttribute('data-mode');
+    this.cfg = MODES[this.mode] || MODES.soft;
+    this.nodes = [];
+    this.drag = null;
+    this.svg = null;
+    this.raf = 0;
+    this.build();
+    this.bind();
+    this.loop();
+  }
+
+  Stage.prototype.place = function (W, H) {
+    var cfg = this.cfg;
+    var nodes = this.nodes;
+    var i, n, a, r;
+
+    if (cfg.layout === 'kiss') {
+      /* Flush 2×2 — tiles kiss, fill stage */
+      var cw = W / 2, ch = H / 2;
+      nodes.forEach(function (n, i) {
+        n.w = Math.round(cw);
+        n.h = Math.round(ch);
+        n.rot = 0;
+        n.x = (i % 2) * cw + cw * 0.5;
+        n.y = Math.floor(i / 2) * ch + ch * 0.5;
+      });
+      return;
+    }
+
+    if (cfg.layout === 'scatter') {
+      /* Airy corners — dark cross of empty stage in the middle (not a packed collage) */
+      var sizes = [
+        [0.34, 0.40], [0.32, 0.34], [0.33, 0.32], [0.30, 0.38]
+      ];
+      var spots = [
+        [0.22, 0.24], [0.80, 0.22], [0.20, 0.78], [0.82, 0.76]
+      ];
+      var tilts = [-7, 6, 5, -6];
+      nodes.forEach(function (n, i) {
+        n.w = Math.round(W * sizes[i][0]);
+        n.h = Math.round(H * sizes[i][1]);
+        n.x = W * spots[i][0];
+        n.y = H * spots[i][1];
+        n.rot = tilts[i];
+      });
+      return;
+    }
+
+    if (cfg.layout === 'graph') {
+      /* Smaller cards in open diamond — filaments readable */
+      var gSize = Math.round(Math.min(W, H) * 0.32);
+      var gx = [0.28, 0.72, 0.28, 0.72];
+      var gy = [0.28, 0.28, 0.72, 0.72];
+      nodes.forEach(function (n, i) {
+        n.w = gSize;
+        n.h = gSize;
+        n.x = W * gx[i];
+        n.y = H * gy[i];
+        n.rot = 0;
+      });
+      return;
+    }
+
+    if (cfg.layout === 'hub') {
+      nodes.forEach(function (n, i) {
+        n.rot = 0;
+        if (i === 0) {
+          n.w = Math.round(W * 0.48);
+          n.h = Math.round(H * 0.58);
+          n.x = W * 0.5;
+          n.y = H * 0.5;
+          n.hub = true;
+        } else {
+          n.w = Math.round(W * 0.28);
+          n.h = Math.round(H * 0.26);
+          a = ((i - 1) / 3) * Math.PI * 2 - Math.PI * 0.5;
+          r = Math.min(W, H) * 0.36;
+          n.x = W * 0.5 + Math.cos(a) * r;
+          n.y = H * 0.5 + Math.sin(a) * r;
+        }
+      });
+      return;
+    }
+
+    if (cfg.layout === 'bubbles') {
+      var diam = Math.round(Math.min(W, H) * 0.36);
+      var bx = [0.30, 0.70, 0.32, 0.68];
+      var by = [0.32, 0.30, 0.70, 0.68];
+      nodes.forEach(function (n, i) {
+        n.w = diam;
+        n.h = diam;
+        n.x = W * bx[i];
+        n.y = H * by[i];
+        n.rot = 0;
+      });
+      return;
+    }
+
+    if (cfg.layout === 'lattice') {
+      var cols = 2, rows = 2, gutter = 14;
+      var cellW = (W - gutter * (cols + 1)) / cols;
+      var cellH = (H - gutter * (rows + 1)) / rows;
+      nodes.forEach(function (n, i) {
+        var c = i % cols, r = Math.floor(i / cols);
+        n.w = Math.round(cellW);
+        n.h = Math.round(cellH);
+        n.homeX = gutter + cellW * (c + 0.5) + gutter * c;
+        n.homeY = gutter + cellH * (r + 0.5) + gutter * r;
+        n.x = n.homeX;
+        n.y = n.homeY;
+        n.rot = 0;
+      });
+    }
+  };
+
+  Stage.prototype.build = function () {
+    var self = this;
+    this.el.innerHTML = '';
+    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this.svg.setAttribute('class', 'links');
+    this.el.appendChild(this.svg);
+
+    var rect = this.el.getBoundingClientRect();
+    var W = Math.max(rect.width, 480);
+    var H = Math.max(rect.height, 420);
+    this.nodes = SEED_META.map(function (s) {
+      return {
+        id: s.id, title: s.title, photo: s.photo,
+        w: 300, h: 280, x: 0, y: 0, vx: 0, vy: 0, rot: 0
+      };
+    });
+    this.place(W, H);
+
+    this.nodes.forEach(function (n) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'node' + (n.hub ? ' is-hub' : '');
+      btn.dataset.id = n.id;
+      btn.style.width = n.w + 'px';
+      btn.style.height = n.h + 'px';
+      btn.style.backgroundImage = 'url("' + n.photo + '")';
+      if (n.rot) btn.style.transform = 'translate(-50%, -50%) rotate(' + n.rot + 'deg)';
+      btn.innerHTML = '<span class="foil">' + n.title + '</span><span class="kill" title="remove">×</span>';
+      self.el.appendChild(btn);
+      n.el = btn;
+    });
+    this.paint();
+  };
+
+  Stage.prototype.bind = function () {
+    var self = this;
+    this.el.addEventListener('pointerdown', function (ev) {
+      var kill = ev.target.closest && ev.target.closest('.kill');
+      if (kill) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        var id = kill.parentElement.dataset.id;
+        self.nodes = self.nodes.filter(function (n) {
+          if (n.id === id) { n.el.remove(); return false; }
+          return true;
+        });
+        return;
+      }
+      var nodeEl = ev.target.closest && ev.target.closest('.node');
+      if (!nodeEl) return;
+      ev.preventDefault();
+      var n = self.nodes.find(function (x) { return x.id === nodeEl.dataset.id; });
+      if (!n) return;
+      nodeEl.setPointerCapture(ev.pointerId);
+      nodeEl.classList.add('is-drag');
+      var r = self.el.getBoundingClientRect();
+      self.drag = {
+        n: n,
+        ox: ev.clientX - r.left - n.x,
+        oy: ev.clientY - r.top - n.y
+      };
+      n.vx = 0; n.vy = 0;
+    });
+    this.el.addEventListener('pointermove', function (ev) {
+      if (!self.drag) return;
+      var r = self.el.getBoundingClientRect();
+      var n = self.drag.n;
+      n.x = ev.clientX - r.left - self.drag.ox;
+      n.y = ev.clientY - r.top - self.drag.oy;
+      n.vx = 0; n.vy = 0;
+    });
+    function endDrag(ev) {
+      if (!self.drag) return;
+      if (self.drag.n && self.drag.n.el) self.drag.n.el.classList.remove('is-drag');
+      try { ev.target.releasePointerCapture && ev.target.releasePointerCapture(ev.pointerId); } catch (e) {}
+      self.drag = null;
+    }
+    this.el.addEventListener('pointerup', endDrag);
+    this.el.addEventListener('pointercancel', endDrag);
+
+    var panel = this.el.closest('.panel');
+    panel.querySelectorAll('[data-act]').forEach(function (btn) {
+      btn.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        var act = btn.getAttribute('data-act');
+        if (act === 'reset') self.build();
+        if (act === 'shake') {
+          self.nodes.forEach(function (n) {
+            n.vx += (Math.random() - 0.5) * 22;
+            n.vy += (Math.random() - 0.5) * 22;
+          });
+        }
+      });
+    });
+  };
+
+  Stage.prototype.step = function () {
+    var rect = this.el.getBoundingClientRect();
+    var W = rect.width, H = rect.height;
+    if (W < 40 || H < 40) return;
+    var cfg = this.cfg;
+    var nodes = this.nodes;
+    var i, j, n, m, dx, dy, dist, f, nx, ny;
+    var cx = W * 0.5, cy = H * 0.5;
+
+    for (i = 0; i < nodes.length; i++) {
+      n = nodes[i];
+      if (this.drag && this.drag.n === n) continue;
+
+      n.vx += (cx - n.x) * cfg.kCenter;
+      n.vy += (cy - n.y) * cfg.kCenter;
+
+      if (cfg.layout === 'lattice' && n.homeX != null) {
+        n.vx += (n.homeX - n.x) * 0.08;
+        n.vy += (n.homeY - n.y) * 0.08;
+      }
+
+      if (cfg.layout === 'hub' && i > 0 && nodes[0]) {
+        var hub = nodes[0];
+        dx = n.x - hub.x; dy = n.y - hub.y;
+        dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        var want = Math.min(W, H) * 0.36;
+        f = (want - dist) * 0.035;
+        n.vx += (dx / dist) * f;
+        n.vy += (dy / dist) * f;
+      }
+
+      /* Soft / graph: gentle spring to ideal separation (keeps air) */
+      if (cfg.layout === 'soft' || cfg.layout === 'graph' || cfg.layout === 'bubbles') {
+        for (j = i + 1; j < nodes.length; j++) {
+          m = nodes[j];
+          dx = m.x - n.x; dy = m.y - n.y;
+          dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          var ideal = (n.w + m.w) * 0.5 + cfg.pad;
+          if (dist > ideal) {
+            f = (dist - ideal) * cfg.kLink;
+            nx = (dx / dist) * f;
+            ny = (dy / dist) * f;
+            if (!(this.drag && this.drag.n === n)) { n.vx += nx; n.vy += ny; }
+            if (!(this.drag && this.drag.n === m)) { m.vx -= nx; m.vy -= ny; }
+          }
+        }
+      }
+
+      /* Tight: strong pull when a hole opens */
+      if (cfg.layout === 'kiss') {
+        for (j = i + 1; j < nodes.length; j++) {
+          m = nodes[j];
+          dx = m.x - n.x; dy = m.y - n.y;
+          dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          var kissIdeal = (n.w + m.w) * 0.5;
+          if (dist > kissIdeal + 2) {
+            f = (dist - kissIdeal) * cfg.kLink;
+            nx = (dx / dist) * f;
+            ny = (dy / dist) * f;
+            if (!(this.drag && this.drag.n === n)) { n.vx += nx; n.vy += ny; }
+            if (!(this.drag && this.drag.n === m)) { m.vx -= nx; m.vy -= ny; }
+          }
+        }
+      }
+    }
+
+    /* Collision — bubbles use circular radius */
+    for (i = 0; i < nodes.length; i++) {
+      for (j = i + 1; j < nodes.length; j++) {
+        n = nodes[i]; m = nodes[j];
+        dx = m.x - n.x; dy = m.y - n.y;
+        if (cfg.layout === 'bubbles') {
+          var minR = (n.w + m.w) * 0.5 * 0.5 * cfg.collide + cfg.pad * 0.35;
+          dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          if (dist < minR) {
+            var push = (minR - dist) * 0.5;
+            nx = (dx / dist) * push;
+            ny = (dy / dist) * push;
+            if (!(this.drag && this.drag.n === n)) { n.x -= nx; n.y -= ny; }
+            if (!(this.drag && this.drag.n === m)) { m.x += nx; m.y += ny; }
+          }
+        } else {
+          var minX = (n.w + m.w) * 0.5 * cfg.collide + (cfg.pad > 0 ? 4 : 0);
+          var minY = (n.h + m.h) * 0.5 * cfg.collide + (cfg.pad > 0 ? 4 : 0);
+          if (cfg.layout === 'kiss') {
+            minX = (n.w + m.w) * 0.5;
+            minY = (n.h + m.h) * 0.5;
+          }
+          if (Math.abs(dx) < minX && Math.abs(dy) < minY) {
+            var ox = minX - Math.abs(dx);
+            var oy = minY - Math.abs(dy);
+            if (ox < oy) {
+              var sx = dx < 0 ? -1 : 1;
+              if (!(this.drag && this.drag.n === n)) n.x -= sx * ox * 0.5;
+              if (!(this.drag && this.drag.n === m)) m.x += sx * ox * 0.5;
+            } else {
+              var sy = dy < 0 ? -1 : 1;
+              if (!(this.drag && this.drag.n === n)) n.y -= sy * oy * 0.5;
+              if (!(this.drag && this.drag.n === m)) m.y += sy * oy * 0.5;
+            }
+          }
+        }
+      }
+    }
+
+    for (i = 0; i < nodes.length; i++) {
+      n = nodes[i];
+      if (this.drag && this.drag.n === n) {
+        n.vx = 0; n.vy = 0;
+      } else {
+        n.vx *= cfg.damp;
+        n.vy *= cfg.damp;
+        n.x += n.vx;
+        n.y += n.vy;
+      }
+      var hw = n.w * 0.5, hh = n.h * 0.5;
+      n.x = Math.max(hw, Math.min(W - hw, n.x));
+      n.y = Math.max(hh, Math.min(H - hh, n.y));
+    }
+    this.paint();
+  };
+
+  Stage.prototype.paint = function () {
+    var self = this;
+    var cfg = this.cfg;
+    this.nodes.forEach(function (n) {
+      var rot = n.rot || 0;
+      n.el.style.left = n.x + 'px';
+      n.el.style.top = n.y + 'px';
+      n.el.style.width = n.w + 'px';
+      n.el.style.height = n.h + 'px';
+      n.el.style.transform = 'translate(-50%, -50%)' + (rot ? ' rotate(' + rot + 'deg)' : '');
+    });
+
+    while (this.svg.firstChild) this.svg.removeChild(this.svg.firstChild);
+    if (!cfg.link) return;
+
+    function rim(a, b) {
+      var dx = b.x - a.x, dy = b.y - a.y;
+      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      var aw = (cfg.layout === 'bubbles') ? a.w * 0.5 : a.w * 0.5;
+      var bw = (cfg.layout === 'bubbles') ? b.w * 0.5 : b.w * 0.5;
+      return {
+        ax: a.x + (dx / dist) * aw,
+        ay: a.y + (dy / dist) * (a.h * 0.5),
+        bx: b.x - (dx / dist) * bw,
+        by: b.y - (dy / dist) * (b.h * 0.5),
+        dist: dist
+      };
+    }
+
+    function addPath(a, b) {
+      var p = rim(a, b);
+      var mx = (p.ax + p.bx) / 2 + (p.ay - p.by) * 0.1;
+      var my = (p.ay + p.by) / 2 + (p.bx - p.ax) * 0.1;
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M ' + p.ax + ' ' + p.ay + ' Q ' + mx + ' ' + my + ' ' + p.bx + ' ' + p.by);
+      self.svg.appendChild(path);
+      if (cfg.link === 'loud') {
+        var c1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c1.setAttribute('cx', p.ax); c1.setAttribute('cy', p.ay); c1.setAttribute('r', 3.5);
+        var c2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c2.setAttribute('cx', p.bx); c2.setAttribute('cy', p.by); c2.setAttribute('r', 3.5);
+        self.svg.appendChild(c1);
+        self.svg.appendChild(c2);
+      }
+    }
+
+    var i, j;
+    if (cfg.link === 'spokes' && this.nodes[0]) {
+      for (i = 1; i < this.nodes.length; i++) addPath(this.nodes[0], this.nodes[i]);
+      return;
+    }
+    for (i = 0; i < this.nodes.length; i++) {
+      for (j = i + 1; j < this.nodes.length; j++) {
+        addPath(this.nodes[i], this.nodes[j]);
+      }
+    }
+  };
+
+  Stage.prototype.loop = function () {
+    var self = this;
+    function tick() {
+      self.step();
+      self.raf = requestAnimationFrame(tick);
+    }
+    this.raf = requestAnimationFrame(tick);
+  };
+
+  document.querySelectorAll('.stage').forEach(function (el) {
+    new Stage(el);
+  });
+
+  var picked = document.getElementById('picked');
+  function setPick(letter) {
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.toggle('is-picked', p.getAttribute('data-letter') === letter);
+    });
+    document.querySelectorAll('.jump a').forEach(function (a) {
+      a.classList.toggle('on', a.getAttribute('href') === '#' + letter.toLowerCase());
+    });
+    var panel = document.getElementById(letter.toLowerCase());
+    var name = panel ? panel.getAttribute('data-name') : '';
+    picked.textContent = 'picked · ' + letter + ' · ' + name;
+    picked.classList.add('on');
+    try { localStorage.setItem('btm_force_collage_pick_v1', letter); } catch (e) {}
+  }
+  document.querySelectorAll('[data-pick]').forEach(function (btn) {
+    btn.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      setPick(btn.getAttribute('data-pick'));
+    });
+  });
+  document.querySelectorAll('.panel').forEach(function (p) {
+    p.addEventListener('click', function (ev) {
+      if (ev.target.closest('.node, .tools, .pick, a')) return;
+      setPick(p.getAttribute('data-letter'));
+    });
+  });
+  try {
+    var prev = localStorage.getItem('btm_force_collage_pick_v1');
+    if (prev) setPick(prev);
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

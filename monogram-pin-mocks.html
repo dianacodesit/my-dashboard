@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>number pins · champagne aesthetic</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=num4"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 110px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.55), rgba(10,7,5,0.88)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 780px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+    font-style: normal;
+  }
+  .picked {
+    display: none;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px auto 24px;
+    max-width: 900px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover, .jump a.on { color: #e8c99a; border-color: rgba(232,201,154,0.45); }
+
+  .grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  @media (min-width: 900px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .panel {
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.5);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .panel:hover {
+    border-color: rgba(232,201,154,0.45);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.85);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35), 0 22px 56px rgba(0,0,0,0.42);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px 4px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.25rem;
+    color: rgba(255,248,238,0.92);
+  }
+  .panel-head .letter em {
+    font-style: normal;
+    color: #e8c99a;
+    margin-right: 8px;
+  }
+  .panel-head .tag {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+  }
+  .blurb {
+    padding: 0 16px 10px;
+    font-style: italic;
+    font-size: 0.96rem;
+    color: rgba(247,239,228,0.55);
+    line-height: 1.4;
+  }
+
+  .stage {
+    position: relative;
+    height: 280px;
+    margin: 0 12px 14px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: url("manus-storage/zone-grad-student.jpg?v=grad4") center 40% / cover;
+  }
+  /* no dark stage scrim — pins sit on the real photo */
+  .stage .sec-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 86%;
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(22px, 2.8vw, 30px);
+    letter-spacing: 0.03em;
+    line-height: 1.12;
+    background-image: linear-gradient(185deg,
+      #e8d4b0 0%, #d4b888 16%, #c4a882 36%,
+      #8f7858 54%, #b89568 72%, #d8c49a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #c4a882;
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.4))
+      drop-shadow(0 1px 0 rgba(58, 50, 40, 0.28));
+    pointer-events: none;
+  }
+
+  .pin {
+    position: absolute;
+    z-index: 3;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: default;
+  }
+  .pin .name {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    color: #fff8ee;
+    white-space: nowrap;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+  }
+  .pin:hover .name { opacity: 1; }
+
+  .foil {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background-image: linear-gradient(185deg,
+      #e8d4b0 0%, #d4b888 16%, #c4a882 36%,
+      #8f7858 54%, #b89568 72%, #d8c49a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #c4a882;
+  }
+
+  /* A — floating foil number only (same metal as section titles) */
+  .a .core {
+    font-size: 36px;
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.5))
+      drop-shadow(0 1px 0 rgba(58, 50, 40, 0.35))
+      drop-shadow(0 6px 18px rgba(196,168,130,0.35));
+  }
+
+  /* B — champagne glass disc, foil number */
+  .b .core {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,201,154,0.55);
+    background:
+      radial-gradient(circle at 35% 28%, rgba(255,248,238,0.35), transparent 45%),
+      rgba(255,248,238,0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255,248,238,0.35),
+      inset 0 -1px 0 rgba(80,55,30,0.2),
+      0 4px 16px rgba(0,0,0,0.28);
+    backdrop-filter: blur(8px);
+  }
+  .b .core span { font-size: 26px; }
+
+  /* C — gold foil ring seal (open, no ink pad) */
+  .c .core {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid transparent;
+    background-image:
+      linear-gradient(rgba(12,8,6,0.15), rgba(12,8,6,0.15)),
+      linear-gradient(145deg, #f0e0c0, #c4a882 40%, #8a7050 70%, #e0c8a0);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3), 0 0 20px rgba(232,201,154,0.2);
+  }
+  .c .core span {
+    font-size: 26px;
+    filter: drop-shadow(0 1px 0 rgba(36,28,22,0.35));
+  }
+
+  /* D — soft luminous orb */
+  .d .core {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 0;
+    background:
+      radial-gradient(circle at 38% 30%, #fff8ee 0%, #e8d3b0 32%, rgba(196,168,130,0.55) 58%, rgba(196,168,130,0.08) 78%, transparent 100%);
+    box-shadow:
+      0 0 12px rgba(255,248,238,0.55),
+      0 0 28px rgba(196,168,130,0.4);
+  }
+  .d .core span {
+    font-size: 24px;
+    filter: drop-shadow(0 1px 2px rgba(40,28,16,0.35));
+  }
+
+  /* E — debossed cream wax (matches board cream, not black) */
+  .e .core {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,168,130,0.45);
+    background:
+      radial-gradient(circle at 40% 30%, #f7efe4, #e8dcc8 55%, #d4c4a8);
+    box-shadow:
+      inset 0 2px 4px rgba(255,255,255,0.55),
+      inset 0 -2px 5px rgba(120,90,50,0.22),
+      0 3px 12px rgba(0,0,0,0.28);
+  }
+  .e .core span {
+    font-size: 26px;
+    background-image: linear-gradient(185deg, #a89068, #6e5a3e 50%, #b89868);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 1px 0 rgba(255,248,238,0.5));
+  }
+
+  /* F — thin gold number, no disc — lightest touch */
+  .f .core {
+    font-size: 32px;
+    letter-spacing: 0.04em;
+    filter:
+      drop-shadow(0 0 10px rgba(232,201,154,0.55))
+      drop-shadow(0 1px 0 rgba(58,50,40,0.4));
+  }
+
+  /* G — champagne capsule (pill, editorial) */
+  .g .core {
+    display: grid;
+    place-items: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(232,201,154,0.65);
+    background: linear-gradient(180deg, rgba(255,248,238,0.22), rgba(196,168,130,0.12));
+    box-shadow:
+      inset 0 1px 0 rgba(255,248,238,0.4),
+      0 3px 14px rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+  }
+  .g .core span { font-size: 24px; }
+
+  /* H — engraved metal coin */
+  .h .core {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(232,201,154,0.7);
+    background:
+      radial-gradient(circle at 30% 25%, #f2e4c8, #c4a882 45%, #8f7858 78%, #b89568);
+    box-shadow:
+      inset 0 2px 3px rgba(255,248,238,0.45),
+      inset 0 -3px 6px rgba(60,40,20,0.35),
+      0 4px 16px rgba(0,0,0,0.35);
+  }
+  .h .core span {
+    font-size: 26px;
+    background-image: linear-gradient(185deg, #5a4830, #2a2014 55%, #6a5438);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 1px 0 rgba(255,248,238,0.35));
+  }
+</style>
+</head>
+<body>
+<script src="nav-shared.js?v=num3"></script>
+
+<div class="hero">
+  <h1>number pins</h1>
+  <p>Same A–H finishes — now numbered 1 · 2 · 3 on the Ph.D section. Hover for the task name.</p>
+  <div class="rule">hover for the name · click a letter to pick</div>
+  <div class="picked" id="picked">picked · —</div>
+</div>
+
+<nav class="jump" id="jump">
+  <a href="#a">A foil</a>
+  <a href="#b">B glass</a>
+  <a href="#c">C ring</a>
+  <a href="#d">D orb</a>
+  <a href="#e">E cream</a>
+  <a href="#f">F light</a>
+  <a href="#g">G capsule</a>
+  <a href="#h">H coin</a>
+</nav>
+
+<div class="grid">
+
+<section class="panel a" id="a" data-letter="A" data-name="floating foil">
+  <div class="panel-head"><div class="letter"><em>A</em> floating foil</div><div class="tag">same metal as titles</div></div>
+  <p class="blurb">Just the number — gold foil, no disc. Lightest read on the collage.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:22%;--y:28%"><span class="core foil">1</span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:68%;--y:62%"><span class="core foil">2</span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:40%;--y:78%"><span class="core foil">3</span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel b" id="b" data-letter="B" data-name="champagne glass">
+  <div class="panel-head"><div class="letter"><em>B</em> champagne glass</div><div class="tag">frosted disc</div></div>
+  <p class="blurb">Soft glass circle — frosted champagne, foil number. Matches board glass pills.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:24%;--y:30%"><span class="core"><span class="foil">1</span></span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:70%;--y:58%"><span class="core"><span class="foil">2</span></span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:42%;--y:76%"><span class="core"><span class="foil">3</span></span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel c" id="c" data-letter="C" data-name="gold ring">
+  <div class="panel-head"><div class="letter"><em>C</em> gold ring</div><div class="tag">open seal</div></div>
+  <p class="blurb">Open foil ring — no ink fill. Number floats in the aperture.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:22%;--y:32%"><span class="core"><span class="foil">1</span></span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:68%;--y:60%"><span class="core"><span class="foil">2</span></span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:44%;--y:78%"><span class="core"><span class="foil">3</span></span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel d" id="d" data-letter="D" data-name="luminous orb">
+  <div class="panel-head"><div class="letter"><em>D</em> luminous orb</div><div class="tag">soft glow</div></div>
+  <p class="blurb">Champagne orb glow — soft light node with foil number.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:24%;--y:30%"><span class="core"><span class="foil">1</span></span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:70%;--y:58%"><span class="core"><span class="foil">2</span></span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:42%;--y:76%"><span class="core"><span class="foil">3</span></span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel e" id="e" data-letter="E" data-name="cream wax">
+  <div class="panel-head"><div class="letter"><em>E</em> cream wax</div><div class="tag">debossed</div></div>
+  <p class="blurb">Cream wax seal — board cream, not black. Debossed bronze number.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:22%;--y:32%"><span class="core"><span class="foil">1</span></span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:68%;--y:60%"><span class="core"><span class="foil">2</span></span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:44%;--y:78%"><span class="core"><span class="foil">3</span></span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel f" id="f" data-letter="F" data-name="light initial">
+  <div class="panel-head"><div class="letter"><em>F</em> light initial</div><div class="tag">glow only</div></div>
+  <p class="blurb">Foil number with a soft champagne halo — almost invisible until you look.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:22%;--y:28%"><span class="core foil">1</span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:68%;--y:62%"><span class="core foil">2</span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:40%;--y:78%"><span class="core foil">3</span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel g" id="g" data-letter="G" data-name="capsule">
+  <div class="panel-head"><div class="letter"><em>G</em> capsule</div><div class="tag">editorial pill</div></div>
+  <p class="blurb">Tiny champagne pill — same language as the date / move chrome.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:24%;--y:30%"><span class="core"><span class="foil">1</span></span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:70%;--y:58%"><span class="core"><span class="foil">2</span></span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:42%;--y:76%"><span class="core"><span class="foil">3</span></span><span class="name">committee</span></button>
+  </div>
+</section>
+
+<section class="panel h" id="h" data-letter="H" data-name="engraved coin">
+  <div class="panel-head"><div class="letter"><em>H</em> engraved coin</div><div class="tag">metal relief</div></div>
+  <p class="blurb">Solid champagne coin — engraved number, soft metal catchlight.</p>
+  <div class="stage">
+    <div class="sec-title">I am pursuing my Ph.D</div>
+    <button class="pin" style="--x:22%;--y:32%"><span class="core"><span class="foil">1</span></span><span class="name">tuition</span></button>
+    <button class="pin" style="--x:68%;--y:60%"><span class="core"><span class="foil">2</span></span><span class="name">scholarship</span></button>
+    <button class="pin" style="--x:44%;--y:78%"><span class="core"><span class="foil">3</span></span><span class="name">committee</span></button>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function () {
+  var picked = document.getElementById('picked');
+  function setPick(letter) {
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.toggle('is-picked', p.getAttribute('data-letter') === letter);
+    });
+    document.querySelectorAll('.jump a').forEach(function (a) {
+      a.classList.toggle('on', a.getAttribute('href') === '#' + letter.toLowerCase());
+    });
+    var panel = document.getElementById(letter.toLowerCase());
+    var name = panel ? panel.getAttribute('data-name') : '';
+    picked.textContent = 'picked · ' + letter + ' · ' + name;
+    picked.classList.add('on');
+    try { localStorage.setItem('btm_number_pin_pick_v3', letter); } catch (e) {}
+  }
+  document.querySelectorAll('.panel').forEach(function (p) {
+    p.addEventListener('click', function () { setPick(p.getAttribute('data-letter')); });
+  });
+  try {
+    var prev = localStorage.getItem('btm_number_pin_pick_v3');
+    if (prev) setPick(prev);
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

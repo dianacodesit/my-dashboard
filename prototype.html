@@ -10491,6 +10491,7 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
 <a href="deadline-fonts.html">deadline pill fonts</a>
 <a href="flow-styles.html">flow chart designs</a>
 <a href="task-pin-mocks.html">task pins · marks</a>
+<a href="task-attention-mocks.html">task attention · A–H</a>
 <a href="arrows.html">arrow formations</a>
 <a href="transitions.html">transition styles</a>
 </nav>
@@ -48569,6 +48570,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       [].slice.call(tile.querySelectorAll(':scope > .vision-task-sky')).forEach(function(el){
         try { el.remove(); } catch(e){}
       });
+      try { tile.classList.remove('has-open-tasks'); } catch(eCls){}
       return;
     }
     var sky = tile.querySelector(':scope > .vision-task-sky');
@@ -48647,6 +48649,57 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     requestAnimationFrame(function(){ drawTaskFilaments(sky); });
     setTimeout(function(){ drawTaskFilaments(sky); }, 60);
+    try { syncTaskAttentionRim(tile, open || [], done || []); } catch(eRim){}
+  }
+  /* E · breathing rim — section attention at rest; hover for full open-task names. */
+  function syncTaskAttentionRim(tile, open, done){
+    if(!tile) return;
+    var sky = tile.querySelector(':scope > .vision-task-sky');
+    if(!sky) return;
+    [].slice.call(sky.querySelectorAll('.vision-task-rim, .vision-task-hover-names')).forEach(function(el){
+      try { el.remove(); } catch(eRm){}
+    });
+    var openList = (open || []).filter(Boolean);
+    tile.classList.toggle('has-open-tasks', openList.length > 0);
+    if(!openList.length) return;
+    var rim = document.createElement('div');
+    rim.className = 'vision-task-rim';
+    rim.setAttribute('aria-hidden', 'true');
+    rim.innerHTML = '<div class="vision-task-rim-chip">work open</div>';
+    sky.appendChild(rim);
+    var hn = document.createElement('div');
+    hn.className = 'vision-task-hover-names';
+    hn.innerHTML = '<div class="vision-task-hn-lab">open on this section</div><ul class="vision-task-hn-list"></ul>';
+    var ul = hn.querySelector('.vision-task-hn-list');
+    openList.forEach(function(lab){
+      var name = String(lab.getAttribute('data-hz-title') || ((lab.querySelector('span') || {}).textContent) || '').replace(/\s+/g, ' ').trim();
+      if(!name) return;
+      var li = document.createElement('li');
+      li.textContent = name;
+      li.setAttribute('role', 'button');
+      li.tabIndex = 0;
+      li.addEventListener('click', function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(document.body.classList.contains('zoom-move-on')) return;
+        var inp = lab.querySelector('input');
+        if(inp){
+          inp.checked = !inp.checked;
+          try { inp.dispatchEvent(new Event('change', { bubbles: true })); } catch(eCh){}
+          return;
+        }
+        var star = [].slice.call(sky.querySelectorAll('.vision-task-star')).find(function(s){
+          var n = s.querySelector('.vision-task-star-name');
+          return n && String(n.textContent || '').replace(/\s+/g, ' ').trim() === name;
+        });
+        if(star){
+          var core = star.querySelector('.vision-task-star-core');
+          if(core) try { core.click(); } catch(eClk){}
+        }
+      });
+      ul.appendChild(li);
+    });
+    sky.appendChild(hn);
   }
   function horizonSourceNode(tile, lab){
     if(!tile || !lab) return null;
@@ -68226,22 +68279,43 @@ html body .day-block.vision-collage-day .vision-board.vision-board-filled:not(.i
   height: auto !important;
   max-height: none !important;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open),
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).today,
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).today-block,
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).flow-modern,
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open).fmt22 {
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open),
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open).today,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open).today-block,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open).flow-modern,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open).fmt22 {
   overflow: clip !important;
   isolation: isolate;
 }
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open) .day-card,
-html body .day-block.overview-era-day.today-block.fmt22:not(.collapsed):not(.picker-open) .day-card,
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open) .day-tasks,
-html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open) .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)) {
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open) .day-card,
+html body .day-block.overview-era-day.today-block.fmt22:not(.collapsed):not(.picker-open):not(.depth-menu-open) .day-card,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open) .day-tasks,
+html body .day-block:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open) .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)) {
   overflow: clip !important;
 }
 html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed) {
   overflow: clip !important;
+}
+/* Depth popup left of overview — beat overflow:clip above. */
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed),
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed).fmt22,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed).overview-era-day,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed).vision-collage-day,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .day-card,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .day-card-header,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .day-card-header.day-header-chrome,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .overview-center-stack,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .today-view-toggle,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .overview-depth-anchor {
+  overflow: visible !important;
+}
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .day-card-header,
+html body .day-block.depth-four-era.depth-menu-open:not(.collapsed) .day-card-header.day-header-chrome {
+  position: relative !important;
+  z-index: 80 !important;
+}
+html body .day-block.depth-four-era.view-overview.depth-menu-open .overview-depth-toggle.depth-glass-overlay.depth-overview-popup {
+  z-index: 90 !important;
 }
 </style>
 <style id="prototypes-page-scroll-v1">
@@ -70015,6 +70089,119 @@ html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-off
 html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-star.is-off .vision-task-star-core::after {
   content: none !important;
   display: none !important;
+}
+</style>
+<style id="tasks-attention-rim-e-v1">
+/* E · breathing rim — unzoomed tasks depth. Pins stay for zoomed section work. */
+@keyframes vision-rim-breathe {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 2px rgba(200, 60, 50, 0.35),
+      inset 0 0 22px rgba(180, 40, 40, 0.12);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 4px rgba(220, 80, 60, 0.75),
+      inset 0 0 40px rgba(180, 40, 40, 0.32);
+  }
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-tile.has-open-tasks > .vision-task-sky > .vision-task-star {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-rim {
+  display: none;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-tile.has-open-tasks > .vision-task-sky > .vision-task-rim {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
+  animation: vision-rim-breathe 2s ease-in-out infinite !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-rim-chip {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  padding: 5px 10px !important;
+  border-radius: 999px !important;
+  background: rgba(12, 8, 6, 0.72) !important;
+  border: 1px solid rgba(232, 201, 154, 0.45) !important;
+  font-family: "DM Mono", monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #e8c99a !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-hover-names {
+  display: block !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 18px !important;
+  transform: translateX(-50%) translateY(6px) !important;
+  z-index: 24 !important;
+  min-width: 168px !important;
+  max-width: 78% !important;
+  padding: 10px 14px 11px !important;
+  border-radius: 12px !important;
+  background: rgba(12, 8, 6, 0.78) !important;
+  border: 1px solid rgba(232, 201, 154, 0.42) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-tile.has-open-tasks:hover > .vision-task-sky > .vision-task-hover-names,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board:not(.is-zoomed) .vision-tile.has-open-tasks:focus-within > .vision-task-sky > .vision-task-hover-names {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-hn-lab {
+  font-family: "DM Mono", monospace !important;
+  font-size: 8px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(232, 201, 154, 0.7) !important;
+  margin-bottom: 6px !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-hn-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-hn-list li {
+  font-family: "Newsreader", Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  color: #f7efe4 !important;
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-hn-list li + li {
+  border-top: 1px solid rgba(255, 248, 238, 0.08) !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-task-hn-list li:hover {
+  color: #e8c99a !important;
+}
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-task-rim,
+html body .day-block.depth-four-era.overview-mode-tasks .vision-board.is-zoomed .vision-task-hover-names,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-rim,
+html body.overview-mode-tasks > .vision-board.is-zoomed .vision-task-hover-names {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 </style>
 </html>
