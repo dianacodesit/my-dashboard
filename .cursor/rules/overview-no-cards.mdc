@@ -12,7 +12,7 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage /
 1. **Sections** — collage tiles (`.vision-tile`): fitness training, abundance, Pepperdine, audacity…
 2. **Subsections** — nested inside a section only (`.vision-subsection` / `.vision-tile-subsections`), e.g. calisthenics under fitness training. **Not** polaroids. **Not** collage tiles.
 3. **Cards** — polaroid-style items (`.vision-polaroid` / `.vision-shot-card`): tuition, refunds, EnhanCV… Keep the UI label **cards** until Diana renames them. Do **not** call them subsections.
-4. **Tasks (Sep 7 onward only)** — carry-forward **pins** on each section tile (gold dots + glass name chips). Gold task nodes must never appear on Sep 6 or any earlier day. **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and `.vision-check` items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` paints `.vision-task-sky`. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web.
+4. **Tasks (Sep 7 onward only)** — carry-forward **monogram pins** on each section tile (large Bodoni italic first letter; full name on hover). **Not** gold dots. **Not** always-on glass name chips. Monograms must never appear on Sep 6 or any earlier day. **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and `.vision-check` items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` paints `.vision-task-sky` with `data-mono` / `.vision-task-star-core` letter. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web. **Gold-dot pins are rejected** — never restore `tasks-pins-beam` / glowing orb cores.
 
 ## Depth toggle (re-click overview → vertical popup to the left)
 
@@ -33,7 +33,7 @@ Do **not** put depth as a second row / hairline underline menu *under* the cente
 | **sections** (legacy `overview`) | `.overview-mode-sections` + `.overview-mode-overview` | Sections only — no subsections, cards, or tasks |
 | **subsections** | `.overview-mode-subsections` | Nested subsections; hide cards and tasks |
 | **cards** | `.overview-mode-cards` (+ legacy `.overview-mode-details`) | Cards (polaroids); hide subsections and tasks |
-| **tasks** | `.overview-mode-tasks` | Pins on tiles (gold dots + glass labels, no filaments) — hide polaroids / subsections / horizon paint; arm `.horizon-armed` via `syncHorizonTile` + `syncTaskConstellation` (`tasks-constellation-v1` + `tasks-pins-glass-v1`) |
+| **tasks** | `.overview-mode-tasks` | Monogram seals on tiles (ink pad + Bodoni first letter; name on hover; no filaments) — hide polaroids / subsections / horizon paint; arm `.horizon-armed` via `syncHorizonTile` + `syncTaskConstellation` (`tasks-constellation-v1` + `tasks-pins-monogram-v2`). Gate sky on `depth-four-era`, never `dash-mosaic-era` alone (Sep 18+ drops mosaic). |
 
 ## Never
 
@@ -65,7 +65,7 @@ Fix the CSS immediately. Sections depth = clean sections.
 
 ## If polaroids reappear in tasks mode
 
-Restore pins (`tasks-constellation-v1` + `tasks-pins-glass-v1` + `syncTaskConstellation`): hide polaroids, paint gold dots + glass labels. Do not ask permission.
+Restore monogram pins (`tasks-constellation-v1` + `tasks-pins-monogram-v2` + `syncTaskConstellation`): hide polaroids, paint large first-letter monograms (name on hover). Do not ask permission. Never restore gold dots.
 
 ## If slabs come back in tasks mode
 
@@ -73,7 +73,7 @@ Remove `tasks-slabs-v1`. Keep pins. Do not ask permission.
 
 ## If filaments come back in tasks mode
 
-Hide / remove `.vision-task-filament`. Keep gold dots + glass labels. Do not ask permission.
+Hide / remove `.vision-task-filament`. Keep monogram letters. Do not ask permission.
 
 ## If the painted horizon line comes back in tasks mode
 

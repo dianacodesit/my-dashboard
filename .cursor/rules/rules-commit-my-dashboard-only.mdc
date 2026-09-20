@@ -1,0 +1,26 @@
+---
+description: Dashboard Cursor rules commit/push only to my-dashboard — never task-dashboard
+alwaysApply: true
+---
+
+# Rules live on my-dashboard only
+
+Hard rule for diana’s dashboard agent work.
+
+## When updating `.cursor/rules/` for the live board
+
+- Canonical rules live in **`/Users/diana/my-dashboard/.cursor/rules/`**
+- **Commit and push** those rule files to **`dianacodesit/my-dashboard`** (remote `my-dashboard`)
+- **Never** commit or push dashboard rule mirrors to **`dianacodesit/task-dashboard`**
+
+## Never
+
+- “Rule mirrors only” commits on task-dashboard
+- Pushing overview / packing / chrome rule updates to task-dashboard `main`
+- Treating task-dashboard as the rules repo for the live board
+
+## Always
+
+1. Edit rules under `/Users/diana/my-dashboard/.cursor/rules/`
+2. If the workspace is task-dashboard, still write the rule into **my-dashboard** and commit/push **there**
+3. Keep product HTML (`everything.html`, etc.) on my-dashboard — same destination
