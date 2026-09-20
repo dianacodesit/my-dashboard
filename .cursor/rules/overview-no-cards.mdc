@@ -12,7 +12,7 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage /
 1. **Sections** — collage tiles (`.vision-tile`): fitness training, abundance, Pepperdine, audacity…
 2. **Subsections** — nested inside a section only (`.vision-subsection` / `.vision-tile-subsections`), e.g. calisthenics under fitness training. **Not** polaroids. **Not** collage tiles.
 3. **Cards** — polaroid-style items (`.vision-polaroid` / `.vision-shot-card`): tuition, refunds, EnhanCV… Keep the UI label **cards** until Diana renames them. Do **not** call them subsections.
-4. **Tasks (Sep 7 onward only)** — carry-forward **number pins** on each section tile (large Bodoni italic **1 · 2 · 3…**; full name on hover). **Not** gold dots. **Not** always-on glass name chips. **Not** letter monograms. Number pins must never appear on Sep 6 or any earlier day. **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and `.vision-check` items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` paints `.vision-task-sky` with `data-mono` / `.vision-task-star-core` ordinal. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web. **Gold-dot pins are rejected** — never restore `tasks-pins-beam` / glowing orb cores. **Letter monograms are rejected** — never restore first-letter cores.
+4. **Tasks (Sep 7 onward only)** — unzoomed collage uses **E breathing rim** (`tasks-attention-rim-e-v1`): pulsing inset rim + `work open` chip on sections with unfinished work; **hover the section** for the full open-task name list. Zoomed section still uses **number pins** (large Bodoni italic **1 · 2 · 3…**; full name on hover) for task work. **Not** gold dots. **Not** always-on glass name chips. **Not** letter monograms. Number pins / rim must never appear on Sep 6 or any earlier day. **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and `.vision-check` items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` + `syncTaskAttentionRim` paint `.vision-task-sky`. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web. **Gold-dot pins are rejected** — never restore `tasks-pins-beam` / glowing orb cores. **Letter monograms are rejected** — never restore first-letter cores. Mock archive: `task-attention-mocks.html` (design previews).
 
 ## Depth toggle (re-click overview → vertical popup to the left)
 
@@ -65,7 +65,7 @@ Fix the CSS immediately. Sections depth = clean sections.
 
 ## If polaroids reappear in tasks mode
 
-Restore number pins (`tasks-constellation-v1` + `tasks-pins-number-v3` + `syncTaskConstellation`): hide polaroids, paint large ordinal digits (name on hover). Do not ask permission. Never restore gold dots or letter monograms.
+Restore E breathing rim unzoomed (`tasks-attention-rim-e-v1` + `syncTaskAttentionRim`) and number pins when zoomed (`tasks-constellation-v1` + `tasks-pins-number-v3` + `syncTaskConstellation`): hide polaroids. Do not ask permission. Never restore gold dots or letter monograms.
 
 ## If slabs come back in tasks mode
 
