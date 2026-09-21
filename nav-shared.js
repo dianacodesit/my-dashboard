@@ -93,6 +93,7 @@
     { href: 'monogram-pin-mocks.html?v=4b', label: 'number pins · v4b', group: 'design' },
     { href: 'day-dawn-mocks.html', label: 'new day · fold', group: 'design' },
     { href: 'induction-habit-mocks.html', label: 'induction habit · chrome', group: 'design' },
+    { href: 'induction-habit-mocks.html?v=round2c', label: 'induction habit · round2c', group: 'design' },
     { href: 'day-chrome-layout-mocks.html?v=1', label: 'day chrome + collage', group: 'design' },
     { href: 'everything.html?flowtrail=1', label: 'everything · flow trail', group: 'design' },
     { href: 'everything.html?v=vision-collage-2x3', label: 'everything · collage 2×3', group: 'design' },

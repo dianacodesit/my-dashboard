@@ -152,6 +152,7 @@ html body #enh-zoom-move {
   display: none !important;
 }
 html body.vision-zoom-open #enh-left-fab #enh-jump-today,
+html body.vision-zoom-open #enh-left-fab #enh-add-next,
 html body.vision-zoom-open #enh-left-fab #enh-scroll-top {
   display: none !important;
 }
@@ -10506,6 +10507,7 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
 <a href="monogram-pin-mocks.html?v=4b">number pins · v4b</a>
 <a href="day-dawn-mocks.html">new day · fold</a>
 <a href="induction-habit-mocks.html">induction habit · chrome</a>
+<a href="induction-habit-mocks.html?v=round2c">induction habit · round2c</a>
 <a href="day-chrome-layout-mocks.html?v=1">day chrome + collage</a>
 <a href="everything.html?flowtrail=1">everything · flow trail</a>
 <a href="everything.html?v=vision-collage-2x3">everything · collage 2×3</a>
@@ -10564,7 +10566,7 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
   else setup();
 })();
 </script>
-<script src="nav-shared.js?v=navdesignpreviews7" defer></script>
+<script src="nav-shared.js?v=navdesignpreviews8" defer></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -13590,6 +13592,8 @@ window.__j22fnApply=run;
     'to feel it into being':'',
     'set-the-mark':'manus-storage/zone-intentions.jpg?v=aim1',
     'attention':'manus-storage/zone-attention.jpg?v=beam1',
+    'adhd':'manus-storage/zone-adhd.jpg?v=adhd2',
+    'ADHD':'manus-storage/zone-adhd.jpg?v=adhd2',
     'anticipate':'manus-storage/zone-anticipating-theater.jpg?v=theater1',
     'darkness':'',
   };
@@ -55333,6 +55337,8 @@ function seedAug30SelectedCards(blk){
     // Every new day is a fresh start. One-shot: wipe auto-seeded sections on today + future only.
     // Past days are history — never rewrite them. + and carry still add sections.
     if(!blkOk(blk)) return false;
+    if(blk.getAttribute && (blk.getAttribute('data-baked-collage') || blk.getAttribute('data-file-day'))) return false;
+    if(window.__bakedFileDays && window.__bakedFileDays[dayKey(blk)]) return false;
     var d = dayKey(blk);
     var today = boardTodayIso();
     if(!d || !today || d < today || d < '2026-09-01') return false;
@@ -59303,6 +59309,137 @@ html body .day-block:is(.overview-era-day, .vision-collage-day).overview-mode-ov
   pointer-events: auto !important;
 }
 
+</style>
+
+<style id="induction-ring-plaque">
+/* Induction habit · design I · ring plaque */
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"],
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"],
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"] {
+  display: flex !important;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 210px !important;
+  height: auto !important;
+  padding: 12px 12px 14px !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  background: #14100e !important;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.55) !important;
+  transform: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"]::before,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"]::before,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"]::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: auto !important;
+  top: 12px !important;
+  left: 12px !important;
+  width: calc(100% - 24px) !important;
+  height: auto !important;
+  aspect-ratio: 1 !important;
+  border-radius: 50% !important;
+  z-index: 4 !important;
+  pointer-events: none !important;
+  background: conic-gradient(from 20deg, #ff8a3a 0 55%, transparent 55% 100%) !important;
+  -webkit-mask: radial-gradient(circle, transparent 82%, #000 83% 92%, transparent 93%);
+  mask: radial-gradient(circle, transparent 82%, #000 83% 92%, transparent 93%);
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > img,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > img,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"] > img {
+  display: block !important;
+  position: relative !important;
+  flex: 0 0 calc(100% - 20px) !important;
+  width: calc(100% - 20px) !important;
+  height: auto !important;
+  aspect-ratio: 1 !important;
+  margin: 10px 10px 12px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  filter: none !important;
+  box-shadow: 0 0 0 10px #0a0706 !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > span,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > span.vision-habit-title,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > span,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > span.vision-habit-title,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"] > span,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"] > span.vision-habit-title {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  margin: 0 8px 0 4px !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+  color: #fff4ec !important;
+  text-align: left !important;
+  text-shadow: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-badge,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-badge,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-badge {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  margin: 0 4px 0 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 9px !important;
+  letter-spacing: 0.12em !important;
+  color: rgba(255,180,140,0.7) !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"].is-done > .vision-habit-badge {
+  background: transparent !important;
+  color: #9fd48c !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-status {
+  display: none !important;
+}
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-check,
+html body .day-block.overview-mode-details .vision-board:not(.is-zoomed) .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-check,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-board.is-zoomed .vision-tile.is-zoomed .vision-polaroid.vision-habit-card[data-habit-id="induction"] > .vision-habit-check {
+  top: 30px !important;
+  left: 50% !important;
+  width: 22px !important;
+  height: 22px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1.5px solid rgba(255,248,238,0.7) !important;
+  transform: translateX(-50%) !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"] .vision-habit-tick {
+  width: 8px !important;
+  height: 8px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"].is-done > .vision-habit-check {
+  border-color: #6fad5c !important;
+  background: rgba(111,173,92,0.2) !important;
+  box-shadow: none !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"].is-done .vision-habit-tick {
+  background: #6fad5c !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"].is-done,
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"].is-done > img {
+  box-shadow: 0 16px 36px rgba(0,0,0,0.55) !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+html body .day-block .vision-polaroid.vision-habit-card[data-habit-id="induction"].is-done > img {
+  box-shadow: 0 0 0 10px #0a0706 !important;
+}
 </style>
 
 <style id="vision-tile-sort-css">
@@ -68416,6 +68553,7 @@ html body #enh-zoom-move {
   display: none !important;
 }
 html body.vision-zoom-open #enh-left-fab #enh-jump-today,
+html body.vision-zoom-open #enh-left-fab #enh-add-next,
 html body.vision-zoom-open #enh-left-fab #enh-scroll-top {
   display: none !important;
 }
