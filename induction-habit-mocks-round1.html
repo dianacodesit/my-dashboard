@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>induction habit · A–F · unique styles</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=indhabit1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    background: #0c0908;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 18px 120px;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.55);
+    line-height: 1.7;
+  }
+  .note {
+    max-width: 640px;
+    margin: 0 auto 28px;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.5);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: -10px auto 22px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e08a4a;
+  }
+  .picked.on { display: block; }
+
+  .stage {
+    max-width: 1180px;
+    margin: 0 auto 18px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,248,238,0.08);
+    background:
+      linear-gradient(180deg, rgba(8,5,4,0.35), rgba(8,5,4,0.55)),
+      url('manus-storage/zone-athletic-gym.jpg?v=gym1') center/cover;
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    padding: 28px 16px;
+  }
+  .stage-label {
+    position: absolute;
+    margin-top: -190px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,248,238,0.55);
+  }
+
+  .grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+  }
+  .opt {
+    appearance: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(255,248,238,0.12);
+    border-radius: 16px;
+    background: rgba(255,248,238,0.03);
+    color: inherit;
+    cursor: pointer;
+    padding: 14px 14px 16px;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  }
+  .opt:hover, .opt:focus-visible {
+    border-color: rgba(224,138,74,0.55);
+    background: rgba(255,248,238,0.06);
+    outline: none;
+    transform: translateY(-2px);
+  }
+  .opt.is-on {
+    border-color: rgba(224,138,74,0.85);
+    box-shadow: 0 0 0 1px rgba(224,138,74,0.35);
+  }
+  .opt-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .opt-letter {
+    font-family: "Italiana", serif;
+    font-size: 28px;
+    color: #fff8ee;
+  }
+  .opt-name {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.55);
+  }
+  .preview {
+    position: relative;
+    height: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(10,7,5,0.2), rgba(10,7,5,0.55)),
+      url('manus-storage/zone-athletic-gym.jpg?v=gym1') center/cover;
+    display: grid;
+    place-items: center;
+  }
+
+  /* ── shared habit chrome pieces ── */
+  .hab {
+    position: relative;
+    width: 196px;
+    user-select: none;
+  }
+  .hab img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+  }
+  .hab .t {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+  }
+  .hab .d {
+    font-family: "DM Mono", monospace;
+    font-style: normal;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hab .tick {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,248,238,0.7);
+    background: transparent;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .hab .tick::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+  }
+  .hab.is-done .tick {
+    border-color: #6fad5c;
+    background: rgba(111,173,92,0.2);
+  }
+  .hab.is-done .tick::after { background: #6fad5c; }
+
+  /* A — Ember seal (elevated current) */
+  .a.hab {
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(165deg, #17130f, #2a1812 70%, #1a100e);
+    box-shadow:
+      0 16px 36px rgba(8,5,2,0.55),
+      0 0 0 1.5px rgba(224,90,55,0.55),
+      inset 0 0 40px rgba(180,40,20,0.18);
+    transform: rotate(-1.6deg);
+  }
+  .a img { height: 168px; }
+  .a .veil {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(8,4,2,0.88) 100%);
+    pointer-events: none;
+  }
+  .a .t {
+    position: absolute; left: 14px; right: 14px; bottom: 34px;
+    font-size: 28px; color: #fff4ea; line-height: 1;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+  }
+  .a .d {
+    position: absolute; top: 10px; right: 10px;
+    padding: 5px 9px; border-radius: 999px;
+    background: rgba(255,248,238,0.94); color: #5a2a18; font-size: 10px;
+  }
+  .a .tick { position: absolute; left: 12px; top: 12px; z-index: 2; }
+
+  /* B — LED grid stamp */
+  .b.hab {
+    border-radius: 10px;
+    overflow: hidden;
+    background: #0a0807;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,60,40,0.35);
+  }
+  .b img { height: 150px; filter: saturate(1.15) contrast(1.05); }
+  .b .leds {
+    position: absolute; top: 8px; left: 8px;
+    display: grid; grid-template-columns: repeat(5, 5px); gap: 3px;
+  }
+  .b .leds i {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #ff2a1a;
+    box-shadow: 0 0 6px #ff3a22;
+    opacity: 0.85;
+  }
+  .b .leds i:nth-child(3n) { opacity: 0.35; }
+  .b .foot {
+    padding: 10px 12px 12px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    background: #120e0c;
+  }
+  .b .t { font-size: 22px; color: #ffe8e0; }
+  .b .d { font-size: 9px; color: #ff6a4a; }
+
+  /* C — Ring dial (device ring) */
+  .c.hab {
+    width: 188px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #100c0a;
+    box-shadow:
+      0 0 0 3px rgba(255,140,60,0.25),
+      0 0 0 8px rgba(20,12,8,0.9),
+      0 18px 40px rgba(0,0,0,0.55);
+  }
+  .c img {
+    position: absolute; inset: 18px;
+    width: auto; height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .c .ring {
+    position: absolute; inset: 6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background:
+      conic-gradient(from -90deg, #ff8a3a 0 72%, rgba(255,248,238,0.12) 72% 100%) border-box;
+    -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .c .core {
+    position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
+    text-align: center; z-index: 2;
+    width: 70%;
+  }
+  .c .t { font-size: 20px; color: #fff6ee; display: block; }
+  .c .d { font-size: 8px; color: #ffb070; margin-top: 4px; display: block; }
+  .c .tick { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); z-index: 3; }
+
+  /* D — Red panel strip */
+  .d.hab {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #14100e;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.5);
+    width: 210px;
+  }
+  .d .strip {
+    background: repeating-linear-gradient(
+      180deg,
+      #ff1e12 0 7px,
+      #8a0c08 7px 9px
+    );
+    box-shadow: inset -4px 0 12px rgba(0,0,0,0.35);
+  }
+  .d .body { position: relative; }
+  .d img { height: 150px; }
+  .d .meta {
+    padding: 10px 12px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .d .t { font-size: 22px; color: #fff4ec; }
+  .d .d { font-size: 9px; color: rgba(255,200,180,0.7); }
+
+  /* E — Perforated ritual ticket */
+  .e.hab {
+    width: 220px;
+    border-radius: 4px 12px 12px 4px;
+    background: #f3ebe0;
+    color: #2a1a14;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.4);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 86px;
+  }
+  .e .main { padding: 12px 12px 14px; }
+  .e .d {
+    font-size: 9px; color: #a05030; margin-bottom: 8px; display: block;
+  }
+  .e .t {
+    font-family: "Cormorant Garamond", "Newsreader", serif;
+    font-style: italic;
+    font-size: 26px;
+    color: #1e120e;
+    line-height: 1;
+  }
+  .e .sub {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: rgba(42,26,20,0.55);
+    text-transform: uppercase;
+  }
+  .e .stub {
+    position: relative;
+    border-left: 1.5px dashed rgba(42,26,20,0.28);
+    background:
+      url('manus-storage/card-induction.jpg?v=rl2') center/cover;
+  }
+  .e .stub::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(20,8,4,0.15), rgba(20,8,4,0.55));
+  }
+  .e .tick {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    border-color: #fff8ee; z-index: 2;
+  }
+
+  /* F — Glass biochip (not a polaroid) */
+  .f.hab {
+    width: 220px;
+    border-radius: 18px;
+    padding: 14px 14px 14px 16px;
+    background: rgba(255,248,238,0.1);
+    border: 1px solid rgba(255,180,120,0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+      0 12px 30px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,248,238,0.2);
+    display: grid;
+    grid-template-columns: 54px 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+  .f .orb {
+    width: 54px; height: 54px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #ffb070, #e04828 55%, #4a1008 100%);
+    box-shadow: 0 0 18px rgba(255,80,40,0.55), inset 0 0 0 2px rgba(255,200,160,0.35);
+  }
+  .f .t { font-size: 22px; color: #fff8ee; display: block; line-height: 1.05; }
+  .f .d { font-size: 9px; color: rgba(255,200,160,0.75); margin-top: 4px; display: block; }
+
+  .foot {
+    max-width: 720px;
+    margin: 28px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(247,239,228,0.4);
+    line-height: 1.7;
+  }
+  .foot a { color: #e08a4a; }
+</style>
+</head>
+<body>
+<button id="hamburger-menu" type="button" aria-label="open menu"><span></span><span></span><span></span></button>
+
+<div class="hero">
+  <h1>induction · habit styles</h1>
+  <p>daily habit on I am training · pick by looking</p>
+</div>
+<p class="note">Same photo. Six unique chrome languages — not ordinary polaroids.</p>
+<p class="picked" id="picked"></p>
+
+<div class="grid">
+  <button class="opt" type="button" data-pick="A" data-name="ember seal">
+    <div class="opt-head"><span class="opt-letter">A</span><span class="opt-name">ember seal</span></div>
+    <div class="preview">
+      <div class="hab a">
+        <button class="tick" type="button" aria-label="done"></button>
+        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        <div class="veil"></div>
+        <em class="d">daily</em>
+        <span class="t">induction</span>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="B" data-name="LED grid stamp">
+    <div class="opt-head"><span class="opt-letter">B</span><span class="opt-name">LED grid stamp</span></div>
+    <div class="preview">
+      <div class="hab b">
+        <div class="leds" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        <div class="foot">
+          <span class="t">induction</span>
+          <span class="d">daily</span>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="C" data-name="ring dial">
+    <div class="opt-head"><span class="opt-letter">C</span><span class="opt-name">ring dial</span></div>
+    <div class="preview">
+      <div class="hab c">
+        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        <div class="ring"></div>
+        <button class="tick" type="button" aria-label="done"></button>
+        <div class="core">
+          <span class="t">induction</span>
+          <span class="d">daily</span>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="D" data-name="red panel strip">
+    <div class="opt-head"><span class="opt-letter">D</span><span class="opt-name">red panel strip</span></div>
+    <div class="preview">
+      <div class="hab d">
+        <div class="strip" aria-hidden="true"></div>
+        <div class="body">
+          <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+          <div class="meta">
+            <span class="t">induction</span>
+            <span class="d">daily</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="E" data-name="ritual ticket">
+    <div class="opt-head"><span class="opt-letter">E</span><span class="opt-name">ritual ticket</span></div>
+    <div class="preview">
+      <div class="hab e">
+        <div class="main">
+          <em class="d">daily · habit</em>
+          <span class="t">induction</span>
+          <div class="sub">on training</div>
+        </div>
+        <div class="stub">
+          <button class="tick" type="button" aria-label="done"></button>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="F" data-name="glass biochip">
+    <div class="opt-head"><span class="opt-letter">F</span><span class="opt-name">glass biochip</span></div>
+    <div class="preview">
+      <div class="hab f">
+        <div class="orb" aria-hidden="true"></div>
+        <div>
+          <span class="t">induction</span>
+          <span class="d">daily</span>
+        </div>
+        <button class="tick" type="button" aria-label="done"></button>
+      </div>
+    </div>
+  </button>
+</div>
+
+<p class="foot">
+  Habit is wired back onto <strong>I am training</strong> (not a card picker preset).<br/>
+  Click a letter — I’ll ship that chrome next.<br/>
+  <a href="everything.html">← everything</a>
+</p>
+
+<script src="nav-shared.js?v=indhabit1"></script>
+<script>
+(function(){
+  var picked = document.getElementById('picked');
+  document.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('is-on'); });
+      btn.classList.add('is-on');
+      var letter = btn.getAttribute('data-pick');
+      var name = btn.getAttribute('data-name');
+      picked.textContent = 'picked · ' + letter + ' · ' + name;
+      picked.classList.add('on');
+      try { localStorage.setItem('btm_induction_habit_style_pick', letter); } catch(e){}
+      try { history.replaceState(null, '', '?pick=' + letter); } catch(e2){}
+    });
+  });
+  document.querySelectorAll('.hab .tick').forEach(function(t){
+    t.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      t.closest('.hab').classList.toggle('is-done');
+    });
+  });
+  var q = new URLSearchParams(location.search).get('pick');
+  if(q){
+    var el = document.querySelector('.opt[data-pick="'+q.toUpperCase()+'"]');
+    if(el) el.click();
+  }
+})();
+</script>
+</body>
+</html>

@@ -30,7 +30,7 @@ html body .day-block.collapsed.vision-collage-day:not(.today-block) .vision-subs
 }
 </style>
 <link rel="stylesheet" href="dashboard-current-fonts.css?v=1"/>
-<link rel="stylesheet" href="dashboard-current.css?v=no-white-pills1"/>
+<link rel="stylesheet" href="dashboard-current.css?v=foil-restore-v4"/>
 <script>
 try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (e) {}
 try { document.documentElement.classList.remove('btm-today-hold', 'btm-today-first'); document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready'); } catch (eHold) {}
@@ -13106,12 +13106,12 @@ window.__j22fnApply=run;
     'I am earning':'manus-storage/zone-earn-hands.jpg?v=earn39',
     'funds':'manus-storage/zone-funds-card.jpg?v=fund4',
     'motherhood':'manus-storage/zone-motherhood.jpg?v=mom1',
-    'projects':'manus-storage/zone-projects-model.jpg?v=proj3',
-    'challenges':'manus-storage/zone-challenges-puzzle.jpg?v=chal3',
+    'projects':'manus-storage/zone-projects-desk.jpg?v=proj4',
+    'challenges':'manus-storage/zone-challenges-climb.jpg?v=chal5',
     'breath':'manus-storage/zone-breath.jpg?v=breath1',
     'nutritious foods':'manus-storage/zone-nutritious-foods.jpg?v=food1',
-    'adhd':'manus-storage/zone-adhd-rx.jpg?v=adhd3',
-    'ADHD':'manus-storage/zone-adhd-rx.jpg?v=adhd3',
+    'adhd':'manus-storage/zone-adhd-desk.jpg?v=adhd4',
+    'ADHD':'manus-storage/zone-adhd-desk.jpg?v=adhd4',
     'i am funds':'manus-storage/zone-funds-cash.jpg?v=fund3',
     'I am earning':'manus-storage/zone-earn-hands.jpg?v=earn39',
     'earned':'manus-storage/zone-earn-hands.jpg?v=earn39',
@@ -13446,11 +13446,11 @@ window.__j22fnApply=run;
     [/\bearning\b|I am earning|\bi will earn\b|\bto earn\b|\bearn\b/, 'manus-storage/zone-earn-hands.jpg?v=earn39'],
     [/\bfunds\b/, 'manus-storage/zone-funds-cash.jpg?v=fund3'],
     [/\bmotherhood\b/, 'manus-storage/zone-motherhood.jpg?v=mom1'],
-    [/\bprojects\b/, 'manus-storage/zone-projects-model.jpg?v=proj3'],
-    [/\bchallenges\b/, 'manus-storage/zone-challenges-puzzle.jpg?v=chal3'],
+    [/\bprojects\b/, 'manus-storage/zone-projects-desk.jpg?v=proj4'],
+    [/\bchallenges\b/, 'manus-storage/zone-challenges-climb.jpg?v=chal5'],
     [/\bbreath\b/, 'manus-storage/zone-breath.jpg?v=breath1'],
     [/nutritious foods|nutritious-foods/, 'manus-storage/zone-nutritious-foods.jpg?v=food1'],
-    [/\badhd\b/, 'manus-storage/zone-adhd-rx.jpg?v=adhd3'],
+    [/\badhd\b/, 'manus-storage/zone-adhd-desk.jpg?v=adhd4'],
     [/\bigniting\b|i am igniting/, 'manus-storage/zone-inner-fire.jpg?v=spark1'],
     [/\baligning\b|i am aligning/, 'manus-storage/zone-alignment.jpg?v=align1'],
     [/\bchanneling\b|i am channeling/, 'manus-storage/zone-to-channel-souls.jpg?v=souls1'],
@@ -17509,7 +17509,7 @@ window.__j22fnApply=run;
           next = next.split(k.toLowerCase()).join(v);
         });
         next = next
-          .replace(/data-carve="i am\b/gi, 'data-carve="I am')
+          .replace(/data-carve="I am\b/gi, 'data-carve="I am')
           .replace(/(class="vision-tile-title"[^>]*>)i am\b/gi, '$1I am')
           .replace(/(class="pursuit-zone-title"[^>]*>)i am\b/gi, '$1I am');
         return next;
@@ -17544,8 +17544,8 @@ window.__j22fnApply=run;
       function scrubIamHtmlLegacy(raw){
         if(!raw) return raw;
         return String(raw)
-          .replace(/data-carve="i am\b/gi, 'data-carve="I am')
-          .replace(/data-carve="i will\b/gi, 'data-carve="I will')
+          .replace(/data-carve="I am\b/gi, 'data-carve="I am')
+          .replace(/data-carve="I will\b/gi, 'data-carve="I will')
           .replace(/(class="vision-tile-title"[^>]*>)i am\b/gi, '$1I am')
           .replace(/(class="vision-tile-title"[^>]*>)i will\b/gi, '$1I will')
           .replace(/(class="pursuit-zone-title"[^>]*>)i am\b/gi, '$1I am')
@@ -18173,8 +18173,9 @@ window.__j22fnApply=run;
       var titleEl=z.querySelector('.pursuit-zone-title');
       if(titleEl){
         var t=((titleEl.textContent)||'').replace(/\s+/g,' ').trim();
-        var low=t.toLowerCase();
-        if(t && t !== low) titleEl.textContent=low;
+        /* NEVER force lowercase section titles — capital I am / I will stay. */
+        if(/^i\s+am\b/i.test(t)) titleEl.textContent = t.replace(/^i\s+am\b/i, 'I am');
+        else if(/^i\s+will\b/i.test(t)) titleEl.textContent = t.replace(/^i\s+will\b/i, 'I will');
       }
       var head=z.querySelector(':scope > .pursuit-zone-head') || z;
       var d=z.querySelector('.zone-del');
@@ -21173,14 +21174,17 @@ low-step').classList.toggle('done', this.checked)" type="checkbox"/><span class=
 <div class="vision-hero">
 <article class="vision-tile" data-focus="deen" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="Ibadah">Ibadah</h3><div class="vision-tile-subsections"><article class="vision-subsection vision-subsection-nophoto" data-sub="defeat-the-enemy" style="--sub-photo: none; --sx: 58%; --sy: 52%; --sw: 36%; --sr: -2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">defeat the enemy</h4></article><article class="vision-subsection" data-sub="istighfar-1000x" style="--sub-photo: url(&quot;manus-storage/sub-istighfar.jpg?v=ist1&quot;); --sx: 6%; --sy: 62%; --sw: 28%; --sr: 2deg;"><div class="vision-subsection-photo"></div><h4 class="vision-subsection-title">istighfar 1000x</h4></article></div><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-earn-hands.jpg?v=earn39');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am earning">I am earning</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="funds" style="--tile-photo: url('manus-storage/zone-funds-cash.jpg?v=fund3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="funds">funds</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 28%;"><input class="agenda-check" type="checkbox"><span>PLUS loan appeal via [guarantor]</span></label></div></article>
-<article class="vision-tile" data-focus="motherhood" style="--tile-photo: url('manus-storage/zone-motherhood.jpg?v=mom1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="motherhood">motherhood</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="lifestyle" style="--tile-photo: url('manus-storage/zone-lifestyle-kitchen.jpg?v=life3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am curating my lifestyle">I am curating my lifestyle</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 22%; --py: 30%;"><input class="agenda-check" type="checkbox"><span>Notion ring</span></label><label class="vision-check" style="--px: 72%; --py: 26%;"><input class="agenda-check" type="checkbox"><span>Sunday Naturals supplements</span></label><label class="vision-check" style="--px: 28%; --py: 62%;"><input class="agenda-check" type="checkbox"><span>Home Centre lemon plates</span></label><label class="vision-check" style="--px: 68%; --py: 58%;"><input class="agenda-check" type="checkbox"><span>Ariete mixer</span></label><label class="vision-check" style="--px: 48%; --py: 78%;"><input class="agenda-check" type="checkbox"><span>Apple AirPods Max in green</span></label></div></article>
-<article class="vision-tile" data-focus="projects" style="--tile-photo: url('manus-storage/zone-projects-model.jpg?v=proj3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="projects">projects</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 36%;"><input class="agenda-check" type="checkbox"><span>Manus restoration</span></label></div></article>
-<article class="vision-tile" data-focus="challenges" style="--tile-photo: url('manus-storage/zone-challenges.jpg?v=chal2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="challenges">challenges</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="nutritious-foods" style="--tile-photo: url('manus-storage/zone-nutritious-foods.jpg?v=food1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="nutritious foods">nutritious foods</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game13');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am winning">I am winning</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 36%;"><input class="agenda-check" type="checkbox"><span>Musly membership</span></label></div></article>
-<article class="vision-tile" data-focus="adhd" style="--tile-photo: url('manus-storage/zone-adhd.jpg?v=adhd2');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="ADHD">ADHD</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 48%; --py: 36%;"><input class="agenda-check" type="checkbox"><span>Adderall refill</span></label><label class="vision-check" style="--px: 62%; --py: 64%;"><input class="agenda-check" type="checkbox"><span>Acronis data</span></label></div></article>
+<article class="vision-tile" data-focus="academia" style="--tile-photo: url('manus-storage/zone-grad-student.jpg?v=grad4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="litigating" style="--tile-photo: url('manus-storage/zone-to-litigate.jpg?v=court1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="networking" style="--tile-photo: url('manus-storage/zone-networking.jpg?v=net1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am networking">I am networking</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="glowing-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am glowing up">I am glowing up</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="fitness" style="--tile-photo: url('manus-storage/zone-athletic-gym.jpg?v=gym1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am training">I am training</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="traveling" style="--tile-photo: url('manus-storage/zone-start-over-positano.jpg?v=travel1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am traveling">I am traveling</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="adhd" style="--tile-photo: url('manus-storage/zone-adhd-desk.jpg?v=adhd4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="ADHD">ADHD</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="challenges" style="--tile-photo: url('manus-storage/zone-challenges-climb.jpg?v=chal5');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="challenges">challenges</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="funds" style="--tile-photo: url('manus-storage/zone-funds-cash.jpg?v=fund3');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="funds">funds</h3><div class="vision-tile-details"></div></article>
 </div>
 </div></div></div></div></div>
 <script id="sep21-baked-hero-snapshot">
@@ -31307,7 +31311,7 @@ html body .day-block.fmt22.today-block:not([data-date="2026-08-25"]) .flow-chart
   }
   function dayOf(g){ var b=g.closest('.day-block'); return b?b.getAttribute('data-date'):''; }
   function existing(g){ return [].slice.call(g.querySelectorAll(':scope > .sec-card')).map(function(sc){var p=sc.querySelector('.j22-group');return p?(p.getAttribute('data-newhdr')||p.textContent.trim()).toLowerCase():'';}); }
-  var CANONICAL_SECTIONS=['I am glowing up','I am curating my lifestyle','I am asking','I am in my power','I am living my purpose','I am in my ambition','I am in the quantum','I am training','I am pursuing my Ph.D','I am mastering','I am achieving','I am pursuing','I am igniting','I am in my potential','I am resonating with other souls','Ibadah','I am envisioning','I am becoming','I am navigating','I am focusing','I am aligning','I am in my strengths','I am planning','I am in spirit','I am in art | science','I am in my self-esteem',"I am giving 'em hell",'I am in politics','I am winning','I am repeating 10,000 times','I am aiming above the mark','I am feeling it into being','I am anticipating','I am facing the darkness','I am detaching','I am traveling','I am tuning into','I am self-actualizing','I am claiming','I am facing sabotage','I am saying thank you in advance','I am executing','I am channeling','I am feeling','I am persevering','I am loving','I am curating','I am seizing opportunities','I am litigating','I am recouping','I am earning','I am calculating','I am successful','I am facing the villains','I am surrendering to Allah ﷻ','funds','motherhood'];
+  var CANONICAL_SECTIONS=['I am glowing up','I am curating my lifestyle','I am asking','I am in my power','I am living my purpose','I am in my ambition','I am in the quantum','I am training','I am pursuing my Ph.D','I am mastering','I am achieving','I am pursuing','I am igniting','I am in my potential','I am resonating with other souls','Ibadah','I am envisioning','I am becoming','I am navigating','I am focusing','I am aligning','I am in my strengths','I am planning','I am in spirit','I am in art | science','I am in my self-esteem',"I am giving 'em hell",'I am in politics','I am winning','I am repeating 10,000 times','I am aiming above the mark','I am feeling it into being','I am anticipating','I am facing the darkness','I am detaching','I am traveling','I am tuning into','I am self-actualizing','I am claiming','I am facing sabotage','I am saying thank you in advance','I am executing','I am channeling','I am feeling','I am persevering','I am loving','I am curating','I am seizing opportunities','I am litigating','I am recouping','I am earning','I am calculating','I am successful','I am facing the villains','I am surrendering to Allah ﷻ','funds','motherhood','ADHD','projects','challenges','nutritious foods'];
   var SECTION_LC={};
   CANONICAL_SECTIONS.forEach(function(s){ SECTION_LC[s.toLowerCase()]=1; });
   var SECTION_BY_ZONE={body:'glow up', life:'curated lifestyle', finances:'ask', leverage:'power', ambition:'ambition', presence:'quantum'};
@@ -49505,7 +49509,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     // Section foci only — never tasks, shopping lines, polaroids, or day-task text.
     var KNOWN = {
       'glow up':1, 'curated lifestyle':1, finances:1, abundance:1, power:1, 'power | purpose':1, purpose:1, 'she pursues':1, 'she-pursues':1, pursue:1, 'i will pursue':1, 'i pursue':1, earn:1, 'i will earn':1, 'to earn':1, 'to-earn':1, 'i earn':1, earning:1, 'I am earning':1,
-      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, fitness:1, academia:1, deen:1, networking:1, 'i am training':1, 'i am a grad student':1, 'i am pursuing my ph.d':1, 'i am networking':1, 'i am fighting':1, "i am giving 'em hell":1, fighting:1, 'I am winning':1, 'i am becoming':1, 'i am persevering':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, 'feel it into being':1, 'aim-above-the-mark':1, 'to feel it into being':1, 'feel it into being':1, 'aim-above-the-mark':1, 'to feel it into being':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1, 'to love':1, 'to-love':1, tolove:1, 'to feel':1, 'to-feel':1, tofeel:1, feel:1, 'to channel':1, 'to-channel':1, tochannel:1, channel:1, 'to persevere':1, 'to-persevere':1, topersevere:1, persevere:1
+      executive:1, ambition:1, quantum:1, gym:1, body:1, 'toned body':1, 'toned-body':1, athletic:1, 'fitness training':1, 'fitness-training':1, fitness:1, academia:1, deen:1, networking:1, 'i am training':1, 'i am a grad student':1, 'i am pursuing my ph.d':1, 'i am networking':1, 'i am fighting':1, "i am giving 'em hell":1, fighting:1, 'I am winning':1, 'i am becoming':1, 'i am persevering':1, calisthenics:1, house:1, 'pepperdine':1, enroll:1, achieve:1, 'grad school':1, pursuits:1, 'inner fire':1, ignite:1, potential:1, resonance:1, 'god-conscious':1, 'god conscious':1, 'awliya allah':1, 'awliya-allah':1, 'awliya allah swt':1, 'awliya-allah-swt':1, 'fear allah':1, 'fear-allah':1, 'fear Allah ﷻ':1, 'itaq-allah':1, 'itaqallah':1, 'itaqAllah':1, villains:1, villain:1, 'fight back':1, 'remember who you are':1, envision:1, future:1, 'future self':1, 'future-self':1, phd:1, 'ph.d':1, 'ph-d':1, workflow:1, focus:1, alignment:1, strengths:1, plan:1, spirit:1, 'art | science':1, 'art-science':1, 'self-esteem':1, 'self esteem':1, audacity:1, politics:1, wins:1, win:1, receive:1, ask:1, 'remember who you are':1, repetitions:1, 'repeat 10,000 times':1, 'repeat 10000 times':1, 'repeat-10000-times':1, intentions:1, 'set the mark':1, 'set-the-mark':1, 'feel it into being':1, 'aim-above-the-mark':1, 'to feel it into being':1, 'feel it into being':1, 'aim-above-the-mark':1, 'to feel it into being':1, attention:1, anticipate:1, darkness:1, claim:1, sabotage:1, 'say thank you in advance':1, 'say-thank-you-in-advance':1, execute:1, curate:1, 'to love':1, 'to-love':1, tolove:1, 'to feel':1, 'to-feel':1, tofeel:1, feel:1, 'to channel':1, 'to-channel':1, tochannel:1, channel:1, 'to persevere':1, 'to-persevere':1, topersevere:1, persevere:1, funds:1, motherhood:1, adhd:1, ADHD:1, projects:1, challenges:1, 'nutritious foods':1, 'nutritious-foods':1
     };
     function looksLikeTask(name){
       if(/^\d/.test(name)) return true;
@@ -49518,7 +49522,8 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       // Aug 30+ only: these names are Pepperdine cards, never sections.
       if((dayKey(blk)||'') >= '2026-08-30' && pepperdineCardOnlyName(shown)) return;
       if(/^i will\b/i.test(shown)) return;
-      if(!/^i am\b/i.test(shown) && shown.toLowerCase() !== 'ibadah') return;
+      var PLAIN_PICK = {ibadah:1, funds:1, motherhood:1, adhd:1, projects:1, challenges:1, 'nutritious foods':1};
+      if(!/^i am\b/i.test(shown) && !PLAIN_PICK[shown.toLowerCase()]) return;
       var display = shown;
       var name = shown.toLowerCase();
       // lifestyle → curated lifestyle (section name)
@@ -49551,7 +49556,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       Object.keys(aliases).forEach(function(a){ seen[a] = 1; });
       out.push(display);
     }
-    var presetSecs=['I am glowing up','I am curating my lifestyle','I am asking','I am in my power','I am living my purpose','I am in my ambition','I am in the quantum','I am training','I am pursuing my Ph.D','I am mastering','I am achieving','I am pursuing','I am igniting','I am in my potential','I am resonating with other souls','Ibadah','I am envisioning','I am becoming','I am navigating','I am focusing','I am aligning','I am in my strengths','I am planning','I am in spirit','I am in art | science','I am in my self-esteem',"I am giving 'em hell",'I am in politics','I am winning','I am repeating 10,000 times','I am aiming above the mark','I am feeling it into being','I am anticipating','I am facing the darkness','I am detaching','I am traveling','I am tuning into','I am self-actualizing','I am claiming','I am facing sabotage','I am saying thank you in advance','I am executing','I am channeling','I am feeling','I am persevering','I am loving','I am curating','I am seizing opportunities','I am litigating','I am recouping','I am earning','I am calculating','I am successful','funds','motherhood'];
+    var presetSecs=['I am glowing up','I am curating my lifestyle','I am asking','I am in my power','I am living my purpose','I am in my ambition','I am in the quantum','I am training','I am pursuing my Ph.D','I am mastering','I am achieving','I am pursuing','I am igniting','I am in my potential','I am resonating with other souls','Ibadah','I am envisioning','I am becoming','I am navigating','I am focusing','I am aligning','I am in my strengths','I am planning','I am in spirit','I am in art | science','I am in my self-esteem',"I am giving 'em hell",'I am in politics','I am winning','I am repeating 10,000 times','I am aiming above the mark','I am feeling it into being','I am anticipating','I am facing the darkness','I am detaching','I am traveling','I am tuning into','I am self-actualizing','I am claiming','I am facing sabotage','I am saying thank you in advance','I am executing','I am channeling','I am feeling','I am persevering','I am loving','I am curating','I am seizing opportunities','I am litigating','I am recouping','I am earning','I am calculating','I am successful','funds','motherhood','ADHD','projects','challenges','nutritious foods'];
     if((dayKey(blk)||'') >= '2026-08-30') presetSecs.push('I am facing the villains');
     /* Explicit picker copy wins before legacy aliases such as "I am a grad student". */
     presetSecs.forEach(push);
@@ -50047,6 +50052,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     earn: { focus: 'earn', title: 'I am earning', photo: 'manus-storage/zone-earn-hands.jpg?v=earn39' },
     funds: { focus: 'funds', title: 'funds', photo: 'manus-storage/zone-funds-cash.jpg?v=fund3' },
     motherhood: { focus: 'motherhood', title: 'motherhood', photo: 'manus-storage/zone-motherhood.jpg?v=mom1' },
+    adhd: { focus: 'adhd', title: 'ADHD', photo: 'manus-storage/zone-adhd-desk.jpg?v=adhd4' },
+    projects: { focus: 'projects', title: 'projects', photo: 'manus-storage/zone-projects-desk.jpg?v=proj4' },
+    challenges: { focus: 'challenges', title: 'challenges', photo: 'manus-storage/zone-challenges-climb.jpg?v=chal5' },
+    'nutritious-foods': { focus: 'nutritious-foods', title: 'nutritious foods', photo: 'manus-storage/zone-nutritious-foods.jpg?v=food1' },
   };
   function plainLabelDay(blk){
     var node = blk;
@@ -50108,6 +50117,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'pursuing' || bare === 'pursuing' || /i am pursuing/i.test(low) || /^(i am )?pursuing$/i.test(low)) return SECTION_PLAIN.pursuing;
     if(f === 'fit' || bare === 'fit' || /i am fit/i.test(low) || /^(i am |i |to )?fit$/i.test(low)) return SECTION_PLAIN.fit;
     if(f === 'centered' || bare === 'centered' || /i am centered/i.test(low) || /^(i am |i |to )?centered$/i.test(low)) return SECTION_PLAIN.centered;
+    if(f === 'funds' || bare === 'funds' || /^funds$/i.test(low)) return SECTION_PLAIN.funds;
+    if(f === 'motherhood' || bare === 'motherhood' || /^motherhood$/i.test(low)) return SECTION_PLAIN.motherhood;
+    if(f === 'adhd' || bare === 'adhd' || /^adhd$/i.test(low)) return SECTION_PLAIN.adhd;
+    if(f === 'projects' || bare === 'projects' || /^projects$/i.test(low)) return SECTION_PLAIN.projects;
+    if(f === 'challenges' || bare === 'challenges' || /^challenges$/i.test(low)) return SECTION_PLAIN.challenges;
+    if(f === 'nutritious-foods' || bare === 'nutritious foods' || bare === 'nutritious-foods' || /^nutritious foods$/i.test(low)) return SECTION_PLAIN['nutritious-foods'];
     return null;
   }
   window.__plainLabelDay = plainLabelDay;
@@ -53219,6 +53234,12 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'to-litigate' || f === 'litigate' || title.toLowerCase() === 'to litigate' || title.toLowerCase() === 'i litigate' || title.toLowerCase() === 'litigate') return 'manus-storage/zone-to-litigate.jpg?v=court1';
     if(f === 'to-recoup' || f === 'recoup' || title.toLowerCase() === 'to recoup' || title.toLowerCase() === 'i recoup' || title.toLowerCase() === 'i i recoup' || title.toLowerCase() === 'i recoup every dollar' || title.toLowerCase() === 'recoup') return '';
     if(f === 'earn' || f === 'earned' || f === 'to-earn' || title.toLowerCase() === 'i will earn' || title.toLowerCase() === 'i earned' || title.toLowerCase() === 'to earn' || title.toLowerCase() === 'i earn' || title.toLowerCase() === 'earn' || title.toLowerCase() === 'I am earning' || title.toLowerCase() === 'earning') return 'manus-storage/zone-earn-hands.jpg?v=earn39';
+    if(f === 'challenges' || title.toLowerCase() === 'challenges') return 'manus-storage/zone-challenges-climb.jpg?v=chal5';
+    if(f === 'projects' || title.toLowerCase() === 'projects') return 'manus-storage/zone-projects-desk.jpg?v=proj4';
+    if(f === 'funds' || title.toLowerCase() === 'funds') return 'manus-storage/zone-funds-cash.jpg?v=fund3';
+    if(f === 'adhd' || title.toLowerCase() === 'adhd') return 'manus-storage/zone-adhd-desk.jpg?v=adhd4';
+    if(f === 'motherhood' || title.toLowerCase() === 'motherhood') return 'manus-storage/zone-motherhood.jpg?v=mom1';
+    if(f === 'nutritious-foods' || title.toLowerCase() === 'nutritious foods' || title.toLowerCase() === 'nutritious-foods') return 'manus-storage/zone-nutritious-foods.jpg?v=food1';
     if(f === 'she-pursues' || f === 'pursue' || f === 'pursuing' || title.toLowerCase() === 'she pursues' || title.toLowerCase() === 'she-pursues' || title.toLowerCase() === 'pursue' || title.toLowerCase() === 'i will pursue' || title.toLowerCase() === 'i pursue' || title.toLowerCase() === 'i am pursuing' || title.toLowerCase() === 'pursuing') return 'manus-storage/zone-she-pursues.jpg?v=pursue1';
     if(f === 'to-master' || f === 'master' || title.toLowerCase() === 'i will master' || title.toLowerCase() === 'to master' || title.toLowerCase() === 'i master' || title.toLowerCase() === 'master' || title.toLowerCase() === 'to-master') return 'manus-storage/zone-to-master.jpg?v=dip3';
     if(f === 'to-achieve' || title.toLowerCase() === 'i will achieve' || title.toLowerCase() === 'to achieve' || title.toLowerCase() === 'i achieve' || title.toLowerCase() === 'to-achieve') return ''; /* achieve license saved to backgrounds */
@@ -53328,6 +53349,201 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     arr.push({ name: name, done: false });
     setMarginTasks(blk, arr);
     renderDayMargin(blk);
+  }
+  function removeMarginTaskByName(blk, name){
+    name = String(name || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if(!name || !blkOk(blk)) return false;
+    var arr = marginTasksFor(blk).slice();
+    var next = arr.filter(function(t){
+      return String(t && t.name || '').toLowerCase() !== name;
+    });
+    if(next.length === arr.length) return false;
+    setMarginTasks(blk, next);
+    renderDayMargin(blk);
+    return true;
+  }
+  var PARKED_SECTION_CONTENTS_KEY = 'btm_parked_section_contents_v1';
+  function loadParkedSectionContents(){
+    try {
+      var raw = localStorage.getItem(PARKED_SECTION_CONTENTS_KEY);
+      var o = raw ? JSON.parse(raw) : {};
+      return (o && typeof o === 'object' && !Array.isArray(o)) ? o : {};
+    } catch(e){ return {}; }
+  }
+  function saveParkedSectionContents(map){
+    try { localStorage.setItem(PARKED_SECTION_CONTENTS_KEY, JSON.stringify(map || {})); } catch(e){}
+  }
+  function collectTileContentsForPark(tile){
+    var tasks = [];
+    var seenTask = Object.create(null);
+    function pushTask(name, done, subsection){
+      name = String(name || '').replace(/\s+/g, ' ').trim();
+      if(!name) return;
+      var k = name.toLowerCase();
+      if(seenTask[k]) return;
+      seenTask[k] = true;
+      tasks.push({
+        name: name,
+        done: !!done,
+        subsection: String(subsection || '').replace(/\s+/g, ' ').trim()
+      });
+    }
+    [].slice.call(tile.querySelectorAll(':scope > .vision-tile-details > .vision-check')).forEach(function(lab){
+      var sp = lab.querySelector('span');
+      var inp = lab.querySelector('input.agenda-check');
+      pushTask((sp && sp.textContent) || '', !!(inp && inp.checked), lab.getAttribute('data-subsection') || '');
+    });
+    [].slice.call(tile.querySelectorAll('.vision-task-star')).forEach(function(star){
+      var nm = star.getAttribute('data-task-name') ||
+        ((star.querySelector('.vision-task-star-name') || {}).textContent) || '';
+      pushTask(nm, star.classList.contains('is-done') || star.getAttribute('data-done') === '1', '');
+    });
+    [].slice.call(tile.querySelectorAll('.vision-horizon-task')).forEach(function(ht){
+      var sp = ht.querySelector('span');
+      pushTask((sp && sp.textContent) || ht.getAttribute('data-task') || '', ht.classList.contains('is-done'), ht.getAttribute('data-subsection') || '');
+    });
+    var cards = [];
+    var seenCard = Object.create(null);
+    [].slice.call(tile.querySelectorAll('.vision-polaroid, .vision-shot-card')).forEach(function(pol){
+      var title = '';
+      try { title = (typeof cardTitle === 'function') ? cardTitle(pol) : ''; } catch(e){}
+      if(!title){
+        var span = pol.querySelector(':scope > span.vision-habit-title') || pol.querySelector(':scope > span:not(.vision-card-headline)');
+        title = ((span && span.textContent) || '').replace(/\s+/g, ' ').trim();
+      }
+      if(!title) return;
+      var ck = title.toLowerCase();
+      if(seenCard[ck]) return;
+      seenCard[ck] = true;
+      cards.push({
+        title: title,
+        habit: !!(pol.classList.contains('vision-habit-card') || pol.getAttribute('data-habit-id')),
+        habitId: pol.getAttribute('data-habit-id') || '',
+        src: pol.getAttribute('data-shot-src') || pol.getAttribute('data-photo') || ''
+      });
+    });
+    var subs = [];
+    var seenSub = Object.create(null);
+    [].slice.call(tile.querySelectorAll('.vision-subsection')).forEach(function(sub){
+      var t = '';
+      try { t = (typeof subsectionTitle === 'function') ? subsectionTitle(sub) : ''; } catch(e){}
+      if(!t){
+        var el = sub.querySelector('.vision-subsection-title');
+        t = ((el && el.textContent) || '').replace(/\s+/g, ' ').trim();
+      }
+      if(!t) return;
+      var sk = t.toLowerCase();
+      if(seenSub[sk]) return;
+      seenSub[sk] = true;
+      subs.push({ title: t, slug: sub.getAttribute('data-sub') || '' });
+    });
+    return { tasks: tasks, cards: cards, subs: subs };
+  }
+  function parkSectionContentsOnDelete(blk, tile, focus, title){
+    if(!tile || !blkOk(blk)) return;
+    var payload = collectTileContentsForPark(tile);
+    if(!payload.tasks.length && !payload.cards.length && !payload.subs.length) return;
+    try { ensureDayMargin(blk); } catch(eM){}
+    (payload.tasks || []).forEach(function(t){
+      if(t && t.name && !t.done){
+        try { addMarginTask(blk, t.name); } catch(eAdd){}
+      }
+    });
+    var map = loadParkedSectionContents();
+    var aliases = (typeof sectionAliasSet === 'function')
+      ? sectionAliasSet(focus, title)
+      : Object.create(null);
+    var key = String(focus || '').toLowerCase().replace(/^to-/, '') ||
+      String(title || '').toLowerCase().replace(/^(to|i will|i)\s+/, '').replace(/\s+/g, '-');
+    if(!key) key = 'section';
+    var entry = {
+      focus: focus || '',
+      title: title || '',
+      day: (typeof dayKey === 'function') ? dayKey(blk) : (blk.getAttribute('data-date') || ''),
+      parkedAt: Date.now(),
+      tasks: payload.tasks,
+      cards: payload.cards,
+      subs: payload.subs
+    };
+    map[key] = entry;
+    Object.keys(aliases || {}).forEach(function(a){
+      if(a) map[String(a).toLowerCase()] = entry;
+    });
+    saveParkedSectionContents(map);
+  }
+  function restoreParkedSectionContents(blk, tile, focus, title){
+    if(!tile || !blkOk(blk)) return false;
+    var map = loadParkedSectionContents();
+    var aliases = (typeof sectionAliasSet === 'function')
+      ? sectionAliasSet(focus, title)
+      : Object.create(null);
+    var keys = Object.keys(map);
+    var hit = null;
+    var hitKey = '';
+    for(var i = 0; i < keys.length; i++){
+      var k = keys[i];
+      var fk = String(focus || '').toLowerCase();
+      var kk = String(k || '').toLowerCase();
+      if(kk === fk || aliases[kk] || aliases[fk] ||
+         kk === String(focus || '').toLowerCase().replace(/^to-/, '') ||
+         (map[k] && String(map[k].focus || '').toLowerCase() === fk)){
+        hit = map[k];
+        hitKey = k;
+        break;
+      }
+    }
+    if(!hit) return false;
+    (hit.subs || []).forEach(function(s){
+      if(!s || !s.title) return;
+      try { addSubsection(tile, s.title, false); } catch(eSub){}
+    });
+    (hit.cards || []).forEach(function(c){
+      if(!c || !c.title) return;
+      try {
+        addCard(tile, c.title, false);
+        if(c.habit || c.habitId){
+          var pol = [].slice.call(tile.querySelectorAll('.vision-polaroid')).find(function(p){
+            try { return (typeof cardTitle === 'function' ? cardTitle(p) : '').toLowerCase() === String(c.title).toLowerCase(); }
+            catch(e){ return false; }
+          });
+          if(pol){
+            pol.classList.add('vision-habit-card');
+            if(c.habitId) pol.setAttribute('data-habit-id', c.habitId);
+          }
+        }
+      } catch(eCard){}
+    });
+    (hit.tasks || []).forEach(function(t){
+      if(!t || !t.name) return;
+      try {
+        try { if(typeof clearHorizonTaskRemoved === 'function') clearHorizonTaskRemoved(blk, tile, t.name); } catch(eClr){}
+        var lab = addVisionCheck(tile, t.name, {
+          force: true,
+          fromLoad: true,
+          subsection: t.subsection || ''
+        });
+        if(lab && t.done){
+          var inp = lab.querySelector('input.agenda-check');
+          if(inp) inp.checked = true;
+        }
+        try { removeMarginTaskByName(blk, t.name); } catch(eRm){}
+      } catch(eTask){}
+    });
+    try { syncHorizonTile(tile); } catch(eH){}
+    try {
+      if(typeof syncTaskConstellation === 'function') syncTaskConstellation(blk);
+    } catch(eC){}
+    var drop = Object.create(null);
+    keys.forEach(function(k){
+      if(map[k] === hit || (hitKey && k === hitKey)) drop[k] = true;
+      if(hit.focus && map[k] &&
+         String(map[k].focus || '').toLowerCase() === String(hit.focus).toLowerCase() &&
+         map[k].parkedAt === hit.parkedAt) drop[k] = true;
+    });
+    Object.keys(drop).forEach(function(k){ delete map[k]; });
+    saveParkedSectionContents(map);
+    try { persistDay(blk); } catch(eP){}
+    return true;
   }
   function renderDayMargin(blk){
     if(!blkOk(blk)) return;
@@ -56353,6 +56569,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     var focus = tileFocus(tile);
     var titleEl = tile.querySelector('.vision-tile-title');
     var title = ((titleEl && titleEl.textContent) || '').replace(/\s+/g, ' ').trim();
+    try { parkSectionContentsOnDelete(blk, tile, focus, title); } catch(ePark){}
     var data = dayData(blk);
     var aliases = sectionAliasSet(focus, title);
     data.removedSections = data.removedSections || [];
@@ -56575,6 +56792,9 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   }
   function addTile(blk, title, asUser, readd){
     title = String(title||'').replace(/\s+/g,' ').trim().toLowerCase();
+    /* NEVER leave lowercase pronoun — addTile matches on lower, display must be I am / I will */
+    if(/^i am\b/.test(title)) title = 'I am' + title.slice(4);
+    else if(/^i will\b/.test(title)) title = 'I will' + title.slice(6);
     if(!title || !blkOk(blk)) return;
         if(title === 'luscious hair' || title === 'glass skin' || title === 'aligned teeth' || title === 'facial tone' || title === 'facial structure'){
       var glow0 = glowUpTile(blk.querySelector('.vision-board'));
@@ -56753,9 +56973,11 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     });
     if(asUser) markUserAddedSection(blk, focus, title);
     data.addedSections.push(rec);
-    host.appendChild(makeTile(rec));
+    var newTile = makeTile(rec);
+    host.appendChild(newTile);
     try { host.removeAttribute('data-pack-sig'); } catch(eSig){}
     ensureOverviewEditChrome(blk);
+    try { restoreParkedSectionContents(blk, newTile, focus, title); } catch(eRestore){}
     persistDay(blk);
     try { syncHeroLayoutClass(blk); } catch(ePack){}
     if(asUser) bakeVisionSection(blk, rec);
@@ -64289,18 +64511,18 @@ html body .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
 }
 </style>
 
-<style id="day-card-del-css">
-/* Hover × on day cards — remove day (user-initiated only). */
+<style id="day-card-del-css-v2">
+/* Hover × on day cards — tuck into the card corner so it never covers carry/+. */
 html body .day-block > .day-card {
   position: relative;
 }
 html body .day-block > .day-card > .day-card-del {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 2px;
+  right: 2px;
   z-index: 40;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -64308,21 +64530,26 @@ html body .day-block > .day-card > .day-card-del {
   background: transparent;
   color: rgba(94, 83, 64, 0.78);
   font-family: Arial, sans-serif;
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 15px;
+  line-height: 22px;
   text-align: center;
   cursor: pointer;
   opacity: 0;
   pointer-events: auto;
   transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
+/* Keep layout · carry · + clear of the corner × */
+html body .day-block:not(.collapsed) > .day-card .overview-right-tools {
+  padding-right: 26px !important;
+  box-sizing: border-box !important;
+}
 html body .day-block.collapsed > .day-card > .day-card-del {
-  top: 4px;
-  right: 6px;
-  width: 24px;
-  height: 24px;
-  font-size: 16px;
-  line-height: 24px;
+  top: 1px;
+  right: 1px;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
   color: rgba(94, 83, 64, 0.7);
 }
 html body .day-block:hover > .day-card > .day-card-del,
@@ -64333,8 +64560,8 @@ html body .day-block > .day-card > .day-card-del:hover {
   color: rgba(44, 40, 31, 0.92);
 }
 html body .day-block.day-fullpage-active > .day-card > .day-card-del {
-  top: 14px;
-  right: 16px;
+  top: 8px;
+  right: 8px;
 }
 html body .day-block.today-block > .day-card > .day-card-del {
   color: rgba(255, 248, 238, 0.55);
@@ -64514,6 +64741,32 @@ html body .day-block.today-block > .day-card > .day-card-del:hover {
       blk.__fileDayPackedOnce = 0;
       try { hero.removeAttribute('data-pack-sig'); } catch(eSig){}
     }
+    var CHAL = 'manus-storage/zone-challenges-climb.jpg?v=chal5';
+    hero.querySelectorAll('.vision-tile[data-focus="challenges"]').forEach(function(el){
+      el.style.setProperty('--tile-photo', 'url("'+CHAL+'")');
+    });
+    var PROJ = 'manus-storage/zone-projects-desk.jpg?v=proj4';
+    hero.querySelectorAll('.vision-tile[data-focus="projects"]').forEach(function(el){
+      el.style.setProperty('--tile-photo', 'url("'+PROJ+'")');
+    });
+    var ADHD = 'manus-storage/zone-adhd-desk.jpg?v=adhd4';
+    hero.querySelectorAll('.vision-tile[data-focus="adhd"]').forEach(function(el){
+      el.style.setProperty('--tile-photo', 'url("'+ADHD+'")');
+    });
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1','btm_zone_photos_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = raw
+          .replace(/manus-storage\/zone-challenges-puzzle\.jpg(\?v=[^"'\\s)]+)?/g, CHAL)
+          .replace(/manus-storage\/zone-challenges-scene\.jpg(\?v=[^"'\\s)]+)?/g, CHAL)
+          .replace(/manus-storage\/zone-challenges\.jpg(\?v=[^"'\\s)]+)?/g, CHAL)
+          .replace(/manus-storage\/zone-projects-model\.jpg(\?v=[^"'\\s)]+)?/g, PROJ)
+          .replace(/manus-storage\/zone-projects\.jpg(\?v=[^"'\\s)]+)?/g, PROJ)
+          .replace(/manus-storage\/zone-adhd-rx\.jpg(\?v=[^"'\\s)]+)?/g, ADHD)
+          .replace(/manus-storage\/zone-adhd\.jpg(\?v=[^"'\\s)]+)?/g, ADHD);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+    } catch(eStore){}
     var tile = hero.querySelector(':scope > .vision-tile');
     if(!tile || blk.classList.contains('collapsed')) return;
     var inlineW = 0, hh = 0;
@@ -67417,6 +67670,8 @@ html body #julRail.rail-open {
     'am networking': 'manus-storage/zone-networking.jpg?v=net1',
     earn: 'manus-storage/zone-earn-hands.jpg?v=earn39',
     earning: 'manus-storage/zone-earn-hands.jpg?v=earn39',
+    challenges: 'manus-storage/zone-challenges-climb.jpg?v=chal5',
+    projects: 'manus-storage/zone-projects-desk.jpg?v=proj4',
     'I am earning': 'manus-storage/zone-earn-hands.jpg?v=earn39',
     'I am earning': 'manus-storage/zone-earn-hands.jpg?v=earn39',
     'i will earn': 'manus-storage/zone-earn-hands.jpg?v=earn39',
@@ -67544,7 +67799,13 @@ html body #julRail.rail-open {
     'zone-claiming-envelope', 'zone-claiming-envelope-banned', '/archive/zone-claiming-envelope',
     'zone-claiming-safe', 'zone-claiming-safe-banned', '/archive/zone-claiming-safe',
     'zone-claiming-seat', 'zone-claiming-seat-banned', 'zone-claiming-seat-claim5',
-    'zone-claiming-seat.jpg', 'seat.jpg?v=claim5'
+    'zone-claiming-seat.jpg', 'seat.jpg?v=claim5',
+    /* challenges — puzzle pile, stone stairs, AI gear flatlay forever banned; live is mid-climb chalk */
+    'zone-challenges-puzzle', 'zone-challenges.jpg', 'zone-challenges-scene',
+    /* projects — architectural model forever banned; live is the full desk scene */
+    'zone-projects-model', 'zone-projects.jpg',
+    /* ADHD — lone amber bottle forever banned; live is the full desk scene */
+    'zone-adhd-rx', 'zone-adhd.jpg'
   ];
   function isBanned(url){
     var s = String(url || '').toLowerCase();
@@ -67941,9 +68202,9 @@ html body #julRail.rail-open {
 })();
 </script>
 
-<script id="migration-earn-black-marble-v39">
+<script id="migration-earn-black-marble-v40">
 (function(){
-  var MKEY = 'migration-earn-black-marble-v39';
+  var MKEY = 'migration-earn-black-marble-v40';
   var WANT = 'manus-storage/zone-earn-hands.jpg?v=earn39';
   var OLD_RE = /manus-storage\/zone-earn-hands\.jpg(?:\?v=earn\d+)?/g;
   function isEarn(tile){
@@ -67956,9 +68217,12 @@ html body #julRail.rail-open {
       if(!isEarn(tile)) return;
       tile.classList.remove('vision-tile-nophoto');
       tile.style.setProperty('--tile-photo', 'url("' + WANT + '")');
-      /* No dark foil carve on earn — not on the collage, not on zoom. */
+      /* Keep same foil carve as every other Sep 6+ title. */
       var title = tile.querySelector('.vision-tile-title');
-      if(title) title.removeAttribute('data-carve');
+      if(title){
+        var label = (title.textContent || '').replace(/\s+/g, ' ').trim();
+        if(label) title.setAttribute('data-carve', label);
+      }
     });
     try {
       ['btm_day_shells_v1','btm_overview_edits_v1','btm_zone_photos_v1','btm_last_good_board_v1'].forEach(function(k){
@@ -72149,8 +72413,9 @@ html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) 
 
 
 
-<style id="sep6-gold-foil-titles-lock-v1">
-/* HARD LOCK: Sep 6+ / foil / dash-mosaic = centered gold foil titles. Never white Newsreader. */
+<style id="sep6-gold-foil-titles-lock-v3">
+/* HARD LOCK: Sep 6+ / foil / dash-mosaic = centered gold foil titles. Never white Newsreader.
+   Global foil formula restored — do NOT retint all titles to fix one section. */
 html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title,
 html body .day-block.dash-mosaic-era article.vision-tile > h3.vision-tile-title,
 html body .day-block[data-title-era="foil"] .vision-tile > .vision-tile-title,
@@ -73781,33 +74046,75 @@ html body.vision-zoom-open .vision-tile.is-zoomed > .vision-tile-title::before {
   box-shadow: none !important;
 }
 </style>
-<style id="earn-no-dark-carve-v1">
-/* Earn titles stay gold foil. No dark carve duplicate, no drop-shadow blotch — collage or zoom. */
-html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] .vision-tile[data-focus="earn"] > .vision-tile-title,
-html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] article.vision-tile[data-focus="earn"] > h3.vision-tile-title,
-html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title,
-html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title,
-html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title,
-html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title {
-  filter: none !important;
-  -webkit-filter: none !important;
-  text-shadow: none !important;
-}
-html body .day-block[data-title-era="foil"] .vision-tile[data-focus="earn"] > .vision-tile-title::before,
-html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] .vision-tile[data-focus="earn"] > .vision-tile-title::before,
-html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] article.vision-tile[data-focus="earn"] > h3.vision-tile-title::before,
-html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title::before,
-html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title::before,
-html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title::before,
-html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title::before {
-  content: none !important;
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
-}
-</style>
+
+<script id="iam-capital-i-permanent-v1">
+/* PERMANENT: leading "i am" / "i will" on section titles → "I am" / "I will".
+   Not a one-shot. Not optional. Survives shells, bakes, addTile, carve sync. */
+(function(){
+  if(window.__iamCapitalIPermanent) return;
+  window.__iamCapitalIPermanent = 1;
+  function cap(s){
+    return String(s||'')
+      .replace(/^\s*i\s+am\b/i, 'I am')
+      .replace(/^\s*i\s+will\b/i, 'I will');
+  }
+  function scrubHtml(raw){
+    if(!raw) return raw;
+    return String(raw)
+      .replace(/data-carve="i am\b/gi, 'data-carve="I am')
+      .replace(/data-carve="i will\b/gi, 'data-carve="I will')
+      .replace(/(class="vision-tile-title"[^>]*>)i am\b/gi, '$1I am')
+      .replace(/(class="vision-tile-title"[^>]*>)i will\b/gi, '$1I will')
+      .replace(/(class="pursuit-zone-title"[^>]*>)i am\b/gi, '$1I am')
+      .replace(/(class="pursuit-zone-title"[^>]*>)i will\b/gi, '$1I will')
+      .replace(/>i am\b/gi, function(m){ return m.replace(/i am/i, 'I am'); })
+      .replace(/>i will\b/gi, function(m){ return m.replace(/i will/i, 'I will'); });
+  }
+  function fixEl(el){
+    if(!el) return;
+    var t = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+    if(!t) return;
+    var fixed = cap(t);
+    if(fixed !== t) el.textContent = fixed;
+    if(el.hasAttribute('data-carve')){
+      var c = el.getAttribute('data-carve') || '';
+      var cf = cap(c);
+      if(cf !== c) el.setAttribute('data-carve', cf);
+    } else if(el.classList && el.classList.contains('vision-tile-title')){
+      el.setAttribute('data-carve', fixed);
+    }
+  }
+  function all(){
+    document.querySelectorAll('.vision-tile-title, .pursuit-zone-title').forEach(fixEl);
+  }
+  function scrubStores(){
+    try {
+      ['btm_day_shells_v1','btm_overview_edits_v1','btm_overview_nodes_v1','btm_last_good_board_v1'].forEach(function(k){
+        var raw = localStorage.getItem(k); if(!raw) return;
+        var next = scrubHtml(raw);
+        if(next !== raw) localStorage.setItem(k, next);
+      });
+    } catch(e){}
+  }
+  window.__capIamSectionTitle = cap;
+  window.__fixIamCapitalI = all;
+  function boot(){ scrubStores(); all(); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
+  else boot();
+  setTimeout(boot, 0);
+  setTimeout(boot, 200);
+  setTimeout(boot, 800);
+  setTimeout(boot, 2000);
+  try {
+    var t = 0;
+    new MutationObserver(function(){
+      clearTimeout(t);
+      t = setTimeout(all, 40);
+    }).observe(document.documentElement, { childList:true, subtree:true, characterData:true });
+  } catch(e){}
+})();
+</script>
+
 <style id="zoom-hide-day-fabs-v1">
 /* Section full view: today, +, and ↑ stay off. Move stays. */
 html body.vision-zoom-open #enh-left-fab #enh-jump-today,
@@ -73825,4 +74132,112 @@ html body:has(.vision-board.is-zoomed) #enh-left-fab #enh-scroll-top {
   pointer-events: none !important;
 }
 </style>
+
+<script id="migration-archive-empty-picker-sections-v1">
+/* Archive picker sections that are NOT on Sep 21 and have 0 presets
+   (no seeded/historical subsections, cards, tasks, or habits).
+   Keep anything on Sep 21 (incl. ADHD/funds/challenges) and anything with presets. */
+(function(){
+  var MKEY = 'migration-archive-empty-picker-sections-v1';
+  if(localStorage.getItem(MKEY)) return;
+  var SEP21_KEEP = {
+    'ibadah':1, 'deen':1,
+    'i am earning':1, 'earn':1, 'earning':1,
+    'nutritious foods':1, 'nutritious-foods':1,
+    'i am winning':1, 'wins':1, 'winning':1,
+    'i am pursuing my ph.d':1, 'academia':1, 'phd':1, 'ph.d':1,
+    'i am litigating':1, 'litigating':1,
+    'i am networking':1, 'networking':1,
+    'i am glowing up':1, 'glowing-up':1, 'glowing up':1, 'glow':1, 'glow up':1,
+    'i am training':1, 'fitness':1, 'training':1, 'body':1,
+    'i am traveling':1, 'traveling':1,
+    'adhd':1,
+    'challenges':1,
+    'funds':1
+  };
+  /* Explicit empty-preset picker leftovers (not on Sep 21). */
+  var TO_ARCHIVE = [
+    { title: 'I am mastering', focus: 'mastering' },
+    { title: 'I am igniting', focus: 'igniting' },
+    { title: 'I am resonating with other souls', focus: 'resonating-with-other-souls' },
+    { title: 'I am navigating', focus: 'navigating' },
+    { title: 'I am repeating 10,000 times', focus: 'repeating-10000-times' },
+    { title: 'I am feeling it into being', focus: 'feeling-it-into-being' },
+    { title: 'I am detaching', focus: 'detaching' },
+    { title: 'I am self-actualizing', focus: 'self-actualizing' },
+    { title: 'I am claiming', focus: 'claiming' },
+    { title: 'I am saying thank you in advance', focus: 'saying-thank-you-in-advance' },
+    { title: 'I am executing', focus: 'executing' },
+    { title: 'I am feeling', focus: 'feeling' },
+    { title: 'I am persevering', focus: 'persevering' },
+    { title: 'I am loving', focus: 'loving' }
+  ];
+  function norm(s){ return String(s||'').replace(/\s+/g,' ').trim().toLowerCase(); }
+  function isSep21Keep(title, focus){
+    var t = norm(title), f = norm(focus);
+    if(SEP21_KEEP[t] || SEP21_KEEP[f]) return true;
+    var bare = t.replace(/^i am\s+/, '').replace(/^to\s+/, '');
+    if(SEP21_KEEP[bare]) return true;
+    return false;
+  }
+  try {
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem('btm_archived_sections_v1')||'[]') || []; } catch(e){ list = []; }
+    if(!Array.isArray(list)) list = [];
+    function already(title, focus){
+      var t = norm(title), f = norm(focus);
+      return list.some(function(it){
+        if(!it) return false;
+        return norm(it.title) === t || norm(it.focus) === f || norm(it.focus) === t || norm(it.title) === f;
+      });
+    }
+    var now = Date.now();
+    TO_ARCHIVE.forEach(function(rec){
+      if(isSep21Keep(rec.title, rec.focus)) return;
+      if(already(rec.title, rec.focus)) return;
+      list.unshift({
+        title: rec.title,
+        focus: rec.focus,
+        day: '2026-09-21',
+        from: 'everything.html',
+        photo: '',
+        archivedAt: now,
+        reason: 'empty-picker-no-presets'
+      });
+    });
+    localStorage.setItem('btm_archived_sections_v1', JSON.stringify(list));
+    localStorage.setItem(MKEY, '1');
+    try {
+      if(typeof window.__scrubArchivedSectionsEverywhere === 'function'){
+        window.__scrubArchivedSectionsEverywhere();
+      }
+    } catch(e2){}
+  } catch(e){}
+})();
+</script>
+
+<script id="migration-unarchive-motherhood-projects-v1">
+/* Revert empty-picker archive for motherhood + projects — keep them in the + picker. */
+(function(){
+  var MKEY = 'migration-unarchive-motherhood-projects-v1';
+  if(localStorage.getItem(MKEY)) return;
+  function norm(s){ return String(s||'').replace(/\s+/g,' ').trim().toLowerCase(); }
+  function isMomOrProj(it){
+    if(!it) return false;
+    var t = norm(it.title), f = norm(it.focus);
+    return t === 'motherhood' || f === 'motherhood' || t === 'projects' || f === 'projects';
+  }
+  try {
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem('btm_archived_sections_v1')||'[]') || []; } catch(e){ list = []; }
+    if(!Array.isArray(list)) list = [];
+    var next = list.filter(function(it){ return !isMomOrProj(it); });
+    if(next.length !== list.length){
+      localStorage.setItem('btm_archived_sections_v1', JSON.stringify(next));
+    }
+  } catch(e){}
+  localStorage.setItem(MKEY, '1');
+})();
+</script>
+
 </html>
