@@ -10495,13 +10495,18 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
 <a href="card-style-mocks.html">card style mocks</a>
 <a href="capture-panel-mocks.html">capture panel mocks</a>
 <a href="task-pin-mocks.html">task pins · marks</a>
-<a href="task-attention-mocks.html">task attention · A–H</a>
+<a href="task-attention-mocks.html?v=1">task attention · A–H</a>
 <a href="carry-forward-mocks.html">carry forward · spatial</a>
 <a href="carry-forward-mocks-v2.html">carry forward · v2</a>
 <a href="collage-structure-mocks.html?v=4">collage structure · A–F</a>
-<a href="monogram-pin-mocks.html?v=1">monogram pins · A–H</a>
+<a href="collage-packing-mocks.html?v=2">collage packing</a>
+<a href="force-collage-mocks.html?v=5">force collage</a>
+<a href="force-collage-mocks.html?v=4">force collage · v4</a>
+<a href="monogram-pin-mocks.html?v=2">number pins</a>
+<a href="monogram-pin-mocks.html?v=4b">number pins · v4b</a>
 <a href="day-dawn-mocks.html">new day · fold</a>
 <a href="induction-habit-mocks.html">induction habit · chrome</a>
+<a href="day-chrome-layout-mocks.html?v=1">day chrome + collage</a>
 <a href="everything.html?flowtrail=1">everything · flow trail</a>
 <a href="everything.html?v=vision-collage-2x3">everything · collage 2×3</a>
 <a href="everything.html?v=zoom-plus-z">everything · zoom + Z</a>
@@ -10559,7 +10564,7 @@ html.prototypes-page .day-block[data-date="2026-08-30"] .vision-hero {
   else setup();
 })();
 </script>
-<script src="nav-shared.js?v=navdesignpreviews2" defer></script>
+<script src="nav-shared.js?v=navdesignpreviews7" defer></script>
 <script>
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
@@ -46739,7 +46744,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   var SECTION_PLAIN = {
     fitness: { focus: 'fitness', title: 'I am training', photo: 'manus-storage/zone-athletic-gym.jpg?v=gym1' },
     academia: { focus: 'academia', title: 'I am a grad student', photo: 'manus-storage/zone-achieve-csol.jpg?v=csol3' },
-    deen: { focus: 'deen', title: 'I am worshipping Allah \uFDFB', photo: 'manus-storage/zone-god-conscious.jpg?v=remembrance1' },
+    deen: { focus: 'deen', title: 'Ibadah', photo: 'manus-storage/zone-god-conscious.jpg?v=remembrance1' },
     networking: { focus: 'networking', title: 'I am networking', photo: 'manus-storage/zone-to-earn-gold.jpg?v=earn3' },
     wins: { focus: 'wins', title: 'I am winning', photo: 'manus-storage/zone-wins-hand.jpg?v=game13' },
     become: { focus: 'become', title: 'I am becoming', photo: 'manus-storage/zone-envision.jpg?v=swap1' },
@@ -46773,7 +46778,10 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       || bare === 'academia' || bare === 'succeed' || bare === 'succeeded' || bare === 'pepperdine' || bare === 'enroll' || bare === 'grad student' || bare === 'a grad student'
       || /grad student/i.test(low) || /^(i will |i |to )?(succeed|succeeded)$/i.test(low)) return SECTION_PLAIN.academia;
     if(f === 'deen' || f === 'surrendered-to-allah' || f === 'surrender-to-allah' || f === 'itaq-allah' || f === 'god-conscious' || f === 'awliya-allah' || f === 'awliya-allah-swt' || f === 'fear-allah'
-      || bare === 'deen' || /surrender/.test(low) || /itaq/.test(low) || /worshipping/.test(low) || bare === 'god-conscious' || bare === 'god conscious') return SECTION_PLAIN.deen;
+      || bare === 'deen' || /surrender/.test(low) || /itaq/.test(low) || /worshipping/.test(low) || /ibadah/.test(low) || bare === 'god-conscious' || bare === 'god conscious'){
+      if(iso && iso < '2026-09-21') return { focus: 'deen', title: 'I am worshipping Allah \uFDFB', photo: SECTION_PLAIN.deen.photo };
+      return { focus: 'deen', title: 'Ibadah', photo: SECTION_PLAIN.deen.photo };
+    }
     if(f === 'networking' || f === 'earned' || f === 'earn' || f === 'to-earn'
       || bare === 'networking' || bare === 'earn' || bare === 'earned'
       || /networking/i.test(low) || /^(i will |i |to )?(earn|earned|networking)$/i.test(low)) return SECTION_PLAIN.networking;
@@ -63484,11 +63492,6 @@ html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-polaroid
       '  color: #fff8ee !important;',
       '  border-color: rgba(255,248,238,0.48) !important;',
       '}',
-      'html body .day-block .overview-carry-forward.is-armed {',
-      '  color: #2c2418 !important;',
-      '  background: rgba(255,248,238,0.92) !important;',
-      '  border-color: transparent !important;',
-      '}',
       '#constellation-rollover {',
       '  position: fixed; inset: 0; z-index: 200050;',
       '  display: none; align-items: center; justify-content: center;',
@@ -67387,6 +67390,25 @@ html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed > .vis
 html body > .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title::after {
   content: none !important;
 }
+/* Earn: no dark foil carve on the collage or on zoom. */
+html body .vision-tile[data-focus="earn"] > .vision-tile-title::before,
+html body .vision-tile[data-focus="earn"] > .vision-tile-title::after,
+html body .day-block:is(.overview-era-day, .vision-collage-day) .vision-tile[data-focus="earn"] > .vision-tile-title::before,
+html body.vision-zoom-open .vision-board.is-zoomed .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title::before,
+html body > .vision-board.is-zoomed .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title::before {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html body .vision-tile[data-focus="earn"] > .vision-tile-title,
+html body.vision-zoom-open .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title {
+  filter: none !important;
+  -webkit-filter: none !important;
+  text-shadow: none !important;
+}
 </style>
 <script id="vision-tile-title-letterpress-v3-js">
 (function(){
@@ -69899,10 +69921,13 @@ html body .day-block.day-fullpage-active .day-card-header > .day-date::after {
 html body.day-fullpage-open #day-fullpage-date-chip,
 html body #day-fullpage-date-chip.day-fullpage-date-chip {
   position: fixed !important;
-  top: 58px !important;
+  top: 54px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 2147483640 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14px !important;
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
@@ -69914,23 +69939,64 @@ html body #day-fullpage-date-chip.day-fullpage-date-chip {
   -webkit-backdrop-filter: none !important;
   -webkit-background-clip: initial !important;
   background-clip: initial !important;
-  -webkit-text-fill-color: #d8c49a !important;
-  color: #d8c49a !important;
-  font-family: "Cinzel", "Times New Roman", serif !important;
-  font-size: 13px !important;
+  -webkit-text-fill-color: #e8d4b0 !important;
+  color: #e8d4b0 !important;
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-size: 28px !important;
   font-weight: 500 !important;
-  font-style: normal !important;
-  letter-spacing: 0.18em !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
   line-height: 1 !important;
-  text-transform: uppercase !important;
-  text-shadow:
-    0 1px 0 rgba(255, 248, 236, 0.35),
-    0 1px 10px rgba(18, 10, 6, 0.45),
-    0 0 18px rgba(216, 196, 154, 0.28) !important;
+  text-transform: lowercase !important;
+  text-shadow: none !important;
   filter: none !important;
   pointer-events: auto !important;
   cursor: pointer !important;
   white-space: nowrap !important;
+  transform-origin: 50% 0 !important;
+  animation: day-date-overhead-arrive 620ms cubic-bezier(0.2, 0.82, 0.2, 1) both !important;
+}
+html body.day-fullpage-open #day-fullpage-date-chip .dfd-side,
+html body #day-fullpage-date-chip.day-fullpage-date-chip .dfd-side {
+  font-family: "Cinzel", "Times New Roman", serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  letter-spacing: 0.32em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  color: rgba(232, 214, 180, 0.78) !important;
+  -webkit-text-fill-color: rgba(232, 214, 180, 0.78) !important;
+  background: none !important;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55) !important;
+  filter: none !important;
+}
+html body.day-fullpage-open #day-fullpage-date-chip .dfd-num,
+html body #day-fullpage-date-chip.day-fullpage-date-chip .dfd-num {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-size: 36px !important;
+  letter-spacing: 0.02em !important;
+  line-height: 0.8 !important;
+  text-transform: none !important;
+  background-image: linear-gradient(185deg,
+    #e8d4b0 0%,
+    #d4b888 16%,
+    #c4a882 36%,
+    #8f7858 54%,
+    #b89568 72%,
+    #d8c49a 100%) !important;
+  background-size: 100% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: #c4a882 !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+  filter:
+    drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
+    drop-shadow(0 1px 0 #3a3228)
+    drop-shadow(0 2px 0 #241c16) !important;
 }
 html body.day-fullpage-open .day-fullpage-close {
   position: fixed !important;
@@ -70092,6 +70158,27 @@ html body .day-fullpage-close {
       try { el.style.removeProperty(k); } catch(e){}
     });
   }
+  function paintDateChip(chip, raw){
+    var text = String(raw || '').replace(/\s+/g, ' ').trim();
+    chip.textContent = '';
+    var m = text.match(/^([A-Za-z]+)\s+(\d{1,2})\s*·\s*(.+)$/);
+    if(!m){
+      chip.textContent = text;
+      return;
+    }
+    var mo = document.createElement('span');
+    mo.className = 'dfd-side';
+    mo.textContent = m[1];
+    var num = document.createElement('em');
+    num.className = 'dfd-num';
+    num.textContent = m[2];
+    var wd = document.createElement('span');
+    wd.className = 'dfd-side';
+    wd.textContent = m[3];
+    chip.appendChild(mo);
+    chip.appendChild(num);
+    chip.appendChild(wd);
+  }
   function ensureDateChip(blk){
     var existing = document.getElementById('day-fullpage-date-chip');
     if(existing) existing.remove();
@@ -70099,7 +70186,7 @@ html body .day-fullpage-close {
     var chip = document.createElement('div');
     chip.id = 'day-fullpage-date-chip';
     chip.className = 'day-fullpage-date-chip';
-    chip.textContent = ((src && src.textContent) || '').trim();
+    paintDateChip(chip, (src && src.textContent) || '');
     document.body.appendChild(chip);
     if(src){
       src.setAttribute('data-fullpage-hidden', '1');

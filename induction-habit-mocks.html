@@ -76,6 +76,9 @@
     appearance: none;
     display: block;
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
     text-align: left;
     border: 1px solid rgba(255,248,238,0.12);
     border-radius: 16px;
@@ -119,6 +122,7 @@
     height: 300px;
     border-radius: 12px;
     overflow: hidden;
+    contain: paint;
     background:
       linear-gradient(180deg, rgba(10,7,5,0.2), rgba(10,7,5,0.55)),
       url('manus-storage/zone-athletic-gym.jpg?v=gym1') center/cover;
@@ -127,7 +131,13 @@
   }
 
   .hab { position: relative; user-select: none; }
-  .hab img { display: block; width: 100%; object-fit: cover; }
+  .hab img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
   .hab .t { font-family: "Newsreader", Georgia, serif; font-style: italic; }
   .hab .d {
     font-family: "DM Mono", monospace;
@@ -188,8 +198,13 @@
     pointer-events: none;
   }
   .g img {
-    position: absolute; inset: 28px;
-    width: auto; height: auto;
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    width: calc(100% - 56px);
+    height: calc(100% - 56px);
+    max-width: none;
+    object-fit: cover;
     border-radius: 50%;
     box-shadow: inset 0 0 0 1px rgba(255,180,120,0.25);
   }
@@ -254,8 +269,13 @@
       0 0 24px rgba(255,80,30,0.15);
   }
   .i .well img {
-    position: absolute; inset: 10px;
-    width: auto; height: auto;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    max-width: none;
+    object-fit: cover;
     border-radius: 50%;
   }
   .i .ringbit {
@@ -428,8 +448,13 @@
     mask: radial-gradient(circle, transparent 58%, #000 59% 78%, transparent 79%);
   }
   .m .dial img {
-    position: absolute; inset: 12px;
-    width: auto; height: auto;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
+    max-width: none;
+    object-fit: cover;
     border-radius: 50%;
   }
   .m .t { font-size: 22px; color: #fff6ee; display: block; line-height: 1.05; }
@@ -506,7 +531,7 @@
         <div class="notches" aria-hidden="true"></div>
         <div class="arc" aria-hidden="true"></div>
         <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
-        <button class="tick" type="button" aria-label="done"></button>
+        <span class="tick" role="button" aria-label="done"></span>
         <div class="core">
           <span class="t">induction</span>
           <span class="d">daily</span>
@@ -521,7 +546,7 @@
       <div class="hab h">
         <div class="rail" aria-hidden="true"></div>
         <div class="body">
-          <button class="tick" type="button" aria-label="done"></button>
+          <span class="tick" role="button" aria-label="done"></span>
           <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
           <div class="meta">
             <span class="t">induction</span>
@@ -539,7 +564,7 @@
         <div class="well">
           <div class="ringbit" aria-hidden="true"></div>
           <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
-          <button class="tick" type="button" aria-label="done"></button>
+          <span class="tick" role="button" aria-label="done"></span>
         </div>
         <div class="row">
           <span class="t">induction</span>
@@ -557,7 +582,7 @@
           <span>M</span><span class="on">T</span><span class="on">W</span><span class="on">T</span><span>F</span><span>S</span><span>S</span>
         </div>
         <div class="body">
-          <button class="tick" type="button" aria-label="done"></button>
+          <span class="tick" role="button" aria-label="done"></span>
           <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
           <div class="meta">
             <span class="t">induction</span>
@@ -575,7 +600,7 @@
         <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
         <div class="iris" aria-hidden="true"></div>
         <div class="rim" aria-hidden="true"></div>
-        <button class="tick" type="button" aria-label="done"></button>
+        <span class="tick" role="button" aria-label="done"></span>
         <div class="core">
           <span class="t">induction</span>
           <span class="d">daily</span>
@@ -589,7 +614,7 @@
     <div class="preview">
       <div class="hab l">
         <div class="body">
-          <button class="tick" type="button" aria-label="done"></button>
+          <span class="tick" role="button" aria-label="done"></span>
           <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
         </div>
         <div class="meta">
@@ -614,7 +639,7 @@
           <span class="t">induction</span>
           <span class="d">daily</span>
         </div>
-        <button class="tick" type="button" aria-label="done"></button>
+        <span class="tick" role="button" aria-label="done"></span>
       </div>
     </div>
   </button>
@@ -630,7 +655,7 @@
         <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
         <div class="meta">
           <span class="t">induction</span>
-          <button class="tick" type="button" aria-label="done"></button>
+          <span class="tick" role="button" aria-label="done"></span>
         </div>
       </div>
     </div>

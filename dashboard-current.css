@@ -480,11 +480,6 @@ html body .day-block .overview-carry-forward:hover {
   color: #fff8ee !important;
   border-color: rgba(255,248,238,0.48) !important;
 }
-html body .day-block .overview-carry-forward.is-armed {
-  color: #2c2418 !important;
-  background: rgba(255,248,238,0.92) !important;
-  border-color: transparent !important;
-}
 #constellation-rollover {
   /* Above full-page day lock (2147483000) — otherwise carry paints behind
      the transparent full-page plate: black bleeds through, stars unclickable. */
@@ -742,4 +737,30 @@ html body .day-block .overview-carry-forward.is-armed {
 }
 @keyframes cr-comet-bright {
   to { filter: brightness(1.45); box-shadow: 0 0 48px #e6c994cc, 0 0 110px #b27b3f88; }
+}
+
+/* Earn titles: gold foil only. No dark carve on the collage or on zoom. */
+html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] .vision-tile[data-focus="earn"] > .vision-tile-title,
+html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] article.vision-tile[data-focus="earn"] > h3.vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title,
+html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title,
+html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title {
+  filter: none !important;
+  -webkit-filter: none !important;
+  text-shadow: none !important;
+}
+html body .day-block[data-title-era="foil"] .vision-tile[data-focus="earn"] > .vision-tile-title::before,
+html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] .vision-tile[data-focus="earn"] > .vision-tile-title::before,
+html body .day-block:is(.overview-era-day, .vision-collage-day)[data-title-era="foil"] article.vision-tile[data-focus="earn"] > h3.vision-tile-title::before,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title::before,
+html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title::before,
+html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed[data-focus="earn"] > .vision-tile-title::before,
+html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed[data-focus="earn"] > h3.vision-tile-title::before {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
