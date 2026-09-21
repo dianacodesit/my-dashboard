@@ -21,6 +21,19 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`).
 4. Prefer **one composition**: options side-by-side or tabbed in a single popup/page — not scattered chat screenshots.
 5. Match real chrome feel (collage, pills, tools) when mocking UI — not empty wireframe boxes alone.
 6. After she picks, wire the winner to the live board.
+7. **Save every mock to design previews in the same turn you give her the URL.** Do not wait for her to ask.
+
+## Design previews — always
+
+Any mock, gallery, or options page you open for her (`*-mocks.html`, `*-mock.html`, or a live `?mock=` / `?v=` preview) goes in the hamburger **design previews** group before you send the link.
+
+1. Add it to `LINKS` in `nav-shared.js` with `group: 'design'` and the **exact** href, including `?v=`.
+2. Add the same `<a href>` under `<summary class="nav-section">design previews</summary>` in **both** `everything.html` and `prototype.html`.
+3. Bump the `nav-shared.js?v=` cache query on those pages so a hard refresh shows the new link.
+4. Label from the page’s `<h1>`, not a new name.
+5. If an older href for the same file is already listed, replace it — do not leave two.
+
+Saved nav layout matches href exactly. A missing `?v=` is a different link and will not show the page she just opened.
 
 ## Never
 
