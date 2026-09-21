@@ -488,6 +488,13 @@ REJECTED_SECTION_PHOTOS = (
     "zone-to-earn.jpg?v=earn1",
     "zone-to-earn.jpg",
     "zone-to-earn-gold.jpg",
+    # claiming — envelope, safe, seat forever banned; live is gold-in-velvet claim7
+    "zone-claiming-envelope",
+    "zone-claiming-safe",
+    "zone-claiming-seat",
+    "zone-claiming-seat.jpg",
+    "seat.jpg?v=claim5",
+    "/archive/zone-claiming-seat",
 )
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",

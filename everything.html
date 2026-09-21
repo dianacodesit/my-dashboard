@@ -20,7 +20,7 @@ This applies regardless of conversation context or recently edited days.
 
 <meta charset="utf-8"/>
 <link rel="stylesheet" href="dashboard-current-fonts.css?v=1"/>
-<link rel="stylesheet" href="dashboard-current.css?v=today-fast2"/>
+<link rel="stylesheet" href="dashboard-current.css?v=today-fast3"/>
 <script>
 try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (e) {}
 try { document.documentElement.classList.add('btm-today-hold'); } catch (eHold) {}
@@ -56,7 +56,7 @@ window.__isLiveDayBlock = function(blk){
   return !!(date && iso && date === iso);
 };
 </script>
-<script src="boot-today.js?v=today-fast2"></script>
+<script src="boot-today.js?v=today-fast3"></script>
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
@@ -18484,6 +18484,7 @@ window.__j22fnApply=run;
       blk.classList.toggle('overview-empty', !hasTiles);
     }
     if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
+    try { if(window.__paintKnownSubsections) window.__paintKnownSubsections(blk); } catch(eSubs){}
   }
   function ensureOverviewNodesGrid(blk){
     if(!blk || !isOverviewEra(blk)) return;
@@ -20732,7 +20733,7 @@ low-step').classList.toggle('done', this.checked)" type="checkbox"/><span class=
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-earn-hands.jpg?v=earn39'); --photo-ar: 0.75; --zoom-ar: 0.75;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am earning">I am earning</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="to-persevere" style="--tile-photo: url('manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am persevering">I am persevering</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="executing" style="--tile-photo: url('manus-storage/zone-execute-focus.jpg?v=chess1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am executing">I am executing</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="claiming" style="--tile-photo: url('manus-storage/zone-claiming-seat.jpg?v=claim5');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am claiming">I am claiming</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="claiming" style="--tile-photo: url('manus-storage/zone-claiming-mine.jpg?v=claim7');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am claiming">I am claiming</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-future" data-focus="become" style="--tile-photo: url('manus-storage/zone-envision.jpg?v=swap1');"><div class="vision-tile-photo"></div><p class="vision-tile-quote">I can do this.</p><h3 class="vision-tile-title" data-carve="I am becoming">I am becoming</h3><div class="vision-tile-details"><label class="vision-check" style="--px: 34%; --py: 32%;"><input class="agenda-check" type="checkbox"><span>Dr Betty</span></label><label class="vision-check" style="--px: 62%; --py: 58%;"><input class="agenda-check" type="checkbox"><span>document translation into Arabic</span></label></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="healthy" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am healthy">I am healthy</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile vision-tile-nophoto" data-focus="financially-abundant" style="--tile-photo: none;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am financially abundant">I am financially abundant</h3><div class="vision-tile-details"></div></article>
@@ -20802,7 +20803,7 @@ low-step').classList.toggle('done', this.checked)" type="checkbox"/><span class=
 <div class="vision-hero">
 <article class="vision-tile" data-focus="deen" style="--tile-photo: url('manus-storage/zone-god-conscious.jpg?v=remembrance1');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am worshipping Allah ﷻ">I am worshipping Allah ﷻ</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="academia" style="--tile-photo: url('manus-storage/zone-grad-student.jpg?v=grad4');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3><div class="vision-tile-details"></div></article>
-<article class="vision-tile" data-focus="claiming" style="--tile-photo: url('manus-storage/zone-claiming-seat.jpg?v=claim5');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am claiming">I am claiming</h3><div class="vision-tile-details"></div></article>
+<article class="vision-tile" data-focus="claiming" style="--tile-photo: url('manus-storage/zone-claiming-mine.jpg?v=claim7');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am claiming">I am claiming</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="earn" style="--tile-photo: url('manus-storage/zone-earn-hands.jpg?v=earn39'); --photo-ar: 0.75; --zoom-ar: 0.75;"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am earning">I am earning</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="glowing-up" style="--tile-photo: url('manus-storage/zone-glow-up.jpg?v=glow6');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am glowing up">I am glowing up</h3><div class="vision-tile-details"></div></article>
 <article class="vision-tile" data-focus="wins" style="--tile-photo: url('manus-storage/zone-wins-hand.jpg?v=game13');"><div class="vision-tile-photo"></div><h3 class="vision-tile-title" data-carve="I am winning">I am winning</h3><div class="vision-tile-details"></div></article>
@@ -24746,8 +24747,9 @@ function wireDayDots(opts) {
       if (!header) return;
       const block = header.closest('.day-block');
       if (!block) return;
-      /* Full-page day: header click exits full-page (sep8 handler), never rail-collapse. */
+      /* Full-page day: never rail-collapse. Date click opens full-page (sep8 capture). */
       if (block.classList.contains('day-fullpage-active') || document.body.classList.contains('day-fullpage-open')) return;
+      if (e.target.closest('.day-date')) return;
       block.classList.toggle('collapsed');
       try { if(window.__syncOverviewEraChrome) window.__syncOverviewEraChrome(block); } catch(eSync){}
       try { if(window.__ensureCarryControl) window.__ensureCarryControl(block); } catch(eCarry2){}
@@ -46208,6 +46210,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
       blk.classList.toggle('overview-empty', !hasTiles);
     }
     if(window.__ensureOverviewEditChrome) window.__ensureOverviewEditChrome(blk);
+    try { if(window.__paintKnownSubsections) window.__paintKnownSubsections(blk); } catch(eSubs){}
   }
   function ensureOverviewNodesGrid(blk){
     if(!blk || !isOverviewEra(blk)) return;
@@ -52772,7 +52775,7 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
     if(f === 'detach' || title.toLowerCase() === 'detach') return 'manus-storage/zone-detach-silhouette-woman.jpg?v=woman1';
     if(f === 'start-over' || f === 'start over' || f === 'create-again' || f === 'create again' || f === 'travel' || f === 'to-travel' || title.toLowerCase() === 'start over' || title.toLowerCase() === 'create again' || title.toLowerCase() === 'create-again' || title.toLowerCase() === 'travel' || title.toLowerCase() === 'to travel' || title.toLowerCase() === 'i travel') return 'manus-storage/zone-start-over-positano.jpg?v=travel1';
     if(f === 'self-actualize' || f === 'to-self-actualize' || title.toLowerCase() === 'self-actualize' || title.toLowerCase() === 'self actualize' || title.toLowerCase() === 'to self-actualize' || title.toLowerCase() === 'i self-actualize') return '';
-    if(f === 'claim' || f === 'claiming' || title.toLowerCase() === 'claim' || title.toLowerCase() === 'claiming' || title.toLowerCase() === 'to claim' || title.toLowerCase() === 'i claim' || title.toLowerCase() === 'i am claiming' || f === 'to-claim') return dayKey(blk) >= '2026-09-07' ? 'manus-storage/zone-claiming-seat.jpg?v=claim5' : '';
+    if(f === 'claim' || f === 'claiming' || title.toLowerCase() === 'claim' || title.toLowerCase() === 'claiming' || title.toLowerCase() === 'to claim' || title.toLowerCase() === 'i claim' || title.toLowerCase() === 'i am claiming' || f === 'to-claim') return dayKey(blk) >= '2026-09-07' ? 'manus-storage/zone-claiming-mine.jpg?v=claim7' : '';
     if(f === 'to-litigate' || f === 'litigate' || title.toLowerCase() === 'to litigate' || title.toLowerCase() === 'i litigate' || title.toLowerCase() === 'litigate') return 'manus-storage/zone-to-litigate.jpg?v=court1';
     if(f === 'to-recoup' || f === 'recoup' || title.toLowerCase() === 'to recoup' || title.toLowerCase() === 'i recoup' || title.toLowerCase() === 'i i recoup' || title.toLowerCase() === 'i recoup every dollar' || title.toLowerCase() === 'recoup') return '';
     if(f === 'earn' || f === 'earned' || f === 'to-earn' || title.toLowerCase() === 'i will earn' || title.toLowerCase() === 'i earned' || title.toLowerCase() === 'to earn' || title.toLowerCase() === 'i earn' || title.toLowerCase() === 'earn' || title.toLowerCase() === 'I am earning' || title.toLowerCase() === 'earning') return 'manus-storage/zone-earn-hands.jpg?v=earn39';
@@ -59593,7 +59596,49 @@ html body .day-block.fmt22[data-date="2026-08-27"] .sec-card.shot-card .card-bod
   window.__shouldDropAug30ArchivedSection = shouldDropAug30ArchivedSection;
   window.__restoreAug30HistorySections = restoreAug30HistorySections;
   window.__clearArchivedRemovalsOnHistoryDays = clearArchivedRemovalsOnHistoryDays;
-/* Do not run overview boot on reload — it restyles the live collage and flashes the page. */
+
+  /* Lean overview boot — restore stored edits + known subsections only.
+     Full seed/migrate boot was disabled to stop collage flash; subsections
+     must still paint whenever the parent section is on the day. */
+  function paintKnownSubsections(onlyBlk){
+    document.querySelectorAll('.day-block.overview-era-day, .day-block.vision-collage-day').forEach(function(blk){
+      if(onlyBlk && blk !== onlyBlk) return;
+      if(!blkOk(blk)) return;
+      var changed = false;
+      try { if(ensureFitnessSubsections(blk)) changed = true; } catch(e){}
+      try { if(ensureGlowSubsections(blk)) changed = true; } catch(e){}
+      try { if(ensureSurrenderSubsections(blk)) changed = true; } catch(e){}
+      try { if(ensureAcademiaSubsections(blk)) changed = true; } catch(e){}
+      try { if(ensureHealthySubsections(blk)) changed = true; } catch(e){}
+      try { if(ensureCenteredSubsections(blk)) changed = true; } catch(e){}
+      if(changed){
+        try { syncAddedSubsectionsFromDom(blk); } catch(eSync){}
+        try { persistDay(blk); } catch(ePers){}
+      }
+    });
+  }
+  function bootOverviewSubsections(){
+    try { clearArchivedRemovalsOnHistoryDays(); } catch(eHist){}
+    document.querySelectorAll('.day-block[data-date]').forEach(function(blk){
+      if(!blkOk(blk)) return;
+      if(window.__isFileDay && window.__isFileDay(blk)){
+        try { applyFileDayAddsOnly(blk); } catch(eAdd){}
+        try { paintKnownSubsections(blk); } catch(ePaint){}
+        return;
+      }
+      var dk = dayKey(blk);
+      if(!_overviewApplied[dk]){
+        try { applyStoredEdits(blk); } catch(eApply){}
+        if(heroHost(blk)) _overviewApplied[dk] = 1;
+      }
+      try { paintKnownSubsections(blk); } catch(ePaint2){}
+      try { ensureOverviewEditChrome(blk); } catch(eChrome){}
+    });
+  }
+  window.__paintKnownSubsections = paintKnownSubsections;
+  window.__bootOverviewSubsections = bootOverviewSubsections;
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ bootOverviewSubsections(); });
+  else bootOverviewSubsections();
   document.addEventListener('click', function(e){
     var vb = e.target.closest && e.target.closest('.day-block.overview-era-day .vision-board');
     if(vb) setTimeout(function(){
@@ -60016,13 +60061,14 @@ html body .day-block.collapsed .day-card-header > .day-count {
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  color: #d8c49a !important;
-  -webkit-text-fill-color: #d8c49a !important;
-  font-family: "Newsreader", Georgia, serif !important;
-  font-style: italic !important;
-  font-size: 17px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.04em !important;
+  /* Same rail ink as .day-date — never champagne foil / italic Newsreader */
+  color: #1c140e !important;
+  -webkit-text-fill-color: #1c140e !important;
+  font-family: "Cinzel", serif !important;
+  font-style: normal !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
   line-height: 1.15 !important;
   text-transform: none !important;
   opacity: 1 !important;
@@ -60031,8 +60077,8 @@ html body .day-block.collapsed .day-card-header > .day-count {
   z-index: 3 !important;
   flex: 0 0 auto !important;
   text-shadow:
-    0 1px 1px rgba(20, 12, 6, 0.45),
-    0 0 12px rgba(244, 217, 122, 0.18) !important;
+    0 1px 2px rgba(20, 12, 6, 0.5),
+    0 2px 8px rgba(20, 12, 6, 0.3) !important;
 }
 
 
@@ -66565,12 +66611,12 @@ html body #julRail.rail-open {
     'i am achieving': 'manus-storage/zone-achieving.jpg?v=done1',
     recouping: 'manus-storage/zone-recouping.jpg?v=back1',
     'i am recouping': 'manus-storage/zone-recouping.jpg?v=back1',
-    claiming: 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    'i am claiming': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    claim: 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    'to claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    'to-claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    'i claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
+    claiming: 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    'i am claiming': 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    claim: 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    'to claim': 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    'to-claim': 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    'i claim': 'manus-storage/zone-claiming-mine.jpg?v=claim7',
   };
   var REJECTED_SECTION_PHOTOS = [
     'zone-to-love-rings',
@@ -66635,9 +66681,11 @@ html body #julRail.rail-open {
     'zone-successful.jpg?v=ok1', 'zone-successful-champagne',
     /* Pepperdine campus — school-name line (Caruso / Graziadio) forever banned */
     'zone-achieve-csol-pre-nudge-up', 'zone-achieve-csol-caruso-line',
-    /* claiming — red cash envelope + lockbox gravel forever banned; live is woman silhouette in her seat (claim5) */
+    /* claiming — envelope, safe, seat forever banned; live is gold waiting in velvet (claim7) */
     'zone-claiming-envelope', 'zone-claiming-envelope-banned', '/archive/zone-claiming-envelope',
-    'zone-claiming-safe', 'zone-claiming-safe-banned', '/archive/zone-claiming-safe'
+    'zone-claiming-safe', 'zone-claiming-safe-banned', '/archive/zone-claiming-safe',
+    'zone-claiming-seat', 'zone-claiming-seat-banned', 'zone-claiming-seat-claim5',
+    'zone-claiming-seat.jpg', 'seat.jpg?v=claim5'
   ];
   function isBanned(url){
     var s = String(url || '').toLowerCase();
@@ -66753,11 +66801,12 @@ html body #julRail.rail-open {
 })();
 </script>
 
-<script id="migration-claiming-seat-claim5-v1">
+<script id="migration-claiming-mine-claim7-v2">
 (function(){
-  var MKEY = 'migration-claiming-seat-claim5-v1';
-  var WANT = 'manus-storage/zone-claiming-seat.jpg?v=claim5';
-  var OLD_RE = /manus-storage\/zone-claiming-(?:envelope|safe)\.jpg(?:\?v=[^"'?\s;)]*)?/g;
+  /* Seat silhouette is banned forever. Force gold-in-velvet claim7. */
+  var MKEY = 'migration-claiming-mine-claim7-v2';
+  var WANT = 'manus-storage/zone-claiming-mine.jpg?v=claim7';
+  var OLD_RE = /manus-storage\/zone-claiming-(?:envelope|safe|seat|key|throne|seal)\.jpg(?:\?v=[^"'?\s;)]*)?/g;
   function isClaiming(tile){
     var t = ((tile.querySelector('.vision-tile-title')||{}).textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
     var f = (tile.getAttribute('data-focus')||'').replace(/\s+/g,'-').toLowerCase();
@@ -66796,10 +66845,11 @@ html body #julRail.rail-open {
         });
       });
       if(changed) localStorage.setItem('btm_overview_edits_v1', JSON.stringify(edits));
+      try { localStorage.removeItem('migration-claiming-seat-claim5-v1'); } catch(eRm){}
       localStorage.setItem(MKEY, '1');
     } catch(e){}
   }
-  window.__applyClaimingSeatClaim3 = run;
+  window.__applyClaimingMineClaim7 = run;
   run();
   setTimeout(run, 0);
   setTimeout(run, 400);
@@ -71849,6 +71899,7 @@ html body.day-fullpage-open .day-fullpage-close {
     blk.classList.remove('collapsed');
     blk.classList.add('day-fullpage-active');
     document.body.classList.add('day-fullpage-open');
+    try { if(window.__restoreDayImgs) window.__restoreDayImgs(blk); } catch(eImg){}
     sealRailChrome();
     applyLock(blk, LOCK);
     ensureDateChip(blk);
@@ -71896,13 +71947,13 @@ html body.day-fullpage-open .day-fullpage-close {
     }
     var blk=e.target.closest && e.target.closest('.day-block');
     if(!blk || !eligible(blk)) return;
-    /* Real controls never toggle full-page / collapse. */
+    /* Real controls never toggle full-page. */
     if(e.target.closest('input, button, a, textarea, .overview-depth-opt, .overview-add-section, .overview-carry-forward, .overview-center-stack, .overview-right-tools, .today-view-toggle, .tv-pill, .vision-layout-button, .vision-layout-panel, .day-fullpage-close, .day-pop-x, .make-flow-btn, .vision-add-card, .vision-tile-del, .vision-card-del, .vision-pol-resize, .vision-tile-resize, .card-resize, .zone-resize, .overview-link-btn, .overview-web-bar, .day-margin')) return;
+    var dateEl=e.target.closest && e.target.closest('.day-date');
     var header=e.target.closest && e.target.closest('.day-card-header');
     var inFull=blk.classList.contains('day-fullpage-active') || (active && active.blk === blk);
-    /* Full-page: header click exits. Body stays in full-page (tiles can zoom). */
+    /* Full-page: any non-control click exits. */
     if(inFull){
-      if(!header) return;
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation) e.stopImmediatePropagation();
@@ -71912,16 +71963,19 @@ html body.day-fullpage-open .day-fullpage-close {
       try { if(window.__parkRailHeaderChrome) window.__parkRailHeaderChrome(blk); } catch(ePark){}
       return;
     }
-    /* Rail: header is collapse/expand only — never open full-page. */
+    /* Rail: ONLY the date label opens full-page. Header (not date) collapses/expands. */
+    if(dateEl && header && header.contains(dateEl)){
+      openDay(blk);
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      return;
+    }
     if(header) return;
-    /* Collapsed days expand via header; no body to open. */
     if(blk.classList.contains('collapsed')) return;
     var card=e.target.closest && e.target.closest('.day-card');
     if(!card || !blk.contains(card)) return;
-    var tile=e.target.closest && e.target.closest('.vision-tile');
     openDay(blk);
-    /* Section click: let zoom handlers run after full-page opens. */
-    if(tile) return;
     e.preventDefault();
     e.stopPropagation();
     if(e.stopImmediatePropagation) e.stopImmediatePropagation();
@@ -72179,18 +72233,19 @@ html body .day-block.collapsed.overview-era-day .day-card-header > .day-count {
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  font-family: "Newsreader", Georgia, serif !important;
-  font-style: italic !important;
-  font-size: 17px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.04em !important;
+  /* Match date rail — Cinzel ink, not champagne italic */
+  font-family: "Cinzel", serif !important;
+  font-style: normal !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
   line-height: 1.15 !important;
   text-transform: none !important;
-  color: #d8c49a !important;
-  -webkit-text-fill-color: #d8c49a !important;
+  color: #1c140e !important;
+  -webkit-text-fill-color: #1c140e !important;
   text-shadow:
-    0 1px 1px rgba(20, 12, 6, 0.45),
-    0 0 12px rgba(244, 217, 122, 0.18) !important;
+    0 1px 2px rgba(20, 12, 6, 0.5),
+    0 2px 8px rgba(20, 12, 6, 0.3) !important;
 }
 </style>
 

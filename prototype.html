@@ -25021,8 +25021,9 @@ function wireDayDots(opts) {
       if (!header) return;
       const block = header.closest('.day-block');
       if (!block) return;
-      /* Full-page day: header click exits full-page (sep8 handler), never rail-collapse. */
+      /* Full-page day: never rail-collapse. Date click opens full-page (sep8 capture). */
       if (block.classList.contains('day-fullpage-active') || document.body.classList.contains('day-fullpage-open')) return;
+      if (e.target.closest('.day-date')) return;
       block.classList.toggle('collapsed');
       try { if(window.__syncOverviewEraChrome) window.__syncOverviewEraChrome(block); } catch(eSync){}
       try { if(window.__ensureCarryControl) window.__ensureCarryControl(block); } catch(eCarry2){}
@@ -69966,22 +69967,40 @@ html body .day-fullpage-close {
       closeDay();
       return;
     }
+    var blk=e.target.closest && e.target.closest('.day-block');
+    if(!blk || !eligible(blk)) return;
+    /* Real controls never toggle full-page. */
+    if(e.target.closest('input, button, a, textarea, .overview-depth-opt, .overview-add-section, .overview-carry-forward, .overview-center-stack, .overview-right-tools, .today-view-toggle, .tv-pill, .vision-layout-button, .vision-layout-panel, .day-fullpage-close, .day-pop-x, .make-flow-btn, .vision-add-card, .vision-tile-del, .vision-card-del, .vision-pol-resize, .vision-tile-resize, .card-resize, .zone-resize, .overview-link-btn, .overview-web-bar, .day-margin')) return;
+    var dateEl=e.target.closest && e.target.closest('.day-date');
     var header=e.target.closest && e.target.closest('.day-card-header');
-    var blk=header && header.closest('.day-block');
-    if(!header || !eligible(blk)) return;
-    /* Only real controls — empty header chrome / wrappers still toggle full-page. */
-    if(e.target.closest('input, button, a, .overview-depth-opt, .overview-add-section, .overview-carry-forward, .vision-layout-button, .vision-layout-panel, .tv-pill, .day-fullpage-close')) return;
-    e.preventDefault();
-    e.stopPropagation();
-    if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-    if(blk.classList.contains('day-fullpage-active') || (active && active.blk === blk)){
+    var inFull=blk.classList.contains('day-fullpage-active') || (active && active.blk === blk);
+    /* Full-page: any non-control click exits. */
+    if(inFull){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
       closeDay();
       try { blk.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch(eScroll){}
       try { if(window.__syncOverviewEraChrome) window.__syncOverviewEraChrome(blk); } catch(eChrome){}
       try { if(window.__parkRailHeaderChrome) window.__parkRailHeaderChrome(blk); } catch(ePark){}
       return;
     }
+    /* Rail: ONLY the date label opens full-page. Header (not date) collapses/expands. */
+    if(dateEl && header && header.contains(dateEl)){
+      openDay(blk);
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      return;
+    }
+    if(header) return;
+    if(blk.classList.contains('collapsed')) return;
+    var card=e.target.closest && e.target.closest('.day-card');
+    if(!card || !blk.contains(card)) return;
     openDay(blk);
+    e.preventDefault();
+    e.stopPropagation();
+    if(e.stopImmediatePropagation) e.stopImmediatePropagation();
   },true);
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape' && active) closeDay();

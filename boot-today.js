@@ -98,6 +98,49 @@
       releaseHold();
     }
 
+    /* Park <img src> inside collapsed days so refresh does not fetch hundreds of
+       pursuit card photos. Restore when a day opens. Today stays live. */
+    function parkCollapsedImgs(root) {
+      try {
+        var scope = root || document;
+        scope.querySelectorAll('.day-block.collapsed:not(.today-block) img[src]').forEach(function (img) {
+          if (img.getAttribute('data-park-src')) return;
+          var src = img.getAttribute('src') || '';
+          if (!src || src.indexOf('data:') === 0) return;
+          img.setAttribute('data-park-src', src);
+          img.removeAttribute('src');
+          img.setAttribute('loading', 'lazy');
+        });
+      } catch (ePark) {}
+    }
+    function restoreDayImgs(blk) {
+      if (!blk) return;
+      try {
+        blk.querySelectorAll('img[data-park-src]').forEach(function (img) {
+          var src = img.getAttribute('data-park-src');
+          if (!src) return;
+          img.setAttribute('src', src);
+          img.removeAttribute('data-park-src');
+        });
+      } catch (eRest) {}
+    }
+    window.__parkCollapsedImgs = parkCollapsedImgs;
+    window.__restoreDayImgs = restoreDayImgs;
+    var parkScheduled = false;
+    function schedulePark() {
+      if (parkScheduled) return;
+      parkScheduled = true;
+      try {
+        requestAnimationFrame(function () {
+          parkScheduled = false;
+          parkCollapsedImgs(document);
+        });
+      } catch (eRafP) {
+        parkScheduled = false;
+        parkCollapsedImgs(document);
+      }
+    }
+
     window.__pinTodayCard = pinTodayCard;
     window.__scrollToToday = function () {
       userMoved = false;
@@ -110,25 +153,30 @@
     try {
       mo = new MutationObserver(function () {
         schedulePin();
+        schedulePark();
       });
       mo.observe(document.documentElement, { childList: true, subtree: true });
     } catch (eMo) {}
 
     pinTodayCard();
+    parkCollapsedImgs(document);
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () {
         pinTodayCard();
+        parkCollapsedImgs(document);
         releaseHold();
         try { if (mo) mo.disconnect(); } catch (eD0) {}
       }, { once: true });
     } else {
       pinTodayCard();
+      parkCollapsedImgs(document);
       releaseHold();
     }
 
     window.addEventListener('load', function () {
       pinTodayCard();
+      parkCollapsedImgs(document);
       releaseHold();
       try { if (mo) mo.disconnect(); } catch (eD) {}
     }, { once: true });
@@ -137,6 +185,7 @@
     [0, 50, 150, 400].forEach(function (ms) {
       setTimeout(function () {
         pinTodayCard();
+        parkCollapsedImgs(document);
         if (ms >= 400) {
           releaseHold();
           try { if (mo) mo.disconnect(); } catch (eD2) {}
@@ -155,6 +204,20 @@
     window.addEventListener('keydown', function (e) {
       if (e.key === 'PageDown' || e.key === 'PageUp' || e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Home' || e.key === 'End' || e.key === ' ') releasePin();
     }, { passive: true });
+
+    document.addEventListener('click', function (e) {
+      var hdr = e.target && e.target.closest && e.target.closest('.day-card-header');
+      if (!hdr) return;
+      var blk = hdr.closest('.day-block');
+      if (!blk) return;
+      setTimeout(function () {
+        if (blk.classList.contains('collapsed') && !blk.classList.contains('today-block')) {
+          parkCollapsedImgs(blk);
+        } else {
+          restoreDayImgs(blk);
+        }
+      }, 0);
+    }, true);
   } catch (err) {
     try {
       document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');

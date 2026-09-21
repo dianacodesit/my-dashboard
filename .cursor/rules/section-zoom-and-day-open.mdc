@@ -27,18 +27,30 @@ Clicking a **section** (`.vision-tile`) must open full-size zoom in **both** mod
 - `openTile` clears `grid-area` / `grid-column` / `grid-row` on tiles; `clearVisionPack` clears `grid-area` too; `closeBoard` re-packs via `__syncHeroLayoutClass`
 - After any collage / Sortable / overview-chrome change, verify: details zoom (click a polaroid), overview zoom → close → zoom a second section
 
-## Day expand — late-created days (Aug 29+ shells)
+## Day open — full-page
+
+### Behavior
+
+- **`.day-date` only** → opens full view (including from a collapsed day)
+- **Header (not the date)** → collapse / expand the day card
+- **Body** → opens full view
+- **Anywhere in full view** (except real controls: pills, layout/carry/+, inputs, resize, etc.) → exits full view
+- Escape / × / pearl date chip still exit
 
 ### Never
 
-- Rely only on per-header `dataset.wired` listeners — shell `outerHTML` saves `data-wired` but **not** listeners, so reload skips re-wiring and the day won’t open
+- Treat the whole header as “open full-page” — that steals collapse/expand
+- Full-page exit gated to header only — any non-control click must leave
+- Rely only on per-header `dataset.wired` listeners — shell `outerHTML` saves `data-wired` but **not** listeners, so reload skips re-wiring
 - Persist `data-wired` (or any wiring flag) into `btm_day_shells_v1`
 
 ### Always
 
-- Document-level delegation for `.day-card-header` collapse toggle (`dayHeaderCollapseWired`)
+- Document-level capture handler for full-page open/close (`__openFullpageDay` / `__closeFullpageDay`)
+- Document-level delegation for `.day-card-header` collapse toggle (`dayHeaderCollapseWired`) — skips `.day-date`
 - Strip `[data-wired]` when saving and when hydrating shells in `ensureDayCard`
-- After shell / day-creation changes, verify Aug 29 (or any shell-only day) expands on click
+- Keep `everything.html` and `prototype.html` in sync
+- After shell / day-creation changes, verify: date → full view; header chrome → collapse; body → full view
 
 ## If either ability breaks
 

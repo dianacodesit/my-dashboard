@@ -6,16 +6,47 @@ html body .day-block.collapsed:not(.today-block) {
   content-visibility: auto;
   contain-intrinsic-size: auto 56px;
 }
-/* Hide the April→today flash while boot-today pins the real day mid-parse. */
+/* Hide April checklist chrome + rail while boot-today pins the real day.
+   (Only hiding #agendaBody still flashed "to do / the plan".) */
+html.btm-today-hold #page-bg-wrapper > header,
+html.btm-today-hold #page-bg-wrapper > .progress-wrap,
+html.btm-today-hold #page-bg-wrapper > .schedule-section > .schedule-header,
 html.btm-today-hold #agendaBody,
 html.btm-today-hold .timeline {
   opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
+html.btm-today-pinned #page-bg-wrapper > header,
+html.btm-today-pinned #page-bg-wrapper > .progress-wrap,
+html.btm-today-pinned #page-bg-wrapper > .schedule-section > .schedule-header,
 html.btm-today-pinned #agendaBody,
 html.btm-today-pinned .timeline,
+html:not(.btm-today-hold) #page-bg-wrapper > header,
+html:not(.btm-today-hold) #page-bg-wrapper > .progress-wrap,
+html:not(.btm-today-hold) #page-bg-wrapper > .schedule-section > .schedule-header,
 html:not(.btm-today-hold) #agendaBody,
 html:not(.btm-today-hold) .timeline {
   opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Collapsed days: never paint section/card photos — stops the refresh fetch storm.
+   Today stays live. Expand restores background via existing --tile-photo rules. */
+html body .day-block.collapsed:not(.today-block) .vision-tile-photo,
+html body .day-block.collapsed:not(.today-block) .vision-subsection-photo,
+html body .day-block.collapsed:not(.today-block) .vision-polaroid,
+html body .day-block.collapsed:not(.today-block) .vision-shot-card,
+html body .day-block.collapsed:not(.today-block) .vision-polaroid img,
+html body .day-block.collapsed:not(.today-block) .vision-shot-card img,
+html body .day-block.collapsed:not(.today-block) .j22-section img,
+html body .day-block.collapsed:not(.today-block) .card-visual img,
+html body .day-block.collapsed:not(.today-block) .sec-card img {
+  background-image: none !important;
+}
+html body .day-block.collapsed:not(.today-block) img {
+  content-visibility: auto;
 }
 
 /* no-card-flash */
