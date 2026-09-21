@@ -7,26 +7,38 @@ html body .day-block.collapsed:not(.today-block) {
   contain-intrinsic-size: auto 56px;
 }
 /* Hide April checklist chrome + rail while boot-today pins the real day.
-   (Only hiding #agendaBody still flashed "to do / the plan".) */
+   Never leave mountain-only or april footer visible mid-reload. */
+html.btm-today-hold #page-bg-img {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+html.btm-today-hold #page-bg-wrapper,
 html.btm-today-hold #page-bg-wrapper > header,
 html.btm-today-hold #page-bg-wrapper > .progress-wrap,
+html.btm-today-hold #page-bg-wrapper > .schedule-section,
 html.btm-today-hold #page-bg-wrapper > .schedule-section > .schedule-header,
 html.btm-today-hold #agendaBody,
-html.btm-today-hold .timeline {
+html.btm-today-hold .timeline,
+html.btm-today-hold .sched-footer,
+html.btm-today-hold .day-block:not(.today-block) {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
+html.btm-today-hold .day-block.today-block {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+html.btm-today-pinned #page-bg-img,
+html.btm-today-pinned #page-bg-wrapper,
 html.btm-today-pinned #page-bg-wrapper > header,
 html.btm-today-pinned #page-bg-wrapper > .progress-wrap,
+html.btm-today-pinned #page-bg-wrapper > .schedule-section,
 html.btm-today-pinned #page-bg-wrapper > .schedule-section > .schedule-header,
 html.btm-today-pinned #agendaBody,
 html.btm-today-pinned .timeline,
-html:not(.btm-today-hold) #page-bg-wrapper > header,
-html:not(.btm-today-hold) #page-bg-wrapper > .progress-wrap,
-html:not(.btm-today-hold) #page-bg-wrapper > .schedule-section > .schedule-header,
-html:not(.btm-today-hold) #agendaBody,
-html:not(.btm-today-hold) .timeline {
+html.btm-today-pinned .sched-footer {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
@@ -36,6 +48,10 @@ html:not(.btm-today-hold) .timeline {
    Today stays live. Expand restores background via existing --tile-photo rules. */
 html body .day-block.collapsed:not(.today-block) .vision-tile-photo,
 html body .day-block.collapsed:not(.today-block) .vision-subsection-photo,
+html body .day-block.collapsed.overview-era-day:not(.today-block) .vision-tile-photo,
+html body .day-block.collapsed.vision-collage-day:not(.today-block) .vision-tile-photo,
+html body .day-block.collapsed.overview-era-day:not(.today-block) .vision-subsection-photo,
+html body .day-block.collapsed.vision-collage-day:not(.today-block) .vision-subsection-photo,
 html body .day-block.collapsed:not(.today-block) .vision-polaroid,
 html body .day-block.collapsed:not(.today-block) .vision-shot-card,
 html body .day-block.collapsed:not(.today-block) .vision-polaroid img,

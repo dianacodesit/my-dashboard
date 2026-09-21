@@ -69665,30 +69665,34 @@ html body .day-block.day-fullpage-active .day-card-header > .day-date::after {
 html body.day-fullpage-open #day-fullpage-date-chip,
 html body #day-fullpage-date-chip.day-fullpage-date-chip {
   position: fixed !important;
-  top: 78px !important;
+  top: 58px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 2147483640 !important;
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
+  border-radius: 0 !important;
   background: none !important;
   background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   -webkit-background-clip: initial !important;
   background-clip: initial !important;
-  -webkit-text-fill-color: #eef3f7 !important;
-  color: #eef3f7 !important;
-  font-family: "Newsreader", Georgia, serif !important;
-  font-size: 23px !important;
-  font-weight: 400 !important;
-  font-style: italic !important;
-  letter-spacing: 0.14em !important;
+  -webkit-text-fill-color: #d8c49a !important;
+  color: #d8c49a !important;
+  font-family: "Cinzel", "Times New Roman", serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  letter-spacing: 0.18em !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.35),
-    0 2px 16px rgba(6, 10, 18, 0.58),
-    0 0 32px rgba(170, 200, 230, 0.28) !important;
+    0 1px 0 rgba(255, 248, 236, 0.35),
+    0 1px 10px rgba(18, 10, 6, 0.45),
+    0 0 18px rgba(216, 196, 154, 0.28) !important;
   filter: none !important;
   pointer-events: auto !important;
   cursor: pointer !important;
@@ -69971,6 +69975,8 @@ html body .day-fullpage-close {
     if(!blk || !eligible(blk)) return;
     /* Real controls never toggle full-page. */
     if(e.target.closest('input, button, a, textarea, .overview-depth-opt, .overview-add-section, .overview-carry-forward, .overview-center-stack, .overview-right-tools, .today-view-toggle, .tv-pill, .vision-layout-button, .vision-layout-panel, .day-fullpage-close, .day-pop-x, .make-flow-btn, .vision-add-card, .vision-tile-del, .vision-card-del, .vision-pol-resize, .vision-tile-resize, .card-resize, .zone-resize, .overview-link-btn, .overview-web-bar, .day-margin')) return;
+    /* Section clicks zoom the section — never open/close day full-page. */
+    if(e.target.closest('.vision-board, .vision-tile, .vision-hero, .vision-subsection, .vision-polaroid, .vision-shot-card, .vision-task-sky, .vision-task-star, .vision-horizon, .vision-horizon-above, .vision-horizon-below, .vision-horizon-task')) return;
     var dateEl=e.target.closest && e.target.closest('.day-date');
     var header=e.target.closest && e.target.closest('.day-card-header');
     var inFull=blk.classList.contains('day-fullpage-active') || (active && active.blk === blk);

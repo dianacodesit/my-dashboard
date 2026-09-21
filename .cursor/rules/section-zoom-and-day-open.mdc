@@ -19,13 +19,14 @@ Clicking a **section** (`.vision-tile`) must open full-size zoom in **both** mod
 - Setting `__visionTileJustDragged = true` on every Sortable `onEnd` — only set it when `oldIndex !== newIndex`
 - Opening the polaroid **lightbox** from the collage before the section is zoomed (in details, cards cover the tile and steal zoom)
 - Leaving packing `grid-area` / `grid-column` / `grid-row` `!important` inline styles on the tile while zoomed (blocks full-bleed fill)
+- **Day full-page capture handler swallowing section clicks** — `sep8-fullpage-day-js` must `return` early on `.vision-board` / `.vision-tile` / polaroids / task stars so it never `stopImmediatePropagation` before `openTile`
 
 ### Always
 
 - Details overlay: `pointer-events: none` on `.vision-tile-details`; `pointer-events: auto` only on polaroids / shot-cards / delete / resize / habit chrome
 - **Collage click → zoom section first** (photo, title, or polaroid). Lightbox only when the board is already `is-zoomed`
 - `openTile` clears `grid-area` / `grid-column` / `grid-row` on tiles; `clearVisionPack` clears `grid-area` too; `closeBoard` re-packs via `__syncHeroLayoutClass`
-- After any collage / Sortable / overview-chrome change, verify: details zoom (click a polaroid), overview zoom → close → zoom a second section
+- After any collage / Sortable / overview-chrome / **day-fullpage** change, verify: section click zooms (rail + full-page day); details zoom (click a polaroid); overview zoom → close → zoom a second section
 
 ## Day open — full-page
 
@@ -33,24 +34,26 @@ Clicking a **section** (`.vision-tile`) must open full-size zoom in **both** mod
 
 - **`.day-date` only** → opens full view (including from a collapsed day)
 - **Header (not the date)** → collapse / expand the day card
-- **Body** → opens full view
-- **Anywhere in full view** (except real controls: pills, layout/carry/+, inputs, resize, etc.) → exits full view
+- **Body** → opens full view — **except** clicks on the vision collage (sections / cards / tasks), which zoom instead
+- **Anywhere in full view** (except real controls **and** vision collage) → exits full view
 - Escape / × / pearl date chip still exit
 
 ### Never
 
 - Treat the whole header as “open full-page” — that steals collapse/expand
 - Full-page exit gated to header only — any non-control click must leave
+- Let full-page open/close steal `.vision-tile` clicks (section zoom dies)
 - Rely only on per-header `dataset.wired` listeners — shell `outerHTML` saves `data-wired` but **not** listeners, so reload skips re-wiring
 - Persist `data-wired` (or any wiring flag) into `btm_day_shells_v1`
 
 ### Always
 
 - Document-level capture handler for full-page open/close (`__openFullpageDay` / `__closeFullpageDay`)
+- That capture handler **skips** `.vision-board, .vision-tile, .vision-hero, .vision-subsection, .vision-polaroid, .vision-shot-card, .vision-task-sky, .vision-task-star, .vision-horizon*` before open/close
 - Document-level delegation for `.day-card-header` collapse toggle (`dayHeaderCollapseWired`) — skips `.day-date`
 - Strip `[data-wired]` when saving and when hydrating shells in `ensureDayCard`
 - Keep `everything.html` and `prototype.html` in sync
-- After shell / day-creation changes, verify: date → full view; header chrome → collapse; body → full view
+- After shell / day-creation changes, verify: date → full view; header chrome → collapse; body → full view; **section → zoom**
 
 ## If either ability breaks
 
