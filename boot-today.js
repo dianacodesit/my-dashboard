@@ -1,14 +1,17 @@
-/* Land on today as soon as that day-block exists in the DOM — during HTML
-   parse, not after the rest of the page finishes. Park collapsed-day photos
-   so refresh does not fetch hundreds of card images. Never wipe localStorage. */
+/* Pin today as soon as its day-block exists. NEVER hide the page waiting —
+   that was not a fix and made load feel endless. Collapsed-day photo parking
+   stays (stops the fetch storm). Never wipe localStorage here. */
 (function () {
   try {
     if (document.documentElement.classList.contains('prototypes-page')) return;
     try { if (history.scrollRestoration) history.scrollRestoration = 'manual'; } catch (eR) {}
     try { document.documentElement.style.setProperty('overflow-anchor', 'none'); } catch (eA) {}
-    try { document.documentElement.classList.add('btm-today-hold'); } catch (eH) {}
+    /* Explicitly clear any leftover hold from older builds. */
+    try {
+      document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
+      document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready');
+    } catch (eClear) {}
 
-    /* Any script that does img.src = … on a collapsed day must park instead of fetch. */
     (function interceptCollapsedImgSrc() {
       function inParkedDay(img) {
         try {
@@ -65,59 +68,11 @@
     };
 
     var pinnedOnce = false;
-    var pinUntil = Date.now() + 1800;
+    var pinUntil = Date.now() + 1200;
     var userMoved = false;
     var mo = null;
     var collapsePassDone = false;
     var pinScheduled = false;
-    var holdReleased = false;
-
-    function releaseHold() {
-      if (holdReleased) return;
-      holdReleased = true;
-      try {
-        document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
-        document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready');
-      } catch (e) {}
-    }
-
-    function todayReadyInView(block) {
-      if (!block) return false;
-      try {
-        var card = block.querySelector('.day-card') || block;
-        var top = card.getBoundingClientRect().top;
-        /* Today must be near the top of the viewport — not still mid-rail over April. */
-        if (top > 120 || top < -80) return false;
-        var tiles = block.querySelectorAll('.vision-tile');
-        if (tiles.length) return true;
-        /* Non-collage today (rare) — day card alone is enough. */
-        return !!card;
-      } catch (e) { return false; }
-    }
-
-    /* Reveal only after scroll has applied and today is on screen — never April. */
-    function releaseHoldAfterPaint() {
-      try {
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            var iso = isoNow();
-            var block = document.querySelector('.day-block[data-date="' + iso + '"]')
-              || document.querySelector('.day-block.today-block');
-            if (todayReadyInView(block)) releaseHold();
-            else {
-              /* Re-pin then try once more next frame. */
-              pinTodayCard();
-              requestAnimationFrame(function () {
-                var b2 = document.querySelector('.day-block.today-block');
-                if (todayReadyInView(b2)) releaseHold();
-              });
-            }
-          });
-        });
-      } catch (eRaf) {
-        releaseHold();
-      }
-    }
 
     function collapseOthers(iso, block) {
       if (collapsePassDone) return;
@@ -162,11 +117,10 @@
       try { if (document.body) document.body.scrollTop = y; } catch (e5) {}
 
       window.__earlyTodayReady = true;
-      /* Only reveal once today is actually on screen — never while still over April. */
-      if (todayReadyInView(block)) {
-        if (!pinnedOnce) releaseHoldAfterPaint();
-        else releaseHold();
-      }
+      try {
+        document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
+        document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready');
+      } catch (eCls) {}
       pinnedOnce = true;
       return true;
     }
@@ -188,10 +142,8 @@
     function releasePin() {
       userMoved = true;
       pinUntil = 0;
-      releaseHold();
     }
 
-    /* Park <img src> + CSS photo vars inside collapsed days. Today stays live. */
     function parkCollapsedImgs(root) {
       try {
         var scope = root || document;
@@ -226,7 +178,6 @@
     function restoreDayImgs(blk) {
       if (!blk) return;
       try {
-        /* Must not be collapsed or the src interceptor will re-park. */
         blk.classList.remove('collapsed');
         blk.querySelectorAll('img[data-park-src]').forEach(function (img) {
           var src = img.getAttribute('data-park-src');
@@ -270,16 +221,18 @@
       userMoved = false;
       pinUntil = Date.now() + 800;
       collapsePassDone = false;
-      holdReleased = false;
-      try { document.documentElement.classList.add('btm-today-hold'); } catch (eH2) {}
       return pinTodayCard();
     };
-    window.__releaseTodayHold = releaseHold;
+    window.__releaseTodayHold = function () {
+      try {
+        document.documentElement.classList.remove('btm-today-hold', 'btm-today-first');
+        document.documentElement.classList.add('btm-today-pinned', 'btm-collage-ready');
+      } catch (e) {}
+    };
 
     try {
       mo = new MutationObserver(function (muts) {
         schedulePin();
-        /* Park newly inserted collapsed-day imgs before the next paint when possible. */
         for (var i = 0; i < muts.length; i++) {
           var nodes = muts[i].addedNodes;
           for (var j = 0; j < nodes.length; j++) {
@@ -315,40 +268,27 @@
         pinTodayCard();
         parkCollapsedImgs(document);
         try { if (mo) mo.disconnect(); } catch (eD0) {}
-        releaseHoldAfterPaint();
       }, { once: true });
     } else {
       pinTodayCard();
       parkCollapsedImgs(document);
-      releaseHoldAfterPaint();
     }
 
     window.addEventListener('load', function () {
       pinTodayCard();
       parkCollapsedImgs(document);
-      releaseHold();
       try { if (mo) mo.disconnect(); } catch (eD) {}
     }, { once: true });
 
-    [0, 50, 150, 400, 900].forEach(function (ms) {
+    [0, 50, 150, 400].forEach(function (ms) {
       setTimeout(function () {
         pinTodayCard();
         parkCollapsedImgs(document);
         if (ms >= 400) {
-          var blk = document.querySelector('.day-block.today-block');
-          if (todayReadyInView(blk) || ms >= 900) {
-            releaseHold();
-            try { if (mo) mo.disconnect(); } catch (eD2) {}
-          }
+          try { if (mo) mo.disconnect(); } catch (eD2) {}
         }
       }, ms);
     });
-
-    setTimeout(function () {
-      pinTodayCard();
-      releaseHold();
-      try { if (mo) mo.disconnect(); } catch (eD3) {}
-    }, 2000);
 
     window.addEventListener('wheel', releasePin, { passive: true, once: true });
     window.addEventListener('touchmove', releasePin, { passive: true, once: true });

@@ -83,7 +83,16 @@
     { href: 'overview-task-format-mocks.html', label: 'overview tasks · six ways', group: 'design' },
     { href: 'task-pin-mocks.html', label: 'task pins · marks', group: 'design' },
     { href: 'task-attention-mocks.html', label: 'task attention · A–H', group: 'design' },
+    { href: 'carry-forward-mocks.html', label: 'carry forward · spatial', group: 'design' },
+    { href: 'carry-forward-mocks-v2.html', label: 'carry forward · v2', group: 'design' },
+    { href: 'collage-structure-mocks.html?v=4', label: 'collage structure · A–F', group: 'design' },
+    { href: 'monogram-pin-mocks.html?v=1', label: 'monogram pins · A–H', group: 'design' },
     { href: 'day-dawn-mocks.html', label: 'new day · fold', group: 'design' },
+    { href: 'induction-habit-mocks.html', label: 'induction habit · chrome', group: 'design' },
+    { href: 'everything.html?flowtrail=1', label: 'everything · flow trail', group: 'design' },
+    { href: 'everything.html?v=vision-collage-2x3', label: 'everything · collage 2×3', group: 'design' },
+    { href: 'everything.html?v=zoom-plus-z', label: 'everything · zoom + Z', group: 'design' },
+    { href: 'everything.html?v=restore-days-1', label: 'everything · restore days', group: 'design' },
     { href: 'arrows.html', label: 'arrow formations', group: 'design' },
     { href: 'transitions.html', label: 'transition styles', group: 'design' }
   ];

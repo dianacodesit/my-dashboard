@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>induction habit · A–F · unique styles</title>
+<title>induction habit · round 2 · G–N</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css?v=indhabit1"/>
+<link rel="stylesheet" href="nav-shared.css?v=indhabit2"/>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -17,7 +17,7 @@
   }
   body #hamburger-menu span { background: #f3e6d0; }
 
-  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 8px; }
   .hero h1 {
     font-family: "Italiana", serif;
     font-size: clamp(28px, 5vw, 44px);
@@ -34,13 +34,23 @@
     line-height: 1.7;
   }
   .note {
-    max-width: 640px;
-    margin: 0 auto 28px;
+    max-width: 680px;
+    margin: 0 auto 10px;
     text-align: center;
     font-style: italic;
-    color: rgba(247,239,228,0.5);
-    font-size: 1.05rem;
+    color: rgba(247,239,228,0.55);
+    font-size: 1.08rem;
     line-height: 1.5;
+  }
+  .round-tag {
+    max-width: 680px;
+    margin: 0 auto 26px;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #e08a4a;
   }
   .picked {
     display: none;
@@ -54,30 +64,6 @@
     color: #e08a4a;
   }
   .picked.on { display: block; }
-
-  .stage {
-    max-width: 1180px;
-    margin: 0 auto 18px;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(255,248,238,0.08);
-    background:
-      linear-gradient(180deg, rgba(8,5,4,0.35), rgba(8,5,4,0.55)),
-      url('manus-storage/zone-athletic-gym.jpg?v=gym1') center/cover;
-    min-height: 220px;
-    display: grid;
-    place-items: center;
-    padding: 28px 16px;
-  }
-  .stage-label {
-    position: absolute;
-    margin-top: -190px;
-    font-family: "DM Mono", monospace;
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255,248,238,0.55);
-  }
 
   .grid {
     max-width: 1180px;
@@ -130,7 +116,7 @@
   }
   .preview {
     position: relative;
-    height: 280px;
+    height: 300px;
     border-radius: 12px;
     overflow: hidden;
     background:
@@ -140,21 +126,9 @@
     place-items: center;
   }
 
-  /* ── shared habit chrome pieces ── */
-  .hab {
-    position: relative;
-    width: 196px;
-    user-select: none;
-  }
-  .hab img {
-    display: block;
-    width: 100%;
-    object-fit: cover;
-  }
-  .hab .t {
-    font-family: "Newsreader", Georgia, serif;
-    font-style: italic;
-  }
+  .hab { position: relative; user-select: none; }
+  .hab img { display: block; width: 100%; object-fit: cover; }
+  .hab .t { font-family: "Newsreader", Georgia, serif; font-style: italic; }
   .hab .d {
     font-family: "DM Mono", monospace;
     font-style: normal;
@@ -163,19 +137,16 @@
   }
   .hab .tick {
     appearance: none;
-    width: 22px;
-    height: 22px;
+    width: 22px; height: 22px;
     border-radius: 50%;
     border: 1.5px solid rgba(255,248,238,0.7);
     background: transparent;
     cursor: pointer;
-    display: grid;
-    place-items: center;
+    display: grid; place-items: center;
   }
   .hab .tick::after {
     content: "";
-    width: 8px;
-    height: 8px;
+    width: 8px; height: 8px;
     border-radius: 50%;
     background: transparent;
   }
@@ -185,201 +156,326 @@
   }
   .hab.is-done .tick::after { background: #6fad5c; }
 
-  /* A — Ember seal (elevated current) */
-  .a.hab {
-    border-radius: 16px;
-    overflow: hidden;
-    background: linear-gradient(165deg, #17130f, #2a1812 70%, #1a100e);
+  /* ── G · notch bezel (C, sharper) ── */
+  .g.hab {
+    width: 196px; aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 42%, #1a120e 0 58%, #0a0706 59% 100%);
     box-shadow:
-      0 16px 36px rgba(8,5,2,0.55),
-      0 0 0 1.5px rgba(224,90,55,0.55),
-      inset 0 0 40px rgba(180,40,20,0.18);
-    transform: rotate(-1.6deg);
+      0 0 0 2px #2a1810,
+      0 0 0 5px rgba(255,120,50,0.35),
+      0 20px 44px rgba(0,0,0,0.6);
   }
-  .a img { height: 168px; }
-  .a .veil {
+  .g .notches {
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 40%, rgba(8,4,2,0.88) 100%);
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+      from -2deg,
+      rgba(255,200,150,0.55) 0 1.2deg,
+      transparent 1.2deg 18deg
+    );
+    -webkit-mask: radial-gradient(circle, transparent 68%, #000 69% 78%, transparent 79%);
+    mask: radial-gradient(circle, transparent 68%, #000 69% 78%, transparent 79%);
     pointer-events: none;
   }
-  .a .t {
-    position: absolute; left: 14px; right: 14px; bottom: 34px;
-    font-size: 28px; color: #fff4ea; line-height: 1;
-    text-shadow: 0 2px 14px rgba(0,0,0,0.55);
-  }
-  .a .d {
-    position: absolute; top: 10px; right: 10px;
-    padding: 5px 9px; border-radius: 999px;
-    background: rgba(255,248,238,0.94); color: #5a2a18; font-size: 10px;
-  }
-  .a .tick { position: absolute; left: 12px; top: 12px; z-index: 2; }
-
-  /* B — LED grid stamp */
-  .b.hab {
-    border-radius: 10px;
-    overflow: hidden;
-    background: #0a0807;
-    box-shadow: 0 14px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,60,40,0.35);
-  }
-  .b img { height: 150px; filter: saturate(1.15) contrast(1.05); }
-  .b .leds {
-    position: absolute; top: 8px; left: 8px;
-    display: grid; grid-template-columns: repeat(5, 5px); gap: 3px;
-  }
-  .b .leds i {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: #ff2a1a;
-    box-shadow: 0 0 6px #ff3a22;
-    opacity: 0.85;
-  }
-  .b .leds i:nth-child(3n) { opacity: 0.35; }
-  .b .foot {
-    padding: 10px 12px 12px;
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    background: #120e0c;
-  }
-  .b .t { font-size: 22px; color: #ffe8e0; }
-  .b .d { font-size: 9px; color: #ff6a4a; }
-
-  /* C — Ring dial (device ring) */
-  .c.hab {
-    width: 188px;
-    aspect-ratio: 1;
+  .g .arc {
+    position: absolute; inset: 10px;
     border-radius: 50%;
-    overflow: hidden;
-    background: #100c0a;
-    box-shadow:
-      0 0 0 3px rgba(255,140,60,0.25),
-      0 0 0 8px rgba(20,12,8,0.9),
-      0 18px 40px rgba(0,0,0,0.55);
+    background: conic-gradient(from -90deg, #ff7a35 0 68%, rgba(255,248,238,0.08) 68% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 74%, #000 75% 88%, transparent 89%);
+    mask: radial-gradient(circle, transparent 74%, #000 75% 88%, transparent 89%);
+    pointer-events: none;
   }
-  .c img {
-    position: absolute; inset: 18px;
+  .g img {
+    position: absolute; inset: 28px;
     width: auto; height: auto;
     border-radius: 50%;
-    object-fit: cover;
+    box-shadow: inset 0 0 0 1px rgba(255,180,120,0.25);
   }
-  .c .ring {
-    position: absolute; inset: 6px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    background:
-      conic-gradient(from -90deg, #ff8a3a 0 72%, rgba(255,248,238,0.12) 72% 100%) border-box;
-    -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+  .g .core {
+    position: absolute; left: 50%; bottom: 34px;
+    transform: translateX(-50%);
+    text-align: center; z-index: 2; width: 62%;
   }
-  .c .core {
-    position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
-    text-align: center; z-index: 2;
-    width: 70%;
-  }
-  .c .t { font-size: 20px; color: #fff6ee; display: block; }
-  .c .d { font-size: 8px; color: #ffb070; margin-top: 4px; display: block; }
-  .c .tick { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); z-index: 3; }
+  .g .t { font-size: 18px; color: #fff6ee; display: block; text-shadow: 0 2px 10px #000; }
+  .g .d { font-size: 8px; color: #ffb070; margin-top: 3px; display: block; }
+  .g .tick { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); z-index: 3; }
 
-  /* D — Red panel strip */
-  .d.hab {
+  /* ── H · hazard rail (D, meaner) ── */
+  .h.hab {
+    width: 220px;
     display: grid;
-    grid-template-columns: 18px 1fr;
-    border-radius: 14px;
+    grid-template-columns: 22px 1fr;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #120e0c;
+    box-shadow: 0 16px 34px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,40,20,0.25);
+  }
+  .h .rail {
+    background:
+      repeating-linear-gradient(
+        -38deg,
+        #ff1a0c 0 9px,
+        #1a0604 9px 14px
+      );
+    box-shadow: inset -3px 0 10px rgba(0,0,0,0.45);
+  }
+  .h .body { position: relative; }
+  .h img { height: 148px; }
+  .h .meta {
+    padding: 10px 12px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,80,40,0.2);
+  }
+  .h .t { font-size: 22px; color: #fff4ec; }
+  .h .d { font-size: 9px; color: #ff6a4a; }
+  .h .tick { position: absolute; top: 10px; right: 10px; z-index: 2; }
+
+  /* ── I · ring plaque (C geometry in D frame) ── */
+  .i.hab {
+    width: 210px;
+    border-radius: 16px;
     overflow: hidden;
     background: #14100e;
-    box-shadow: 0 14px 30px rgba(0,0,0,0.5);
-    width: 210px;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.55);
+    padding: 12px 12px 14px;
   }
-  .d .strip {
-    background: repeating-linear-gradient(
-      180deg,
-      #ff1e12 0 7px,
-      #8a0c08 7px 9px
-    );
-    box-shadow: inset -4px 0 12px rgba(0,0,0,0.35);
+  .i .well {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    background: #0a0706;
+    box-shadow:
+      inset 0 0 0 3px rgba(255,130,60,0.45),
+      inset 0 0 0 8px #1a100c,
+      0 0 24px rgba(255,80,30,0.15);
   }
-  .d .body { position: relative; }
-  .d img { height: 150px; }
-  .d .meta {
+  .i .well img {
+    position: absolute; inset: 10px;
+    width: auto; height: auto;
+    border-radius: 50%;
+  }
+  .i .ringbit {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 20deg, #ff8a3a 0 55%, transparent 55% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 82%, #000 83% 92%, transparent 93%);
+    mask: radial-gradient(circle, transparent 82%, #000 83% 92%, transparent 93%);
+    pointer-events: none;
+  }
+  .i .row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 4px;
+  }
+  .i .t { font-size: 22px; color: #fff4ec; }
+  .i .d { font-size: 9px; color: rgba(255,180,140,0.7); }
+  .i .tick { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); z-index: 3; }
+
+  /* ── J · day ladder strip ── */
+  .j.hab {
+    width: 214px;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #100c0a;
+    box-shadow: 0 16px 34px rgba(0,0,0,0.55);
+  }
+  .j .ladder {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #2a0c08, #120604);
+    border-right: 1px solid rgba(255,80,40,0.25);
+  }
+  .j .ladder span {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    text-align: center;
+    color: rgba(255,180,140,0.35);
+    line-height: 1;
+  }
+  .j .ladder span.on {
+    color: #ff5a30;
+    text-shadow: 0 0 8px rgba(255,60,20,0.7);
+  }
+  .j .body { position: relative; }
+  .j img { height: 152px; }
+  .j .meta {
+    padding: 10px 12px 12px;
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .j .t { font-size: 22px; color: #fff4ec; }
+  .j .d { font-size: 9px; color: rgba(255,200,180,0.65); }
+  .j .tick { position: absolute; top: 10px; right: 10px; z-index: 2; }
+
+  /* ── K · iris shutter ── */
+  .k.hab {
+    width: 200px; aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #0a0706;
+    box-shadow:
+      0 0 0 4px #1c100c,
+      0 0 0 6px rgba(255,90,40,0.55),
+      0 18px 40px rgba(0,0,0,0.6);
+  }
+  .k img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05);
+  }
+  .k .iris {
+    position: absolute; inset: 0;
+    background:
+      conic-gradient(from 0deg,
+        rgba(8,4,2,0.92) 0 28deg,
+        transparent 28deg 52deg,
+        rgba(8,4,2,0.92) 52deg 80deg,
+        transparent 80deg 104deg,
+        rgba(8,4,2,0.92) 104deg 132deg,
+        transparent 132deg 156deg,
+        rgba(8,4,2,0.92) 156deg 184deg,
+        transparent 184deg 208deg,
+        rgba(8,4,2,0.92) 208deg 236deg,
+        transparent 236deg 260deg,
+        rgba(8,4,2,0.92) 260deg 288deg,
+        transparent 288deg 312deg,
+        rgba(8,4,2,0.92) 312deg 340deg,
+        transparent 340deg 360deg);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.92;
+  }
+  .k .rim {
+    position: absolute; inset: 8px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,140,80,0.45);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.45);
+    pointer-events: none;
+  }
+  .k .core {
+    position: absolute; left: 50%; bottom: 26px;
+    transform: translateX(-50%);
+    text-align: center; z-index: 2; width: 70%;
+  }
+  .k .t { font-size: 20px; color: #fff6ee; display: block; text-shadow: 0 2px 12px #000; }
+  .k .d { font-size: 8px; color: #ffb070; margin-top: 4px; display: block; }
+  .k .tick { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); z-index: 3; }
+
+  /* ── L · forge edge ── */
+  .l.hab {
+    width: 218px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #1a1410, #0e0a08);
+    box-shadow:
+      0 16px 34px rgba(0,0,0,0.55),
+      inset 0 0 0 1px rgba(255,160,100,0.18);
+    border-left: 5px solid transparent;
+    border-image: linear-gradient(180deg, #ff7a40, #ff1e10 40%, #5a0804 100%) 1;
+  }
+  .l img { height: 146px; }
+  .l .meta {
+    padding: 11px 13px 13px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .l .t { font-size: 22px; color: #fff4ec; display: block; }
+  .l .d { font-size: 9px; color: #ff8a5a; margin-top: 3px; display: block; }
+  .l .badge {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid rgba(255,120,60,0.55);
+    background: conic-gradient(from -90deg, #ff6a30 0 40%, rgba(255,248,238,0.08) 40% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 52%, #000 53%);
+    mask: radial-gradient(circle, transparent 52%, #000 53%);
+  }
+  .l .tick { position: absolute; top: 10px; right: 10px; z-index: 2; }
+  .l .body { position: relative; }
+
+  /* ── M · capsule dial ── */
+  .m.hab {
+    width: 230px;
+    border-radius: 999px;
+    padding: 8px 14px 8px 8px;
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: rgba(18,12,10,0.92);
+    border: 1px solid rgba(255,120,60,0.35);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,200,160,0.1);
+  }
+  .m .dial {
+    position: relative;
+    width: 72px; height: 72px;
+    border-radius: 50%;
+  }
+  .m .dial::before {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from -90deg, #ff7a35 0 70%, rgba(255,248,238,0.1) 70% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 58%, #000 59% 78%, transparent 79%);
+    mask: radial-gradient(circle, transparent 58%, #000 59% 78%, transparent 79%);
+  }
+  .m .dial img {
+    position: absolute; inset: 12px;
+    width: auto; height: auto;
+    border-radius: 50%;
+  }
+  .m .t { font-size: 22px; color: #fff6ee; display: block; line-height: 1.05; }
+  .m .d { font-size: 9px; color: rgba(255,180,140,0.7); margin-top: 4px; display: block; }
+
+  /* ── N · scoreboard strip ── */
+  .n.hab {
+    width: 224px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0a0807;
+    box-shadow: 0 16px 34px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,40,20,0.3);
+  }
+  .n .board {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    background: #160a08;
+    border-bottom: 1px solid rgba(255,50,30,0.35);
+  }
+  .n .leds {
+    display: flex; gap: 4px;
+  }
+  .n .leds i {
+    width: 7px; height: 7px; border-radius: 1px;
+    background: #ff2a18;
+    box-shadow: 0 0 6px #ff3a22;
+  }
+  .n .leds i:nth-child(4),
+  .n .leds i:nth-child(5) { opacity: 0.25; }
+  .n .d { font-size: 9px; color: #ff6a4a; }
+  .n img { height: 140px; }
+  .n .meta {
     padding: 10px 12px 12px;
     display: flex; align-items: center; justify-content: space-between;
   }
-  .d .t { font-size: 22px; color: #fff4ec; }
-  .d .d { font-size: 9px; color: rgba(255,200,180,0.7); }
-
-  /* E — Perforated ritual ticket */
-  .e.hab {
-    width: 220px;
-    border-radius: 4px 12px 12px 4px;
-    background: #f3ebe0;
-    color: #2a1a14;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.4);
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 86px;
+  .n .t { font-size: 22px; color: #ffe8e0; }
+  .n .tick {
+    border-radius: 4px;
+    width: 20px; height: 20px;
   }
-  .e .main { padding: 12px 12px 14px; }
-  .e .d {
-    font-size: 9px; color: #a05030; margin-bottom: 8px; display: block;
-  }
-  .e .t {
-    font-family: "Cormorant Garamond", "Newsreader", serif;
-    font-style: italic;
-    font-size: 26px;
-    color: #1e120e;
-    line-height: 1;
-  }
-  .e .sub {
-    margin-top: 10px;
-    font-family: "DM Mono", monospace;
-    font-size: 9px;
-    letter-spacing: 0.08em;
-    color: rgba(42,26,20,0.55);
-    text-transform: uppercase;
-  }
-  .e .stub {
-    position: relative;
-    border-left: 1.5px dashed rgba(42,26,20,0.28);
-    background:
-      url('manus-storage/card-induction.jpg?v=rl2') center/cover;
-  }
-  .e .stub::before {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(20,8,4,0.15), rgba(20,8,4,0.55));
-  }
-  .e .tick {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-    border-color: #fff8ee; z-index: 2;
-  }
-
-  /* F — Glass biochip (not a polaroid) */
-  .f.hab {
-    width: 220px;
-    border-radius: 18px;
-    padding: 14px 14px 14px 16px;
-    background: rgba(255,248,238,0.1);
-    border: 1px solid rgba(255,180,120,0.35);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow:
-      0 12px 30px rgba(0,0,0,0.35),
-      inset 0 1px 0 rgba(255,248,238,0.2);
-    display: grid;
-    grid-template-columns: 54px 1fr auto;
-    gap: 12px;
-    align-items: center;
-  }
-  .f .orb {
-    width: 54px; height: 54px; border-radius: 50%;
-    background:
-      radial-gradient(circle at 35% 30%, #ffb070, #e04828 55%, #4a1008 100%);
-    box-shadow: 0 0 18px rgba(255,80,40,0.55), inset 0 0 0 2px rgba(255,200,160,0.35);
-  }
-  .f .t { font-size: 22px; color: #fff8ee; display: block; line-height: 1.05; }
-  .f .d { font-size: 9px; color: rgba(255,200,160,0.75); margin-top: 4px; display: block; }
 
   .foot {
-    max-width: 720px;
+    max-width: 760px;
     margin: 28px auto 0;
     text-align: center;
     font-family: "DM Mono", monospace;
@@ -395,46 +491,21 @@
 <button id="hamburger-menu" type="button" aria-label="open menu"><span></span><span></span><span></span></button>
 
 <div class="hero">
-  <h1>induction · habit styles</h1>
-  <p>daily habit on I am training · pick by looking</p>
+  <h1>induction · habit · round 2</h1>
+  <p>built from what you liked in C &amp; D · pick by looking</p>
 </div>
-<p class="note">Same photo. Six unique chrome languages — not ordinary polaroids.</p>
+<p class="note">Ring dial energy + red panel edge — pushed further. Same photo. No ordinary polaroids.</p>
+<p class="round-tag">G–N · better than A–F</p>
 <p class="picked" id="picked"></p>
 
 <div class="grid">
-  <button class="opt" type="button" data-pick="A" data-name="ember seal">
-    <div class="opt-head"><span class="opt-letter">A</span><span class="opt-name">ember seal</span></div>
+  <button class="opt" type="button" data-pick="G" data-name="notch bezel">
+    <div class="opt-head"><span class="opt-letter">G</span><span class="opt-name">notch bezel</span></div>
     <div class="preview">
-      <div class="hab a">
-        <button class="tick" type="button" aria-label="done"></button>
+      <div class="hab g">
+        <div class="notches" aria-hidden="true"></div>
+        <div class="arc" aria-hidden="true"></div>
         <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
-        <div class="veil"></div>
-        <em class="d">daily</em>
-        <span class="t">induction</span>
-      </div>
-    </div>
-  </button>
-
-  <button class="opt" type="button" data-pick="B" data-name="LED grid stamp">
-    <div class="opt-head"><span class="opt-letter">B</span><span class="opt-name">LED grid stamp</span></div>
-    <div class="preview">
-      <div class="hab b">
-        <div class="leds" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
-        <div class="foot">
-          <span class="t">induction</span>
-          <span class="d">daily</span>
-        </div>
-      </div>
-    </div>
-  </button>
-
-  <button class="opt" type="button" data-pick="C" data-name="ring dial">
-    <div class="opt-head"><span class="opt-letter">C</span><span class="opt-name">ring dial</span></div>
-    <div class="preview">
-      <div class="hab c">
-        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
-        <div class="ring"></div>
         <button class="tick" type="button" aria-label="done"></button>
         <div class="core">
           <span class="t">induction</span>
@@ -444,12 +515,13 @@
     </div>
   </button>
 
-  <button class="opt" type="button" data-pick="D" data-name="red panel strip">
-    <div class="opt-head"><span class="opt-letter">D</span><span class="opt-name">red panel strip</span></div>
+  <button class="opt" type="button" data-pick="H" data-name="hazard rail">
+    <div class="opt-head"><span class="opt-letter">H</span><span class="opt-name">hazard rail</span></div>
     <div class="preview">
-      <div class="hab d">
-        <div class="strip" aria-hidden="true"></div>
+      <div class="hab h">
+        <div class="rail" aria-hidden="true"></div>
         <div class="body">
+          <button class="tick" type="button" aria-label="done"></button>
           <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
           <div class="meta">
             <span class="t">induction</span>
@@ -460,27 +532,84 @@
     </div>
   </button>
 
-  <button class="opt" type="button" data-pick="E" data-name="ritual ticket">
-    <div class="opt-head"><span class="opt-letter">E</span><span class="opt-name">ritual ticket</span></div>
+  <button class="opt" type="button" data-pick="I" data-name="ring plaque">
+    <div class="opt-head"><span class="opt-letter">I</span><span class="opt-name">ring plaque</span></div>
     <div class="preview">
-      <div class="hab e">
-        <div class="main">
-          <em class="d">daily · habit</em>
-          <span class="t">induction</span>
-          <div class="sub">on training</div>
-        </div>
-        <div class="stub">
+      <div class="hab i">
+        <div class="well">
+          <div class="ringbit" aria-hidden="true"></div>
+          <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
           <button class="tick" type="button" aria-label="done"></button>
+        </div>
+        <div class="row">
+          <span class="t">induction</span>
+          <span class="d">daily</span>
         </div>
       </div>
     </div>
   </button>
 
-  <button class="opt" type="button" data-pick="F" data-name="glass biochip">
-    <div class="opt-head"><span class="opt-letter">F</span><span class="opt-name">glass biochip</span></div>
+  <button class="opt" type="button" data-pick="J" data-name="day ladder">
+    <div class="opt-head"><span class="opt-letter">J</span><span class="opt-name">day ladder</span></div>
     <div class="preview">
-      <div class="hab f">
-        <div class="orb" aria-hidden="true"></div>
+      <div class="hab j">
+        <div class="ladder" aria-hidden="true">
+          <span>M</span><span class="on">T</span><span class="on">W</span><span class="on">T</span><span>F</span><span>S</span><span>S</span>
+        </div>
+        <div class="body">
+          <button class="tick" type="button" aria-label="done"></button>
+          <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+          <div class="meta">
+            <span class="t">induction</span>
+            <span class="d">daily</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="K" data-name="iris shutter">
+    <div class="opt-head"><span class="opt-letter">K</span><span class="opt-name">iris shutter</span></div>
+    <div class="preview">
+      <div class="hab k">
+        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        <div class="iris" aria-hidden="true"></div>
+        <div class="rim" aria-hidden="true"></div>
+        <button class="tick" type="button" aria-label="done"></button>
+        <div class="core">
+          <span class="t">induction</span>
+          <span class="d">daily</span>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="L" data-name="forge edge">
+    <div class="opt-head"><span class="opt-letter">L</span><span class="opt-name">forge edge</span></div>
+    <div class="preview">
+      <div class="hab l">
+        <div class="body">
+          <button class="tick" type="button" aria-label="done"></button>
+          <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        </div>
+        <div class="meta">
+          <div>
+            <span class="t">induction</span>
+            <span class="d">daily</span>
+          </div>
+          <div class="badge" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <button class="opt" type="button" data-pick="M" data-name="capsule dial">
+    <div class="opt-head"><span class="opt-letter">M</span><span class="opt-name">capsule dial</span></div>
+    <div class="preview">
+      <div class="hab m">
+        <div class="dial">
+          <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        </div>
         <div>
           <span class="t">induction</span>
           <span class="d">daily</span>
@@ -489,15 +618,33 @@
       </div>
     </div>
   </button>
+
+  <button class="opt" type="button" data-pick="N" data-name="scoreboard strip">
+    <div class="opt-head"><span class="opt-letter">N</span><span class="opt-name">scoreboard strip</span></div>
+    <div class="preview">
+      <div class="hab n">
+        <div class="board">
+          <div class="leds" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <span class="d">daily</span>
+        </div>
+        <img src="manus-storage/card-induction.jpg?v=rl2" alt=""/>
+        <div class="meta">
+          <span class="t">induction</span>
+          <button class="tick" type="button" aria-label="done"></button>
+        </div>
+      </div>
+    </div>
+  </button>
 </div>
 
 <p class="foot">
-  Habit is wired back onto <strong>I am training</strong> (not a card picker preset).<br/>
-  Click a letter — I’ll ship that chrome next.<br/>
+  Round 2 of the habit chrome for <strong>induction</strong> on training.<br/>
+  Click a letter — I’ll wire that one live.<br/>
   <a href="everything.html">← everything</a>
+  · <a href="induction-habit-mocks-round1.html">old A–F</a>
 </p>
 
-<script src="nav-shared.js?v=indhabit1"></script>
+<script src="nav-shared.js?v=indhabit2"></script>
 <script>
 (function(){
   var picked = document.getElementById('picked');
@@ -510,7 +657,7 @@
       picked.textContent = 'picked · ' + letter + ' · ' + name;
       picked.classList.add('on');
       try { localStorage.setItem('btm_induction_habit_style_pick', letter); } catch(e){}
-      try { history.replaceState(null, '', '?pick=' + letter); } catch(e2){}
+      try { history.replaceState(null, '', '?v=round2&pick=' + letter); } catch(e2){}
     });
   });
   document.querySelectorAll('.hab .tick').forEach(function(t){

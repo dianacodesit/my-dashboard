@@ -6,43 +6,7 @@ html body .day-block.collapsed:not(.today-block) {
   content-visibility: auto;
   contain-intrinsic-size: auto 56px;
 }
-/* Hide April checklist chrome + rail while boot-today pins the real day.
-   Never leave mountain-only or april footer visible mid-reload. */
-html.btm-today-hold #page-bg-img {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-html.btm-today-hold #page-bg-wrapper,
-html.btm-today-hold #page-bg-wrapper > header,
-html.btm-today-hold #page-bg-wrapper > .progress-wrap,
-html.btm-today-hold #page-bg-wrapper > .schedule-section,
-html.btm-today-hold #page-bg-wrapper > .schedule-section > .schedule-header,
-html.btm-today-hold #agendaBody,
-html.btm-today-hold .timeline,
-html.btm-today-hold .sched-footer,
-html.btm-today-hold .day-block:not(.today-block) {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-html.btm-today-hold .day-block.today-block {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-html.btm-today-pinned #page-bg-img,
-html.btm-today-pinned #page-bg-wrapper,
-html.btm-today-pinned #page-bg-wrapper > header,
-html.btm-today-pinned #page-bg-wrapper > .progress-wrap,
-html.btm-today-pinned #page-bg-wrapper > .schedule-section,
-html.btm-today-pinned #page-bg-wrapper > .schedule-section > .schedule-header,
-html.btm-today-pinned #agendaBody,
-html.btm-today-pinned .timeline,
-html.btm-today-pinned .sched-footer {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
+/* Hold/hide-until-ready is banned — never cover the page waiting for today. */
 
 /* Collapsed days: never paint section/card photos — stops the refresh fetch storm.
    Today stays live. Expand restores background via existing --tile-photo rules. */
@@ -577,10 +541,21 @@ html body .day-block .overview-carry-forward.is-armed {
 }
 #constellation-rollover .cr-comet-core {
   position: absolute; right: 9%; top: 46%; width: 58px; height: 58px;
-  border-radius: 50%; z-index: 3; pointer-events: none;
+  border: 0; padding: 0; margin: 0;
+  border-radius: 50%; z-index: 5; pointer-events: auto; cursor: pointer;
   background: radial-gradient(circle at 38% 34%, #fffaf0, #e6c994 22%, #9d7141 48%, transparent 72%);
   box-shadow: 0 0 30px #d5ac7288, 0 0 80px #b27b3f44;
   animation: cr-comet-pulse 3.4s ease-in-out infinite;
+  transition: box-shadow 0.25s ease, filter 0.2s ease;
+}
+#constellation-rollover .cr-comet-core:hover,
+#constellation-rollover .cr-comet-core:focus-visible {
+  filter: brightness(1.28);
+  box-shadow: 0 0 40px #e6c994bb, 0 0 100px #b27b3f77;
+  outline: none;
+}
+#constellation-rollover .cr-comet-core.is-receiving {
+  box-shadow: 0 0 38px #d5ac72cc, 0 0 100px #b27b3f88;
 }
 @keyframes cr-comet-pulse {
   50% { filter: brightness(1.18); transform: scale(1.06); }

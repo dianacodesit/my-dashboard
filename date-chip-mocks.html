@@ -3,27 +3,27 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>date chip mocks · full-page overhead</title>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,300;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cinzel:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css?v=datechip1"/>
+<title>date chip mocks · round 3 · date that stands out</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&amp;family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,300;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;family=Cinzel:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=datechip3"/>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: "Newsreader", Georgia, serif;
     color: #f7efe4;
     min-height: 100vh;
-    padding: 56px 18px 120px;
+    padding: 52px 16px 100px;
     background:
-      linear-gradient(180deg, rgba(18,12,8,0.28), rgba(12,8,6,0.78)),
+      linear-gradient(180deg, rgba(18,12,8,0.35), rgba(10,7,5,0.82)),
       url("manus-storage/_339ab459.jpg") center / cover fixed;
     background-color: #1a1210;
   }
   body #hamburger-menu span { background: #f3e6d0; }
 
-  .hero { text-align: center; max-width: 760px; margin: 0 auto 8px; }
+  .hero { text-align: center; max-width: 820px; margin: 0 auto 6px; }
   .hero h1 {
     font-family: "Italiana", serif;
-    font-size: clamp(28px, 5vw, 42px);
+    font-size: clamp(28px, 5vw, 40px);
     font-weight: 400;
     color: #fff8ee;
   }
@@ -37,18 +37,18 @@
     line-height: 1.7;
   }
   .note {
-    max-width: 640px;
-    margin: 0 auto 28px;
+    max-width: 680px;
+    margin: 0 auto 22px;
     text-align: center;
     font-style: italic;
     color: rgba(247,239,228,0.58);
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     line-height: 1.45;
   }
   .picked {
     display: none;
     max-width: 640px;
-    margin: -8px auto 22px;
+    margin: -6px auto 18px;
     text-align: center;
     font-family: "DM Mono", monospace;
     font-size: 11px;
@@ -61,19 +61,19 @@
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 22px;
-    max-width: 1100px;
+    gap: 20px;
+    max-width: 1180px;
     margin: 0 auto;
   }
-  @media (min-width: 900px) {
+  @media (min-width: 980px) {
     .grid { grid-template-columns: 1fr 1fr; }
   }
 
   .opt {
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(8,6,4,0.45);
+    background: rgba(8,6,4,0.5);
     cursor: pointer;
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
@@ -87,7 +87,7 @@
     box-shadow: 0 0 0 1px rgba(216,196,154,0.35), 0 16px 40px rgba(0,0,0,0.4);
   }
   .opt header {
-    padding: 12px 16px 10px;
+    padding: 11px 15px 9px;
     border-bottom: 1px solid rgba(255,255,255,0.07);
     display: flex;
     align-items: baseline;
@@ -111,34 +111,50 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(247,239,228,0.42);
-    max-width: 46%;
+    max-width: 48%;
     text-align: right;
     line-height: 1.4;
   }
 
+  /* ── Exact live Bismillah (bismillah-header-restore-v1) ── */
   @keyframes allah-shimmer {
     0%   { background-position: 200% center; }
     100% { background-position: -200% center; }
   }
+  @keyframes day-date-overhead-arrive {
+    0% { opacity: 0; transform: translate3d(-50%, -14px, 0) scale(0.96); }
+    58% { opacity: 1; transform: translate3d(-50%, 2px, 0) scale(1.02); }
+    100% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+  }
+
   .stage {
     position: relative;
-    height: 240px;
+    height: 340px;
     background:
-      linear-gradient(180deg, rgba(20,14,10,0.15), rgba(10,7,5,0.55)),
-      url("manus-storage/zone-to-litigate.jpg?v=court1") center 35% / cover;
+      linear-gradient(180deg, rgba(14,10,8,0.22) 0%, rgba(10,7,5,0.08) 28%, rgba(10,7,5,0.55) 100%),
+      url("manus-storage/zone-to-litigate.jpg?v=court1") center 32% / cover;
+    overflow: hidden;
   }
-  /* Exact live Bismillah — same glyph + gold shimmer as .dco-bismillah on the board */
-  .stage .dco-bismillah {
+
+  /* Live overlay stack: Bismillah fixed-feel at top of stage */
+  .stage .day-card-overlay {
     position: absolute;
     top: 14px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+  }
+  .stage .dco-bismillah {
     margin: 0;
     font-size: 36px;
     line-height: 1;
     display: inline-block;
     white-space: nowrap;
-    pointer-events: none;
     background: linear-gradient(90deg, #8a6d1f 0%, #c4a882 25%, #f4d97a 50%, #c4a882 75%, #8a6d1f 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
@@ -148,127 +164,244 @@
     animation: allah-shimmer 4s linear infinite;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)) drop-shadow(0 0 16px rgba(244,217,122,0.4));
   }
-  .chip {
-    position: absolute;
-    top: 62px;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    line-height: 1;
-    cursor: inherit;
-  }
-  .stage .title {
+
+  /* Exact live gold-foil section title (sep6-gold-foil-titles-lock-v1) */
+  .stage .vision-tile-title {
     position: absolute;
     left: 50%;
     top: 58%;
     transform: translate(-50%, -50%);
-    font-family: "Newsreader", Georgia, serif;
+    z-index: 16;
+    width: calc(100% - 48px);
+    margin: 0;
+    font-family: "Playfair Display", "Gilda Display", Georgia, "Times New Roman", serif;
     font-style: italic;
+    font-weight: 500;
     font-size: 28px;
-    color: rgba(255,248,238,0.88);
-    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+    letter-spacing: 0.03em;
+    line-height: 1.12;
+    text-align: center;
+    background-image: linear-gradient(185deg,
+      #e8d4b0 0%,
+      #d4b888 16%,
+      #c4a882 36%,
+      #8f7858 54%,
+      #b89568 72%,
+      #d8c49a 100%);
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #c4a882;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+    paint-order: fill;
+    mix-blend-mode: normal;
+    isolation: isolate;
+    text-shadow: none;
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16);
+    pointer-events: none;
+  }
+  .stage .vision-tile-title::before {
+    content: attr(data-carve);
+    position: absolute;
+    left: 1px;
+    right: -1px;
+    top: 2px;
+    display: block;
+    width: 100%;
+    text-align: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    color: #2a241c;
+    -webkit-text-fill-color: #2a241c;
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    filter: none;
+    text-shadow: none;
+    opacity: 0.92;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .stage .vision-tile-title::after { content: none; display: none; }
+
+  /* Date chip base — under Bismillah */
+  .chip {
+    position: absolute;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 28;
+    white-space: nowrap;
+    line-height: 1;
     pointer-events: none;
   }
 
-  /* A — cream glass + dark ink (carry / layout family) */
-  .chip-a {
-    padding: 8px 16px;
-    border-radius: 999px;
-    border: 1px solid rgba(196,168,130,0.38);
-    background: rgba(245,240,232,0.88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 14px rgba(0,0,0,0.12);
-    color: #1c140e;
+  .foil-type {
+    background-image: linear-gradient(185deg,
+      #e8d4b0 0%, #d4b888 16%, #c4a882 36%,
+      #8f7858 54%, #b89568 72%, #d8c49a 100%);
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #c4a882;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.45))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16);
+  }
+  .shimmer-type {
+    background: linear-gradient(90deg, #8a6d1f 0%, #c4a882 25%, #f4d97a 50%, #c4a882 75%, #8a6d1f 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: allah-shimmer 4s linear infinite;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 14px rgba(244,217,122,0.32));
+  }
+
+  /* Round 3 — date is a presence (≈ section title), not a 10–15px caption.
+     Full phrase stays under the 28px title. The day number may go larger. */
+
+  /* Q — day numeral: 20 is the mark; sep / sun flank it */
+  .chip-q {
+    top: 56px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(-50%);
+  }
+  .chip-q .side {
+    font-family: "Cinzel", serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(232,214,180,0.88);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  }
+  .chip-q .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 0.8;
+  }
+
+  /* R — weekday leads, date sits under a short foil rule */
+  .chip-r {
+    top: 58px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transform: translateX(-50%);
+  }
+  .chip-r .wd {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: lowercase;
+  }
+  .chip-r .rule {
+    width: 88px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e8d4b0, transparent);
+  }
+  .chip-r .when {
+    font-family: "Cinzel", serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(232,214,180,0.9);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  }
+
+  /* S — full date in title foil, just under the section size */
+  .chip-s {
+    top: 62px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: 0.03em;
+    text-transform: lowercase;
+  }
+
+  /* T — left stamp: the number owns the corner */
+  .chip-t {
+    top: 18px;
+    left: 22px;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .chip-t .mo {
     font-family: "Cinzel", serif;
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
+    color: rgba(232,214,180,0.9);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  }
+  .chip-t .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 52px;
+    line-height: 0.82;
+    margin: 2px 0 0;
+  }
+  .chip-t .wd {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    color: rgba(247,239,228,0.88);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
   }
 
-  /* B — bare Newsreader italic, soft champagne (no foil, no pill) */
-  .chip-b {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: rgba(232,214,180,0.92);
+  /* U — full date in the Bismillah shimmer, readable */
+  .chip-u {
+    top: 62px;
     font-family: "Newsreader", Georgia, serif;
-    font-size: 16px;
     font-style: italic;
     font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: lowercase;
-    text-shadow: 0 1px 10px rgba(0,0,0,0.4);
-  }
-
-  /* C — pearl rim: light translucent cream capsule */
-  .chip-c {
-    padding: 8px 15px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,248,238,0.42);
-    background: rgba(255,248,238,0.14);
-    backdrop-filter: blur(14px) saturate(1.1);
-    -webkit-backdrop-filter: blur(14px) saturate(1.1);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-    color: rgba(255,248,238,0.94);
-    font-family: "Newsreader", Georgia, serif;
-    font-size: 14px;
-    font-style: italic;
-    letter-spacing: 0.05em;
-    text-transform: lowercase;
-  }
-
-  /* D — hairline only, no fill */
-  .chip-d {
-    padding: 7px 14px;
-    border-radius: 999px;
-    border: 1px solid rgba(216,196,154,0.55);
-    background: transparent;
-    color: rgba(245,236,214,0.95);
-    font-family: "Cinzel", serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.35);
-  }
-
-  /* E — soft cream glass + champagne text (not charcoal) */
-  .chip-e {
-    padding: 8px 16px;
-    border-radius: 999px;
-    border: 1px solid rgba(216,196,154,0.32);
-    background: rgba(245,240,232,0.22);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.16);
-    color: #d8c49a;
-    font-family: "Newsreader", Georgia, serif;
-    font-size: 14px;
-    font-style: italic;
+    font-size: 26px;
     letter-spacing: 0.04em;
     text-transform: lowercase;
   }
 
-  /* F — quiet Cinzel tracking, no pill, gentle (not foil glow) */
-  .chip-f {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: rgba(245,236,214,0.9);
-    font-family: "Cinzel", serif;
-    font-size: 12px;
+  /* V — open frame: date has a stage, not a whisper pill */
+  .chip-v {
+    top: 58px;
+    padding: 8px 22px 10px;
+    border-radius: 0;
+    box-shadow:
+      inset 0 0 0 1px rgba(216,196,154,0.55),
+      0 8px 22px rgba(0,0,0,0.18);
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
     font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
   }
 
-  .ref {
-    opacity: 0.72;
-  }
-  .ref header .letter { color: rgba(247,239,228,0.4); }
+  .ref { opacity: 0.55; }
+  .ref header .letter { color: rgba(247,239,228,0.35); }
   .chip-old {
     padding: 7px 16px;
     border-radius: 999px;
@@ -286,104 +419,105 @@
 </head>
 <body>
 <button id="hamburger-menu" type="button" aria-label="open menu"><span></span><span></span><span></span></button>
-<script src="nav-shared.js?v=datechip1"></script>
+<script src="nav-shared.js?v=datechip3"></script>
 
 <div class="hero">
-  <h1>date chip</h1>
-  <p>full-page overhead · actual live Bismillah · chip vibe only</p>
+  <h1>date chip · round 3</h1>
+  <p>same live Bismillah · same gold-foil title · date is a presence, not a caption</p>
 </div>
-<p class="note">Same calligraphy as the board. Only the date chip changes — pick the vibe under it.</p>
+<p class="note">The full date stays smaller than the section title. The day number can be the thing that stands out.</p>
 <p class="picked" id="picked"></p>
 
 <div class="grid">
-  <article class="opt" data-pick="A" data-name="cream glass · dark ink">
+
+  <article class="opt" data-pick="Q" data-name="day numeral">
     <header>
-      <span class="letter">A</span>
-      <span class="name">cream glass</span>
-      <span class="blurb">same family as layout / carry</span>
+      <span class="letter">Q</span>
+      <span class="name">day numeral</span>
+      <span class="blurb">20 is the mark · sep and sun flank it</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
-      <div class="chip chip-a">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
+      <div class="chip chip-q"><span class="side">sep</span><span class="num foil-type">20</span><span class="side">sun</span></div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 
-  <article class="opt" data-pick="B" data-name="bare italic champagne">
+  <article class="opt" data-pick="R" data-name="weekday lead">
     <header>
-      <span class="letter">B</span>
-      <span class="name">bare italic</span>
-      <span class="blurb">no pill · soft champagne</span>
+      <span class="letter">R</span>
+      <span class="name">weekday lead</span>
+      <span class="blurb">sunday in foil · sep 20 under a rule</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
-      <div class="chip chip-b">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
+      <div class="chip chip-r"><span class="wd foil-type">sunday</span><span class="rule"></span><span class="when">sep 20</span></div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 
-  <article class="opt" data-pick="C" data-name="pearl rim">
+  <article class="opt" data-pick="S" data-name="foil line">
     <header>
-      <span class="letter">C</span>
-      <span class="name">pearl rim</span>
-      <span class="blurb">light glass · cream edge</span>
+      <span class="letter">S</span>
+      <span class="name">foil line</span>
+      <span class="blurb">full date · just under the title size</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
-      <div class="chip chip-c">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
+      <div class="chip chip-s foil-type">sep 20 · sun</div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 
-  <article class="opt" data-pick="D" data-name="hairline only">
+  <article class="opt" data-pick="T" data-name="corner stamp">
     <header>
-      <span class="letter">D</span>
-      <span class="name">hairline</span>
-      <span class="blurb">outline only · Cinzel</span>
+      <span class="letter">T</span>
+      <span class="name">corner stamp</span>
+      <span class="blurb">number owns the left · title stays center</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
-      <div class="chip chip-d">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
+      <div class="chip chip-t"><span class="mo">sep</span><span class="num foil-type">20</span><span class="wd">sunday</span></div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 
-  <article class="opt" data-pick="E" data-name="soft cream · champagne type">
+  <article class="opt" data-pick="U" data-name="shimmer line">
     <header>
-      <span class="letter">E</span>
-      <span class="name">soft cream</span>
-      <span class="blurb">pill stays · not charcoal</span>
+      <span class="letter">U</span>
+      <span class="name">shimmer line</span>
+      <span class="blurb">same gold motion as ﷽ · readable</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
-      <div class="chip chip-e">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
+      <div class="chip chip-u shimmer-type">sep 20 · sun</div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 
-  <article class="opt" data-pick="F" data-name="quiet tracking">
+  <article class="opt" data-pick="V" data-name="open frame">
     <header>
-      <span class="letter">F</span>
-      <span class="name">quiet tracking</span>
-      <span class="blurb">Cinzel · no foil glow</span>
+      <span class="letter">V</span>
+      <span class="name">open frame</span>
+      <span class="blurb">foil date inside a hairline stage</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
-      <div class="chip chip-f">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
+      <div class="chip chip-v foil-type">sep 20 · sun</div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 
-  <article class="opt ref" data-pick="OLD" data-name="rejected charcoal" style="grid-column: 1 / -1; max-width: 540px; margin: 0 auto; width: 100%;">
+  <article class="opt ref" data-pick="OLD" data-name="rejected charcoal" style="grid-column: 1 / -1; max-width: 520px; margin: 0 auto; width: 100%;">
     <header>
       <span class="letter">—</span>
       <span class="name">rejected</span>
-      <span class="blurb">the heavy charcoal pill</span>
+      <span class="blurb">heavy charcoal pill — not an option</span>
     </header>
     <div class="stage">
-      <p class="dco-bismillah" aria-hidden="true">﷽</p>
+      <div class="day-card-overlay"><p class="dco-bismillah">﷽</p></div>
       <div class="chip chip-old">sep 20 · sun</div>
-      <div class="title">i am litigating</div>
+      <h3 class="vision-tile-title" data-carve="I am litigating">I am litigating</h3>
     </div>
   </article>
 </div>
@@ -398,11 +532,11 @@
       el.classList.add('is-picked');
       picked.textContent = 'picked · ' + el.getAttribute('data-pick') + ' · ' + el.getAttribute('data-name');
       picked.classList.add('on');
-      try { localStorage.setItem('btm_date_chip_mock_pick', el.getAttribute('data-pick')); } catch(e){}
+      try { localStorage.setItem('btm_date_chip_mock_pick_v3', el.getAttribute('data-pick')); } catch(e){}
     });
   });
   try {
-    var prev = localStorage.getItem('btm_date_chip_mock_pick');
+    var prev = localStorage.getItem('btm_date_chip_mock_pick_v3');
     if(prev){
       var hit = document.querySelector('.opt[data-pick="'+prev+'"]');
       if(hit && !hit.classList.contains('ref')) hit.click();
