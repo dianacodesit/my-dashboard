@@ -1,6 +1,8 @@
 /* Pin today as soon as its day-block exists. NEVER hide the page waiting —
    that was not a fix and made load feel endless. Collapsed-day photo parking
-   stays (stops the fetch storm). Never wipe localStorage here. */
+   stays (stops the fetch storm). Never wipe localStorage here.
+   Load flash cascades are banned forever — see .cursor/rules/no-load-flash-cascades.mdc
+   and window.__BTM_NO_LOAD_CASCADE in everything.html. */
 (function () {
   try {
     if (document.documentElement.classList.contains('prototypes-page')) return;

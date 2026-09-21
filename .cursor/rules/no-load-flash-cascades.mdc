@@ -1,0 +1,38 @@
+---
+description: Permanent ban on load-time DOM rewrite cascades that flash hundreds of board versions
+alwaysApply: true
+---
+
+# No load flash cascades — permanent
+
+Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) `everything.html` (+ `boot-today.js`).
+
+## What “hundreds of versions” means
+
+On every refresh, migrations / heal / pack / pill-lock / MutationObservers rewrote the collage and cards over and over until the page “settled.” That is banned forever.
+
+## Permanent contract (`window.__BTM_NO_LOAD_CASCADE`)
+
+1. **`__btmBootQuiet`** is true until `load` — no pack, no `/photo-for`+Openverse, no `persistDay` storms, no pill `innerHTML` rewrites.
+2. **One pass only** for heal / lock / park / title-cap / one-shot migrations — never `setTimeout(fn, 400)` + `setTimeout(fn, 1200)` (or any multi-delay cascade) on boot.
+3. **Baked / Sep 18+ file days:** HTML is truth. Heal may scrub poison (shells, auto-subs, dupes, depth stubs, bad weights). Heal must **never** call `__packVisionCollage` / clear `data-pack-sig` / skinny `getBoundingClientRect` loops on load.
+4. **Migrations:** `if (localStorage.getItem(MKEY)) return;` at the top. No archive-as-delete. No delayed re-run after MKEY is set.
+5. **No document-wide MutationObservers** that re-strip titles/photos/cards on every `childList`/`style` mutation during boot.
+
+## Allowed on load
+
+- Overlay scrub (`scrub-stale-day-overlays`)
+- Pin today + collapse others + park collapsed photos (`boot-today.js`)
+- One cheap banlist live-tile check (not full `scrubStores` every time after MKEY)
+- One depth DELETE when closed
+
+## Never reintroduce
+
+- `setTimeout(healAll, …)` / `setTimeout(lockAll, …)` / `setTimeout(run, 0)+400+1200`
+- Heal → pack on every refresh “just in case”
+- Openverse / mass `assignCardPhotoAuto` during boot
+- Archiving something the user asked to **delete**
+
+## If flash comes back
+
+Fix the cascade immediately. Do not ask. Do not add another delayed “belt and suspenders” pass.
