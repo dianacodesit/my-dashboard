@@ -65,42 +65,43 @@
     { href: '2030.html', label: '2030', group: 'main' },
     { href: 'archived-pages.html', label: 'pages', group: 'archived' },
     { href: 'archived-sections.html', label: 'sections', group: 'archived' },
+    /* Design previews: similar pages nest under one toggleable parent (same as deen → Quran). */
     { href: 'palettes.html', label: 'color palettes', group: 'design' },
-    { href: 'backgrounds.html', label: 'background images', group: 'design' },
-    { href: 'colors.html', label: 'individual colors', group: 'design' },
+    { href: 'backgrounds.html', label: 'background images', group: 'design', parent: 'palettes.html' },
+    { href: 'colors.html', label: 'individual colors', group: 'design', parent: 'palettes.html' },
     { href: 'fonts.html', label: 'editorial fonts', group: 'design' },
-    { href: 'flow-fonts.html', label: 'cursive flow fonts', group: 'design' },
-    { href: 'deadline-fonts.html', label: 'deadline pill fonts', group: 'design' },
-    { href: 'flow-styles.html', label: 'flow chart designs', group: 'design' },
-    { href: 'flow-route-mocks.html', label: 'flow route UI · A–D', group: 'design' },
+    { href: 'flow-fonts.html', label: 'cursive flow fonts', group: 'design', parent: 'fonts.html' },
+    { href: 'deadline-fonts.html', label: 'deadline pill fonts', group: 'design', parent: 'fonts.html' },
+    { href: 'flow-styles.html', label: 'flow', group: 'design' },
+    { href: 'flow-route-mocks.html', label: 'flow route UI · A–D', group: 'design', parent: 'flow-styles.html' },
+    { href: 'arrows.html', label: 'arrow formations', group: 'design', parent: 'flow-styles.html' },
+    { href: 'transitions.html', label: 'transition styles', group: 'design', parent: 'flow-styles.html' },
     { href: 'depth-style-mocks.html', label: 'depth toggle styles', group: 'design' },
     { href: 'card-style-mocks.html', label: 'card style mocks', group: 'design' },
     { href: 'capture-panel-mocks.html', label: 'capture panel mocks', group: 'design' },
-    { href: 'task-display-options.html', label: 'task display options', group: 'design' },
-    { href: 'tasks-glance-mocks.html', label: 'tasks · first glance', group: 'design' },
-    { href: 'tasks-display-mocks.html', label: 'tasks · other ways', group: 'design' },
-    { href: 'flow-task-format-mocks.html', label: 'task format · six ways', group: 'design' },
-    { href: 'overview-task-format-mocks.html', label: 'overview tasks · six ways', group: 'design' },
-    { href: 'task-pin-mocks.html', label: 'task pins · marks', group: 'design' },
-    { href: 'task-attention-mocks.html?v=1', label: 'task attention · A–H', group: 'design' },
-    { href: 'carry-forward-mocks.html', label: 'carry forward · spatial', group: 'design' },
-    { href: 'carry-forward-mocks-v2.html', label: 'carry forward · v2', group: 'design' },
-    { href: 'collage-structure-mocks.html?v=4', label: 'collage structure · A–F', group: 'design' },
-    { href: 'collage-packing-mocks.html?v=2', label: 'collage packing', group: 'design' },
-    { href: 'force-collage-mocks.html?v=5', label: 'force collage', group: 'design' },
-    { href: 'force-collage-mocks.html?v=4', label: 'force collage · v4', group: 'design' },
+    { href: 'task-display-options.html', label: 'tasks', group: 'design' },
+    { href: 'tasks-glance-mocks.html', label: 'tasks · first glance', group: 'design', parent: 'task-display-options.html' },
+    { href: 'tasks-display-mocks.html', label: 'tasks · other ways', group: 'design', parent: 'task-display-options.html' },
+    { href: 'flow-task-format-mocks.html', label: 'task format · six ways', group: 'design', parent: 'task-display-options.html' },
+    { href: 'overview-task-format-mocks.html', label: 'overview tasks · six ways', group: 'design', parent: 'task-display-options.html' },
+    { href: 'task-pin-mocks.html', label: 'task pins · marks', group: 'design', parent: 'task-display-options.html' },
+    { href: 'task-attention-mocks.html?v=1', label: 'task attention · A–H', group: 'design', parent: 'task-display-options.html' },
+    { href: 'carry-forward-mocks.html', label: 'carry forward', group: 'design' },
+    { href: 'carry-forward-mocks-v2.html', label: 'carry forward · v2', group: 'design', parent: 'carry-forward-mocks.html' },
+    { href: 'collage-structure-mocks.html?v=4', label: 'collage', group: 'design' },
+    { href: 'collage-packing-mocks.html?v=2', label: 'collage packing', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
+    { href: 'force-collage-mocks.html?v=5', label: 'force collage', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
+    { href: 'force-collage-mocks.html?v=4', label: 'force collage · v4', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
+    { href: 'day-chrome-layout-mocks.html?v=1', label: 'day chrome + collage', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
     { href: 'monogram-pin-mocks.html?v=2', label: 'number pins', group: 'design' },
-    { href: 'monogram-pin-mocks.html?v=4b', label: 'number pins · v4b', group: 'design' },
+    { href: 'monogram-pin-mocks.html?v=4b', label: 'number pins · v4b', group: 'design', parent: 'monogram-pin-mocks.html?v=2' },
     { href: 'day-dawn-mocks.html', label: 'new day · fold', group: 'design' },
-    { href: 'induction-habit-mocks.html', label: 'induction habit · chrome', group: 'design' },
-    { href: 'induction-habit-mocks.html?v=round2c', label: 'induction habit · round2c', group: 'design' },
-    { href: 'day-chrome-layout-mocks.html?v=1', label: 'day chrome + collage', group: 'design' },
-    { href: 'everything.html?flowtrail=1', label: 'everything · flow trail', group: 'design' },
-    { href: 'everything.html?v=vision-collage-2x3', label: 'everything · collage 2×3', group: 'design' },
-    { href: 'everything.html?v=zoom-plus-z', label: 'everything · zoom + Z', group: 'design' },
-    { href: 'everything.html?v=restore-days-1', label: 'everything · restore days', group: 'design' },
-    { href: 'arrows.html', label: 'arrow formations', group: 'design' },
-    { href: 'transitions.html', label: 'transition styles', group: 'design' }
+    { href: 'induction-habit-mocks.html', label: 'induction habit', group: 'design' },
+    { href: 'induction-habit-mocks.html?v=round2c', label: 'induction habit · round2c', group: 'design', parent: 'induction-habit-mocks.html' },
+    { href: 'everything.html?flowtrail=1', label: 'everything previews', group: 'design' },
+    { href: 'everything.html?v=vision-collage-2x3', label: 'everything · collage 2×3', group: 'design', parent: 'everything.html?flowtrail=1' },
+    { href: 'everything.html?v=zoom-plus-z', label: 'everything · zoom + Z', group: 'design', parent: 'everything.html?flowtrail=1' },
+    { href: 'everything.html?v=restore-days-1', label: 'everything · restore days', group: 'design', parent: 'everything.html?flowtrail=1' }
   ];
   var GROUPS = [
     { id: 'top', title: '' },
@@ -114,8 +115,13 @@
     return String(href || '').split('/').pop();
   }
   function currentFile(){
-    var path = (window.location.pathname || '').split('/').pop();
-    return path || 'index.html';
+    var path = (window.location.pathname || '').split('/').pop() || 'index.html';
+    var search = window.location.search || '';
+    if (search) {
+      var full = path + search;
+      if (LINKS.some(function(x){ return x.href === full; })) return full;
+    }
+    return path;
   }
   function loadLayout(){
     try {
@@ -286,7 +292,11 @@
       if (!s || !byHref[s.href] || seen[s.href]) return;
       if (archived[s.href] || archived[fileOf(s.href)]) return;
       if (s.group) byHref[s.href].group = s.group;
-      if ('parent' in s) byHref[s.href].parent = s.parent || null;
+      /* Saved flat layout used to wipe design families — keep LINKS parents for design. */
+      if ('parent' in s) {
+        if (s.parent) byHref[s.href].parent = s.parent;
+        else if (byHref[s.href].group !== 'design') byHref[s.href].parent = null;
+      }
       order.push(s.href);
       seen[s.href] = 1;
     });
@@ -296,6 +306,12 @@
         order.push(x.href);
         seen[x.href] = 1;
       }
+    });
+    /* Design previews: always nest similar pages under their LINKS parent. */
+    LINKS.forEach(function(x){
+      if (x.group !== 'design' || !byHref[x.href]) return;
+      byHref[x.href].parent = x.parent || null;
+      byHref[x.href].group = 'design';
     });
     // Prevent cycles: if parent chain loops, clear parent.
     order.forEach(function(href){

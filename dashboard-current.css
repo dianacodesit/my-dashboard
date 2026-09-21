@@ -160,7 +160,7 @@ html body #enh-left-fab {
   pointer-events: none !important;
 }
 html body #enh-left-fab #enh-jump-today,
-html body #enh-left-fab #enh-scroll-top {
+html body #enh-left-fab #enh-add-next {
   position: static !important;
   left: auto !important;
   right: auto !important;
@@ -187,15 +187,26 @@ html body #enh-left-fab #enh-jump-today {
   text-transform: uppercase !important;
   box-shadow: 0 2px 12px rgba(138,158,133,0.3) !important;
 }
-html body #enh-left-fab #enh-scroll-top {
-  width: 40px !important;
-  height: 40px !important;
+html body #enh-left-fab #enh-add-next {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border: none !important;
   border-radius: 50% !important;
-  background: rgba(245,240,232,0.9) !important;
-  border: 1px solid rgba(196,168,130,0.4) !important;
-  color: #2A2A25 !important;
-  font-size: 18px !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+  background: rgba(138,158,133,0.9) !important;
+  color: #fff !important;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 22px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 12px rgba(138,158,133,0.3) !important;
+}
+html body #enh-left-fab #enh-add-next:hover {
+  background: rgba(122,140,110,0.95) !important;
+  box-shadow: 0 4px 16px rgba(138,158,133,0.4) !important;
+}
+html body #enh-scroll-top {
+  display: none !important;
 }
 @media (max-width: 768px) {
   html body #enh-left-fab {
@@ -344,23 +355,22 @@ html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.i
   mix-blend-mode: normal !important;
   isolation: isolate !important;
   filter:
-    drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.72))
+    drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
     drop-shadow(0 1px 0 #3a3228)
     drop-shadow(0 2px 0 #241c16) !important;
   text-shadow: none !important;
 }
+/* Overview AND zoom — same size. Never fork zoom to 36px. */
 html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title,
 html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title,
-html body .day-block[data-title-era="foil"] .vision-tile > .vision-tile-title {
-  font-size: clamp(22px, 2.6vw, 34px) !important;
-}
+html body .day-block[data-title-era="foil"] .vision-tile > .vision-tile-title,
 html body .day-block[data-date="2026-09-06"] .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
 html body .day-block.dash-mosaic-era .vision-board.is-zoomed .vision-tile.is-zoomed > .vision-tile-title,
 html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title,
 html body.vision-zoom-open .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed > h3.vision-tile-title,
 html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoomed > .vision-tile-title,
 html body > .vision-board.is-zoomed[data-title-era="foil"] article.vision-tile.is-zoomed > h3.vision-tile-title {
-  font-size: 36px !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
 }
 html body .day-block[data-date="2026-09-06"] .vision-tile > .vision-tile-title::before,
 html body .day-block.dash-mosaic-era .vision-tile > .vision-tile-title::before,
