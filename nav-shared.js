@@ -93,6 +93,7 @@
     { href: 'force-collage-mocks.html?v=5', label: 'force collage', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
     { href: 'force-collage-mocks.html?v=4', label: 'force collage · v4', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
     { href: 'day-chrome-layout-mocks.html?v=1', label: 'day chrome + collage', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
+    { href: 'title-lift-mocks.html?v=1', label: 'title lift · emboss depth', group: 'design', parent: 'collage-structure-mocks.html?v=4' },
     { href: 'monogram-pin-mocks.html?v=2', label: 'number pins', group: 'design' },
     { href: 'monogram-pin-mocks.html?v=4b', label: 'number pins · v4b', group: 'design', parent: 'monogram-pin-mocks.html?v=2' },
     { href: 'day-dawn-mocks.html', label: 'new day · fold', group: 'design' },

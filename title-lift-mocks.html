@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>title lift · emboss depth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=titlelift1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.58), rgba(10,7,5,0.9)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+    font-style: normal;
+  }
+  .picked {
+    display: none;
+    max-width: 640px;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px auto 28px;
+    max-width: 960px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover { color: #fff8ee; border-color: rgba(232,201,154,0.45); }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  @media (min-width: 900px) {
+    .gallery { grid-template-columns: 1fr 1fr; }
+  }
+
+  .opt {
+    border: 1px solid rgba(255,248,238,0.12);
+    background: rgba(8,6,5,0.42);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .opt:hover { border-color: rgba(232,201,154,0.4); transform: translateY(-2px); }
+  .opt.chosen {
+    border-color: rgba(232,201,154,0.75);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.28), 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .opt-meta {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .opt-meta .letter {
+    font-family: "Italiana", serif;
+    font-size: 28px;
+    color: #e8c99a;
+    letter-spacing: 0.04em;
+  }
+  .opt-meta .name {
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.78);
+  }
+  .opt-meta .blurb {
+    margin-top: 4px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.5);
+    line-height: 1.4;
+  }
+  .opt-meta .left { min-width: 0; }
+  .opt-meta .tag {
+    flex-shrink: 0;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(201,168,114,0.7);
+    border: 1px solid rgba(201,168,114,0.28);
+    padding: 4px 8px;
+    border-radius: 999px;
+  }
+
+  .mini-board {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0;
+    height: 280px;
+    background: #0a0806;
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+  .tile:nth-child(1) { grid-row: 1 / 3; }
+  .tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 42%, rgba(8,5,3,0.55) 100%);
+    pointer-events: none;
+  }
+
+  /* Shared foil type — size locked. Only lift recipe changes. */
+  .foil {
+    position: absolute;
+    left: 50%;
+    bottom: 14%;
+    transform: translateX(-50%);
+    z-index: 3;
+    width: max-content;
+    max-width: 92%;
+    margin: 0;
+    text-align: center;
+    font-family: "Playfair Display", "Gilda Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.12;
+    font-size: clamp(22px, 2.6vw, 34px);
+    background-image: linear-gradient(185deg,
+      #e8d4b0 0%,
+      #d4b888 16%,
+      #c4a882 36%,
+      #8f7858 54%,
+      #b89568 72%,
+      #d8c49a 100%);
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #c4a882;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+    paint-order: fill;
+    isolation: isolate;
+    pointer-events: none;
+  }
+  .foil::before {
+    content: attr(data-carve);
+    position: absolute;
+    left: 1px;
+    right: -1px;
+    top: 2px;
+    display: block;
+    width: 100%;
+    text-align: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    color: #2a241c;
+    -webkit-text-fill-color: #2a241c;
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    filter: none;
+    text-shadow: none;
+    opacity: 0.92;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* A — now (live baseline) */
+  .lift-a .foil {
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16);
+  }
+
+  /* B — deeper stamp — extra bevel steps, same hard die feel */
+  .lift-b .foil {
+    filter:
+      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.7))
+      drop-shadow(0 1px 0 #4a4034)
+      drop-shadow(0 2px 0 #2e261e)
+      drop-shadow(0 3px 0 #1c1610)
+      drop-shadow(0 4px 0 #120e0a);
+  }
+  .lift-b .foil::before {
+    top: 3px;
+    left: 1.5px;
+    opacity: 0.95;
+  }
+
+  /* C — float — hard emboss + soft ambient shadow under the letter */
+  .lift-c .foil {
+    filter:
+      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.58))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16)
+      drop-shadow(0 6px 4px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 14px 18px rgba(0, 0, 0, 0.38));
+  }
+
+  /* D — coin press — thick underside + crisp top highlight */
+  .lift-d .foil {
+    filter:
+      drop-shadow(0 -2px 0 rgba(255, 248, 238, 0.65))
+      drop-shadow(0 -1px 0 rgba(232, 201, 154, 0.35))
+      drop-shadow(0 1px 0 #5a4a36)
+      drop-shadow(0 2px 0 #3a3024)
+      drop-shadow(0 3px 0 #241c14)
+      drop-shadow(0 5px 0 #14100c)
+      drop-shadow(0 7px 0 #0a0806);
+  }
+  .lift-d .foil::before {
+    top: 4px;
+    left: 2px;
+    color: #100c08;
+    -webkit-text-fill-color: #100c08;
+    opacity: 1;
+  }
+
+  /* E — champagne halo — soft foil glow + lifted shadow */
+  .lift-e .foil {
+    filter:
+      drop-shadow(0 0 1px rgba(232, 201, 154, 0.55))
+      drop-shadow(0 0 10px rgba(201, 168, 114, 0.28))
+      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.6))
+      drop-shadow(0 1px 0 #3a3228)
+      drop-shadow(0 2px 0 #241c16)
+      drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
+  }
+
+  /* F — wax seal — carved depth + soft float (most lifted) */
+  .lift-f .foil {
+    filter:
+      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.72))
+      drop-shadow(0 1px 0 #4a4034)
+      drop-shadow(0 2px 0 #2e261e)
+      drop-shadow(0 3px 0 #1a1410)
+      drop-shadow(0 5px 2px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 12px 16px rgba(0, 0, 0, 0.42))
+      drop-shadow(0 22px 28px rgba(0, 0, 0, 0.28));
+  }
+  .lift-f .foil::before {
+    top: 3px;
+    left: 1.5px;
+    opacity: 0.98;
+  }
+
+  .foot {
+    max-width: 640px;
+    margin: 36px auto 0;
+    text-align: center;
+    font-style: italic;
+    color: rgba(247,239,228,0.45);
+    font-size: 0.95rem;
+  }
+</style>
+</head>
+<body>
+<button type="button" id="hamburger-menu" aria-label="Open menu"><span></span><span></span><span></span></button>
+<div id="nav-overlay"></div>
+<aside id="nav-sidebar" aria-hidden="true">
+  <button type="button" id="nav-close" aria-label="Close">×</button>
+  <div id="nav-mount"></div>
+</aside>
+
+<header class="hero">
+  <h1>title lift · emboss depth</h1>
+  <p>Same champagne foil, same size. Only how far the letters lift off the photo.</p>
+  <p class="rule">section titles stay clamp(22px → 34px) · click one to pick</p>
+  <p class="picked" id="picked"></p>
+</header>
+
+<nav class="jump" aria-label="jump to option">
+  <a href="#a">A now</a>
+  <a href="#b">B stamp</a>
+  <a href="#c">C float</a>
+  <a href="#d">D coin</a>
+  <a href="#e">E halo</a>
+  <a href="#f">F wax</a>
+</nav>
+
+<div class="gallery">
+
+  <article class="opt lift-a" id="a" data-pick="A · now" tabindex="0">
+    <div class="opt-meta">
+      <div class="left">
+        <div class="letter">A</div>
+        <div class="name">now · live emboss</div>
+        <div class="blurb">today’s raised foil stamp — light top highlight, 2px dark step</div>
+      </div>
+      <span class="tag">baseline</span>
+    </div>
+    <div class="mini-board">
+      <div class="tile" style="background-image:url('manus-storage/zone-earn-hands.jpg?v=earn39')">
+        <h3 class="foil" data-carve="I am earning">I am earning</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-athletic-gym.jpg?v=gym1')">
+        <h3 class="foil" data-carve="I am training">I am training</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-challenges-maze.jpg?v=chal15')">
+        <h3 class="foil" data-carve="challenges">challenges</h3>
+      </div>
+    </div>
+  </article>
+
+  <article class="opt lift-b" id="b" data-pick="B · deeper stamp" tabindex="0">
+    <div class="opt-meta">
+      <div class="left">
+        <div class="letter">B</div>
+        <div class="name">deeper stamp</div>
+        <div class="blurb">more bevel steps — still a hard die-cut, just thicker metal</div>
+      </div>
+      <span class="tag">emboss+</span>
+    </div>
+    <div class="mini-board">
+      <div class="tile" style="background-image:url('manus-storage/zone-earn-hands.jpg?v=earn39')">
+        <h3 class="foil" data-carve="I am earning">I am earning</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-athletic-gym.jpg?v=gym1')">
+        <h3 class="foil" data-carve="I am training">I am training</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-challenges-maze.jpg?v=chal15')">
+        <h3 class="foil" data-carve="challenges">challenges</h3>
+      </div>
+    </div>
+  </article>
+
+  <article class="opt lift-c" id="c" data-pick="C · float" tabindex="0">
+    <div class="opt-meta">
+      <div class="left">
+        <div class="letter">C</div>
+        <div class="name">float</div>
+        <div class="blurb">keep the stamp edge, add a soft ambient shadow so it sits above the photo</div>
+      </div>
+      <span class="tag">lift</span>
+    </div>
+    <div class="mini-board">
+      <div class="tile" style="background-image:url('manus-storage/zone-wins-hand.jpg?v=game13')">
+        <h3 class="foil" data-carve="I am winning">I am winning</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-start-over-positano.jpg?v=travel1')">
+        <h3 class="foil" data-carve="I am traveling">I am traveling</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-networking.jpg?v=net1')">
+        <h3 class="foil" data-carve="I am networking">I am networking</h3>
+      </div>
+    </div>
+  </article>
+
+  <article class="opt lift-d" id="d" data-pick="D · coin press" tabindex="0">
+    <div class="opt-meta">
+      <div class="left">
+        <div class="letter">D</div>
+        <div class="name">coin press</div>
+        <div class="blurb">thick underside stack + brighter top rim — minted champagne letter</div>
+      </div>
+      <span class="tag">relief</span>
+    </div>
+    <div class="mini-board">
+      <div class="tile" style="background-image:url('manus-storage/zone-wins-hand.jpg?v=game13')">
+        <h3 class="foil" data-carve="I am winning">I am winning</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-start-over-positano.jpg?v=travel1')">
+        <h3 class="foil" data-carve="I am traveling">I am traveling</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-networking.jpg?v=net1')">
+        <h3 class="foil" data-carve="I am networking">I am networking</h3>
+      </div>
+    </div>
+  </article>
+
+  <article class="opt lift-e" id="e" data-pick="E · champagne halo" tabindex="0">
+    <div class="opt-meta">
+      <div class="left">
+        <div class="letter">E</div>
+        <div class="name">champagne halo</div>
+        <div class="blurb">soft foil glow around the word + lift shadow — luminous, still small</div>
+      </div>
+      <span class="tag">glow lift</span>
+    </div>
+    <div class="mini-board">
+      <div class="tile" style="background-image:url('manus-storage/zone-god-conscious.jpg?v=remembrance1')">
+        <h3 class="foil" data-carve="Ibadah">Ibadah</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-grad-student.jpg?v=grad4')">
+        <h3 class="foil" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-adhd-gold-threads.jpg?v=adhd6')">
+        <h3 class="foil" data-carve="ADHD">ADHD</h3>
+      </div>
+    </div>
+  </article>
+
+  <article class="opt lift-f" id="f" data-pick="F · wax seal" tabindex="0">
+    <div class="opt-meta">
+      <div class="left">
+        <div class="letter">F</div>
+        <div class="name">wax seal</div>
+        <div class="blurb">deep carve + long soft float — most lifted without growing the type</div>
+      </div>
+      <span class="tag">most lift</span>
+    </div>
+    <div class="mini-board">
+      <div class="tile" style="background-image:url('manus-storage/zone-god-conscious.jpg?v=remembrance1')">
+        <h3 class="foil" data-carve="Ibadah">Ibadah</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-grad-student.jpg?v=grad4')">
+        <h3 class="foil" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3>
+      </div>
+      <div class="tile" style="background-image:url('manus-storage/zone-adhd-gold-threads.jpg?v=adhd6')">
+        <h3 class="foil" data-carve="ADHD">ADHD</h3>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<p class="foot">pick the lift that reads on dark photos and light ones — I’ll wire it to Sep 23 forward.</p>
+
+<script src="nav-shared.js?v=titlelift1"></script>
+<script>
+(function(){
+  var picked = document.getElementById('picked');
+  function choose(el){
+    document.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('chosen'); });
+    el.classList.add('chosen');
+    var label = el.getAttribute('data-pick') || '';
+    picked.textContent = 'picked · ' + label;
+    picked.classList.add('on');
+    try { history.replaceState(null, '', '#' + (el.id || '')); } catch(e){}
+  }
+  document.querySelectorAll('.opt').forEach(function(el){
+    el.addEventListener('click', function(){ choose(el); });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); choose(el); }
+    });
+  });
+  if(location.hash){
+    var hit = document.querySelector(location.hash);
+    if(hit && hit.classList.contains('opt')) choose(hit);
+  }
+})();
+</script>
+</body>
+</html>
