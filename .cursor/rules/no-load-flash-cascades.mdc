@@ -18,6 +18,7 @@ On every refresh, migrations / heal / pack / pill-lock / MutationObservers rewro
 3. **Baked / Sep 18+ file days:** HTML is truth. Heal may scrub poison (shells, auto-subs, dupes, depth stubs, bad weights). Heal must **never** call `__packVisionCollage` / clear `data-pack-sig` / skinny `getBoundingClientRect` loops on load.
 4. **Migrations:** `if (localStorage.getItem(MKEY)) return;` at the top. No archive-as-delete. No delayed re-run after MKEY is set.
 5. **No document-wide MutationObservers** that re-strip titles/photos/cards on every `childList`/`style` mutation during boot.
+6. **Boot quiet hard gates (required):** `packVisionCollage`, `syncHeroLayoutClass`, `syncHorizonTile` / `syncHorizonBlock` / `syncTaskConstellation`, and `applyOverviewDepth` (horizon + Sortable) must **return early** while `__btmBootQuiet`. `bootOverviewSubsections` must **defer** until quiet ends, run under `__overviewBootPass` (no mid-pass pack), hydrate **today only**, then **one pack** if tiles are still unplaced (`!tilesAlreadyPlaced` / no `data-pack-sig`). Do **not** skip pack on bare file bakes that ship without grid-area — that leaves a wrong flat stack. Past days hydrate lazily on expand (`__hydrateOverviewDay`). `ensureOverviewEditChrome` must not inject × / + / quotes during quiet.
 
 ## Allowed on load
 
@@ -25,6 +26,7 @@ On every refresh, migrations / heal / pack / pill-lock / MutationObservers rewro
 - Pin today + collapse others + park collapsed photos (`boot-today.js`)
 - One cheap banlist live-tile check (not full `scrubStores` every time after MKEY)
 - One depth DELETE when closed
+- One deferred overview-edits pass after quiet (**today only**; no pack on file/baked today)
 
 ## Never reintroduce
 
@@ -32,6 +34,17 @@ On every refresh, migrations / heal / pack / pill-lock / MutationObservers rewro
 - Heal → pack on every refresh “just in case”
 - Openverse / mass `assignCardPhotoAuto` during boot
 - Archiving something the user asked to **delete**
+- `ensureToggleRow` → `applyOverviewDepth` → horizon/Sortable rebuilds during quiet (that was the “hundreds of versions” flash on today)
+- `bootOverviewSubsections` packing every past day on load
+- Horizon / Sortable rebuild on baked/file today during the deferred boot kick
+- `healOne` DOM surgery on a healthy baked today (tiles already present)
+- Treating only `vis:` pack-sigs as placed (Sep 21+ uses `forceBkiss:` — that caused a second pack every load)
+- Hiding the title-only grid (`btm-booting`, `collage-pack-pending`, visibility/opacity hold). That grid is deleted: Sep 21/22 tiles ship with absolute geometry. Boot does not clear `data-pack-sig` or repack a placed collage.
+- Boot `healAll` walking every past day (childList flash down the rail) — load heal is **today only**; past days heal lazily on expand
+- Pinning a stale baked `today-block` (yesterday) as today — that left the unpositioned collage expanded and flashed the title-only grid. `pinTodayCard` pins the real date only. Yesterday ships `collapsed` once the date has rolled.
+- `resize` → `packVisionCollage` on already-placed file days (load fires a fake resize and rewrites every tile)
+- Deferred boot `ensureToggleRow` → full `applyOverviewDepth` → horizon inject on load (wrap kick in `__btmBootDepthClassesOnly`)
+- Adding `btm-collage-ready` / clearing pending before the post-pack chrome mutation settles
 
 ## If flash comes back
 

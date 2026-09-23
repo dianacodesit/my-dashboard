@@ -8,14 +8,7 @@ html body .day-block.collapsed:not(.today-block) {
 }
 /* Hold/hide-until-ready is banned — never cover the page waiting for today. */
 
-/* Collapsed days: never paint section/card photos — stops the refresh fetch storm.
-   Today stays live. Expand restores background via existing --tile-photo rules. */
-html body .day-block.collapsed:not(.today-block) .vision-tile-photo,
-html body .day-block.collapsed:not(.today-block) .vision-subsection-photo,
-html body .day-block.collapsed.overview-era-day:not(.today-block) .vision-tile-photo,
-html body .day-block.collapsed.vision-collage-day:not(.today-block) .vision-tile-photo,
-html body .day-block.collapsed.overview-era-day:not(.today-block) .vision-subsection-photo,
-html body .day-block.collapsed.vision-collage-day:not(.today-block) .vision-subsection-photo,
+/* Collapsed days stay header-only. Do not blank section photos — that painted the title grid. */
 html body .day-block.collapsed:not(.today-block) .vision-polaroid,
 html body .day-block.collapsed:not(.today-block) .vision-shot-card,
 html body .day-block.collapsed:not(.today-block) .vision-polaroid img,
@@ -31,8 +24,8 @@ html body .day-block.collapsed:not(.today-block) img {
 
 /* no-card-flash */
 /* Never hide #page-bg-wrapper — that stuck both pages on the mountain. */
-html body .day-block.vision-collage-day .vision-board,
-html body .day-block.overview-era-day .vision-board {
+html body .day-block.vision-collage-day:not(.collapsed) .vision-board,
+html body .day-block.overview-era-day:not(.collapsed) .vision-board {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -42,8 +35,8 @@ html body .day-block.overview-era-day .vision-board {
   max-height: none !important;
   box-sizing: border-box;
 }
-html body .day-block.vision-collage-day:not(.scrap-collage-era) .vision-hero:not(.vision-hero-dashmosaic),
-html body .day-block.overview-era-day:not(.scrap-collage-era) .vision-hero:not(.vision-hero-dashmosaic) {
+html body .day-block.vision-collage-day:not(.scrap-collage-era):not(.collapsed) .vision-hero:not(.vision-hero-dashmosaic),
+html body .day-block.overview-era-day:not(.scrap-collage-era):not(.collapsed) .vision-hero:not(.vision-hero-dashmosaic) {
   display: flex !important;
   flex-wrap: wrap !important;
   align-content: flex-start !important;

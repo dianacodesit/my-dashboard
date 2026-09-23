@@ -100,8 +100,9 @@
       if (userMoved && Date.now() > pinUntil) return false;
 
       var iso = isoNow();
-      var block = document.querySelector('.day-block[data-date="' + iso + '"]')
-        || document.querySelector('.day-block.today-block');
+      /* Never pin a stale baked today-block (yesterday) — that left Sep 22
+         expanded and unpositioned, so load flashed the title-only grid. */
+      var block = document.querySelector('.day-block[data-date="' + iso + '"]');
       if (!block) return false;
 
       document.querySelectorAll('.day-block.today-block').forEach(function (b) {
@@ -163,18 +164,20 @@
             img.removeAttribute('src');
             img.setAttribute('loading', 'lazy');
           });
-          blk.querySelectorAll('.vision-tile, .vision-subsection').forEach(function (el) {
-            ['--tile-photo', '--sub-photo'].forEach(function (prop) {
-              var val = '';
-              try { val = el.style.getPropertyValue(prop) || ''; } catch (eV) {}
-              if (!val) return;
-              var parkKey = prop === '--tile-photo' ? 'data-park-tile-photo' : 'data-park-sub-photo';
-              if (el.getAttribute(parkKey)) return;
-              el.setAttribute(parkKey, val);
-              try { el.style.removeProperty(prop); } catch (eR) {}
-            });
-          });
+          /* Do not strip --tile-photo. That strip is the title-only grid. */
         });
+        // #region agent log
+        try {
+          var s22 = document.querySelector('.day-block[data-date="2026-09-22"]');
+          var tiles = s22 ? s22.querySelectorAll('.vision-hero > .vision-tile') : [];
+          var live = 0, parked = 0;
+          [].forEach.call(tiles, function (t) {
+            if (t.style.getPropertyValue('--tile-photo')) live++;
+            if (t.getAttribute('data-park-tile-photo')) parked++;
+          });
+          fetch('http://127.0.0.1:7377/ingest/ef4f74e3-93fd-4fda-b1d5-ff8477f18dd9',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'013c46'},body:JSON.stringify({sessionId:'013c46',runId:'post-fix-keep-photo',hypothesisId:'P',location:'boot-today.js:park',message:'sep22-photos',data:{n:tiles.length,live:live,parked:parked,collapsed:!!(s22&&s22.classList.contains('collapsed'))},timestamp:Date.now()})}).catch(function(){});
+        } catch (eLog) {}
+        // #endregion
       } catch (ePark) {}
     }
     function restoreDayImgs(blk) {
