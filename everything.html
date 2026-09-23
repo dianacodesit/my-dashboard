@@ -74725,6 +74725,29 @@ html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-he
 }
 </style>
 
+<style id="tile-del-above-corner-v1">
+/* Section × above the outer corner — never clipped under the kiss radius. */
+html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-hero > .vision-tile,
+html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-hero > .vision-tile,
+html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-hero.vision-hero-dashmosaic > .vision-tile,
+html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-hero > .vision-tile {
+  overflow: visible !important;
+}
+html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo,
+html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo,
+html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo {
+  border-radius: inherit !important;
+  overflow: hidden !important;
+}
+html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del,
+html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del,
+html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del {
+  top: -9px !important;
+  right: -9px !important;
+  z-index: 130 !important;
+}
+</style>
+
 <style id="plus-above-resize-lock-v1">
 /* Killed: this lock put + over SE and clipped the SE hit, so bottom-right showed the hand
    while NE (×) still resized. SE now matches NE — corner rim above the button. */
