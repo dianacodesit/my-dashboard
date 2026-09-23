@@ -231,8 +231,8 @@ KNOWN_CARD_PHOTOS = {
     "breath": "manus-storage/zone-breath.jpg?v=breath1",
     "nutritious foods": "manus-storage/zone-nutritious-foods.jpg?v=food1",
     "nutritious-foods": "manus-storage/zone-nutritious-foods.jpg?v=food1",
-    "adhd": "manus-storage/zone-adhd-calacatta-threads.jpg?v=adhd8",
-    "ADHD": "manus-storage/zone-adhd-calacatta-threads.jpg?v=adhd8",
+    "adhd": "manus-storage/zone-adhd-gold-marble.jpg?v=adhd9",
+    "ADHD": "manus-storage/zone-adhd-gold-marble.jpg?v=adhd9",
     "Motherhood": "manus-storage/zone-motherhood.jpg?v=mom1",
     "strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
     "a strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
@@ -530,6 +530,9 @@ REJECTED_SECTION_PHOTOS = (
     # ADHD rejected flatlay white marble (linen + empty jewelry) — never restore
     "zone-adhd-white-marble",
     "zone-adhd-white-marble-adhd7-flatlay-banned",
+    # ADHD grey-vein Calacatta — gold veins only; never restore grey/silver
+    "zone-adhd-calacatta-threads",
+    "zone-adhd-calacatta-threads-adhd8-grey-veins-banned",
 )
 PHOTO_SKIP = re.compile(
     r"\b(person|people|portrait|face|faces|woman|women|man|men|girl|boy|child|selfie|crowd|model|couple)\b",
