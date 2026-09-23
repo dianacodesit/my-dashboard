@@ -65241,30 +65241,35 @@ html body .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
 }
 </style>
 
-<style id="day-card-del-css-v3">
-/* Day-card hover × sits on the true outer corner (overlay).
-   layout · carry · + go flush to the right — no reserved gap for the ×. */
+<style id="day-card-del-css-v4">
+/* Day-card × sits ON the outer corner (half outside the glass).
+   + sits slightly inset — not flush on the rim, not a big dead gap. */
+html body .day-block:not(.collapsed) {
+  overflow: visible !important;
+}
 html body .day-block > .day-card {
   position: relative;
+  overflow: visible !important;
 }
 html body .day-block > .day-card > .day-card-del {
   position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
+  /* Park on the corner apex — half out of the card */
+  top: -7px !important;
+  right: -7px !important;
   left: auto !important;
   bottom: auto !important;
   z-index: 80 !important;
-  width: 20px !important;
-  height: 20px !important;
+  width: 22px !important;
+  height: 22px !important;
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 10px 0 10px !important; /* kiss the card's top-right radius */
+  border-radius: 50% !important;
   background: transparent !important;
   color: rgba(94, 83, 64, 0.78);
   font-family: Arial, sans-serif !important;
-  font-size: 14px !important;
-  line-height: 20px !important;
+  font-size: 15px !important;
+  line-height: 22px !important;
   text-align: center !important;
   cursor: pointer !important;
   opacity: 0;
@@ -65272,10 +65277,9 @@ html body .day-block > .day-card > .day-card-del {
   transform: none !important;
   transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
-/* Flush to the card edge — no padding-right buffer */
 html body .day-block:not(.collapsed) > .day-card .day-card-header.day-header-chrome,
 html body .day-block:not(.collapsed) > .day-card .day-card-header {
-  padding-right: 0 !important;
+  padding-right: 10px !important; /* + off the rim a bit */
 }
 html body .day-block:not(.collapsed) > .day-card .overview-right-tools {
   padding-right: 0 !important;
@@ -65283,27 +65287,27 @@ html body .day-block:not(.collapsed) > .day-card .overview-right-tools {
   box-sizing: border-box !important;
 }
 html body .day-block:not(.collapsed) > .day-card .overview-right-tools > .overview-add-section {
-  margin-right: 2px !important; /* hairline from the glass rim only */
+  margin-right: 0 !important;
 }
 html body .day-block.collapsed > .day-card > .day-card-del {
-  top: 0 !important;
-  right: 0 !important;
-  width: 18px !important;
-  height: 18px !important;
-  font-size: 13px !important;
-  line-height: 18px !important;
+  top: -6px !important;
+  right: -6px !important;
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
   color: rgba(94, 83, 64, 0.7);
 }
 html body .day-block:hover > .day-card > .day-card-del,
 html body .day-block > .day-card > .day-card-del:focus,
 html body .day-block > .day-card > .day-card-del:hover {
   opacity: 1;
-  background: rgba(44, 40, 31, 0.18) !important;
+  background: rgba(44, 40, 31, 0.2) !important;
   color: rgba(44, 40, 31, 0.95);
 }
 html body .day-block.day-fullpage-active > .day-card > .day-card-del {
-  top: 0 !important;
-  right: 0 !important;
+  top: -7px !important;
+  right: -7px !important;
 }
 html body .day-block.today-block > .day-card > .day-card-del {
   color: rgba(255, 248, 238, 0.55);
@@ -73314,7 +73318,7 @@ html body .day-block.fmt22:not(.collapsed):not(.day-fullpage-active) .day-card-h
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header,
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header.day-header-chrome {
   padding-left: 12px !important;
-  padding-right: 0 !important; /* + sits on the rim; day × overlays the corner */
+  padding-right: 10px !important; /* + slightly inset; × sits outside on the corner */
 }
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header.day-header-chrome > .overview-center-stack {
   flex-direction: row !important;
