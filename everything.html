@@ -50185,6 +50185,70 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
     CARD_SEED.forEach(push);
     return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
   }
+  function subsectionPresets(blk, tile){
+    var already = {};
+    if(tile){
+      [].slice.call(tile.querySelectorAll('.vision-subsection-title')).forEach(function(el){
+        var n = ((el && el.textContent) || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        if(n) already[n] = 1;
+      });
+    }
+    var section = ((tile && tile.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    var focus = (tile && tile.getAttribute('data-focus') || '').toLowerCase();
+    var bare = section.replace(/^i am\s+/i, '').replace(/^to\s+/i, '').trim();
+    try { if(typeof bareSectionTitle === 'function') bare = bareSectionTitle(section) || bare; } catch(eBare){}
+    var FITNESS = ['calisthenics', 'inversions', 'gut health'];
+    var GLOW = ['luscious hair', 'glass skin', 'aligned teeth', 'facial tone'];
+    var ACADEMIA = ['classes', 'registration', 'financial aid & scholarships', 'coursework'];
+    var DEEN = ['defeat the enemy', 'istighfar 1000x'];
+    var CENTERED = ['inner-Self'];
+    var SUB_SEED_BY_SECTION = {
+      fitness: FITNESS, 'fitness training': FITNESS, 'fitness-training': FITNESS,
+      training: FITNESS, 'i am training': FITNESS, train: FITNESS, body: FITNESS,
+      athletic: FITNESS, gym: FITNESS, 'toned body': FITNESS, 'toned-body': FITNESS,
+      glow: GLOW, 'glow up': GLOW, 'glow-up': GLOW, 'glowing up': GLOW, 'glowing-up': GLOW,
+      'i am glowing up': GLOW,
+      academia: ACADEMIA, phd: ACADEMIA, 'ph.d': ACADEMIA, 'ph-d': ACADEMIA,
+      'i am pursuing my ph.d': ACADEMIA, 'pursuing my ph.d': ACADEMIA,
+      'i am a grad student': ACADEMIA, 'grad student': ACADEMIA,
+      deen: DEEN, ibadah: DEEN, surrender: DEEN, 'god-conscious': DEEN,
+      'god conscious': DEEN, 'itaq-allah': DEEN, 'itaqallah': DEEN,
+      'worshipping allah': DEEN, 'i am worshipping allah': DEEN,
+      centered: CENTERED, 'inner-self': CENTERED, 'inner self': CENTERED
+    };
+    var seed = SUB_SEED_BY_SECTION[section] || SUB_SEED_BY_SECTION[focus] || SUB_SEED_BY_SECTION[bare] || [];
+    var seen = {}, out = [];
+    function push(raw){
+      var name = String(raw || '').replace(/\s+/g, ' ').trim();
+      if(!name) return;
+      var low = name.toLowerCase();
+      if(already[low] || seen[low]) return;
+      if(name.length > 64) return;
+      seen[low] = 1;
+      out.push(name);
+    }
+    seed.forEach(push);
+    /* Also offer subsections already used on matching sections across the board. */
+    try {
+      document.querySelectorAll('.day-block .vision-tile').forEach(function(t){
+        if(t === tile) return;
+        var f = (t.getAttribute('data-focus') || '').toLowerCase();
+        var tit = ((t.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        var tb = tit.replace(/^i am\s+/i, '').replace(/^to\s+/i, '').trim();
+        var match = (f && (f === focus || SUB_SEED_BY_SECTION[f] === seed && seed.length)) ||
+          (tit && (tit === section || tb === bare));
+        if(!match && seed.length){
+          var otherSeed = SUB_SEED_BY_SECTION[tit] || SUB_SEED_BY_SECTION[f] || SUB_SEED_BY_SECTION[tb];
+          match = !!(otherSeed && otherSeed === seed);
+        }
+        if(!match) return;
+        [].slice.call(t.querySelectorAll('.vision-subsection-title')).forEach(function(el){
+          push(el.textContent);
+        });
+      });
+    } catch(eHarv){}
+    return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
+  }
   function appendPresetPicker(box, label, picks, onPick, formatName){
     if(!picks || !picks.length) return;
     var lab = document.createElement('p');
@@ -57968,7 +58032,13 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
     box.appendChild(head);
     modal.appendChild(box);
     mountDayModal(blk, modal);
-    appendCustomRow(box, 'subsection name', function(name){
+    var picks = [];
+    try { picks = subsectionPresets(blk, tile) || []; } catch(eSubP){ picks = []; }
+    appendPresetPicker(box, picks.length ? 'choose a preset' : 'no presets yet — type a name', picks, function(name){
+      addSubsection(tile, name, true);
+      closePicker(modal);
+    }, function(name){ return name; });
+    appendCustomRow(box, 'custom subsection name', function(name){
       addSubsection(tile, name, true);
       closePicker(modal);
     });
