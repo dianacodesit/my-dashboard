@@ -65238,14 +65238,14 @@ html body .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
 </style>
 
 <style id="day-card-del-css-v2">
-/* Hover × on day cards — tuck into the card corner so it never covers carry/+. */
+/* Hover × on day cards — true outer corner; layout · carry · + sit just left of it. */
 html body .day-block > .day-card {
   position: relative;
 }
 html body .day-block > .day-card > .day-card-del {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 0;
+  right: 0;
   z-index: 40;
   width: 22px;
   height: 22px;
@@ -65264,14 +65264,14 @@ html body .day-block > .day-card > .day-card-del {
   pointer-events: auto;
   transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
-/* Keep layout · carry · + clear of the corner × */
+/* layout · carry · + — nudged right; leave only a slim gap for the corner × */
 html body .day-block:not(.collapsed) > .day-card .overview-right-tools {
-  padding-right: 26px !important;
+  padding-right: 8px !important;
   box-sizing: border-box !important;
 }
 html body .day-block.collapsed > .day-card > .day-card-del {
-  top: 1px;
-  right: 1px;
+  top: 0;
+  right: 0;
   width: 20px;
   height: 20px;
   font-size: 14px;
@@ -65286,8 +65286,8 @@ html body .day-block > .day-card > .day-card-del:hover {
   color: rgba(44, 40, 31, 0.92);
 }
 html body .day-block.day-fullpage-active > .day-card > .day-card-del {
-  top: 8px;
-  right: 8px;
+  top: 0;
+  right: 0;
 }
 html body .day-block.today-block > .day-card > .day-card-del {
   color: rgba(255, 248, 238, 0.55);
@@ -73298,7 +73298,7 @@ html body .day-block.fmt22:not(.collapsed):not(.day-fullpage-active) .day-card-h
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header,
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header.day-header-chrome {
   padding-left: 12px !important;
-  padding-right: 16px !important;
+  padding-right: 6px !important;
 }
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header.day-header-chrome > .overview-center-stack {
   flex-direction: row !important;
