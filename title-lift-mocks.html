@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>title lift · embossed foil</title>
+<title>title lift · raised foil</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="nav-shared.css?v=titlelift5"/>
+<link rel="stylesheet" href="nav-shared.css?v=titlelift6"/>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -44,7 +44,7 @@
     text-transform: none;
   }
 
-  .hero { text-align: center; max-width: 720px; margin: 0 auto 8px; }
+  .hero { text-align: center; max-width: 760px; margin: 0 auto 8px; }
   .hero h1 {
     font-family: "Italiana", serif;
     font-size: clamp(28px, 5vw, 42px);
@@ -192,21 +192,21 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 42%, rgba(8,5,3,0.55) 100%);
+    background: linear-gradient(180deg, transparent 42%, rgba(8,5,3,0.45) 100%);
     pointer-events: none;
   }
 
   /*
-    EMBOSSED FOIL = 3D in the LETTER FACE
-    • NW catch-light + SE shade = raised bevel (reads as metal standing up)
-    • ::before = thin die-carve under the face (1–2px only — counters stay open)
-    • NO soft floor blob · NO thick extrude walls · NO ::after cushion
-    Same size lock as the live board.
+    RAISED FOIL — type sits OFF the photo (not stamped into it).
+    1) face     = bright champagne (legible)
+    2) ::before = thin hard side-wall (1–2px only — counters stay open)
+    3) ::after  = soft FLOOR cast on the photo (air under the word)
+    B/C were closest — these push real lift from that direction.
   */
   .foil {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 48%;
     transform: translate(-50%, -50%);
     z-index: 3;
     width: max-content;
@@ -220,12 +220,11 @@
     line-height: 1.12;
     font-size: clamp(22px, 2.6vw, 34px);
     background-image: linear-gradient(185deg,
-      #f4e6c8 0%,
-      #e8d09a 16%,
-      #d4b070 36%,
-      #a89060 54%,
-      #c9a56e 72%,
-      #ead8b0 100%);
+      #fff6e4 0%,
+      #f0d9a4 18%,
+      #d4b070 42%,
+      #b89860 62%,
+      #e8c99a 100%);
     background-size: 100% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -235,111 +234,168 @@
     isolation: isolate;
     pointer-events: none;
     text-shadow: none;
+    /* lit top rim on the raised face */
+    filter:
+      drop-shadow(0 -1px 0 rgba(255, 250, 240, 0.9))
+      drop-shadow(0.5px 0.5px 0 rgba(90, 70, 40, 0.35));
   }
+
+  /* Thin side wall of the raised letter (hard, short — never fill counters) */
   .foil::before {
-    content: attr(data-carve);
+    content: attr(data-lift);
     position: absolute;
-    left: 1px;
-    right: -1px;
-    top: 2px;
+    left: 0;
+    top: 0;
     display: block;
     width: 100%;
     text-align: inherit;
     font: inherit;
     letter-spacing: inherit;
-    color: #2a241c;
-    -webkit-text-fill-color: #2a241c;
+    color: #1a120c;
+    -webkit-text-fill-color: #1a120c;
     background: none;
-    -webkit-background-clip: border-box;
-    background-clip: border-box;
-    filter: none;
-    text-shadow: none;
-    opacity: 0.92;
-    pointer-events: none;
     z-index: -1;
+    pointer-events: none;
+    text-shadow:
+      1px 1px 0 #1a120c,
+      2px 2px 0 #120c08;
   }
-  .foil::after { content: none !important; display: none !important; }
 
-  /* A — live now (board baseline) */
+  /* Floor cast on the PHOTO — this is the air / raised proof */
+  .foil::after {
+    content: attr(data-lift);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    text-align: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background: none;
+    z-index: -2;
+    pointer-events: none;
+    text-shadow: 3px 5px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  /* A — slight raise (B-direction, small air) */
   .lift-a .foil {
-    filter:
-      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
-      drop-shadow(0 1px 0 #3a3228)
-      drop-shadow(0 2px 0 #241c16);
-  }
-
-  /* B — brighter catch light on the top rim */
-  .lift-b .foil {
+    transform: translate(-50%, calc(-50% - 1px));
     filter:
       drop-shadow(0 -1.5px 0 rgba(255, 250, 240, 0.95))
+      drop-shadow(0 -0.5px 0 rgba(232, 201, 154, 0.5))
+      drop-shadow(0.5px 0.5px 0 rgba(90, 70, 40, 0.3));
+  }
+  .lift-a .foil::before {
+    text-shadow:
+      1px 1px 0 #1a120c,
+      2px 2px 0 #120c08;
+  }
+  .lift-a .foil::after {
+    text-shadow: 2px 4px 7px rgba(0, 0, 0, 0.4);
+  }
+
+  /* B — raised (was closest) — clear air under the face */
+  .lift-b .foil {
+    transform: translate(-50%, calc(-50% - 3px));
+    filter:
+      drop-shadow(0 -1.5px 0 rgba(255, 250, 240, 1))
       drop-shadow(0 -0.5px 0 rgba(232, 201, 154, 0.55))
-      drop-shadow(0 1px 0 #3a3228)
-      drop-shadow(0 2px 0 #241c16);
+      drop-shadow(0.5px 0.5px 0 rgba(90, 70, 40, 0.3));
+  }
+  .lift-b .foil::before {
+    text-shadow:
+      1px 1px 0 #22180f,
+      2px 2px 0 #1a120c;
+  }
+  .lift-b .foil::after {
+    text-shadow: 4px 7px 11px rgba(0, 0, 0, 0.48);
   }
 
-  /* C — diagonal emboss (NW light / SE shade) — face reads raised */
+  /* C — raised diagonal light (was closest) + more air */
   .lift-c .foil {
+    transform: translate(-50%, calc(-50% - 4px));
     filter:
-      drop-shadow(-1px -1px 0 rgba(255, 250, 240, 0.95))
-      drop-shadow(1px 1px 0 #2a2218)
-      drop-shadow(0 2px 0 #1a1410);
+      drop-shadow(-1px -1.5px 0 rgba(255, 250, 240, 1))
+      drop-shadow(0.5px 0.5px 0 rgba(90, 70, 40, 0.35));
+  }
+  .lift-c .foil::before {
+    text-shadow:
+      1px 1px 0 #22180f,
+      2px 2px 0 #14100c;
+  }
+  .lift-c .foil::after {
+    text-shadow: 5px 8px 13px rgba(0, 0, 0, 0.5);
   }
 
-  /* D — deeper die-carve under a crisp face */
+  /* D — higher float */
   .lift-d .foil {
+    transform: translate(-50%, calc(-50% - 6px));
     filter:
-      drop-shadow(-1px -1px 0 rgba(255, 248, 238, 0.9))
-      drop-shadow(0 1px 0 #3a3228)
-      drop-shadow(0 2px 0 #241c16)
-      drop-shadow(0 3px 0 #18120c);
+      drop-shadow(0 -1.5px 0 rgba(255, 250, 240, 1))
+      drop-shadow(-0.5px -1px 0 rgba(232, 201, 154, 0.55))
+      drop-shadow(0.5px 0.5px 0 rgba(90, 70, 40, 0.28));
   }
   .lift-d .foil::before {
-    top: 3px;
-    left: 1.5px;
-    opacity: 0.95;
+    text-shadow:
+      1px 1px 0 #22180f,
+      2px 2px 0 #1a120c,
+      3px 3px 0 #100c08;
+  }
+  .lift-d .foil::after {
+    text-shadow:
+      3px 5px 8px rgba(0, 0, 0, 0.35),
+      7px 12px 18px rgba(0, 0, 0, 0.4);
   }
 
-  /* E — high-contrast metal bevel (legible, strong 3D face) */
+  /* E — soft high float (more blur under, still thin wall) */
   .lift-e .foil {
-    background-image: linear-gradient(200deg,
-      #fff8ee 0%,
-      #f0d9a4 22%,
+    transform: translate(-50%, calc(-50% - 7px));
+    background-image: linear-gradient(185deg,
+      #fffaf0 0%,
+      #f2dcb0 20%,
       #d4b070 48%,
-      #9a8050 70%,
-      #e8c99a 100%);
+      #c9a56e 100%);
     filter:
-      drop-shadow(-1.5px -1.5px 0 rgba(255, 252, 245, 1))
-      drop-shadow(1.5px 1.5px 0 #1a1410)
-      drop-shadow(0 2px 0 #100c08);
+      drop-shadow(0 -2px 0 rgba(255, 252, 245, 1))
+      drop-shadow(0.5px 0.5px 0 rgba(120, 90, 50, 0.25));
   }
   .lift-e .foil::before {
-    top: 2px;
-    left: 1px;
-    color: #100c08;
-    -webkit-text-fill-color: #100c08;
-    opacity: 0.9;
+    text-shadow:
+      1px 1px 0 #1a120c,
+      2px 2px 0 #120c08;
+  }
+  .lift-e .foil::after {
+    text-shadow:
+      4px 6px 10px rgba(0, 0, 0, 0.32),
+      8px 14px 22px rgba(0, 0, 0, 0.38);
   }
 
-  /* F — max emboss still thin: strong diagonal + carve — counters stay open */
+  /* F — max raise (tallest air, still thin wall / open counters) */
   .lift-f .foil {
-    background-image: linear-gradient(200deg,
+    transform: translate(-50%, calc(-50% - 9px));
+    background-image: linear-gradient(185deg,
       #fffaf0 0%,
       #f2dcb0 18%,
       #d4b070 45%,
-      #8a7048 68%,
-      #e8c99a 100%);
+      #c9a56e 100%);
     filter:
-      drop-shadow(-2px -2px 0 rgba(255, 252, 245, 1))
-      drop-shadow(-1px -1px 0 rgba(232, 201, 154, 0.7))
-      drop-shadow(1px 1px 0 #2a2218)
-      drop-shadow(2px 2px 0 #14100c);
+      drop-shadow(-1px -2px 0 rgba(255, 252, 245, 1))
+      drop-shadow(0 -1px 0 rgba(232, 201, 154, 0.6))
+      drop-shadow(0.5px 0.5px 0 rgba(90, 70, 40, 0.28));
   }
   .lift-f .foil::before {
-    top: 3px;
-    left: 2px;
-    color: #0c0a08;
-    -webkit-text-fill-color: #0c0a08;
-    opacity: 0.95;
+    text-shadow:
+      1px 1px 0 #22180f,
+      2px 2px 0 #1a120c,
+      3px 3px 0 #100c08;
+  }
+  .lift-f .foil::after {
+    text-shadow:
+      4px 7px 10px rgba(0, 0, 0, 0.35),
+      10px 16px 24px rgba(0, 0, 0, 0.42);
   }
 
   .foot {
@@ -361,165 +417,165 @@
 </aside>
 
 <div class="see-me" role="status">
-  <strong>A · B · C · D · E · F — embossed letter faces</strong>
-  3D is in the foil bevel — not floor shadows · type stays legible · click one
+  <strong>A · B · C · D · E · F — raised off the photo</strong>
+  not emboss · thin side wall + floor cast = air under the foil · click one
 </div>
 
 <header class="hero">
-  <h1>title lift · embossed foil</h1>
-  <p>Raised metal on the letter itself: catch-light + shade + thin carve. No thick walls. No soft puddles under the word.</p>
+  <h1>title lift · raised</h1>
+  <p>B and C were closest — these actually lift the champagne type off the photo. Thin wall only. Soft cast on the surface. Face stays readable.</p>
   <p class="rule">section titles stay clamp(22px → 34px) · click one to pick</p>
   <p class="picked" id="picked"></p>
 </header>
 
 <nav class="jump" aria-label="jump to option">
-  <a href="#a">A live</a>
-  <a href="#b">B bright rim</a>
-  <a href="#c">C diagonal</a>
-  <a href="#d">D deeper carve</a>
-  <a href="#e">E high contrast</a>
-  <a href="#f">F max emboss</a>
+  <a href="#a">A slight</a>
+  <a href="#b">B raised</a>
+  <a href="#c">C raised+</a>
+  <a href="#d">D higher</a>
+  <a href="#e">E float</a>
+  <a href="#f">F max</a>
 </nav>
 
 <div class="gallery">
 
-  <article class="opt lift-a" id="a" data-pick="A · live now" tabindex="0">
+  <article class="opt lift-a" id="a" data-pick="A · slight raise" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">A</div>
-        <div class="name">live now</div>
-        <div class="blurb">today’s board recipe — top highlight + 2px hard step</div>
+        <div class="name">slight raise</div>
+        <div class="blurb">B’s bright rim + a little air under the word</div>
       </div>
-      <span class="tag">baseline</span>
+      <span class="tag">low</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-earn-hands.jpg?v=earn39')">
-        <h3 class="foil" data-carve="I am earning">I am earning</h3>
+        <h3 class="foil" data-lift="I am earning">I am earning</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-athletic-gym.jpg?v=gym1')">
-        <h3 class="foil" data-carve="I am training">I am training</h3>
+        <h3 class="foil" data-lift="I am training">I am training</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-challenges-maze.jpg?v=chal15')">
-        <h3 class="foil" data-carve="challenges">challenges</h3>
+        <h3 class="foil" data-lift="challenges">challenges</h3>
       </div>
     </div>
   </article>
 
-  <article class="opt lift-b" id="b" data-pick="B · bright rim" tabindex="0">
+  <article class="opt lift-b" id="b" data-pick="B · raised" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">B</div>
-        <div class="name">bright rim</div>
-        <div class="blurb">stronger top catch-light — still the live hard step</div>
+        <div class="name">raised</div>
+        <div class="blurb">your closest pick — now with real air under the face</div>
       </div>
-      <span class="tag">rim</span>
+      <span class="tag">raised</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-earn-hands.jpg?v=earn39')">
-        <h3 class="foil" data-carve="I am earning">I am earning</h3>
+        <h3 class="foil" data-lift="I am earning">I am earning</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-athletic-gym.jpg?v=gym1')">
-        <h3 class="foil" data-carve="I am training">I am training</h3>
+        <h3 class="foil" data-lift="I am training">I am training</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-challenges-maze.jpg?v=chal15')">
-        <h3 class="foil" data-carve="challenges">challenges</h3>
+        <h3 class="foil" data-lift="challenges">challenges</h3>
       </div>
     </div>
   </article>
 
-  <article class="opt lift-c" id="c" data-pick="C · diagonal emboss" tabindex="0">
+  <article class="opt lift-c" id="c" data-pick="C · raised+" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">C</div>
-        <div class="name">diagonal emboss</div>
-        <div class="blurb">NW light / SE shade — the face itself reads raised</div>
+        <div class="name">raised+</div>
+        <div class="blurb">your other closest — diagonal light + more lift</div>
       </div>
-      <span class="tag">bevel</span>
+      <span class="tag">raised+</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-wins-hand.jpg?v=game13')">
-        <h3 class="foil" data-carve="I am winning">I am winning</h3>
+        <h3 class="foil" data-lift="I am winning">I am winning</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-start-over-positano.jpg?v=travel1')">
-        <h3 class="foil" data-carve="I am traveling">I am traveling</h3>
+        <h3 class="foil" data-lift="I am traveling">I am traveling</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-networking.jpg?v=net1')">
-        <h3 class="foil" data-carve="I am networking">I am networking</h3>
+        <h3 class="foil" data-lift="I am networking">I am networking</h3>
       </div>
     </div>
   </article>
 
-  <article class="opt lift-d" id="d" data-pick="D · deeper carve" tabindex="0">
+  <article class="opt lift-d" id="d" data-pick="D · higher" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">D</div>
-        <div class="name">deeper carve</div>
-        <div class="blurb">one more hard step + thicker die under the face</div>
+        <div class="name">higher</div>
+        <div class="blurb">more air · longer floor cast · still thin wall</div>
       </div>
-      <span class="tag">carve</span>
+      <span class="tag">higher</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-wins-hand.jpg?v=game13')">
-        <h3 class="foil" data-carve="I am winning">I am winning</h3>
+        <h3 class="foil" data-lift="I am winning">I am winning</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-start-over-positano.jpg?v=travel1')">
-        <h3 class="foil" data-carve="I am traveling">I am traveling</h3>
+        <h3 class="foil" data-lift="I am traveling">I am traveling</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-networking.jpg?v=net1')">
-        <h3 class="foil" data-carve="I am networking">I am networking</h3>
+        <h3 class="foil" data-lift="I am networking">I am networking</h3>
       </div>
     </div>
   </article>
 
-  <article class="opt lift-e" id="e" data-pick="E · high contrast" tabindex="0">
+  <article class="opt lift-e" id="e" data-pick="E · float" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">E</div>
-        <div class="name">high contrast</div>
-        <div class="blurb">brighter foil face + harder bevel — still thin, still readable</div>
+        <div class="name">float</div>
+        <div class="blurb">softer, higher cast — floating champagne</div>
       </div>
-      <span class="tag">contrast</span>
+      <span class="tag">float</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-god-conscious.jpg?v=remembrance1')">
-        <h3 class="foil" data-carve="Ibadah">Ibadah</h3>
+        <h3 class="foil" data-lift="Ibadah">Ibadah</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-grad-student.jpg?v=grad4')">
-        <h3 class="foil" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3>
+        <h3 class="foil" data-lift="I am pursuing my Ph.D">I am pursuing my Ph.D</h3>
       </div>
-      <div class="tile" style="background-image:url('manus-storage/zone-adhd-gold-threads.jpg?v=adhd6')">
-        <h3 class="foil" data-carve="ADHD">ADHD</h3>
+      <div class="tile" style="background-image:url('manus-storage/zone-adhd-calacatta-threads.jpg?v=adhd8')">
+        <h3 class="foil" data-lift="ADHD">ADHD</h3>
       </div>
     </div>
   </article>
 
-  <article class="opt lift-f" id="f" data-pick="F · max emboss" tabindex="0">
+  <article class="opt lift-f" id="f" data-pick="F · max raise" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">F</div>
-        <div class="name">max emboss</div>
-        <div class="blurb">strongest diagonal bevel + carve — counters stay open</div>
+        <div class="name">max raise</div>
+        <div class="blurb">most air under the type — counters still open</div>
       </div>
       <span class="tag">max</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-god-conscious.jpg?v=remembrance1')">
-        <h3 class="foil" data-carve="Ibadah">Ibadah</h3>
+        <h3 class="foil" data-lift="Ibadah">Ibadah</h3>
       </div>
       <div class="tile" style="background-image:url('manus-storage/zone-grad-student.jpg?v=grad4')">
-        <h3 class="foil" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</h3>
+        <h3 class="foil" data-lift="I am pursuing my Ph.D">I am pursuing my Ph.D</h3>
       </div>
-      <div class="tile" style="background-image:url('manus-storage/zone-adhd-gold-threads.jpg?v=adhd6')">
-        <h3 class="foil" data-carve="ADHD">ADHD</h3>
+      <div class="tile" style="background-image:url('manus-storage/zone-adhd-calacatta-threads.jpg?v=adhd8')">
+        <h3 class="foil" data-lift="ADHD">ADHD</h3>
       </div>
     </div>
   </article>
 
 </div>
 
-<p class="foot">pick the emboss that reads as raised foil — I’ll wire it to Sep 23 forward.</p>
+<p class="foot">pick the raise that sits off the photo — I’ll wire it to Sep 23 forward.</p>
 
-<script src="nav-shared.js?v=titlelift5"></script>
+<script src="nav-shared.js?v=titlelift6"></script>
 <script>
 (function(){
   var picked = document.getElementById('picked');
