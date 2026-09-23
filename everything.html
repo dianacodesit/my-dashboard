@@ -62104,19 +62104,12 @@ html body .day-block.overview-era-day.today-block.fmt22 .day-card {
   margin: 0 !important;
   overflow: visible !important;
 }
-/* Section × sits ABOVE the outer corner — photo still clips via .vision-tile-photo. */
-html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-hero > .vision-tile {
-  overflow: visible !important;
-}
-html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo {
-  border-radius: inherit !important;
-  overflow: hidden !important;
-}
+/* Section × on the outer corner (inside the kiss — outside gets buried by neighbors). */
 html body .day-block.overview-era-day .vision-tile-del,
 html body .day-block.overview-era-day .vision-card-del {
   position: absolute !important;
-  top: -9px !important;
-  right: -9px !important;
+  top: 2px !important;
+  right: 2px !important;
   width: 28px !important;
   height: 28px !important;
   margin: 0 !important;
@@ -65250,20 +65243,19 @@ html body .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
 </style>
 
 <style id="day-card-del-css-v5">
-/* Day × is a sibling of .day-card (not inside it) so backdrop-filter
-   + border-radius cannot clip it. Sits ABOVE the outer corner. */
+/* Day × on the glass corner — inside the card so overflow:clip cannot erase it.
+   layout · carry · + stay slightly inset. */
 html body .day-block {
   position: relative !important;
-  overflow: visible !important;
 }
 html body .day-block > .day-card {
   position: relative;
-  overflow: visible !important;
 }
-html body .day-block > .day-card-del {
+html body .day-block > .day-card-del,
+html body .day-block > .day-card > .day-card-del {
   position: absolute !important;
-  top: -10px !important;
-  right: -10px !important;
+  top: 4px !important;
+  right: 4px !important;
   left: auto !important;
   bottom: auto !important;
   z-index: 200 !important;
@@ -65297,9 +65289,10 @@ html body .day-block:not(.collapsed) > .day-card .overview-right-tools {
 html body .day-block:not(.collapsed) > .day-card .overview-right-tools > .overview-add-section {
   margin-right: 0 !important;
 }
-html body .day-block.collapsed > .day-card-del {
-  top: -8px !important;
-  right: -8px !important;
+html body .day-block.collapsed > .day-card-del,
+html body .day-block.collapsed > .day-card > .day-card-del {
+  top: 2px !important;
+  right: 2px !important;
   width: 20px !important;
   height: 20px !important;
   font-size: 14px !important;
@@ -65307,21 +65300,28 @@ html body .day-block.collapsed > .day-card-del {
   color: rgba(94, 83, 64, 0.75);
 }
 html body .day-block:hover > .day-card-del,
+html body .day-block:hover > .day-card > .day-card-del,
 html body .day-block > .day-card-del:focus,
-html body .day-block > .day-card-del:hover {
+html body .day-block > .day-card-del:hover,
+html body .day-block > .day-card > .day-card-del:focus,
+html body .day-block > .day-card > .day-card-del:hover {
   opacity: 1;
   background: rgba(44, 40, 31, 0.22) !important;
   color: rgba(44, 40, 31, 0.95);
 }
-html body .day-block.day-fullpage-active > .day-card-del {
-  top: -10px !important;
-  right: -10px !important;
+html body .day-block.day-fullpage-active > .day-card-del,
+html body .day-block.day-fullpage-active > .day-card > .day-card-del {
+  top: 4px !important;
+  right: 4px !important;
 }
-html body .day-block.today-block > .day-card-del {
+html body .day-block.today-block > .day-card-del,
+html body .day-block.today-block > .day-card > .day-card-del {
   color: rgba(255, 248, 238, 0.7);
 }
 html body .day-block.today-block:hover > .day-card-del,
-html body .day-block.today-block > .day-card-del:hover {
+html body .day-block.today-block:hover > .day-card > .day-card-del,
+html body .day-block.today-block > .day-card-del:hover,
+html body .day-block.today-block > .day-card > .day-card-del:hover {
   background: rgba(0, 0, 0, 0.4) !important;
   color: rgba(255, 248, 238, 0.98);
 }
@@ -74726,25 +74726,37 @@ html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-he
 </style>
 
 <style id="tile-del-above-corner-v1">
-/* Section × above the outer corner — never clipped under the kiss radius. */
+/* Section × ON the outer corner — inside the tile so kiss-neighbors / header
+   cannot bury it. Photo keeps overflow:hidden on the tile (rounded kiss). */
 html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-hero > .vision-tile,
 html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-hero > .vision-tile,
 html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-hero.vision-hero-dashmosaic > .vision-tile,
 html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-hero > .vision-tile {
-  overflow: visible !important;
-}
-html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo,
-html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo,
-html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-hero > .vision-tile > .vision-tile-photo {
-  border-radius: inherit !important;
   overflow: hidden !important;
 }
 html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del,
 html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del,
 html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del {
-  top: -9px !important;
-  right: -9px !important;
+  top: 2px !important;
+  right: 2px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 28px !important;
+  height: 28px !important;
   z-index: 130 !important;
+  opacity: 0 !important;
+  pointer-events: auto !important;
+  color: rgba(255, 248, 238, 0.95) !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65) !important;
+}
+html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile:hover > .vision-tile-del,
+html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-tile:hover > .vision-tile-del,
+html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-tile:hover > .vision-tile-del,
+html body .day-block.overview-era-day .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del:hover,
+html body .day-block.force-tight-magnet .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del:hover,
+html body .day-block.vision-collage-gap .vision-board:not(.is-zoomed) .vision-tile > .vision-tile-del:hover {
+  opacity: 1 !important;
+  background: rgba(16, 11, 8, 0.5) !important;
 }
 </style>
 
