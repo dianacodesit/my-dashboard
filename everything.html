@@ -62107,8 +62107,8 @@ html body .day-block.overview-era-day.today-block.fmt22 .day-card {
 html body .day-block.overview-era-day .vision-tile-del,
 html body .day-block.overview-era-day .vision-card-del {
   position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
+  top: 0 !important;
+  right: 0 !important;
   width: 28px !important;
   height: 28px !important;
   margin: 0 !important;
@@ -65241,64 +65241,76 @@ html body .vision-board.is-zoomed .vision-zoom-out:not([hidden]) {
 }
 </style>
 
-<style id="day-card-del-css-v2">
-/* Hover × on day cards — tuck into the card corner so it never covers carry/+. */
+<style id="day-card-del-css-v3">
+/* Day-card hover × sits on the true outer corner (overlay).
+   layout · carry · + go flush to the right — no reserved gap for the ×. */
 html body .day-block > .day-card {
   position: relative;
 }
 html body .day-block > .day-card > .day-card-del {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  z-index: 40;
-  width: 22px;
-  height: 22px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 80 !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 10px 0 10px !important; /* kiss the card's top-right radius */
+  background: transparent !important;
   color: rgba(94, 83, 64, 0.78);
-  font-family: Arial, sans-serif;
-  font-size: 15px;
-  line-height: 22px;
-  text-align: center;
-  cursor: pointer;
+  font-family: Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  text-align: center !important;
+  cursor: pointer !important;
   opacity: 0;
-  pointer-events: auto;
+  pointer-events: auto !important;
+  transform: none !important;
   transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
-/* Keep layout · carry · + clear of the corner × */
+/* Flush to the card edge — no padding-right buffer */
+html body .day-block:not(.collapsed) > .day-card .day-card-header.day-header-chrome,
+html body .day-block:not(.collapsed) > .day-card .day-card-header {
+  padding-right: 0 !important;
+}
 html body .day-block:not(.collapsed) > .day-card .overview-right-tools {
-  padding-right: 26px !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
   box-sizing: border-box !important;
 }
+html body .day-block:not(.collapsed) > .day-card .overview-right-tools > .overview-add-section {
+  margin-right: 2px !important; /* hairline from the glass rim only */
+}
 html body .day-block.collapsed > .day-card > .day-card-del {
-  top: 1px;
-  right: 1px;
-  width: 20px;
-  height: 20px;
-  font-size: 14px;
-  line-height: 20px;
+  top: 0 !important;
+  right: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 13px !important;
+  line-height: 18px !important;
   color: rgba(94, 83, 64, 0.7);
 }
 html body .day-block:hover > .day-card > .day-card-del,
 html body .day-block > .day-card > .day-card-del:focus,
 html body .day-block > .day-card > .day-card-del:hover {
   opacity: 1;
-  background: rgba(44, 40, 31, 0.12);
-  color: rgba(44, 40, 31, 0.92);
+  background: rgba(44, 40, 31, 0.18) !important;
+  color: rgba(44, 40, 31, 0.95);
 }
 html body .day-block.day-fullpage-active > .day-card > .day-card-del {
-  top: 8px;
-  right: 8px;
+  top: 0 !important;
+  right: 0 !important;
 }
 html body .day-block.today-block > .day-card > .day-card-del {
   color: rgba(255, 248, 238, 0.55);
 }
 html body .day-block.today-block:hover > .day-card > .day-card-del,
 html body .day-block.today-block > .day-card > .day-card-del:hover {
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.35) !important;
   color: rgba(255, 248, 238, 0.95);
 }
 </style>
@@ -73302,7 +73314,7 @@ html body .day-block.fmt22:not(.collapsed):not(.day-fullpage-active) .day-card-h
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header,
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header.day-header-chrome {
   padding-left: 12px !important;
-  padding-right: 16px !important;
+  padding-right: 0 !important; /* + sits on the rim; day × overlays the corner */
 }
 html body .day-block.overview-era-day:not(.collapsed):not(.day-fullpage-active) .day-card-header.day-header-chrome > .overview-center-stack {
   flex-direction: row !important;
