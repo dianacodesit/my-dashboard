@@ -197,7 +197,8 @@
     pointer-events: none;
   }
 
-  /* Shared foil type — size locked. Only lift recipe changes. */
+  /* Shared foil type — size locked. Only HARD emboss bevel changes.
+     Soft/blurred drop-shadows are banned here — those read as “heavy shadow”, not lift. */
   .foil {
     position: absolute;
     left: 50%;
@@ -215,21 +216,22 @@
     line-height: 1.12;
     font-size: clamp(22px, 2.6vw, 34px);
     background-image: linear-gradient(185deg,
-      #e8d4b0 0%,
-      #d4b888 16%,
-      #c4a882 36%,
-      #8f7858 54%,
-      #b89568 72%,
-      #d8c49a 100%);
+      #f4e6c8 0%,
+      #e8d09a 16%,
+      #d4b070 36%,
+      #a89060 54%,
+      #c9a56e 72%,
+      #ead8b0 100%);
     background-size: 100% 100%;
     -webkit-background-clip: text;
     background-clip: text;
-    color: #c4a882;
+    color: #d4b070;
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: 0;
     paint-order: fill;
     isolation: isolate;
     pointer-events: none;
+    text-shadow: none;
   }
   .foil::before {
     content: attr(data-carve);
@@ -254,7 +256,7 @@
     z-index: -1;
   }
 
-  /* A — now (live baseline) */
+  /* A — now (live) — hard top highlight + 2px dark step */
   .lift-a .foil {
     filter:
       drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.55))
@@ -262,7 +264,7 @@
       drop-shadow(0 2px 0 #241c16);
   }
 
-  /* B — deeper stamp — extra bevel steps, same hard die feel */
+  /* B — deeper die — more hard bevel steps, larger carve */
   .lift-b .foil {
     filter:
       drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.7))
@@ -277,26 +279,24 @@
     opacity: 0.95;
   }
 
-  /* C — float — hard emboss + soft ambient shadow under the letter */
+  /* C — bright rim — stronger top light edge, same metal step */
   .lift-c .foil {
     filter:
-      drop-shadow(0 -1px 0 rgba(247, 239, 228, 0.58))
+      drop-shadow(0 -2px 0 rgba(255, 248, 238, 0.85))
+      drop-shadow(0 -1px 0 rgba(232, 201, 154, 0.55))
       drop-shadow(0 1px 0 #3a3228)
-      drop-shadow(0 2px 0 #241c16)
-      drop-shadow(0 6px 4px rgba(0, 0, 0, 0.45))
-      drop-shadow(0 14px 18px rgba(0, 0, 0, 0.38));
+      drop-shadow(0 2px 0 #241c16);
   }
 
-  /* D — coin press — thick underside + crisp top highlight */
+  /* D — tall relief — thicker hard stack under the letter (still 0 blur) */
   .lift-d .foil {
     filter:
-      drop-shadow(0 -2px 0 rgba(255, 248, 238, 0.65))
-      drop-shadow(0 -1px 0 rgba(232, 201, 154, 0.35))
+      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.65))
       drop-shadow(0 1px 0 #5a4a36)
       drop-shadow(0 2px 0 #3a3024)
       drop-shadow(0 3px 0 #241c14)
-      drop-shadow(0 5px 0 #14100c)
-      drop-shadow(0 7px 0 #0a0806);
+      drop-shadow(0 4px 0 #18120c)
+      drop-shadow(0 5px 0 #0c0a08);
   }
   .lift-d .foil::before {
     top: 4px;
@@ -306,31 +306,33 @@
     opacity: 1;
   }
 
-  /* E — champagne halo — soft foil glow + lifted shadow */
+  /* E — crisp stamp — tight 1px rim only (least shadow, most metal edge) */
   .lift-e .foil {
     filter:
-      drop-shadow(0 0 1px rgba(232, 201, 154, 0.55))
-      drop-shadow(0 0 10px rgba(201, 168, 114, 0.28))
-      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.6))
-      drop-shadow(0 1px 0 #3a3228)
-      drop-shadow(0 2px 0 #241c16)
-      drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
+      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.9))
+      drop-shadow(0 1px 0 #1a1410);
+  }
+  .lift-e .foil::before {
+    top: 1px;
+    left: 1px;
+    opacity: 0.85;
   }
 
-  /* F — wax seal — carved depth + soft float (most lifted) */
+  /* F — max emboss — deepest hard bevel + carve (still no soft shadow) */
   .lift-f .foil {
     filter:
-      drop-shadow(0 -1px 0 rgba(255, 248, 238, 0.72))
+      drop-shadow(0 -2px 0 rgba(255, 248, 238, 0.8))
+      drop-shadow(0 -1px 0 rgba(232, 201, 154, 0.45))
       drop-shadow(0 1px 0 #4a4034)
       drop-shadow(0 2px 0 #2e261e)
       drop-shadow(0 3px 0 #1a1410)
-      drop-shadow(0 5px 2px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 12px 16px rgba(0, 0, 0, 0.42))
-      drop-shadow(0 22px 28px rgba(0, 0, 0, 0.28));
+      drop-shadow(0 4px 0 #120e0a)
+      drop-shadow(0 5px 0 #0a0806)
+      drop-shadow(0 6px 0 #050403);
   }
   .lift-f .foil::before {
-    top: 3px;
-    left: 1.5px;
+    top: 4px;
+    left: 2px;
     opacity: 0.98;
   }
 
@@ -353,24 +355,24 @@
 </aside>
 
 <div class="see-me" role="status">
-  <strong>A · B · C · D · E · F — title lift mocks</strong>
-  six emboss depths on real collage tiles · scroll · click one
+  <strong>A · B · C · D · E · F — hard emboss only</strong>
+  no soft shadows · raised foil bevel / carve depth · click one
 </div>
 
 <header class="hero">
   <h1>title lift · emboss depth</h1>
-  <p>Same champagne foil, same size. Only how far the letters lift off the photo.</p>
+  <p>Same champagne foil, same size. Hard metal edge only — not a blurry drop shadow under the word.</p>
   <p class="rule">section titles stay clamp(22px → 34px) · click one to pick</p>
   <p class="picked" id="picked"></p>
 </header>
 
 <nav class="jump" aria-label="jump to option">
   <a href="#a">A now</a>
-  <a href="#b">B stamp</a>
-  <a href="#c">C float</a>
-  <a href="#d">D coin</a>
-  <a href="#e">E halo</a>
-  <a href="#f">F wax</a>
+  <a href="#b">B deeper</a>
+  <a href="#c">C bright rim</a>
+  <a href="#d">D tall relief</a>
+  <a href="#e">E crisp</a>
+  <a href="#f">F max</a>
 </nav>
 
 <div class="gallery">
@@ -419,14 +421,14 @@
     </div>
   </article>
 
-  <article class="opt lift-c" id="c" data-pick="C · float" tabindex="0">
+  <article class="opt lift-c" id="c" data-pick="C · bright rim" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">C</div>
-        <div class="name">float</div>
-        <div class="blurb">keep the stamp edge, add a soft ambient shadow so it sits above the photo</div>
+        <div class="name">bright rim</div>
+        <div class="blurb">stronger top light edge — same hard metal step, no soft shadow</div>
       </div>
-      <span class="tag">lift</span>
+      <span class="tag">highlight</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-wins-hand.jpg?v=game13')">
@@ -441,12 +443,12 @@
     </div>
   </article>
 
-  <article class="opt lift-d" id="d" data-pick="D · coin press" tabindex="0">
+  <article class="opt lift-d" id="d" data-pick="D · tall relief" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">D</div>
-        <div class="name">coin press</div>
-        <div class="blurb">thick underside stack + brighter top rim — minted champagne letter</div>
+        <div class="name">tall relief</div>
+        <div class="blurb">thicker hard stack under the letter — minted edge, still zero blur</div>
       </div>
       <span class="tag">relief</span>
     </div>
@@ -463,14 +465,14 @@
     </div>
   </article>
 
-  <article class="opt lift-e" id="e" data-pick="E · champagne halo" tabindex="0">
+  <article class="opt lift-e" id="e" data-pick="E · crisp stamp" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">E</div>
-        <div class="name">champagne halo</div>
-        <div class="blurb">soft foil glow around the word + lift shadow — luminous, still small</div>
+        <div class="name">crisp stamp</div>
+        <div class="blurb">tight 1px rim only — least weight, most metal edge</div>
       </div>
-      <span class="tag">glow lift</span>
+      <span class="tag">crisp</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-god-conscious.jpg?v=remembrance1')">
@@ -485,14 +487,14 @@
     </div>
   </article>
 
-  <article class="opt lift-f" id="f" data-pick="F · wax seal" tabindex="0">
+  <article class="opt lift-f" id="f" data-pick="F · max emboss" tabindex="0">
     <div class="opt-meta">
       <div class="left">
         <div class="letter">F</div>
-        <div class="name">wax seal</div>
-        <div class="blurb">deep carve + long soft float — most lifted without growing the type</div>
+        <div class="name">max emboss</div>
+        <div class="blurb">deepest hard bevel + carve — most lifted without any soft shadow</div>
       </div>
-      <span class="tag">most lift</span>
+      <span class="tag">max</span>
     </div>
     <div class="mini-board">
       <div class="tile" style="background-image:url('manus-storage/zone-god-conscious.jpg?v=remembrance1')">
@@ -509,9 +511,9 @@
 
 </div>
 
-<p class="foot">pick the lift that reads on dark photos and light ones — I’ll wire it to Sep 23 forward.</p>
+<p class="foot">pick the hard emboss that reads as raised foil — I’ll wire it to Sep 23 forward.</p>
 
-<script src="nav-shared.js?v=titlelift2"></script>
+<script src="nav-shared.js?v=titlelift3"></script>
 <script>
 (function(){
   var picked = document.getElementById('picked');
