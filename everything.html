@@ -50186,6 +50186,7 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
     return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
   }
   function subsectionPresets(blk, tile){
+    /* Same pattern as cardPresets / taskPresets: section-scoped seeds for this tile only. */
     var already = {};
     if(tile){
       [].slice.call(tile.querySelectorAll('.vision-subsection-title')).forEach(function(el){
@@ -50216,7 +50217,7 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
       'worshipping allah': DEEN, 'i am worshipping allah': DEEN,
       centered: CENTERED, 'inner-self': CENTERED, 'inner self': CENTERED
     };
-    var seed = SUB_SEED_BY_SECTION[section] || SUB_SEED_BY_SECTION[focus] || SUB_SEED_BY_SECTION[bare] || [];
+    var SUB_SEED = SUB_SEED_BY_SECTION[section] || SUB_SEED_BY_SECTION[focus] || SUB_SEED_BY_SECTION[bare] || [];
     var seen = {}, out = [];
     function push(raw){
       var name = String(raw || '').replace(/\s+/g, ' ').trim();
@@ -50227,26 +50228,7 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
       seen[low] = 1;
       out.push(name);
     }
-    seed.forEach(push);
-    /* Also offer subsections already used on matching sections across the board. */
-    try {
-      document.querySelectorAll('.day-block .vision-tile').forEach(function(t){
-        if(t === tile) return;
-        var f = (t.getAttribute('data-focus') || '').toLowerCase();
-        var tit = ((t.querySelector('.vision-tile-title') || {}).textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-        var tb = tit.replace(/^i am\s+/i, '').replace(/^to\s+/i, '').trim();
-        var match = (f && (f === focus || SUB_SEED_BY_SECTION[f] === seed && seed.length)) ||
-          (tit && (tit === section || tb === bare));
-        if(!match && seed.length){
-          var otherSeed = SUB_SEED_BY_SECTION[tit] || SUB_SEED_BY_SECTION[f] || SUB_SEED_BY_SECTION[tb];
-          match = !!(otherSeed && otherSeed === seed);
-        }
-        if(!match) return;
-        [].slice.call(t.querySelectorAll('.vision-subsection-title')).forEach(function(el){
-          push(el.textContent);
-        });
-      });
-    } catch(eHarv){}
+    SUB_SEED.forEach(push);
     return out.sort(function(a, b){ return a.localeCompare(b, undefined, {sensitivity:'base'}); });
   }
   function appendPresetPicker(box, label, picks, onPick, formatName){
@@ -58006,7 +57988,8 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
       : (btn && btn.closest ? btn.closest('.vision-tile') : null);
     if(!tile) return;
     var blk = tileDayBlock(tile);
-    if(!blk) return;
+    var vb = tile.closest('.vision-board');
+    if(!vb || !blk) return;
     closeTileAddMenus();
     document.querySelectorAll('.overview-card-modal, .overview-card-picker').forEach(function(p){ closePicker(p); });
     var modal = document.createElement('div');
@@ -58031,13 +58014,13 @@ PHOTO_AR['zone-wins-hand.jpg'] = 864 / 1152;
     head.textContent = 'add a subsection';
     box.appendChild(head);
     modal.appendChild(box);
+    /* Same mount as card/task pickers — never inside .vision-board. */
     mountDayModal(blk, modal);
-    var picks = [];
-    try { picks = subsectionPresets(blk, tile) || []; } catch(eSubP){ picks = []; }
+    var picks = subsectionPresets(blk, tile);
     appendPresetPicker(box, picks.length ? 'choose a preset' : 'no presets yet — type a name', picks, function(name){
       addSubsection(tile, name, true);
       closePicker(modal);
-    }, function(name){ return name; });
+    });
     appendCustomRow(box, 'custom subsection name', function(name){
       addSubsection(tile, name, true);
       closePicker(modal);
