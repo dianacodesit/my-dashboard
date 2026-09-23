@@ -604,10 +604,10 @@ body.editing .add-task-here-btn { display: block; }
   .day-block.collapsed .day-card .day-tasks { display: none; }
   .day-block.collapsed .day-card .day-note { display: none; }
   .day-block.collapsed .day-dot { background: var(--cream); }
-  .day-block.collapsed .day-card-header { border-bottom: none; padding-left: 0; padding-right: 0; justify-content: space-between; text-shadow: none; }
+  .day-block.collapsed .day-card-header { border-bottom: none; padding-left: 0; padding-right: 0; justify-content: flex-start; text-shadow: none; }
   .day-block.collapsed .day-title { display: none; }
   .day-block.collapsed .day-badge { display: none; }
-  .day-block.collapsed .day-count { margin-left: auto; }
+  .day-block.collapsed .day-count { margin-left: 10px; }
 
   /* Expandable tasks: chevron sits below task on its own row; extras appear to the right of chevron when expanded */
   .day-task-item.expandable { flex-wrap: wrap; }
@@ -1777,9 +1777,9 @@ body.editing .add-task-here-btn { display: block; }
     margin-left: auto !important;
   }
 
-  /* Ensure count badge is right-aligned on regular (non-today/featured) day cards */
+  /* Count badge sits just right of the date — never stretch across the viewport */
   .day-block:not(.today-block):not(.featured-block) .day-count {
-    margin-left: auto;
+    margin-left: 10px;
   }
 
   /* X-mark = cancelled style: X glyph but no strikethrough or fading */
@@ -61592,7 +61592,7 @@ html body .day-block.collapsed .day-card-header > .day-count {
   align-items: center !important;
   justify-content: center !important;
   position: relative !important;
-  margin-left: auto !important;
+  margin-left: 10px !important;
   margin-right: 0 !important;
   padding: 0 !important;
   min-width: 0 !important;
@@ -74814,18 +74814,21 @@ html body .day-block.collapsed.overview-era-day .day-card-header > .day-count {
 </style>
 
 <style id="day-count-all-collapsed-v1">
-/* Open-task badges on EVERY collapsed day — including pre-Aug 20 flow/agenda days */
+/* Open-task badges on EVERY collapsed day — including pre-Aug 20 flow/agenda days.
+   Sit beside the date (same row), not at the far right of a full-width card. */
 html body .day-block.collapsed .day-card-header {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  gap: 8px !important;
+  gap: 10px !important;
+  width: fit-content !important;
+  max-width: 100% !important;
 }
 html body .day-block.collapsed .day-card-header > .day-count {
   display: inline-flex !important;
   visibility: visible !important;
   opacity: 1 !important;
-  margin-left: auto !important;
+  margin-left: 0 !important;
   padding: 0 !important;
   min-width: 0 !important;
   border: 0 !important;
@@ -74845,6 +74848,10 @@ html body .day-block.collapsed .day-card-header > .day-count {
     0 2px 8px rgba(20, 12, 6, 0.3) !important;
   pointer-events: none !important;
   flex: 0 0 auto !important;
+}
+html body .day-block.collapsed > .day-card {
+  width: fit-content !important;
+  max-width: 100% !important;
 }
 </style>
 
