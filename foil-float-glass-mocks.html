@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>foil float · elevated titles</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=floatglass2"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.62), rgba(8,6,5,0.94)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #100c0a;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 780px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.08rem;
+    line-height: 1.45;
+    color: rgba(247,239,228,0.68);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.78);
+  }
+  .picked {
+    display: none;
+    margin: 14px auto 0;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  /* —— NOW reference: flat foil stuck to the photo —— */
+  .now-wrap {
+    max-width: 720px;
+    margin: 28px auto 8px;
+  }
+  .now-label {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .now-stage {
+    position: relative;
+    height: 220px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: url("manus-storage/zone-earn-hands.jpg?v=earn39") center / cover no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(232,201,154,0.25), 0 12px 32px rgba(0,0,0,0.45);
+  }
+  .now-stage .foil {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  .now-tag {
+    position: absolute;
+    left: 12px; top: 12px;
+    z-index: 3;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.55);
+    color: rgba(247,239,228,0.7);
+    border: 1px solid rgba(255,248,238,0.15);
+  }
+
+  .jump {
+    position: sticky; top: 10px; z-index: 40;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+    margin: 28px auto 20px; max-width: 1100px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover, .jump a.on { color: #e8c99a; border-color: rgba(232,201,154,0.45); }
+
+  .grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 980px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  .panel {
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.55);
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.95);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.45), 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .panel-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    padding: 16px 18px 2px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.3rem;
+    color: rgba(255,248,238,0.95);
+  }
+  .panel-head .letter em { font-style: normal; color: #e8c99a; margin-right: 8px; }
+  .panel-head .diff {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.7);
+    text-align: right;
+    max-width: 46%;
+    line-height: 1.35;
+  }
+  .panel-desc {
+    padding: 4px 18px 12px;
+    font-style: italic;
+    font-size: 0.98rem;
+    color: rgba(247,239,228,0.58);
+    line-height: 1.4;
+  }
+
+  .stage {
+    position: relative;
+    margin: 0 14px 14px;
+    height: 340px;
+    border-radius: 14px;
+    /* overflow visible so lift + shadow can read outside the photo plane */
+    overflow: visible;
+    isolation: isolate;
+    background: url("manus-storage/zone-earn-hands.jpg?v=earn39") center / cover no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(232,201,154,0.22), 0 14px 36px rgba(0,0,0,0.42);
+  }
+  .stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    /* clip photo only — title/shadow can sit above */
+    overflow: hidden;
+  }
+  .stage-tag {
+    position: absolute;
+    left: 12px; top: 12px;
+    z-index: 8;
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.55);
+    color: #e8c99a;
+    border: 1px solid rgba(232,201,154,0.35);
+  }
+
+  /* Gold foil — same size as live board (small titles) */
+  .foil {
+    width: max-content;
+    max-width: 90%;
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(22px, 2.6vw, 34px);
+    letter-spacing: 0.03em;
+    line-height: 1.12;
+    background-image: linear-gradient(185deg, #f4e6c8, #e8d09a 22%, #d4b070 42%, #a89060 56%, #c9a56e 76%, #ead8b0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .pick-row { padding: 0 18px 18px; }
+  .pick-row button {
+    width: 100%;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(232,201,154,0.4);
+    background: rgba(232,201,154,0.12);
+    color: #e8c99a;
+    cursor: pointer;
+  }
+  .pick-row button:hover { background: rgba(232,201,154,0.22); }
+
+  /* ========== A · HOVER ONLY ==========
+     Word up in the air. Contact shadow stays on the photo. No glass. */
+  .a-shadow {
+    position: absolute;
+    left: 50%; top: 58%;
+    z-index: 2;
+    width: 56%; height: 36px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 42%, transparent 72%);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+  .a-foil {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 6;
+    transform: translate(-50%, calc(-50% - 72px));
+    filter:
+      drop-shadow(0 28px 18px rgba(0,0,0,0.55))
+      drop-shadow(0 8px 6px rgba(0,0,0,0.4))
+      brightness(1.12);
+    text-shadow:
+      -1px -1px 0 rgba(255,252,245,0.55),
+      1px 2px 0 rgba(30,20,12,0.65);
+  }
+
+  /* ========== B · GOLD LEDGE ==========
+     Thin champagne shelf under the title; shelf casts onto the photo. */
+  .b-ledge {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 5;
+    transform: translate(-50%, calc(-50% - 48px));
+    width: max-content;
+    max-width: 92%;
+    padding: 0 8px 10px;
+    pointer-events: none;
+  }
+  .b-ledge .shelf {
+    display: block;
+    height: 7px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background:
+      linear-gradient(180deg, #f0e0c0 0%, #c9a56e 35%, #8a7048 70%, #5a4830 100%);
+    box-shadow:
+      0 1px 0 rgba(255,248,238,0.55) inset,
+      0 18px 28px rgba(0,0,0,0.55),
+      0 6px 10px rgba(0,0,0,0.4);
+  }
+  .b-foil {
+    position: relative;
+    left: auto; top: auto;
+    transform: none;
+    display: block;
+    margin: 0 auto;
+    filter: brightness(1.1);
+    text-shadow:
+      -1px -1px 0 rgba(255,252,245,0.5),
+      0 2px 0 rgba(40,28,16,0.5);
+  }
+  .b-ground {
+    position: absolute;
+    left: 50%; top: 62%;
+    z-index: 2;
+    width: 50%; height: 28px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(0,0,0,0.6), transparent 70%);
+    filter: blur(10px);
+    pointer-events: none;
+  }
+
+  /* ========== C · ACRYLIC BLOCK ==========
+     Rectangle sized to the title (not a pill). Thick glass edge. */
+  .c-block {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 5;
+    transform: translate(-50%, calc(-50% - 56px));
+    width: max-content;
+    max-width: 92%;
+    padding: 18px 28px 20px;
+    border-radius: 14px;
+    background:
+      linear-gradient(145deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.05) 42%, rgba(255,255,255,0.12) 100%);
+    border: 1.5px solid rgba(255,255,255,0.55);
+    box-shadow:
+      inset 0 2px 3px rgba(255,255,255,0.65),
+      inset 0 -4px 10px rgba(0,0,0,0.2),
+      0 40px 64px rgba(0,0,0,0.55),
+      0 14px 22px rgba(0,0,0,0.35);
+    backdrop-filter: blur(22px) saturate(1.45);
+    -webkit-backdrop-filter: blur(22px) saturate(1.45);
+    pointer-events: none;
+  }
+  .c-block .foil {
+    position: relative;
+    left: auto; top: auto;
+    transform: none;
+    display: block;
+  }
+  .c-ground {
+    position: absolute;
+    left: 50%; top: 64%;
+    z-index: 2;
+    width: 54%; height: 32px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(0,0,0,0.65), transparent 70%);
+    filter: blur(12px);
+    pointer-events: none;
+  }
+
+  /* ========== D · TWIN PLANE ==========
+     Faded title stuck on photo + bright title floating high. */
+  .d-stuck {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    opacity: 0.38;
+    filter: blur(0.4px) brightness(0.75);
+  }
+  .d-float {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 6;
+    transform: translate(-50%, calc(-50% - 78px));
+    filter:
+      drop-shadow(0 32px 20px rgba(0,0,0,0.6))
+      drop-shadow(0 10px 8px rgba(0,0,0,0.45))
+      brightness(1.15);
+    text-shadow:
+      -1px -1px 0 rgba(255,252,245,0.6),
+      1px 2px 0 rgba(30,20,12,0.7),
+      0 0 28px rgba(232,201,154,0.3);
+  }
+  .d-line {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 3;
+    width: 2px;
+    height: 62px;
+    transform: translate(-50%, calc(-100% - 8px));
+    background: linear-gradient(180deg, rgba(232,201,154,0.55), rgba(232,201,154,0.05));
+    pointer-events: none;
+  }
+
+  /* ========== E · SOFT HALO ==========
+     Soft glow cloud (no hard box). Title high. */
+  .e-halo {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 4;
+    transform: translate(-50%, calc(-50% - 64px));
+    width: min(78%, 340px);
+    height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255,248,238,0.28) 0%, rgba(255,248,238,0.08) 45%, transparent 70%);
+    filter: blur(14px);
+    pointer-events: none;
+  }
+  .e-foil {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 6;
+    transform: translate(-50%, calc(-50% - 64px));
+    filter:
+      drop-shadow(0 26px 18px rgba(0,0,0,0.55))
+      brightness(1.14);
+    text-shadow:
+      0 0 24px rgba(255,248,238,0.35),
+      -1px -1px 0 rgba(255,252,245,0.55),
+      1px 2px 0 rgba(30,20,12,0.6);
+  }
+  .e-ground {
+    position: absolute;
+    left: 50%; top: 60%;
+    z-index: 2;
+    width: 48%; height: 26px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(0,0,0,0.58), transparent 70%);
+    filter: blur(10px);
+    pointer-events: none;
+  }
+
+  /* ========== F · TILTED CARD ==========
+     Frosted card in real 3D tilt — reads as an object in space. */
+  .f-card {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 5;
+    transform: translate(-50%, calc(-50% - 52px)) perspective(700px) rotateX(18deg) rotateZ(-2deg);
+    width: max-content;
+    max-width: 92%;
+    padding: 20px 30px 22px;
+    border-radius: 16px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,0.32), rgba(255,255,255,0.06) 50%, rgba(20,12,8,0.2));
+    border: 1px solid rgba(255,255,255,0.45);
+    box-shadow:
+      inset 0 2px 2px rgba(255,255,255,0.5),
+      0 48px 70px rgba(0,0,0,0.58),
+      0 16px 28px rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    pointer-events: none;
+  }
+  .f-card .foil {
+    position: relative;
+    left: auto; top: auto;
+    transform: none;
+    display: block;
+  }
+  .f-ground {
+    position: absolute;
+    left: 50%; top: 66%;
+    z-index: 2;
+    width: 58%; height: 34px;
+    transform: translateX(-50%) skewX(-6deg);
+    background: radial-gradient(ellipse, rgba(0,0,0,0.62), transparent 70%);
+    filter: blur(12px);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>foil float · elevated titles</h1>
+  <p>Same title on every option. Top strip = how it looks <em>now</em> (flat on the photo). Each letter below is a different way to lift it off.</p>
+  <p class="rule">no random pills · title always fits · Sep 23+</p>
+  <p class="picked" id="picked">picked — say the letter in chat</p>
+</div>
+
+<div class="now-wrap">
+  <div class="now-label">now · flat foil stuck to the photo</div>
+  <div class="now-stage">
+    <span class="now-tag">now</span>
+    <div class="foil">money management</div>
+  </div>
+</div>
+
+<nav class="jump">
+  <a href="#a">A hover</a>
+  <a href="#b">B ledge</a>
+  <a href="#c">C acrylic</a>
+  <a href="#d">D twin</a>
+  <a href="#e">E halo</a>
+  <a href="#f">F tilt</a>
+</nav>
+
+<div class="grid">
+
+  <article class="panel" id="a" data-letter="A">
+    <div class="panel-head">
+      <span class="letter"><em>A</em> hover</span>
+      <span class="diff">word up · shadow on photo</span>
+    </div>
+    <p class="panel-desc">No glass. The title floats up; a dark contact shadow stays on the photo so you see the air gap.</p>
+    <div class="stage">
+      <span class="stage-tag">elevated</span>
+      <div class="a-shadow" aria-hidden="true"></div>
+      <div class="foil a-foil">money management</div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="A">pick A</button></div>
+  </article>
+
+  <article class="panel" id="b" data-letter="B">
+    <div class="panel-head">
+      <span class="letter"><em>B</em> gold ledge</span>
+      <span class="diff">shelf under the word</span>
+    </div>
+    <p class="panel-desc">A thin champagne ledge under the title — like the word is standing on a floating shelf.</p>
+    <div class="stage">
+      <span class="stage-tag">elevated</span>
+      <div class="b-ground" aria-hidden="true"></div>
+      <div class="b-ledge">
+        <div class="foil b-foil">money management</div>
+        <span class="shelf" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="B">pick B</button></div>
+  </article>
+
+  <article class="panel" id="c" data-letter="C">
+    <div class="panel-head">
+      <span class="letter"><em>C</em> acrylic</span>
+      <span class="diff">glass sized to the title</span>
+    </div>
+    <p class="panel-desc">Clear acrylic rectangle that grows with the words — not a pill that clips them.</p>
+    <div class="stage">
+      <span class="stage-tag">elevated</span>
+      <div class="c-ground" aria-hidden="true"></div>
+      <div class="c-block">
+        <div class="foil">money management</div>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="C">pick C</button></div>
+  </article>
+
+  <article class="panel" id="d" data-letter="D">
+    <div class="panel-head">
+      <span class="letter"><em>D</em> twin plane</span>
+      <span class="diff">stuck copy + floating copy</span>
+    </div>
+    <p class="panel-desc">Faded title stays on the photo. Bright foil floats high above it — two layers in space.</p>
+    <div class="stage">
+      <span class="stage-tag">elevated</span>
+      <div class="foil d-stuck" aria-hidden="true">money management</div>
+      <div class="d-line" aria-hidden="true"></div>
+      <div class="foil d-float">money management</div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="D">pick D</button></div>
+  </article>
+
+  <article class="panel" id="e" data-letter="E">
+    <div class="panel-head">
+      <span class="letter"><em>E</em> soft halo</span>
+      <span class="diff">glow · no hard box</span>
+    </div>
+    <p class="panel-desc">Soft light cloud behind the word — no hard edges, no pill. Title still sits high off the photo.</p>
+    <div class="stage">
+      <span class="stage-tag">elevated</span>
+      <div class="e-ground" aria-hidden="true"></div>
+      <div class="e-halo" aria-hidden="true"></div>
+      <div class="foil e-foil">money management</div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="E">pick E</button></div>
+  </article>
+
+  <article class="panel" id="f" data-letter="F">
+    <div class="panel-head">
+      <span class="letter"><em>F</em> tilt card</span>
+      <span class="diff">3D card in space</span>
+    </div>
+    <p class="panel-desc">Frosted card tilted toward you — reads as a real object floating in front of the photo.</p>
+    <div class="stage">
+      <span class="stage-tag">elevated</span>
+      <div class="f-ground" aria-hidden="true"></div>
+      <div class="f-card">
+        <div class="foil">money management</div>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button" data-pick="F">pick F</button></div>
+  </article>
+
+</div>
+
+<script src="nav-shared.js?v=floatglass2" defer></script>
+<script>
+(function(){
+  var picked = document.getElementById('picked');
+  document.querySelectorAll('[data-pick]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var letter = btn.getAttribute('data-pick');
+      document.querySelectorAll('.panel').forEach(function(p){
+        p.classList.toggle('is-picked', p.getAttribute('data-letter') === letter);
+      });
+      if(picked){
+        picked.textContent = 'picked ' + letter + ' — say that letter in chat to wire it live';
+        picked.classList.add('on');
+      }
+      try { history.replaceState(null, '', '?v=2&pick=' + letter); } catch(e){}
+    });
+  });
+  var q = new URLSearchParams(location.search).get('pick');
+  if(q){
+    var b = document.querySelector('[data-pick="'+q.toUpperCase()+'"]');
+    if(b) b.click();
+  }
+})();
+</script>
+</body>
+</html>

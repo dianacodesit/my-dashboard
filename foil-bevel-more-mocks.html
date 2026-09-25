@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>foil lift · more height</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500;1,700&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=bevelmore2"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.55), rgba(10,7,5,0.9)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 900px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+  }
+  .picked {
+    display: none;
+    margin: 14px auto 0;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky; top: 10px; z-index: 40;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+    margin: 20px auto 24px; max-width: 980px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover, .jump a.on { color: #e8c99a; border-color: rgba(232,201,154,0.45); }
+
+  .grid {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  @media (min-width: 960px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  .panel {
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.5);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .panel:hover {
+    border-color: rgba(232,201,154,0.45);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.85);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35), 0 22px 56px rgba(0,0,0,0.42);
+  }
+  .panel-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    padding: 14px 16px 4px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.25rem;
+    color: rgba(255,248,238,0.92);
+  }
+  .panel-head .letter em { font-style: normal; color: #e8c99a; margin-right: 8px; }
+  .panel-head .hint {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.42);
+  }
+  .panel-desc {
+    padding: 0 16px 10px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.52);
+    line-height: 1.4;
+  }
+
+  .stage {
+    position: relative;
+    margin: 0 12px 12px;
+    height: 300px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: center / cover no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(232,201,154,0.22), 0 10px 28px rgba(0,0,0,0.35);
+  }
+  .stage.ambition { background-image: url("manus-storage/zone-ambition-v4.jpg"); }
+  .stage.earn { background-image: url("manus-storage/zone-earn-hands.jpg"); }
+  .stage.wins { background-image: url("manus-storage/zone-wins-hand.jpg?v=game13"); }
+  .stage.phd { background-image: url("manus-storage/zone-grad-student.jpg?v=grad4"); }
+  .stage.projects { background-image: url("manus-storage/zone-projects-plans.jpg?v=proj5"); }
+  .stage.gym { background-image: url("manus-storage/zone-body-gym-wide-dark.jpg"); }
+  .stage.travel { background-image: url("manus-storage/pursuit-travel.jpg"); }
+
+  /*
+    Letter face stays G0 forever — same weight, same 1px bevel.
+    “More” = air under the foil (soft drop-shadow + rise). Never thicker stroke.
+  */
+  .foil-base {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 88%;
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(26px, 3.2vw, 36px);
+    background-image: linear-gradient(185deg, #f4e6c8, #e8d09a 20%, #d4b070 40%, #a89060 55%, #c9a56e 75%, #ead8b0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+    z-index: 4;
+    /* G0 bevel locked — do not thicken */
+    -webkit-text-stroke: 0.4px rgba(255,248,238,0.35);
+    text-shadow:
+      -1px -1px 0 rgba(255,252,245,0.55),
+      1px 1px 0 rgba(40,28,16,0.65);
+  }
+
+  .pick-row { padding: 0 16px 16px; }
+  .pick-row button {
+    width: 100%;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(232,201,154,0.35);
+    background: rgba(232,201,154,0.1);
+    color: #e8c99a;
+    cursor: pointer;
+  }
+  .pick-row button:hover { background: rgba(232,201,154,0.18); }
+
+  /* G0 · flush — no lift */
+  .g0 {
+    transform: translate(-50%, -50%);
+    filter: none;
+  }
+
+  /* G1 · slight float */
+  .g1 {
+    transform: translate(-50%, calc(-50% - 3px));
+    filter:
+      drop-shadow(0 3px 2px rgba(0,0,0,0.28))
+      drop-shadow(0 6px 10px rgba(0,0,0,0.32));
+  }
+
+  /* G2 · clear air */
+  .g2 {
+    transform: translate(-50%, calc(-50% - 6px));
+    filter:
+      drop-shadow(0 4px 3px rgba(0,0,0,0.3))
+      drop-shadow(0 10px 16px rgba(0,0,0,0.38));
+  }
+
+  /* G3 · hovering */
+  .g3 {
+    transform: translate(-50%, calc(-50% - 10px));
+    filter:
+      drop-shadow(0 5px 3px rgba(0,0,0,0.28))
+      drop-shadow(0 14px 22px rgba(0,0,0,0.42));
+  }
+
+  /* G4 · high lift */
+  .g4 {
+    transform: translate(-50%, calc(-50% - 14px));
+    filter:
+      drop-shadow(0 6px 4px rgba(0,0,0,0.28))
+      drop-shadow(0 18px 28px rgba(0,0,0,0.45))
+      drop-shadow(0 2px 0 rgba(255,248,238,0.08));
+  }
+
+  /* G5 · floating far */
+  .g5 {
+    transform: translate(-50%, calc(-50% - 18px));
+    filter:
+      drop-shadow(0 8px 5px rgba(0,0,0,0.3))
+      drop-shadow(0 22px 34px rgba(0,0,0,0.5))
+      drop-shadow(0 36px 48px rgba(0,0,0,0.28));
+  }
+
+  /* G6 · max height off the photo */
+  .g6 {
+    transform: translate(-50%, calc(-50% - 24px));
+    filter:
+      drop-shadow(0 10px 6px rgba(0,0,0,0.32))
+      drop-shadow(0 26px 40px rgba(0,0,0,0.55))
+      drop-shadow(0 44px 60px rgba(0,0,0,0.32));
+  }
+</style>
+</head>
+<body>
+<button type="button" id="hamburger-menu" aria-label="open menu"><span></span><span></span><span></span></button>
+<div id="nav-overlay"></div>
+<div id="nav-sidebar-host"></div>
+<script src="nav-shared.js?v=bevelmore2" defer></script>
+
+<header class="hero">
+  <h1>foil lift · more height</h1>
+  <p>Same thin G0 letter. “More” means higher off the photo — soft shadow + rise. Not a thicker stroke.</p>
+  <div class="rule">G0 = flat · G1–G6 = more lift (air under the foil)</div>
+  <div class="picked" id="picked">picked · —</div>
+</header>
+
+<nav class="jump">
+  <a href="#g0">G0</a>
+  <a href="#g1">G1</a>
+  <a href="#g2">G2</a>
+  <a href="#g3">G3</a>
+  <a href="#g4">G4</a>
+  <a href="#g5">G5</a>
+  <a href="#g6">G6</a>
+</nav>
+
+<div class="grid">
+
+  <article class="panel" id="g0" data-pick="G0 · flat">
+    <div class="panel-head">
+      <div class="letter"><em>G0</em> flat</div>
+      <div class="hint">no lift · baseline</div>
+    </div>
+    <p class="panel-desc">Original 1px bevel, sitting on the photo. Letter weight stays here forever.</p>
+    <div class="stage ambition">
+      <div class="foil-base g0" data-carve="I am in my ambition">I am in my ambition</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G0</button></div>
+  </article>
+
+  <article class="panel" id="g1" data-pick="G1 · slight float">
+    <div class="panel-head">
+      <div class="letter"><em>G1</em> slight float</div>
+      <div class="hint">+3px rise · soft puddle</div>
+    </div>
+    <p class="panel-desc">Same letter. Tiny rise + soft ground shadow — starts to leave the surface.</p>
+    <div class="stage earn">
+      <div class="foil-base g1" data-carve="I am earning">I am earning</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G1</button></div>
+  </article>
+
+  <article class="panel" id="g2" data-pick="G2 · clear air">
+    <div class="panel-head">
+      <div class="letter"><em>G2</em> clear air</div>
+      <div class="hint">+6px · longer shadow</div>
+    </div>
+    <p class="panel-desc">More gap under the foil. Shadow stretches — still the same thin bevel.</p>
+    <div class="stage wins">
+      <div class="foil-base g2" data-carve="I am winning">I am winning</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G2</button></div>
+  </article>
+
+  <article class="panel" id="g3" data-pick="G3 · hovering">
+    <div class="panel-head">
+      <div class="letter"><em>G3</em> hovering</div>
+      <div class="hint">+10px · mid height</div>
+    </div>
+    <p class="panel-desc">Clearly floating. Soft blur under — not a hard extrusion ladder.</p>
+    <div class="stage phd">
+      <div class="foil-base g3" data-carve="I am pursuing my Ph.D">I am pursuing my Ph.D</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G3</button></div>
+  </article>
+
+  <article class="panel" id="g4" data-pick="G4 · high lift">
+    <div class="panel-head">
+      <div class="letter"><em>G4</em> high lift</div>
+      <div class="hint">+14px · deep puddle</div>
+    </div>
+    <p class="panel-desc">High off the photo. Soft multi-blur shadow = height, not bold.</p>
+    <div class="stage projects">
+      <div class="foil-base g4" data-carve="projects">projects</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G4</button></div>
+  </article>
+
+  <article class="panel" id="g5" data-pick="G5 · floating far">
+    <div class="panel-head">
+      <div class="letter"><em>G5</em> floating far</div>
+      <div class="hint">+18px · long fall</div>
+    </div>
+    <p class="panel-desc">Far above the surface. Shadow falls a long way — letter still G0-thin.</p>
+    <div class="stage travel">
+      <div class="foil-base g5" data-carve="I am traveling">I am traveling</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G5</button></div>
+  </article>
+
+  <article class="panel" id="g6" data-pick="G6 · max height">
+    <div class="panel-head">
+      <div class="letter"><em>G6</em> max height</div>
+      <div class="hint">+24px · highest</div>
+    </div>
+    <p class="panel-desc">Maximum air under the foil. Loudest lift — still not a thicker letter.</p>
+    <div class="stage gym">
+      <div class="foil-base g6" data-carve="I am training">I am training</div>
+    </div>
+    <div class="pick-row"><button type="button">pick G6</button></div>
+  </article>
+
+</div>
+
+<script>
+(function () {
+  var picked = document.getElementById('picked');
+  function setPick(label) {
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.toggle('is-picked', p.getAttribute('data-pick') === label);
+    });
+    picked.textContent = 'picked · ' + label;
+    picked.classList.add('on');
+    try { localStorage.setItem('btm_foil_lift_more_pick_v2', label); } catch (e) {}
+  }
+  document.querySelectorAll('.pick-row button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var panel = btn.closest('.panel');
+      if (panel) setPick(panel.getAttribute('data-pick'));
+    });
+  });
+  try {
+    var q = new URLSearchParams(location.search).get('pick');
+    if (q) {
+      var panel = document.getElementById(q.toLowerCase());
+      if (panel) setPick(panel.getAttribute('data-pick'));
+    } else {
+      var prev = localStorage.getItem('btm_foil_lift_more_pick_v2');
+      if (prev) setPick(prev);
+    }
+  } catch (e) {}
+  var jump = document.querySelectorAll('.jump a');
+  function syncJump() {
+    var y = window.scrollY + 80;
+    var cur = null;
+    document.querySelectorAll('.panel').forEach(function (p) {
+      if (p.offsetTop <= y) cur = p.id;
+    });
+    jump.forEach(function (a) {
+      a.classList.toggle('on', cur && a.getAttribute('href') === '#' + cur);
+    });
+  }
+  window.addEventListener('scroll', syncJump, { passive: true });
+  syncJump();
+})();
+</script>
+</body>
+</html>

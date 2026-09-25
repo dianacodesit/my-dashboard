@@ -148,7 +148,8 @@
 (function(){
   var KEY = 'btm_archived_sections_v1';
   var EDITS_KEY = 'btm_overview_edits_v1';
-  /* Fallback when an older archive entry was saved without photo */
+  /* Fallback when an older archive entry was saved without photo.
+     Prefer last live / approved section photo — never banned assets. */
   var FOCUS_PHOTO = {
     potential: 'manus-storage/zone-potential.jpg?v=hers1',
     power: 'manus-storage/zone-power.jpg?v=lightning1',
@@ -163,28 +164,68 @@
     calisthenics: 'manus-storage/zone-calisthenics.jpg?v=sec1',
     'inner fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
     'inner-fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
-    'ignite': 'manus-storage/zone-inner-fire.jpg?v=spark1',
-    'claim': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    'claiming': 'manus-storage/zone-claiming-seat.jpg?v=claim5',
-    'sabotage': 'manus-storage/zone-sabotage.jpg?v=1',
+    ignite: 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    igniting: 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    'i am igniting': 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    claim: 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    claiming: 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    'i am claiming': 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    'to claim': 'manus-storage/zone-claiming-mine.jpg?v=claim7',
+    sabotage: 'manus-storage/zone-sabotage.jpg?v=1',
     'say thank you in advance': 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
     'say-thank-you-in-advance': 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
-    'execute': 'manus-storage/zone-execute-focus.jpg?v=chess1',
-    'executing': 'manus-storage/zone-execute-focus.jpg?v=chess1',
-    'become': 'manus-storage/zone-envision.jpg?v=swap1',
-    'becoming': 'manus-storage/zone-envision.jpg?v=swap1',
+    'saying thank you in advance': 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
+    'saying-thank-you-in-advance': 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
+    'i am saying thank you in advance': 'manus-storage/zone-say-thank-you-in-advance.jpg?v=advance1',
+    execute: 'manus-storage/zone-execute-focus.jpg?v=chess1',
+    executing: 'manus-storage/zone-execute-focus.jpg?v=chess1',
+    'i am executing': 'manus-storage/zone-execute-focus.jpg?v=chess1',
+    become: 'manus-storage/zone-envision.jpg?v=swap1',
+    becoming: 'manus-storage/zone-envision.jpg?v=swap1',
     'to-persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
-    'persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
-    'persevering': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
-    'curate': 'manus-storage/zone-curate-materials.jpg?v=mat2',
-    'detach': 'manus-storage/zone-detach-silhouette.jpg?v=sil1',
-    'start over': 'manus-storage/zone-start-over-openroad.jpg?v=road1',
-    'start-over': 'manus-storage/zone-start-over-openroad.jpg?v=road1',
-    'tune into': 'manus-storage/zone-tune-into-radio.jpg?v=freq1',
-    'tune-into': 'manus-storage/zone-tune-into-radio.jpg?v=freq1',
-    'self-actualize': 'manus-storage/zone-self-actualize-summit.jpg?v=summit1',
-    'self actualize': 'manus-storage/zone-self-actualize-summit.jpg?v=summit1',
-    'inner-fire': 'manus-storage/zone-inner-fire.jpg?v=spark1',
+    persevere: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    persevering: 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'i am persevering': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    'to persevere': 'manus-storage/zone-to-persevere-worn-pointe-shoes.jpg?v=pointe1',
+    curate: 'manus-storage/zone-curate-materials.jpg?v=mat2',
+    detach: 'manus-storage/zone-detach-silhouette-woman.jpg?v=woman1',
+    detaching: 'manus-storage/zone-detach-silhouette-woman.jpg?v=woman1',
+    'i am detaching': 'manus-storage/zone-detach-silhouette-woman.jpg?v=woman1',
+    love: 'manus-storage/zone-to-love-souls.jpg?v=souls3',
+    loving: 'manus-storage/zone-to-love-souls.jpg?v=souls3',
+    'i am loving': 'manus-storage/zone-to-love-souls.jpg?v=souls3',
+    'to love': 'manus-storage/zone-to-love-souls.jpg?v=souls3',
+    'to-love': 'manus-storage/zone-to-love-souls.jpg?v=souls3',
+    master: 'manus-storage/zone-to-master.jpg?v=dip3',
+    mastering: 'manus-storage/zone-to-master.jpg?v=dip3',
+    'i am mastering': 'manus-storage/zone-to-master.jpg?v=dip3',
+    'to master': 'manus-storage/zone-to-master.jpg?v=dip3',
+    navigate: 'manus-storage/zone-plan.jpg?v=swap1',
+    navigating: 'manus-storage/zone-plan.jpg?v=swap1',
+    'i am navigating': 'manus-storage/zone-plan.jpg?v=swap1',
+    plan: 'manus-storage/zone-plan.jpg?v=swap1',
+    resonance: 'manus-storage/zone-resonance.jpg?v=res1',
+    resonating: 'manus-storage/zone-resonance.jpg?v=res1',
+    'resonating with other souls': 'manus-storage/zone-resonance.jpg?v=res1',
+    'resonating-with-other-souls': 'manus-storage/zone-resonance.jpg?v=res1',
+    'i am resonating with other souls': 'manus-storage/zone-resonance.jpg?v=res1',
+    repetitions: 'manus-storage/zone-repetitions.jpg?v=cubes1',
+    'repeating 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
+    'repeating-10000-times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
+    'i am repeating 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
+    'repeat 10,000 times': 'manus-storage/zone-repetitions.jpg?v=cubes1',
+    /* intentionally nophoto (banned / never approved): feeling, feel-it-into-being, self-actualize */
+    feel: '',
+    feeling: '',
+    'i am feeling': '',
+    'to feel': '',
+    'feeling it into being': '',
+    'feeling-it-into-being': '',
+    'i am feeling it into being': '',
+    'self-actualize': '',
+    'self actualize': '',
+    'self-actualizing': '',
+    'i am self-actualizing': '',
     executive: 'manus-storage/zone-executive-command.jpg?v=board1',
     pursuits: 'manus-storage/zone-pursuits.jpg?v=chase3',
     pepperdine: 'manus-storage/zone-pepperdine-malibu.jpg?v=campus2',
@@ -298,12 +339,51 @@
     var p = (it && it.photo) ? String(it.photo).trim() : '';
     if (p) {
       p = p.replace(/^['"]|['"]$/g, '');
+      p = p.replace(/&quot;/g, '');
       p = p.replace(/(\?v=[^?&]+)(\?v=[^?&]+)+/g, '$1');
-      if (/zone-strengths\.jpg/i.test(p)) return FOCUS_PHOTO.strengths;
-      return p;
+      /* Banned archive leftovers — never show */
+      if (/zone-claiming-seat|zone-detach-silhouette\.jpg|zone-start-over-openroad|zone-self-actualize-summit|zone-to-feel-rain|zone-tune-into-radio/i.test(p)) {
+        p = '';
+      } else {
+        if (/zone-strengths\.jpg/i.test(p)) return FOCUS_PHOTO.strengths;
+        return p;
+      }
     }
-    var key = String((it && (it.focus || it.title)) || '').toLowerCase().replace(/\s+/g, ' ').trim();
-    return FOCUS_PHOTO[key] || FOCUS_PHOTO[key.replace(/\s+/g, '-')] || '';
+    var keys = [
+      String((it && it.focus) || '').toLowerCase().replace(/\s+/g, ' ').trim(),
+      String((it && it.title) || '').toLowerCase().replace(/\s+/g, ' ').trim(),
+      slug(String((it && it.focus) || '')),
+      slug(String((it && it.title) || ''))
+    ];
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if (!key) continue;
+      if (Object.prototype.hasOwnProperty.call(FOCUS_PHOTO, key)) return FOCUS_PHOTO[key] || '';
+      var dashed = key.replace(/\s+/g, '-');
+      if (Object.prototype.hasOwnProperty.call(FOCUS_PHOTO, dashed)) return FOCUS_PHOTO[dashed] || '';
+    }
+    return '';
+  }
+  /** One-shot: empty-picker archive wrote photo:'' — restore historical/approved photos into storage. */
+  function healArchivePhotos(){
+    var HEAL_KEY = 'archived-sections-photo-heal-v1';
+    try { if (localStorage.getItem(HEAL_KEY)) return; } catch (e) {}
+    var items = load();
+    var changed = false;
+    items.forEach(function(it){
+      if (!it) return;
+      var want = photoFor(it);
+      var cur = String(it.photo || '').trim();
+      if (want && cur !== want) {
+        it.photo = want;
+        changed = true;
+      } else if (!want && cur && /zone-claiming-seat|zone-detach-silhouette\.jpg|zone-start-over-openroad|zone-self-actualize-summit/i.test(cur)) {
+        it.photo = '';
+        changed = true;
+      }
+    });
+    if (changed) save(items);
+    try { localStorage.setItem(HEAL_KEY, '1'); } catch (e2) {}
   }
   function setStatus(msg){
     var el = document.getElementById('status');
@@ -373,6 +453,7 @@
     });
     empty.hidden = items.length > 0;
   }
+  healArchivePhotos();
   render();
 })();
 </script>

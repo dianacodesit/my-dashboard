@@ -210,8 +210,8 @@ KNOWN_CARD_PHOTOS = {
     "succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "I succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
     "i succeeded": "manus-storage/zone-achieve-csol.jpg?v=csol11",
-    "Deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "deen": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "Deen": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "deen": "manus-storage/zone-ibadah.jpg?v=deen1",
     "networking": "manus-storage/zone-networking.jpg?v=net1",
     "I am networking": "manus-storage/zone-networking.jpg?v=net1",
     "i am networking": "manus-storage/zone-networking.jpg?v=net1",
@@ -231,8 +231,8 @@ KNOWN_CARD_PHOTOS = {
     "breath": "manus-storage/zone-breath.jpg?v=breath1",
     "nutritious foods": "manus-storage/zone-nutritious-foods.jpg?v=food1",
     "nutritious-foods": "manus-storage/zone-nutritious-foods.jpg?v=food1",
-    "adhd": "manus-storage/zone-adhd-gold-threads.jpg?v=adhd6",
-    "ADHD": "manus-storage/zone-adhd-gold-threads.jpg?v=adhd6",
+    "adhd": "manus-storage/zone-adhd-gold-threads.jpg?v=adhd10",
+    "ADHD": "manus-storage/zone-adhd-gold-threads.jpg?v=adhd10",
     "Motherhood": "manus-storage/zone-motherhood.jpg?v=mom1",
     "strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
     "a strategist": "manus-storage/zone-strategist-behind.jpg?v=back2",
@@ -277,24 +277,24 @@ KNOWN_CARD_PHOTOS = {
     "body": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "gym": "manus-storage/zone-athletic-gym.jpg?v=gym1",
     "athletic": "manus-storage/zone-athletic-gym.jpg?v=gym1",
-    "surrender to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I will surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "i surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I surrender myself": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I surrender myself to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I will surrender myself to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I will surrender to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "I will surrender": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "surrender to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "i surrender myself to allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "surrender myself to Allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "surrender-to-allah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "surrender to allah \ufdfb": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
-    "itaqallah": "manus-storage/zone-god-conscious.jpg?v=remembrance1",
+    "surrender to allah": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "i surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I will surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "i surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I surrender myself": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I surrender myself to Allah \ufdfb": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I will surrender myself to Allah \ufdfb": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I will surrender to Allah \ufdfb": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "I will surrender": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "surrender to Allah \ufdfb": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "i surrender myself to allah": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "surrender myself to Allah \ufdfb": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "surrender-to-allah": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "surrender to allah \ufdfb": "manus-storage/zone-ibadah.jpg?v=deen1",
+    "itaqallah": "manus-storage/zone-ibadah.jpg?v=deen1",
     "detach": "manus-storage/zone-detach-silhouette-woman.jpg?v=woman1",
     "start over": "manus-storage/zone-start-over-positano.jpg?v=travel1",
     "start-over": "manus-storage/zone-start-over-positano.jpg?v=travel1",
@@ -1762,8 +1762,168 @@ def save_vision_sections(date: str, recs: list, page: str) -> dict:
     }
 
 
+def _top_level_vision_tiles(inner: str) -> list[tuple[int, int, str, float, str]]:
+    """Return [(start, end, focus, area, article_html), ...] for hero children only."""
+    articles: list[tuple[int, int, str, float, str]] = []
+    i = 0
+    while True:
+        m = re.search(
+            r'<article\b[^>]*\bclass="[^"]*\bvision-tile\b[^"]*"[^>]*>',
+            inner[i:],
+            re.I,
+        )
+        if not m:
+            break
+        start = i + m.start()
+        depth = 0
+        pos = start
+        end = -1
+        while pos < len(inner):
+            nxt_open = inner.find("<article", pos)
+            nxt_close = inner.find("</article>", pos)
+            if nxt_close < 0:
+                break
+            if nxt_open >= 0 and nxt_open < nxt_close:
+                depth += 1
+                pos = nxt_open + 8
+            else:
+                depth -= 1
+                if depth == 0:
+                    end = nxt_close + len("</article>")
+                    break
+                pos = nxt_close + 10
+        if end < 0:
+            break
+        nested = any(start > a0 and end <= a1 for a0, a1, *_ in articles)
+        if nested:
+            i = end
+            continue
+        art = inner[start:end]
+        focus_m = re.search(r'data-focus="([^"]*)"', art)
+        focus = (focus_m.group(1) if focus_m else f"t{len(articles)}") or f"t{len(articles)}"
+        style_m = re.search(r'\bstyle="([^"]*)"', art)
+        style = style_m.group(1) if style_m else ""
+
+        def _dim(name: str) -> float:
+            mm = re.search(rf"{name}\s*:\s*([\d.]+)%", style, re.I)
+            if mm:
+                return float(mm.group(1))
+            mm = re.search(rf"{name}\s*:\s*([\d.]+)px", style, re.I)
+            if mm:
+                # px → provisional weight (not real %); keep relative scale
+                return max(8.0, float(mm.group(1)) / 10.0)
+            return 20.0
+
+        area = max(1.0, _dim("width") * _dim("height"))
+        articles.append((start, end, focus, area, art))
+        i = end
+    return articles
+
+
+def seal_force_kiss_inner(inner: str) -> tuple[str, int]:
+    """Re-tessellate absolute vision-tiles so neighbors snap shut (0–100% fill)."""
+    articles = _top_level_vision_tiles(inner)
+    if not articles:
+        return inner, 0
+    items = [
+        {"i": idx, "area": a[3], "art": a[4], "focus": a[2]}
+        for idx, a in enumerate(articles)
+    ]
+    placements: list[tuple[dict, float, float, float, float]] = []
+
+    def layout(list_: list[dict], x: float, y: float, w: float, h: float, split_vert: bool) -> None:
+        if not list_ or w <= 0.05 or h <= 0.05:
+            return
+        if len(list_) == 1:
+            placements.append((list_[0], x, y, w, h))
+            return
+        total = sum(it["area"] for it in list_) or len(list_)
+        for it in list_:
+            it["frac"] = it["area"] / total
+        acc = 0.0
+        mid = 1
+        for i in range(len(list_) - 1):
+            acc += list_[i]["frac"]
+            mid = i + 1
+            if acc >= 0.5:
+                break
+        mid = max(1, min(len(list_) - 1, mid))
+        group_a = list_[:mid]
+        group_b = list_[mid:]
+        a_frac = sum(it["frac"] for it in group_a)
+        b_frac = sum(it["frac"] for it in group_b)
+        af = a_frac / max(1e-9, a_frac + b_frac)
+        af = max(0.08, min(0.92, af))
+        if split_vert:
+            left_w = w * af
+            layout(group_a, x, y, left_w, h, False)
+            layout(group_b, x + left_w, y, w - left_w, h, False)
+        else:
+            top_h = h * af
+            layout(group_a, x, y, w, top_h, True)
+            layout(group_b, x, y + top_h, w, h - top_h, True)
+
+    layout(items, 0.0, 0.0, 100.0, 100.0, True)
+    new_arts: dict[int, str] = {}
+    for it, x, y, w, h in placements:
+        art = it["art"]
+        style_m = re.search(r'\bstyle="([^"]*)"', art)
+        if not style_m:
+            continue
+        style = style_m.group(1)
+        style = re.sub(
+            r";?\s*(?:position|left|top|right|bottom|width|height|z-index)\s*:[^;]*",
+            "",
+            style,
+            flags=re.I,
+        ).strip().strip(";")
+        geo = (
+            f"position:absolute !important;"
+            f"left:{x:.3f}% !important;"
+            f"top:{y:.3f}% !important;"
+            f"width:{w:.3f}% !important;"
+            f"height:{h:.3f}% !important;"
+            f"z-index:{9 + int(it['i'])} !important"
+        )
+        style = f"{geo};{style}" if style else geo
+        new_arts[int(it["i"])] = art[: style_m.start(1)] + style + art[style_m.end(1) :]
+    out = inner
+    for idx in range(len(articles) - 1, -1, -1):
+        start, end, _focus, _area, _art = articles[idx]
+        if idx in new_arts:
+            out = out[:start] + new_arts[idx] + out[end:]
+    return out, len(articles)
+
+
+def _patch_hero_pack_sig(html: str, date: str, n: int) -> str:
+    """Stamp forceBkiss:N#baked-abs on the day's vision-hero open tag."""
+    try:
+        _marker_i, block_start, block_end = _day_block_bounds(html, date)
+    except Exception:
+        return html
+    tag_re = re.compile(
+        r'<div\b[^>]*\bclass="[^"]*\bvision-hero\b[^"]*"[^>]*>',
+        re.IGNORECASE,
+    )
+    m = tag_re.search(html, block_start, block_end)
+    if not m:
+        return html
+    tag = m.group(0)
+    sig = f'forceBkiss:{n}#baked-abs'
+    if re.search(r'data-pack-sig="[^"]*"', tag):
+        new_tag = re.sub(r'data-pack-sig="[^"]*"', f'data-pack-sig="{sig}"', tag)
+    else:
+        new_tag = tag[:-1] + f' data-pack-sig="{sig}">'
+    return html[: m.start()] + new_tag + html[m.end() :]
+
+
 def remove_vision_sections(date: str, recs: list, page: str) -> dict:
-    """Cut specific vision tiles out of one day's collage. One file, one write."""
+    """Cut specific vision tiles out of one day's collage. One file, one write.
+
+    Sep 21+ force-kiss: after the cut, re-tessellate remaining absolute tiles so
+    neighbors snap shut. Leaving old % boxes + stale forceBkiss:N#baked-abs is
+    what painted the empty hole after ×.
+    """
     date = str(date or "").strip()
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
         raise ValueError(f"invalid overview date: {date}")
@@ -1795,7 +1955,13 @@ def remove_vision_sections(date: str, recs: list, page: str) -> dict:
                 if not cut:
                     written.append(path.name)
                     continue
+                tile_n = 0
+                # Force-kiss days (and any absolute mosaic): seal the hole in the bake.
+                if date >= "2026-09-21" or "position:absolute" in inner or "position: absolute" in inner:
+                    inner, tile_n = seal_force_kiss_inner(inner)
                 new_html = html[:start_inner] + inner + html[end_inner:]
+                if tile_n:
+                    new_html = _patch_hero_pack_sig(new_html, date, tile_n)
                 if "<!DOCTYPE" not in new_html[:80]:
                     raise ValueError(f"refusing save: {path.name} lost its document shell")
                 if len(html) > 500_000 and len(new_html) < 500_000:

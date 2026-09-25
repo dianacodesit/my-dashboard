@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>travel · diana's board</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@6..72,300;6..72,400;1,400&amp;family=DM+Mono:wght@300;400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=travelpage1"/>
+<link rel="stylesheet" href="capture-page.css?v=nocream"/>
+<style>
+  .page-bg {
+    background:
+      linear-gradient(180deg, rgba(8, 14, 22, 0.42) 0%, rgba(8, 14, 22, 0.08) 40%, rgba(6, 10, 16, 0.55) 100%),
+      url("manus-storage/zone-start-over-positano.jpg?v=travel1") center 42%/cover no-repeat;
+  }
+  body.capture-page.travel-page #hamburger-menu span { background: #f3e6d0; }
+  body.travel-page .hero h1 {
+    font-family: "Italiana", "Newsreader", Georgia, serif;
+    font-size: clamp(44px, 9vw, 72px);
+    letter-spacing: 0.04em;
+    color: #fff8ee;
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.75),
+      0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+  body.travel-page .eyebrow,
+  body.travel-page .sub {
+    color: rgba(255, 248, 238, 0.82);
+  }
+</style>
+</head>
+<body class="capture-page travel-page" data-store="page_travel_v1" data-empty="nowhere yet">
+<div class="page-bg" aria-hidden="true"></div>
+<main class="page-shell">
+  <header class="hero">
+    <p class="eyebrow">places · packing · the leaving</p>
+    <h1>travel</h1>
+    <p class="sub">where you’re going, and what goes with you</p>
+  </header>
+  <section class="panel">
+    <div class="add-row">
+      <input id="new-item" type="text" placeholder="trip, flight, packing, place…" autocomplete="off"/>
+      <button id="add-btn" type="button">add</button>
+    </div>
+    <div id="list"></div>
+    <p class="status" id="status">saved here</p>
+  </section>
+</main>
+<script src="nav-shared.js?v=travelmain1" defer></script>
+<script src="capture-page.js?v=1" defer></script>
+</body>
+</html>

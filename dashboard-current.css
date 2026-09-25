@@ -61,6 +61,20 @@ html body .day-block:is(.vision-collage-day, .overview-era-day) .vision-board:no
   margin: 0 !important;
   flex: unset !important;
 }
+/* Absolute kiss / force-tight packs keep baked % sizes — never auto-shrink. */
+html body .day-block:is(.vision-collage-gap, .force-tight-magnet) .vision-board:not(.is-zoomed) {
+  display: block !important;
+  gap: 0 !important;
+  row-gap: 0 !important;
+  column-gap: 0 !important;
+  padding: 0 !important;
+}
+
+html body .day-block:is(.vision-collage-gap, .force-tight-magnet) .vision-board:not(.is-zoomed) .vision-hero > .vision-tile {
+  width: unset !important;
+  height: unset !important;
+  position: absolute !important;
+}
 /* 8 tiles need 4 tracks on first paint — the 2-row default auto-flows into a scramble. */
 html body .day-block:is(.vision-collage-day, .overview-era-day):not(.scrap-collage-era) .vision-hero:has(> .vision-tile:nth-child(2)):not(:has(> .vision-tile:nth-child(3))) {
   grid-template-columns: 1fr 1fr !important;
@@ -90,6 +104,9 @@ html body .day-block.overview-era-day .vision-tile {
   overflow: hidden !important;
   min-height: 0 !important;
   min-width: 0 !important;
+}
+html body .day-block:is(.vision-collage-gap, .force-tight-magnet) .vision-board:not(.is-zoomed) .vision-hero > .vision-tile {
+  position: absolute !important;
 }
 html body .day-block.vision-collage-day .vision-tile-photo,
 html body .day-block.overview-era-day .vision-tile-photo {
@@ -400,6 +417,15 @@ html body > .vision-board.is-zoomed[data-title-era="foil"] .vision-tile.is-zoome
   content: none !important;
 }
 
+
+/* raised-titles-sep23-override-v2 */
+/* Size lock only — lift face lives in everything.html raised-titles block. */
+html body .day-block.foil-title-elevated .vision-tile > .vision-tile-title,
+html body .day-block.foil-title-elevated article.vision-tile > h3.vision-tile-title,
+html body.vision-zoom-open .vision-board.is-zoomed.foil-title-elevated .vision-tile.is-zoomed > .vision-tile-title {
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+}
+
 /* pre-sep6-title-restore */
 /* Aug 26–Sep 5 were white Newsreader, bottom-left. Centered gold foil started Sep 6. */
 html body .day-block:is(.vision-collage-day, .overview-era-day):is(
@@ -516,14 +542,14 @@ html body .day-block .overview-carry-forward:hover {
 #constellation-rollover .cr-sky {
   position: relative; flex: 1; min-height: 380px; margin: 8px 0 4px;
   border-radius: 22px; overflow: hidden;
-  /* comet wake sky — field of work left, nucleus glow right */
+  /* comet wake sky — field of unfinished light (no gold nucleus) */
   background:
-    radial-gradient(circle at 82% 48%, rgba(225,180,120,0.16), transparent 16%),
     radial-gradient(1px 1px at 10% 20%, #cbb89a, transparent 70%),
     radial-gradient(1px 1px at 28% 66%, #8c7d6c, transparent 70%),
     radial-gradient(1px 1px at 48% 18%, #b7a58e, transparent 70%),
     radial-gradient(1px 1px at 18% 44%, rgba(255,248,238,0.35), transparent 70%),
     radial-gradient(1px 1px at 62% 72%, rgba(196,168,130,0.4), transparent 70%),
+    radial-gradient(1px 1px at 82% 40%, rgba(255,248,238,0.22), transparent 70%),
     #090807;
   border: 1px solid rgba(255,248,238,0.12);
 }
@@ -534,29 +560,9 @@ html body .day-block .overview-carry-forward:hover {
   color: rgba(248,239,227,0.36); pointer-events: none;
 }
 #constellation-rollover .cr-sky-tag.is-field { left: 4%; top: 5%; }
-#constellation-rollover .cr-sky-tag.is-nucleus {
-  right: 5%; top: 6%; color: rgba(239,213,174,0.72);
-}
+#constellation-rollover .cr-sky-tag.is-nucleus,
 #constellation-rollover .cr-comet-core {
-  position: absolute; right: 9%; top: 46%; width: 58px; height: 58px;
-  border: 0; padding: 0; margin: 0;
-  border-radius: 50%; z-index: 5; pointer-events: auto; cursor: pointer;
-  background: radial-gradient(circle at 38% 34%, #fffaf0, #e6c994 22%, #9d7141 48%, transparent 72%);
-  box-shadow: 0 0 30px #d5ac7288, 0 0 80px #b27b3f44;
-  animation: cr-comet-pulse 3.4s ease-in-out infinite;
-  transition: box-shadow 0.25s ease, filter 0.2s ease;
-}
-#constellation-rollover .cr-comet-core:hover,
-#constellation-rollover .cr-comet-core:focus-visible {
-  filter: brightness(1.28);
-  box-shadow: 0 0 40px #e6c994bb, 0 0 100px #b27b3f77;
-  outline: none;
-}
-#constellation-rollover .cr-comet-core.is-receiving {
-  box-shadow: 0 0 38px #d5ac72cc, 0 0 100px #b27b3f88;
-}
-@keyframes cr-comet-pulse {
-  50% { filter: brightness(1.18); transform: scale(1.06); }
+  display: none !important;
 }
 #constellation-rollover .cr-star {
   position: absolute; width: max-content; max-width: 168px;
@@ -732,12 +738,42 @@ html body .day-block .overview-carry-forward:hover {
   opacity: 1;
   filter: brightness(1.35);
 }
-#constellation-rollover.is-launching .cr-comet-core {
-  animation: cr-comet-pulse 0.6s ease-in-out infinite, cr-comet-bright 0.72s ease forwards;
-}
 @keyframes cr-comet-haul {
   to { transform: translate(28vw, -4vh) scale(0.18); opacity: 0; }
 }
-@keyframes cr-comet-bright {
-  to { filter: brightness(1.45); box-shadow: 0 0 48px #e6c994cc, 0 0 110px #b27b3f88; }
+
+
+/* tiles-taller-force-tight-v1 — Sep 21+ stage must stay tall so % tiles stay large */
+html body .day-block.force-tight-magnet:not(.collapsed) .vision-board:not(.is-zoomed) .vision-hero {
+  aspect-ratio: 1119 / 1050 !important;
+  min-height: min(88vh, 1700px) !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+
+/* foil-g4-overflow-visible — beat overview-era overflow:clip */
+html body .day-block.foil-title-elevated:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open) .day-tasks,
+html body .day-block.foil-title-elevated:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open) .tv-panel.tv-pursuits,
+html body .day-block.foil-title-elevated:is(.overview-era-day, .vision-collage-day):not(.collapsed):not(.picker-open):not(.depth-menu-open) .tv-panel.tv-pursuits:not(:has(.vision-board.is-zoomed)),
+html body .day-block.foil-title-elevated:is(.overview-era-day, .vision-collage-day) .vision-board:not(.is-zoomed),
+html body .day-block.foil-title-elevated:is(.overview-era-day, .vision-collage-day) .vision-hero,
+html body .day-block.foil-title-elevated .vision-tile,
+html body .day-block.foil-title-elevated:is(.vision-collage-gap, .force-tight-magnet) .vision-board:not(.is-zoomed) .vision-hero > .vision-tile {
+  overflow: visible !important;
+}
+
+/* foil-g4-kill-carve — emboss ::before only; ::after is the G4 soft puddle */
+html body .day-block.foil-title-elevated .vision-tile > .vision-tile-title::before,
+html body .day-block.foil-title-elevated[data-title-era="foil"] .vision-tile > .vision-tile-title::before,
+html body .day-block.foil-title-elevated article.vision-tile > h3.vision-tile-title::before,
+html body.vision-zoom-open .vision-board.is-zoomed.foil-title-elevated .vision-tile.is-zoomed > .vision-tile-title::before,
+html body > .vision-board.is-zoomed.foil-title-elevated .vision-tile.is-zoomed > .vision-tile-title::before {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  filter: none !important;
 }

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ADHD · white marble tints</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=adhdmarble1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.55), rgba(10,7,5,0.9)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 860px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+  }
+  .picked {
+    display: none;
+    margin: 14px auto 0;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky; top: 10px; z-index: 40;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+    margin: 20px auto 24px; max-width: 980px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover { color: #e8c99a; border-color: rgba(232,201,154,0.45); }
+
+  .grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12, 8, 6, 0.55);
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.55);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.25), 0 18px 40px rgba(0,0,0,0.35);
+  }
+  .panel.current { opacity: 0.92; }
+  .panel-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    padding: 14px 16px 6px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.2rem;
+    color: rgba(255,248,238,0.92);
+  }
+  .panel-head .letter em { font-style: normal; color: #e8c99a; margin-right: 8px; }
+  .badge {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.45);
+    border: 1px solid rgba(255,248,238,0.14);
+    border-radius: 999px;
+    padding: 4px 10px;
+  }
+  .panel-desc {
+    padding: 0 16px 10px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.52);
+    line-height: 1.4;
+  }
+  .stage {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: #0a0705 center / cover no-repeat;
+  }
+  .stage::after {
+    content: "ADHD";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(22px, 3.2vw, 34px);
+    letter-spacing: 0.03em;
+    color: #fff8ee;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.65), 0 1px 2px rgba(0,0,0,0.8);
+    pointer-events: none;
+  }
+  .pick-row { padding: 12px 16px 16px; }
+  .pick-row button {
+    width: 100%;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(232,201,154,0.35);
+    background: rgba(232,201,154,0.1);
+    color: #e8c99a;
+    cursor: pointer;
+  }
+  .pick-row button:hover { background: rgba(232,201,154,0.18); }
+  .pick-row button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>ADHD · white marble tints</h1>
+  <p>Same gold foil papers + pen. Only the black marble changes — white fancy stone with soft tint options.</p>
+  <p class="rule">surgical · keep threads · pick a tint</p>
+  <p class="picked" id="picked">picked</p>
+</div>
+
+<nav class="jump">
+  <a href="#now">now</a>
+  <a href="#a">A lilac</a>
+  <a href="#b">B violet</a>
+  <a href="#c">C blush</a>
+  <a href="#d">D champagne</a>
+  <a href="#e">E sage</a>
+  <a href="#f">F slate</a>
+</nav>
+
+<div class="grid">
+  <article class="panel current" id="now">
+    <div class="panel-head"><span class="letter"><em>now</em> black marble</span><span class="badge">live</span></div>
+    <p class="panel-desc">Current ADHD tile — black marble + gold threads (adhd10).</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-gold-threads.jpg?v=adhd10')"></div>
+    <div class="pick-row"><button type="button" disabled>live now</button></div>
+  </article>
+
+  <article class="panel" id="a" data-letter="A" data-src="manus-storage/zone-adhd-marble-white-lilac.jpg">
+    <div class="panel-head"><span class="letter"><em>A</em> white · lilac</span><span class="badge">soft purple</span></div>
+    <p class="panel-desc">Creamy white marble with delicate lilac veins.</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-marble-white-lilac.jpg')"></div>
+    <div class="pick-row"><button type="button" data-pick="A">pick A</button></div>
+  </article>
+
+  <article class="panel" id="b" data-letter="B" data-src="manus-storage/zone-adhd-marble-white-violet.jpg">
+    <div class="panel-head"><span class="letter"><em>B</em> white · violet</span><span class="badge">amethyst</span></div>
+    <p class="panel-desc">Bright white Calacatta with clearer soft violet / amethyst veins.</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-marble-white-violet.jpg')"></div>
+    <div class="pick-row"><button type="button" data-pick="B">pick B</button></div>
+  </article>
+
+  <article class="panel" id="c" data-letter="C" data-src="manus-storage/zone-adhd-marble-white-blush.jpg">
+    <div class="panel-head"><span class="letter"><em>C</em> white · blush</span><span class="badge">dusty rose</span></div>
+    <p class="panel-desc">White marble with soft dusty-rose / blush undertone in the veins.</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-marble-white-blush.jpg')"></div>
+    <div class="pick-row"><button type="button" data-pick="C">pick C</button></div>
+  </article>
+
+  <article class="panel" id="d" data-letter="D" data-src="manus-storage/zone-adhd-marble-white-champagne.jpg">
+    <div class="panel-head"><span class="letter"><em>D</em> white · champagne</span><span class="badge">warm gold</span></div>
+    <p class="panel-desc">White marble with warm champagne veins that echo the foil.</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-marble-white-champagne.jpg')"></div>
+    <div class="pick-row"><button type="button" data-pick="D">pick D</button></div>
+  </article>
+
+  <article class="panel" id="e" data-letter="E" data-src="manus-storage/zone-adhd-marble-white-sage.jpg">
+    <div class="panel-head"><span class="letter"><em>E</em> white · sage</span><span class="badge">cool green</span></div>
+    <p class="panel-desc">White marble with soft sage / cool green-gray veins.</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-marble-white-sage.jpg')"></div>
+    <div class="pick-row"><button type="button" data-pick="E">pick E</button></div>
+  </article>
+
+  <article class="panel" id="f" data-letter="F" data-src="manus-storage/zone-adhd-marble-white-slate.jpg">
+    <div class="panel-head"><span class="letter"><em>F</em> white · slate</span><span class="badge">blue-gray</span></div>
+    <p class="panel-desc">Cool white marble with soft slate / icy blue-gray veins.</p>
+    <div class="stage" style="background-image:url('manus-storage/zone-adhd-marble-white-slate.jpg')"></div>
+    <div class="pick-row"><button type="button" data-pick="F">pick F</button></div>
+  </article>
+</div>
+
+<script src="nav-shared.js?v=adhdmarble1" defer></script>
+<script>
+(function(){
+  var picked = document.getElementById('picked');
+  document.querySelectorAll('[data-pick]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var letter = btn.getAttribute('data-pick');
+      document.querySelectorAll('.panel').forEach(function(p){
+        p.classList.toggle('is-picked', p.getAttribute('data-letter') === letter);
+      });
+      if(picked){
+        picked.textContent = 'picked ' + letter + ' — say that letter in chat to put it live';
+        picked.classList.add('on');
+      }
+      try { history.replaceState(null, '', '?v=1&pick=' + letter); } catch(e){}
+    });
+  });
+  var q = new URLSearchParams(location.search).get('pick');
+  if(q){
+    var b = document.querySelector('[data-pick="'+q.toUpperCase()+'"]');
+    if(b) b.click();
+  }
+})();
+</script>
+</body>
+</html>

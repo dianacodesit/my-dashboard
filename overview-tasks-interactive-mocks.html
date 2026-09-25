@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>overview tasks · interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500;1,700&amp;family=Newsreader:ital,opsz,wght@0,400;1,400&amp;family=DM+Mono:wght@400&amp;family=Italiana&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="nav-shared.css?v=ovtask1"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Newsreader", Georgia, serif;
+    color: #f7efe4;
+    min-height: 100vh;
+    padding: 56px 16px 120px;
+    background:
+      linear-gradient(180deg, rgba(14,10,8,0.55), rgba(10,7,5,0.88)),
+      url("manus-storage/_339ab459.jpg") center / cover fixed;
+    background-color: #120e0c;
+  }
+  body #hamburger-menu span { background: #f3e6d0; }
+
+  .hero { text-align: center; max-width: 860px; margin: 0 auto 8px; }
+  .hero h1 {
+    font-family: "Italiana", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff8ee;
+  }
+  .hero p {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(247,239,228,0.62);
+  }
+  .hero .rule {
+    margin-top: 10px;
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.72);
+    font-style: normal;
+  }
+  .picked {
+    display: none;
+    margin: 14px auto 0;
+    text-align: center;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a872;
+  }
+  .picked.on { display: block; }
+
+  .jump {
+    position: sticky;
+    top: 10px;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px auto 24px;
+    max-width: 1100px;
+  }
+  .jump a {
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,248,238,0.18);
+    background: rgba(12,8,6,0.55);
+    color: rgba(247,239,228,0.72);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .jump a:hover, .jump a.on { color: #e8c99a; border-color: rgba(232,201,154,0.45); }
+
+  .grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  @media (min-width: 980px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .panel {
+    border-radius: 18px;
+    border: 1px solid rgba(255,248,238,0.14);
+    background: rgba(12,8,6,0.5);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .panel:hover {
+    border-color: rgba(232,201,154,0.45);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+  }
+  .panel.is-picked {
+    border-color: rgba(232,201,154,0.85);
+    box-shadow: 0 0 0 1px rgba(232,201,154,0.35), 0 22px 56px rgba(0,0,0,0.42);
+  }
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px 4px;
+  }
+  .panel-head .letter {
+    font-family: "Italiana", serif;
+    font-size: 1.25rem;
+    color: rgba(255,248,238,0.92);
+  }
+  .panel-head .letter em {
+    font-style: normal;
+    color: #e8c99a;
+    margin-right: 8px;
+  }
+  .panel-head .hint {
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(247,239,228,0.42);
+  }
+  .panel-desc {
+    padding: 0 16px 10px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: rgba(247,239,228,0.52);
+    line-height: 1.4;
+  }
+
+  .stage {
+    position: relative;
+    margin: 0 12px 12px;
+    height: 340px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: center / cover no-repeat;
+    box-shadow:
+      inset 0 0 0 1px rgba(232,201,154,0.22),
+      0 10px 28px rgba(0,0,0,0.35);
+    cursor: default;
+  }
+  .stage.earn { background-image: url("manus-storage/zone-earn-hands.jpg"); }
+  .stage.adhd { background-image: url("manus-storage/zone-adhd-gold-threads.jpg?v=adhd6"); }
+  .stage.wins { background-image: url("manus-storage/zone-wins-hand.jpg?v=game13"); }
+  .stage.travel { background-image: url("manus-storage/pursuit-travel.jpg"); }
+  .stage.phd { background-image: url("manus-storage/zone-grad-student.jpg?v=grad4"); }
+  .stage.projects { background-image: url("manus-storage/zone-projects-plans.jpg?v=proj5"); }
+  .stage.network { background-image: url("manus-storage/zone-ambition-v4.jpg"); }
+  .stage.train { background-image: url("manus-storage/zone-body-gym-wide-dark.jpg"); }
+
+  .stage .foil {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, calc(-50% - 10px));
+    width: 82%;
+    text-align: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(22px, 2.8vw, 30px);
+    background-image: linear-gradient(185deg, #e8d4b0, #c4a882 40%, #8f7858 55%, #d8c49a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+    z-index: 3;
+    filter:
+      drop-shadow(0 2px 0 rgba(0,0,0,0.7))
+      drop-shadow(0 8px 12px rgba(0,0,0,0.4));
+  }
+
+  .pick-row { padding: 0 16px 16px; }
+  .pick-row button {
+    width: 100%;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(232,201,154,0.35);
+    background: rgba(232,201,154,0.1);
+    color: #e8c99a;
+    cursor: pointer;
+  }
+  .pick-row button:hover { background: rgba(232,201,154,0.18); }
+
+  /* ——— A · breathing rim (current) ——— */
+  @keyframes rimBreathe {
+    0%, 100% { box-shadow: inset 0 0 0 2px rgba(200,60,50,0.35), inset 0 0 22px rgba(180,40,40,0.12); }
+    50% { box-shadow: inset 0 0 0 4px rgba(220,80,60,0.75), inset 0 0 40px rgba(180,40,40,0.32); }
+  }
+  .a-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 4;
+    animation: rimBreathe 2s ease-in-out infinite;
+  }
+  .a-chip {
+    position: absolute;
+    top: 12px; left: 12px;
+    z-index: 5;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(12,8,6,0.72);
+    border: 1px solid rgba(232,201,154,0.45);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #e8c99a;
+  }
+  .a-hover {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%) translateY(8px);
+    z-index: 6;
+    min-width: 180px;
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(12,8,6,0.78);
+    border: 1px solid rgba(232,201,154,0.42);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+    pointer-events: none;
+  }
+  .stage:hover .a-hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .a-hover .lab {
+    font-family: "DM Mono", monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.7);
+    margin-bottom: 6px;
+  }
+  .a-hover li {
+    list-style: none;
+    font-style: italic;
+    font-size: 15px;
+    padding: 4px 0;
+    border-top: 1px solid rgba(255,248,238,0.08);
+  }
+  .a-hover li:first-of-type { border-top: 0; }
+
+  /* ——— B · orbit chips ——— */
+  .b-orbit {
+    position: absolute;
+    inset: 18px;
+    z-index: 5;
+    pointer-events: none;
+    animation: orbitSpin 28s linear infinite;
+  }
+  @keyframes orbitSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .b-chip {
+    position: absolute;
+    left: 50%; top: 50%;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(12,8,6,0.78);
+    border: 1px solid rgba(232,201,154,0.5);
+    color: #f7efe4;
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    pointer-events: auto;
+    cursor: pointer;
+    animation: orbitSpin 28s linear infinite reverse;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .b-chip:hover {
+    background: rgba(232,201,154,0.22);
+    transform: scale(1.06);
+  }
+  .b-chip:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-118px) rotate(0deg); }
+  .b-chip:nth-child(2) { transform: translate(-50%, -50%) rotate(72deg) translateY(-118px) rotate(-72deg); }
+  .b-chip:nth-child(3) { transform: translate(-50%, -50%) rotate(144deg) translateY(-118px) rotate(-144deg); }
+  .b-chip:nth-child(4) { transform: translate(-50%, -50%) rotate(216deg) translateY(-118px) rotate(-216deg); }
+  .b-chip:nth-child(5) { transform: translate(-50%, -50%) rotate(288deg) translateY(-118px) rotate(-288deg); }
+  .stage:hover .b-orbit { animation-play-state: paused; }
+  .stage:hover .b-chip { animation-play-state: paused; }
+
+  /* ——— C · pulse count seal ——— */
+  .c-seal {
+    position: absolute;
+    right: 16px; bottom: 16px;
+    z-index: 6;
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,246,228,0.9);
+    background: rgba(6,3,1,0.82);
+    color: #fff8ee;
+    font-family: "Bodoni Moda", "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-size: 34px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 2px rgba(8,4,2,0.98), 0 8px 24px rgba(0,0,0,0.55);
+    animation: sealPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes sealPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 2px rgba(8,4,2,0.98), 0 8px 24px rgba(0,0,0,0.55); }
+    50% { transform: scale(1.08); box-shadow: 0 0 0 2px rgba(8,4,2,0.98), 0 0 28px rgba(232,201,154,0.45), 0 10px 28px rgba(0,0,0,0.55); }
+  }
+  .c-fan {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .stage.is-open .c-fan { opacity: 1; pointer-events: auto; }
+  .c-fan span {
+    position: absolute;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(12,8,6,0.82);
+    border: 1px solid rgba(232,201,154,0.45);
+    color: #f7efe4;
+    font-style: italic;
+    font-size: 14px;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+  }
+  .stage.is-open .c-fan span { transform: translate(-50%, -50%) scale(1); }
+  .c-fan span:nth-child(1) { left: 22%; top: 28%; }
+  .c-fan span:nth-child(2) { left: 70%; top: 24%; }
+  .c-fan span:nth-child(3) { left: 30%; top: 72%; }
+  .c-fan span:nth-child(4) { left: 72%; top: 68%; }
+
+  /* ——— D · ticker ribbon ——— */
+  .d-ribbon {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 6;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(8,4,2,0.15), rgba(8,4,2,0.82));
+    border-top: 1px solid rgba(232,201,154,0.35);
+    backdrop-filter: blur(8px);
+  }
+  .d-track {
+    display: flex;
+    gap: 28px;
+    white-space: nowrap;
+    animation: ticker 18s linear infinite;
+    padding-left: 100%;
+  }
+  .stage:hover .d-track { animation-play-state: paused; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .d-track span {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 16px;
+    color: #f7efe4;
+    cursor: pointer;
+  }
+  .d-track span::before {
+    content: "·";
+    margin-right: 28px;
+    color: rgba(232,201,154,0.7);
+  }
+  .d-track span:first-child::before { content: ""; margin: 0; }
+  .d-count {
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    z-index: 7;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(12,8,6,0.85);
+    border: 1px solid rgba(232,201,154,0.4);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #e8c99a;
+  }
+
+  /* ——— E · mini constellation ——— */
+  .e-sky { position: absolute; inset: 0; z-index: 5; }
+  .e-star {
+    position: absolute;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: rgba(12,8,6,0.72);
+    border: 1px solid rgba(232,201,154,0.42);
+    color: #f7efe4;
+    font-style: italic;
+    font-size: 13px;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transform: translateY(-2px);
+    animation: starFloat 3.2s ease-in-out infinite;
+  }
+  .e-star:nth-child(2) { animation-delay: -0.7s; }
+  .e-star:nth-child(3) { animation-delay: -1.4s; }
+  .e-star:nth-child(4) { animation-delay: -2.1s; }
+  @keyframes starFloat {
+    0%, 100% { transform: translateY(-2px); }
+    50% { transform: translateY(-8px); }
+  }
+  .e-star:hover {
+    background: rgba(232,201,154,0.22);
+    border-color: rgba(232,201,154,0.75);
+  }
+
+  /* ——— F · flip reveal ——— */
+  .f-veil {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background: rgba(8,4,2,0);
+    transition: background 0.28s;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+  }
+  .stage:hover .f-veil,
+  .stage.is-open .f-veil {
+    background: rgba(8,4,2,0.55);
+  }
+  .f-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+    transition: opacity 0.28s, transform 0.28s;
+  }
+  .stage:hover .f-cards,
+  .stage.is-open .f-cards {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .f-card {
+    width: 118px;
+    padding: 12px 10px;
+    border-radius: 12px;
+    background: rgba(247,239,228,0.92);
+    color: #1a120c;
+    font-family: "Caveat", cursive;
+    font-size: 18px;
+    line-height: 1.2;
+    text-align: center;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+    cursor: pointer;
+    transform: rotate(var(--r, -2deg));
+    transition: transform 0.15s;
+  }
+  .f-card:hover { transform: rotate(0deg) scale(1.05); }
+
+  /* ——— G · edge magnets ——— */
+  .g-strip {
+    position: absolute;
+    z-index: 6;
+    padding: 8px 12px;
+    max-width: 46%;
+    border-radius: 10px;
+    background: rgba(12,8,6,0.8);
+    border: 1px solid rgba(232,201,154,0.42);
+    color: #f7efe4;
+    font-style: italic;
+    font-size: 14px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.4);
+    cursor: pointer;
+    animation: magnetBreath 2.6s ease-in-out infinite;
+  }
+  .g-strip:nth-child(1) { left: 10px; top: 18%; animation-delay: 0s; }
+  .g-strip:nth-child(2) { right: 10px; top: 32%; animation-delay: -0.6s; }
+  .g-strip:nth-child(3) { left: 10px; bottom: 22%; animation-delay: -1.2s; }
+  .g-strip:nth-child(4) { right: 10px; bottom: 16%; animation-delay: -1.8s; }
+  @keyframes magnetBreath {
+    0%, 100% { box-shadow: 0 10px 22px rgba(0,0,0,0.4), 0 0 0 0 rgba(232,201,154,0); }
+    50% { box-shadow: 0 12px 26px rgba(0,0,0,0.45), 0 0 0 4px rgba(232,201,154,0.18); }
+  }
+  .g-strip:hover {
+    background: rgba(232,201,154,0.2);
+    border-color: rgba(232,201,154,0.8);
+  }
+
+  /* ——— H · spotlight cycle ——— */
+  .h-spot {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 6;
+    min-width: 200px;
+    max-width: 86%;
+    text-align: center;
+    padding: 12px 16px 14px;
+    border-radius: 14px;
+    background: rgba(12,8,6,0.78);
+    border: 1px solid rgba(232,201,154,0.45);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+    cursor: pointer;
+  }
+  .h-spot .lab {
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(232,201,154,0.75);
+    margin-bottom: 6px;
+  }
+  .h-name {
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #fff8ee;
+    min-height: 1.3em;
+    transition: opacity 0.25s;
+  }
+  .h-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .h-dots i {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,248,238,0.25);
+    display: block;
+  }
+  .h-dots i.on { background: #e8c99a; box-shadow: 0 0 8px rgba(232,201,154,0.6); }
+  .h-beam {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: radial-gradient(ellipse 55% 40% at 50% 78%, rgba(232,201,154,0.22), transparent 70%);
+    pointer-events: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .stage:hover .h-beam { opacity: 1; }
+</style>
+</head>
+<body>
+<button type="button" id="hamburger-menu" aria-label="open menu"><span></span><span></span><span></span></button>
+<div id="nav-overlay"></div>
+<div id="nav-sidebar-host"></div>
+<script src="nav-shared.js?v=ovtask1" defer></script>
+
+<header class="hero">
+  <h1>overview tasks · interactive</h1>
+  <p>Breathing rim stays as option A. Hover / click each stage — pick the one that feels alive on the collage.</p>
+  <div class="rule">tasks depth · unzoomed collage · no digit seals · no check pills on the photo</div>
+  <div class="picked on" id="picked">picked · H overview · D zoom</div>
+</header>
+
+<nav class="jump" aria-label="jump">
+  <a href="#a">A rim</a>
+  <a href="#b">B orbit</a>
+  <a href="#c">C seal</a>
+  <a href="#d">D ticker</a>
+  <a href="#e">E constellation</a>
+  <a href="#f">F flip</a>
+  <a href="#g">G magnets</a>
+  <a href="#h">H spotlight</a>
+</nav>
+
+<div class="grid">
+
+  <article class="panel" id="a" data-pick="A · breathing rim">
+    <div class="panel-head">
+      <div class="letter"><em>A</em> breathing rim</div>
+      <div class="hint">current · hover names</div>
+    </div>
+    <p class="panel-desc">Red pulse on the tile edge + work-open chip. Full name list only on hover.</p>
+    <div class="stage earn">
+      <div class="a-rim"></div>
+      <div class="a-chip">work open</div>
+      <div class="foil">I am earning</div>
+      <div class="a-hover">
+        <div class="lab">open</div>
+        <ul>
+          <li>$3,000 WF check</li>
+          <li>PLUS loan appeal</li>
+          <li>Musly membership</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button">pick A</button></div>
+  </article>
+
+  <article class="panel" id="b" data-pick="B · orbit chips">
+    <div class="panel-head">
+      <div class="letter"><em>B</em> orbit chips</div>
+      <div class="hint">hover to pause · click a name</div>
+    </div>
+    <p class="panel-desc">Task names slowly orbit the section. Hover freezes the orbit so you can click one.</p>
+    <div class="stage adhd">
+      <div class="foil">ADHD</div>
+      <div class="b-orbit">
+        <button type="button" class="b-chip">inbox zero</button>
+        <button type="button" class="b-chip">meds refill</button>
+        <button type="button" class="b-chip">focus block</button>
+        <button type="button" class="b-chip">calendar audit</button>
+        <button type="button" class="b-chip">body double</button>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button">pick B</button></div>
+  </article>
+
+  <article class="panel" id="c" data-pick="C · pulse count seal">
+    <div class="panel-head">
+      <div class="letter"><em>C</em> pulse count seal</div>
+      <div class="hint">click the seal</div>
+    </div>
+    <p class="panel-desc">One breathing count in the corner. Click → names fan out around the photo; click again to close.</p>
+    <div class="stage wins" data-toggle>
+      <div class="foil">I am winning</div>
+      <div class="c-fan">
+        <span>queen take</span>
+        <span>endgame study</span>
+        <span>match review</span>
+        <span>opening prep</span>
+      </div>
+      <button type="button" class="c-seal" aria-label="open tasks">4</button>
+    </div>
+    <div class="pick-row"><button type="button">pick C</button></div>
+  </article>
+
+  <article class="panel" id="d" data-pick="D · ticker ribbon">
+    <div class="panel-head">
+      <div class="letter"><em>D</em> ticker ribbon</div>
+      <div class="hint">hover to pause</div>
+    </div>
+    <p class="panel-desc">Champagne marquee across the bottom — every open task scrolls past. Always moving, always glanceable.</p>
+    <div class="stage travel">
+      <div class="foil">I am traveling</div>
+      <div class="d-ribbon">
+        <div class="d-count">3 open</div>
+        <div class="d-track">
+          <span>pack carry-on</span><span>TSA PreCheck</span><span>hotel hold</span><span>visa copy</span>
+          <span>pack carry-on</span><span>TSA PreCheck</span><span>hotel hold</span><span>visa copy</span>
+        </div>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button">pick D</button></div>
+  </article>
+
+  <article class="panel" id="e" data-pick="E · mini constellation">
+    <div class="panel-head">
+      <div class="letter"><em>E</em> mini constellation</div>
+      <div class="hint">always on · float</div>
+    </div>
+    <p class="panel-desc">Zoom’s floating name chips, scaled for overview — soft bob, no digits, clickable in place.</p>
+    <div class="stage phd">
+      <div class="foil">I am pursuing my Ph.D</div>
+      <div class="e-sky">
+        <button type="button" class="e-star" style="left:14%;top:18%">lit review</button>
+        <button type="button" class="e-star" style="left:58%;top:14%">IRB draft</button>
+        <button type="button" class="e-star" style="left:18%;top:70%">advisor email</button>
+        <button type="button" class="e-star" style="left:55%;top:66%">methods outline</button>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button">pick E</button></div>
+  </article>
+
+  <article class="panel" id="f" data-pick="F · flip reveal">
+    <div class="panel-head">
+      <div class="letter"><em>F</em> flip reveal</div>
+      <div class="hint">hover or click</div>
+    </div>
+    <p class="panel-desc">Photo dims; ripped-paper task scraps flip into view. Feels tactile — like opening the section without zooming.</p>
+    <div class="stage projects" data-toggle>
+      <div class="foil">projects</div>
+      <div class="f-veil">
+        <div class="f-cards">
+          <div class="f-card" style="--r:-3deg">blueprint pass</div>
+          <div class="f-card" style="--r:2deg">client call</div>
+          <div class="f-card" style="--r:-1deg">scope freeze</div>
+          <div class="f-card" style="--r:3deg">mood board</div>
+        </div>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button">pick F</button></div>
+  </article>
+
+  <article class="panel" id="g" data-pick="G · edge magnets">
+    <div class="panel-head">
+      <div class="letter"><em>G</em> edge magnets</div>
+      <div class="hint">always on · breathe</div>
+    </div>
+    <p class="panel-desc">Tasks cling to the nearest edges as glass strips with a soft champagne pulse — readable without covering the center foil.</p>
+    <div class="stage network">
+      <div class="foil">I am networking</div>
+      <button type="button" class="g-strip">send thank-you</button>
+      <button type="button" class="g-strip">coffee with M</button>
+      <button type="button" class="g-strip">update LinkedIn</button>
+      <button type="button" class="g-strip">intro follow-up</button>
+    </div>
+    <div class="pick-row"><button type="button">pick G</button></div>
+  </article>
+
+  <article class="panel" id="h" data-pick="H · spotlight cycle">
+    <div class="panel-head">
+      <div class="letter"><em>H</em> spotlight cycle</div>
+      <div class="hint">auto · click to advance</div>
+    </div>
+    <p class="panel-desc">One task name at a time in a spotlight under the foil, cycling. Soft beam on the photo. Click to pin-next.</p>
+    <div class="stage train" data-spotlight>
+      <div class="h-beam"></div>
+      <div class="foil">I am training</div>
+      <div class="h-spot" role="button" tabindex="0">
+        <div class="lab">now · open</div>
+        <div class="h-name">reformer · 6:00</div>
+        <div class="h-dots"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="pick-row"><button type="button">pick H</button></div>
+  </article>
+
+</div>
+
+<script>
+(function () {
+  var picked = document.getElementById('picked');
+  function setPick(label) {
+    document.querySelectorAll('.panel').forEach(function (p) {
+      p.classList.toggle('is-picked', p.getAttribute('data-pick') === label);
+    });
+    picked.textContent = 'picked · ' + label;
+    picked.classList.add('on');
+    try { localStorage.setItem('btm_overview_tasks_interactive_pick_v1', label); } catch (e) {}
+  }
+  document.querySelectorAll('.pick-row button').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var panel = btn.closest('.panel');
+      if (panel) setPick(panel.getAttribute('data-pick'));
+    });
+  });
+  document.querySelectorAll('.panel').forEach(function (panel) {
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('button, a, .c-seal, .h-spot, .b-chip, .e-star, .g-strip, .f-card')) return;
+    });
+  });
+
+  document.querySelectorAll('.stage[data-toggle]').forEach(function (stage) {
+    var seal = stage.querySelector('.c-seal');
+    function toggle(ev) {
+      if (ev) ev.stopPropagation();
+      stage.classList.toggle('is-open');
+    }
+    if (seal) seal.addEventListener('click', toggle);
+    stage.addEventListener('click', function (e) {
+      if (e.target.closest('.c-seal, .f-card, .c-fan span')) return;
+      if (stage.querySelector('.f-veil')) toggle(e);
+    });
+  });
+
+  document.querySelectorAll('.stage[data-spotlight]').forEach(function (stage) {
+    var names = ['reformer · 6:00', 'protein prep', 'walk after dinner', 'mobility 12 min'];
+    var i = 0;
+    var nameEl = stage.querySelector('.h-name');
+    var dots = stage.querySelectorAll('.h-dots i');
+    var spot = stage.querySelector('.h-spot');
+    function show(n) {
+      i = (n + names.length) % names.length;
+      nameEl.style.opacity = '0';
+      setTimeout(function () {
+        nameEl.textContent = names[i];
+        nameEl.style.opacity = '1';
+        dots.forEach(function (d, idx) { d.classList.toggle('on', idx === i); });
+      }, 140);
+    }
+    spot.addEventListener('click', function (e) {
+      e.stopPropagation();
+      show(i + 1);
+    });
+    setInterval(function () {
+      if (document.hidden) return;
+      if (stage.matches(':hover')) return;
+      show(i + 1);
+    }, 2800);
+  });
+
+  try {
+    try {
+      localStorage.setItem('btm_overview_tasks_interactive_pick_overview_v1', 'H · spotlight cycle');
+      localStorage.setItem('btm_overview_tasks_interactive_pick_zoom_v1', 'D · ticker ribbon');
+      localStorage.setItem('btm_overview_tasks_interactive_pick_v1', 'H overview · D zoom');
+    } catch (e) {}
+    var prev = localStorage.getItem('btm_overview_tasks_interactive_pick_v1');
+    if (prev) setPick(prev);
+  } catch (e) {}
+
+  var jump = document.querySelectorAll('.jump a');
+  function syncJump() {
+    var y = window.scrollY + 120;
+    var cur = null;
+    jump.forEach(function (a) {
+      var el = document.querySelector(a.getAttribute('href'));
+      if (el && el.offsetTop <= y) cur = a;
+    });
+    jump.forEach(function (a) { a.classList.toggle('on', a === cur); });
+  }
+  window.addEventListener('scroll', syncJump, { passive: true });
+  syncJump();
+})();
+</script>
+</body>
+</html>

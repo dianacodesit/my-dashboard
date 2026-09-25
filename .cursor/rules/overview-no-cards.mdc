@@ -12,7 +12,7 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage /
 1. **Sections** — collage tiles (`.vision-tile`): fitness training, abundance, Pepperdine, audacity…
 2. **Subsections** — nested inside a section only (`.vision-subsection` / `.vision-tile-subsections`), e.g. calisthenics under fitness training. **Not** polaroids. **Not** collage tiles.
 3. **Cards** — polaroid-style items (`.vision-polaroid` / `.vision-shot-card`): tuition, refunds, EnhanCV… Keep the UI label **cards** until Diana renames them. Do **not** call them subsections.
-4. **Tasks (Sep 7 onward only)** — unzoomed collage uses **E breathing rim** (`tasks-attention-rim-e-v1`): pulsing inset rim + `work open` chip on sections with unfinished work; **hover the section** for the full open-task name list. Zoomed section still uses **number pins** (large Bodoni italic **1 · 2 · 3…**; full name on hover) for task work. **Not** gold dots. **Not** always-on glass name chips. **Not** letter monograms. Number pins / rim must never appear on Sep 6 or any earlier day. **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and `.vision-check` items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` + `syncTaskAttentionRim` paint `.vision-task-sky`. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web. **Gold-dot pins are rejected** — never restore `tasks-pins-beam` / glowing orb cores. **Letter monograms are rejected** — never restore first-letter cores. Mock archive: `task-attention-mocks.html` (design previews).
+4. **Tasks (Sep 7 onward only as a depth layer)** — day-forward chrome only; never rewrite earlier days. **Sep 7–22:** historical task chrome stays as baked (constellation / floating names in zoom — **not** E breathing rim). **E breathing rim** (`tasks-attention-rim-e-v1` / `.tasks-e-rim-era`) shipped **2026-09-23** and must **not** be backdated onto Sep 7–22. **Sep 23+ (`foil-title-elevated`):** unzoomed = **H spotlight cycle** (one open task at a time under the foil, click to advance); zoomed = **D ticker ribbon** (champagne marquee of open tasks along the bottom). Still no digit cores, check pills, slabs, filaments, or gold-dot pins. **Not** gold dots. **Not** letter monograms. **Not** `.vision-check` pills on the zoomed tile (rejected). Number pins must never appear on Sep 6 or any earlier day. **No filaments.** Not polaroids, not slabs, not the painted horizon line. Card titles and task items still ride as hidden `.vision-horizon-task` via `syncHorizonTile`, then `syncTaskConstellation` + `syncTaskAttentionRim` paint `.vision-task-sky`. Empty sections stay clean photos. **Slabs are rejected** — never restore `tasks-slabs-v1`. **Filaments are rejected** — never restore the connecting web. **Gold-dot pins are rejected** — never restore `tasks-pins-beam` / glowing orb cores. **Letter monograms are rejected** — never restore first-letter cores. **Number pins are rejected** — never restore `tasks-pins-number-v3` as visible zoomed/unzoomed chrome. **Check pills are rejected** in zoom — never restore `.vision-check` as zoomed task chrome. Mock archive: `task-attention-mocks.html` (design previews).
 
 ## Depth toggle (re-click overview → vertical popup to the left)
 
@@ -20,26 +20,28 @@ Hard rule for diana’s dashboard (`/Users/diana/my-dashboard`) vision collage /
 
 **View pill bar never crowds.** Grow when a label is added. Do not leave five words in the four-pill 325px bar (that is how they jam). Floors: **3 → 280px · 4 → 325px · 5 → 406px** (325 × 5/4 — same per-label room as four pills, not extra gap). Bar is `fit-content` + `gap` — pills are `flex: 0 0 auto` with horizontal padding, not equal columns that squash `priority`. If a sixth view is added, the bar grows with the word. Keep `everything.html` + `prototype.html` in sync. If labels look jammed, widen immediately — do not ask.
 
-**Depth** (sections · subsections · cards · tasks): how deep into the collage you’re looking. Persist `btm_day_overview_mode_v1`; map old `details` → `cards`; map `overview` ↔ `sections` (same layer). **Default is tasks only on Sep 7 onward** (pins on the collage). Never paint task pins on earlier days.
+**Depth** (sections · subsections · cards · tasks): how deep into the collage you’re looking. Persist `btm_day_overview_mode_v1`; map old `details` → `cards`; map `overview` ↔ `sections` (same layer). **Default is tasks only on Sep 7 onward** (depth layer — not a license to paint E rim onto Sep 7–22). Sep 23+ collage chrome is H spotlight / D ticker. Never paint task pins on Sep 6 or earlier.
 
 When already on **overview**, press **overview again** to open a vertical glass popup **to the left** of that pill (`.depth-menu-open` + `.depth-overview-popup`). Pick a layer; click outside / Escape / pick closes it. Right tools stay **carry | +** only — no always-on four-pill depth cluster.
 
 Do **not** put depth as a second row / hairline underline menu *under* the center pills. The popup is beside overview, not below the cluster.
 
-**Zoomed section:** every layer available for that date shows together. Task pins are available only Sep 7 onward; earlier zoomed days never inherit them. Depth does **not** filter the zoomed view. Do **not** flip depth when adding a card/subsection while zoomed.
+**Zoomed section:** every layer available for that date shows together. **No number pins / check pills in zoom** — digits stay off; tasks float as name chips around the section. Depth does **not** filter the zoomed view. Do **not** flip depth when adding a card/subsection while zoomed.
 
 | Mode (UI / storage) | Class | Unzoomed collage shows |
 |------|--------|-------------------------|
 | **sections** (legacy `overview`) | `.overview-mode-sections` + `.overview-mode-overview` | Sections only — no subsections, cards, or tasks |
 | **subsections** | `.overview-mode-subsections` | Nested subsections; hide cards and tasks |
 | **cards** | `.overview-mode-cards` (+ legacy `.overview-mode-details`) | Cards (polaroids); hide subsections and tasks |
-| **tasks** | `.overview-mode-tasks` | Number seals on tiles (ink pad + Bodoni **1 · 2 · 3…**; name on hover; no filaments) — hide polaroids / subsections / horizon paint; arm `.horizon-armed` via `syncHorizonTile` + `syncTaskConstellation` (`tasks-constellation-v1` + `tasks-pins-number-v3`). Gate sky on `depth-four-era`, never `dash-mosaic-era` alone (Sep 18+ drops mosaic). |
+| **tasks** | `.overview-mode-tasks` | Sep 23+: H spotlight unzoomed / D ticker zoomed. Sep 7–22: historical task chrome only — **no** E rim backdate. Hide polaroids / subsections / horizon paint; arm via `syncHorizonTile` + `syncTaskAttentionRim`. Gate sky on `depth-four-era`, never `dash-mosaic-era` alone (Sep 18+ drops mosaic). |
 
 ## Never
 
 - Treat polaroids / cards as subsections (or vice versa)
 - Rename the cards layer to “subsections” in UI copy
-- Show polaroids in **tasks** depth (tasks = pins, not cards)
+- Show polaroids in **tasks** depth (tasks = day-forward collage chrome / floating names zoomed, not cards)
+- Show number pins / digit seals in **tasks** depth (unzoomed or zoomed)
+- Show **check pills** on a zoomed section (rejected — floating names only)
 - Restore **slabs** after Diana rejected them (`tasks-slabs-v1`)
 - Restore **filaments** / connecting web after Diana rejected them
 - `display: block` on `.vision-polaroid` / `.vision-shot-card` under `.overview-mode-overview` / `.overview-mode-sections` + `:not(.is-zoomed)`
@@ -65,19 +67,27 @@ Fix the CSS immediately. Sections depth = clean sections.
 
 ## If polaroids reappear in tasks mode
 
-Restore E breathing rim unzoomed (`tasks-attention-rim-e-v1` + `syncTaskAttentionRim`) and number pins when zoomed (`tasks-constellation-v1` + `tasks-pins-number-v3` + `syncTaskConstellation`): hide polaroids. Do not ask permission. Never restore gold dots or letter monograms.
+Restore the correct day-forward chrome (Sep 23+ H/D; never E rim on Sep 7–22) and floating name chips in zoom where that era uses them (no digit cores, no check pills); hide polaroids. Do not ask permission. Never restore gold dots, letter monograms, digit seals, or check pills.
 
 ## If slabs come back in tasks mode
 
-Remove `tasks-slabs-v1`. Keep pins. Do not ask permission.
+Remove `tasks-slabs-v1`. Keep day-forward task chrome. Do not ask permission.
 
 ## If filaments come back in tasks mode
 
-Hide / remove `.vision-task-filament`. Keep number digits. Do not ask permission.
+Hide / remove `.vision-task-filament`. Do not ask permission.
+
+## If number pins / digits come back (collage or zoom)
+
+Unzoomed = day-forward chrome for that date (H spotlight on Sep 23+; never E rim on Sep 7–22). Zoomed = floating name chips / D ticker where that era uses them; cores/digits hidden, check pills hidden. Do not ask permission.
+
+## If check pills come back on a zoomed section
+
+Hide `.vision-check`. Restore floating `.vision-task-star` name chips around the section. Do not ask permission.
 
 ## If the painted horizon line comes back in tasks mode
 
-Hide `.vision-horizon` / above / below. Keep pins. Do not ask permission.
+Hide `.vision-horizon` / above / below. Do not ask permission.
 
 ## If depth becomes a second row under the center pills
 
